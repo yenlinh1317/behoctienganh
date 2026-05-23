@@ -137,7 +137,7 @@
 
     const speak = (t) => new Promise(r => { 
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(t); u.lang = 'vi-VN'; u.rate = 2.0; u.onend = r; 
+        const u = new SpeechSynthesisUtterance(t); u.lang = 'vi-VN'; u.rate = 1.0; u.onend = r; 
         window.speechSynthesis.speak(u); 
     });
 
