@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trò Chơi: Vua Tốc Độ Học Vần</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { --primary: #4dabf7; --success: #2b8a3e; --error: #e03131; --dark: #2f3542; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background: #e3fafc; min-height: 100vh; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        .game-container { background: white; border: 4px solid #15aabf; border-radius: 30px; box-shadow: 8px 8px 0px #0c8599; width: 100%; max-width: 800px; padding: 30px; text-align: center; position: relative; }
+        
+        /* ĐIỂM SỐ & THỜI GIAN */
+        .status-bar { display: flex; justify-content: space-between; font-size: 24px; font-weight: 700; color: #0b7285; margin-bottom: 20px; }
+        .timer-container { width: 100%; height: 15px; background: #e9ecef; border-radius: 10px; margin-bottom: 30px; overflow: hidden; border: 1px solid #ced4da; }
+        .timer-bar { height: 100%; width: 100%; background: #fab005; transition: width 0.1s linear; }
+
+        /* LOA PHÁT ÂM */
+        .audio-box { margin-bottom: 40px; }
+        .btn-listen { background: #15aabf; border: none; border-radius: 50%; width: 120px; height: 120px; font-size: 50px; color: white; cursor: pointer; box-shadow: 0 8px 15px rgba(21, 170, 191, 0.3); transition: 0.2s; }
+        .btn-listen:active { transform: scale(0.95); }
+        .hint-text { color: #868e96; margin-top: 10px; font-size: 16px; }
+
+        /* ĐÁP ÁN */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .btn-option { padding: 30px 10px; font-size: 45px; font-weight: 700; color: var(--dark); background: #f1f3f5; border: 3px solid #dee2e6; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+        .btn-option:hover { background: #e9ecef; border-color: #adb5bd; }
+        
+        /* ĐÚNG / SAI */
+        .btn-option.correct { background: #5c7cfa !important; color: white !important; border-color: #364fc7 !important; animation: pop 0.3s ease; }
+        .btn-option.wrong { background: #ffc9c9 !important; color: #c92a2a !important; border-color: #fa5252 !important; }
+
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        /* MÀN HÌNH BẮT ĐẦU / KẾT THÚC */
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; border-radius: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; z-index: 10; }
+        .screen h1 { font-size: 40px; color: #0c8599; margin-bottom: 10px; }
+        .screen p { font-size: 20px; color: #495057; margin-bottom: 30px; }
+        .btn-start { padding: 20px 5px; width: 250px; font-size: 24px; font-weight: 700; background: #228be6; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 5px 0 #1864ab; }
+        .btn-start:active { transform: translateY(5px); box-shadow: none; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- MÀN HÌNH BẮT ĐẦU -->
+    <div id="start-screen" class="screen">
+        <h1>⚡ VUA TỐC ĐỘ ⚡</h1>
+        <p>Bé hãy nghe thật kỹ âm thanh và chọn đúng chữ nhé!</p>
+        <button class="btn-start" onclick="startGame()">BẮT ĐẦU CHƠI</button>
+    </div>
+
+    <!-- MÀN HÌNH KẾT THÚC -->
+    <div id="end-screen" class="screen hidden">
+        <h1>🎉 HOÀN THÀNH! 🎉</h1>
+        <p>Số điểm của Minh Khang đạt được là:</p>
+        <div style="font-size: 60px; font-weight: 700; color: #e03131; margin-bottom: 30px;" id="final-score">0</div>
+        <button class="btn-start" style="background: #12b886; box-shadow: 0 5px 0 #087f5b;" onclick="startGame()">CHƠI LẠI</button>
+    </div>
+
+    <!-- GIAO DIỆN CHƠI CHÍNH -->
+    <div class="status-bar">
+        <div>⭐ ĐIỂM: <span id="score">0</span></div>
+        <div>CÂU: <span id="question-idx">1</span>/10</div>
+    </div>
+
+    <div class="timer-container">
+        <div id="timer" class="timer-bar"></div>
+    </div>
+
+    <div class="audio-box">
+        <button class="btn-listen" onclick="playCurrentWord()">📢</button>
+        <div class="hint-text">(Bấm vào loa nếu muốn nghe lại)</div>
+    </div>
+
+    <div class="options-grid">
+        <button class="btn-option" onclick="checkAnswer(this)"></button>
+        <button class="btn-option" onclick="checkAnswer(this)"></button>
+        <button class="btn-option" onclick="checkAnswer(this)"></button>
+        <button class="btn-option" onclick="checkAnswer(this)"></button>
+    </div>
+</div>
+
+<script>
+    // Kho dữ liệu từ ghép đơn giản, quen thuộc cho bé
+    const database = [
+        'ba', 'bà', 'bá', 'bả', 'bạ', 'cá', 'cà', 'gà', 'nhà', 'lá', 
+        'chợ', 'bơ', 'kho', 'thỏ', 'chữ', 'khế', 'ngựa', 'sư tử', 'củ cải',
+        'đu đủ', 'bí đỏ', 'mẹ', 'bố', 'xe', 'đò', 'hồ', 'cờ', 'dê', 'ví'
+    ];
+
+    let score = 0;
+    let currentIdx = 0;
+    let currentWord = '';
+    let timerInterval = null;
+    let timeLeft = 100; // phần trăm thanh thời gian
+    let canClick = false;
+
+    function speak(text) {
+        return new Promise((resolve) => {
+            if (!('speechSynthesis' in window)) return resolve();
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'vi-VN';
+            u.rate = 0.65; // Đọc hơi chậm rành mạch cho bé nghe rõ
+            u.onend = () => resolve();
+            window.speechSynthesis.speak(u);
+        });
+    }
+
+    function startGame() {
+        score = 0;
+        currentIdx = 0;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('score').innerText = score;
+        nextQuestion();
+    }
+
+    function playCurrentWord() {
+        speak(currentWord);
+    }
+
+    function nextQuestion() {
+        if (currentIdx >= 10) {
+            endGame();
+            return;
+        }
+
+        currentIdx++;
+        document.getElementById('question-idx').innerText = currentIdx;
+        canClick = true;
+
+        // Reset nút bấm về trạng thái cũ
+        const buttons = document.querySelectorAll('.btn-option');
+        buttons.forEach(btn => btn.className = 'btn-option');
+
+        // Chọn từ đúng ngẫu nhiên
+        currentWord = database[Math.floor(Math.random() * database.length)];
+
+        // Tạo danh sách 4 đáp án (1 đúng, 3 sai ngẫu nhiên)
+        let options = [currentWord];
+        while (options.length < 4) {
+            let randomWord = database[Math.floor(Math.random() * database.length)];
+            if (!options.includes(randomWord)) {
+                options.push(randomWord);
+            }
+        }
+        // Trộn ngẫu nhiên vị trí các đáp án
+        options.sort(() => Math.random() - 0.5);
+
+        // Gán chữ vào các nút bấm
+        buttons.forEach((btn, idx) => {
+            btn.innerText = options[idx];
+        });
+
+        // Phát âm từ cần tìm
+        playCurrentWord();
+
+        // Chạy thanh thời gian (10 giây)
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 100;
+        const timerBar = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft -= 1; // Giảm dần mỗi 100ms (Tổng cộng 10 giây)
+            timerBar.style.width = timeLeft + '%';
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                showCorrectAnswerOnTimeout();
+            }
+        }, 100);
+    }
+
+    function checkAnswer(selectedButton) {
+        if (!canClick) return;
+        canClick = false;
+        clearInterval(timerInterval);
+
+        const answer = selectedButton.innerText;
+        const buttons = document.querySelectorAll('.btn-option');
+
+        if (answer === currentWord) {
+            selectedButton.classList.add('correct');
+            score += 10;
+            document.getElementById('score').innerText = score;
+            // Phát âm thanh báo hiệu đúng bằng tiếng
+            speak("Đúng rồi! Xuất sắc!");
+        } else {
+            selectedButton.classList.add('wrong');
+            // Hiển thị luôn nút nào mới là đúng
+            buttons.forEach(btn => {
+                if (btn.innerText === currentWord) btn.classList.add('correct');
+            });
+            speak("Chưa đúng rồi!");
+        }
+
+        // Chờ 2 giây để bé nhìn nhận mặt chữ đúng rồi tự chuyển câu
+        setTimeout(nextQuestion, 2000);
+    }
+
+    function showCorrectAnswerOnTimeout() {
+        canClick = false;
+        const buttons = document.querySelectorAll('.btn-option');
+        buttons.forEach(btn => {
+            if (btn.innerText === currentWord) btn.classList.add('correct');
+        });
+        speak("Hết giờ rồi!");
+        setTimeout(nextQuestion, 2000);
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        document.getElementById('end-screen').classList.remove('hidden');
+        document.getElementById('final-score').innerText = score;
+        speak("Chúc mừng Minh Khang đã hoàn thành trò chơi!");
+    }
+</script>
+</body>
+</html>
