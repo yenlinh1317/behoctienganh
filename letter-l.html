@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bóng Bay Tiếng Anh - Vương Quốc Chữ L</title>
+    <style>
+        body { margin: 0; background: #ffeaa7; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: 'Arial', sans-serif; user-select: none; overflow: hidden; }
+        
+        /* Khu vực nút bấm nghe câu hỏi lớn */
+        #topArea { text-align: center; margin-bottom: 15px; background: #fff; padding: 20px 40px; border-radius: 25px; box-shadow: 0 8px 0 #fab1a0; width: 600px; border: 4px solid #ff7675; }
+        #audioBtn { background: #ff7675; color: white; border: none; padding: 15px 40px; font-size: 26px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 6px 0 #d63031; transition: all 0.1s; display: inline-flex; align-items: center; gap: 15px; }
+        #audioBtn:active { transform: translateY(4px); box-shadow: none; }
+        
+        /* Khung chơi game bầu trời rộng lớn để bóng bay lên */
+        #gameArea { width: 800px; height: 650px; background: linear-gradient(to top, #74b9ff, #a29bfe); border: 8px solid #2d3436; position: relative; overflow: hidden; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        
+        /* Quả bóng bay thiết kế hoạt hình, uốn lượn đáng yêu */
+        .balloon { position: absolute; width: 130px; height: 160px; background: #ff7675; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: inset -10px -10px 0 rgba(0,0,0,0.15), 0 8px 15px rgba(0,0,0,0.2); bottom: -200px; transition: transform 0.1s active; }
+        
+        /* Núm thắt và dây của quả bóng bay */
+        .balloon::after { content: ""; position: absolute; bottom: -8px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 10px solid inherit; }
+        .balloon-string { position: absolute; bottom: -45px; width: 2px; height: 40px; background: rgba(0,0,0,0.2); }
+
+        .balloon .svg-container { width: 65px; height: 65px; margin-bottom: 5px; }
+        .balloon .svg-container svg { width: 100%; height: 100%; }
+        .balloon span { font-size: 16px; font-weight: bold; color: #fff; text-transform: uppercase; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; font-family: 'Comic Sans MS', sans-serif; }
+
+        /* Hiệu ứng nổ tung bong bóng */
+        .pop-effect { animation: balloonPop 0.2s ease-out forwards; }
+
+        /* Bảng điểm */
+        .stats { position: absolute; top: 20px; font-size: 24px; font-weight: bold; color: #2d3436; background: #fff; padding: 8px 25px; border-radius: 35px; z-index: 10; border: 4px solid #2d3436; box-shadow: 0 5px 0 #2d3436; }
+        #scoreBoard { left: 20px; }
+        #livesBoard { right: 20px; color: #d63031; letter-spacing: 3px; }
+
+        /* Màn hình Game Over */
+        #gameOverScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #gameOverScreen.active { opacity: 1; pointer-events: auto; }
+        .over-box { background: white; padding: 40px; border-radius: 30px; text-align: center; border: 8px solid #ff7675; box-shadow: 0 20px 0 #d63031; transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 400px; }
+        #gameOverScreen.active .over-box { transform: scale(1); }
+        .over-box h1 { margin: 0 0 15px 0; color: #ff7675; font-size: 42px; }
+        .over-box p { font-size: 24px; font-weight: bold; margin-bottom: 30px; color: #2d3436; }
+        .restart-btn { background: #2ecc71; color: white; border: none; padding: 15px 45px; font-size: 24px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 6px 0 #27ae60; }
+        .restart-btn:active { transform: translateY(4px); box-shadow: none; }
+
+        @keyframes balloonPop { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } 100% { transform: scale(0); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div id="topArea">
+    <button id="audioBtn" onclick="speakQuestion()">🔊 Bé Nghe Câu Hỏi</button>
+</div>
+
+<div id="gameArea">
+    <div id="scoreBoard" class="stats">Điểm: <span id="score">0</span></div>
+    <div id="livesBoard" class="stats">Mạng: <span id="lives">💖💖💖</span></div>
+
+    <div id="gameOverScreen">
+        <div class="over-box">
+            <h1>Hết Mạng Rồi! 🧸</h1>
+            <p>Bé xuất sắc đạt: <span id="finalScore" style="color: #0984e3; font-size: 32px;">0</span> điểm!</p>
+            <button class="restart-btn" onclick="resetGame()">Chơi Lại Lần Nữa 🎮</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        
+        if (type === 'pop') { // Tiếng bộp khi làm vỡ bóng đúng
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+        } else if (type === 'wrong') { // Tiếng ting trầm khi chọn sai
+            osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+        }
+    }
+
+    // Kho từ vựng nhóm chữ L vẽ SVG hoạt hình lớn sắc nét
+    const wordBank = [
+        { word: "lion", svg: '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/><circle cx="32" cy="34" r="17" fill="#f1c40f"/><circle cx="24" cy="32" r="3" fill="#333"/><circle cx="40" cy="32" r="3" fill="#333"/></svg>', color: '#f39c12' },
+        { word: "lemon", svg: '<svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="22" ry="16" fill="#f1c40f" stroke="#d4ac0d" stroke-width="2"/></svg>', color: '#f1c40f' },
+        { word: "leaf", svg: '<svg viewBox="0 0 64 64"><path d="M14 50C14 30 30 14 50 14c0 20-14 36-36 36z" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/><path d="M14 50L42 22" stroke="#27ae60" stroke-width="3"/></svg>', color: '#2ecc71' },
+        { word: "lollipop", svg: '<svg viewBox="0 0 64 64"><circle cx="32" cy="22" r="18" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/><path d="M32 40v18" stroke="#7f8c8d" stroke-width="5" stroke-linecap="round"/></svg>', color: '#ea2027' },
+        { word: "ladder", svg: '<svg viewBox="0 0 64 64"><path d="M20 8v48M44 8v48M20 18h24M20 32h24M20 46h24" stroke="#d35400" stroke-width="5" stroke-linecap="round"/></svg>', color: '#e67e22' },
+        { word: "lock", svg: '<svg viewBox="0 0 64 64"><rect x="18" y="28" width="28" height="26" rx="5" fill="#f1c40f" stroke="#2c3e50" stroke-width="2"/><path d="M24 28v-8c0-5 4-7 8-7s8 2 8 7v8" stroke="#bdc3c7" stroke-width="5" fill="none"/></svg>', color: '#ffc312' },
+        { word: "lips", svg: '<svg viewBox="0 0 64 64"><path d="M12 32s10-12 20-5c10-7 20 5 20 5s-10 12-20 5c-10 7-20-5-20-5z" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/></svg>', color: '#ee5a24' },
+        { word: "lizard", svg: '<svg viewBox="0 0 64 64"><path d="M10 32s14-8 26 0 18 8 18 8" stroke="#2ecc71" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="15" cy="30" r="2" fill="#333"/></svg>', color: '#009432' }
+    ];
+
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('score');
+    const livesDisplay = document.getElementById('lives');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+
+    let score = 0;
+    let lives = 3;
+    let speed = 1.2; // Tốc độ bóng bay từ từ lên rất vừa vặn cho phản xạ của bé
+    let gameOver = false;
+    let currentTarget = {};
+    let currentQuestionText = "";
+    let activeBalloons = [];
+
+    function speakQuestion() {
+        if ('speechSynthesis' in window && currentQuestionText) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(currentQuestionText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.75;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function nextQuestion() {
+       // Xóa sạch các quả bóng bay cũ đang hoạt động
+        activeBalloons.forEach(b => b.dom.remove());
+        activeBalloons = [];
+        
+        if (gameOver) return;
+
+        // Chọn ngẫu nhiên từ vựng làm đáp án đúng
+        currentTarget = wordBank[Math.floor(Math.random() * wordBank.length)];
+
+        // Ngẫu nhiên chọn 1 trong 2 mẫu câu hỏi
+        if (Math.random() < 0.5) {
+            currentQuestionText = `What is it? It is a ${currentTarget.word}.`;
+        } else {
+            currentQuestionText = `What can you see? I can see a ${currentTarget.word}.`;
+        }
+
+        speakQuestion();
+
+        // ĐỘ TRỄ 2.5 GIÂY: Máy đọc xong câu hỏi mới bơm bóng cho bay từ dưới lên
+        setTimeout(() => {
+            if (gameOver) return;
+
+            // Quả bóng ĐÚNG
+            createBalloon(currentTarget, true, 150);
+
+            // Chọn quả bóng SAI làm nhiễu
+            let wrongTarget;
+            do {
+                wrongTarget = wordBank[Math.floor(Math.random() * wordBank.length)];
+            } while (wrongTarget.word === currentTarget.word);
+
+            // Quả bóng SAI
+            createBalloon(wrongTarget, false, 500);
+        }, 2500);
+    }
+
+    function createBalloon(targetObj, isCorrect, fixedX) {
+        const div = document.createElement('div');
+        div.className = 'balloon';
+        // Gán màu sắc ngẫu nhiên hoặc màu định sẵn để bóng rực rỡ
+        div.style.backgroundColor = targetObj.color || '#3498db';
+        
+        // Tạo sợi dây bóng bay phía dưới
+        const stringDiv = document.createElement('div');
+        stringDiv.className = 'balloon-string';
+        div.appendChild(stringDiv);
+
+        // Chèn nội dung SVG và chữ vào quả bóng
+        const content = document.createElement('div');
+        content.style.display = 'flex';
+        content.style.flexDirection = 'column';
+        content.style.alignItems = 'center';
+        content.innerHTML = `
+            <div class="svg-container">${targetObj.svg}</div>
+            <span>${targetObj.word}</span>
+        `;
+        div.appendChild(content);
+
+        // Thiết lập vị trí ban đầu ở dưới đáy khung game
+        const xPos = fixedX + (Math.random() * 100 - 50);
+        let yPos = 650; // Xuất phát từ đáy màn hình (height của khung là 650)
+        
+        div.style.left = xPos + 'px';
+        div.style.top = yPos + 'px';
+        gameArea.appendChild(div);
+
+        // Hiệu ứng bắt sự kiện khi bé Chạm/Click đập bóng
+        div.addEventListener('mousedown', () => {
+            if (gameOver || div.classList.contains('pop-effect')) return;
+
+            if (isCorrect) {
+                playSound('pop');
+                div.classList.add('pop-effect');
+                score += 10;
+                scoreDisplay.innerText = score;
+                speed += 0.05; // Tăng dần tốc độ bay cho kịch tính
+                
+                // Chờ hiệu ứng nổ kết thúc thì qua câu mới
+                setTimeout(nextQuestion, 200);
+            } else {
+                playSound('wrong');
+                lives--;
+                updateLivesDisplay();
+                
+                if (lives <= 0) {
+                    endGame();
+                    return;
+                }
+                nextQuestion();
+            }
+        });
+
+        activeBalloons.push({
+            dom: div,
+            x: xPos,
+            y: yPos,
+            isCorrect: isCorrect
+        });
+    }
+
+    function updateLivesDisplay() {
+        let hearts = "";
+        for (let i = 0; i < lives; i++) hearts += "💖";
+        for (let i = lives; i < 3; i++) hearts += "🖤";
+        livesDisplay.innerText = hearts;
+    }
+
+    // Vòng lặp điều khiển bóng bay lên
+    function gameLoop() {
+        if (gameOver) return;
+
+        let questionChanged = false;
+
+        for (let i = activeBalloons.length - 1; i >= 0; i--) {
+            let b = activeBalloons[i];
+            
+            // Bóng bay ngược từ dưới lên (trừ tọa độ Y)
+            b.y -= speed;
+            b.dom.style.top = b.y + 'px';
+
+            // Nếu bóng bay vượt quá đỉnh màn hình (Y < -200) mà bé không chọc kịp
+            if (b.y < -200) {
+                if (b.isCorrect) {
+                    // Nếu để lọt mất quả bóng đúng, tự động đổi câu khác
+                    questionChanged = true;
+                    break;
+                } else {
+                    // Bóng sai bay mất thì chỉ cần xóa đi, giữ quả đúng cho bé nhìn
+                    b.dom.remove();
+                    activeBalloons.splice(i, 1);
+                }
+            }
+        }
+
+        if (questionChanged) {
+            nextQuestion();
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+        gameOver = true;
+        finalScore.innerText = score;
+        gameOverScreen.classList.add('active');
+    }
+
+    function resetGame() {
+        score = 0;
+        lives = 3;
+        speed = 1.2;
+        gameOver = false;
+        scoreDisplay.innerText = "0";
+        updateLivesDisplay();
+        gameOverScreen.classList.remove('active');
+        nextQuestion();
+        gameLoop();
+    }
+
+    // Bắt đầu chạy trò chơi
+    updateLivesDisplay();
+    nextQuestion();
+    gameLoop();
+</script>
+
+</body>
+</html>
