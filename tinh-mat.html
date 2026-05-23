@@ -220,8 +220,8 @@
             { main: "ưa", spy: "ươ" }, { main: "ươc", spy: "ương" }, { main: "ươm", spy: "ươn" }, { main: "ươp", spy: "ươt" },
             { main: "ươu", spy: "ưu" }, { main: "ui", spy: "uy" }, { main: "uych", spy: "uynh" }, { main: "uyp", spy: "uyt" },
             { main: "uya", spy: "uyn" }, { main: "en", spy: "et" }, { main: "eng", spy: "en" },
-            { main: "a", spy: "ă" }, { main: "â", spy: "ă" }, { main: "e", spy: "ê" }, { main: "i", spy: "y" },
-            { main: "o", spy: "ô" }, { main: "ơ", spy: "ư" }, { main: "ư", spy: "u" }, { main: "ap", spy: "ăp" },
+            { main: "an", spy: "ăn" }, { main: "ân", spy: "ăn" }, { main: "en", spy: "êm" }, { main: "iu", spy: "uy" },
+            { main: "oi", spy: "ôi" }, { main: "ơn", spy: "ưm" }, { main: "ưu", spy: "ui" }, { main: "ap", spy: "ăp" },
             { main: "ep", spy: "êp" }, { main: "op", spy: "ôp" }, { main: "ơp", spy: "up" }, { main: "ip", spy: "up" },
             { main: "ach", spy: "êch" }, { main: "êch", spy: "ich" }, { main: "oc", spy: "ôc" }, { main: "uc", spy: "ưc" },
             { main: "ăc", spy: "âc" }, { main: "ôn", spy: "un" }, { main: "ưn", spy: "un" }, { main: "ăn", spy: "ân" },
@@ -232,7 +232,7 @@
  { main: "ot", spy: "ôt" }, { main: "ơt", spy: "ut" }, { main: "ưt", spy: "ut" }, { main: "uât", spy: "uyêt" },
             { main: "êu", spy: "ưu" }, { main: "iêu", spy: "yêu" }, { main: "au", spy: "âu" },
             { main: "iu", spy: "ưu" }, { main: "êu", spy: "iêu" }, { main: "eo", spy: "oe" }, { main: "ay", spy: "ây" },
-            { main: "uây", spy: "oay" }, { main: "oi", spy: "ôi" }, { main: "ơi", spy: "ơi" }, { main: "uôi", spy: "ươi" },
+            { main: "uây", spy: "oay" }, { main: "oi", spy: "ôi" }, { main: "ơi", spy: "ôi" }, { main: "uôi", spy: "ươi" },
             { main: "uai", spy: "oai" }, { main: "ui", spy: "ưi" }, { main: "oe", spy: "oet" }
         ];
 
@@ -361,6 +361,7 @@
             if (targetVần.endsWith('t') || targetVần.endsWith('c') || targetVần.endsWith('p') || targetVần.endsWith('ch')) {
                 if (targetVần === "ât") đọcTrơnVần = "ất";
                 else if (targetVần === "ăt") đọcTrơnVần = "ắt";
+		else if (targetVần === "oai") đọcTrơnVần = "oai";
                 else if (targetVần === "ơt") đọcTrơnVần = "ớt";
                 else if (targetVần === "ut") đọcTrơnVần = "út";
                 else if (targetVần === "ưt") đọcTrơnVần = "ứt";
@@ -372,7 +373,7 @@
                 else if (targetVần === "uyêt") đọcTrơnVần = "uyết";
                 else if (targetVần === "oet") đọcTrơnVần = "oét";
                 else if (targetVần === "oét") đọcTrơnVần = "oét";
-                else if (targetVần === "uich") đọcTrơnVần = "uịch";
+                else if (targetVần === "uich") đọcTrơnVần = "uích";
                 else if (targetVần === "uyp") đọcTrơnVần = "uýp";
                 else if (targetVần === "uyt") đọcTrơnVần = "uýt";
                 else if (targetVần === "ach") đọcTrơnVần = "ách";
@@ -390,7 +391,7 @@
                 else if (targetVần === "ôp") đọcTrơnVần = "ốp";
                 else if (targetVần === "ơp") cladding = "ớp";
                 else if (targetVần === "up") đọcTrơnVần = "úp";
-                else if (targetVần === "ưp") đọcTrơnVần = "úp";
+                else if (targetVần === "ưp") đọcTrơnVần = "ứp";
                 else {
                     đọcTrơnVần = targetVần + " sắc"; // Dự phòng
                 }
@@ -398,16 +399,18 @@
             // 2. Nhóm vần ba và các vần đặc biệt dễ bị đọc lỗi chữ cái tiếng Anh
             else {
                 const bangDichGiong = {
-                    "oay": "oai",
-                    "oang": "oáng",
-                    "oanh": "oánh",
-                    "uynh": "uýnh",
+                    "oai": "oai",
+		    "oay": "oay",
+		    "iêu": "iêu",
+                    "oang": "oang",
+                    "oanh": "oanh",
+                    "uynh": "uynh",
                     "uân": "uân",
                     "uâng": "uâng",
                     "uâc": "uấc",
                     "uây": "uây",
                     "ươu": "ươu",
-                    "uyu": "u du",
+                    "uyu": "uyu",
                     "am": "am",
                     "an": "an",
                     "ang": "ang",
