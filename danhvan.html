@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bé Học Đánh Vần</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { --primary: #007bff; --secondary: #ff4757; --dark: #2f3542; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background: #fff9db; min-height: 100vh; margin: 0; padding: 10px; display: flex; align-items: center; justify-content: center; }
+        
+        /* BỐ CỤC TRÁI - PHẢI */
+        .main-wrapper { display: flex; flex-direction: row; gap: 15px; width: 100%; max-width: 1600px; height: 95vh; align-items: stretch; }
+
+        /* BÊN TRÁI: BẢNG CHỌN */
+        .selection-container { display: grid; grid-template-columns: 1fr 0.8fr 1.5fr 1fr; gap: 8px; flex: 2; height: 100%; }
+        .column { background: white; border-radius: 20px; display: flex; flex-direction: column; border: 3px solid #ffd43b; overflow: hidden; box-shadow: 5px 5px 0px #fab005; }
+        .col-header { background: #fff3bf; padding: 10px; text-align: center; font-weight: 700; font-size: 16px; color: #f08c00; border-bottom: 2px solid #ffd43b; }
+        .btn-grid { padding: 10px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; flex-grow: 1; }
+        .btn-item { padding: 20px 5px; border: 2px solid #f1f2f6; border-radius: 15px; background: #fff; cursor: pointer; font-size: 28px; font-weight: 700; color: var(--dark); transition: 0.1s; }
+        .btn-item.active { background: #4dabf7; color: white; border-color: #228be6; transform: scale(1.05); }
+        .btn-item.hidden { display: none; }
+        .btn-item:disabled { opacity: 0.1; }
+        #dt .btn-item { font-size: 50px; padding: 15px 5px; }
+
+        /* BÊN PHẢI: BẢNG HIỂN THỊ & NÚT BẤM */
+        .right-panel { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        #display-area { background: white; flex: 1; border-radius: 25px; border: 4px solid #4dabf7; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 8px 8px 0px #1971c2; overflow: hidden; }
+        
+        #box-main { font-size: 150px; font-weight: 700; color: var(--dark); display: flex; align-items: center; justify-content: center; min-height: 150px; }
+        #box-res { font-size: 200px; font-weight: 700; color: var(--secondary); min-height: 150px; }
+
+        /* DẤU ĐỎ SÁT CHỮ */
+        .char-unit { position: relative; display: inline-flex; justify-content: center; align-items: center; min-width: 60px; }
+        .mark-red { color: #ff0000 !important; position: absolute; top: 20px; left: 70%; transform: translateX(-50%); font-size: 170px; line-height: 1; pointer-events: none; animation: pop 0.3s ease; }
+        .mark-dot { top: 70px !important; font-size: 200px !important; }
+
+        /* HIỆU ỨNG NGỘ NGHĨNH */
+        @keyframes pop { 0% { transform: translateX(-50%) scale(0); } 100% { transform: translateX(-50%) scale(1); } }
+        .jump { animation: jump 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-40px) rotate(5deg); } }
+
+        .controls { display: flex; flex-direction: column; gap: 10px; }
+        .btn-action { padding: 20px; font-size: 24px; border: none; border-radius: 20px; color: white; cursor: pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.2s; }
+        .btn-action:active { transform: translateY(3px); }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <!-- BÊN TRÁI -->
+    <div class="selection-container">
+        <div class="column"><div class="col-header">Âm đầu</div><div id="pa" class="btn-grid"></div></div>
+        <div class="column"><div class="col-header">Âm đơn</div><div id="na" class="btn-grid"></div></div>
+        <div class="column"><div class="col-header">Vần</div><div id="v" class="btn-grid"></div></div>
+        <div class="column"><div class="col-header">Dấu</div><div id="dt" class="btn-grid"></div></div>
+    </div>
+
+    <!-- BÊN PHẢI -->
+    <div class="right-panel">
+        <div id="display-area">
+            <div id="box-main">Chào Minh Khang!</div>
+            <div id="box-res"></div>
+        </div>
+        <div class="controls">
+            <button class="btn-action" style="background: #228be6" onclick="runSpell()">🚀 ĐÁNH VẦN</button>
+            <button class="btn-action" style="background: #fa5252" onclick="runRead()">📢 ĐỌC TRƠN</button>
+            <button class="btn-action" style="background: #868e96" onclick="clearAll()">🧹 XÓA</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cfg = {
+        pa: ['b','c','ch','d','đ','g','gh','gi','h','k','kh','l','m','n','ng','ngh','nh','p','ph','qu','r','s','t','th','tr','v','x'],
+        na: ['a','ă','â','e','ê','i','o','ô','ơ','u','ư','y'],
+        van: ['ai','ao','au','âu','ay','ây','eo','êu','ia','iu','oa','oă','oe','oi','ôi','ơi','ua','uâ','uê','ui','uô','uơ','ưa','ưi','ươ','ưu','uy','am','ăm','âm','an','ăn','ân','ang','ăng','âng','anh','ap','ăp','âp','at','ăt','ât','em','êm','en','ên','eng','ênh','ep','êp','et','êt','iêc','iên','iêp','iêt','iêu','im','in','inh','ip','it','oac','oach','oai','oam','oan','oang','oanh','oap','oat','oay','ong','op','ot','ôc','ông','ôp','ôt','ơc','ơm','ơn','ơp','ơt','uân','uât','uôc','uôn','uông','uôt','up','ut','ưc','ưng','ươc','ươm','ươn','ương','ươp','ươt','uyên','uyêt','uynh','uyt'],
+        dt: [{n:'ngang',s:''},{n:'huyền',s:'\u0300'},{n:'hỏi',s:'\u0309'},{n:'ngã',s:'\u0303'},{n:'sắc',s:'\u0301'},{n:'nặng',s:'\u0323'}]
+    };
+
+    const sounds = {'a':'a','ă':'á','â':'ớ','b':'bờ','c':'cờ','ch':'chờ','d':'dờ','đ':'đờ','e':'e','ê':'ê','g':'gờ','gh':'gờ','gi':'di','h':'hờ','i':'i','k':'ca','kh':'khờ','l':'lờ','m':'mờ','n':'nờ','ng':'ngờ','ngh':'ngờ','nh':'nhờ','o':'o','ô':'ô','ơ':'ơ','p':'pờ','ph':'phờ','qu':'quờ','r':'rờ','s':'sờ','t':'tờ','th':'thờ','tr':'trờ','u':'u','ư':'ư','v':'vờ','x':'xờ','y':'i','ng':'ngờ','nh':'nhờ','ch':'chờ'};
+
+    let sel = {pa: '', v: '', dt: cfg.dt[0]};
+
+    function init() {
+        const render = (id, list, key) => {
+            const el = document.getElementById(id);
+            list.forEach((item) => {
+                const b = document.createElement('button');
+                b.className = 'btn-item';
+                b.innerText = (typeof item === 'object') ? (item.s || '—') : item;
+                b.onclick = () => {
+                    if(key === 'v' || key === 'na') {
+                        sel.v = (typeof item === 'object') ? sel.v : item;
+                        document.querySelectorAll('#na .btn-item, #v .btn-item').forEach(x=>x.classList.remove('active'));
+                    } else if(key === 'dt') { sel.dt = item; }
+                    else { sel.pa = item; }
+                    b.parentElement.querySelectorAll('.btn-item').forEach(btn => btn.classList.remove('active'));
+                    b.classList.add('active');
+                    updateUI();
+                };
+                el.appendChild(b);
+            });
+        };
+        render('pa', cfg.pa, 'pa'); render('na', cfg.na, 'na'); render('v', cfg.van, 'v'); render('dt', cfg.dt, 'dt');
+    }
+
+    function updateUI(){
+        const v = sel.v || "";
+        const isSoft = /^[eêiy]/.test(v);
+        const isAmTac = /[tcp]$/.test(v) || v.endsWith('ch');
+        document.querySelectorAll('#pa .btn-item').forEach(btn => {
+            const p = btn.innerText;
+            btn.classList.remove('hidden');
+            if (v !== "") {
+                if (isSoft) { if (['c','g','ng'].includes(p)) btn.classList.add('hidden'); }
+                else { if (['k','gh','ngh'].includes(p)) btn.classList.add('hidden'); }
+            }
+        });
+        document.querySelectorAll('#dt .btn-item').forEach((btn, i) => {
+            if (isAmTac && i !== 0 && i !== 4 && i !== 5) btn.disabled = true;
+            else btn.disabled = false;
+        });
+        document.getElementById('box-main').innerText = ghepChuan(sel.pa, sel.v, sel.dt.s);
+        document.getElementById('box-res').innerText = "";
+    }
+
+    function ghepChuan(pa, van, dau) {
+        if (!van) return pa;
+        const vowels = 'aăâeêioôơuưy';
+        let idx = 0;
+        for(let i=0; i<van.length; i++) if(vowels.includes(van[i])) { idx = i; break; }
+        let vArr = van.split('');
+        vArr[idx] = (vArr[idx] + (dau || '')).normalize('NFC');
+        return (pa + vArr.join('')).normalize('NFC');
+    }
+
+    const speak = (t) => new Promise(r => { 
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(t); u.lang = 'vi-VN'; u.rate = 2.0; u.onend = r; 
+        window.speechSynthesis.speak(u); 
+    });
+
+    async function runSpell() {
+        if (!sel.v) return;
+        const main = document.getElementById('box-main');
+        const res = document.getElementById('box-res');
+        main.innerHTML = ""; res.innerText = "";
+
+        // --- HÀM BỔ TRỢ NẰM TRONG ĐỂ TRÁNH LỖI ---
+        const tachAm = (v) => {
+            const comp = ['ng','nh','ch','gh','ph','th','tr','kh'];
+            for (let c of comp) if (v.endsWith(c)) return [v.slice(0, -c.length), c];
+            if (/[nmptc]$/.test(v)) return [v.slice(0, -1), v.slice(-1)];
+            return v.split('');
+        };
+
+        const getVowelTargetIdx = (v) => {
+            const vowels = 'aăâeêioôơuưy';
+            let idxs = [];
+            for(let i=0; i<v.length; i++) if(vowels.includes(v[i].toLowerCase())) idxs.push(i);
+            if(idxs.length === 1) return idxs[0];
+            if(idxs.length >= 2) return (v.length > idxs[idxs.length-1] + 1) ? idxs[1] : idxs[0];
+            return 0;
+        };
+        // ---------------------------------------
+
+        const createUnit = (txt) => {
+            let s = document.createElement('div'); s.className = 'char-unit';
+            s.innerText = txt; main.appendChild(s); return s;
+        };
+
+        const vParts = tachAm(sel.v);
+        const targetIdxInRhyme = getVowelTargetIdx(sel.v);
+        let targetElement = null;
+
+        if (!sel.pa) {
+            // Đánh vần vần: a - ngờ - ang
+            let charPos = 0;
+            for (let p of vParts) { 
+                let b = createUnit(p); 
+                if (targetElement === null && charPos <= targetIdxInRhyme && targetIdxInRhyme < charPos + p.length) targetElement = b;
+                await speak(sounds[p] || p);
+                charPos += p.length;
+            }
+            await speak(sel.v);
+        } else {
+            // Đánh vần tiếng: bờ - ang - bang
+            createUnit(sel.pa); await speak(sounds[sel.pa] || sel.pa);
+            let charPos = 0;
+            for (let p of vParts) {
+                let b = createUnit(p);
+                if (targetElement === null && charPos <= targetIdxInRhyme && targetIdxInRhyme < charPos + p.length) targetElement = b;
+                charPos += p.length;
+            }
+            await speak(sel.v);
+            await speak(ghepChuan(sel.pa, sel.v, ''));
+        }
+
+        // HIỆN DẤU ĐÚNG VỊ TRÍ
+        if (sel.dt && sel.dt.n !== 'ngang') {
+            const mark = document.createElement('div');
+            mark.className = 'mark-red' + (sel.dt.n === 'nặng' ? ' mark-dot' : '');
+            mark.innerText = sel.dt.s;
+            // Gắn dấu vào đúng ô chứa nguyên âm chính (Ví dụ: ô chữ a)
+            if (targetElement) targetElement.appendChild(mark);
+            else main.lastChild.appendChild(mark);
+            await speak(sel.dt.n);
+        }
+
+        res.innerText = ghepChuan(sel.pa, sel.v, sel.dt.s);
+        res.classList.add('jump');
+        await speak(res.innerText);
+        setTimeout(() => res.classList.remove('jump'), 500);
+    }
+
+    function runRead() {
+        if (!sel.v) return;
+        const res = document.getElementById('box-res');
+        res.innerText = ghepChuan(sel.pa, sel.v, sel.dt.s);
+        res.classList.add('jump');
+        speak(res.innerText);
+        setTimeout(() => res.classList.remove('jump'), 500);
+    }
+
+    function clearAll() {
+        sel = {pa: '', v: '', dt: cfg.dt[0]};
+        document.querySelectorAll('.btn-item').forEach(b => b.classList.remove('active'));
+        document.getElementById('box-main').innerText = "Chào Minh Khang!";
+        document.getElementById('box-res').innerText = "";
+        updateUI();
+    }
+    init();
+</script>
+</body>
+</html>
