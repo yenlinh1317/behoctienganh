@@ -354,22 +354,96 @@
             normalVần = randomPair.main;
             targetVần = randomPair.spy;
 
-            speak(`Minh Khang ơi, hãy tìm vần ${targetVần} đang đi trốn nào!`);
+            // BỘ LỌC ÉP TRÌNH DUYỆT ĐỌC TRƠN CHUẨN TẤT CẢ CÁC VẦN TIẾNG VIỆT KHI GỌI ĐỀ BÀI
+            let đọcTrơnVần = targetVần;
+            
+            // 1. Nhóm các vần kết thúc bằng phụ âm tờ (t), cờ (c), pờ (p), ch -> Thêm dấu sắc để máy đọc trơn tự nhiên
+            if (targetVần.endsWith('t') || targetVần.endsWith('c') || targetVần.endsWith('p') || targetVần.endsWith('ch')) {
+                if (targetVần === "ât") đọcTrơnVần = "ất";
+                else if (targetVần === "ăt") đọcTrơnVần = "ắt";
+                else if (targetVần === "ơt") đọcTrơnVần = "ớt";
+                else if (targetVần === "ut") đọcTrơnVần = "út";
+                else if (targetVần === "ưt") đọcTrơnVần = "ứt";
+                else if (targetVần === "et") đọcTrơnVần = "ét";
+                else if (targetVần === "êt" || targetVần === "êch") đọcTrơnVần = "ếch";
+                else if (targetVần === "ot") đọcTrơnVần = "ót";
+                else if (targetVần === "ôt") đọcTrơnVần = "ốt";
+                else if (targetVần === "uât") đọcTrơnVần = "uất";
+                else if (targetVần === "uyêt") đọcTrơnVần = "uyết";
+                else if (targetVần === "oet") đọcTrơnVần = "oét";
+                else if (targetVần === "oét") đọcTrơnVần = "oét";
+                else if (targetVần === "uich") đọcTrơnVần = "uịch";
+                else if (targetVần === "uyp") đọcTrơnVần = "uýp";
+                else if (targetVần === "uyt") đọcTrơnVần = "uýt";
+                else if (targetVần === "ach") đọcTrơnVần = "ách";
+                else if (targetVần === "ich") đọcTrơnVần = "ích";
+                else if (targetVần === "êch") đọcTrơnVần = "ếch";
+                else if (targetVần === "ôc") đọcTrơnVần = "ốc";
+                else if (targetVần === "uc") đọcTrơnVần = "úc";
+                else if (targetVần === "ưc") đọcTrơnVần = "ức";
+                else if (targetVần === "ăc") đọcTrơnVần = "ắc";
+                else if (targetVần === "âc") đọcTrơnVần = "ấc";
+                else if (targetVần === "ap") đọcTrơnVần = "áp";
+                else if (targetVần === "ep") đọcTrơnVần = "ép";
+                else if (targetVần === "êp") đọcTrơnVần = "ếp";
+                else if (targetVần === "op") đọcTrơnVần = "óp";
+                else if (targetVần === "ôp") đọcTrơnVần = "ốp";
+                else if (targetVần === "ơp") cladding = "ớp";
+                else if (targetVần === "up") đọcTrơnVần = "úp";
+                else if (targetVần === "ưp") đọcTrơnVần = "úp";
+                else {
+                    đọcTrơnVần = targetVần + " sắc"; // Dự phòng
+                }
+            }
+            // 2. Nhóm vần ba và các vần đặc biệt dễ bị đọc lỗi chữ cái tiếng Anh
+            else {
+                const bangDichGiong = {
+                    "oay": "oai",
+                    "oang": "oáng",
+                    "oanh": "oánh",
+                    "uynh": "uýnh",
+                    "uân": "uân",
+                    "uâng": "uâng",
+                    "uâc": "uấc",
+                    "uây": "uây",
+                    "ươu": "ươu",
+                    "uyu": "u du",
+                    "am": "am",
+                    "an": "an",
+                    "ang": "ang",
+                    "anh": "anh",
+                    "ăm": "ăm",
+                    "ăn": "ăn",
+                    "ăng": "ăng",
+                    "âm": "âm",
+                    "ân": "ân",
+                    "âng": "âng",
+                    "en": "en",
+                    "eng": "eng"
+                };
+                if (bangDichGiong[targetVần]) {
+                    đọcTrơnVần = bangDichGiong[targetVần];
+                }
+            }
 
-            // ĐIỀU CHỈNH MA TRẬN VÀ KÍCH THƯỚC Ô THEO TỪNG CHẶNG ĐỂ CHỐNG TRÀN
+            // Phát âm câu hỏi với từ đã được chuẩn hóa giọng đọc trơn thuần Việt
+            speak(`Minh Khang ơi,, hãy tìm vần ${đọcTrơnVần} đang đi trốn nào!`);
+
+            // Logic tính toán dòng và cột để chống tràn màn hình điện thoại
+            let isPortrait = window.innerHeight > window.innerWidth;
             let gridSize = 9; 
             let columns = 3;
-            let targetHeight = "130px"; // Màn 1-4: Ô chữ siêu cao rộng rãi
+            let targetHeight = "130px"; 
 
             if (currentIdx > 4) { 
                 gridSize = 12; 
-                columns = 4; 
-                targetHeight = "115px"; // Màn 5-7: 12 ô, hạ nhẹ chiều cao
+                columns = isPortrait ? 3 : 4; 
+                targetHeight = "115px"; 
             } 
             if (currentIdx > 7) { 
                 gridSize = 16; 
-                columns = 4; 
-                targetHeight = "90px";  // MÀN 8-10: 16 Ô, TỰ ĐỘNG BÓP CHIỀU CAO XUỐNG 90PX ĐỂ KHÔNG BỊ TRÀN MÀN HÌNH
+                columns = isPortrait ? 4 : 4; 
+                targetHeight = "90px";  
             } 
 
             const gridContainer = document.getElementById('grid');
@@ -385,10 +459,7 @@
                 box.className = 'letter-box';
                 box.innerText = vần;
                 
-                // Áp dụng chiều cao linh hoạt đã tính toán ở trên cho từng ô chữ
                 box.style.height = targetHeight; 
-                
-                // Nếu ở màn 8-10, hạ nhẹ cỡ chữ xuống một chút (75px) để chữ ôm khít trong ô thấp
                 if (currentIdx > 7) {
                     box.style.fontSize = "75px";
                 }
