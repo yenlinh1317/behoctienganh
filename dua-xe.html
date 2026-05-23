@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siêu Đua Xe Học Tập Cao Cấp - Minh Khang</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { 
+            background: linear-gradient(135deg, #15803d 0%, #166534 100%); /* Nền cỏ xanh mướt toàn màn hình */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 100vh; 
+            padding: 15px;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Trang trí cây cỏ rìa màn hình */
+        body::before, body::after {
+            content: '🌳 🌲 🌸 🌿 🌾 🌳';
+            position: absolute;
+            font-size: 24px;
+            letter-spacing: 15px;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        body::before { top: 10px; left: 20px; }
+        body::after { top: 10px; right: 10px; }
+        
+        /* Màn hình khởi đầu và kết thúc */
+        #start-screen, #end-screen { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(15, 23, 42, 0.95); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            color: white; 
+            text-align: center; 
+            backdrop-filter: blur(10px);
+        }
+        
+        .game-title {
+            font-size: 55px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px #22c55e, 0 0 20px #16a34a;
+            margin-bottom: 20px;
+        }
+
+        .btn-start { 
+            padding: 22px 65px; 
+            font-size: 34px; 
+            font-weight: bold; 
+            background: linear-gradient(45deg, #f59e0b, #ef4444); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); 
+            transition: 0.2s; 
+        }
+        .btn-start:hover { transform: scale(1.1); box-shadow: 0 0 35px rgba(239, 68, 68, 0.8); }
+
+        /* ĐƯỜNG ĐUA MÀU XÁM NHẠT VÀ CÂY CỎ BÊN ĐƯỜNG */
+        .track-container { 
+            width: 100%; 
+            flex-grow: 1;
+            max-height: 280px;
+            background: #d4d4d8; /* Đường màu xám nhạt */
+            padding: 15px 0; 
+            border-radius: 24px; 
+            border-top: 12px solid #a1a1aa; /* Lề đường */
+            border-bottom: 12px solid #a1a1aa;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 10px 30px rgba(0,0,0,0.4); 
+            position: relative; 
+            margin-bottom: 15px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow: hidden;
+        }
+
+        /* Cỏ hoa mọc ngay sát mép đường đua */
+        .track-decor {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 50px;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .decor-top { top: 2px; }
+        .decor-bottom { bottom: 2px; }
+
+        /* Làn đường đua */
+        .lane { 
+            height: 110px; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            background-image: linear-gradient(to right, #ffffff 50%, rgba(255,255,255,0) 0%);
+            background-position: bottom;
+            background-size: 60px 4px;
+            background-repeat: repeat-x;
+        }
+        .lane:last-child { background-image: none; }
+        
+        /* Vạch đích ô caro chuyên nghiệp */
+        .finish-line { 
+            position: absolute; 
+            right: 50px; 
+            top: 0; 
+            bottom: 0; 
+            width: 35px; 
+            background: repeating-conic-gradient(#fff 0% 25%, #000 0% 50%) 0% 0%/15px 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        
+        /* XE ĐUA KHỔNG LỒ */
+        .car { 
+            font-size: 85px; /* Tăng kích thước xe siêu to */
+            position: absolute; 
+            left: 20px; 
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            user-select: none; 
+            z-index: 3;
+            filter: drop-shadow(0 12px 6px rgba(0,0,0,0.3));
+        }
+
+        /* Khói bụi turbo đuôi xe */
+        .car::after {
+            content: '💨';
+            position: absolute;
+            left: -50px;
+            top: 25px;
+            font-size: 35px;
+            opacity: 0.7;
+        }
+
+        .car-label { 
+            font-size: 16px; 
+            font-weight: 800;
+            color: white; 
+            background: linear-gradient(to right, #06b6d4, #0891b2);
+            padding: 4px 14px; 
+            border-radius: 20px; 
+            position: absolute; 
+            top: -15px; 
+            white-space: nowrap; 
+            left: 20px; 
+            box-shadow: 0 4px 10px rgba(6, 182, 212, 0.4);
+        }
+        #rival-car .car-label {
+            background: linear-gradient(to right, #f43f5e, #e11d48);
+            box-shadow: 0 4px 10px rgba(244, 63, 94, 0.4);
+        }
+
+        /* KHU VỰC ĐIỀU KHIỂN & HÌNH ẢNH MINH HỌA */
+        .game-box { 
+            width: 100%; 
+            flex-grow: 1.5;
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 15px 30px; 
+            border-radius: 30px; 
+            text-align: center; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .status-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 26px; 
+            font-weight: 800; 
+            color: #1e293b; 
+        }
+        .status-card {
+            background: #f1f5f9;
+            padding: 4px 20px;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .timer-container { 
+            width: 100%; 
+            height: 16px; 
+            background: #cbd5e1; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            margin: 10px 0;
+        }
+        #timer-bar { 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(to right, #4ade80, #22c55e); 
+            transition: width 0.1s linear; 
+        }
+
+        /* KHUNG HIỂN THỊ ẢNH TỪ VỰNG */
+        .word-image-container {
+            width: 160px;
+            height: 120px;
+            margin: 0 auto;
+            border: 4px solid #cbd5e1;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #f8fafc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #word-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .btn-audio {
+            align-self: center;
+            padding: 10px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* ĐÁP ÁN TO RÕ RÀNG */
+        .options-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            flex-grow: 1;
+            margin-top: 12px;
+        }
+        .btn-option { 
+            font-size: 38px; 
+            font-weight: 800; 
+            color: #0f172a; 
+            background: linear-gradient(to bottom, #ffffff, #f8fafc); 
+            border: none;
+            border-bottom: 6px solid #cbd5e1;
+            border-radius: 24px; 
+            cursor: pointer; 
+            transition: all 0.1s; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-option:hover { background: #f1f5f9; transform: translateY(2px); border-bottom-width: 4px; }
+        .btn-option:active { transform: translateY(6px); border-bottom-width: 0px; }
+        
+        .btn-option.correct { 
+            background: linear-gradient(to bottom, #4ade80, #22c55e) !important; 
+            color: white !important; 
+            border-bottom-color: #15803d !important;
+        }
+        .btn-option.wrong { 
+            background: linear-gradient(to bottom, #f87171, #ef4444) !important; 
+            color: white !important; 
+            border-bottom-color: #b91c1c !important;
+        }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Màn hình bắt đầu -->
+    <div id="start-screen">
+        <h1 class="game-title">🏎️ SIÊU ĐUA XE TỐC ĐỘ 🏎️</h1>
+        <p style="font-size: 22px; margin-bottom: 40px; color: #94a3b8; max-width: 600px;">Bé Minh Khang hãy nhìn ảnh, nghe âm thanh và chọn đúng từ để xe về đích nhé!</p>
+        <button class="btn-start" onclick="startGame()">ĐUA NGAY THÔI!</button>
+    </div>
+
+    <!-- Màn hình kết thúc -->
+    <div id="end-screen" class="hidden">
+        <h1 id="end-title" class="game-title">🏁 KẾT THÚC VÒNG ĐUA 🏁</h1>
+        <p id="end-p" style="font-size: 26px; margin-bottom: 40px; color: #cbd5e1; font-weight: bold;"></p>
+        <button class="btn-start" onclick="startGame()">ĐUA LẠI NÀO</button>
+    </div>
+
+    <!-- Đường đua Xám Nhạt -->
+    <div class="track-container">
+<!-- Hoa cỏ ven đường đua -->
+        <div class="track-decor decor-top"><span>🌸</span><span>🌱</span><span>🌻</span><span>🌿</span><span>🌸</span></div>
+        <div class="track-decor decor-bottom"><span>🌿</span><span>🌸</span><span>🌱</span><span>🌸</span><span>🌻</span></div>
+        
+        <!-- Làn xe của Minh Khang -->
+        <div class="lane">
+            <div id="player-car" class="car" style="left: 5%;">
+                <span class="car-label">Minh Khang</span>🏎️
+            </div>
+        </div>
+        
+        <!-- Làn xe đối thủ -->
+        <div class="lane">
+            <div id="rival-car" class="car" style="left: 5%;">
+                <span class="car-label">Máy Đua</span>🚗
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng câu hỏi & Hình ảnh minh họa từ -->
+    <div class="game-box">
+        <div class="status-bar">
+            <div class="status-card">Chặng: <span id="question-idx" style="color: #2563eb;">0</span>/10</div>
+            <div class="status-card">Điểm: <span id="score" style="color: #16a34a;">0</span></div>
+        </div>
+
+        <div class="timer-container">
+            <div id="timer-bar"></div>
+        </div>
+
+        <!-- Khung chứa ảnh của từ cần tìm -->
+        <div class="word-image-container">
+            <img id="word-img" src="" alt="Hình minh họa">
+        </div>
+
+        <button class="btn-audio" onclick="playCurrentWord()">🔊 NGHE LẠI TỪ</button>
+
+        <div class="options-grid">
+            <button class="btn-option" onclick="checkAnswer(this)"></button>
+            <button class="btn-option" onclick="checkAnswer(this)"></button>
+            <button class="btn-option" onclick="checkAnswer(this)"></button>
+            <button class="btn-option" onclick="checkAnswer(this)"></button>
+        </div>
+    </div>
+
+    <script>
+        // HÃY THAY THẾ CÁC TỪ TRONG MẢNG NÀY THÀNH BỘ TỪ GỐC CỦA BẠN
+        const database = ['ba', 'bà', 'bá', 'bả', 'bạ', 'cá', 'cà', 'gà', 'cổ cò', 'lá', 'ca','cô','cỏ','cọ','cổ','cờ','da','đe','đa','đò','đố','đổ','dẻ','lê','lồ ô','le le','lọ',
+        'cố đô', 'bơ', 'đồ cổ', 'dế', 'dê', 'đê', 'da cá', 'sư tử', 'cá cờ','lê la','bê','bễ','ga','hồ','bi','bia','bi bô','lia lịa','bể cá','đĩa','bể cá','hổ',
+        'đu đủ', 'bí đỏ', 'mẹ', 'bố', 'xe', 'đò', 'hồ', 'cờ', 'dê', 'ví','ghế gỗ','ghế da','ghế đá','giá đỗ','kì đà','kể','giẻ','kẻ','giò','bờ kè','giỏ cá'];
+
+        let currentIdx = 0;
+        let score = 0;
+        let currentWord = "";
+        let canClick = false;
+        let timerInterval;
+        let timeLeft = 100;
+
+        let playerProgress = 5;
+        let rivalProgress = 5;
+        let rivalInterval;
+
+        function speak(text) {
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            
+            currentIdx = 0;
+            score = 0;
+            playerProgress = 5;
+            rivalProgress = 5;
+            document.getElementById('score').innerText = score;
+            updateCarPositions();
+
+            clearInterval(rivalInterval);
+            rivalInterval = setInterval(() => {
+                if (rivalProgress < 80) {
+                    rivalProgress += 8;
+                    updateCarPositions();
+                    checkRaceFinish();
+                }
+            }, 4000);
+
+            nextQuestion();
+        }
+
+        function updateCarPositions() {
+            document.getElementById('player-car').style.left = playerProgress + '%';
+            document.getElementById('rival-car').style.left = rivalProgress + '%';
+        }
+
+        function playCurrentWord() {
+            speak(currentWord);
+        }
+
+        function nextQuestion() {
+            if (currentIdx >= 10 || playerProgress >= 80 || rivalProgress >= 80) {
+                endGame();
+                return;
+            }
+
+            currentIdx++;
+            document.getElementById('question-idx').innerText = currentIdx;
+            canClick = true;
+
+            const buttons = document.querySelectorAll('.btn-option');
+            buttons.forEach(btn => btn.className = 'btn-option');
+
+            currentWord = database[Math.floor(Math.random() * database.length)];
+
+            // Tải ảnh minh họa thông qua API mã nguồn mở (Hỗ trợ từ khóa tiếng Anh/Việt)
+            const imgElement = document.getElementById('word-img');
+            imgElement.src = `https://unsplash.com`; // Ảnh mặc định dự phòng
+            
+            // Tìm ảnh động theo từ khóa
+            imgElement.src = `https://unsplash.com{encodeURIComponent(currentWord)}&client_id=source`;
+            imgElement.src = `https://unsplash.com`; // Ảnh dự phòng mặc định 2
+            
+            // Sử dụng URL ảnh tĩnh dựa trên từ khóa thực tế
+            imgElement.src = `https://loremflickr.com{encodeURIComponent(currentWord)}`;
+
+            let options = [currentWord];
+            while (options.length < 4) {
+                let randomWord = database[Math.floor(Math.random() * database.length)];
+                if (!options.includes(randomWord)) {
+                    options.push(randomWord);
+                }
+            }
+
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+
+            buttons.forEach((btn, idx) => {
+                btn.innerText = options[idx];
+            });
+
+            playCurrentWord();
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 100;
+            const timerBar = document.getElementById('timer-bar');
+            
+            timerInterval = setInterval(() => {
+                timeLeft -= 1.25; 
+                if (timerBar) {
+                    timerBar.style.width = timeLeft + '%';
+                    if (timeLeft < 30) {
+                        timerBar.style.background = 'linear-gradient(to right, #f87171, #ef4444)';
+                    } else {
+                        timerBar.style.background = 'linear-gradient(to right, #4ade80, #22c55e)';
+                    }
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showCorrectAnswerOnTimeout();
+                }
+            }, 100);
+        }
+
+        function checkAnswer(selectedButton) {
+            if (!canClick) return;
+            canClick = false;
+            clearInterval(timerInterval);
+
+            const answer = selectedButton.innerText;
+            const buttons = document.querySelectorAll('.btn-option');
+
+            if (answer === currentWord) {
+                selectedButton.classList.add('correct');
+                score += 10;
+                document.getElementById('score').innerText = score;
+                
+                playerProgress += 9; 
+                updateCarPositions();
+                
+                speak("Chính xác! Xe phóng lên nào!");
+                checkRaceFinish();
+            } else {
+                selectedButton.classList.add('wrong');
+                buttons.forEach(btn => {
+                    if (btn.innerText === currentWord) btn.classList.add('correct');
+                });
+                speak("Tiếc quá, chưa đúng rồi!");
+            }
+
+            setTimeout(nextQuestion, 2000);
+        }
+
+        function showCorrectAnswerOnTimeout() {
+            canClick = false;
+            const buttons = document.querySelectorAll('.btn-option');
+            buttons.forEach(btn => {
+                if (btn.innerText === currentWord) btn.classList.add('correct');
+            });
+            speak("Hết giờ rồi, cố lên con nhé!");
+            setTimeout(nextQuestion, 2000);
+        }
+
+        function checkRaceFinish() {
+            if (playerProgress >= 80 || rivalProgress >= 80) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            clearInterval(rivalInterval);
+            
+            const endScreen = document.getElementById('end-screen');
+            const endTitle = document.getElementById('end-title');
+            const endP = document.getElementById('end-p');
+            
+            endScreen.classList.remove('hidden');
+            
+            if (playerProgress > rivalProgress) {
+                endTitle.innerHTML = "🏆 MINH KHANG CHIẾN THẮNG! 🏆";
+                endP.innerText = `Tuyệt vời! Siêu tay đua Minh Khang cán đích đầu tiên với ${score} điểm!`;
+                speak("Chúc mừng Minh Khang xuất sắc cán đích đầu tiên và giành cúp vô địch cuộc đua!");
+            } else if (playerProgress < rivalProgress) {
+                endTitle.innerHTML = "🏁 MÁY ĐÃ VỀ ĐÍCH TRƯỚC! 🏁";
+                endP.innerText = `Bé đạt được ${score} điểm. Đua lại lần nữa để phục thù nào!`;
+                speak("Máy đua cán đích trước rồi, Minh Khang thử lại lần nữa để chiến thắng nhé!");
+            } else {
+                endTitle.innerHTML = "🤝 HÒA NHAU KỊCH TÍNH! 🤝";
+                endP.innerText = `Cả 2 xe lao qua vạch đích cùng lúc! Điểm của bé: ${score}`;
+                speak("Một cuộc đua nghẹt thở, hai xe đã về đích cùng một lúc!");
+            }
+        }
+    </script>
+</body>
+</html>
