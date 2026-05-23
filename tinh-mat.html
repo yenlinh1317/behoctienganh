@@ -180,7 +180,7 @@
     <!-- Màn hình bắt đầu -->
     <div id="start-screen">
         <h1 class="game-title">🥳 THÁM TỬ TINH MẮT 🥳</h1>
-        <p style="font-size: 24px; margin-bottom: 30px; color: #475569; font-weight: bold; max-width: 850px;">Ô chữ khổng lồ giống sách giáo khoa! Bé Minh Khang hãy nhanh mắt tìm từ đi trốn nhé! ✨</p>
+        <p style="font-size: 80px; margin-bottom: 60px; color: #475569; font-weight: bold; max-width: 1850px;">Bé Minh Khang hãy nhanh mắt tìm từ đi trốn nhé! ✨</p>
         <button class="btn-start" onclick="startGame()">🍭 BẮT ĐẦU CHƠI 🍭</button>
     </div>
 
@@ -253,25 +253,37 @@
         }
 
         function getSpellingGuide(word) {
-            let guide = "";
-            for (let i = 0; i < word.length; i++) {
-                let char = word[i];
-                if (char === 'n') guide += " ngờ ";
-                else if (char === 'g') guide += " gờ ";
-                else if (char === 'h') guide += " hờ ";
-                else if (char === 't') guide += " tờ ";
-                else if (char === 'c') guide += " cờ_ ";
-                else if (char === 'm') guide += " mờ ";
-                else if (char === 'p') guide += " ờ_pờ ";
-                else if (char === 'ch') guide += " chờ ";
-                else if (char === 'ê') guide += " ê_ "; 
-                else if (char === 'ơ') guide += " ơ_ ";
-                else if (char === 'ư') guide += " ư_ ";
-                else if (char === 'â') guide += " â_ ";
-                else if (char === 'ă') guide += " ă_ ";
-                else guide += ` ${char} `;
+            // Danh sách các vần phức tạp cần đánh vần theo tổ hợp âm chuẩn SGK
+            const danhSachVan = {
+                "oay": "o - a - i - oay",
+                "oai": "o - a - i - oai",
+                "oan": "o - a - nờ - oan",
+                "oang": "o - a - ngờ - oang",
+                "oanh": "o - a - nhờ - oanh",
+                "uynh": "u - i - nhờ - uynh",
+                "uich": "u - i - chờ - uich",
+                "uyêt": "u - iê - tờ - uyết",
+                "uyên": "u - iê - nờ - uyên",
+                "ươu": "ươ - u - ươu",
+                "ương": "ươ - ngờ - ương",
+                "ươn": "ươ - nờ - ươn",
+                "iêu": "i - ê - u - iêu",
+                "yêu": "i - ê - u - yêu",
+                "iên": "i - ê - nờ - iên",
+                "yên": "i - ê - nờ - yên",
+                "ang": "a - ngờ - ang",
+                "anh": "a - nhờ - anh",
+                "inh": "i - nhờ - inh",
+                "ich": "i - chờ - ich"
+            };
+
+            // Nếu vần nằm trong danh sách khó, lấy chuỗi đánh vần chuẩn
+            if (danhSachVan[word]) {
+                return danhSachVan[word];
             }
-            return guide;
+            
+            // Với tất cả các vần còn lại (an, am, at...), máy sẽ tự động đọc trơn cả vần
+            return word;
         }
 
         function startGame() {
@@ -299,13 +311,21 @@
 
             speak(`Minh Khang ơi, hãy tìm vần ${targetVần} đang đi trốn nào!`);
 
-            // Tính toán số cột và dòng tự động dựa trên hướng cầm máy
-            let isPortrait = window.innerHeight > window.innerWidth;
+            // ĐIỀU CHỈNH MA TRẬN VÀ KÍCH THƯỚC Ô THEO TỪNG CHẶNG ĐỂ CHỐNG TRÀN
             let gridSize = 9; 
             let columns = 3;
-            
-            if (currentIdx > 4) { gridSize = 12; columns = isPortrait ? 3 : 4; } 
-            if (currentIdx > 7) { gridSize = 16; columns = isPortrait ? 4 : 4; } 
+            let targetHeight = "130px"; // Màn 1-4: Ô chữ siêu cao rộng rãi
+
+            if (currentIdx > 4) { 
+                gridSize = 12; 
+                columns = 4; 
+                targetHeight = "115px"; // Màn 5-7: 12 ô, hạ nhẹ chiều cao
+            } 
+            if (currentIdx > 7) { 
+                gridSize = 16; 
+                columns = 4; 
+                targetHeight = "90px";  // MÀN 8-10: 16 Ô, TỰ ĐỘNG BÓP CHIỀU CAO XUỐNG 90PX ĐỂ KHÔNG BỊ TRÀN MÀN HÌNH
+            } 
 
             const gridContainer = document.getElementById('grid');
             gridContainer.innerHTML = "";
@@ -319,6 +339,15 @@
                 const box = document.createElement('div');
                 box.className = 'letter-box';
                 box.innerText = vần;
+                
+                // Áp dụng chiều cao linh hoạt đã tính toán ở trên cho từng ô chữ
+                box.style.height = targetHeight; 
+                
+                // Nếu ở màn 8-10, hạ nhẹ cỡ chữ xuống một chút (75px) để chữ ôm khít trong ô thấp
+                if (currentIdx > 7) {
+                    box.style.fontSize = "75px";
+                }
+
                 box.onclick = () => checkAnswer(box, vần);
                 gridContainer.appendChild(box);
             });
@@ -352,18 +381,35 @@
                 score += 10;
                 document.getElementById('score').innerText = score;
                 
+                // Lấy chuỗi đánh vần từ hàm getSpellingGuide
                 let spelling = getSpellingGuide(targetVần);
-                speak(`Đúng rồi! Xuất sắc! Vần ${targetVần}. ${spelling}. ${targetVần}!`);
+                
+                // Tách câu thành các cụm từ có dấu phẩy và chấm để máy nghỉ hơi tự nhiên
+                let chúcMừngText = `Đúng rồi! ... Vần ${targetVần}. ... ${spelling}. ... ${targetVần}!`;
+                
+                // Cấu hình giọng đọc riêng biệt: Chậm rãi, rõ ràng cho bé dễ nghe
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(chúcMừngText);
+                utterance.lang = 'vi-VN';
+                utterance.rate = 0.65; // Đẩy tốc độ đọc chậm hẳn lại (mức cũ là 0.8)
+                window.speechSynthesis.speak(utterance);
+                
             } else {
                 selectedBox.classList.add('wrong');
                 const boxes = document.querySelectorAll('.letter-box');
                 boxes.forEach(box => {
                     if (box.innerText === targetVần) box.classList.add('correct');
                 });
-                speak(`Chưa đúng rồi! Vần ${targetVần} ở đây cơ!`);
+                
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(`Chưa đúng rồi con ơi! ... Vần ${targetVần} ở đây cơ!`);
+                utterance.lang = 'vi-VN';
+                utterance.rate = 0.75;
+                window.speechSynthesis.speak(utterance);
             }
 
-            setTimeout(nextQuestion, 4500); 
+            // Tăng thời gian chờ lên 5.5 giây để bé có đủ thời gian nghe hết câu đọc chậm
+            setTimeout(nextQuestion, 5500); 
         }
 
         function showCorrectAnswerOnTimeout() {
