@@ -253,8 +253,8 @@
         }
 
         function getSpellingGuide(word) {
-            // Danh sách các vần phức tạp cần đánh vần theo tổ hợp âm chuẩn SGK
-            const danhSachVan = {
+            // 1. Bảng tra cứu các vần 3-4 chữ cái phức tạp (Chuẩn theo SGK tiểu học)
+            const danhSachVanPhucTap = {
                 "oay": "o - a - i - oay",
                 "oai": "o - a - i - oai",
                 "oan": "o - a - nờ - oan",
@@ -271,19 +271,65 @@
                 "yêu": "i - ê - u - yêu",
                 "iên": "i - ê - nờ - iên",
                 "yên": "i - ê - nờ - yên",
-                "ang": "a - ngờ - ang",
-                "anh": "a - nhờ - anh",
-                "inh": "i - nhờ - inh",
-                "ich": "i - chờ - ich"
+                "ăng": "ă - ngờ - ăng",
+                "âng": "â - ngờ - âng",
+                "ong": "o - ngờ - ong",
+                "ông": "ô - ngờ - ông",
+                "ung": "u - ngờ - ung",
+                "ưng": "ư - ngờ - ưng",
+                "uông": "u - ô - ngờ - uông",
+                "eng": "e - ngờ - eng",
+                "iêng": "i - ê - ngờ - iêng",
+                "uât": "u - ớ - tờ - uất",
+                "uân": "u - ớ - nờ - uân",
+                "uây": "u - ớ - i - uây",
+                "oet": "o - e - tờ - oét"
             };
 
-            // Nếu vần nằm trong danh sách khó, lấy chuỗi đánh vần chuẩn
-            if (danhSachVan[word]) {
-                return danhSachVan[word];
+            // Nếu vần nằm trong nhóm phức tạp, trả về cách đọc chuẩn ngay
+            if (danhSachVanPhucTap[word]) {
+                return danhSachVanPhucTap[word];
             }
-            
-            // Với tất cả các vần còn lại (an, am, at...), máy sẽ tự động đọc trơn cả vần
-            return word;
+
+            // 2. Tự động xử lý đánh vần cho TẤT CẢ các vần 2 chữ cái còn lại (am, an, at, ot, et, êch...)
+            let guide = "";
+            for (let i = 0; i < word.length; i++) {
+                let char = word[i];
+                
+                // Quy đổi chữ cái Latinh sang tên gọi âm vị tiếng Việt để dạy bé
+                if (char === 'n') guide += " nờ ";
+                else if (char === 'm') guide += " mờ ";
+                else if (char === 't') guide += " tờ ";
+                else if (char === 'c') guide += " cờ_ ";
+                else if (char === 'p') guide += " pờ ";
+                else if (char === 'g') guide += " gờ ";
+                else if (char === 'h') guide += " hờ ";
+                else if (char === 'b') guide += " bờ ";
+                else if (char === 'd') guide += " giờ ";
+                else if (char === 'đ') guide += " đờ ";
+                else if (char === 'l') guide += " lờ ";
+                else if (char === 'r') guide += " rờ ";
+                else if (char === 's') guide += " sờ ";
+                else if (char === 'v') guide += " vờ ";
+                else if (char === 'x') guide += " xờ ";
+                // Xử lý các phụ âm ghép nằm ở cuối vần
+                else if (char === 'c' && word[i-1] === 'h') guide += ""; // Đã xử lý ở chữ 'ch' trước đó nếu có
+                else if (word.substr(i, 2) === 'ch') { guide += " chờ "; i++; }
+                else if (word.substr(i, 2) === 'ng') { guide += " ngờ "; i++; }
+                else if (word.substr(i, 2) === 'nh') { guide += " nhờ "; i++; }
+                // Giữ nguyên các nguyên âm (a, ă, â, e, ê, i, o, ô, ơ, u, ư, y) nhưng thêm khoảng nghỉ
+                else {
+                    guide += ` ${char}_ `;
+                }
+
+                // Thêm dấu nối gạch ngang giữa các âm cho máy ngắt nghỉ
+                if (i < word.length - 1) {
+                    guide += " - ";
+                }
+            }
+
+            // Trả về chuỗi kết nối kèm theo vần gốc ở cuối (Ví dụ: "a - mờ - am")
+            return `${guide.trim()} - ${word}`;
         }
 
         function startGame() {
