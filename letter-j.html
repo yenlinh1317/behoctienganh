@@ -25,16 +25,13 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* KHUNG CHỨA GAME: Tự động co giãn theo tỷ lệ cố định (Fixed Aspect Ratio) */
+        /* KHUNG CHỨA GAME: Tự động co giãn theo tỷ lệ cố định */
         #gameArea {
             width: 800px;
             height: 650px;
             position: relative;
             transform-origin: center center;
-            /* Hình nền hoạt họa sinh động phong cách bầu trời rừng xanh thiên nhiên */
-            background: linear-gradient(to bottom, rgba(135, 206, 235, 0.8), rgba(224, 246, 255, 0.9)), 
-                        url('https://unsplash.com') no-repeat center center;
-            background-size: cover;
+            background: linear-gradient(to bottom, #cae9ff, #f7fff7);
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border: 8px solid #ffffff;
@@ -70,23 +67,23 @@
             border: 4px solid #f1c40f;
             border-radius: 15px;
             padding: 12px 30px;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 900;
             color: #d35400;
             box-shadow: 0 8px 16px rgba(0,0,0,0.15);
             text-align: center;
             z-index: 10;
-            min-width: 450px;
+            min-width: 550px;
+            line-height: 1.4;
         }
 
-        /* RỔ HỨNG HOẠT HỌA SINH ĐỘNG */
+        /* RỔ HỨNG HOẠT HỌA */
         #basket {
             position: absolute;
             bottom: 20px;
             left: 310px;
             width: 180px;
             height: 60px;
-            /* Tạo vân gỗ đan rổ hoạt hình 3D */
             background: radial-gradient(circle at 50% 0%, #ffb366, #cc6600);
             border: 5px solid #994d00;
             border-radius: 10px 10px 45px 45px;
@@ -94,7 +91,6 @@
             transition: transform 0.1s ease;
             z-index: 5;
         }
-        /* Viền miệng rổ */
         #basket::before {
             content: '';
             position: absolute;
@@ -106,7 +102,7 @@
             border-radius: 10px;
         }
 
-        /* VẬT PHẨM RƠI: Bao gồm cả Hình ảnh + Chữ bên dưới */
+        /* VẬT PHẨM RƠI: Vẽ bằng EMOJI TEXT 100% không bao giờ lỗi hình */
         .game-item {
             position: absolute;
             display: flex;
@@ -115,31 +111,29 @@
             background: #ffffff;
             border: 4px solid #2ecc71;
             border-radius: 18px;
-            padding: 8px;
+            padding: 10px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             z-index: 2;
+            width: 130px;
         }
-        .game-item img {
-            width: 65px;
-            height: 65px;
-            object-fit: contain;
-            pointer-events: none;
-            border-radius: 10px;
-            background: #fcfcfc;
+        .game-item .emoji-box {
+            font-size: 50px;
+            line-height: 60px;
+            height: 60px;
+            text-align: center;
+            margin-bottom: 5px;
         }
         .game-item .word-label {
-            margin-top: 5px;
             font-size: 18px;
             font-weight: bold;
             color: #2c3e50;
             text-transform: capitalize;
         }
-        /* Viền đỏ cho từ sai mục tiêu */
         .game-item.wrong-style {
             border-color: #e74c3c;
         }
 
-        /* Hiệu ứng flash màn hình & nảy rổ */
+        /* Hiệu ứng chớp màn hình & nảy rổ */
         .flash-correct { animation: flashGreen 0.3s ease-out; }
         .flash-wrong { animation: flashRed 0.3s ease-out; }
         .bounce { transform: scale(1.15); }
@@ -153,7 +147,7 @@
             50% { background-color: rgba(231, 76, 60, 0.4); }
         }
 
-        /* MÀN HÌNH KẾT THÚC GAME */
+        /* MÀN HÌNH KẾT THÚC */
         #gameOverScreen {
             position: absolute;
             top: 0;
@@ -203,9 +197,7 @@
         <div id="livesDisplay">💖💖💖</div>
     </div>
     
-    <!-- Hiển thị cấu trúc câu hỏi ngẫu nhiên -->
     <div id="question-box">Loading...</div>
-    
     <div id="basket"></div>
 
     <div id="gameOverScreen">
@@ -224,16 +216,16 @@
     const gameOverScreen = document.getElementById('gameOverScreen');
     const finalScore = document.getElementById('finalScore');
 
-    // CHỈ SỬ DỤNG DUY NHẤT DANH SÁCH TỪ CHỮ J BẠN CUNG CẤP
+    // 1. DANH SÁCH TỪ CHỮ J: Sử dụng emoji hệ thống, tự động thêm mạo từ chuẩn ngữ pháp
     const J_WORDS = [
-        { word: "juice", img: "https://flaticon.com" },
-        { word: "jug", img: "https://flaticon.com" },
-        { word: "jar", img: "https://flaticon.com" },
-        { word: "jet", img: "https://flaticon.com" },
-        { word: "jacket", img: "https://flaticon.com" },
-        { word: "jam", img: "https://flaticon.com" },
-        { word: "jellyfish", img: "https://flaticon.com" },
-        { word: "jelly", img: "https://flaticon.com" }
+        { word: "juice", emoji: "🧃", article: "some" },
+        { word: "jug", emoji: "🏺", article: "a" },
+        { word: "jar", emoji: "🫙", article: "a" },
+        { word: "jet", emoji: "🛩️", article: "a" },
+        { word: "jacket", emoji: "🧥", article: "a" },
+        { word: "jam", emoji: "🍯", article: "some" },
+        { word: "jellyfish", emoji: "🪼", article: "a" },
+        { word: "jelly", emoji: "🍮", article: "some" }
     ];
 
     const QUESTION_TEMPLATES = [
@@ -248,8 +240,10 @@
     let activeElements = [];
     let basketX = 310;
     let targetWord = ""; 
+    let targetArticle = "";
+    let isWaitingForVoice = true;
 
-    // --- 1. TỰ ĐỘNG CHỈNH TOÀN MÀN HÌNH (Responsive & Xoay Ngang) ---
+    // --- 2. TỰ ĐỘNG CHỈNH TOÀN MÀN HÌNH ---
     function resizeGame() {
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
@@ -262,14 +256,29 @@
     window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
     resizeGame();
 
-    // --- 2. ÂM THANH CHÚC MỪNG & TÈ BÁO SAI CHUẨN TIẾNG ANH ---
+    // --- 3. ÂM THANH ĐỌC CÂU HỎI KÈM A/AN/SOME CHUẨN ---
+    function speakQuestion(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US';
+            utterance.rate = 1.0; 
+            utterance.onend = function() {
+                callback();
+            };
+            window.speechSynthesis.speak(utterance);
+        } else {
+            setTimeout(callback, 2200);
+        }
+    }
+
     function playSound(isCorrect) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             let text = "";
             if (isCorrect) {
                 const kudos = ["Correct!", "Good job!", "Excellent!", "Awesome!"];
-                text = `${kudos[Math.floor(Math.random() * kudos.length)]}. It is ${targetWord}!`;
+                text = `${kudos[Math.floor(Math.random() * kudos.length)]}. It is ${targetArticle} ${targetWord}!`;
             } else {
                 text = "Te te te! Wrong!";
             }
@@ -280,21 +289,21 @@
         }
     }
 
-    // --- 3. ĐIỀU KHIỂN RỔ HỨNG MƯỢT MÀ ---
+    // --- 4. ĐIỀU KHIỂN RỔ HỨNG ---
     function moveBasket(clientX) {
         if (gameOver) return;
         const rect = gameArea.getBoundingClientRect();
         const scale = rect.width / 800;
         let relativeX = (clientX - rect.left) / scale;
         basketX = Math.max(0, Math.min(620, relativeX - 90));
-             basket.style.left = basketX + 'px';
+        basket.style.left = basketX + 'px';
     }
     window.addEventListener('mousemove', (e) => moveBasket(e.clientX));
     window.addEventListener('touchmove', (e) => {
-        if(e.touches.length > 0) moveBasket(e.touches[0].clientX);
+ if(e.touches.length > 0) moveBasket(e.touches[0].clientX);
     }, { passive: true });
 
-    // --- 4. SINH CÂU HỎI VÀ ĐỐI TƯỢNG RƠI ---
+    // --- 5. SINH CÂU HỎI & XẾP THẲNG HÀNG 3 CỘT KHÔNG ĐÈ NHAU ---
     function clearAllActiveElements() {
         activeElements.forEach(item => item.dom.remove());
         activeElements = [];
@@ -302,51 +311,79 @@
 
     function nextQuestion() {
         clearAllActiveElements();
-        
-        // Chọn ngẫu nhiên 1 từ đúng trong danh sách chữ J làm mục tiêu hứng
+        isWaitingForVoice = true; // Khóa di chuyển rơi tự do lại
+
+        // Chọn ngẫu nhiên 1 từ đúng trong danh sách chữ J
         const correctIndex = Math.floor(Math.random() * J_WORDS.length);
         const correctObj = J_WORDS[correctIndex];
         targetWord = correctObj.word;
+        
+        // Tự động thêm mạo từ a, an, some phù hợp với từng từ tiếng Anh
+        const article = correctObj.article; 
 
-        // Chọn ngẫu nhiên cấu trúc câu hỏi (What is it? / What can you see?)
+        // Chọn ngẫu nhiên cấu trúc câu hỏi
         const template = QUESTION_TEMPLATES[Math.floor(Math.random() * QUESTION_TEMPLATES.length)];
-        questionBox.innerHTML = `${template.text} <span style="color:#2ecc71; text-decoration: underline;">${targetWord}</span>`;
+        
+        // Hiển thị câu hỏi hoàn chỉnh có chứa mạo từ (Ví dụ: It is some juice / I can see a jet)
+        questionBox.innerHTML = `${template.text} <span style="color:#2ecc71; text-decoration: underline;">${article} ${targetWord}</span>`;
 
-        // Kích hoạt vật phẩm ĐÚNG rơi xuống
-        spawnItem(correctObj.word, correctObj.img, true);
+        // Tạo câu nói đầy đủ loại bỏ dấu ba chấm để máy đọc chuẩn ngữ pháp tiếng Anh
+        const textToSpeak = template.text.replace("...", "") + " " + article + " " + targetWord;
 
-        // Lấy các từ còn lại trong danh sách chữ J để làm từ SAI (gây nhiễu)
-        let wrongCandidates = J_WORDS.filter((_, idx) => idx !== correctIndex);
-        wrongCandidates.sort(() => 0.5 - Math.random());
+        speakQuestion(textToSpeak, function() {
+            // SAU KHI ĐỌC XONG: Lấy ngẫu nhiên thêm 2 từ khác trong mảng làm từ sai (gây nhiễu)
+            let wrongCandidates = J_WORDS.filter((_, idx) => idx !== correctIndex);
+            wrongCandidates.sort(() => 0.5 - Math.random());
 
-        // Sinh ra 2 vật phẩm sai ngẫu nhiên (cùng nhóm chữ J nhưng khác từ đang đố)
-        if (wrongCandidates[0]) spawnItem(wrongCandidates[0].word, wrongCandidates[0].img, false);
-        if (wrongCandidates[1]) spawnItem(wrongCandidates[1].word, wrongCandidates[1].img, false);
+            // Gộp 1 từ đúng và 2 từ sai vào danh sách xuất hiện
+            let itemsToSpawn = [
+                { word: correctObj.word, emoji: correctObj.emoji, isCorrect: true },
+                { word: wrongCandidates[0].word, emoji: wrongCandidates[0].emoji, isCorrect: false },
+                { word: wrongCandidates[1].word, emoji: wrongCandidates[1].emoji, isCorrect: false }
+            ];
+            // Trộn ngẫu nhiên vị trí xuất hiện giữa các cột
+            itemsToSpawn.sort(() => 0.5 - Math.random());
+
+            // Chia cố định thành 3 cột cố định (Cột 1: X=150px, Cột 2: X=400px, Cột 3: X=650px)
+            const columnPositions = [150, 400, 650];
+
+            itemsToSpawn.forEach((item, index) => {
+                spawnItemAtColumn(item.word, item.emoji, item.isCorrect, columnPositions[index]);
+            });
+
+            isWaitingForVoice = false; // Mở khóa cho phép vật phẩm bắt đầu rơi xuống từ từ
+        });
     }
 
-    function spawnItem(word, imgSrc, isCorrect) {
+    function spawnItemAtColumn(word, emoji, isCorrect, colX) {
         const itemDom = document.createElement('div');
         itemDom.className = 'game-item' + (isCorrect ? '' : ' wrong-style');
-        itemDom.innerHTML = `<img src="${imgSrc}"><div class="word-label">${word}</div>`;
+        
+        // Sử dụng Emoji ký tự gốc cỡ lớn thay thế hoàn toàn cho thẻ img, không bao giờ lo vỡ hình ảnh
+        itemDom.innerHTML = `
+            <div style="font-size: 55px; line-height: 70px; height: 70px; text-align: center;">${emoji}</div>
+            <div class="word-label">${word}</div>
+        `;
         gameArea.appendChild(itemDom);
 
-        const width = itemDom.offsetWidth || 110;
-        const randomX = Math.random() * (800 - width - 40) + 20;
-        const randomY = -(Math.random() * 200 + 60); // Tạo độ trễ chiều cao để vật rơi so le
+        // Căn lề sao cho tâm vật phẩm nằm chính giữa cột tọa độ
+        const width = 120;
+        const finalX = colX - (width / 2);
+        const startY = -90; // Xuất phát ẩn phía trên màn hình
 
-        itemDom.style.left = randomX + 'px';
-        itemDom.style.top = randomY + 'px';
+        itemDom.style.left = finalX + 'px';
+        itemDom.style.top = startY + 'px';
 
         activeElements.push({
             dom: itemDom,
-            x: randomX,
-            y: randomY,
+            x: finalX,
+            y: startY,
             width: width,
             isCorrect: isCorrect
         });
     }
 
-    // --- 5. LOGIC KIỂM TRA VA CHẠM VÀ VÒNG LẶP GAME ---
+    // --- 6. LOGIC VA CHẠM VÀ VÒNG LẶP GAME CHÍNH ---
     function triggerEffect(type) {
         gameArea.classList.remove('flash-correct', 'flash-wrong');
         void gameArea.offsetWidth; 
@@ -370,6 +407,12 @@
     function gameLoop() {
         if (gameOver) return;
         
+        // Nếu máy đang đọc câu hỏi, giữ nguyên các vật phẩm đứng yên phía trên, chưa cho rơi
+        if (isWaitingForVoice) {
+            requestAnimationFrame(gameLoop);
+            return;
+        }
+
         let questionChanged = false;
         
         for (let i = activeElements.length - 1; i >= 0; i--) {
@@ -377,7 +420,7 @@
             item.y += speed;
             item.dom.style.top = item.y + 'px';
 
-            // Va chạm miệng rổ (Độ cao Y: từ 530px đến 585px)
+            // Va chạm miệng rổ (Y: từ 530px đến 585px)
             if (item.y > 530 && item.y < 585) {
                 if (item.x + item.width > basketX && item.x < basketX + 180) {
                     
@@ -387,14 +430,14 @@
                     if (item.isCorrect) {
                         score += 10;
                         scoreDisplay.innerText = score;
-                        speed += 0.05; 
-                        playSound(true); // Khen tiếng Anh chuẩn bản xứ
+                        speed += 0.04; 
+                        playSound(true); 
                         triggerEffect('correct');
                         questionChanged = true;
                     } else {
                         lives--;
                         updateLivesDisplay();
-                        playSound(false); // Phát âm thanh cảnh báo "Tè te te"
+                        playSound(false); 
                         triggerEffect('wrong');
                         
                         if (lives <= 0) {
@@ -407,13 +450,13 @@
                 }
             }
 
-            // Vật phẩm lọt xuống đáy màn hình (650px) mà không được hứng
+            // Vật phẩm rơi quá đáy màn hình (650px)
             if (item.y > 650) {
                 item.dom.remove();
                 activeElements.splice(i, 1);
 
                 if (item.isCorrect) {
-                    questionChanged = true; // Bỏ lỡ từ đúng -> tự động đổi sang câu hỏi tiếp theo
+                    questionChanged = true; // Bé bỏ lỡ mất từ đúng -> tự động chuyển sang câu khác
                 }
             }
         }
@@ -446,7 +489,7 @@
         gameLoop();
     }
 
-    // --- 6. KHỞI CHẠY HỆ THỐNG TRÒ CHƠI ---
+    // Khởi động hệ thống trò chơi lần đầu tiên
     updateLivesDisplay();
     nextQuestion();
     gameLoop();
