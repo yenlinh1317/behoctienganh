@@ -156,7 +156,7 @@
         function getSpellingGuide(word) {
             const danhSachVanPhucTap = {
                 "oay": "o, a, i, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan", "oang": "o, a, ngờ, oang",
-                "oanh": "o, a, nhờ, oanh", "uynh": "u, i, nhờ, uynh", "uich": "u, i, chờ, uịch", "uyêt": "u, iê, tờ, uyết",
+                "oanh": "o, a, nhờ, oanh", "uynh": "u, i, nhờ, uynh", "uich": "u, i, chờ, uích", "uyêt": "u, iê, tờ, uyết",
                 "uyên": "u, iê, nờ, uyên", "ươu": "ươ, u, ươu", "ương": "ươ, ngờ, ương", "ươn": "ươ, nờ, ươn",
                 "iêu": "i, ê, u, iêu", "yêu": "i, ê, u, yêu", "iên": "i, ê, nờ, iên", "yên": "i, ê, nờ, yên",
                 "ang": "a, ngờ, ang", "anh": "a, nhờ, anh", "inh": "i, nhờ, inh", "ich": "i, chờ, ích",
@@ -181,12 +181,29 @@
             return `${components.join(", ")}, ${word}`;
         }
 
-        function getPronounceWord(van) {
-            // Giữ nguyên âm vần chuẩn tiếng Việt không tự ý thêm dấu sắc dồn dập
-            if (van === "oay") return "oai"; 
-            if (van === "oang") return "oang"; 
-            if (van === "oanh") return "oanh"; 
-            if (van === "uynh") return "uynh";
+       function getPronounceWord(van) {
+            // Danh sách ép giọng đọc AI phát âm chuẩn nguyên vần tiếng Việt, không đọc rời rạc từng chữ cái
+            const boLocGiongDoc = {
+                "uân": "huân", "uât": "huất", "uây": "huây", "uông": "huông", "uôc": "huốc", 
+                "uôm": "huôm", "uôi": "huôi", "uynh": "huýnh", "uich": "huịch", "uyêt": "huuyết",
+                "uyên": "huuyên", "uya": "huuya", "oay": "hoay", "oai": "hoai", "oan": "hoan", 
+                "oang": "hoang", "oanh": "hoanh", "oac": "hoác", "oat": "hoát", "oach": "hoách",
+                "oam": "hoám", "oe": "hoe", "oet": "hoét", "ươu": "hươu", "ương": "hương", 
+                "ươn": "hươn", "ươc": "hước", "ươm": "hươm", "ưa": "hưa", "ươ": "hươ",
+                "iêu": "hiêu", "yêu": "hiêu", "iên": "hiên", "yên": "hiên", "iêc": "hiếc", 
+                "iêp": "hiếp", "iêt": "hiết", "iêm": "hiếm", "yêm": "hiếm", "ia": "hia",
+                "ang": "hang", "anh": "hanh", "inh": "hinh", "ich": "hịch", "eng": "heng",
+                "ăng": "hăng", "âng": "hâng", "ong": "hong", "ông": "hông",
+                "an": "han", "am": "ham", "at": "hạt", "ac": "hạc", "ao": "hao", "au": "hau",
+                "ai": "hai", "ay": "hay", "ăm": "hăm", "ân": "hân", "ât": "hật", "ấp": "hấp",
+                "eo": "heo", "êu": "hêu", "im": "him", "ip": "hịp", "it": "hịt", "ôi": "hôi",
+                "ơi": "hơi", "ôt": "hột", "ơt": "hợt", "ơng": "hơng", "ui": "hui", "uy": "huy",
+                "en": "hen", "et": "hẹt", "êt": "hệt", "êch": "hệch", "oc": "hóc", "ôc": "hốc",
+                "uc": "húc", "ưc": "hức", "ăt": "hặt", "ut": "hụt", "ưt": "hựt"
+            };
+
+            // Nếu vần nằm trong danh sách bộ lọc thì ép đọc theo từ chuẩn, ngược lại giữ nguyên
+            if (boLocGiongDoc[van]) return boLocGiongDoc[van];
             return van;
         }
 
@@ -529,7 +546,7 @@
         function getSpellingGuide(word) {
             const danhSachVanPhucTap = {
                 "oay": "o, a, i, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan", "oang": "o, a, ngờ, oang",
-                "oanh": "o, a, nhờ, oanh", "uynh": "u, i, nhờ, uynh", "uich": "u, i, chờ, uịch", "uyêt": "u, iê, tờ, uyết",
+                "oanh": "o, a, nhờ, oanh", "uynh": "u, i, nhờ, uynh", "uich": "u, i, chờ, uích", "uyêt": "u, iê, tờ, uyết",
                 "uyên": "u, iê, nờ, uyên", "ươu": "ươ, u, ươu", "ương": "ươ, ngờ, ương", "ươn": "ươ, nờ, ươn",
                 "iêu": "i, ê, u, iêu", "yêu": "i, ê, u, yêu", "iên": "i, ê, nờ, iên", "yên": "i, ê, nờ, yên",
                 "ang": "a, ngờ, ang", "anh": "a, nhờ, anh", "inh": "i, nhờ, inh", "ich": "i, chờ, ích",
