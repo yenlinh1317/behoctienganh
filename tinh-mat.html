@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <!-- THẺ QUAN TRỌNG NHẤT: Ép điện thoại phải tự động xoay và co giãn theo hướng cầm máy -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
     <title>Siêu Thám Tử Tinh Mắt - Minh Khang</title>
     <style>
@@ -19,15 +18,12 @@
             overflow: hidden; 
             color: #1e293b;
             position: relative;
-            /* Font chữ Times New Roman đứng chữ chuẩn theo sách giáo khoa tiểu học */
             font-family: "Times New Roman", Times, serif; 
         }
 
-        /* Bong bóng trang trí nền */
         .decor-bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.4); pointer-events: none; z-index: 1; animation: float 6s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.1); } }
         
-        /* Màn hình Bắt đầu & Kết thúc */
         #start-screen, #end-screen { 
             position: fixed; 
             inset: 0; 
@@ -64,7 +60,6 @@
         .btn-start:hover { transform: scale(1.05); }
         .btn-start:active { border-bottom-width: 0px; transform: translateY(6px); }
 
-        /* Bảng điểm trên cùng */
         .status-bar { 
             width: 98%; 
             max-width: 1400px;
@@ -82,7 +77,6 @@
             border: 2px solid #94a3b8;
         }
 
-        /* Thanh thời gian */
         .timer-container { 
             width: 98%; 
             max-width: 1400px;
@@ -102,7 +96,6 @@
             transition: width 0.1s linear; 
         }
 
-        /* KHU VỰC LƯỚI CHỮ TỰ CO GIÃN THÔNG MINH */
         .grid-container {
             width: 98%; 
             max-width: 1400px;
@@ -120,10 +113,9 @@
             margin-bottom: 5px;
         }
 
-        /* Ô CHỮ KHỔNG LỒ CHUẨN SÁCH GIÁO KHOA KHI MÀN HÌNH NGANG */
         .letter-box {
-            font-size: 85px; /* Chữ siêu to khổng lồ */
-            font-weight: normal; /* Chữ nét đơn, thanh mảnh đúng chuẩn SGK tập đọc */
+            font-size: 85px; 
+            font-weight: normal; 
             color: #1e3a8a;
             background: #ffffff;
             border-radius: 20px;
@@ -157,10 +149,9 @@
         @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
         .hidden { display: none !important; }
 
-        /* TỰ ĐỘNG KHẮC PHỤC NẾU ĐIỆN THOẠI BỊ LỖI KẸT THEO CHIỀU DỌC (CHỐNG TRÀN CHỮ) */
         @media screen and (max-width: 768px) and (orientation: portrait) {
             .letter-box {
-                font-size: 55px !important; /* Tự thu nhỏ chữ lại để vừa màn hình dọc */
+                font-size: 55px !important; 
                 min-width: 110px !important;
                 height: 90px !important;
             }
@@ -173,14 +164,13 @@
 </head>
 <body>
 
-    <!-- Bong bóng trang trí nền -->
     <div class="decor-bubble" style="width: 70px; height: 70px; top: 8%; left: 3%; animation-delay: 0s;"></div>
     <div class="decor-bubble" style="width: 100px; height: 100px; bottom: 12%; right: 3%; animation-delay: 2s;"></div>
 
     <!-- Màn hình bắt đầu -->
     <div id="start-screen">
         <h1 class="game-title">🥳 THÁM TỬ TINH MẮT 🥳</h1>
-        <p style="font-size: 80px; margin-bottom: 60px; color: #475569; font-weight: bold; max-width: 1850px;">Bé Minh Khang hãy nhanh mắt tìm từ đi trốn nhé! ✨</p>
+        <p style="font-size: 32px; margin-bottom: 60px; color: #475569; font-weight: bold; max-width: 850px;">Bé Minh Khang hãy nhanh mắt tìm vần đi trốn nhé! ✨</p>
         <button class="btn-start" onclick="startGame()">🍭 BẮT ĐẦU CHƠI 🍭</button>
     </div>
 
@@ -206,7 +196,6 @@
     <div id="grid" class="grid-container"></div>
 
     <script>
-        // DANH SÁCH 100% CHÍNH XÁC THEO SGK TIẾNG VIỆT TIỂU HỌC (ĐÃ SỬA LỖI ECH, OEO, OÓ, IYA...)
         const vầnGroups = [
             { main: "an", spy: "am" }, { main: "at", spy: "ac" }, { main: "ang", spy: "anh" }, { main: "ao", spy: "au" },
             { main: "ai", spy: "ay" }, { main: "am", spy: "ăm" }, { main: "ăn", spy: "ân" }, { main: "ât", spy: "âp" },
@@ -229,10 +218,9 @@
             { main: "ăng", spy: "âng" }, { main: "ong", spy: "ông" }, { main: "ung", spy: "ưng" }, { main: "uông", spy: "ương" },
             { main: "eng", spy: "iêng" }, { main: "om", spy: "ôm" }, { main: "ơm", spy: "um" }, { main: "ưm", spy: "um" },
             { main: "iêm", spy: "yêm" }, { main: "uôm", spy: "ươm" }, { main: "ăt", spy: "ât" }, { main: "et", spy: "êt" },
- { main: "ot", spy: "ôt" }, { main: "ơt", spy: "ut" }, { main: "ưt", spy: "ut" }, { main: "uât", spy: "uyêt" },
+            { main: "ot", spy: "ôt" }, { main: "ơt", spy: "ut" }, { main: "ưt", spy: "ut" }, { main: "uât", spy: "uyêt" },
             { main: "êu", spy: "ưu" }, { main: "iêu", spy: "yêu" }, { main: "au", spy: "âu" },
-            { main: "iu", spy: "ưu" }, { main: "êu", spy: "iêu" }, { main: "eo", spy: "oe" }, { main: "ay", spy: "ây" },
-            { main: "uây", spy: "oay" }, { main: "oi", spy: "ôi" }, { main: "ơi", spy: "ôi" }, { main: "uôi", spy: "ươi" },
+			  { main: "uây", spy: "oay" }, { main: "oi", spy: "ôi" }, { main: "ơi", spy: "ôi" }, { main: "uôi", spy: "ươi" },
             { main: "uai", spy: "oai" }, { main: "ui", spy: "ưi" }, { main: "oe", spy: "oet" }
         ];
 
@@ -244,64 +232,69 @@
         let targetVần = ""; 
         let normalVần = ""; 
 
-        function speak(text) {
+        function speak(text, slowMode = false) {
             window.speechSynthesis.cancel(); 
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'vi-VN';
-            utterance.rate = 0.8; 
+            utterance.rate = slowMode ? 0.60 : 0.80; // Giọng đọc đánh vần sẽ chậm hẳn lại cho bé nghe rõ
             window.speechSynthesis.speak(utterance);
         }
 
-       function getSpellingGuide(word) {
-            // 1. Danh sách tất cả các vần phức tạp (3-4 chữ cái) chuẩn sách giáo khoa
+        // HÀM ÉP GIỌNG ĐỌC TRƠN ĐÚNG CHUẨN TIẾNG VIỆT KHI HỎI (BỎ ĐỌC TIẾNG ANH)
+        function getPurePronunciation(word) {
+            const mapTron = {
+                "oai": "oai", "oay": "oay", "iêu": "iêu", "oang": "oang", "oanh": "oanh",
+                "uynh": "uynh", "uân": "uân", "uâng": "uâng", "uâc": "uấc", "uây": "uây",
+                "ươu": "ươu", "uyu": "uyu", "am": "am", "an": "an", "ang": "ang",
+                "anh": "anh", "ăm": "ăm", "ăn": "ăn", "ăng": "ăng", "âm": "âm",
+                "ân": "ân", "âng": "âng", "en": "en", "eng": "eng", "at": "át", "ac": "ác",
+                "ao": "ao", "au": "au", "ai": "ai", "ay": "ay", "ât": "ất", "âp": "ấp",
+                "eo": "eo", "êu": "êu", "ia": "ia", "oi": "oi", "iêc": "iếc", "iên": "iên",
+                "iêp": "iếp", "iêt": "iết", "yêu": "yêu", "im": "im", "ip": "íp", "inh": "inh",
+                "ich": "ích", "it": "ít", "oa": "oa", "oe": "oe", "oac": "oác", "oam": "oam",
+                "oat": "oát", "oach": "oách", "oap": "oáp", "ooc": "oóc", "oong": "oong",
+                "ôi": "ôi", "ơi": "ơi", "ôm": "ôm", "ơm": "ơm", "ôn": "ôn", "ơn": "ơn",
+                "ôt": "ốt", "ơt": "ớt", "ông": "ông", "ơng": "ơng", "uâc": "uấc", "uân": "uân",
+                "uât": "uất", "uôi": "uôi", "uôc": "uốc", "uông": "uông", "uôm": "uôm",
+                "uôn": "uôn", "uôt": "uốt", "ưa": "ưa", "ươ": "ươ", "ươc": "ước",
+                "ương": "ương", "ươm": "ươm", "ươn": "ươn", "ươp": "ướp", "ươt": "ướt",
+                "ưu": "ưu", "ui": "ui", "uy": "uy", "uych": "uých", "uynh": "uynh",
+                "uyp": "uýp", "uyt": "uýt", "uya": "uya", "uyn": "uyn", "et": "ét",
+                "êm": "êm", "iu": "iu", "ap": "áp", "ăp": "ắp", "ep": "ép", "êp": "ếp",
+                "op": "óp", "ôp": "ốp", "ơp": "ớp", "up": "úp", "ach": "ách", "êch": "ếch",
+                "oc": "óc", "ôc": "ốc", "uc": "úc", "ưc": "ức", "ăc": "ắc", "âc": "ấc",
+                "un": "un", "ưn": "ưn", "on": "on", "yên": "yên", "uên": "uên", "uyên": "uyên",
+                "ung": "ung", "ưng": "ưng", "uông": "uông", "iêng": "iêng", "om": "om",
+                "um": "um", "ưm": "ưm", "yêm": "yêm", "ươm": "ươm", "ăt": "ắt", "êt": "ết",
+                "ot": "ót", "ut": "út", "ưt": "ứt", "uyêt": "uyết", "âu": "âu", "ươi": "ươi", "ưi": "ưi", "oet": "oét"
+            };
+            return mapTron[word] || word;
+        }
+
+        // HÀM CHỈ GỌI KHI BÉ TRẢ LỜI ĐÚNG: BÓC TÁCH TỪNG CHỮ CÁI ĐỂ ĐÁNH VẦN CHUẨN ĐẸP SGK
+        function getSpellingGuide(word) {
             const danhSachVanPhucTap = {
-                "oay": "o, a, y, oay",
-                "oai": "o, a, i, oai",
-                "oan": "o, a, nờ, oan",
-                "oang": "o, a, ngờ, oang",
-                "oanh": "o, a, nhờ, oanh",
-                "uynh": "u, y, nhờ, uynh",
-                "uych": "u, y, chờ, uych",
-                "uyêt": "u, iê, tờ, uyêt",
-                "uyên": "u, iê, nờ, uyên",
-                "ươu": "ươ, u, ươu",
-                "ương": "ươ, ngờ, ương",
-                "ươn": "ươ, nờ, ươn",
-                "iêu": "i, ê, u, iêu",
-                "yêu": "y, ê, u, yêu",
-                "iên": "i, ê, nờ, iên",
-                "yên": "i, ê, nờ, yên",
-                "ang": "a, ngờ, ang",
-                "anh": "a, nhờ, anh",
-                "inh": "i, nhờ, inh",
-                "ich": "i, chờ, ich",
-                "ăng": "ă, ngờ, ăng",
-                "âng": "â, ngờ, âng",
-                "ong": "o, ngờ, ong",
-                "ông": "ô, ngờ, ông",
-                "ung": "u, ngờ, ung",
-                "ưng": "ư, ngờ, ưng",
-                "uông": "u, ô, ngờ, uông",
-                "eng": "e, ngờ, eng",
-                "iêng": "i, ê, ngờ, iêng",
-                "uât": "u, ớ, tờ, uất",
-                "uân": "u, ớ, nờ, uân",
-                "uây": "u, ớ, i, uây",
-                "oet": "o, e, tờ, oét",
+                "oay": "o, a, y, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan",
+                "oang": "o, a, ngờ, oang", "oanh": "o, a, nhờ, oanh", "uynh": "u, y, nhờ, uynh",
+                "uych": "u, y, chờ, uych", "uyêt": "u, iê, tờ, uyêt", "uyên": "u, iê, nờ, uyên",
+                "ươu": "ươ, u, ươu", "ương": "ươ, ngờ, ương", "ươn": "ươ, nờ, ươn",
+                "iêu": "i, ê, u, iêu", "yêu": "y, ê, u, yêu", "iên": "i, ê, nờ, iên",
+                "yên": "i, ê, nờ, yên", "ang": "a, ngờ, ang", "anh": "a, nhờ, anh",
+                "inh": "i, nhờ, inh", "ich": "i, chờ, ich", "ăng": "ă, ngờ, ăng",
+                "âng": "â, ngờ, âng", "ong": "o, ngờ, ong", "ông": "ô, ngờ, ông",
+                "ung": "u, ngờ, ung", "ưng": "ư, ngờ, ưng", "uông": "u, ô, ngờ, uông",
+                "eng": "e, ngờ, eng", "iêng": "i, ê, ngờ, iêng", "uât": "u, ớ, tờ, uất",
+                "uân": "u, ớ, nờ, uân", "uây": "u, ớ, i, uây", "oet": "o, e, tờ, oét",
                 "uyu": "u, y, u, uyu"
             };
 
-            // Nếu vần nằm trong nhóm phức tạp, trả về ngay cách đọc chuẩn
             if (danhSachVanPhucTap[word]) {
                 return danhSachVanPhucTap[word];
             }
 
-            // 2. Tự động dịch các vần 2 chữ cái (am, an, at, et, ot, uc...) sang từ thuần Việt để ép loa đọc chuẩn
             let components = [];
             for (let i = 0; i < word.length; i++) {
                 let char = word[i];
-                
-                // Ép trình duyệt đọc đúng tên âm vị tiếng Việt bằng các từ có dấu thanh nhẹ
                 if (char === 'n') components.push("nờ");
                 else if (char === 'm') components.push("mờ");
                 else if (char === 't') components.push("tờ");
@@ -317,20 +310,16 @@
                 else if (char === 's') components.push("sờ");
                 else if (char === 'v') components.push("vờ");
                 else if (char === 'x') components.push("xờ");
-                // Xử lý phụ âm ghép tiếng Việt ở cuối vần
                 else if (word.substr(i, 2) === 'ch') { components.push("chờ"); i++; }
                 else if (word.substr(i, 2) === 'ng') { components.push("ngờ"); i++; }
                 else if (word.substr(i, 2) === 'nh') { components.push("nhờ"); i++; }
-                // Giữ nguyên các nguyên âm nhưng ép bóc tách độc lập
-                else {
-                    components.push(char);
-                }
+                else { components.push(char); }
             }
 
-            // Nối các âm lại bằng dấu phẩy để ép máy đọc ngắt quãng (Ví dụ: "e, tờ, et")
             let guideText = components.join(", ");
             return `${guideText}, ${word}`;
         }
+
         function startGame() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('end-screen').classList.add('hidden');
@@ -354,85 +343,10 @@
             normalVần = randomPair.main;
             targetVần = randomPair.spy;
 
-            // BỘ LỌC ÉP TRÌNH DUYỆT ĐỌC TRƠN CHUẨN TẤT CẢ CÁC VẦN TIẾNG VIỆT KHI GỌI ĐỀ BÀI
-            let đọcTrơnVần = targetVần;
-            
-            // 1. Nhóm các vần kết thúc bằng phụ âm tờ (t), cờ (c), pờ (p), ch -> Thêm dấu sắc để máy đọc trơn tự nhiên
-            if (targetVần.endsWith('t') || targetVần.endsWith('c') || targetVần.endsWith('p') || targetVần.endsWith('ch')) {
-                if (targetVần === "ât") đọcTrơnVần = "ất";
-                else if (targetVần === "ăt") đọcTrơnVần = "ắt";
-		else if (targetVần === "oai") đọcTrơnVần = "oai";
-                else if (targetVần === "ơt") đọcTrơnVần = "ớt";
-                else if (targetVần === "ut") đọcTrơnVần = "út";
-                else if (targetVần === "ưt") đọcTrơnVần = "ứt";
-                else if (targetVần === "et") đọcTrơnVần = "ét";
-                else if (targetVần === "êt" || targetVần === "êch") đọcTrơnVần = "ếch";
-                else if (targetVần === "ot") đọcTrơnVần = "ót";
-                else if (targetVần === "ôt") đọcTrơnVần = "ốt";
-                else if (targetVần === "uât") đọcTrơnVần = "uất";
-                else if (targetVần === "uyêt") đọcTrơnVần = "uyết";
-                else if (targetVần === "oet") đọcTrơnVần = "oét";
-                else if (targetVần === "oét") đọcTrơnVần = "oét";
-                else if (targetVần === "uich") đọcTrơnVần = "uích";
-                else if (targetVần === "uyp") đọcTrơnVần = "uýp";
-                else if (targetVần === "uyt") đọcTrơnVần = "uýt";
-                else if (targetVần === "ach") đọcTrơnVần = "ách";
-                else if (targetVần === "ich") đọcTrơnVần = "ích";
-                else if (targetVần === "êch") đọcTrơnVần = "ếch";
-                else if (targetVần === "ôc") đọcTrơnVần = "ốc";
-                else if (targetVần === "uc") đọcTrơnVần = "úc";
-                else if (targetVần === "ưc") đọcTrơnVần = "ức";
-                else if (targetVần === "ăc") đọcTrơnVần = "ắc";
-                else if (targetVần === "âc") đọcTrơnVần = "ấc";
-                else if (targetVần === "ap") đọcTrơnVần = "áp";
-                else if (targetVần === "ep") đọcTrơnVần = "ép";
-                else if (targetVần === "êp") đọcTrơnVần = "ếp";
-                else if (targetVần === "op") đọcTrơnVần = "óp";
-                else if (targetVần === "ôp") đọcTrơnVần = "ốp";
-                else if (targetVần === "ơp") cladding = "ớp";
-                else if (targetVần === "up") đọcTrơnVần = "úp";
-                else if (targetVần === "ưp") đọcTrơnVần = "ứp";
-                else {
-                    đọcTrơnVần = targetVần + " sắc"; // Dự phòng
-                }
-            }
-            // 2. Nhóm vần ba và các vần đặc biệt dễ bị đọc lỗi chữ cái tiếng Anh
-            else {
-                const bangDichGiong = {
-                    "oai": "oai",
-		    "oay": "oay",
-		    "iêu": "iêu",
-                    "oang": "oang",
-                    "oanh": "oanh",
-                    "uynh": "uynh",
-                    "uân": "uân",
-                    "uâng": "uâng",
-                    "uâc": "uấc",
-                    "uây": "uây",
-                    "ươu": "ươu",
-                    "uyu": "uyu",
-                    "am": "am",
-                    "an": "an",
-                    "ang": "ang",
-                    "anh": "anh",
-                    "ăm": "ăm",
-                    "ăn": "ăn",
-                    "ăng": "ăng",
-                    "âm": "âm",
-                    "ân": "ân",
-                    "âng": "âng",
-                    "en": "en",
-                    "eng": "eng"
-                };
-                if (bangDichGiong[targetVần]) {
-                    đọcTrơnVần = bangDichGiong[targetVần];
-                }
-            }
+            // ĐỘC TRƠN THUẦN TÚY KHI BẮT ĐẦU MÀN CHƠI
+            let đọcTrơnChuẩn = getPurePronunciation(targetVần);
+            speak(`Minh Khang ơi, hãy tìm vần ${đọcTrơnChuẩn} đang đi trốn nào!`);
 
-            // Phát âm câu hỏi với từ đã được chuẩn hóa giọng đọc trơn thuần Việt
-            speak(`Minh Khang ơi,, hãy tìm vần ${đọcTrơnVần} đang đi trốn nào!`);
-
-            // Logic tính toán dòng và cột để chống tràn màn hình điện thoại
             let isPortrait = window.innerHeight > window.innerWidth;
             let gridSize = 9; 
             let columns = 3;
@@ -487,7 +401,7 @@
                     clearInterval(timerInterval);
                     showCorrectAnswerOnTimeout();
                 }
-            }, 100);
+            }, 180); 
         }
 
         function checkAnswer(selectedBox, value) {
@@ -495,23 +409,18 @@
             canClick = false;
             clearInterval(timerInterval);
 
+            let đọcTrơnChuẩn = getPurePronunciation(targetVần);
+
             if (value === targetVần) {
                 selectedBox.classList.add('correct');
                 score += 10;
                 document.getElementById('score').innerText = score;
                 
-                // Lấy chuỗi đánh vần từ hàm getSpellingGuide
+                // KHI BẤM ĐÚNG: Chúc mừng + Đọc trơn lại + Đánh vần chi tiết bóc tách
                 let spelling = getSpellingGuide(targetVần);
+                let chúcMừngText = `Đúng rồi! ... Vần ${đọcTrơnChuẩn}. ... ${spelling}. ... Vần ${đọcTrơnChuẩn}!`;
                 
-                // Tách câu thành các cụm từ có dấu phẩy và chấm để máy nghỉ hơi tự nhiên
-                let chúcMừngText = `Đúng rồi! ... Vần ${targetVần}. ... ${spelling}. ... ${targetVần}!`;
-                
-                // Cấu hình giọng đọc riêng biệt: Chậm rãi, rõ ràng cho bé dễ nghe
-                window.speechSynthesis.cancel(); 
-                const utterance = new SpeechSynthesisUtterance(chúcMừngText);
-                utterance.lang = 'vi-VN';
-                utterance.rate = 0.65; // Đẩy tốc độ đọc chậm hẳn lại (mức cũ là 0.8)
-                window.speechSynthesis.speak(utterance);
+                speak(chúcMừngText, true); 
                 
             } else {
                 selectedBox.classList.add('wrong');
@@ -519,15 +428,11 @@
                 boxes.forEach(box => {
                     if (box.innerText === targetVần) box.classList.add('correct');
                 });
-                
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(`Chưa đúng rồi con ơi! ... Vần ${targetVần} ở đây cơ!`);
-                utterance.lang = 'vi-VN';
-                utterance.rate = 0.75;
-                window.speechSynthesis.speak(utterance);
+                 let đọcTrơnChuẩn = getPurePronunciation(targetVần);
+                speak(`Chưa đúng rồi con ơi! ... Vần ${đọcTrơnChuẩn} ở đây cơ!`);
             }
 
-            // Tăng thời gian chờ lên 5.5 giây để bé có đủ thời gian nghe hết câu đọc chậm
+            // Giữ thời gian chờ 5.5 giây để bé nghe trọn vẹn mạch đánh vần mẫu
             setTimeout(nextQuestion, 5500); 
         }
 
@@ -537,8 +442,9 @@
             boxes.forEach(box => {
                 if (box.innerText === targetVần) box.classList.add('correct');
             });
-            speak(`Hết giờ rồi con ơi! Vần ${targetVần} trốn ở đây này!`);
-            setTimeout(nextQuestion, 3000);
+            let đọcTrơnChuẩn = getPurePronunciation(targetVần);
+            speak(`Hết giờ rồi con ơi! Vần ${đọcTrơnChuẩn} trốn ở đây này!`);
+            setTimeout(nextQuestion, 3500);
         }
 
         function endGame() {
