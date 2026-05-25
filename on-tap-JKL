@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Phonics Millionaire - Official Edition</title>
+    <style>
+        /* Tối ưu hóa toàn màn hình chống cuộn */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #020205;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* KHUNG GAME AI LÀ TRIỆU PHÚ: Đổ bóng Neon huyền bí */
+        #gameArea {
+            width: 800px;
+            height: 650px;
+            position: relative;
+            transform-origin: center center;
+            background: radial-gradient(circle, #0b1930 0%, #020712 100%);
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 214, 252, 0.3);
+            border: 4px solid #00d6fc;
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* HUD thanh thông tin vàng bạc óng ánh */
+        #hud {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(90deg, rgba(0,214,252,0.1), rgba(0,0,0,0.5), rgba(0,214,252,0.1));
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: 2px solid #00d6fc;
+            box-shadow: 0 0 15px rgba(0, 214, 252, 0.2);
+        }
+        #scoreDisplay { color: #f1c40f; text-shadow: 0 0 10px rgba(241,196,15,0.5); }
+        #questionNum { color: #00d6fc; }
+
+        /* KHUNG CÂU HỎI HÌNH KIM CƯƠNG VÁT GÓC */
+        #question-display-box {
+            width: 95%;
+            background: rgba(4, 15, 36, 0.9);
+            border: 3px solid #f1c40f;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(241,196,15,0.3);
+            margin: 20px 0;
+            min-height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* KHU VỰC CHỨA 4 ĐÁP ÁN DẠNG THANH DÀI */
+        #options-container {
+            width: 95%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .quiz-option {
+            padding: 16px 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            background: linear-gradient(180deg, #091e3d 0%, #030d1c 100%);
+            border: 2px solid #00d6fc;
+            border-radius: 35px;
+            cursor: pointer;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .quiz-option:hover {
+            border-color: #f1c40f;
+            box-shadow: 0 0 15px rgba(241,196,15,0.4);
+        }
+        .quiz-option::before {
+            content: attr(data-prefix);
+            color: #f1c40f;
+        }
+        
+        /* Hiệu ứng đổi màu kịch tính */
+        .quiz-option.selected-choice { background: linear-gradient(180deg, #ff9f43, #ee5253) !important; border-color: #ff9f43 !important; box-shadow: 0 0 20px #ff9f43; }
+        .quiz-option.correct-choice { background: linear-gradient(180deg, #10ac84, #1dd1a1) !important; border-color: #1dd1a1 !important; box-shadow: 0 0 20px #1dd1a1; }
+        .quiz-option.wrong-choice { background: linear-gradient(180deg, #ee5253, #ff6b6b) !important; border-color: #ff6b6b !important; box-shadow: 0 0 20px #ff6b6b; }
+
+        /* CÁC MÀN HÌNH POPUP CHÈN ĐÈ */
+        #giftScreen, #gameOverScreen, #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #091936 0%, #010612 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+            padding: 30px;
+            text-align: center;
+        }
+        .screen-title { font-size: 50px; color: #f1c40f; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 20px rgba(241,196,15,0.6); letter-spacing: 2px; }
+        .gift-box { font-size: 110px; cursor: pointer; animation: wobble 0.8s infinite; margin: 20px 0; }
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.08); }
+            75% { transform: rotate(10deg) scale(1.08); }
+        }
+
+        .action-btn { padding: 16px 50px; font-size: 24px; font-weight: bold; background: linear-gradient(180deg, #1dd1a1, #10ac84); border: none; color: white; border-radius: 40px; cursor: pointer; box-shadow: 0 8px 25px rgba(29,209,161,0.4); margin-top: 25px; transition: transform 0.1s; }
+        .action-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+<div id="gameArea">
+    <!-- MÀN HÌNH KHỞI ĐỘNG -->
+    <div id="startScreen">
+        <h1 class="screen-title">PHONICS MILLIONAIRE</h1>
+        <p style="font-size: 24px; margin-bottom: 30px; color: #00d6fc;">Vượt qua 27 câu hỏi tiếng Anh để bốc thăm quà bí ẩn!</p>
+        <button class="action-btn" onclick="initGame()">Vào Chơi Ngay 🎮</button>
+    </div>
+
+    <!-- MÀN HÌNH BỐC THĂM NHẬN QUÀ -->
+    <div id="giftScreen" style="display: none;">
+        <h1 class="screen-title">🎁 BONUS GIFT TIME! 🎁</h1>
+        <p style="font-size: 24px; color: #cae9ff;">Bé đã xuất sắc đúng liên tiếp 5 câu! Nhấp vào hộp quà để mở!</p>
+        <div class="gift-box" id="clickableGift" onclick="openLuckyDraw()">🎁</div>
+        <div id="giftResult" style="font-size: 34px; font-weight: bold; color: #f1c40f; margin: 15px 0; display: none; text-shadow: 0 0 10px #f1c40f;"></div>
+        <button class="action-btn" id="nextQuestBtn" style="display: none;" onclick="continueAfterGift()">Câu Tiếp Theo ➡️</button>
+    </div>
+
+    <!-- MÀN HÌNH KẾT THÚC THẮNG/THUA -->
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" id="endTitle">GAME OVER</h1>
+        <p style="font-size: 28px; margin-bottom: 25px;">Điểm số của bé: <span id="finalScore" style="color:#f1c40f;">0</span></p>
+        <button class="action-btn" onclick="location.reload()">Chơi Lại Từ Đầu 🔄</button>
+    </div>
+
+    <!-- KHU VỰC CHƠI CHÍNH -->
+    <div id="hud">
+        <div id="score-box">⭐ Score: <span id="scoreDisplay">0</span></div>
+        <div id="questionNum">Question: 1/27</div>
+        <div id="livesDisplay">💖💖💖</div>
+    </div>
+    
+    <div id="question-display-box">Loading question...</div>
+    
+    <div id="options-container">
+        <button class="quiz-option" data-prefix="A: " onclick="selectOption(0)"></button>
+        <button class="quiz-option" data-prefix="B: " onclick="selectOption(1)"></button>
+        <button class="quiz-option" data-prefix="C: " onclick="selectOption(2)"></button>
+        <button class="quiz-option" data-prefix="D: " onclick="selectOption(3)"></button>
+    </div>
+</div>
+
+<script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const questionDisplayBox = document.getElementById('question-display-box');
+    const optionsContainer = document.getElementById('options-container');
+    const questionNumEl = document.getElementById('questionNum');
+    
+    const startScreen = document.getElementById('startScreen');
+    const giftScreen = document.getElementById('giftScreen');
+    const giftResult = document.getElementById('giftResult');
+    const clickableGift = document.getElementById('clickableGift');
+    const nextQuestBtn = document.getElementById('nextQuestBtn');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const endTitle = document.getElementById('endTitle');
+
+    // 1. KHO DỮ LIỆU CHỮ J, K, L CHUẨN ĐỒ HỌA CHỐNG LỖI ẢNH VỠ
+    const J_WORDS = [
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        { word: "jar", icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#00d6fc" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#00d6fc"/><path d="M14,32H50" stroke="#00d6fc" stroke-width="3" stroke-dasharray="4 3"/></svg>`, isSvg: true, article: "a" },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
+    ];
+
+    const K_WORDS = [
+        { word: "key", icon: "🔑", isSvg: false, article: "a" },
+        { word: "kite", icon: "🪁", isSvg: false, article: "a" },
+ { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
+        { word: "kitten", icon: "🐱", isSvg: false, article: "a" },
+        { word: "knife", icon: "🔪", isSvg: false, article: "a" },
+        { 
+            word: "kettle", 
+            icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#cc6600" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#cc6600" stroke-width="4"/></svg>`, 
+            isSvg: true, 
+            article: "a" 
+        },
+        { word: "king", icon: "👑", isSvg: false, article: "a" },
+        { word: "koala", icon: "🐨", isSvg: false, article: "a" }
+    ];
+
+    const L_WORDS = [
+        { word: "lion", icon: "🦁", isSvg: false, article: "a" },
+        { word: "lemon", icon: "🍋", isSvg: false, article: "a" },
+        { word: "leaf", icon: "🍃", isSvg: false, article: "a" },
+        { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
+        { 
+            word: "ladder", 
+            icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, 
+            isSvg: true, 
+            article: "a" 
+        },
+        { word: "lock", icon: "🔒", isSvg: false, article: "a" },
+        { word: "lips", icon: "👄", isSvg: false, article: "some" },
+        { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
+    ];
+
+    const LUCKY_GIFTS = ["🦁 Cute Teddy Bear!", "🎨 Color Painting Set!", "🚗 Super Toy Car!", "🍭 Giant Lollipop Box!", "🚀 Space Rocket Toy!"];
+
+    let score = 0;
+    let lives = 3;
+    let currentQuestionIdx = 0;
+    let correctChainCount = 0; 
+    let questionsList = []; 
+    let currentCorrectAnswerIdx = -1;
+    let isBlockClick = false;
+    let gameOver = false;
+
+    let audioCtx = null;
+    let backgroundMusicNode = null;
+
+    // Kích hoạt AudioContext an toàn chống lỗi chặn bảo mật của trình duyệt
+    function initAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function playSoundTone(frequency, type, duration) {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    // Nhạc nền nhịp đập kịch tính lặp vô hạn chuẩn trường quay
+    function startBackgroundMusic() {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(110, audioCtx.currentTime); 
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            
+            setInterval(() => {
+                if(!gameOver && !isBlockClick) {
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                }
+            }, 600);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            backgroundMusicNode = osc;
+        } catch(e){}
+    }
+
+    function speakVoice(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US';
+            utterance.rate = 1.0;
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) {
+            setTimeout(callback, 2000);
+        }
+    }
+
+    function buildQuizDatabase() {
+        let list = [];
+        for(let i = 0; i < 3; i++) {
+            list.push({ type: 'sound', target: 'J', soundName: 'jay', phonics: '/j/', options: ['Letter J', 'Letter K', 'Letter I', 'Letter H'], ansIdx: 0 });
+            list.push({ type: 'sound', target: 'K', soundName: 'kay', phonics: '/k/', options: ['Letter G', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 1 });
+            list.push({ type: 'sound', target: 'L', soundName: 'el', phonics: '/l/', options: ['Letter M', 'Letter H', 'Letter L', 'Letter J'], ansIdx: 2 });
+        }
+
+        const templates = ["What is it? It is...", "What can you see? I can see..."];
+        
+        function addVocabQuest(wordArr, wrongArr1, wrongArr2, wrongArr3) {
+            wordArr.forEach(item => {
+                const temp = templates[Math.floor(Math.random() * templates.length)];
+                const w1 = wrongArr1[Math.floor(Math.random() * wrongArr1.length)];
+                const w2 = wrongArr2[Math.floor(Math.random() * wrongArr2.length)];
+                const w3 = wrongArr3[Math.floor(Math.random() * wrongArr3.length)];
+                
+                list.push({
+                    type: 'vocab',
+                    questionText: `${temp} <span style="color:#f1c40f;">${item.article} ${item.word}</span>`,
+                    voiceText: temp.replace("...", "") + " " + item.article + " " + item.word,
+                    options: [item, w1, w2, w3],
+                    correctWord: item.word
+                });
+            });
+        }
+        
+        addVocabQuest(J_WORDS.slice(0,6), K_WORDS, L_WORDS, J_WORDS);
+        addVocabQuest(K_WORDS.slice(0,6), J_WORDS, L_WORDS, K_WORDS);
+        addVocabQuest(L_WORDS.slice(0,6), J_WORDS, K_WORDS, L_WORDS);
+
+        list.sort(() => 0.5 - Math.random());
+        questionsList = list.slice(0, 27);
+    }
+
+    function initGame() {
+        // Mở khóa âm thanh trình duyệt ngay khi người chơi click tương tác nút khởi động
+        initAudioContext(); 
+        startScreen.style.display = 'none';
+        buildQuizDatabase();
+        startBackgroundMusic(); 
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        isBlockClick = false;
+        const optionsButtons = document.querySelectorAll('.quiz-option');
+        optionsButtons.forEach(btn => btn.className = 'quiz-option'); 
+
+        questionNumEl.innerText = `Question: ${currentQuestionIdx + 1}/27`;
+        const q = questionsList[currentQuestionIdx];
+
+        if (q.type === 'sound') {
+            questionDisplayBox.innerHTML = `Which letter makes the sound <span style="color:#00d6fc; font-size:34px;">${q.phonics}</span>?`;
+            optionsButtons.forEach((btn, idx) => {
+                btn.innerHTML = `<span style="font-size: 22px;">🔤</span> ${q.options[idx]}`;
+            });
+            currentCorrectAnswerIdx = q.ansIdx;
+            speakVoice("Which letter makes the sound " + q.soundName);
+        } 
+        else if (q.type === 'vocab') {
+            questionDisplayBox.innerHTML = q.questionText;
+
+            let scrambledOptions = [...q.options].sort(() => 0.5 - Math.random());
+            currentCorrectAnswerIdx = scrambledOptions.findIndex(item => item.word === q.correctWord);
+
+            optionsButtons.forEach((btn, idx) => {
+                const opt = scrambledOptions[idx];
+                let iconHtml = opt.isSvg ? opt.icon : `<span style="font-size:35px; line-height:1;">${opt.icon}</span>`;
+                btn.innerHTML = `<div style="display:inline-flex; width:45px; height:45px; align-items:center; justify-content:center;">${iconHtml}</div> <span style="margin-left:5px;">${opt.word}</span>`;
+            });
+
+            speakVoice(q.voiceText);
+        }
+    }
+
+    function selectOption(selectedIdx) {
+        if (isBlockClick) return;
+        isBlockClick = true;
+
+        const optionsButtons = document.querySelectorAll('.quiz-option');
+        optionsButtons[selectedIdx].classList.add('selected-choice'); 
+        
+        playSoundTone(440, 'square', 0.15); 
+
+        setTimeout(() => {
+            if (selectedIdx === currentCorrectAnswerIdx) {
+                optionsButtons[selectedIdx].classList.remove('selected-choice');
+                optionsButtons[selectedIdx].classList.add('correct-choice'); 
+                
+                score += 10;
+                scoreDisplay.innerText = score;
+                correctChainCount++; 
+                
+                playSoundTone(587.33, 'sine', 0.2);
+                setTimeout(() => playSoundTone(880, 'sine', 0.4), 150);
+
+                speakVoice("Correct! Good job!", function() {
+                    if (correctChainCount > 0 && correctChainCount % 5 === 0) {
+                        showGiftScreen(); 
+                    } else {
+                        advanceToNextQuestion();
+                    }
+                });
+            } else {
+                optionsButtons[selectedIdx].classList.remove('selected-choice');
+                optionsButtons[selectedIdx].classList.add('wrong-choice'); 
+                optionsButtons[currentCorrectAnswerIdx].classList.add('correct-choice'); 
+                
+                lives--;
+                updateLivesDisplay();
+                correctChainCount = 0; 
+                
+                playSoundTone(180, 'sawtooth', 0.6); 
+ speakVoice("Te te te! Wrong!", function() {
+                    if (lives <= 0) {
+                        endGame(false);
+                    } else {
+                        advanceToNextQuestion();
+                    }
+                });
+            }
+        }, 1000); 
+    }
+
+    function advanceToNextQuestion() {
+        currentQuestionIdx++;
+        if (currentQuestionIdx >= questionsList.length) {
+            endGame(true);
+        } else {
+            loadQuestion();
+        }
+    }
+
+    function showGiftScreen() {
+        giftScreen.style.display = 'flex';
+        giftResult.style.display = 'none';
+        nextQuestBtn.style.display = 'none';
+        clickableGift.style.display = 'block';
+        clickableGift.innerText = "🎁";
+        playSoundTone(600, 'triangle', 0.3);
+    }
+
+    function openLuckyDraw() {
+        clickableGift.innerText = "🎉";
+        const randomGift = LUCKY_GIFTS[Math.floor(Math.random() * LUCKY_GIFTS.length)];
+        
+        giftResult.innerText = `Bé nhận được: ${randomGift}`;
+        giftResult.style.display = 'block';
+        nextQuestBtn.style.display = 'block';
+        
+        playSoundTone(523.25, 'sine', 0.1);
+        setTimeout(() => playSoundTone(659.25, 'sine', 0.1), 100);
+        setTimeout(() => playSoundTone(783.99, 'sine', 0.1), 200);
+        setTimeout(() => playSoundTone(1046.50, 'sine', 0.4), 300);
+
+        speakVoice("Wow! You got a special bonus gift!");
+    }
+
+    function continueAfterGift() {
+        giftScreen.style.display = 'none';
+        advanceToNextQuestion();
+    }
+
+    function updateLivesDisplay() {
+        let hearts = "";
+        for (let i = 0; i < lives; i++) hearts += "💖";
+        for (let i = lives; i < 3; i++) hearts += "🖤";
+        livesDisplay.innerText = hearts;
+    }
+
+    function endGame(isWin) {
+        gameOver = true;
+        if(backgroundMusicNode) {
+            try { backgroundMusicNode.stop(); } catch(e){}
+        }
+        gameOverScreen.style.display = 'flex';
+        finalScore.innerText = score;
+        if (isWin) {
+            endTitle.innerText = "👑 CONGRATULATIONS! 👑";
+            endTitle.style.color = "#2ecc71";
+            speakVoice("Congratulations! You are a brilliant phonics millionaire!");
+        } else {
+            endTitle.innerText = "GAME OVER";
+            endTitle.style.color = "#ee5253";
+        }
+    }
+</script>
+
+</body>
+</html>
