@@ -2,42 +2,59 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Trò Chơi: Vua Tốc Độ Học Vần</title>
+    <title>Trò Chơi: Đua Xe Học Vần</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { --primary: #4dabf7; --success: #2b8a3e; --error: #e03131; --dark: #2f3542; }
         * { box-sizing: border-box; }
         body { font-family: 'Be Vietnam Pro', sans-serif; background: #e3fafc; min-height: 100vh; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        .game-container { background: white; border: 4px solid #15aabf; border-radius: 30px; box-shadow: 8px 8px 0px #0c8599; width: 100%; max-width: 800px; padding: 30px; text-align: center; position: relative; }
+        .game-container { background: white; border: 4px solid #15aabf; border-radius: 30px; box-shadow: 8px 8px 0px #0c8599; width: 100%; max-width: 800px; padding: 25px; text-align: center; position: relative; overflow: hidden; }
         
-        /* ĐIỂM SỐ & THỜI GIAN */
-        .status-bar { display: flex; justify-content: space-between; font-size: 24px; font-weight: 700; color: #0b7285; margin-bottom: 20px; }
-        .timer-container { width: 100%; height: 15px; background: #e9ecef; border-radius: 10px; margin-bottom: 30px; overflow: hidden; border: 1px solid #ced4da; }
+        /* ĐƯỜNG ĐUA Ô TÔ */
+        .race-track { background: #555; padding: 15px 10px; border-radius: 15px; margin-bottom: 20px; position: relative; border-top: 4px dashed #fff; border-bottom: 4px dashed #fff; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .lane { height: 50px; position: relative; display: flex; align-items: center; border-bottom: 2px dashed #aaa; }
+        .lane:last-child { border-bottom: none; }
+        
+        /* THIẾT KẾ XE CHẠY ĐÚNG CHIỀU (HƯỚNG SANG PHẢI) */
+        .car { font-size: 38px; position: absolute; left: 0; bottom: 2px; transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1); display: inline-block; transform: scaleX(-1); /* Quay icon sang phải */ }
+        .finish-line { position: absolute; right: 10px; top: 0; bottom: 0; width: 15px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #000 5px, #000 10px); border-radius: 3px; }
+
+        /* BẢNG ĐIỂM THI ĐUA KHANG VS AI */
+        .scoreboard { display: flex; justify-content: space-around; background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 15px; padding: 10px; margin-bottom: 15px; }
+        .score-box { font-size: 18px; font-weight: 700; color: #0b7285; }
+        .score-box span { font-size: 24px; color: #e03131; }
+
+        .status-bar { display: flex; justify-content: center; font-size: 20px; font-weight: 700; color: #0b7285; margin-bottom: 15px; }
+        .timer-container { width: 100%; height: 12px; background: #e9ecef; border-radius: 10px; margin-bottom: 20px; overflow: hidden; border: 1px solid #ced4da; }
         .timer-bar { height: 100%; width: 100%; background: #fab005; transition: width 0.1s linear; }
 
+        /* THÔNG BÁO */
+        .battle-status { font-size: 22px; font-weight: 700; min-height: 30px; color: #f59f00; margin-bottom: 15px; }
+
         /* LOA PHÁT ÂM */
-        .audio-box { margin-bottom: 40px; }
-        .btn-listen { background: #15aabf; border: none; border-radius: 50%; width: 120px; height: 120px; font-size: 50px; color: white; cursor: pointer; box-shadow: 0 8px 15px rgba(21, 170, 191, 0.3); transition: 0.2s; }
+        .audio-box { margin-bottom: 25px; }
+        .btn-listen { background: #15aabf; border: none; border-radius: 50%; width: 110px; height: 110px; font-size: 45px; color: white; cursor: pointer; box-shadow: 0 8px 15px rgba(21, 170, 191, 0.3); transition: 0.2s; }
         .btn-listen:active { transform: scale(0.95); }
-        .hint-text { color: #868e96; margin-top: 10px; font-size: 16px; }
+        .hint-text { color: #868e96; margin-top: 8px; font-size: 15px; }
 
         /* ĐÁP ÁN */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .btn-option { padding: 30px 10px; font-size: 45px; font-weight: 700; color: var(--dark); background: #f1f3f5; border: 3px solid #dee2e6; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-option { padding: 25px 10px; font-size: 42px; font-weight: 700; color: var(--dark); background: #f1f3f5; border: 3px solid #dee2e6; border-radius: 20px; cursor: pointer; transition: 0.2s; }
         .btn-option:hover { background: #e9ecef; border-color: #adb5bd; }
         
-        /* ĐÚNG / SAI */
-        .btn-option.correct { background: #5c7cfa !important; color: white !important; border-color: #364fc7 !important; animation: pop 0.3s ease; }
+        /* ĐÚNG / SAI / AI CHỌN */
+        .btn-option.correct { background: #40c057 !important; color: white !important; border-color: #2b8a3e !important; animation: pop 0.3s ease; }
         .btn-option.wrong { background: #ffc9c9 !important; color: #c92a2a !important; border-color: #fa5252 !important; }
+        .btn-option.ai-selected { border: 5px dashed #f59f00 !important; background: #fff9db; }
 
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         
         /* MÀN HÌNH BẮT ĐẦU / KẾT THÚC */
         .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; border-radius: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; z-index: 10; }
-        .screen h1 { font-size: 40px; color: #0c8599; margin-bottom: 10px; }
-        .screen p { font-size: 20px; color: #495057; margin-bottom: 30px; }
-        .btn-start { padding: 20px 5px; width: 250px; font-size: 24px; font-weight: 700; background: #228be6; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 5px 0 #1864ab; }
+        .screen h1 { font-size: 38px; color: #0c8599; margin-bottom: 10px; }
+        .screen p { font-size: 18px; color: #495057; margin-bottom: 30px; }
+        .btn-start { padding: 18px 5px; width: 250px; font-size: 22px; font-weight: 700; background: #228be6; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 5px 0 #1864ab; }
         .btn-start:active { transform: translateY(5px); box-shadow: none; }
         .hidden { display: none !important; }
     </style>
@@ -47,28 +64,50 @@
 <div class="game-container">
     <!-- MÀN HÌNH BẮT ĐẦU -->
     <div id="start-screen" class="screen">
-        <h1>⚡ VUA TỐC ĐỘ ⚡</h1>
-        <p>Bé hãy nghe thật kỹ âm thanh và chọn đúng chữ nhé!</p>
-        <button class="btn-start" onclick="startGame()">BẮT ĐẦU CHƠI</button>
+        <h1>🏎️ ĐUA XE HỌC VẦN 🏎️</h1>
+        <p>Minh Khang lái 🚗Ô tô Đỏ thi xem ai về đích trước bạn 🚙Ô tô Xanh nhé!</p>
+        <button class="btn-start" onclick="startGame()">BẮT ĐẦU ĐUA</button>
     </div>
 
     <!-- MÀN HÌNH KẾT THÚC -->
     <div id="end-screen" class="screen hidden">
-        <h1>🎉 HOÀN THÀNH! 🎉</h1>
-        <p>Số điểm của Minh Khang đạt được là:</p>
-        <div style="font-size: 60px; font-weight: 700; color: #e03131; margin-bottom: 30px;" id="final-score">0</div>
-        <button class="btn-start" style="background: #12b886; box-shadow: 0 5px 0 #087f5b;" onclick="startGame()">CHƠI LẠI</button>
+        <h1>🏁 CUỘC ĐUA KẾT THÚC! 🏁</h1>
+        <p id="winner-text" style="font-size: 26px; font-weight: 700; color: #2b8a3e;"></p>
+        <div style="display: flex; gap: 30px; margin-bottom: 30px;">
+            <div class="score-box">Minh Khang: <span id="final-khang">0</span>đ</div>
+            <div class="score-box">Bạn AI: <span id="final-ai">0</span>đ</div>
+        </div>
+        <button class="btn-start" style="background: #12b886; box-shadow: 0 5px 0 #087f5b;" onclick="startGame()">ĐUAlẠI LƯỢT MỚI</button>
     </div>
 
-    <!-- GIAO DIỆN CHƠI CHÍNH -->
+    <!-- ĐƯỜNG ĐUA TRỰC QUAN -->
+    <div class="race-track">
+        <div class="finish-line"></div>
+        <div class="lane">
+            <span style="position:absolute; left:10px; color:#fff; font-size:12px; font-weight:bold; z-index:1;">KHANG</span>
+            <div id="car-khang" class="car">🚗</div>
+        </div>
+        <div class="lane">
+            <span style="position:absolute; left:10px; color:#fff; font-size:12px; font-weight:bold; z-index:1;">BẠN AI</span>
+            <div id="car-ai" class="car">🚙</div>
+        </div>
+    </div>
+
+    <!-- BẢNG ĐIỂM -->
+    <div class="scoreboard">
+        <div class="score-box">👦 Khang đạt được: <span id="score-khang">0</span> điểm</div>
+        <div class="score-box">🤖 Bạn AI được: <span id="score-ai">0</span> điểm</div>
+    </div>
+
     <div class="status-bar">
-        <div>⭐ ĐIỂM: <span id="score">0</span></div>
-        <div>CÂU: <span id="question-idx">1</span>/10</div>
+        <div>CHẶNG ĐƯỜNG: <span id="question-idx">1</span> / 20</div>
     </div>
 
     <div class="timer-container">
         <div id="timer" class="timer-bar"></div>
     </div>
+
+    <div id="battle-status" class="battle-status">Chuẩn bị xuất phát...</div>
 
     <div class="audio-box">
         <button class="btn-listen" onclick="playCurrentWord()">📢</button>
@@ -84,19 +123,22 @@
 </div>
 
 <script>
-    // Kho dữ liệu từ ghép đơn giản, quen thuộc cho bé
     const database = [
         'ba', 'bà', 'bá', 'bả', 'bạ', 'cá', 'cà', 'gà', 'cổ cò', 'lá', 'ca','cô','cỏ','cọ','cổ','cờ','da','đe','đa','đò','đố','đổ','dẻ','lê','lồ ô','le le','lọ',
-        'cố đô', 'bơ', 'đồ cổ', 'dế', 'dê', 'đê', 'da cá', 'sư tử', 'cá cờ','lê la','bê','bễ','ga','hồ','bi','bia','bi bô','lia lịa','bể cá','đĩa','bể cá','hổ',
-        'đu đủ', 'bí đỏ', 'mẹ', 'bố', 'xe', 'đò', 'hồ', 'cờ', 'dê', 'ví','ghế gỗ','ghế da','ghế đá','giá đỗ','kì đà','kể','giẻ','kẻ','giò','bờ kè','giỏ cá'
+        'cố đô', 'bơ', 'đồ cổ', 'dế', 'dê', 'đê', 'da cá', 'sư tử', 'cá cờ','lê la','bê','bễ','ga','hồ','bi','bia','bi bô','lia lịa','bể cá','đĩa','hổ',
+        'đu đủ', 'bí đỏ', 'mẹ', 'bố', 'xe', 'ví','ghế gỗ','ghế da','ghế đá','giá đỗ','kì đà','kể','giẻ','kẻ','giò','bờ kè','giỏ cá'
     ];
 
-    let score = 0;
+    let scoreKhang = 0;
+    let scoreAI = 0;
     let currentIdx = 0;
     let currentWord = '';
     let timerInterval = null;
-    let timeLeft = 100; // phần trăm thanh thời gian
+    let aiTimeout = null;
+    let timeLeft = 100; 
     let canClick = false;
+    let hasAiAnswered = false;
+    const maxQuestions = 20;
 
     function speak(text) {
         return new Promise((resolve) => {
@@ -104,19 +146,35 @@
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(text);
             u.lang = 'vi-VN';
-            u.rate = 0.65; // Đọc hơi chậm rành mạch cho bé nghe rõ
+            u.rate = 0.55; 
             u.onend = () => resolve();
             window.speechSynthesis.speak(u);
         });
     }
 
     function startGame() {
-        score = 0;
+        scoreKhang = 0;
+        scoreAI = 0;
         currentIdx = 0;
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.add('hidden');
-        document.getElementById('score').innerText = score;
+        document.getElementById('score-khang').innerText = scoreKhang;
+        document.getElementById('score-ai').innerText = scoreAI;
+        
+        // Đặt lại vị trí xe về vạch xuất phát
+        updateCarPositions();
+        
         nextQuestion();
+    }
+
+    function updateCarPositions() {
+        // Tính toán vị trí phần trăm dựa trên số điểm (tối đa 80% đường đua để không đè vạch đích)
+        const maxScore = maxQuestions * 10;
+        const posKhang = maxScore > 0 ? (scoreKhang / maxScore) * 80 : 0;
+        const posAi = maxScore > 0 ? (scoreAI / maxScore) * 80 : 0;
+        
+        document.getElementById('car-khang').style.left = posKhang + '%';
+        document.getElementById('car-ai').style.left = posAi + '%';
     }
 
     function playCurrentWord() {
@@ -124,23 +182,25 @@
     }
 
     function nextQuestion() {
-        if (currentIdx >= 10) {
+        if (currentIdx >= maxQuestions) {
             endGame();
             return;
         }
 
         currentIdx++;
         document.getElementById('question-idx').innerText = currentIdx;
+        document.getElementById('battle-status').innerText = "Khang ơi, nhấn ga tìm chữ nào! 🏎️";
+        document.getElementById('battle-status').style.color = "#0b7285";
         canClick = true;
+        hasAiAnswered = false;
+        canClick = true;
+        hasAiAnswered = false;
 
-        // Reset nút bấm về trạng thái cũ
         const buttons = document.querySelectorAll('.btn-option');
         buttons.forEach(btn => btn.className = 'btn-option');
 
-        // Chọn từ đúng ngẫu nhiên
         currentWord = database[Math.floor(Math.random() * database.length)];
 
-        // Tạo danh sách 4 đáp án (1 đúng, 3 sai ngẫu nhiên)
         let options = [currentWord];
         while (options.length < 4) {
             let randomWord = database[Math.floor(Math.random() * database.length)];
@@ -148,19 +208,15 @@
                 options.push(randomWord);
             }
         }
-        // Trộn ngẫu nhiên vị trí các đáp án
         options.sort(() => Math.random() - 0.5);
 
-        // Gán chữ vào các nút bấm
         buttons.forEach((btn, idx) => {
             btn.innerText = options[idx];
         });
 
-        // Phát âm từ cần tìm
         playCurrentWord();
-
-        // Chạy thanh thời gian (10 giây)
         startTimer();
+        scheduleAiAnswer(); 
     }
 
     function startTimer() {
@@ -169,59 +225,113 @@
         const timerBar = document.getElementById('timer');
         
         timerInterval = setInterval(() => {
-            timeLeft -= 1; // Giảm dần mỗi 100ms (Tổng cộng 10 giây)
+            timeLeft -= 1; 
             timerBar.style.width = timeLeft + '%';
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
+                clearTimeout(aiTimeout);
+                canClick = false;
                 showCorrectAnswerOnTimeout();
             }
-        }, 100);
+        }, 250); // Cho bé hẳn 25 giây suy nghĩ tự do
     }
 
+    // ĐOẠN ĐIỀU KHIỂN AI CHẠY CHẬM
+    function scheduleAiAnswer() {
+        clearTimeout(aiTimeout);
+        // AI suy nghĩ chậm, mất từ 12 đến 16 giây mới tự động bấm
+        const aiDelay = Math.floor(Math.random() * 4000) + 12000; 
+
+        aiTimeout = setTimeout(() => {
+            if (!canClick || hasAiAnswered) return;
+            
+            hasAiAnswered = true;
+            document.getElementById('battle-status').innerText = "🤖 Bạn AI đã nhấn ga phóng lên trước rồi!";
+            document.getElementById('battle-status').style.color = "#f59f00";
+
+            const buttons = document.querySelectorAll('.btn-option');
+            buttons.forEach(btn => {
+                if (btn.innerText === currentWord) {
+                    btn.classList.add('ai-selected');
+                }
+            });
+
+            scoreAI += 10;
+            document.getElementById('score-ai').innerText = scoreAI;
+            updateCarPositions(); // Cập nhật xe AI chạy lên phía trước
+            
+            canClick = false;
+            clearInterval(timerInterval);
+            setTimeout(nextQuestion, 2500); // Nghỉ 2.5 giây rồi đổi câu
+
+        }, aiDelay);
+    }
+
+    function showCorrectAnswerOnTimeout() {
+        const buttons = document.querySelectorAll('.btn-option');
+        buttons.forEach(btn => {
+            if (btn.innerText === currentWord) {
+                btn.classList.add('correct');
+            }
+        });
+        document.getElementById('battle-status').innerText = "Hết xăng giữa đường rồi! Đổi chặng mới!";
+        setTimeout(nextQuestion, 2500);
+    }
+
+    // ĐOẠN XỬ LÝ KHI BÉ MINH KHANG BẤM
     function checkAnswer(selectedButton) {
         if (!canClick) return;
         canClick = false;
         clearInterval(timerInterval);
+        clearTimeout(aiTimeout); // Hủy ngay lượt bấm của AI vì Khang đã nhanh tay hơn!
 
-        const answer = selectedButton.innerText;
-        const buttons = document.querySelectorAll('.btn-option');
+        const chosenWord = selectedButton.innerText;
+        speak(chosenWord);
 
-        if (answer === currentWord) {
+        if (chosenWord === currentWord) {
             selectedButton.classList.add('correct');
-            score += 10;
-            document.getElementById('score').innerText = score;
-            // Phát âm thanh báo hiệu đúng bằng tiếng
-            speak("Đúng rồi! Xuất sắc!");
+            scoreKhang += 10;
+            document.getElementById('score-khang').innerText = scoreKhang;
+            document.getElementById('battle-status').innerText = "🔥 Quá siêu! Xe của Khang vừa tăng tốc vút lên!";
+            document.getElementById('battle-status').style.color = "#2b8a3e";
+            updateCarPositions(); // Xe Khang tiến lên một đoạn
         } else {
             selectedButton.classList.add('wrong');
-            // Hiển thị luôn nút nào mới là đúng
+            const buttons = document.querySelectorAll('.btn-option');
             buttons.forEach(btn => {
-                if (btn.innerText === currentWord) btn.classList.add('correct');
+                if (btn.innerText === currentWord) {
+                    btn.classList.add('correct');
+                }
             });
-            speak("Chưa đúng rồi!");
+            document.getElementById('battle-status').innerText = "Nhầm đường mất rồi, chặng sau cố lên con!";
+            document.getElementById('battle-status').style.color = "#e03131";
         }
 
-        // Chờ 2 giây để bé nhìn nhận mặt chữ đúng rồi tự chuyển câu
-        setTimeout(nextQuestion, 2000);
+        setTimeout(nextQuestion, 2500); // Đợi 2.5 giây cho bé nhìn kết quả rồi mới qua câu mới
     }
-
-    function showCorrectAnswerOnTimeout() {
-        canClick = false;
-        const buttons = document.querySelectorAll('.btn-option');
-        buttons.forEach(btn => {
-            if (btn.innerText === currentWord) btn.classList.add('correct');
-        });
-        speak("Hết giờ rồi!");
-        setTimeout(nextQuestion, 2000);
-    }
-
     function endGame() {
         clearInterval(timerInterval);
+        clearTimeout(aiTimeout);
+        
+        document.getElementById('final-khang').innerText = scoreKhang;
+        document.getElementById('final-ai').innerText = scoreAI;
+
+        const winnerText = document.getElementById('winner-text');
+        if (scoreKhang > scoreAI) {
+            winnerText.innerText = "🏆 CHIẾN THẮNG! Minh Khang đã cán đích đầu tiên! 🎉";
+            winnerText.style.color = "#2b8a3e";
+        } else if (scoreKhang < scoreAI) {
+            winnerText.innerText = "🤖 Lần này Bạn AI về đích trước rồi. Khang nhấn ga nhanh hơn ở lượt sau nhé!";
+            winnerText.style.color = "#f59f00";
+        } else {
+            winnerText.innerText = "🤝 Bám đuổi ngoạn mục! Cả hai xe cùng cán đích một lúc!";
+            winnerText.style.color = "#15aabf";
+        }
+
         document.getElementById('end-screen').classList.remove('hidden');
-        document.getElementById('final-score').innerText = score;
-        speak("Chúc mừng Minh Khang đã hoàn thành trò chơi!");
     }
 </script>
+
 </body>
 </html>
