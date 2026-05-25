@@ -511,49 +511,7 @@
             bubbles.push(newBubble);
         }
 
-        // =========================================================================
-        // XỬ LÝ THAO TÁC VUỐT KIẾM CHÉM BÓNG TRÊN DI ĐỘNG & PC
-        // =========================================================================
-        function handleCut(clientX, clientY) {
-            if (!gameActive) return;
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = clientX - rect.left;
-            const mouseY = clientY - rect.top;
-
-            bladeTracks.push({ x: mouseX, y: mouseY, alpha: 1.0 });
-            if (bladeTracks.length > 15) bladeTracks.shift();
-
-            bubbles.forEach(b => {
-                if (!b.isPopped) {
-                    let dist = Math.hypot(b.x - mouseX, b.y - mouseY);
-                    // NỚI RỘNG HITBOX: Bé chỉ cần vuốt sượt qua gần cạnh bóng (+25px) là đã nổ bóng
-                    if (dist < b.radius + 25) { 
-                        b.isPopped = true;
-                        if (b.isTarget) {
-                            score += 10;
-                            document.getElementById('score').innerText = score;
-                            
-                            let giongDocChuan = getPronounceWord(targetVần);
-                            let spelling = getSpellingGuide(targetVần);
-                            speak(`Đúng rồi! ... Vần ${giongDocChuan}. ... ${spelling}. ... vần ${giongDocChuan}!`, true);
-                            
-                            setTimeout(nextQuestion, 4500); 
-                        } else {
-                            speak(`Chưa đúng rồi con ơi!`);
-                        }
-                    }
-                }
-            });
-        }
-
-        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleCut(e.clientX, e.clientY); });
-        canvas.addEventListener('touchmove', (e) => { 
-            if(e.touches.length > 0) {
-                // Sửa lỗi đa điểm chạm trên một số dòng iOS
-                handleCut(e.touches[0].clientX, e.touches[0].clientY); 
-            }
-            e.preventDefault(); 
-        }, {passive: false});
+        Yenlinh123@
 
         // =========================================================================
         // VÒNG LẶP ĐỒ HỌA CHÍNH (GAME LOOP)
