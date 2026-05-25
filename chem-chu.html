@@ -6,7 +6,6 @@
     <title>The Prototype Clown - Poppy Playtime</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body { 
             background: linear-gradient(135deg, #020617 0%, #0f172a 100%); 
             display: flex; 
@@ -14,18 +13,13 @@
             align-items: center; 
             justify-content: space-between; 
             height: 100vh; 
-            padding: 10px 10px; 
+            padding: calc(10px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom)) 10px; 
             overflow: hidden; 
             color: white;
             position: relative;
             font-family: "Times New Roman", Times, serif; 
             user-select: none;
-            /* Thêm đệm an toàn cho tai thỏ và thanh vuốt của iPhone */
-            padding-top: calc(10px + env(safe-area-inset-top));
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
         }
-
-        /* MÀN HÌNH CHỜ ĐẬM CHẤT KINH DỊ POPPY PLAYTIME */
         #start-screen, #end-screen { 
             position: fixed; 
             inset: 0; 
@@ -38,9 +32,8 @@
             text-align: center; 
             padding: 20px;
         }
-        
         .game-title {
-            font-size: clamp(32px, 8vw, 55px); /* Tự co giãn chữ theo màn hình thiết bị */
+            font-size: clamp(32px, 8vw, 55px);
             font-weight: 900;
             color: #fbbf24;
             text-shadow: 3px 3px 0px #be123c, 0 0 20px #7c3aed;
@@ -48,7 +41,6 @@
             letter-spacing: 1px;
             line-height: 1.2;
         }
-
         .btn-start { 
             padding: 14px 40px; 
             font-size: clamp(20px, 5vw, 32px); 
@@ -63,13 +55,12 @@
             transition: 0.1s; 
         }
         .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 25px #a855f7; }
-
         .status-bar { 
             width: 100%; 
             max-width: 1400px;
             display: flex; 
             justify-content: space-between; 
-            font-size: clamp(16px, 4vw, 28px); /* Chữ tự thu nhỏ trên màn hình dọc iPhone */
+            font-size: clamp(16px, 4vw, 28px); 
             font-weight: 900; 
             z-index: 2;
             gap: 5px;
@@ -81,10 +72,8 @@
             border: 2px solid #7c3aed;
             flex: 1;
             text-align: center;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
-
-        /* CANVAS ĐIỀU CHỈNH TỰ ĐỘNG THEO CHIỀU DỌC ĐIỆN THOẠI */
         #game-canvas {
             width: 100%;
             max-width: 1400px;
@@ -97,27 +86,23 @@
             margin-bottom: 5px;
             z-index: 2;
         }
-
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- Màn hình bắt đầu -->
     <div id="start-screen">
         <h1 class="game-title">🤡 PROTOTYPE CLOWN 🤡<br><span style="color:#a855f7">SIÊU TRÙM PHẦN 5</span></h1>
-        <p style="font-size: clamp(16px, 4vw, 24px); margin-bottom: 30px; color: #94a3b8; font-weight: bold; max-width: 850px;">Minh Khang hãy vuốt chém nhanh các bong bóng do Siêu Trùm Chú Hề 1006 tung hứng lên nhé! ⚔️</p>
+        <p style="font-size: 20px; margin-bottom: 30px; color: #94a3b8; font-weight: bold; max-width: 850px;">Minh Khang hãy vuốt chém nhanh các bong bóng do Siêu Trùm Chú Hề 1006 tung hứng lên nhé! ⚔️</p>
         <button class="btn-start" onclick="startGame()">⚡ CHIẾN ĐẤU NGAY ⚡</button>
     </div>
 
-    <!-- Màn hình kết thúc -->
     <div id="end-screen" class="hidden">
         <h1 id="end-title" class="game-title">🏆 CHIẾN THẮNG SIÊU TRÙM 🏆</h1>
-        <p id="end-p" style="font-size: clamp(18px, 4.5vw, 28px); margin-bottom: 30px; color: #cbd5e1; font-weight: bold;"></p>
+        <p id="end-p" style="font-size: 24px; margin-bottom: 30px; color: #cbd5e1; font-weight: bold;"></p>
         <button class="btn-start" onclick="startGame()">🎮 CHƠI LẠI NÀO 🎮</button>
     </div>
 
-    <!-- Thanh thông tin -->
     <div class="status-bar">
         <div class="status-card">Màn: <span id="question-idx" style="color: #ef4444;">0</span>/10</div>
         <div class="status-card" id="target-display" style="color: #fbbf24; border-color: #7c3aed;">Cần tìm: <span id="target-text">...</span></div>
@@ -132,7 +117,7 @@
             { main: "ai", spy: "ay" }, { main: "am", spy: "ăm" }, { main: "ân", spy: "ân" }, { main: "ât", spy: "ấp" },
             { main: "eo", spy: "êu" }, { main: "ia", spy: "uya" }, { main: "iêc", spy: "iên" }, { main: "iêp", spy: "iêt" },
             { main: "iêu", spy: "yêu" }, { main: "im", spy: "ip" }, { main: "inh", spy: "ich" }, { main: "it", spy: "ich" },
-            { main: "oa", spy: "oe" }, { main: "oac", spy: "oam" }, { main: "oach", spy: "oat" }, { main: "oai", spy: "oay" },
+            { main: "oa", spy: "oe" }, { main: "oac", spy: "oam" }, { main: "oac", spy: "oat" }, { main: "oai", spy: "oay" },
             { main: "oan", spy: "oang" }, { main: "oanh", spy: "oang" }, { main: "ôi", spy: "ơi" }, { main: "ôt", spy: "ơt" },
             { main: "ông", spy: "ơng" }, { main: "uâc", spy: "uân" }, { main: "uâng", spy: "uân" }, { main: "uât", spy: "uân" },
             { main: "uây", spy: "uôi" }, { main: "uôc", spy: "uông" }, { main: "ưa", spy: "ươ" }, { main: "ươc", spy: "ương" },
@@ -150,27 +135,24 @@
         let gameActive = false;
         let targetVần = "";
         let normalVần = "";
-        
         let bubbles = [];
         let bladeTracks = []; 
         let spawnTimer;
         let animationFrameId;
         let gameTime = 0;
-        let bossInstance; 
+        let bossInstance;
+        let isWaitingNextQuestion = false;
 
         function speak(text, slowRate = false) {
-            if (!('speechSynthesis' in window)) return;
-            try {
-                window.speechSynthesis.cancel(); 
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'vi-VN';
-                utterance.rate = slowRate ? 0.62 : 0.8; 
-                window.speechSynthesis.speak(utterance);
-            } catch (e) {
-                console.warn("TTS Bypassed: ", e);
-            }
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = slowRate ? 0.65 : 0.85; 
+            window.speechSynthesis.speak(utterance);
         }
-
+// =========================================================================
+        // PHẦN 2: LOGIC ĐÁNH VẦN, PHÁT ÂM VÀ KHỞI TẠO SIÊU TRÙM CHÚ HỀ
+        // =========================================================================
         function getSpellingGuide(word) {
             const danhSachVanPhucTap = {
                 "oay": "o, a, i, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan", "oang": "o, a, ngờ, oang",
@@ -200,35 +182,14 @@
         }
 
         function getPronounceWord(van) {
-            if (van.endsWith('t') || van.endsWith('c') || van.endsWith('p') || van.endsWith('ch')) {
-                if (van === "ât") return "ất"; if (van === "ăt") return "ắt"; if (van === "ơt") return "ớt";
-                if (van === "ut") return "út"; if (van === "ưt") return "ứt"; if (van === "et") return "ét";
-                if (van === "êt" || van === "êch") return "ếch"; if (van === "ot") return "ót"; if (van === "ôt") return "ốt";
-                if (van === "uât") return "uất"; if (van === "uyêt") return "uyết"; if (van === "oet") return "oét";
-                if (van === "oat") return "oát"; if (van === "oac") return "oác"; if (van === "oach") return "oách";
-                if (van === "uôc") return "uốc"; if (van === "uâc") return "uấc"; if (van === "ươc") return "ước";
-                if (van === "oat") return "oát"; if (van === "oac") return "oác"; if (van === "oach") return "oách";
-                if (van === "uôc") return "uốc"; if (van === "uâc") return "uấc"; if (van === "ươc") return "ước";
-                if (van === "uich") return "uịch"; if (van === "uyp") return "uýp"; if (van === "uyt") return "uýt";
-                if (van === "ach") return "ách"; if (van === "ich") return "ích"; if (van === "ôc") return "ốc";
-                if (van === "uc") return "úc"; if (van === "ưc") return "ức"; if (van === "ăc") return "ắc";
-                if (van === "ap") return "áp"; if (van === "ep") return "ép"; if (van === "êp") return "ếp";
-                if (van === "op") return "óp"; if (van === "ôp") return "ốp"; if (van === "up") return "úp";
-                if (van === "ơp") return "ớp"; if (van === "ưp") return "ứp"; if (van === "oam") return "oám";
-            }
-            if (van === "oay") return "oái"; 
-            if (van === "oang") return "oáng"; 
-            if (van === "oanh") return "oánh"; 
-            if (van === "uynh") return "uýnh";
-            if (van === "uâng") return "uấng";
-            if (van === "eng") return "éng";
-            
+            // Giữ nguyên âm vần chuẩn tiếng Việt không tự ý thêm dấu sắc dồn dập
+            if (van === "oay") return "oai"; 
+            if (van === "oang") return "oang"; 
+            if (van === "oanh") return "oanh"; 
+            if (van === "uynh") return "uynh";
             return van;
         }
 
-        // =========================================================================
-        // PROTOTYPE VẼ TOÀN BỘ NHÂN VẬT CHÚ HỀ PROTOTYPE GIỐNG HỆT TRONG ẢNH
-        // =========================================================================
         function ThePrototypeClown() {
             this.x = canvas.width / 2;
             this.y = canvas.height - 110; 
@@ -239,7 +200,9 @@
         ThePrototypeClown.prototype.update = function() {
             this.x += (this.targetX - this.x) * 0.08;
         };
-
+// =========================================================================
+        // PHẦN 3: ĐỒ HỌA CHÚ HỀ VÀ ĐỐI TƯỢNG BONG BÓNG CHỮ
+        // =========================================================================
         ThePrototypeClown.prototype.draw = function(ctx) {
             gameTime += 0.04;
             let dậpDềnh = Math.sin(gameTime * 2) * 6;
@@ -368,12 +331,9 @@
             ctx.beginPath(); ctx.arc(70, headY - 65, 6, 0, Math.PI * 2); ctx.fill();
             ctx.restore();
 
-            ctx.restore();
+            ctx.restore(); 
         };
 
-        // =========================================================================
-        // PROTOTYPE CHO ĐỐI TƯỢNG BONG BÓNG (BUBBLE) - ĐÃ LÀM TO VÀ BAY CHẬM
-        // =========================================================================
         function Bubble(x, y, text, isTarget) {
             this.x = x;
             this.y = y;
@@ -400,12 +360,10 @@
             ctx.fillStyle = '#ffffff';
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 5;
-            
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
-
             ctx.font = 'bold 55px "Times New Roman"'; 
             ctx.fillStyle = '#0f172a';
             ctx.textAlign = 'center';
@@ -413,9 +371,8 @@
             ctx.fillText(this.text, this.x, this.y + 4);
             ctx.restore();
         };
-
-        // =========================================================================
-        // ĐIỀU CHỈNH ĐỘ PHÂN GIẢI VÀ KÍCH THƯỚC CANVAS TỰ ĐỘNG
+// =========================================================================
+        // PHẦN 4: VÒNG LẶP ĐIỀU HÀNH GAME VÀ SỰ KIỆN CHÉM BÓNG SIÊU NHẠY
         // =========================================================================
         function resizeCanvas() {
             canvas.width = canvas.clientWidth;
@@ -428,10 +385,10 @@
         }
         window.addEventListener('resize', () => { setTimeout(resizeCanvas, 150); });
 
-        // =========================================================================
-        // LOGIC KHỞI ĐỘNG VÀ ĐIỀU HÀNH TRÒ CHƠI
-        // =========================================================================
         function startGame() {
+            clearInterval(spawnTimer);
+            if (typeof spawnTimer !== 'undefined') spawnTimer = null;
+
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('end-screen').classList.add('hidden');
             
@@ -440,6 +397,7 @@
             
             currentIdx = 0;
             score = 0;
+            isWaitingNextQuestion = false; 
             document.getElementById('score').innerText = score;
             gameActive = true;
             bubbles = [];
@@ -456,6 +414,7 @@
                 return;
             }
 
+            clearInterval(spawnTimer);
             currentIdx++;
             document.getElementById('question-idx').innerText = currentIdx;
 
@@ -465,18 +424,21 @@
 
             document.getElementById('target-text').innerText = targetVần;
 
-            // Gọi tên phát âm chuẩn của vần giúp câu hỏi chính xác
             let giongDocTron = getPronounceWord(targetVần);
             speak(`Minh Khang ơi,, hãy chém vần ${giongDocTron} !`);
 
-            clearInterval(spawnTimer);
+            isWaitingNextQuestion = false;
+
             spawnTimer = setInterval(() => {
-                if (gameActive) spawnBubble();
-            }, 1600); 
+                if (gameActive && !isWaitingNextQuestion) {
+                    spawnBubble();
+                }
+            }, 1800); 
         }
 
         function spawnBubble() {
-            if (!gameActive) return;
+            if (!gameActive || isWaitingNextQuestion) return;
+            
             bossInstance.targetX = Math.random() * (canvas.width - 150) + 75;
             bossInstance.state = 'attack';
             setTimeout(() => { if(bossInstance) bossInstance.state = 'idle'; }, 400);
@@ -492,15 +454,10 @@
             bubbles.push(newBubble);
         }
 
-        // =========================================================================
-        // XỬ LÝ THAO TÁC VUỐT KIẾM CHÉM BÓNG SIÊU NHẠY - ĐA ĐIỂM TOÀN MÀN HÌNH
-        // =========================================================================
         function handleCut(clientX, clientY) {
-            if (!gameActive) return;
+            if (!gameActive || isWaitingNextQuestion) return;
             
             const rect = canvas.getBoundingClientRect();
-            
-            // Công thức đồng bộ tỷ lệ hiển thị thực tế trên mọi thiết bị
             const mouseX = ((clientX - rect.left) / rect.width) * canvas.width;
             const mouseY = ((clientY - rect.top) / rect.height) * canvas.height;
 
@@ -511,18 +468,25 @@
                 if (!b.isPopped) {
                     let dist = Math.hypot(b.x - mouseX, b.y - mouseY);
                     
-                    // Hitbox nới rộng +45px siêu nhạy cho trẻ em dễ vuốt trúng
                     if (dist < b.radius + 45) { 
                         b.isPopped = true;
+                        
                         if (b.isTarget) {
+                            isWaitingNextQuestion = true; 
+                            clearInterval(spawnTimer); 
+                            bubbles = []; 
+
                             score += 10;
                             document.getElementById('score').innerText = score;
                             
                             let giongDocChuan = getPronounceWord(targetVần);
                             let spelling = getSpellingGuide(targetVần);
+                            
                             speak(`Đúng rồi! ... Vần ${giongDocChuan}. ... ${spelling}. ... vần ${giongDocChuan}!`, true);
                             
-                            setTimeout(nextQuestion, 4500); 
+                            setTimeout(() => {
+                                nextQuestion();
+                            }, 4500); 
                         } else {
                             speak(`Chưa đúng rồi con ơi!`);
                         }
@@ -552,9 +516,6 @@
             e.preventDefault(); 
         }, { passive: false });
 
-        // =========================================================================
-        // VÒNG LẶP ĐỒ HỌA CHÍNH (GAME LOOP)
-        // =========================================================================
         function gameLoop() {
             if (!gameActive) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -596,9 +557,6 @@
             animationFrameId = requestAnimationFrame(gameLoop);
         }
 
-        // =========================================================================
-        // KẾT THÚC TRÒ CHƠI & CHÚC MỪNG CHIẾN THẮNG
-        // =========================================================================
         function endGame() {
             gameActive = false;
             clearInterval(spawnTimer);
