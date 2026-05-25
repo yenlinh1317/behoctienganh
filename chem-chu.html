@@ -460,7 +460,9 @@
                 return;
             }
 
+            // Xóa bộ đếm cũ trước khi thiết lập bộ đếm mới cho câu tiếp theo
             clearInterval(spawnTimer);
+
             currentIdx++;
             document.getElementById('question-idx').innerText = currentIdx;
 
@@ -468,13 +470,19 @@
             normalVần = randomPair.main;
             targetVần = randomPair.spy;
 
+            // Chữ hiển thị trên bảng của bé giữ nguyên gốc 100% không bị thêm dấu sai lệch
             document.getElementById('target-text').innerText = targetVần;
 
+            // Gọi hàm lọc Phonics để lấy âm trơn chuẩn của vần
             let giongDocTron = getPronounceWord(targetVần);
-            speak("Minh Khang ơi. Hãy chém vần. " + giongDocTron + " !");
+            
+            // Ép bộ đọc ngắt nghỉ thong thả để phát âm chính xác toàn vần
+            speak("Minh Khang ơi. Hãy chém vần. " + giongDocTron);
 
+            // Mở khóa cho phép bóng bay ra
             isWaitingNextQuestion = false;
 
+            // Cứ sau 1.8 giây chú hề mới tung ra một quả bóng lơ lửng chậm rãi
             spawnTimer = setInterval(() => {
                 if (gameActive && !isWaitingNextQuestion) {
                     spawnBubble();
