@@ -323,30 +323,45 @@
             ctx.strokeStyle = '#991b1b'; ctx.lineWidth = 4; ctx.lineCap = 'round';
             ctx.beginPath(); ctx.arc(0, headY + 10, 16, 0.1, Math.PI - 0.1); ctx.stroke();
 
-            // 5. VẼ CHIẾC MŨ HỀ 2 MÀU ĐỐI XỨNG CHUẨN TRONG ẢNH MẪU (Đỏ - Xanh Hoàng Gia)
+            // =========================================================================
+            // ĐÃ NÂNG CẤP: VẼ CHIẾC MŨ HỀ 3 CÁNH (ĐỎ - VÀNG - XANH) ĐỐI XỨNG CỰC ĐẸP
+            // =========================================================================
+            
+            // Cánh mũ 1: Bên Trái (Màu Đỏ)
             ctx.fillStyle = '#dc2626';
             ctx.beginPath();
             ctx.moveTo(-28, headY - 15);
-            ctx.bezierCurveTo(-45, headY - 35, -75, headY - 30, -70, headY - 65);
-            ctx.bezierCurveTo(-55, headY - 50, -10, headY - 42, -5, headY - 30);
+            ctx.bezierCurveTo(-50, headY - 35, -85, headY - 25, -80, headY - 60); // Cong vút hẳn ra rìa trái
+            ctx.bezierCurveTo(-65, headY - 45, -15, headY - 42, -8, headY - 28);
             ctx.closePath(); ctx.fill();
 
+            // Cánh mũ 2: Bên Phải (Màu Xanh Dương)
             ctx.fillStyle = '#1e3a8a';
             ctx.beginPath();
             ctx.moveTo(28, headY - 15);
-            ctx.bezierCurveTo(45, headY - 35, 75, headY - 30, 70, headY - 65);
-            ctx.bezierCurveTo(55, headY - 50, 10, headY - 42, 5, headY - 30);
+            ctx.bezierCurveTo(50, headY - 35, 85, headY - 25, 80, headY - 60); // Cong vút hẳn ra rìa phải
+            ctx.bezierCurveTo(65, headY - 45, 15, headY - 42, 8, headY - 28);
             ctx.closePath(); ctx.fill();
 
+            // Cánh mũ 3: Chính Giữa (Màu Vàng Hoàng Gia) - Đâm thẳng vút lên cao
+            ctx.fillStyle = '#eab308';
+            ctx.beginPath();
+            ctx.moveTo(-12, headY - 28);
+            ctx.bezierCurveTo(-15, headY - 55, -5, headY - 75, 0, headY - 85); // Đỉnh nhọn ở giữa cao nhất
+            ctx.bezierCurveTo(5, headY - 75, 15, headY - 55, 12, headY - 28);
+            ctx.closePath(); ctx.fill();
+
+            // Đính 3 quả chuông vàng nhỏ (Lục lạc) phát sáng neon ở đỉnh cả 3 cánh mũ
             ctx.save();
-            ctx.shadowColor = '#facc15'; ctx.shadowBlur = 10;
+            ctx.shadowColor = '#facc15'; ctx.shadowBlur = 12;
             ctx.fillStyle = '#facc15';
-            ctx.beginPath(); ctx.arc(-70, headY - 65, 6, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(70, headY - 65, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(-80, headY - 60, 6, 0, Math.PI * 2); ctx.fill(); // Chuông cánh Trái
+            ctx.beginPath(); ctx.arc(80, headY - 60, 6, 0, Math.PI * 2); ctx.fill();  // Chuông cánh Phải
+            ctx.beginPath(); ctx.arc(0, headY - 85, 6, 0, Math.PI * 2); ctx.fill();   // Chuông cánh Giữa hoàn chỉnh
             ctx.restore();
 
-            ctx.restore(); 
-        };
+            ctx.restore(); // Kết thúc dịch chuyển tọa độ dập dềnh của chú hề
+        }; // KẾT THÚC HÀM DRAW CỦA CHÚ HỀ
 
         function Bubble(x, y, text, isTarget) {
             this.x = x;
