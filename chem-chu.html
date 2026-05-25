@@ -182,27 +182,26 @@
         }
 
        function getPronounceWord(van) {
-            // Danh sách ép giọng đọc AI phát âm chuẩn nguyên vần tiếng Việt, không đọc rời rạc từng chữ cái
+            // Ép giọng đọc AI phát âm trơn vần (âm trần), không đọc tách chữ cái và không thêm phụ âm đầu
             const boLocGiongDoc = {
-                "uân": "huân", "uât": "huất", "uây": "huây", "uông": "huông", "uôc": "huốc", 
-                "uôm": "huôm", "uôi": "huôi", "uynh": "huýnh", "uich": "huịch", "uyêt": "huuyết",
-                "uyên": "huuyên", "uya": "huuya", "oay": "hoay", "oai": "hoai", "oan": "hoan", 
-                "oang": "hoang", "oanh": "hoanh", "oac": "hoác", "oat": "hoát", "oach": "hoách",
-                "oam": "hoám", "oe": "hoe", "oet": "hoét", "ươu": "hươu", "ương": "hương", 
-                "ươn": "hươn", "ươc": "hước", "ươm": "hươm", "ưa": "hưa", "ươ": "hươ",
-                "iêu": "hiêu", "yêu": "hiêu", "iên": "hiên", "yên": "hiên", "iêc": "hiếc", 
-                "iêp": "hiếp", "iêt": "hiết", "iêm": "hiếm", "yêm": "hiếm", "ia": "hia",
-                "ang": "hang", "anh": "hanh", "inh": "hinh", "ich": "hịch", "eng": "heng",
-                "ăng": "hăng", "âng": "hâng", "ong": "hong", "ông": "hông",
-                "an": "han", "am": "ham", "at": "hạt", "ac": "hạc", "ao": "hao", "au": "hau",
-                "ai": "hai", "ay": "hay", "ăm": "hăm", "ân": "hân", "ât": "hật", "ấp": "hấp",
-                "eo": "heo", "êu": "hêu", "im": "him", "ip": "hịp", "it": "hịt", "ôi": "hôi",
-                "ơi": "hơi", "ôt": "hột", "ơt": "hợt", "ơng": "hơng", "ui": "hui", "uy": "huy",
-                "en": "hen", "et": "hẹt", "êt": "hệt", "êch": "hệch", "oc": "hóc", "ôc": "hốc",
-                "uc": "húc", "ưc": "hức", "ăt": "hặt", "ut": "hụt", "ưt": "hựt"
+                "uân": "uân", "uât": "uất", "uây": "uây", "uông": "uông", "uôc": "uốc", 
+                "uôm": "uôm", "uôi": "uôi", "uynh": "uýnh", "uich": "uịch", "uyêt": "uyết",
+                "uyên": "uyển", "uya": "uya", "oay": "oáy", "oai": "oai", "oan": "oan", 
+                "oang": "oáng", "oanh": "oánh", "oac": "oác", "oat": "oát", "oach": "oách",
+                "oam": "oám", "oe": "oe", "oet": "oét", "ươu": "ươu", "ương": "ương", 
+                "ươn": "ươn", "ươc": "ước", "ươm": "ươm", "ưa": "ưa", "ươ": "ươ",
+                "iêu": "iêu", "yêu": "yêu", "iên": "iên", "yên": "yên", "iêc": "iếc", 
+                "iêp": "hiếp", "iêt": "iết", "iêm": "iếm", "yêm": "hiếm", "ia": "ia",
+                "ang": "ang", "anh": "anh", "inh": "inh", "ich": "ích", "eng": "eng",
+                "ăng": "ăng", "âng": "âng", "ong": "ong", "ông": "ông",
+                "an": "an", "am": "am", "at": "át", "ac": "ác", "ao": "ao", "au": "au",
+                "ai": "ai", "ay": "ay", "ăm": "ăm", "ân": "ân", "ât": "ất", "ấp": "ấp",
+                "eo": "eo", "êu": "êu", "im": "im", "ip": "íp", "it": "ít", "ôi": "ôi",
+                "ơi": "ơi", "ôt": "ốt", "ơt": "ớt", "ơng": "ơng", "ui": "ui", "uy": "uy",
+                "en": "en", "et": "ét", "êt": "ết", "êch": "ếch", "oc": "óc", "ôc": "ốc",
+                "uc": "úc", "ưc": "ức", "ăt": "ắt", "ut": "út", "ưt": "ứt"
             };
 
-            // Nếu vần nằm trong danh sách bộ lọc thì ép đọc theo từ chuẩn, ngược lại giữ nguyên
             if (boLocGiongDoc[van]) return boLocGiongDoc[van];
             return van;
         }
