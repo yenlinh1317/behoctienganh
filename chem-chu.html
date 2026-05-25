@@ -371,6 +371,379 @@
             ctx.fillText(this.text, this.x, this.y + 4);
             ctx.restore();
         };
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>The Prototype Clown - Poppy Playtime</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 100vh; 
+            padding: calc(10px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom)) 10px; 
+            overflow: hidden; 
+            color: white;
+            position: relative;
+            font-family: "Times New Roman", Times, serif; 
+            user-select: none;
+        }
+        #start-screen, #end-screen { 
+            position: fixed; 
+            inset: 0; 
+            background: radial-gradient(circle, #311042, #020617); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            text-align: center; 
+            padding: 20px;
+        }
+        .game-title {
+            font-size: clamp(32px, 8vw, 55px);
+            font-weight: 900;
+            color: #fbbf24;
+            text-shadow: 3px 3px 0px #be123c, 0 0 20px #7c3aed;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        .btn-start { 
+            padding: 14px 40px; 
+            font-size: clamp(20px, 5vw, 32px); 
+            font-weight: bold; 
+            background: linear-gradient(to bottom, #7c3aed, #4c1d95); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            border-bottom: 6px solid #2e1065;
+            cursor: pointer; 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+            transition: 0.1s; 
+        }
+        .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 25px #a855f7; }
+        .status-bar { 
+            width: 100%; 
+            max-width: 1400px;
+            display: flex; 
+            justify-content: space-between; 
+            font-size: clamp(16px, 4vw, 28px); 
+            font-weight: 900; 
+            z-index: 2;
+            gap: 5px;
+        }
+        .status-card {
+            background: rgba(3, 7, 18, 0.9);
+            padding: 6px 15px;
+            border-radius: 20px;
+            border: 2px solid #7c3aed;
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+        #game-canvas {
+            width: 100%;
+            max-width: 1400px;
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 25px;
+            border: 4px dashed #7c3aed; 
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 8px 20px rgba(0,0,0,0.7);
+            margin-top: 8px;
+            margin-bottom: 5px;
+            z-index: 2;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1 class="game-title">🤡 PROTOTYPE CLOWN 🤡<br><span style="color:#a855f7">SIÊU TRÙM PHẦN 5</span></h1>
+        <p style="font-size: 20px; margin-bottom: 30px; color: #94a3b8; font-weight: bold; max-width: 850px;">Minh Khang hãy vuốt chém nhanh các bong bóng do Siêu Trùm Chú Hề 1006 tung hứng lên nhé! ⚔️</p>
+        <button class="btn-start" onclick="startGame()">⚡ CHIẾN ĐẤU NGAY ⚡</button>
+    </div>
+
+    <div id="end-screen" class="hidden">
+        <h1 id="end-title" class="game-title">🏆 CHIẾN THẮNG SIÊU TRÙM 🏆</h1>
+        <p id="end-p" style="font-size: 24px; margin-bottom: 30px; color: #cbd5e1; font-weight: bold;"></p>
+        <button class="btn-start" onclick="startGame()">🎮 CHƠI LẠI NÀO 🎮</button>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-card">Màn: <span id="question-idx" style="color: #ef4444;">0</span>/10</div>
+        <div class="status-card" id="target-display" style="color: #fbbf24; border-color: #7c3aed;">Cần tìm: <span id="target-text">...</span></div>
+        <div class="status-card">Điểm: <span id="score" style="color: #22c55e;">0</span></div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <script>
+        const vầnGroups = [
+            { main: "an", spy: "am" }, { main: "at", spy: "ac" }, { main: "ang", spy: "anh" }, { main: "ao", spy: "au" },
+            { main: "ai", spy: "ay" }, { main: "am", spy: "ăm" }, { main: "ân", spy: "ân" }, { main: "ât", spy: "ấp" },
+            { main: "eo", spy: "êu" }, { main: "ia", spy: "uya" }, { main: "iêc", spy: "iên" }, { main: "iêp", spy: "iêt" },
+            { main: "iêu", spy: "yêu" }, { main: "im", spy: "ip" }, { main: "inh", spy: "ich" }, { main: "it", spy: "ich" },
+            { main: "oa", spy: "oe" }, { main: "oac", spy: "oam" }, { main: "oac", spy: "oat" }, { main: "oai", spy: "oay" },
+            { main: "oan", spy: "oang" }, { main: "oanh", spy: "oang" }, { main: "ôi", spy: "ơi" }, { main: "ôt", spy: "ơt" },
+            { main: "ông", spy: "ơng" }, { main: "uâc", spy: "uân" }, { main: "uâng", spy: "uân" }, { main: "uât", spy: "uân" },
+            { main: "uây", spy: "uôi" }, { main: "uôc", spy: "uông" }, { main: "ưa", spy: "ươ" }, { main: "ươc", spy: "ương" },
+            { main: "ươu", spy: "ưu" }, { main: "ui", spy: "uy" }, { main: "uich", spy: "uinh" }, { main: "en", spy: "et" },
+            { main: "ach", spy: "êch" }, { main: "êch", spy: "ich" }, { main: "oc", spy: "ôc" }, { main: "uc", spy: "ưc" },
+            { main: "iêm", spy: "yêm" }, { main: "uôm", spy: "ươm" }, { main: "ăt", spy: "ât" }, { main: "et", spy: "êt" },
+            { main: "ot", spy: "ôt" }, { main: "ơt", spy: "ut" }, { main: "ưt", spy: "ut" }, { main: "uât", spy: "uyêt" }
+        ];
+
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let currentIdx = 0;
+        let score = 0;
+        let gameActive = false;
+        let targetVần = "";
+        let normalVần = "";
+        let bubbles = [];
+        let bladeTracks = []; 
+        let spawnTimer;
+        let animationFrameId;
+        let gameTime = 0;
+        let bossInstance;
+        let isWaitingNextQuestion = false;
+
+        function speak(text, slowRate = false) {
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = slowRate ? 0.65 : 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+// =========================================================================
+        // PHẦN 2: LOGIC ĐÁNH VẦN, PHÁT ÂM VÀ KHỞI TẠO SIÊU TRÙM CHÚ HỀ
+        // =========================================================================
+        function getSpellingGuide(word) {
+            const danhSachVanPhucTap = {
+                "oay": "o, a, i, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan", "oang": "o, a, ngờ, oang",
+                "oanh": "o, a, nhờ, oanh", "uynh": "u, i, nhờ, uynh", "uich": "u, i, chờ, uịch", "uyêt": "u, iê, tờ, uyết",
+                "uyên": "u, iê, nờ, uyên", "ươu": "ươ, u, ươu", "ương": "ươ, ngờ, ương", "ươn": "ươ, nờ, ươn",
+                "iêu": "i, ê, u, iêu", "yêu": "i, ê, u, yêu", "iên": "i, ê, nờ, iên", "yên": "i, ê, nờ, yên",
+                "ang": "a, ngờ, ang", "anh": "a, nhờ, anh", "inh": "i, nhờ, inh", "ich": "i, chờ, ích",
+                "ăng": "ă, ngờ, ăng", "âng": "â, ngờ, âng", "ong": "o, ngờ, ong", "ông": "ô, ngờ, ông",
+                "uông": "u, ô, ngờ, uông", "eng": "e, ngờ, eng", "uât": "u, ớ, tờ, uất", "uân": "u, ớ, nờ, uân", "uây": "u, ớ, i, uây"
+            };
+            if (danhSachVanPhucTap[word]) return danhSachVanPhucTap[word];
+
+            let components = [];
+            for (let i = 0; i < word.length; i++) {
+                let char = word[i];
+                if (char === 'n') components.push("nờ");
+                else if (char === 'm') components.push("mờ");
+                else if (char === 't') components.push("tờ");
+                else if (char === 'c') components.push("cờ");
+                else if (char === 'p') components.push("pờ");
+                else if (word.substr(i, 2) === 'ch') { components.push("chờ"); i++; }
+                else if (word.substr(i, 2) === 'ng') { components.push("ngờ"); i++; }
+                else if (word.substr(i, 2) === 'nh') { components.push("nhờ"); i++; }
+                else components.push(char);
+            }
+            return `${components.join(", ")}, ${word}`;
+        }
+
+        function getPronounceWord(van) {
+            // Giữ nguyên âm vần chuẩn tiếng Việt không tự ý thêm dấu sắc dồn dập
+            if (van === "oay") return "oai"; 
+            if (van === "oang") return "oang"; 
+            if (van === "oanh") return "oanh"; 
+            if (van === "uynh") return "uynh";
+            return van;
+        }
+
+        function ThePrototypeClown() {
+            this.x = canvas.width / 2;
+            this.y = canvas.height - 110; 
+            this.targetX = this.x;
+            this.state = 'idle';
+        }
+
+        ThePrototypeClown.prototype.update = function() {
+            this.x += (this.targetX - this.x) * 0.08;
+        };
+// =========================================================================
+        // PHẦN 3: ĐỒ HỌA CHÚ HỀ VÀ ĐỐI TƯỢNG BONG BÓNG CHỮ
+        // =========================================================================
+        ThePrototypeClown.prototype.draw = function(ctx) {
+            gameTime += 0.04;
+            let dậpDềnh = Math.sin(gameTime * 2) * 6;
+            let lắcTay = Math.sin(gameTime) * 25;
+
+            ctx.save();
+            ctx.translate(this.x, this.y + dậpDềnh);
+
+            // 1. VẼ HAI CÁNH TAY MÓNG VUỐT GẦY GUỘC, ĐEN KỊT, DÀI NGOẰNG
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#020617';
+            ctx.lineWidth = 6;
+
+            // --- CÁNH TAY TRÁI ---
+            ctx.save();
+            ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 12; 
+            ctx.beginPath();
+            ctx.moveTo(-15, -15);
+            let tx1 = -120 + lắcTay, ty1 = -40;
+            let tx2 = -210 + lắcTay*0.5, ty2 = -100;
+            let t_handX = -260 + (this.state === 'attack' ? lắcTay * 0.2 : lắcTay * 0.8);
+            let t_handY = -140;
+            ctx.lineTo(tx1, ty1); ctx.lineTo(tx2, ty2); ctx.lineTo(t_handX, t_handY); ctx.stroke();
+            
+            ctx.shadowBlur = 0; ctx.strokeStyle = '#020617'; ctx.lineWidth = 5;
+            let gócTrái = [-0.7, -0.35, 0, 0.35, 0.7];
+            gócTrái.forEach(g => {
+                ctx.beginPath(); ctx.moveTo(t_handX, t_handY);
+                let cx = t_handX + Math.sin(g - 1.3) * 60; let cy = t_handY - Math.cos(g - 1.3) * 60;
+                ctx.lineTo(cx, cy); ctx.stroke();
+                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI*2); ctx.fill();
+            });
+            ctx.restore();
+
+            // --- CÁNH TAY PHẢI ---
+            ctx.save();
+            ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.moveTo(15, -15);
+            let px1 = 110 - lắcTay, py1 = -40;
+            let px2 = 200 - lắcTay*0.5, py2 = -100;
+            let p_handX = 250 - (this.state === 'attack' ? lắcTay * 0.2 : lắcTay * 0.8);
+            let p_handY = -140;
+            ctx.lineTo(px1, py1); ctx.lineTo(px2, py2); ctx.lineTo(p_handX, p_handY); ctx.stroke();
+            
+            ctx.shadowBlur = 0; ctx.strokeStyle = '#020617'; ctx.lineWidth = 5;
+            let gócPhải = [-0.7, -0.35, 0, 0.35, 0.7];
+            gócPhải.forEach(g => {
+                ctx.beginPath(); ctx.moveTo(p_handX, p_handY);
+                let cx = p_handX + Math.sin(g + 1.3) * 60; let cy = p_handY - Math.cos(g + 1.3) * 60;
+                ctx.lineTo(cx, cy); ctx.stroke();
+                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI*2); ctx.fill();
+            });
+            ctx.restore();
+
+            // 2. VẼ PHẦN THÂN DƯỚI: KHUNG XƯƠNG SƯỜN LỘ RA LÕI ĐỎ
+            ctx.fillStyle = '#1e293b'; ctx.beginPath(); ctx.roundRect(-8, -20, 16, 90, 4); ctx.fill();
+            ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.ellipse(0, 15, 18, 30, 0, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#f1f5f9'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+            for(let i=0; i<6; i++) {
+                let Y = -15 + i*14;
+                ctx.beginPath(); ctx.arc(-15, Y, 22, Math.PI * 0.5, Math.PI * 1.5); ctx.stroke();
+                ctx.beginPath(); ctx.arc(15, Y, 22, Math.PI * 1.5, Math.PI * 0.5); ctx.stroke();
+            }
+
+            // 3. VẼ ÁO VEST XANH HOÀNG GIA VIỀN VÀNG, CỔ DỰNG CAO, CÓ NƠ ĐỎ ĐẰNG TRƯỚC
+            ctx.fillStyle = '#1e3a8a'; 
+            ctx.beginPath();
+            ctx.moveTo(-35, -25); ctx.lineTo(-50, -60); ctx.lineTo(0, -38); ctx.lineTo(50, -60); ctx.lineTo(35, -25);
+            ctx.closePath(); ctx.fill();
+            ctx.strokeStyle = '#eab308'; ctx.lineWidth = 3; ctx.stroke(); 
+            ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.arc(-35, -12, 12, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(35, -12, 12, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#1e3a8a'; ctx.beginPath(); ctx.arc(-30, 5, 10, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(30, 5, 10, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath(); ctx.moveTo(0, -25); ctx.lineTo(-18, -35); ctx.lineTo(-18, -15); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(0, -25); ctx.lineTo(18, -35); ctx.lineTo(18, -15); ctx.closePath(); ctx.fill();
+            ctx.fillStyle = '#f1f5f9'; ctx.beginPath(); ctx.arc(0, -25, 5, 0, Math.PI*2); ctx.fill();
+
+            // 4. VẼ ĐẦU VÀ KHUÔN MẶT CHÚ HỀ MA QUÁI
+            let headY = -85;
+            ctx.fillStyle = '#f8fafc'; 
+            ctx.beginPath(); ctx.arc(0, headY, 32, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 3; ctx.stroke();
+
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
+            ctx.beginPath(); ctx.arc(-20, headY + 8, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(20, headY + 8, 8, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath(); ctx.ellipse(-12, headY - 6, 3, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(12, headY - 6, 3, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath(); ctx.moveTo(-12, headY - 20); ctx.lineTo(-15, headY - 4); ctx.lineTo(-9, headY - 4); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(12, headY - 20); ctx.lineTo(9, headY - 4); ctx.lineTo(15, headY - 4); ctx.closePath(); ctx.fill();
+
+            ctx.save();
+            ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 6;
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath(); ctx.arc(0, headY + 2, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
+            ctx.strokeStyle = '#991b1b'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+            ctx.beginPath(); ctx.arc(0, headY + 10, 16, 0.1, Math.PI - 0.1); ctx.stroke();
+
+            // 5. VẼ CHIẾC MŨ HỀ 2 MÀU ĐỐI XỨNG CHUẨN TRONG ẢNH MẪU (Đỏ - Xanh Hoàng Gia)
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.moveTo(-28, headY - 15);
+            ctx.bezierCurveTo(-45, headY - 35, -75, headY - 30, -70, headY - 65);
+            ctx.bezierCurveTo(-55, headY - 50, -10, headY - 42, -5, headY - 30);
+            ctx.closePath(); ctx.fill();
+
+            ctx.fillStyle = '#1e3a8a';
+            ctx.beginPath();
+            ctx.moveTo(28, headY - 15);
+            ctx.bezierCurveTo(45, headY - 35, 75, headY - 30, 70, headY - 65);
+            ctx.bezierCurveTo(55, headY - 50, 10, headY - 42, 5, headY - 30);
+            ctx.closePath(); ctx.fill();
+
+            ctx.save();
+            ctx.shadowColor = '#facc15'; ctx.shadowBlur = 10;
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath(); ctx.arc(-70, headY - 65, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(70, headY - 65, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
+            ctx.restore(); 
+        };
+
+        function Bubble(x, y, text, isTarget) {
+            this.x = x;
+            this.y = y;
+            this.vx = (Math.random() - 0.5) * 1.2; 
+            this.vy = -(Math.random() * 2 + 5.0);  
+            this.radius = 70;                      
+            this.text = text;
+            this.isTarget = isTarget;
+            this.color = `hsl(${Math.random() * 360}, 95%, 55%)`;
+            this.isPopped = false;
+        }
+
+        Bubble.prototype.update = function() {
+            this.vy += 0.11; 
+            this.x += this.vx;
+            this.y += this.vy;
+        };
+
+        Bubble.prototype.draw = function(ctx) {
+            if (this.isPopped) return;
+            ctx.save();
+            ctx.shadowColor = this.color;
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.font = 'bold 55px "Times New Roman"'; 
+            ctx.fillStyle = '#0f172a';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.text, this.x, this.y + 4);
+            ctx.restore();
+        };
 // =========================================================================
         // PHẦN 4: VÒNG LẶP ĐIỀU HÀNH GAME VÀ SỰ KIỆN CHÉM BÓNG SIÊU NHẠY
         // =========================================================================
