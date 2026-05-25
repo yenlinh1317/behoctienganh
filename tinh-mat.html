@@ -1,7 +1,250 @@
-// HÀM ÉP GIỌNG ĐỌC TRƠN ĐÚNG CHUẨN TIẾNG VIỆT KHI HỎI (ĐÃ SỬA LỖI ĐỌC SAI "OET")
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
+    <title>Siêu Thám Tử Tinh Mắt - Minh Khang</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background: linear-gradient(135deg, #fef08a 0%, #fbcfe8 100%); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 100vh; 
+            padding: 10px 20px; 
+            overflow: hidden; 
+            color: #1e293b;
+            position: relative;
+            font-family: "Times New Roman", Times, serif; 
+        }
+
+        .decor-bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.4); pointer-events: none; z-index: 1; animation: float 6s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.1); } }
+        
+        #start-screen, #end-screen { 
+            position: fixed; 
+            inset: 0; 
+            background: radial-gradient(circle, #fef08a, #fda4af); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            text-align: center; 
+        }
+        
+        .game-title {
+            font-size: 50px;
+            font-weight: 900;
+            color: #db2777;
+            text-shadow: 3px 3px 0px #fff;
+            margin-bottom: 20px;
+        }
+
+        .btn-start { 
+            padding: 18px 50px; 
+            font-size: 32px; 
+            font-weight: bold; 
+            background: linear-gradient(to bottom, #f43f5e, #be123c); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            border-bottom: 6px solid #9f1239;
+            cursor: pointer; 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transition: 0.1s; 
+        }
+        .btn-start:hover { transform: scale(1.05); }
+        .btn-start:active { border-bottom-width: 0px; transform: translateY(6px); }
+
+        .status-bar { 
+            width: 98%; 
+            max-width: 1400px;
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 32px; 
+            font-weight: 900; 
+            z-index: 2;
+        }
+        .status-card {
+            background: white;
+            padding: 6px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 0px #cbd5e1;
+            border: 2px solid #94a3b8;
+        }
+
+        .timer-container { 
+            width: 98%; 
+            max-width: 1400px;
+            height: 18px; 
+            background: #e2e8f0; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 5px 0;
+            z-index: 2;
+        }
+        #timer-bar { 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(to right, #4ade80, #22c55e); 
+            transition: width 0.1s linear; 
+        }
+
+        .grid-container {
+            width: 98%; 
+            max-width: 1400px;
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 35px;
+            border: 6px dashed #f472b6; 
+            padding: 15px;
+            display: grid;
+            gap: 12px;
+            justify-content: center;
+            align-content: center;
+            z-index: 2;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+            margin-bottom: 5px;
+        }
+
+        .letter-box {
+            font-size: 85px; 
+            font-weight: normal; 
+            color: #1e3a8a;
+            background: #ffffff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s;
+            min-width: 200px; 
+            height: 120px; 
+            box-shadow: 0 6px 0px #bfdbfe;
+            border: 2px solid #3b82f6;
+        }
+        .letter-box:hover { background: #eff6ff; transform: translateY(-4px); }
+        
+        .letter-box.correct { 
+            background: linear-gradient(to bottom, #4ade80, #22c55e) !important; 
+            color: white !important; 
+            box-shadow: 0 6px 0px #16a34a !important;
+            border-color: #15803d !important;
+            animation: bounce 0.4s ease infinite alternate;
+        }
+        .letter-box.wrong { 
+            background: linear-gradient(to bottom, #f87171, #ef4444) !important; 
+            color: white !important; 
+            box-shadow: 0 6px 0px #dc2626 !important;
+            border-color: #b91c1c !important;
+        }
+
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
+        .hidden { display: none !important; }
+
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+            .letter-box {
+                font-size: 55px !important; 
+                min-width: 110px !important;
+                height: 90px !important;
+            }
+            .grid-container { gap: 10px !important; padding: 10px !important; }
+            .status-bar { font-size: 26px !important; }
+            .game-title { font-size: 38px !important; }
+            .btn-start { font-size: 24px !important; padding: 12px 35px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decor-bubble" style="width: 70px; height: 70px; top: 8%; left: 3%; animation-delay: 0s;"></div>
+    <div class="decor-bubble" style="width: 100px; height: 100px; bottom: 12%; right: 3%; animation-delay: 2s;"></div>
+
+    <!-- Màn hình bắt đầu -->
+    <div id="start-screen">
+        <h1 class="game-title">🥳 THÁM TỬ TINH MẮT 🥳</h1>
+        <p style="font-size: 32px; margin-bottom: 60px; color: #475569; font-weight: bold; max-width: 850px;">Bé Minh Khang hãy nhanh mắt tìm vần đi trốn nhé! ✨</p>
+        <button class="btn-start" onclick="startGame()">🍭 BẮT ĐẦU CHƠI 🍭</button>
+    </div>
+
+    <!-- Màn hình kết thúc -->
+    <div id="end-screen" class="hidden">
+        <h1 id="end-title" class="game-title">🎉 QUÁ XUẤT SẮC! 🎉</h1>
+        <p id="end-p" style="font-size: 28px; margin-bottom: 30px; color: #475569; font-weight: bold;"></p>
+        <button class="btn-start" onclick="startGame()">🎈 CHƠI LẠI NÀO 🎈</button>
+    </div>
+
+    <!-- Thanh thông tin -->
+    <div class="status-bar">
+        <div class="status-card">Màn: <span id="question-idx" style="color: #ec4899;">0</span>/10</div>
+        <div class="status-card">Điểm: <span id="score" style="color: #22c55e;">0</span></div>
+    </div>
+
+    <!-- Thanh thời gian -->
+    <div class="timer-container">
+        <div id="timer-bar"></div>
+    </div>
+
+    <!-- Lưới hiển thị ô chữ -->
+    <div id="grid" class="grid-container"></div>
+
+    <script>
+        const vầnGroups = [
+            { main: "an", spy: "am" }, { main: "at", spy: "ac" }, { main: "ang", spy: "anh" }, { main: "ao", spy: "au" },
+            { main: "ai", spy: "ay" }, { main: "am", spy: "ăm" }, { main: "ăn", spy: "ân" }, { main: "ât", spy: "âp" },
+            { main: "eo", spy: "êu" }, { main: "ia", spy: "oi" }, { main: "iêc", spy: "iên" }, { main: "iêp", spy: "iêt" },
+            { main: "iêu", spy: "yêu" }, { main: "im", spy: "ip" }, { main: "inh", spy: "ich" }, { main: "it", spy: "ich" },
+            { main: "oa", spy: "oe" }, { main: "oac", spy: "oam" }, { main: "oach", spy: "oat" }, { main: "oai", spy: "oay" },
+            { main: "oan", spy: "oang" }, { main: "oanh", spy: "oang" }, { main: "oap", spy: "oat" }, { main: "ooc", spy: "oong" },
+            { main: "ôi", spy: "ơi" }, { main: "ôm", spy: "ơm" }, { main: "ôn", spy: "ơn" }, { main: "ôt", spy: "ơt" },
+            { main: "ông", spy: "ơng" }, { main: "uâc", spy: "uân" }, { main: "uâng", spy: "uân" }, { main: "uât", spy: "uân" },
+            { main: "uây", spy: "uôi" }, { main: "uôc", spy: "uông" }, { main: "uôm", spy: "uôn" }, { main: "uôt", spy: "uôn" },
+            { main: "ưa", spy: "ươ" }, { main: "ươc", spy: "ương" }, { main: "ươm", spy: "ươn" }, { main: "ươp", spy: "ươt" },
+            { main: "ươu", spy: "ưu" }, { main: "ui", spy: "uy" }, { main: "uych", spy: "uynh" }, { main: "uyp", spy: "uyt" },
+            { main: "uya", spy: "uyn" }, { main: "en", spy: "et" }, { main: "eng", spy: "en" },
+            { main: "an", spy: "ăn" }, { main: "ân", spy: "ăn" }, { main: "en", spy: "êm" }, { main: "iu", spy: "uy" },
+            { main: "oi", spy: "ôi" }, { main: "ơn", spy: "ưm" }, { main: "ưu", spy: "ui" }, { main: "ap", spy: "ăp" },
+            { main: "ep", spy: "êp" }, { main: "op", spy: "ôp" }, { main: "ơp", spy: "up" }, { main: "ip", spy: "up" },
+            { main: "ach", spy: "êch" }, { main: "êch", spy: "ich" }, { main: "oc", spy: "ôc" }, { main: "uc", spy: "ưc" },
+            { main: "ăc", spy: "âc" }, { main: "ôn", spy: "un" }, { main: "ưn", spy: "un" }, { main: "ăn", spy: "ân" },
+            { main: "on", spy: "ôn" }, { main: "ơn", spy: "un" }, { main: "iên", spy: "yên" }, { main: "uên", spy: "uyên" },
+            { main: "ăng", spy: "âng" }, { main: "ong", spy: "ông" }, { main: "ung", spy: "ưng" }, { main: "uông", spy: "ương" },
+            { main: "eng", spy: "iêng" }, { main: "om", spy: "ôm" }, { main: "ơm", spy: "um" }, { main: "ưm", spy: "um" },
+            { main: "iêm", spy: "yêm" }, { main: "uôm", spy: "ươm" }, { main: "ăt", spy: "ât" }, { main: "et", spy: "êt" },
+            { main: "ot", spy: "ôt" }, { main: "ơt", spy: "ut" }, { main: "ưt", spy: "ut" }, { main: "uât", spy: "uyêt" },
+                  { main: "êu", spy: "ưu" }, { main: "iêu", spy: "yêu" }, { main: "au", spy: "âu" },
+            { main: "iu", spy: "ưu" }, { main: "êu", spy: "iêu" }, { main: "eo", spy: "oe" }, { main: "ay", spy: "ây" },
+            { main: "uây", spy: "oay" }, { main: "oi", spy: "ôi" }, { main: "ơi", spy: "ôi" }, { main: "uôi", spy: "ươi" },
+            { main: "uai", spy: "oai" }, { main: "ui", spy: "ưi" }, { main: "oe", spy: "oet" }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+        let canClick = false;
+        let timerInterval;
+        let timeLeft = 100;
+        let targetVần = ""; 
+        let normalVần = ""; 
+
+        function speak(text, slowMode = false) {
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = slowMode ? 0.60 : 0.80; // Đánh vần mẫu sẽ đọc rất chậm rãi cho bé nghe rõ
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // HÀM ÉP GIỌNG ĐỌC TRƠN ĐÚNG CHUẨN TIẾNG VIỆT KHI HỎI (BỎ ĐỌC TIẾNG ANH / ĐỌC RỜI)
         function getPurePronunciation(word) {
             const mapTron = {
-                "oai": "oai", "oay": "oay", "iêu": "iêu", "oang": "oang", "oang": "oang", "oanh": "oanh",
+                "oai": "oai", "oay": "oay", "iêu": "iêu", "oang": "oang", "oanh": "oanh",
                 "uynh": "uynh", "uân": "uân", "uâng": "uâng", "uâc": "uấc", "uây": "uây",
                 "ươu": "ươu", "uyu": "uyu", "am": "am", "an": "an", "ang": "ang",
                 "anh": "anh", "ăm": "ăm", "ăn": "ăn", "ăng": "ăng", "âm": "âm",
@@ -23,14 +266,14 @@
                 "oc": "óc", "ôc": "ốc", "uc": "úc", "ưc": "ức", "ăc": "ắc", "âc": "ấc",
                 "un": "un", "ưn": "ưn", "on": "on", "yên": "yên", "uên": "uên", "uyên": "uyên",
                 "ung": "ung", "ưng": "ưng", "uông": "uông", "iêng": "iêng", "om": "om",
-                "um": "um", "ưm": "ưng", "yêm": "yêm", "ươm": "ươm", "ăt": "ắt", "êt": "ết",
+                "um": "um", "ưm": "ưm", "yêm": "yêm", "ươm": "ươm", "ăt": "ắt", "êt": "ết",
                 "ot": "ót", "ut": "út", "ưt": "ứt", "uyêt": "uyết", "âu": "âu", "ươi": "ươi", "ưi": "ưi",
-                "oet": "oét" // Ép từ oet phải đọc trơn thành chữ "oét" có dấu sắc chuẩn Việt
+                "oet": "oét" 
             };
             return mapTron[word] || word;
         }
 
-        // HÀM ĐÁNH VẦN: ĐÃ SỬA LỖI ĐÁNH VẦN "UP" THÀNH "U-PỜ-ÚP" VÀ "ƯM" THÀNH "Ư-MỜ-ƯM"
+        // HÀM CHỈ GỌI KHI BÉ TRẢ LỜI ĐÚNG: ĐÁNH VẦN BÓC TÁCH CHI TIẾT TỪNG CHỮ CÁI CHUẨN SGK TIỂU HỌC
         function getSpellingGuide(word) {
             const danhSachVanPhucTap = {
                 "oay": "o, a, y, oay", "oai": "o, a, i, oai", "oan": "o, a, nờ, oan",
@@ -45,8 +288,8 @@
                 "eng": "e, ngờ, eng", "iêng": "i, ê, ngờ, iêng", "uât": "u, ớ, tờ, uất",
                 "uân": "u, ớ, nờ, uân", "uây": "u, ớ, i, uây", "oet": "o, e, tờ, oét",
                 "uyu": "u, y, u, uyu",
-                "up": "u, pờ, úp", // Khóa cứng cấu trúc đánh vần cho từ "up"
-                "ưm": "ư, mờ, ưm"  // Khóa cứng cấu trúc đánh vần cho từ "ưm"
+                "up": "u, pờ, úp", 
+                "ưm": "ư, mờ, ưm"  
             };
 
             if (danhSachVanPhucTap[word]) {
@@ -78,7 +321,6 @@
             }
 
             let guideText = components.join(", ");
-            // Lấy từ đọc trơn chuẩn để nối vào đuôi câu đánh vần
             let duoiDocTron = getPurePronunciation(word);
             return `${guideText}, ${duoiDocTron}`;
         }
@@ -106,9 +348,9 @@
             normalVần = randomPair.main;
             targetVần = randomPair.spy;
 
-            // ĐỘC TRƠN THUẦN TÚY KHI BẮT ĐẦU MÀN CHƠI
+            // ĐỌC TRƠN HOÀN TOÀN KHI BẮT ĐẦU MÀN CHƠI
             let đọcTrơnChuẩn = getPurePronunciation(targetVần);
-            speak(`Minh Khang ơi, hãy tìm vần ${đọcTrơnChuẩn} đang đi trốn nào!`);
+            speak(`Minh Khang ơi,, hãy tìm vần ${đọcTrơnChuẩn} đang đi trốn nào!`);
 
             let isPortrait = window.innerHeight > window.innerWidth;
             let gridSize = 9; 
@@ -179,11 +421,10 @@
                 score += 10;
                 document.getElementById('score').innerText = score;
                 
-                // KHI BẤM ĐÚNG: Chúc mừng + Đọc trơn lại + Đánh vần chi tiết bóc tách
+                // KHI BÉ CHỌN ĐÚNG: Phát âm khen ngợi + Hướng dẫn đánh vần mẫu bóc tách siêu chậm
                 let spelling = getSpellingGuide(targetVần);
                 let chúcMừngText = `Đúng rồi! ... Vần ${đọcTrơnChuẩn}. ... ${spelling}. ... Vần ${đọcTrơnChuẩn}!`;
-                
-                speak(chúcMừngText, true); 
+                     speak(chúcMừngText, true); // Gọi giọng đọc với tốc độ 0.60 siêu chậm cho bé nghe rõ
                 
             } else {
                 selectedBox.classList.add('wrong');
@@ -191,11 +432,12 @@
                 boxes.forEach(box => {
                     if (box.innerText === targetVần) box.classList.add('correct');
                 });
-                 let đọcTrơnChuẩn = getPurePronunciation(targetVần);
+                
+                let đọcTrơnChuẩn = getPurePronunciation(targetVần);
                 speak(`Chưa đúng rồi con ơi! ... Vần ${đọcTrơnChuẩn} ở đây cơ!`);
             }
 
-            // Giữ thời gian chờ 5.5 giây để bé nghe trọn vẹn mạch đánh vần mẫu
+            // Khoảng nghỉ kéo dài 5.5 giây cho con thoải mái nghe hết mạch đánh vần mẫu
             setTimeout(nextQuestion, 5500); 
         }
 
