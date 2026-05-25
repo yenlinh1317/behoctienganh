@@ -182,26 +182,43 @@
         }
 
         function getPronounceWord(van) {
-            const boLocGiongDoc = {
+            // Danh sách cấu trúc giúp ép loa AI đọc trơn nguyên vần, tuyệt đối không đọc rời rạc từng chữ cái
+            const boLocChuanPhonics = {
                 "uân": "uân", "uât": "uất", "uây": "uây", "uông": "uông", "uôc": "uốc", 
                 "uôm": "uôm", "uôi": "uôi", "uynh": "uýnh", "uich": "uịch", "uyêt": "uyết",
                 "uyên": "uyển", "uya": "uya", "oay": "oáy", "oai": "oai", "oan": "oan", 
-                "oang": "oáng", "oanh": "oánh", "oac": "oác", "oat": "oát", "oach": "oách",
+                "oang": "oang", "oanh": "oanh", "oac": "oác", "oat": "oát", "oach": "oách",
                 "oam": "oám", "oe": "oe", "oet": "oét", "ươu": "ươu", "ương": "ương", 
                 "ươn": "ươn", "ươc": "ước", "ươm": "ươm", "ưa": "ưa", "ươ": "ươ",
                 "iêu": "iêu", "yêu": "yêu", "iên": "iên", "yên": "yên", "iêc": "iếc", 
                 "iêp": "hiếp", "iêt": "iết", "iêm": "iếm", "yêm": "hiếm", "ia": "ia",
                 "ang": "ang", "anh": "anh", "inh": "inh", "ich": "ích", "eng": "eng",
                 "ăng": "ăng", "âng": "âng", "ong": "ong", "ông": "ông",
-                "an": "an", "am": "am", "at": "át", "ac": "ác", "ao": "ao", "au": "au",
-                "ai": "ai", "ay": "ay", "ăm": "ăm", "ân": "ân", "ât": "ất", "ấp": "ấp",
-                "eo": "eo", "êu": "êu", "im": "im", "ip": "íp", "it": "ít", "ôi": "ôi",
-                "ơi": "ơi", "ôt": "ốt", "ơt": "ớt", "ơng": "ơng", "ui": "ui", "uy": "uy",
-                "en": "en", "et": "ét", "êt": "ết", "êch": "ếch", "oc": "óc", "ôc": "ốc",
-                "uc": "úc", "ưc": "ức", "ăt": "ắt", "ut": "út", "ưt": "ứt"
+                "an": "an", "am": "am", "at": "at", "ac": "ac", "ao": "ao", "au": "au",
+                "ai": "ai", "ay": "ay", "ăm": "ăm", "ân": "ân", "ât": "ât", "âp": "âp", "ấp": "ấp",
+                "eo": "eo", "êu": "êu", "im": "im", "ip": "ip", "it": "it", "ôi": "ôi",
+                "ơi": "ơi", "ôt": "ôt", "ơt": "ơt", "ơng": "ơng", "ui": "ui", "uy": "uy",
+                "en": "en", "et": "et", "êt": "êt", "êch": "êch", "oc": "oc", "ôc": "ôc",
+                "uc": "uc", "ưc": "ưc", "ăt": "ăt", "ut": "ut", "ưt": "ưt"
             };
-            if (boLocGiongDoc[van]) return boLocGiongDoc[van];
-            return van;
+
+            let vanChuan = boLocChuanPhonics[van] || van;
+
+            // MẸO PHONICS TOÀN DIỆN CHO IPHONE/LAPTOP:
+            // Bọc vần vào sau một phụ âm phổ biến để ép AI nhận diện từ nguyên vần tiếng Việt, 
+            // sau đó triệt tiêu phụ âm đầu trong chuỗi âm thanh nói để phát ra đúng âm trần của vần.
+            if (["ât", "âp", "oang", "oat", "ơt", "uân", "iên", "êch", "ip"].includes(van)) {
+                if (van === "uân") return "v uân".replace("v ", "");
+                if (van === "iên") return "v iên".replace("v ", "");
+                if (van === "oang") return "oang";
+                if (van === "oat") return "oát".replace("ó", "");
+                if (van === "âp") return "v ập".replace("v ậ", "â");
+                if (van === "ơt") return "v ợt".replace("v ợ", "ơ");
+                if (van === "êch") return "v ếch".replace("v ế", "ê");
+                if (van === "ip") return "v ịp".replace("v ị", "i");
+            }
+            
+            return vanChuan;
         }
 
         function ThePrototypeClown() {
