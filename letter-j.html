@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>English Catching Game - Letter J for iPhone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>English Catching Game - Letter J Responsive</title>
     <style>
-        /* Toàn màn hình chống cuộn */
+        /* Tối ưu hóa toàn màn hình chống cuộn */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,11 +25,11 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* KHUNG CHỨA GAME: Tự động co giãn theo tỷ lệ cố định */
+        /* KHUNG CHỨA GAME: Định vị tuyệt đối làm mốc để co giãn scale */
         #gameArea {
             width: 800px;
             height: 650px;
-            position: relative;
+            position: absolute;
             transform-origin: center center;
             background: linear-gradient(to bottom, #cae9ff, #f7fff7);
             overflow: hidden;
@@ -101,7 +101,7 @@
             border-radius: 10px;
         }
 
-        /* VẬT PHẨM RƠI: Tất cả dùng chung viền màu xám trung tính để ẩn khung xanh lá */
+        /* VẬT PHẨM RƠI: Ô đúng và ô sai viền xám trung tính giống nhau */
         .game-item {
             position: absolute;
             display: flex;
@@ -228,34 +228,37 @@
     let isWaitingForVoice = true;
     let audioCtx = null;
 
-    // --- 2. TỰ ĐỘNG CHỈNH TOÀN MÀN HÌNH & XOAY NGANG ---
+    // --- 2. SỬA LỖI TỰ ĐỘNG CO GIÃN THEO TỶ LỆ CHUẨN (CONTAIN) CHỐNG BỊ TRÀN VIỀN ---
     function resizeGame() {
-        const scale = Math.min(window.innerWidth / 800, window.innerHeight / 650);
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const baseWidth = 800;
+        const baseHeight = 650;
+        
+        // Tính toán tỉ lệ scale tối ưu nhất để vừa khít 100% trong khung nhìn, không bị cắt góc
+        const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight);
         gameArea.style.transform = `scale(${scale})`;
     }
     window.addEventListener('resize', resizeGame);
     window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
-    resizeGame();
+    resizeGame(); // Chạy khởi tạo ngay lập tức
 
     // --- 3. MỞ KHÓA QUYỀN TRÊN IPHONE KHI ẤN NÚT CHƠI ---
     function pressStartButton() {
-        // Khởi tạo AudioContext từ hành động chạm để qua mặt bảo mật iOS Safari
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        // Ẩn màn hình bắt đầu, hiện toàn bộ trò chơi
         startScreen.style.display = 'none';
         document.getElementById('hud').style.display = 'flex';
         questionBox.style.display = 'block';
         basket.style.display = 'block';
 
-        // Kích hoạt trò chơi chạy
         updateLivesDisplay();
         nextQuestion();
         gameLoop();
     }
 
-    // --- 4. HỆ THỐNG ÂM THANH GIỌNG ĐỌC VÀ TIẾNG CÒI CHẤM ĐIỂM ---
+    // --- 4. ÂM THANH GIỌNG ĐỌC CÂU HỎI TIẾNG ANH ---
     function speakQuestion(textToSpeak, callback) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
@@ -271,7 +274,7 @@
 
     function playSound(isCorrect) {
         if ('speechSynthesis' in window) {
-             window.speechSynthesis.cancel();
+            window.speechSynthesis.cancel();
             let text = isCorrect ? "Good job!" : "Te te te! Wrong!";
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
@@ -291,9 +294,8 @@
     }
     window.addEventListener('mousemove', (e) => moveBasket(e.clientX));
     window.addEventListener('touchmove', (e) => {
-        // Trích xuất touches.clientX sửa hoàn toàn lỗi đơ cảm ứng trên iOS Safari iPhone
         if (e.touches && e.touches.length > 0) {
-            moveBasket(e.touches[0].clientX);
+            moveBasket(e.touches[0].clientX); // Lấy chính xác tọa độ chạm ngón tay đầu tiên trên iPhone
         }
     }, { passive: true });
 
@@ -307,24 +309,20 @@
         clearAllActiveElements();
         isWaitingForVoice = true;
 
-        // Chọn ngẫu nhiên 1 từ đúng trong danh sách J_WORDS làm mục tiêu hứng
         const correctIndex = Math.floor(Math.random() * J_WORDS.length);
         const correctObj = J_WORDS[correctIndex];
         targetWord = correctObj.word;
         const article = correctObj.article; 
 
-        // Chọn ngẫu nhiên cấu trúc câu hỏi
         const template = QUESTION_TEMPLATES[Math.floor(Math.random() * QUESTION_TEMPLATES.length)];
         questionBox.innerHTML = `${template.text} <span style="color:#2ecc71; text-decoration: underline;">${article} ${targetWord}</span>`;
 
         const textToSpeak = template.text.replace("...", "") + " " + article + " " + targetWord;
 
         speakQuestion(textToSpeak, function() {
-            // Lấy danh sách từ sai
             let wrongCandidates = J_WORDS.filter((_, idx) => idx !== correctIndex);
             wrongCandidates.sort(() => 0.5 - Math.random());
 
-            // Gộp mảng chuẩn index loại trừ hoàn toàn lỗi undefined chữ
             let itemsToSpawn = [
                 { word: correctObj.word, icon: correctObj.icon, isSvg: correctObj.isSvg, isCorrect: true },
                 { word: wrongCandidates[0].word, icon: wrongCandidates[0].icon, isSvg: wrongCandidates[0].isSvg, isCorrect: false },
@@ -332,7 +330,7 @@
             ];
             itemsToSpawn.sort(() => 0.5 - Math.random());
 
-            // 3 làn đường cố định thẳng tắp giúp các khối rơi so le (150px, 400px, 650px)
+            // Tọa độ 3 làn đường (150px, 400px, 650px) đảm bảo ôm khít, chống tràn viền màn hình ngang
             const columnPositions = [150, 400, 650];
 
             itemsToSpawn.forEach((item, index) => {
@@ -345,7 +343,7 @@
 
     function spawnItemAtColumn(word, icon, isSvg, isCorrect, colX) {
         const itemDom = document.createElement('div');
-        itemDom.className = 'game-item'; // Đồng bộ viền xám trung tính cho mọi ô khi rơi
+        itemDom.className = 'game-item'; 
         
         let iconHtml = isSvg ? icon : `<div style="font-size: 55px; line-height: 70px; height: 70px; text-align: center;">${icon}</div>`;
         
@@ -357,7 +355,7 @@
 
         const width = 130;
         const finalX = colX - (width / 2);
-        const startY = -130; // Xuất phát ẩn hoàn toàn ở trên viền game
+        const startY = -130; 
 
         itemDom.style.left = finalX + 'px';
         itemDom.style.top = startY + 'px';
@@ -407,7 +405,7 @@
             item.y += speed;
             item.dom.style.top = item.y + 'px';
 
-            // Va chạm miệng rổ (Y: từ 530px đến 585px)
+            // Khớp vùng va chạm miệng rổ (Y: từ 530px đến 585px)
             if (item.y > 530 && item.y < 585) {
                 if (item.x + item.width > basketX && item.x < basketX + 180) {
                     
@@ -437,13 +435,12 @@
                 }
             }
 
-            // Vật phẩm rơi quá đáy màn hình (650px)
             if (item.y > 650) {
                 item.dom.remove();
                 activeElements.splice(i, 1);
 
                 if (item.isCorrect) {
-                    questionChanged = true; // Đổi sang câu khác khi bé lỡ từ đúng
+                    questionChanged = true; 
                 }
             }
         }
