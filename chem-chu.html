@@ -390,15 +390,15 @@
 
             ctx.restore();
         };
-        // =========================================================================
-        // PROTOTYPE CHO ĐỐI TƯỢNG BONG BÓNG (BUBBLE)
+       // =========================================================================
+        // PROTOTYPE CHO ĐỐI TƯỢNG BONG BÓNG (BUBBLE) - ĐÃ LÀM TO VÀ BAY CHẬM
         // =========================================================================
         function Bubble(x, y, text, isTarget) {
             this.x = x;
             this.y = y;
-            this.vx = (Math.random() - 0.5) * 2.5; // Tốc độ bay ngang vừa phải
-            this.vy = -(Math.random() * 3 + 6.5);  // Lực bắn vừa tầm mắt trẻ em
-            this.radius = 55;                      // Kích thước bong bóng tối ưu cho iPhone
+            this.vx = (Math.random() - 0.5) * 1.2; // GIẢM tốc độ bay ngang cực chậm
+            this.vy = -(Math.random() * 2 + 5.0);  // GIẢM lực bắn bay lên thấp để bóng lơ lửng lâu
+            this.radius = 70;                      // TĂNG kích thước bóng to lên để bé dễ chém trúng
             this.text = text;
             this.isTarget = isTarget;
             this.color = `hsl(${Math.random() * 360}, 95%, 55%)`;
@@ -406,7 +406,7 @@
         }
 
         Bubble.prototype.update = function() {
-            this.vy += 0.14; // Trọng lực nhẹ giúp bóng rơi xuống rất chậm để bé kịp chém
+            this.vy += 0.11; // Giảm trọng lực rơi tự do để bóng rơi xuống từ từ như bong bóng xà phòng
             this.x += this.vx;
             this.y += this.vy;
         };
@@ -425,7 +425,7 @@
             ctx.fill();
             ctx.stroke();
 
-            ctx.font = 'bold 50px "Times New Roman"'; 
+            ctx.font = 'bold 55px "Times New Roman"'; 
             ctx.fillStyle = '#0f172a';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -484,28 +484,27 @@
 
             document.getElementById('target-text').innerText = targetVần;
 
+            // SỬA LỖI ĐỌC SAI: Ép hệ thống gọi hàm phát âm chuẩn âm vần thay vì đọc từng chữ cái rời rạc
             let giongDocTron = getPronounceWord(targetVần);
             speak(`Minh Khang ơi,, hãy chém vần ${giongDocTron} !`);
 
             clearInterval(spawnTimer);
             spawnTimer = setInterval(() => {
                 if (gameActive) spawnBubble();
-            }, 1300); // Khoảng thời gian tung bóng
+            }, 1600); // Kéo dài thời gian giãn cách tung bóng để không bị dồn dập
         }
 
         function spawnBubble() {
             if (!gameActive) return;
-            // Di chuyển chú hề ngẫu nhiên theo chiều ngang màn hình hiện tại
-            bossInstance.targetX = Math.random() * (canvas.width - 120) + 60;
+            bossInstance.targetX = Math.random() * (canvas.width - 150) + 75;
             bossInstance.state = 'attack';
             setTimeout(() => { if(bossInstance) bossInstance.state = 'idle'; }, 400);
 
-            let isTarget = Math.random() < 0.4; // Tỷ lệ xuất hiện bóng mục tiêu đúng
+            let isTarget = Math.random() < 0.42; 
             let text = isTarget ? targetVần : normalVần;
 
-            // Bóng bay ra luân phiên từ hai bên tay móng vuốt của chú hề
             let némTừBênTrái = Math.random() < 0.5;
-            let bóngX = némTừBênTrái ? bossInstance.x - 100 : bossInstance.x + 100;
+            let bóngX = némTừBênTrái ? bossInstance.x - 90 : bossInstance.x + 90;
             let bóngY = bossInstance.y - 120;
 
             let newBubble = new Bubble(bóngX, bóngY, text, isTarget);
@@ -527,16 +526,18 @@
             bubbles.forEach(b => {
                 if (!b.isPopped) {
                     let dist = Math.hypot(b.x - mouseX, b.y - mouseY);
-                    if (dist < b.radius + 15) { // Nới rộng hitbox một chút giúp bé dễ chém trúng
+                    // NỚI RỘNG HITBOX: Bé chỉ cần vuốt sượt qua gần cạnh bóng (+25px) là đã nổ bóng
+                    if (dist < b.radius + 25) { 
                         b.isPopped = true;
                         if (b.isTarget) {
                             score += 10;
                             document.getElementById('score').innerText = score;
                             
+                            let giongDocChuan = getPronounceWord(targetVần);
                             let spelling = getSpellingGuide(targetVần);
-                            speak(`Đúng rồi! ... Vần ${targetVần}. ... ${spelling}. ... vần ${targetVần}!`, true);
+                            speak(`Đúng rồi! ... Vần ${giongDocChuan}. ... ${spelling}. ... vần ${giongDocChuan}!`, true);
                             
-                            setTimeout(nextQuestion, 4500); // Chờ đọc xong đánh vần rồi qua câu tiếp theo
+                            setTimeout(nextQuestion, 4500); 
                         } else {
                             speak(`Chưa đúng rồi con ơi!`);
                         }
@@ -548,6 +549,7 @@
         canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleCut(e.clientX, e.clientY); });
         canvas.addEventListener('touchmove', (e) => { 
             if(e.touches.length > 0) {
+                // Sửa lỗi đa điểm chạm trên một số dòng iOS
                 handleCut(e.touches[0].clientX, e.touches[0].clientY); 
             }
             e.preventDefault(); 
@@ -560,11 +562,9 @@
             if (!gameActive) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Cập nhật và vẽ Siêu trùm Chú hề
             bossInstance.update();
             bossInstance.draw(ctx);
 
-            // Tên bản thử nghiệm dưới chân chú hề
             ctx.save();
             ctx.font = 'bold 20px Times New Roman';
             ctx.fillStyle = '#ef4444';
@@ -572,26 +572,23 @@
             ctx.fillText("Jolly Clown Prototype (Experiment 1006)", bossInstance.x, canvas.height - 15);
             ctx.restore();
 
-            // Cập nhật và vẽ danh sách bong bóng chữ
             for (let i = bubbles.length - 1; i >= 0; i--) {
                 let b = bubbles[i];
                 b.update();
                 b.draw(ctx);
 
-                // Xóa bóng khi rơi quá sâu khỏi đáy màn hình
                 if (b.y > canvas.height + 150) {
                     bubbles.splice(i, 1);
                 }
             }
 
-            // VẼ ĐƯỜNG KIẾM XANH NEON LASER PHÁT SÁNG SIÊU ĐẸP TRÊN MÀN HÌNH
             ctx.save();
             for (let i = 1; i < bladeTracks.length; i++) {
                 ctx.beginPath();
                 ctx.moveTo(bladeTracks[i-1].x, bladeTracks[i-1].y);
                 ctx.lineTo(bladeTracks[i].x, bladeTracks[i].y);
                 ctx.strokeStyle = `rgba(34, 211, 238, ${bladeTracks[i].alpha})`; 
-                ctx.lineWidth = i * 2.2;
+                ctx.lineWidth = i * 2.5;
                 ctx.lineCap = 'round';
                 ctx.stroke();
                 bladeTracks[i].alpha -= 0.04;
