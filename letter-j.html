@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>English Catching Game - Letter J Only</title>
+    <title>English Catching Game - Letter J for iPhone</title>
     <style>
         /* Toàn màn hình chống cuộn */
         * {
@@ -38,13 +38,13 @@
             border-radius: 20px;
         }
 
-        /* Thanh thông tin Điểm và Tim */
+        /* Thanh thông tin Điểm và Tim - Ẩn lúc đầu để hiện nút Start */
         #hud {
             position: absolute;
             top: 15px;
             left: 0;
             width: 100%;
-            display: flex;
+            display: none;
             justify-content: space-between;
             align-items: center;
             padding: 10px 30px;
@@ -55,7 +55,7 @@
         #scoreDisplay { color: #27ae60; font-size: 28px; font-weight: bold; }
         #livesDisplay { letter-spacing: 5px; font-size: 24px; }
 
-        /* Bảng câu hỏi treo phía trên */
+        /* Bảng câu hỏi treo phía trên - Ẩn lúc đầu */
         #question-box {
             position: absolute;
             top: 85px;
@@ -72,9 +72,10 @@
             text-align: center;
             z-index: 10;
             min-width: 520px;
+            display: none;
         }
 
-        /* RỔ HỨNG HOẠT HỌA 3D */
+        /* RỔ HỨNG HOẠT HỌA 3D - Ẩn lúc đầu */
         #basket {
             position: absolute;
             bottom: 20px;
@@ -87,6 +88,7 @@
             box-shadow: inset 0 10px 0 rgba(255,255,255,0.3), 0 10px 20px rgba(0,0,0,0.3);
             transition: transform 0.1s ease;
             z-index: 5;
+            display: none;
         }
         #basket::before {
             content: '';
@@ -99,7 +101,7 @@
             border-radius: 10px;
         }
 
-        /* VẬT PHẨM RƠI: Đã đổi viền màu xanh thành viền màu xám trung tính cho TẤT CẢ các ô */
+        /* VẬT PHẨM RƠI: Tất cả dùng chung viền màu xám trung tính để ẩn khung xanh lá */
         .game-item {
             position: absolute;
             display: flex;
@@ -107,7 +109,7 @@
             align-items: center;
             justify-content: center;
             background: #ffffff;
-            border: 4px solid #bdc3c7; /* Viền xám trung tính - ô đúng và ô sai nhìn giống hệt nhau khi rơi */
+            border: 4px solid #bdc3c7; 
             border-radius: 18px;
             padding: 10px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
@@ -123,6 +125,27 @@
             text-transform: capitalize;
         }
 
+        /* MÀN HÌNH MỞ KHÓA CHO IPHONE */
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 62, 80, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+        }
+        .screen-title { font-size: 45px; color: #f1c40f; margin-bottom: 25px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .action-btn { padding: 15px 45px; font-size: 22px; font-weight: bold; background: #2ecc71; border: none; color: white; border-radius: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(46,204,113,0.4); }
+        
+        #gameOverScreen { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        #gameOverScreen.active { opacity: 1; pointer-events: auto; }
+
         /* Hiệu ứng chớp nền & nảy rổ */
         .flash-correct { animation: flashGreen 0.3s ease-out; }
         .flash-wrong { animation: flashRed 0.3s ease-out; }
@@ -136,52 +159,17 @@
             0%, 100% { background-color: transparent; }
             50% { background-color: rgba(231, 76, 60, 0.4); }
         }
-
-        /* MÀN HÌNH KẾT THÚC */
-        #gameOverScreen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(44, 62, 80, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 100;
-        }
-        #gameOverScreen.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #gameOverScreen h1 {
-            font-size: 50px;
-            color: #f1c40f;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        #gameOverScreen p { font-size: 26px; margin-bottom: 25px; }
-        #gameOverScreen button {
-            padding: 15px 40px;
-            font-size: 22px;
-            font-weight: bold;
-            background: #2ecc71;
-            border: none;
-            color: white;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(46,204,113,0.4);
-        }
     </style>
 </head>
 <body>
 
 <div id="gameArea">
+    <!-- MÀN HÌNH MỞ KHÓA BẮT BUỘC CHO IPHONE / SAFARI -->
+    <div id="startScreen">
+        <h1 class="screen-title">LETTER J GAME</h1>
+        <button class="action-btn" onclick="pressStartButton()">Play Game 🎮</button>
+    </div>
+
     <div id="hud">
         <div>⭐ Score: <span id="scoreDisplay">0</span></div>
         <div id="livesDisplay">💖💖💖</div>
@@ -190,10 +178,11 @@
     <div id="question-box">Loading...</div>
     <div id="basket"></div>
 
+    <!-- MÀN HÌNH THUA CUỘC -->
     <div id="gameOverScreen">
         <h1>WELL DONE!</h1>
-        <p>Your Score: <span id="finalScore">0</span> pts</p>
-        <button onclick="resetGame()">Play Again 🔄</button>
+        <p style="font-size: 26px; margin-bottom: 25px;">Your Score: <span id="finalScore">0</span> pts</p>
+        <button class="action-btn" onclick="location.reload()">Play Again 🔄</button>
     </div>
 </div>
 
@@ -205,8 +194,9 @@
     const questionBox = document.getElementById('question-box');
     const gameOverScreen = document.getElementById('gameOverScreen');
     const finalScore = document.getElementById('finalScore');
+    const startScreen = document.getElementById('startScreen');
 
-    // 1. DANH SÁCH CHỮ J THEO ẢNH (ĐÃ FIX LỖI "JAR" BẰNG VẼ SVG & MẠO TỪ CHUẨN)
+    // 1. DANH SÁCH CHỮ J: ĐÃ FIX LỖI "JAR" BẰNG VẼ SVG VÀ THÊM MẠO TỪ CHUẨN
     const J_WORDS = [
         { word: "juice", icon: "🧃", isSvg: false, article: "some" },
         { word: "jug", icon: "🏺", isSvg: false, article: "a" },
@@ -236,30 +226,43 @@
     let basketX = 310;
     let targetWord = ""; 
     let isWaitingForVoice = true;
+    let audioCtx = null;
 
     // --- 2. TỰ ĐỘNG CHỈNH TOÀN MÀN HÌNH & XOAY NGANG ---
     function resizeGame() {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        const baseWidth = 800;
-        const baseHeight = 650;
-        const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight);
+        const scale = Math.min(window.innerWidth / 800, window.innerHeight / 650);
         gameArea.style.transform = `scale(${scale})`;
     }
     window.addEventListener('resize', resizeGame);
     window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
     resizeGame();
 
-    // --- 3. ÂM THANH ĐỌC CÂU HỎI VÀ TRÚNG/TRƯỢT ---
+    // --- 3. MỞ KHÓA QUYỀN TRÊN IPHONE KHI ẤN NÚT CHƠI ---
+    function pressStartButton() {
+        // Khởi tạo AudioContext từ hành động chạm để qua mặt bảo mật iOS Safari
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        // Ẩn màn hình bắt đầu, hiện toàn bộ trò chơi
+        startScreen.style.display = 'none';
+        document.getElementById('hud').style.display = 'flex';
+        questionBox.style.display = 'block';
+        basket.style.display = 'block';
+
+        // Kích hoạt trò chơi chạy
+        updateLivesDisplay();
+        nextQuestion();
+        gameLoop();
+    }
+
+    // --- 4. HỆ THỐNG ÂM THANH GIỌNG ĐỌC VÀ TIẾNG CÒI CHẤM ĐIỂM ---
     function speakQuestion(textToSpeak, callback) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'en-US';
             utterance.rate = 1.0; 
-            utterance.onend = function() {
-                callback(); 
-            };
+            utterance.onend = function() { callback(); };
             window.speechSynthesis.speak(utterance);
         } else {
             setTimeout(callback, 2000); 
@@ -268,14 +271,8 @@
 
     function playSound(isCorrect) {
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            let text = "";
-            if (isCorrect) {
-                const kudos = ["Correct!", "Good job!", "Excellent!", "Awesome!"];
-                text = `${kudos[Math.floor(Math.random() * kudos.length)]}. It is ${targetWord}!`;
-            } else {
-                text = "Te te te! Wrong!";
-            }
+             window.speechSynthesis.cancel();
+            let text = isCorrect ? "Good job!" : "Te te te! Wrong!";
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
             utterance.rate = 1.2;
@@ -283,21 +280,24 @@
         }
     }
 
-    // --- 4. ĐIỀU KHIỂN RỔ HỨNG MƯỢT MÀ ---
+    // --- 5. ĐIỀU KHIỂN RỔ HỨNG MƯỢT MÀ ---
     function moveBasket(clientX) {
-        if (gameOver) return;
+        if (gameOver || startScreen.style.display !== 'none') return;
         const rect = gameArea.getBoundingClientRect();
-const scale = rect.width / 800;
+        const scale = rect.width / 800;
         let relativeX = (clientX - rect.left) / scale;
         basketX = Math.max(0, Math.min(620, relativeX - 90));
         basket.style.left = basketX + 'px';
     }
     window.addEventListener('mousemove', (e) => moveBasket(e.clientX));
     window.addEventListener('touchmove', (e) => {
-        if(e.touches.length > 0) moveBasket(e.touches.clientX);
+        // Trích xuất touches.clientX sửa hoàn toàn lỗi đơ cảm ứng trên iOS Safari iPhone
+        if (e.touches && e.touches.length > 0) {
+            moveBasket(e.touches[0].clientX);
+        }
     }, { passive: true });
 
-    // --- 5. SINH CÂU HỎI VÀ XẾP 3 CỘT THẲNG HÀNG SẠCH LỖI UNDEFINED ---
+    // --- 6. SINH CÂU HỎI VÀ XẾP 3 CỘT THẲNG HÀNG SẠCH LỖI UNDEFINED ---
     function clearAllActiveElements() {
         activeElements.forEach(item => item.dom.remove());
         activeElements = [];
@@ -307,7 +307,7 @@ const scale = rect.width / 800;
         clearAllActiveElements();
         isWaitingForVoice = true;
 
-        // Chọn ngẫu nhiên 1 từ đúng làm mục tiêu hứng trong danh sách J_WORDS
+        // Chọn ngẫu nhiên 1 từ đúng trong danh sách J_WORDS làm mục tiêu hứng
         const correctIndex = Math.floor(Math.random() * J_WORDS.length);
         const correctObj = J_WORDS[correctIndex];
         targetWord = correctObj.word;
@@ -320,17 +320,16 @@ const scale = rect.width / 800;
         const textToSpeak = template.text.replace("...", "") + " " + article + " " + targetWord;
 
         speakQuestion(textToSpeak, function() {
-            // Lấy danh sách các từ còn lại để làm từ sai (gây nhiễu)
+            // Lấy danh sách từ sai
             let wrongCandidates = J_WORDS.filter((_, idx) => idx !== correctIndex);
             wrongCandidates.sort(() => 0.5 - Math.random());
 
-            // ĐỊNH VỊ CHÍNH XÁC MẢNG: Đã sửa lỗi undefined bằng cách truy xuất đúng chỉ mục [0] và [1]
+            // Gộp mảng chuẩn index loại trừ hoàn toàn lỗi undefined chữ
             let itemsToSpawn = [
                 { word: correctObj.word, icon: correctObj.icon, isSvg: correctObj.isSvg, isCorrect: true },
                 { word: wrongCandidates[0].word, icon: wrongCandidates[0].icon, isSvg: wrongCandidates[0].isSvg, isCorrect: false },
                 { word: wrongCandidates[1].word, icon: wrongCandidates[1].icon, isSvg: wrongCandidates[1].isSvg, isCorrect: false }
             ];
-            // Trộn làn đường ngẫu nhiên giữa các cột
             itemsToSpawn.sort(() => 0.5 - Math.random());
 
             // 3 làn đường cố định thẳng tắp giúp các khối rơi so le (150px, 400px, 650px)
@@ -346,8 +345,7 @@ const scale = rect.width / 800;
 
     function spawnItemAtColumn(word, icon, isSvg, isCorrect, colX) {
         const itemDom = document.createElement('div');
-        // Các ô khi rơi xuống dùng chung class 'game-item' để có viền xám giống hệt nhau
-        itemDom.className = 'game-item';
+        itemDom.className = 'game-item'; // Đồng bộ viền xám trung tính cho mọi ô khi rơi
         
         let iconHtml = isSvg ? icon : `<div style="font-size: 55px; line-height: 70px; height: 70px; text-align: center;">${icon}</div>`;
         
@@ -373,7 +371,7 @@ const scale = rect.width / 800;
         });
     }
 
-    // --- 6. LOGIC VA CHẠM VÀ VÒNG LẶP GAME CHÍNH ---
+    // --- 7. LOGIC VA CHẠM VÀ VÒNG LẶP GAME CHÍNH ---
     function triggerEffect(type) {
         gameArea.classList.remove('flash-correct', 'flash-wrong');
         void gameArea.offsetWidth; 
@@ -445,7 +443,7 @@ const scale = rect.width / 800;
                 activeElements.splice(i, 1);
 
                 if (item.isCorrect) {
-                    questionChanged = true; // Bé bỏ lỡ mất từ đúng -> tự động chuyển sang câu khác
+                    questionChanged = true; // Đổi sang câu khác khi bé lỡ từ đúng
                 }
             }
         }
@@ -463,25 +461,6 @@ const scale = rect.width / 800;
         gameOverScreen.classList.add('active');
         clearAllActiveElements();
     }
-
-    function resetGame() {
-        score = 0;
-        lives = 3;
-        speed = 1.8; 
-        gameOver = false;
-        scoreDisplay.innerText = "0";
-        basketX = 310;
-        basket.style.left = basketX + 'px';
-        updateLivesDisplay();
-        gameOverScreen.classList.remove('active');
-        nextQuestion();
-        gameLoop();
-    }
-
-    // Khởi động hệ thống trò chơi lần đầu tiên
-    updateLivesDisplay();
-    nextQuestion();
-    gameLoop();
 </script>
 
 </body>
