@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Froggy River Crossing - Letter L Official</title>
+    <style>
+        /* Toàn màn hình chống cuộn */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0c1020;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* KHUNG GAME: Dòng sông sâu hoạt hình đổ bóng */
+        #gameArea {
+            width: 800px;
+            height: 650px;
+            position: absolute;
+            transform-origin: center center;
+            background: linear-gradient(180deg, #104e5b 0%, #0a3a44 100%);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 6px solid #2c3e50;
+            border-radius: 24px;
+        }
+
+        /* VỆT SÓNG NƯỚC CHUYỂN ĐỘNG NỀN */
+        .water-wave {
+            position: absolute;
+            width: 200%; height: 100%;
+            background: repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 20px, transparent 20px, transparent 40px);
+            animation: riverFlow 12s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        @keyframes riverFlow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* BỜ SÔNG CHIẾN THẮNG: Bến đò gỗ hoa cỏ */
+        #victory-bank {
+            position: absolute;
+            top: -160px; /* Ẩn ở trên, hạ xuống khi thắng đủ 8 câu */
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, #27ae60, #1e824c);
+            border-bottom: 8px solid #6e473b; 
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: top 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #victory-bank::after {
+            content: '🌳🏡🌻 CHÚC MỪNG BÉ ĐÃ LÊN BỜ AN TOÀN! 🌻🏡🌳';
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* BỤC ĐÁ CHỜ XUẤT PHÁT CỦA ẾCH */
+        #start-dock {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 70px;
+            background: linear-gradient(180deg, #7f8c8d, #34495e);
+            border-top: 4px solid #bdc3c7;
+            border-radius: 20px 20px 0 0;
+            z-index: 3;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.4);
+        }
+
+        /* HUD THANH THÔNG TIN VÀNG ÓNG */
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 35px;
+            z-index: 10;
+        }
+        .hud-card {
+            background: rgba(4, 15, 30, 0.7);
+            border: 2px solid #00d6fc;
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0,214,252,0.2);
+        }
+        #scoreDisplay { color: #f1c40f; }
+        #livesDisplay { letter-spacing: 3px; }
+
+        /* BẢNG CÂU HỎI TREO */
+        #question-box {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid #f1c40f;
+            border-radius: 18px;
+            padding: 14px 35px;
+            font-size: 26px;
+            font-weight: 900;
+            color: #2c3e50;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 10;
+            min-width: 540px;
+            display: none;
+        }
+
+        #river-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2;
+        }
+
+        /* LÁ SEN ĐỒ HỌA GÂN THẬT KHÍA CHỮ V */
+        .lotus-leaf {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 35% 35%, #52be80 0%, #27ae60 50%, #1e8449 100%);
+            border: 3px solid #145a32;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.4), inset 0 -6px 12px rgba(0,0,0,0.4);
+            clip-path: polygon(50% 50%, 42% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 38% 0%);
+            transition: transform 0.2s;
+        }
+        .lotus-leaf::before {
+            content: '';
+            position: absolute;
+            width: 85%; height: 85%;
+            border-radius: 50%;
+            border: 2px dashed rgba(20,90,50,0.25);
+        }
+        .lotus-leaf .leaf-icon { font-size: 48px; line-height: 1; z-index: 2; }
+        .lotus-leaf .word-label {
+            margin-top: 4px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            text-transform: capitalize;
+            background: rgba(11, 46, 25, 0.6);
+            padding: 2px 10px;
+            border-radius: 12px;
+            z-index: 2;
+        }
+
+        /* CHÚ ẾCH HOẠT HÌNH NẢY MƯỢT CỦA APPLE iOS */
+        #frog {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            font-size: 75px;
+            text-align: center;
+            line-height: 90px;
+            z-index: 5;
+            filter: drop-shadow(0 8px 5px rgba(0,0,0,0.4));
+            transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        top 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                        opacity 0.5s ease-out;
+        }
+
+        /* MÀN HÌNH CHỜ TRÁNH SAFARI CHẶN ÂM THANH */
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #1c2833 0%, #0f171e 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; z-index: 100;
+        }
+        .screen-title { font-size: 45px; color: #52be80; margin-bottom: 25px; font-weight: bold; text-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center;}
+        .action-btn { padding: 16px 50px; font-size: 24px; font-weight: bold; background: #27ae60; border: none; color: white; border-radius: 35px; cursor: pointer; box-shadow: 0 8px 25px rgba(39,174,96,0.4); }
+        
+        #gameOverScreen { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        #gameOverScreen.active { opacity: 1; pointer-events: auto; }
+        
+        .flash-correct { animation: correctGlow 0.4s ease-out; }
+        .flash-wrong { animation: wrongWobble 0.4s ease-out; }
+        @keyframes correctGlow { 50% { background-color: rgba(39, 174, 96, 0.2); } }
+        @keyframes wrongWobble {
+            0%, 100% { transform: translate(0, 0); background-color: rgba(192, 57, 43, 0.2); }
+            25% { transform: translate(-8px, 0); }
+            75% { transform: translate(8px, 0); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="gameArea">
+    <div class="water-wave"></div>
+    <div id="victory-bank">⛵🛶🏡</div>
+    <div id="start-dock"></div>
+    <div id="river-container"></div>
+    <div id="frog"></div>
+
+    <div id="startScreen">
+        <h1 class="screen-title">FROGGY RIVER CROSSING 🐸</h1>
+        <p style="font-size: 22px; color:#bdc3c7; margin-bottom:30px;">Nhấn nút để đưa ếch nhảy qua sông lên bờ!</p>
+        <button class="action-btn" onclick="pressStartButton()">Start Game 🎮</button>
+    </div>
+
+    <div id="hud">
+        <div class="hud-card">⭐ Hàng: <span id="scoreDisplay">0</span>/8</div>
+        <div class="hud-card" id="livesDisplay">💖💖💖</div>
+    </div>
+    
+    <div id="question-box">Loading...</div>
+
+    <div id="gameOverScreen">
+        <h1 class="screen-title" id="endTitle" style="color:#e74c3c;">GAME OVER 💀</h1>
+        <p style="font-size: 26px; margin-bottom: 25px; color:#bdc3c7;" id="endSub">Bé lỡ bước làm chú ếch chìm xuống nước rồi!</p>
+        <button class="action-btn" onclick="location.reload()">Chơi Lại 🔄</button>
+    </div>
+</div>
+
+<script>
+    const gameArea = document.getElementById('gameArea');
+    const riverContainer = document.getElementById('river-container');
+    const frog = document.getElementById('frog');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const questionBox = document.getElementById('question-box');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const startScreen = document.getElementById('startScreen');
+    const endTitle = document.getElementById('endTitle');
+    const endSub = document.getElementById('endSub');
+    const victoryBank = document.getElementById('victory-bank');
+ // 1. KHO TỪ VỰNG CHỮ L: GỒM ĐỦ CẢ 8 TỪ TRONG TRANH (ĐỒ HỌA SVG CHO LADDER CHỐNG LỖI)
+    const L_WORDS = [
+        { word: "lion", icon: "🦁", article: "a" },
+        { word: "lemon", icon: "🍋", article: "a" },
+        { word: "leaf", icon: "🍃", article: "a" },
+        { word: "lollipop", icon: "🍭", article: "a" },
+        { 
+            word: "ladder", 
+            icon: `<svg viewBox="0 0 64 64" width="48" height="48"><path d="M22,6V58M42,6V58" stroke="#f39c12" stroke-width="5" stroke-linecap="round"/><path d="M22,16H42M22,26H42M22,36H42M22,46H42" stroke="#f1c40f" stroke-width="4" stroke-linecap="round"/></svg>`, 
+            isSvg: true, 
+            article: "a" 
+        },
+        { word: "lock", icon: "🔒", article: "a" },
+        { word: "lips", icon: "👄", article: "some" },
+        { word: "lizard", icon: "🦎", article: "a" }
+    ];
+
+    const QUESTION_TEMPLATES = [
+        { text: "Where is...", type: "where" },
+        { text: "Jump to...", type: "jump" }
+    ];
+
+    const TOTAL_ROWS = 8; // Đủ cả 8 câu mới được kích hoạt lên bến đò gỗ
+    const columnsX = [180, 400, 620]; // Trục tọa độ 3 làn đường cố định nằm gọn trong iPhone
+
+    let currentStepRow = 0; 
+    let lives = 3;
+    let gameOver = false;
+    let activeElements = []; 
+    let targetWord = "";
+    let isWaitingForVoice = true;
+    let audioCtx = null;
+
+    // --- 2. TỰ ĐỘNG THEO DÕI VÀ CO GIÃN TỶ LỆ CHUẨN TRÁNH TRÀN HÌNH ---
+    function resizeGame() {
+        const scale = Math.min(window.innerWidth / 800, window.innerHeight / 650);
+        gameArea.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', resizeGame);
+    window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+    resizeGame();
+
+    function initAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    // Tạo âm thanh ọc ọc bong bóng nước trầm buồn khi chú ếch chìm sâu khi chọn sai
+    function playSinkBubbleSound() {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.6); 
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        } catch(e){}
+    }
+
+    // --- 3. BẤM NÚT BẮT ĐẦU MỞ QUYỀN TRÌNH DUYỆT TRÊN SAFARI ---
+    function pressStartButton() {
+        initAudioContext();
+        startScreen.style.display = 'none';
+        document.getElementById('hud').style.display = 'flex';
+        questionBox.style.display = 'block';
+
+        // Đặt chú ếch ngồi thăng bằng ở bục đá xuất phát chờ nhảy
+        frog.style.left = '355px'; 
+        frog.style.top = '545px';  
+        frog.style.opacity = '1';
+        frog.style.transform = 'scale(1) rotate(0deg)';
+        frog.innerText = "🐸";
+
+        currentStepRow = 0;
+        scoreDisplay.innerText = "0";
+        updateLivesDisplay();
+        
+        spawnRowLeaves(); // Gọi trực tiếp hàm để giải quyết dứt điểm lỗi Loading
+    }
+
+    // --- 4. ÂM THANH GIỌNG ĐỌC KHÔNG BỊ CHẶN BẢO MẬT ---
+    function speakQuestion(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US';
+            utterance.rate = 1.0; 
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) {
+            setTimeout(callback, 2000); 
+        }
+    }
+
+    function playSound(isCorrect) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            let text = isCorrect ? "Boing! Amazing jump!" : "Oh no! Splash!";
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 1.2;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // --- 5. TẠO NGẪU NHIÊN 1 HÀNG 3 LÁ SEN GÂN THẬT (ĐÃ ĐỒNG BỘ ĐÚNG BIẾN ĐỂ FIX LỖI LOADING) ---
+    function spawnRowLeaves() {
+        clearCurrentRow();
+        isWaitingForVoice = true;
+
+        // Chọn ngẫu nhiên 1 chỉ mục từ đúng
+        const correctIdx = Math.floor(Math.random() * L_WORDS.length);
+        const correctObj = L_WORDS[correctIdx];
+        targetWord = correctObj.word;
+
+        // Bốc 2 từ nhiễu loại trừ trùng lặp
+        let wrongCandidates = L_WORDS.filter((_, idx) => idx !== correctIdx);
+        wrongCandidates.sort(() => 0.5 - Math.random());
+
+        // ĐÃ ĐỒNG BỘ: Sử dụng chuẩn xác tên biến correctIdx ở dòng dọn mảng này chống treo code
+        let rowItems = [
+            { word: correctObj.word, icon: correctObj.icon, isSvg: correctObj.isSvg, article: correctObj.article, isCorrect: true },
+            { word: wrongCandidates[0].word, icon: wrongCandidates[0].icon, isSvg: wrongCandidates[0].isSvg, article: wrongCandidates[0].article, isCorrect: false },
+            { word: wrongCandidates[1].word, icon: wrongCandidates[1].icon, isSvg: wrongCandidates[1].isSvg, article: wrongCandidates[1].article, isCorrect: false }
+        ];
+        rowItems.sort(() => 0.5 - Math.random());
+
+        // Đổ câu hỏi mạo từ lên bảng treo bờ cỏ
+        const template = QUESTION_TEMPLATES[Math.floor(Math.random() * QUESTION_TEMPLATES.length)];
+        questionBox.innerHTML = `${template.text} <span style="color:#27ae60; text-decoration:underline;">${correctObj.article} ${targetWord}</span>`;
+
+        speakQuestion(template.text.replace("...", "") + " " + correctObj.article + " " + targetWord, function() {
+            isWaitingForVoice = false; 
+        });
+
+        // Vẽ 3 lá sen gân chữ V khía thật nằm ở trục Y đố cố định (270px)
+        rowItems.forEach((item, index) => {
+            const leafDom = document.createElement('div');
+            leafDom.className = 'lotus-leaf';
+            
+            let innerHtml = item.isSvg ? item.icon : `<div class="leaf-icon">${item.icon}</div>`;
+            leafDom.innerHTML = `${innerHtml}<div class="word-label">${item.word}</div>`;
+            
+            leafDom.style.left = (columnsX[index] - 70) + 'px';
+            leafDom.style.top = '270px'; 
+            
+            // Nhận diện click chuột máy tính và touch đa điểm nhạy trên iPhone
+            leafDom.onclick = function() { handleLeafClick(index, item.isCorrect, leafDom); };
+            
+            riverContainer.appendChild(leafDom);
+            activeElements.push({ dom: leafDom, laneIdx: index, isCorrect: item.isCorrect });
+        });
+    }
+// --- 6. LOGIC ẾCH NHẢY VÒNG CUNG VÀ TỰ ĐỘNG CUỘN TRÔI DÒNG SÔNG REALISTIC ---
+    function handleLeafClick(colIdx, isCorrect, clickedLeafDom) {
+        if (gameOver || isWaitingForVoice) return;
+        isWaitingForVoice = true; 
+
+        if (isCorrect) {
+            currentStepRow++; 
+            scoreDisplay.innerText = currentStepRow;
+            
+            // HIỆU ỨNG NHẢY GÓC CUNG: Thu người nảy cao xoay nhẹ, đáp chính xác tâm lá sen
+            frog.style.transform = "scale(1.4) translateY(-40px) rotate(10deg)";
+            frog.style.left = (columnsX[colIdx] - 45) + 'px';
+            frog.style.top = '290px'; 
+
+            playSound(true);
+            triggerEffect('correct');
+
+            setTimeout(() => {
+                // Tiếp đất thăng bằng trên mặt lá sen xanh
+                frog.style.transform = "scale(1) translateY(0) rotate(0deg)";
+
+                setTimeout(() => {
+                    if (currentStepRow >= TOTAL_ROWS) {
+                        jumpFrogToVictory(); // Đúng hết cả 8 từ -> bến đò gỗ hạ xuống đón lên bờ
+                    } else {
+                        // LOGIC THỰC TẾ: Chiếc lá sen trúng tuyển cùng chú ếch đang đứng trên nó đồng thời trượt tuột trôi xuôi xuống dưới đáy màn hình
+                        clickedLeafDom.style.transition = "top 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.6s";
+                        clickedLeafDom.style.top = "650px";
+                        clickedLeafDom.style.opacity = "0";
+
+                        // Hai chiếc lá sen bẫy còn lại tự động chao đảo thu nhỏ biến mất tại chỗ
+                        activeElements.forEach(item => {
+                            if (!item.isCorrect) {
+                                item.dom.style.transition = "transform 0.4s, opacity 0.4s";
+                                item.dom.style.transform = "scale(0)";
+                                item.dom.style.opacity = "0";
+                            }
+                        });
+
+                        // Ếch chuyển động trôi tuột xuống đáy sông cùng với mặt lá
+                        frog.style.transition = "left 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53), top 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53)";
+                        frog.style.top = "565px"; 
+
+                        // Sau khi trôi khuất dòng, ếch nhanh chân nhảy lùi lại bục gỗ xuất phát đón câu đố mới
+                        setTimeout(() => {
+                            // Khôi phục bộ bắt tốc độ nảy bật mượt mà ban đầu của Apple iOS
+                            frog.style.transition = "left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
+                            frog.style.left = '355px';
+                            frog.style.top = '545px';
+                            
+                            spawnRowLeaves(); // Tự động sinh hàng lá sen mới tinh tiếp theo
+                        }, 600);
+                    }
+                }, 400);
+            }, 400);
+
+        } else {
+            // LOGIC KHI CHỌN SAI: Ếch lao hụt ra rìa lá bẫy, mất trọng lực xoay tròn chìm hẳn xuống đáy nước
+            lives--;
+            updateLivesDisplay();
+            triggerEffect('wrong');
+            playSound(false);
+            playSinkBubbleSound(); // Kích hoạt âm thanh ọc ọc bong bóng nước trầm buồn
+
+            // Hoạt họa ếch xoay tròn nhỏ dần chìm khuất xuống lòng sông sâu thẳm
+            frog.style.transform = "scale(0.2) rotate(180deg) translateY(50px)";
+            frog.style.opacity = "0";
+
+            setTimeout(() => {
+                if (lives <= 0) {
+                    endGame(false);
+                } else {
+                    // Nếu còn tim, chú ếch mới hồi sinh từ bục đá nhảy ra thế chỗ cho câu hỏi mới
+                    frog.style.transition = "none"; // Tắt hoạt họa tạm thời để hồi sinh ẩn lập tức
+                    frog.style.left = '355px';
+                    frog.style.top = '545px';
+                    frog.style.transform = 'scale(1) rotate(0deg)';
+                    void frog.offsetWidth; // Ép trình duyệt đồng bộ hóa layout ngay lập tức
+                    
+                    // Bật lại hiệu ứng mượt mà và cho ếch hiện hình trở lại
+                    frog.style.transition = "left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s";
+                    frog.style.opacity = "1";
+                    
+                    spawnRowLeaves(); // Đổi câu hỏi và sinh hàng lá sen mới cho bé làm lại
+                }
+            }, 1200);
+        }
+    }
+
+    // --- 7. HOẠT HỌA PHÓNG LÊN BẾN ĐÒ GỖ LÊN BỜ CHIẾN THẮNG ---
+    function jumpFrogToVictory() {
+        victoryBank.style.top = "0px"; // Hạ bến đò gỗ ngập tràn hoa cỏ rực rỡ xuống sát bến sông
+        
+        setTimeout(() => {
+            // Chú ếch thực hiện cú nhảy lịch sử bật phóng siêu cao vọt thẳng lên bến bờ cỏ an toàn
+            frog.style.transform = "scale(1.5) translateY(-30px)";
+            frog.style.left = '355px';
+            frog.style.top = '50px'; // Tọa độ Y nằm chính xác trên bến bờ đất liền
+            
+            setTimeout(() => {
+                frog.style.transform = "scale(1) translateY(0)";
+                endGame(true); // Kích hoạt popup màn hình chiến thắng
+            }, 350);
+        }, 800);
+    }
+
+    function clearCurrentRow() {
+        activeElements.forEach(item => item.dom.remove());
+        activeElements = [];
+    }
+
+    function triggerEffect(type) {
+        gameArea.classList.remove('flash-correct', 'flash-wrong');
+        void gameArea.offsetWidth;
+        gameArea.classList.add(type === 'correct' ? 'flash-correct' : 'flash-wrong');
+    }
+
+    function updateLivesDisplay() {
+        let hearts = "";
+        for (let i = 0; i < lives; i++) hearts += "💖";
+        for (let i = lives; i < 3; i++) hearts += "🖤";
+        livesDisplay.innerText = hearts;
+    }
+
+    function endGame(isWin) {
+        gameOver = true;
+        gameOverScreen.classList.add('active');
+        if (isWin) {
+            endTitle.innerText = "👑 VICTORY WINNER! 👑";
+            endTitle.style.color = "#2ecc71";
+            endSub.innerText = "Bé thật giỏi! Đã đưa chú ếch vượt qua cả 8 từ để lên bờ cỏ bến đò!";
+            speakQuestion("Congratulations! You are the grand champion of river crossing!");
+        } else {
+            endTitle.innerText = "GAME OVER 💀";
+            endTitle.style.color = "#ff5252";
+            endSub.innerText = "Bé lỡ bước mất rồi, hãy thử lại để giải cứu chú ếch nhé!";
+        }
+    }
+</script>
+
+</body>
+</html>
