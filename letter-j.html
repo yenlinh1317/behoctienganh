@@ -2,206 +2,261 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Vương Quốc Chữ J - Bé Học Tiếng Anh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bé Hứng Từ Đúng</title>
     <style>
-        body { margin: 0; background: #ffeaa7; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: 'Arial', sans-serif; user-select: none; overflow: hidden; }
+        /* Tối ưu hóa toàn màn hình chống cuộn */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
         
-        /* Khu vực nút bấm nghe câu hỏi lớn hơn */
-        #topArea { text-align: center; margin-bottom: 15px; background: #fff; padding: 20px 40px; border-radius: 25px; box-shadow: 0 8px 0 #fab1a0; width: 600px; border: 4px solid #ff7675; }
-        #audioBtn { background: #ff7675; color: white; border: none; padding: 15px 40px; font-size: 26px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 6px 0 #d63031; transition: all 0.1s; display: inline-flex; align-items: center; gap: 15px; }
-        #audioBtn:active { transform: translateY(4px); box-shadow: none; }
-        
-        /* Khung chứa trò chơi siêu rộng rãi cho bé */
-        #gameArea { width: 1800px; height: 1650px; background: linear-gradient(to bottom, #74b9ff, #81ecec); border: 18px solid #2d3436; position: relative; overflow: hidden; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        
-        /* Hiệu ứng chớp màn hình khi Đúng/Sai */
-        #gameArea.flash-correct { animation: flashGreen 0.4s ease-out; }
-        #gameArea.flash-wrong { animation: flashRed 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
 
-        /* Rổ hứng thiết kế to hơn, dễ đón hơn */
-        #basket { width: 180px; height: 40px; background: #e67e22; position: absolute; bottom: 20px; left: 310px; border-radius: 15px 15px 25px 25px; box-shadow: inset 0 -8px 0 rgba(0,0,0,0.3), 0 6px 8px rgba(0,0,0,0.15); border: 3px solid #d35400; transition: transform 0.1s; }
-        #basket.bounce { transform: scale(1.15); }
-        
-        /* Thẻ rơi kích thước LỚN, hình ảnh TO rõ ràng */
-        .falling-card { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; padding: 15px; border-radius: 24px; border: 5px solid #fdcb6e; box-shadow: 0 8px 0 #f39c12, 0 12px 20px rgba(0,0,0,0.15); top: -180px; width: 150px; text-align: center; box-sizing: border-box; }
-        .falling-card .svg-container { width: 90px; height: 90px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
-        .falling-card .svg-container svg { width: 100%; height: 100%; }
-        .falling-card span { font-size: 20px; font-weight: bold; color: #2d3436; text-transform: uppercase; white-space: nowrap; font-family: 'Comic Sans MS', sans-serif; pointer-events: none; }
+        /* Khung chứa game tự động co giãn theo mọi kích thước màn hình */
+        #game-wrapper {
+            width: 800px;
+            height: 650px;
+            position: relative;
+            transform-origin: center center;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 12px;
+        }
 
-        /* Bảng điểm số to rõ */
-        .stats { position: absolute; top: 20px; font-size: 24px; font-weight: bold; color: #2d3436; background: #fff; padding: 8px 25px; border-radius: 35px; z-index: 10; border: 4px solid #2d3436; box-shadow: 0 5px 0 #2d3436; }
-        #scoreBoard { left: 20px; }
-        #livesBoard { right: 20px; color: #d63031; letter-spacing: 3px; }
+        /* Thanh thông tin phía trên */
+        #hud {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            z-index: 10;
+        }
 
-        /* Màn hình Game Over */
-        #gameOverScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
-        #gameOverScreen.active { opacity: 1; pointer-events: auto; }
-        .over-box { background: white; padding: 40px; border-radius: 30px; text-align: center; border: 8px solid #ff7675; box-shadow: 0 20px 0 #d63031; transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 400px; }
-        #gameOverScreen.active .over-box { transform: scale(1); }
-        .over-box h1 { margin: 0 0 15px 0; color: #ff7675; font-size: 42px; }
-        .over-box p { font-size: 24px; font-weight: bold; margin-bottom: 30px; color: #2d3436; }
-        .restart-btn { background: #2ecc71; color: white; border: none; padding: 15px 45px; font-size: 24px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 6px 0 #27ae60; }
-        .restart-btn:active { transform: translateY(4px); box-shadow: none; }
+        #lives-display {
+            letter-spacing: 5px;
+        }
 
-        /* Hiệu ứng chớp màn hình hoạt hình */
-        @keyframes flashGreen { 0% { background: #2ecc71; } 100% { background: linear-gradient(to bottom, #74b9ff, #81ecec); } }
-        @keyframes flashRed { 0% { background: #ff7675; } 100% { background: linear-gradient(to bottom, #74b9ff, #81ecec); } }
+        /* Khu vực hiển thị câu hỏi/yêu cầu */
+        #question-box {
+            position: absolute;
+            top: 65px;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #d35400;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            z-index: 10;
+        }
+
+        /* Chiếc rổ hứng */
+        #basket {
+            position: absolute;
+            bottom: 20px;
+            width: 180px;
+            height: 45px;
+            background: #e67e22;
+            border-radius: 0 0 25px 25px;
+            border: 5px solid #d35400;
+            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
+            transition: transform 0.1s ease;
+        }
+
+        /* Vật phẩm rơi xuống */
+        .game-item {
+            position: absolute;
+            padding: 10px 20px;
+            background: #ffffff;
+            border: 3px solid #2ecc71;
+            border-radius: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            white-space: nowrap;
+        }
+        .game-item.wrong-style {
+            border-color: #e74c3c;
+        }
+
+        /* Hiệu ứng chớp màn hình */
+        .flash-correct { animation: flashGreen 0.3s ease-out; }
+        .flash-wrong { animation: flashRed 0.3s ease-out; }
+        .bounce { transform: scale(1.1); }
+
+        @keyframes flashGreen {
+            0% { background: linear-gradient(to bottom, #87CEEB, #E0F6FF); }
+            50% { background: #abf7b1; }
+            100% { background: linear-gradient(to bottom, #87CEEB, #E0F6FF); }
+        }
+        @keyframes flashRed {
+            0% { background: linear-gradient(to bottom, #87CEEB, #E0F6FF); }
+            50% { background: #f7abab; }
+            100% { background: linear-gradient(to bottom, #87CEEB, #E0F6FF); }
+        }
+
+        /* Màn hình kết thúc */
+        #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+        #game-over-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #game-over-screen h1 { font-size: 48px; margin-bottom: 10px; color: #f1c40f; }
+        #game-over-screen p { font-size: 28px; margin-bottom: 20px; }
+        #game-over-screen button {
+            padding: 15px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            background: #2ecc71;
+            border: none;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(46,204,113,0.4);
+        }
     </style>
 </head>
 <body>
 
-<div id="topArea">
-    <button id="audioBtn" onclick="speakQuestion()">🔊 Bé Nghe Câu Hỏi</button>
-</div>
-
-<div id="gameArea">
-    <div id="scoreBoard" class="stats">Điểm: <span id="score">0</span></div>
-    <div id="livesBoard" class="stats">Mạng: <span id="lives">💖💖💖</span></div>
+<div id="game-wrapper">
+    <div id="hud">
+        <div id="score-box">⭐ Điểm: <span id="score-display">0</span></div>
+        <div id="lives-display">💖💖💖</div>
+    </div>
+    
+    <div id="question-box">Hãy hứng quả chứa: Từ chỉ màu sắc!</div>
     <div id="basket"></div>
 
-    <div id="gameOverScreen">
-        <div class="over-box">
-            <h1>Hết Mạng Rồi! 🧸</h1>
-            <p>Bé xuất sắc đạt: <span id="finalScore" style="color: #0984e3; font-size: 32px;">0</span> điểm!</p>
-            <button class="restart-btn" onclick="resetGame()">Chơi Lại Lần Nữa 🎮</button>
-        </div>
+    <div id="game-over-screen">
+        <h1>HẾT GIỜ RỒI!</h1>
+        <p>Điểm của bé: <span id="final-score">0</span></p>
+        <button onclick="resetGame()">Chơi lại</button>
     </div>
 </div>
 
 <script>
-    // Audio Context tạo âm thanh trực tiếp
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(isCorrect) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        if (isCorrect) {
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-        } else {
-            osc.frequency.setValueAtTime(250, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.25);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.25);
-        }
-    }
-
-    // Đã lọc riêng biệt 8 từ vựng thuộc nhóm chữ J từ ảnh của bạn
-    const wordBank = [
-        { word: "juice", svg: '<svg viewBox="0 0 64 64"><rect x="18" y="18" width="28" height="36" rx="5" fill="#ff9f43" stroke="#2c3e50" stroke-width="2"/><path d="M28 18V10h3v8z" stroke="#2c3e50" stroke-width="3" fill="none"/></svg>' },
-        { word: "jug", svg: '<svg viewBox="0 0 64 64"><path d="M22 18h20v8c0 12-20 12-20 0z" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/><path d="M22 24h-8v12h8" stroke="#bdc3c7" stroke-width="5" fill="none" stroke-linecap="round"/></svg>' },
-        { word: "jar", svg: '<svg viewBox="0 0 64 64"><rect x="20" y="24" width="24" height="30" rx="5" fill="#74b9ff" opacity="0.6" stroke="#4834d4" stroke-width="2"/><rect x="22" y="16" width="20" height="8" fill="#6c5ce7" rx="2" stroke="#2c3e50" stroke-width="2"/></svg>' },
-        { word: "jet", svg: '<svg viewBox="0 0 64 64"><path d="M32 10l5 18h16l-12 9 5 17-14-11-14 11 5-17-12-9h16z" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/></svg>' },
-        { word: "jacket", svg: '<svg viewBox="0 0 64 64"><path d="M16 18h32v34H16z" fill="#2980b9" stroke="#2c3e50" stroke-width="2"/><path d="M32 18l12 14M32 18L20 32" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>' },
-        { word: "jam", svg: '<svg viewBox="0 0 64 64"><rect x="20" y="24" width="24" height="30" rx="5" fill="#ff7675" stroke="#2c3e50" stroke-width="2"/><rect x="22" y="16" width="20" height="8" fill="#d63031" rx="2"/><circle cx="32" cy="38" r="5" fill="#d63031"/></svg>' },
-        { word: "jellyfish", svg: '<svg viewBox="0 0 64 64"><path d="M14 34c0-12 12-14 18-14s18 2 18 14z" fill="#9b59b6" stroke="#2c3e50" stroke-width="2"/><path d="M20 34v16M28 34v18M36 34v18M44 34v16" stroke="#9b59b6" stroke-width="4" stroke-linecap="round"/></svg>' },
-        { word: "jelly", svg: '<svg viewBox="0 0 64 64"><path d="M14 48l5-20h26l5 20z" fill="#ff9f43" stroke="#2c3e50" stroke-width="2"/><path d="M24 28s4-4 8 0 8 0 8 0" stroke="#2c3e50" stroke-width="2" fill="none"/></svg>' }
-    ];
-
-    const gameArea = document.getElementById('gameArea');
+    // Cấu hình DOM và Dữ liệu mẫu câu hỏi cho bé
+    const wrapper = document.getElementById('game-wrapper');
+    const gameArea = wrapper; 
     const basket = document.getElementById('basket');
-    const scoreDisplay = document.getElementById('score');
-    const livesDisplay = document.getElementById('lives');
-    const gameOverScreen = document.getElementById('gameOverScreen');
-    const finalScore = document.getElementById('finalScore');
+    const scoreDisplay = document.getElementById('score-display');
+    const livesDisplay = document.getElementById('lives-display');
+    const questionBox = document.getElementById('question-box');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const finalScore = document.getElementById('final-score');
+
+    const sampleQuestions = [
+        { q: "Hãy hứng: Từ chỉ MÀU SẮC! 🎨", correct: ["Đỏ", "Xanh", "Vàng"], wrong: ["Chạy", "Mèo", "To"] },
+        { q: "Hãy hứng: Từ chỉ CON VẬT! 🐶", correct: ["Chó", "Mèo", "Gà", "Vịt"], wrong: ["Bàn", "Đỏ", "Ngủ"] },
+        { q: "Hãy hứng: Từ chỉ HÀNH ĐỘNG! 🏃", correct: ["Chạy", "Nhảy", "Đọc", "Ăn"], wrong: ["Nhà", "Đẹp", "Cá"] }
+    ];
 
     let score = 0;
     let lives = 3;
-    let basketX = 310; 
-    let speed = 1.8;   // Tốc độ rơi nhanh vừa vặn theo yêu cầu mới của bạn
+    let speed = 1.8;
     let gameOver = false;
-    let currentTarget = {};
-    let currentQuestionText = "";
     let activeElements = [];
+    let basketX = 310; // Tọa độ X ban đầu của rổ (ở giữa khung 800px)
+    let currentQuestion = null;
 
-    function speakQuestion() {
-        if ('speechSynthesis' in window && currentQuestionText) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(currentQuestionText);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.75; 
+    // --- 1. TỰ ĐỘNG DIỆN TÍCH MÀN HÌNH & XOAY NGANG ---
+    function resizeGame() {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        
+        // Tỷ lệ chuẩn gốc của game là 800x650
+        const baseWidth = 800;
+        const baseHeight = 650;
+        
+        // Tính toán tỷ lệ co giãn phù hợp nhất (fit màn hình)
+        const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight);
+        
+        // Áp dụng zoom bằng CSS Transform
+        wrapper.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', resizeGame);
+    window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+    resizeGame(); // Chạy ngay lần đầu tiên
+
+    // --- 2. HỆ THỐNG ÂM THANH (CHÚC MỪNG & TÈ) ---
+    function playVoiceEffect(isCorrect) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Ngắt câu nói cũ ngay lập tức
+            
+            let text = "";
+            if (isCorrect) {
+                const wins = ["Đúng rồi! Giỏi quá!", "Tuyệt vời!", "Chính xác!"];
+                text = wins[Math.floor(Math.random() * wins.length)];
+            } else {
+                text = "Tè te te, sai rồi!";
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = 1.2; // Nói nhanh vui tươi phù hợp với trẻ em
             window.speechSynthesis.speak(utterance);
         }
     }
 
-    function nextQuestion() {
-        activeElements.forEach(item => item.dom.remove());
-        activeElements = [];
-        
+    // --- 3. ĐIỀU KHIỂN RỔ HỨNG ---
+    // Hỗ trợ cả chuột (PC) và Cảm ứng vuốt chạm (Điện thoại/Máy tính bảng)
+    function moveBasket(clientX) {
         if (gameOver) return;
-
-        currentTarget = wordBank[Math.floor(Math.random() * wordBank.length)];
-
-        if (Math.random() < 0.5) {
-            currentQuestionText = `What is it? It is a ${currentTarget.word}.`;
-        } else {
-            currentQuestionText = `What can you see? I can see a ${currentTarget.word}.`;
-        }
-
-        speakQuestion();
-       // TẠO ĐỘ TRỄ 2.5 GIÂY: Chờ bé nghe câu hỏi xong các khối hình mới bắt đầu rơi xuống
-        setTimeout(() => {
-            if (gameOver) return;
-
-            let swap = Math.random() < 0.5;
-            // Phân phối vị trí X rộng rãi (Trái: 80px, Phải: 520px) cho khung hình rộng 800px
-            createCard(currentTarget, true, swap ? 80 : 520);
-
-            let wrongTarget;
-            do {
-                wrongTarget = wordBank[Math.floor(Math.random() * wordBank.length)];
-            } while (wrongTarget.word === currentTarget.word);
-
-            createCard(wrongTarget, false, swap ? 520 : 80);
-        }, 2500);
-    }
-
-    function createCard(targetObj, isCorrect, fixedX) {
-        const card = document.createElement('div');
-        card.className = 'falling-card';
+        const rect = wrapper.getBoundingClientRect();
+        // Tính toán vị trí chuột/tay dựa trên tỷ lệ scale hiện tại của khung chứa
+        const scale = rect.width / 800;
+        let relativeX = (clientX - rect.left) / scale;
         
-        card.innerHTML = `
-            <div class="svg-container"> 
-                ${targetObj.svg} 
-            </div> 
-            <span>${targetObj.word}</span>
-        `;
-        gameArea.appendChild(card);
-
-        // Tạo biên độ ngẫu nhiên vị trí X xung quanh trục cố định để rơi tự nhiên
-        const xPos = fixedX + (Math.random() * 80 - 40);
-        const yPos = -200 - (Math.random() * 60); // Đẩy điểm xuất phát lên cao hẳn ngoài màn hình
-        card.style.left = xPos + 'px';
-        card.style.top = yPos + 'px';
-
-        activeElements.push({
-            dom: card,
-            x: xPos,
-            y: yPos,
-            isCorrect: isCorrect,
-            width: 150 // Kích thước chiều rộng thẻ lớn 150px cho bé nhìn rõ hình
-        });
-    }
-
-    // Điều khiển chuyển động rổ hứng mượt mà theo vị trí chuột trên phạm vi 800px
-    gameArea.addEventListener('mousemove', (e) => {
-        if (gameOver) return;
-        const rect = gameArea.getBoundingClientRect();
-        basketX = e.clientX - rect.left - 90; // 90 là một nửa chiều rộng rổ (180px)
-        if (basketX < 0) basketX = 0;
-        if (basketX > 620) basketX = 620; // Giới hạn biên bên phải (800 - 180)
+        // Giới hạn rổ không chạy ra ngoài viền game (0 đến 800 - 180)
+        basketX = Math.max(0, Math.min(620, relativeX - 90));
         basket.style.left = basketX + 'px';
-    });
+    }
 
+    window.addEventListener('mousemove', (e) => moveBasket(e.clientX));
+    window.addEventListener('touchmove', (e) => {
+        if(e.touches.length > 0) moveBasket(e.touches[0].clientX);
+    }, { passive: true });
+
+    // --- 4. LOGIC TRÒ CHƠI CHÍNH ---
     function triggerEffect(type) {
         gameArea.classList.remove('flash-correct', 'flash-wrong');
-        void gameArea.offsetWidth; // Ép trình duyệt vẽ lại để kích hoạt lại CSS Animation
+        void gameArea.offsetWidth; 
         
         if (type === 'correct') {
             gameArea.classList.add('flash-correct');
@@ -219,80 +274,138 @@
         livesDisplay.innerText = hearts;
     }
 
+    function clearAllActiveElements() {
+        activeElements.forEach(item => item.dom.remove());
+        activeElements = [];
+    }
+
+    function nextQuestion() {
+        clearAllActiveElements();
+        // Chọn ngẫu nhiên một câu hỏi từ bộ đề
+        currentQuestion = sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
+        questionBox.innerText = currentQuestion.q;
+
+        // Tạo vật phẩm đúng
+        currentQuestion.correct.forEach((text) => spawnItem(text, true));
+        // Tạo vật phẩm sai
+        currentQuestion.wrong.forEach((text) => spawnItem(text, false));
+    }
+    // --- 5. LOGIC TẠO VẬT PHẨM RƠI ---
+    function spawnItem(text, isCorrect) {
+        const itemDom = document.createElement('div');
+        itemDom.className = 'game-item' + (isCorrect ? '' : ' wrong-style');
+        itemDom.innerText = text;
+        wrapper.appendChild(itemDom);
+
+        // Đo kích thước thực tế của chữ sau khi tạo để tính va chạm chính xác
+        const width = itemDom.offsetWidth || 100;
+        
+        // Phát tán ngẫu nhiên vị trí X (nằm gọn trong khung 800px)
+        const randomX = Math.random() * (800 - width - 40) + 20;
+        // Phát tán chiều cao Y âm để các chữ rơi xuống rải rác, không bị đè lên nhau
+        const randomY = -(Math.random() * 250 + 50); 
+
+        itemDom.style.left = randomX + 'px';
+        itemDom.style.top = randomY + 'px';
+
+        // Đẩy vật phẩm vào mảng quản lý
+        activeElements.push({
+            dom: itemDom,
+            x: randomX,
+            y: randomY,
+            width: width,
+            isCorrect: isCorrect
+        });
+    }
+
+    // --- 6. VÒNG LẶP GAME CHÍNH (XỬ LÝ VA CHẠM & DI CHUYỂN) ---
     function gameLoop() {
         if (gameOver) return;
         
         let questionChanged = false;
         
+        // Duyệt ngược mảng từ dưới lên để xóa phần tử không bị lỗi chỉ mục (index)
         for (let i = activeElements.length - 1; i >= 0; i--) {
             let item = activeElements[i];
             item.y += speed;
             item.dom.style.top = item.y + 'px';
 
-            // Xử lý va chạm với rổ ở độ cao từ 550px đến 595px (Khung cao tổng 650px)
+            // Kiểm tra va chạm với rổ ở độ cao từ 550px đến 595px
             if (item.y > 550 && item.y < 595) {
+                // Kiểm tra tọa độ X của vật phẩm có nằm trong phạm vi miệng rổ (rộng 180px)
                 if (item.x + item.width > basketX && item.x < basketX + 180) {
+                    
+                    // Xóa ngay vật phẩm khỏi màn hình và mảng để tránh bị trừ tim/cộng điểm lặp lại
+                    item.dom.remove();
+                    activeElements.splice(i, 1);
+
                     if (item.isCorrect) {
                         score += 10;
                         scoreDisplay.innerText = score;
-                        speed += 0.05; // Gia tốc tăng nhỏ để trò chơi giữ độ chậm ổn định cho phản xạ của bé
-                        playSound(true); // Phát âm thanh trúng bíp cao vui tai
+                        speed += 0.05; // Tăng tốc độ chậm rãi để thử thách phản xạ của bé
+                        playVoiceEffect(true); // Khen ngợi: "Đúng rồi! Giỏi quá!"
                         triggerEffect('correct');
                         questionChanged = true;
                     } else {
                         lives--;
                         updateLivesDisplay();
-                        playSound(false); // Phát âm thanh cảnh báo trầm
+                        playVoiceEffect(false); // Kêu: "Tè te te, sai rồi!"
                         triggerEffect('wrong');
                         
                         if (lives <= 0) {
                             endGame();
-                            return;
+                            return; // Dừng hẳn vòng lặp game
                         }
                         questionChanged = true;
                     }
-                    break;
+                    continue; // Bỏ qua các kiểm tra phía dưới, chuyển sang vật phẩm tiếp theo
                 }
             }
 
-            // Nếu lọt xuống đáy màn hình rộng (650px) mà không được hứng
+            // Nếu vật phẩm vượt quá đáy màn hình (650px) mà bé không hứng
             if (item.y > 650) {
+                item.dom.remove(); // Dọn dẹp DOM tránh nặng máy
+                activeElements.splice(i, 1);
+
+                // Nếu bé bỏ lỡ "Từ đúng" -> Tự động đổi sang câu hỏi khác để bé không đợi lâu
                 if (item.isCorrect) {
-                    questionChanged = true; // Bỏ lỡ từ đúng thì tự động đổi sang câu khác
-                    break;
-                } else {
-                    item.dom.remove();
-                    activeElements.splice(i, 1);
+                    questionChanged = true;
                 }
             }
         }
 
+        // Nếu có tín hiệu đổi câu hỏi (do hứng trúng hoặc bỏ lỡ từ đúng)
         if (questionChanged) {
             nextQuestion();
         }
 
+        // Tiếp tục chạy khung hình tiếp theo
         requestAnimationFrame(gameLoop);
     }
 
+    // --- 7. TRẠNG THÁI KẾT THÚC & CHƠI LẠI ---
     function endGame() {
         gameOver = true;
         finalScore.innerText = score;
         gameOverScreen.classList.add('active');
+        clearAllActiveElements(); // Xóa sạch chữ rơi trên màn hình khi thua
     }
 
     function resetGame() {
         score = 0;
         lives = 3;
-        speed = 1.8; // Đặt lại tốc độ rơi mượt mà vừa vặn ban đầu
+        speed = 1.8; // Đặt lại tốc độ rơi mượt mà ban đầu
         gameOver = false;
         scoreDisplay.innerText = "0";
+        basketX = 310; // Đưa rổ về lại chính giữa
+        basket.style.left = basketX + 'px';
         updateLivesDisplay();
         gameOverScreen.classList.remove('active');
         nextQuestion();
         gameLoop();
     }
 
-    // Khởi chạy hệ thống trò chơi lần đầu tiên
+    // --- 8. KHỞI CHẠY TRÒ CHƠI LẦN ĐẦU TIÊN ---
     updateLivesDisplay();
     nextQuestion();
     gameLoop();
