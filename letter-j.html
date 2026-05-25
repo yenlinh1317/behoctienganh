@@ -216,16 +216,22 @@
     const gameOverScreen = document.getElementById('gameOverScreen');
     const finalScore = document.getElementById('finalScore');
 
-    // 1. DANH SÁCH TỪ CHỮ J: Sử dụng emoji hệ thống, tự động thêm mạo từ chuẩn ngữ pháp
+ // 1. DANH SÁCH CHỮ J: ĐÃ FIX LỖI "JAR" BẰNG HÌNH VẼ SVG VÀ THÊM MẠO TỪ
     const J_WORDS = [
-        { word: "juice", emoji: "🧃", article: "some" },
-        { word: "jug", emoji: "🏺", article: "a" },
-        { word: "jar", emoji: "🫙", article: "a" },
-        { word: "jet", emoji: "🛩️", article: "a" },
-        { word: "jacket", emoji: "🧥", article: "a" },
-        { word: "jam", emoji: "🍯", article: "some" },
-        { word: "jellyfish", emoji: "🪼", article: "a" },
-        { word: "jelly", emoji: "🍮", article: "some" }
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        // Sử dụng hình vẽ SVG cho Jar để chống lỗi ô vuông
+        { 
+            word: "jar", 
+            icon: `<svg viewBox="0 0 64 64" width="65" height="65"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#006064" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#006064"/><path d="M14,32H50" stroke="#006064" stroke-width="3" stroke-dasharray="4 3"/></svg>`, 
+            isSvg: true, 
+            article: "a" 
+        },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" }, // Dùng bạch tuộc hoạt hình thay cho sứa biển thế hệ mới tránh lỗi ô vuông
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
     ];
 
     const QUESTION_TEMPLATES = [
