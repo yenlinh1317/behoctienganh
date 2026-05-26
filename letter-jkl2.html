@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>English Phonics World - Wordwall Edition</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); display: flex; justify-content: center; align-items: center; font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; }
+        
+        /* KHUNG CHƠI GAME PHONG CÁCH WORDWALL HOẠT HỌA */
+        #gameArea {
+            width: 800px; height: 650px; position: absolute; transform-origin: center center;
+            background: #ffffff; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 8px solid #474787; border-radius: 35px; padding: 25px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        }
+
+        /* HUD WORDWALL ĐÁNG YÊU */
+        #hud {
+            width: 100%; display: flex; justify-content: space-between; align-items: center; color: #2c3e50; font-size: 22px; font-weight: bold;
+            background: #f1f2f6; padding: 15px 30px; border-radius: 25px; border: 4px solid #ced6e0; box-shadow: 0 8px 0 #ced6e0; position: relative; z-index: 10;
+        }
+        #scoreDisplay { color: #ff4757; font-size: 26px; }
+        #questionNum { color: #2ed573; }
+        #livesDisplay { letter-spacing: 5px; font-size: 24px; filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1)); }
+
+        /* THANH ĐẾM NGƯỢC KẸO NGỌT */
+        #timeBarContainer { width: 95%; height: 16px; background: #e4e7eb; border-radius: 20px; border: 3px solid #2c3e50; overflow: hidden; margin-top: -5px; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1); }
+        #timeBar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff4757, #ff6b81); transition: width 0.1s linear; }
+
+        /* KHUNG CÂU HỎI CHỮ TO RÕ */
+        #question-display-box {
+            width: 95%; background: #f1f2f6; border: 5px solid #2ed573; border-radius: 25px; padding: 20px; text-align: center; color: #2c3e50;
+            font-size: 28px; font-weight: bold; min-height: 140px; box-shadow: 0 10px 0 #2ed573;
+            display: flex; justify-content: center; align-items: center; position: relative; z-index: 5;
+        }
+
+        /* 4 NÚT ĐÁP ÁN BO TRÒN MÀU PASTEL NẢY LÊN KHI HOẠT HỌA */
+        #options-container { width: 95%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px; position: relative; z-index: 5; }
+        .quiz-option {
+            padding: 16px 25px; font-size: 24px; font-weight: bold; color: #ffffff; 
+            border: none; border-radius: 25px; cursor: pointer; text-align: left;
+            display: flex; align-items: center; gap: 15px; transition: transform 0.1s, box-shadow 0.1s;
+        }
+        /* Phân chia màu Pastel rực rỡ đặc trưng của Wordwall cho 4 nút */
+        .quiz-option:nth-child(1) { background: #ff4757; box-shadow: 0 8px 0 #ff2a3b; }
+        .quiz-option:nth-child(2) { background: #1e90ff; box-shadow: 0 8px 0 #0077e6; }
+        .quiz-option:nth-child(3) { background: #2ed573; box-shadow: 0 8px 0 #22bb59; }
+        .quiz-option:nth-child(4) { background: #ffa502; box-shadow: 0 8px 0 #e69500; }
+        
+        .quiz-option:active { transform: translateY(4px); box-shadow: 0 4px 0 linear !important; }
+        .quiz-option::before { content: attr(data-prefix); background: rgba(255, 255, 255, 0.3); padding: 4px 12px; border-radius: 12px; }
+
+        /* Hiệu ứng trạng thái đáp án */
+        .quiz-option.selected-choice { background: #747d8c !important; box-shadow: 0 8px 0 #57606f !important; transform: scale(0.98); }
+        .quiz-option.correct-choice { background: #2ed573 !important; box-shadow: 0 8px 0 #22bb59 !important; animation: bounce 0.3s infinite alternate; }
+        .quiz-option.wrong-choice { background: #ff4757 !important; box-shadow: 0 8px 0 #ff2a3b !important; animation: shake 0.2s 2; }
+
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+
+        /* MÀN HÌNH CHÈN LỚP PHỦ POPUP */
+        #giftScreen, #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #2c3e50; z-index: 100; padding: 30px; text-align: center; }
+        .screen-title { font-size: 56px; color: #ff4757; margin-bottom: 20px; font-weight: 900; letter-spacing: 2px; text-shadow: 4px 4px 0 #f1f2f6; }
+        .gift-box { font-size: 130px; cursor: pointer; animation: wobble 0.6s infinite; margin: 15px 0; }
+        @keyframes wobble { 0%, 100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-8deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
+        
+        .action-btn { padding: 18px 60px; font-size: 26px; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 25px; cursor: pointer; box-shadow: 0 10px 0 #22bb59; margin-top: 25px; transition: all 0.1s; }
+        .action-btn:active { transform: translateY(4px); box-shadow: 0 6px 0 #22bb59; }
+        
+        .flash-correct { animation: bgGreen 0.3s ease-out; }
+        .flash-wrong { animation: bgRed 0.3s ease-out; }
+        @keyframes bgGreen { 50% { background: #e3fcef; } }
+        @keyframes bgRed { 50% { background: #ffebee; } }
+    </style>
+</head>
+<body>
+<div id="gameArea">
+    <div id="startScreen">
+        <h1 class="screen-title" style="color: #ffa502;">PHONICS WORDWALL</h1>
+        <p style="font-size: 26px; margin-bottom: 35px; color: #57606f; font-weight: bold;">Lắng nghe mẫu câu và tìm hình ảnh đúng nhanh nhất nhé! 🎧</p>
+        <button class="action-btn" onclick="initGame()">Vào Chơi Ngay 🎮</button>
+    </div>
+    <div id="giftScreen" style="display: none;">
+        <h1 class="screen-title" style="color: #ff4757;">🎁 LUCKY BALLOON! 🎁</h1>
+        <p style="font-size: 26px; color: #57606f; margin-bottom: 10px; font-weight: bold;">Bé giỏi quá! Hãy nhấp vào hộp quà để khui quà may mắn nào!</p>
+        <div class="gift-box" id="clickableGift" onclick="openLuckyDraw()">🎁</div>
+        <div id="giftResult" style="font-size: 34px; font-weight: bold; color: #ffa502; margin: 15px 0; display: none; background: #f1f2f6; padding: 15px 30px; border-radius: 25px; border: 4px dashed #ffa502;"></div>
+        <button class="action-btn" id="nextQuestBtn" style="display: none;" onclick="continueAfterGift()">Câu Tiếp Theo ➡️</button>
+    </div>
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" id="endTitle">GAME OVER</h1>
+        <p style="font-size: 30px; margin-bottom: 25px; color: #57606f; font-weight: bold;">Số câu đúng của bé: <span id="finalScore" style="color:#ff4757;">0</span> / 27</p>
+        <button class="action-btn" style="background: #ffa502; box-shadow: 0 10px 0 #e69500;" onclick="location.reload()">Chơi Lại Lượt Mới 🔄</button>
+    </div>
+    <div id="hud" style="visibility: hidden;">
+        <div id="score-box">⭐ Đúng: <span id="scoreDisplay">0</span></div>
+        <div id="questionNum">Question: 1/27</div>
+        <div id="livesDisplay">💖💖💖</div>
+    </div>
+    <div id="timeBarContainer" style="visibility: hidden;"><div id="timeBar"></div></div>
+    <div id="question-display-box" style="visibility: hidden;">Loading question...</div>
+    <div id="options-container" style="visibility: hidden;">
+        <button class="quiz-option" data-prefix="A" onclick="selectOption(0)"></button>
+        <button class="quiz-option" data-prefix="B" onclick="selectOption(1)"></button>
+        <button class="quiz-option" data-prefix="C" onclick="selectOption(2)"></button>
+        <button class="quiz-option" data-prefix="D" onclick="selectOption(3)"></button>
+    </div>
+</div>
+<script>
+    // ==================== KHAI BÁO CÁC PHẦN TỬ ĐIỀU KHIỂN DOM ====================
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const questionDisplayBox = document.getElementById('question-display-box');
+    const optionsContainer = document.getElementById('options-container');
+    const questionNumEl = document.getElementById('questionNum');
+    const hud = document.getElementById('hud');
+    const timeBarContainer = document.getElementById('timeBarContainer');
+    const timeBar = document.getElementById('timeBar');
+    
+    const startScreen = document.getElementById('startScreen');
+    const giftScreen = document.getElementById('giftScreen');
+    const giftResult = document.getElementById('giftResult');
+    const clickableGift = document.getElementById('clickableGift');
+    const nextQuestBtn = document.getElementById('nextQuestBtn');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const endTitle = document.getElementById('endTitle');
+
+    // ==================== KHO DỮ LIỆU TỪ VỰNG CHUẨN ĐỒ HỌA ====================
+    const J_WORDS = [
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        { 
+            word: "jar", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#474787" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#474787"/><path d="M14,32H50" stroke="#474787" stroke-width="3" stroke-dasharray="4 3"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
+    ];
+
+    const K_WORDS = [
+        { word: "key", icon: "🔑", isSvg: false, article: "a" },
+        { word: "kite", icon: "🪁", isSvg: false, article: "a" },
+        { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
+        { word: "kitten", icon: "🐱", isSvg: false, article: "a" },
+        { word: "knife", icon: "🔪", isSvg: false, article: "a" },
+        { 
+            word: "kettle", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#474787" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#474787" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#474787" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#474787" stroke-width="4"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "king", icon: "👑", isSvg: false, article: "a" },
+        { word: "koala", icon: "🐨", isSvg: false, article: "a" }
+    ];
+
+    const L_WORDS = [
+        { word: "lion", icon: "🦁", isSvg: false, article: "a" },
+        { word: "lemon", icon: "🍋", isSvg: false, article: "a" },
+        { word: "leaf", icon: "🍃", isSvg: false, article: "a" },
+        { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
+        { 
+            word: "ladder", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "lock", icon: "🔒", isSvg: false, article: "a" },
+        { word: "lips", icon: "👄", isSvg: false, article: "some" },
+        { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
+    ];
+
+    const LUCKY_GIFTS = [
+        "🎈 Chú gấu bông bông mềm mại!", 
+        "🎈 Hộp bánh quy kẹo ngọt khổng lồ!", 
+        "🎈 Bộ sticker Phonics siêu đáng yêu!", 
+        "🎈 Trứng khủng long đồ chơi bí mật!", 
+        "🎈 Vương miện Thần Đồng Phonics!"
+    ];
+
+    // CẤU HÌNH BIẾN TOÀN CỤC TRẠNG THÁI GAME
+    let score = 0; 
+    let lives = 3; 
+    let currentQuestionIdx = 0; 
+    let correctChainCount = 0; 
+    let questionsList = []; 
+    let currentCorrectAnswerIdx = -1; 
+    let isBlockClick = false; 
+    let gameOver = false;
+
+    // Biến thời gian đếm ngược suy nghĩ 10 giây
+    let timerInterval = null; 
+    let timeLeft = 10; 
+    let audioCtx = null; 
+    let backgroundMusicNode = null;
+// ==================== CƠ CHẾ ĐIỀU KHIỂN CO GIÃN MÀN HÌNH (RESPONSIVE) ====================
+    function resizeGame() {
+        const scale = Math.min(window.innerWidth / 800, window.innerHeight / 650);
+        gameArea.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', resizeGame);
+    window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+    resizeGame();
+
+    // ==================== HỆ THỐNG ÂM THANH HOẠT HỌA TRẺ EM ====================
+    function initAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSoundTone(frequency, type, duration) {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    function startBackgroundMusic() {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(261.63, audioCtx.currentTime); // Âm nền trong trẻo hơn
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            setInterval(() => {
+                if(!gameOver && !isBlockClick) {
+                    gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.4);
+                }
+            }, 800);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start();
+            backgroundMusicNode = osc;
+        } catch(e){}
+    }
+
+    function speakVoice(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US'; utterance.rate = 0.9;
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) { setTimeout(callback, 2000); }
+    }
+
+    // ==================== THUẬT TOÁN TẠO MẢNG ĐÁP ÁN PHẲNG CHỐNG LẶP ====================
+    function getUniqueWrongOptions(correctItem, pool1, pool2) {
+        let allWords = [...pool1, ...pool2];
+        let filtered = allWords.filter(item => item.word !== correctItem.word);
+        let uniqueWords = [], seen = new Set();
+        for (let item of filtered) {
+            if (!seen.has(item.word)) { seen.add(item.word); uniqueWords.push(item); }
+        }
+        uniqueWords.sort(() => 0.5 - Math.random());
+        // Trả về đúng mảng chứa 3 từ nhiễu dạng phẳng
+        return [uniqueWords[0], uniqueWords[1], uniqueWords[2]];
+    }
+
+    function buildQuizDatabase() {
+        let list = [];
+        for(let i = 0; i < 3; i++) {
+            list.push({ type: 'sound', soundName: 'jay', phonics: '/j/', options: ['Letter J', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 0 });
+            list.push({ type: 'sound', soundName: 'kay', phonics: '/k/', options: ['Letter G', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 1 });
+            list.push({ type: 'sound', soundName: 'el', phonics: '/l/', options: ['Letter M', 'Letter H', 'Letter L', 'Letter J'], ansIdx: 2 });
+        }
+        
+        const templates = ["What is it? It is", "What can you see? I can see"];
+        
+        function generateVocabQuest(item, wrongPool1, wrongPool2) {
+            const basicTemplate = templates[Math.floor(Math.random() * templates.length)];
+            const sentenceText = `${basicTemplate} ${item.article} ${item.word}.`;
+            let wrongArr = getUniqueWrongOptions(item, wrongPool1, wrongPool2);
+            return {
+                type: 'vocab', correctWord: item.word, options: [item, wrongArr[0], wrongArr[1], wrongArr[2]],
+                voiceText: sentenceText,
+                questionText: `<div style="padding:10px 20px; line-height:1.4; color:#2c3e50; font-size:26px;">${basicTemplate} ${item.article} <span style="color:#ff4757; font-weight:900; text-transform:uppercase; border-bottom:4px dashed #ff4757;">${item.word}</span>.</div>`
+            };
+        }
+
+        J_WORDS.forEach(item => list.push(generateVocabQuest(item, K_WORDS, L_WORDS)));
+        K_WORDS.forEach(item => list.push(generateVocabQuest(item, J_WORDS, L_WORDS)));
+        L_WORDS.slice(0, 2).forEach(item => list.push(generateVocabQuest(item, J_WORDS, K_WORDS)));
+        
+        return list.sort(() => Math.random() - 0.5);
+    }
+
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN (10 GIÂY) ====================
+    function startTimer() {
+        clearInterval(timerInterval); timeLeft = 10;
+        timeBar.style.width = '100%'; timeBar.style.background = 'linear-gradient(90deg, #2ed573, #7bed9f)';
+        timerInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            timeLeft -= 0.1; timeBar.style.width = `${(timeLeft / 10) * 100}%`;
+            if (timeLeft <= 3) timeBar.style.background = '#ff4757';
+            if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeOut(); }
+        }, 100);
+    }
+
+    function handleTimeOut() {
+        isBlockClick = true; playSoundTone(150, 'sawtooth', 0.5); lives--; updateLivesDisplay(); correctChainCount = 0;
+        gameArea.classList.add('flash-wrong');
+        speakVoice("Oops! Time out!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+    }
+
+    // ==================== KHỞI CHẠY VÀ HIỂN THỊ CÂU HỎI WORDWALL ====================
+    function initGame() {
+        initAudioContext(); startBackgroundMusic();
+        startScreen.style.display = 'none'; hud.style.visibility = 'visible'; timeBarContainer.style.visibility = 'visible'; questionDisplayBox.style.visibility = 'visible'; optionsContainer.style.visibility = 'visible';
+        questionsList = buildQuizDatabase(); score = 0; lives = 3; currentQuestionIdx = 0; correctChainCount = 0; gameOver = false;
+        updateLivesDisplay(); scoreDisplay.innerText = "0"; loadQuestion();
+    }
+
+    function loadQuestion() {
+        isBlockClick = false; if (currentQuestionIdx >= questionsList.length) { endGame(true); return; }
+        const q = questionsList[currentQuestionIdx], buttons = document.querySelectorAll('.quiz-option');
+        buttons.forEach(btn => btn.className = 'quiz-option');
+        questionNumEl.innerText = `Question: ${currentQuestionIdx + 1}/${questionsList.length}`;
+
+        if (q.type === 'sound') {
+            questionDisplayBox.innerHTML = `Which letter makes the sound <span style="color:#1e90ff; font-size:34px;">${q.phonics}</span>?`;
+            buttons.forEach((btn, idx) => btn.innerHTML = `🔤 <span style="margin-left:5px;">${q.options[idx]}</span>`);
+            currentCorrectAnswerIdx = q.ansIdx; speakVoice("Which letter makes the sound " + q.soundName); startTimer();
+        } else {
+            questionDisplayBox.innerHTML = q.questionText;
+            let scrambledOptions = [...q.options].sort(() => 0.5 - Math.random());
+            currentCorrectAnswerIdx = scrambledOptions.findIndex(item => item.word === q.correctWord);
+            
+            buttons.forEach((btn, idx) => {
+                const opt = scrambledOptions[idx];
+                let iconHtml = opt.isSvg ? opt.icon : `<span style="font-size:38px; line-height:1;">${opt.icon}</span>`;
+                btn.innerHTML = `<div style="display:inline-flex; width:45px; height:45px; align-items:center; justify-content:center;">${iconHtml}</div> <span style="margin-left:5px; font-size:18px; text-transform:capitalize;">(${opt.word})</span>`;
+            });
+            speakVoice(q.voiceText); startTimer();
+        }
+    }
+
+    // ==================== QUY TRÌNH KIỂM TRA ĐÁP ÁN ĐỔI MÀU HOẠT HỌA ====================
+    function selectOption(selectedIdx) {
+        if (isBlockClick || gameOver) return;
+        isBlockClick = true; clearInterval(timerInterval);
+        const buttons = document.querySelectorAll('.quiz-option');
+        buttons[selectedIdx].classList.add('selected-choice'); playSoundTone(300, 'triangle', 0.15);
+
+        setTimeout(() => {
+            if (selectedIdx === currentCorrectAnswerIdx) {
+                buttons[selectedIdx].className = 'quiz-option correct-choice'; gameArea.classList.add('flash-correct');
+                score++; scoreDisplay.innerText = score;
+                correctChainCount++; playSoundTone(523.25, 'sine', 0.15); setTimeout(() => playSoundTone(659.25, 'sine', 0.2), 100);
+                speakVoice("Bingo!", function() { gameArea.classList.remove('flash-correct'); if (correctChainCount % 5 === 0) { showGiftScreen(); } else { advanceToNextQuestion(); } });
+            } else {
+                buttons[selectedIdx].className = 'quiz-option wrong-choice'; buttons[currentCorrectAnswerIdx].className = 'quiz-option correct-choice';
+                gameArea.classList.add('flash-wrong'); lives--; updateLivesDisplay(); correctChainCount = 0; playSoundTone(220, 'sawtooth', 0.4);
+                speakVoice("Oh no!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+            }
+        }, 800);
+    }
+
+    function advanceToNextQuestion() { currentQuestionIdx++; loadQuestion(); }
+// ==================== MÀN HÌNH BỐC THĂM NHẬN QUÀ WORDWALL ====================
+    function showGiftScreen() { 
+        giftScreen.style.display = 'flex'; 
+        giftResult.style.display = 'none'; 
+        nextQuestBtn.style.display = 'none'; 
+        clickableGift.style.display = 'block'; 
+        clickableGift.innerText = "🎁"; 
+        playSoundTone(440, 'sine', 0.3); 
+    }
+
+    function openLuckyDraw() { 
+        clickableGift.innerText = "🎈"; 
+        const gift = LUCKY_GIFTS[Math.floor(Math.random() * LUCKY_GIFTS.length)]; 
+        giftResult.innerText = gift; 
+        giftResult.style.display = 'block'; 
+        nextQuestBtn.style.display = 'block'; 
+        
+        // Âm thanh khui quà vui nhộn, tưng bừng cho bé
+        playSoundTone(523.25, 'sine', 0.1); 
+        setTimeout(() => playSoundTone(659.25, 'sine', 0.1), 80);
+        setTimeout(() => playSoundTone(783.99, 'sine', 0.1), 160);
+        setTimeout(() => playSoundTone(1046.50, 'sine', 0.3), 240); 
+        
+        speakVoice("Super! You got a balloon!"); 
+    }
+
+    function continueAfterGift() { 
+        giftScreen.style.display = 'none'; 
+        advanceToNextQuestion(); 
+    }
+
+    function updateLivesDisplay() { 
+        livesDisplay.innerText = "💖".repeat(lives) + "🖤".repeat(3 - lives); 
+    }
+// ==================== MÀN HÌNH TRẠNG THÁI KẾT THÚC GAME WORDWALL ====================
+    function endGame(isWin) {
+        gameOver = true; 
+        clearInterval(timerInterval); 
+        if (backgroundMusicNode) {
+            try { backgroundMusicNode.stop(); } catch(e) {}
+        }
+        
+        // Ẩn giao diện chơi chính
+        hud.style.visibility = 'hidden'; 
+        timeBarContainer.style.visibility = 'hidden'; 
+        questionDisplayBox.style.visibility = 'hidden'; 
+        optionsContainer.style.visibility = 'hidden';
+        
+        // Hiện màn hình kết quả rực rỡ
+        gameOverScreen.style.display = 'flex'; 
+        finalScore.innerText = score;
+        
+        if (isWin) { 
+            endTitle.innerText = "🏆 WINNER! 🏆"; 
+            endTitle.style.color = "#2ed573"; 
+            speakVoice("Amazing! You are the phonics king!"); 
+        } else { 
+            endTitle.innerText = "GAME OVER"; 
+            endTitle.style.color = "#ff4757"; 
+            speakVoice("Great try! Let's play again!"); 
+        }
+    }
+</script>
+</body>
+</html>
