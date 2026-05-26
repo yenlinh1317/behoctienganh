@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Say The Word On Beat - TikTok Challenge Perfect</title>
+    <title>Say The Word On Beat - TikTok Synced Fix</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #121212;
             color: #ffffff;
@@ -13,49 +17,59 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding: 20px;
+            overflow-x: hidden;
         }
 
         h1 {
             color: #ff007f;
             margin-bottom: 5px;
             text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
             text-align: center;
         }
 
         .info {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             margin-bottom: 5px;
             color: #00ffff;
         }
 
         .pattern-info {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             font-weight: bold;
             color: #ffaa00;
             margin-bottom: 25px;
             text-transform: uppercase;
             text-align: center;
             min-height: 35px;
+            width: 100%;
+            word-wrap: break-word;
         }
 
-        /* Lưới hiển thị đủ 8 ô chữ (4x2) */
+        /* Lưới tự động thích ứng với kích thước màn hình, chống tràn chữ */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr); 
             gap: 15px;
             max-width: 650px;
-            width: 95%;
+            width: 100%;
+        }
+
+        /* Chuyển thành lưới 2 cột khi chạy trên điện thoại di động nhỏ */
+        @media (max-width: 500px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .word-box {
             background-color: #1f1f1f;
             border: 3px solid #333;
             border-radius: 16px;
-            padding: 20px 5px;
+            padding: 15px 5px;
             text-align: center;
             transition: all 0.04s ease-in-out;
             display: flex;
@@ -63,31 +77,37 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            width: 100%;
+            min-width: 0; 
         }
 
-        /* Định dạng cho ảnh SVG tự vẽ */
+        /* Kích thước ảnh Vector co giãn linh hoạt */
         .word-box .svg-icon {
-            width: 55px;
-            height: 55px;
+            width: clamp(40px, 10vw, 55px);
+            height: clamp(40px, 10vw, 55px);
             opacity: 0.25; 
             transition: all 0.04s ease-in-out;
         }
 
-        /* Tên chữ tiếng Anh */
+        /* Chữ tự động thu nhỏ dựa trên độ rộng màn hình, không sợ bị khuất từ JELLYFISH */
         .word-box .text {
-            font-size: 1.3rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
             font-weight: bold;
             text-transform: uppercase;
             color: #555;
             transition: all 0.04s ease-in-out;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            width: 100%;
         }
 
-        /* HIỆU ỨNG KHI ĐÈN NHÁY THEO NHỊP */
+        /* HIỆU ỨNG KHI ĐÈN NHÁY THEO NHỊP CHÍNH THỨC */
         .word-box.active {
             background-color: #ff007f;
             border-color: #ffffff;
-            transform: scale(1.08);
-            box-shadow: 0 0 25px #ff007f;
+            transform: scale(1.06);
+            box-shadow: 0 0 20px #ff007f;
         }
 
         .word-box.active .text {
@@ -96,21 +116,13 @@
         
         .word-box.active .svg-icon {
             opacity: 1;
-            transform: scale(1.15);
-        }
-
-        /* Giữ cho màu sắc các đường nét hình vẽ SVG sáng lên khi trúng nhịp */
-        .word-box.active .svg-icon stroke {
-            stroke: #ffffff;
-        }
-        .word-box.active .svg-icon fill {
-            fill: #ffffff;
+            transform: scale(1.1);
         }
 
         button {
             margin-top: 35px;
             padding: 15px 40px;
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             font-weight: bold;
             background-color: #00ffff;
             color: #000;
@@ -130,17 +142,20 @@
 <body>
 
     <h1>SAY THE WORD ON BEAT!</h1>
-    <div class="info">Vòng: <span id="round">1</span> | Tốc độ: <span id="bpm">110</span> BPM</div>
+    <div class="info">Vòng: <span id="round">1</span> | Tốc độ: Nhạc gốc TikTok</div>
     <div class="pattern-info" id="pattern-text">Bấm nút để bắt đầu thử thách</div>
 
     <div class="grid-container" id="grid">
-        <!-- 8 ô chữ tự động hiển thị ở đây -->
+        <!-- 8 ô chữ sẽ tự sinh ở đây -->
     </div>
 
     <button id="start-btn" onclick="toggleGame()">BẮT ĐẦU CHƠI</button>
 
+    <!-- Tệp nhạc nền gốc chứa câu đếm thoại dạo đầu mở màn -->
+    <audio id="tiktok-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" crossorigin="anonymous"></audio>
+
     <script>
-        // Kho hình ảnh SVG tự vẽ chi tiết và phân biệt rõ ràng cho từng từ
+        // Sơ đồ vẽ hình Vector trực tiếp, sắc nét, không bị lỗi hiển thị hình ảnh
         const svgIcons = {
             JUG: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ff007f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a7 7 0 0 0 14 0Z"/><path d="M18 11h2a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/></svg>`,
             JAR: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8v2H8Z"/><path d="M6 9v10a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9c0-2-2-4-4-4H10C8 5 6 7 6 9Z"/></svg>`,
@@ -152,7 +167,6 @@
             JELLY: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ffff00" stroke-width="2"><path d="M4 18l2-10h12l2 10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z M6 8a3 3 0 0 1 6 0 3 3 0 0 1 6 0"/></svg>`
         };
 
-        // Danh sách 4 cặp từ hoán đổi luân phiên
         const wordPairs = [
             { word1: { text: "JUG", icon: svgIcons.JUG }, word2: { text: "JAR", icon: svgIcons.JAR } },         
             { word1: { text: "JUICE", icon: svgIcons.JUICE }, word2: { text: "JET", icon: svgIcons.JET } },       
@@ -160,35 +174,38 @@
             { word1: { text: "JELLYFISH", icon: svgIcons.JELLYFISH }, word2: { text: "JELLY", icon: svgIcons.JELLY } }   
         ];
 
-        // Chuỗi quy luật sắp xếp chữ cố định cho 8 ô (0: Từ thứ nhất, 1: Từ thứ hai)
+        // Chuỗi nhịp gõ phách cố định cho 8 ô chữ
+        const sequence1 = [0, 1, 0, 1, 0, 1, 0, 1];
+        const sequence2 = [0, 0, 1, 1, 0, 0, 1, 1];
+        const sequence3 = [0, 0, 0, 1, 1, 1, 1, 0];
+
         const layouts = [
-            { name: "Nhịp xen kẽ (1-2-1-2-1-2-1-2)", sequence: [0, 1, 0, 1, 0, 1, 0, 1] },
-            { name: "Nhịp đôi (1-1-2-2-1-1-2-2)", sequence: [0, 0, 1, 1, 0, 0, 1, 1] },
-            { name: "Nhịp dồn nâng cao (1-1-1-2-2-2-2-1)", sequence: [0, 0, 0, 1, 1, 1, 1, 0] }
+            { name: "Nhịp xen kẽ (1-2-1-2-1-2-1-2)", sequence: sequence1 },
+            { name: "Nhịp đôi (1-1-2-2-1-1-2-2)", sequence: sequence2 },
+            { name: "Nhịp dồn nâng cao (1-1-1-2-2-2-2-1)", sequence: sequence3 }
         ];
 
         let currentRound = 0;
-        let bpm = 110; 
-        let activeIndex = 0; 
+        let activeIndex = -1; // -1 đại diện cho trạng thái chưa có ô nào sáng đèn
         let gameInterval = null;
         let isPlaying = false;
         let isFirstBeatOfRound = true; 
         
-        let audioCtx = null; 
+        const beatIntervalMs = 500; 
+
+        // Độ trễ chờ Intro: Đợi chuẩn 6 giây nhạc dạo đầu chạy hết hoàn toàn mới phát đèn
+        const introDelayMs = 6000; 
 
         const gridElement = document.getElementById("grid");
         const startBtn = document.getElementById("start-btn");
         const roundText = document.getElementById("round");
-        const bpmText = document.getElementById("bpm");
         const patternText = document.getElementById("pattern-text");
+        const audioTrack = document.getElementById("tiktok-audio");
 
-        // Tạo cấu trúc 8 ô chữ trên màn hình
         function buildRoundLayout() {
             gridElement.innerHTML = "";
-            
             let pairIndex = Math.floor(currentRound / layouts.length) % wordPairs.length;
             let pair = wordPairs[pairIndex];
-
             let layoutIndex = currentRound % layouts.length;
             let currentLayout = layouts[layoutIndex];
 
@@ -200,7 +217,6 @@
                 box.className = "word-box";
                 box.id = `box-${i}`;
 
-                // Chèn mã vẽ hình SVG trực tiếp
                 const iconContainer = document.createElement("div");
                 iconContainer.innerHTML = targetData.icon;
 
@@ -212,33 +228,12 @@
                 box.appendChild(textDiv);
                 gridElement.appendChild(box);
             }
-
             roundText.innerText = currentRound + 1;
-            bpmText.innerText = bpm;
             patternText.innerText = `Từ: ${pair.word1.text} & ${pair.word2.text} | ${currentLayout.name}`;
         }
 
-        // Tạo âm thanh gõ phách
-        function playBeatSound() {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(750, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
-            } catch (e) {
-                console.log("Audio Error:", e);
-            }
-        }
-
-        // Cơ chế nhảy đèn theo nhịp phách tuần tự qua 8 ô
         function nextBeat() {
+            // Tắt đèn tất cả các ô trước khi nhấp nháy ô tiếp theo
             for (let i = 0; i < 8; i++) {
                 const el = document.getElementById(`box-${i}`);
                 if (el) el.classList.remove("active");
@@ -254,113 +249,68 @@
                 activeIndex = 0;
                 isFirstBeatOfRound = true; 
                 currentRound++;
-                bpm += 10; 
                 clearInterval(gameInterval);
-buildRoundLayout();
-                startMetronome();
+ buildRoundLayout();
+                gameInterval = setInterval(nextBeat, beatIntervalMs);
                 return;
             }
 
             const currentBox = document.getElementById(`box-${activeIndex}`);
             if (currentBox) currentBox.classList.add("active");
-            
-            playBeatSound();
-        }
-
-        function startMetronome() {
-            const intervalMs = (60 / bpm) * 1000;
-            gameInterval = setInterval(nextBeat, intervalMs);
-        }
-
-         // Hàm tạo tiếng nhạc hiệu đếm ngược dạo đầu "Ubaddada, 1, 2, 3, go!"
-        function playIntroCountdown(callback) {
-            patternText.innerText = "Chuẩn bị... 3... 2... 1... GO!";
-            patternText.style.color = "#ff007f";
-            
-            let introBeats = [
-                { delay: 0, freq: 400, vol: 0.2 },   // U-
-                { delay: 150, freq: 450, vol: 0.2 }, // bad-
-                { delay: 300, freq: 500, vol: 0.2 }, // da-
-                { delay: 450, freq: 550, vol: 0.2 }, // da
-                { delay: 800, freq: 650, vol: 0.4 },  // ONE (Phách 1)
-                { delay: 1300, freq: 650, vol: 0.4 }, // TWO (Phách 2)
-                { delay: 1800, freq: 650, vol: 0.4 }, // THREE (Phách 3)
-                { delay: 2300, freq: 900, vol: 0.5 }  // GO! (Vào game)
-            ];
-
-            introBeats.forEach(beat => {
-                setTimeout(() => {
-                    if (!isPlaying) return; // Nếu người dùng bấm dừng giữa chừng thì hủy
-                    
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = "triangle"; // Âm thanh dày và giống nhạc điện tử hơn
-                    osc.frequency.setValueAtTime(beat.freq, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(beat.vol, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                    
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.18);
-                    
-                    // Nháy đèn toàn lưới hiệu ứng theo tiếng dạo đầu
-                    gridElement.style.transform = "scale(1.03)";
-                    setTimeout(() => gridElement.style.transform = "scale(1)", 80);
-                }, beat.delay);
-            });
-
-            // Sau khi hết 2.3 giây nhạc dạo dồn phách, bắt đầu chạy ô chữ chính thức
-            setTimeout(() => {
-                if (isPlaying) {
-                    patternText.style.color = "#ffaa00";
-                    callback();
-                }
-            }, 2600);
         }
 
         function toggleGame() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
             if (isPlaying) {
-                // Thao tác dừng trò chơi
+                // Thao tác dừng game, tắt nhạc nền dứt khoát
                 clearInterval(gameInterval);
+                audioTrack.pause();
+                audioTrack.currentTime = 0;
                 startBtn.innerText = "BẮT ĐẦU CHƠI";
                 startBtn.style.backgroundColor = "#00ffff";
                 isPlaying = false;
-                activeIndex = 0;
+                activeIndex = -1; // Trả về trạng thái đóng băng ẩn đèn
                 isFirstBeatOfRound = true;
                 patternText.innerText = "Bấm nút để bắt đầu thử thách";
-                patternText.style.color = "#ffaa00";
                 for (let i = 0; i < 8; i++) {
                     const el = document.getElementById(`box-${i}`);
                     if (el) el.classList.remove("active");
                 }
             } else {
-                // Thao tác bắt đầu khởi chạy game mới với nhạc dạo
+                // Khởi tạo trạng thái ban đầu nhưng GIỮ CHO TOÀN BỘ Ô CHỮ TẮT ĐÈN
                 currentRound = 0;
-                bpm = 110;
-                activeIndex = 0;
+                activeIndex = 0; // Đặt sẵn chỉ số ô số 1 chuẩn bị chạy sau khi hết intro
                 isFirstBeatOfRound = true;
+                
+                // Vẽ lưới chữ ban đầu ở trạng thái mờ, KHÔNG gọi kích hoạt lớp .active
                 buildRoundLayout();
                 
                 startBtn.innerText = "DỪNG LẠI";
                 startBtn.style.backgroundColor = "#ff0000";
                 isPlaying = true;
+
+                patternText.innerText = "Chuẩn bị nhạc dạo: Ubaddada... 1... 2... 3... GO!";
                 
-                // Kích hoạt chuỗi nhạc dạo trước, sau đó mới kích hoạt vòng quay nhảy ô chữ
-                playIntroCountdown(() => {
-                    startMetronome();
+                audioTrack.play().then(() => {
+                    // ĐÓNG BĂNG HOÀN TOÀN: Đợi đúng 6.0 giây (nhạc dạo chạy xong) mới gọi lệnh kích hoạt đèn nhảy
+                    setTimeout(() => {
+                        if (isPlaying) {
+                            // Ô số 1 chính thức sáng đèn hồng neon khi vào phách nhạc chính
+                            const currentBox = document.getElementById(`box-${activeIndex}`);
+                            if (currentBox) currentBox.classList.add("active");
+                            
+                            // Bắt đầu chu kỳ quét đèn tự động theo phách
+                            gameInterval = setInterval(nextBeat, beatIntervalMs);
+                        }
+                    }, introDelayMs);
+                }).catch(err => {
+                    console.log("Audio Error:", err);
+                    // Nếu lỗi âm thanh trình duyệt chặn, tự động nhảy đèn cứu cánh luôn
+                    gameInterval = setInterval(nextBeat, beatIntervalMs);
                 });
             }
         }
 
-        // Khởi động giao diện hiển thị đầu tiên
+        // Vẽ giao diện lần đầu tiên lúc nạp trang
         buildRoundLayout();
     </script>
 </body>
