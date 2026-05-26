@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dọn Rác Đại Dương - Học Đánh Vần Lớp 1</title>
+    <style>
+        /* NHÚNG FONT CHỮ CHUẨN TẬP VIẾT TIỂU HỌC (SGK) */
+        @import url('https://googleapis.com');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        
+        /* HÌNH NỀN ĐẠI DƯƠNG SINH ĐỘNG */
+        body, html { 
+            width: 100%; height: 100%; overflow: hidden; 
+            background: linear-gradient(180deg, #1565C0 0%, #1E88E5 50%, #00ACC1 100%); 
+            display: flex; justify-content: center; align-items: center; 
+            font-family: 'Mali', 'Quicksand', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        #gameArea {
+            width: 100vw; height: 100vh; max-width: 100%; max-height: 100%;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(2px);
+            overflow: hidden; padding: 2vh 2vw;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            position: relative;
+        }
+
+        /* Hiệu ứng bong bóng nước đại dương bay lên */
+        .bubble-bg {
+            position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%;
+            bottom: -10vh; animation: bubbleUp 8s infinite linear; pointer-events: none; z-index: 1;
+        }
+        @keyframes bubbleUp {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-110vh) translateX(50px); opacity: 0; }
+        }
+
+        /* THANH HUD ĐIỂM SỐ */
+        #hud {
+            width: 96%; display: flex; justify-content: space-between; align-items: center; 
+            color: #1a237e; font-size: 2.8vh; font-weight: bold;
+            background: rgba(255, 255, 255, 0.95); padding: 1vh 3vw; border-radius: 20px; 
+            border: 3px solid #00e5ff; box-shadow: 0 5px 0 #00b8d4; position: relative; z-index: 10;
+        }
+        #scoreDisplay { color: #ff1744; font-weight: 900; }
+
+        /* BẢNG TỪ VỰNG MỤC TIÊU */
+        #target-box {
+            width: 96%; height: 22vh; background: #ffffff; border: 5px solid #ff9100; border-radius: 25px;
+            box-shadow: 0 8px 0 #ff9100, 0 10px 20px rgba(0,0,0,0.15); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.5vh; position: relative; z-index: 10;
+        }
+        #wordHintText { 
+            font-size: 5vh; font-weight: 700; color: #ff3d00; letter-spacing: 1px;
+            background: #fff3e0; padding: 0.3vh 6vw; border-radius: 15px; 
+            border: 2px dashed #ffb74d; text-align: center; font-family: 'Mali', sans-serif;
+        }
+        /* Ô hiển thị từ khuyết để bé điền chữ vào */
+        #displayWordPuzzle {
+            font-size: 7vh; font-weight: 700; color: #263238; font-family: 'Comfortaa', sans-serif; letter-spacing: 10px; margin-top: 1vh;
+        }
+
+        /* BỂ NƯỚC CHỨA RÁC TRÔI NỔI CHẠY NGANG */
+        #oceanContainer { 
+            width: 96%; height: 50vh; background: rgba(255,255,255,0.05); border-radius: 20px;
+            border: 3px dashed rgba(255,255,255,0.3); position: relative; z-index: 10; overflow: hidden;
+        }
+        
+        /* ĐỐI TƯỢNG RÁC ĐẠI DƯƠNG TRÔI NỔI (CHỐNG TRÀN CHỮ - TO RÕ) */
+        .trash-item {
+            position: absolute; right: -150px; width: 14vh; height: 14vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 20; transition: transform 0.1s ease;
+            animation: driftSkew 3s infinite alternate ease-in-out;
+        }
+        .trash-skin { font-size: 7vh; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+         /* ==================== ĐỔI MÀU CHỮ & DẤU SẮC ĐẬM NÉT, ĐỔ NỀN NỔI BẬT ==================== */
+        .trash-text {
+            position: absolute; 
+            color: #ff3d00 !important; /* Đổi hẳn sang màu Đỏ Cam Candy cực nét */
+            font-size: 7.5vh !important; /* Điều chỉnh kích thước vừa vặn */
+            font-weight: 900 !important;
+            font-family: 'Comfortaa', sans-serif; 
+            
+            /* Tạo một lớp nền bo tròn màu trắng sữa bọc quanh chữ để chống chìm màu */
+            background: rgba(255, 255, 255, 0.88);
+            padding: 0.2vh 1.5vh;
+            border-radius: 12px;
+            border: 2px solid #ff3d00; /* Viền đỏ đồng bộ */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+
+            text-transform: lowercase; 
+            bottom: 2vh !important; /* Đẩy lên chính giữa thân mảnh rác */
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ĐIỀU CHỈNH RIÊNG CHO ĐIỆN THOẠI ĐỂ CHỮ KHÔNG BỊ LỆCH */
+        @media (max-width: 767px) {
+            .trash-text { 
+                font-size: 8vw !important; 
+                bottom: 1.5vw !important;
+                padding: 0.1vh 1.2vw;
+                border-radius: 8px;
+                border-width: 1.5px;
+            }
+        }
+        @keyframes driftSkew {
+            0% { transform: rotate(-5deg) translateY(0); }
+            100% { transform: rotate(5deg) translateY(-10px); }
+        }
+
+        /* Hiệu ứng chớp màn hình khi bé làm đúng/sai */
+        .flash-correct { animation: bgGreen 0.3s ease-out; }
+        .flash-wrong { animation: bgRed 0.3s ease-out; }
+        @keyframes bgGreen { 50% { background: rgba(46, 213, 115, 0.4); } }
+        @keyframes bgRed { 50% { background: rgba(255, 71, 87, 0.4); } }
+
+        /* MÀN HÌNH BẮT ĐẦU VÀ KẾT THÚC */
+        #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #e3f2fd; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #0d47a1; z-index: 100; padding: 5vh; text-align: center; }
+        .screen-title { font-size: 6vh; color: #1565C0; margin-bottom: 2vh; font-weight: 900; }
+        .action-btn { padding: 1.5vh 6vw; font-size: 3.5vh; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 20px; cursor: pointer; box-shadow: 0 8px 0 #22bb59; }
+        .action-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #22bb59; }
+
+        /* ĐIỀU CHỈNH RESPONSIVE TRÊN ĐIỆN THOẠI */
+        @media (max-width: 767px) {
+            #wordHintText { font-size: 3.5vh; }
+            #displayWordPuzzle { font-size: 5vh; }
+            .trash-item { width: 11vh; height: 11vh; }
+            .trash-skin { font-size: 6vh; }
+            .trash-text { font-size: 4.5vh; bottom: 2vh; }
+        }
+ /* ==================== ĐOẠN ĐÃ ĐƯỢC PHÓNG TO GẤP ĐÔI VÀ SỬA LỖI TRÀN CHỮ ==================== */
+        /* ĐỐI TƯỢNG RÁC ĐẠI DƯƠNG TRÔI NỔI (TO RÕ RÀNG, KHÔNG CHỒNG CHÉO) */
+        .trash-item {
+            position: absolute; 
+            right: -200px; 
+            width: 18vh !important; 
+            height: 18vh !important;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            cursor: pointer; 
+            z-index: 20; 
+            transition: transform 0.1s ease;
+            animation: driftSkew 3s infinite alternate ease-in-out;
+        }
+        .trash-skin { 
+            font-size: 11vh !important; /* Biểu tượng chai lọ to gấp đôi */
+            line-height: 1; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); 
+        }
+        .trash-text {
+            position: absolute; 
+            color: #ffffff; 
+            font-size: 8vh !important; /* Chữ cái/Dấu thanh siêu to, nét đậm rõ ràng */
+            font-weight: 900 !important;
+            font-family: 'Comfortaa', sans-serif; 
+            text-shadow: 2px 2px 4px #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+            text-transform: lowercase; 
+            bottom: 4vh !important;
+        }
+        
+        @keyframes driftSkew {
+            0% { transform: rotate(-5deg) translateY(0); }
+            100% { transform: rotate(5deg) translateY(-10px); }
+        }
+
+        /* Hiệu ứng chớp màn hình khi bé làm đúng/sai */
+        .flash-correct { animation: bgGreen 0.3s ease-out; }
+        .flash-wrong { animation: bgRed 0.3s ease-out; }
+        @keyframes bgGreen { 50% { background: rgba(46, 213, 115, 0.4); } }
+        @keyframes bgRed { 50% { background: rgba(255, 71, 87, 0.4); } }
+
+        /* MÀN HÌNH BẮT ĐẦU VÀ KẾT THÚC */
+        #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #e3f2fd; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #0d47a1; z-index: 100; padding: 5vh; text-align: center; }
+        .screen-title { font-size: 6vh; color: #1565C0; margin-bottom: 2vh; font-weight: 900; }
+        .action-btn { padding: 1.5vh 6vw; font-size: 3.5vh; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 20px; cursor: pointer; box-shadow: 0 8px 0 #22bb59; }
+        .action-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #22bb59; }
+
+        /* ĐIỀU CHỈNH RESPONSIVE TRÊN ĐIỆN THOẠI CHỐNG TRÀN */
+        @media (max-width: 767px) {
+            #wordHintText { font-size: 3.5vh; }
+            #displayWordPuzzle { font-size: 5vh; }
+            .trash-item { width: 22vw !important; height: 22vw !important; }
+            .trash-skin { font-size: 12vw !important; }
+            .trash-text { font-size: 9vw !important; bottom: 3vw !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="gameArea">
+    <!-- Màn hình bắt đầu -->
+    <div id="startScreen">
+        <h1 class="screen-title">🐟 DỌN RÁC ĐẠI DƯƠNG 🌊<br><span style="font-size: 3.5vh; color:#ff9100;">Học Đánh Vần Từ Vựng Lớp 1</span></h1>
+        <p style="font-size: 3vh; margin-bottom: 4vh; color: #546e7a;">Bé hãy nhặt các mảnh rác chứa chữ cái đúng để làm sạch biển khơi nhé! 📦</p>
+        <button class="action-btn" onclick="initGame()">Bắt Đầu Chơi 🎮</button>
+    </div>
+
+    <!-- Màn hình kết thúc -->
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" style="color: #2ed573;">BÉ QUÁ XUẤT SẮC! 🏆</h1>
+        <p style="font-size: 3.5vh; margin-bottom: 3vh; color: #37474f;">Bé đã làm sạch biển và hoàn thành: <span id="finalScore" style="color:#ff1744; font-size:5vh;">0</span> / 10 từ</p>
+        <button class="action-btn" style="background: #ff9100; box-shadow: 0 8px 0 #ff6d00;" onclick="location.reload()">Chơi Lượt Mới 🔄</button>
+    </div>
+
+    <!-- HUD Điểm số -->
+    <div id="hud" style="visibility: hidden;">
+        <div>🌊 Đại dương xanh</div>
+        <div>⭐ Điểm của bé: <span id="scoreDisplay">0</span> / 10</div>
+    </div>
+    
+    <!-- Bảng hiển thị từ mục tiêu -->
+    <div id="target-box" style="visibility: hidden;">
+        <div id="wordHintText">Từ mục tiêu: ...</div>
+        <div id="displayWordPuzzle">_ _ _</div>
+    </div>
+
+    <!-- Bể nước rác chạy ngang -->
+    <div id="oceanContainer" style="visibility: hidden;"></div>
+</div>
+
+<script>
+    // DỮ LIỆU ĐƯỢC BÓC TÁCH CHI TIẾT TỪ ẢNH CỦA BẠN (CƠ CHẾ: CHỮ GỐC + DẤU THANH)
+    const DATABASE_FROM_IMAGE = [
+        { word: "ba",  puzzle: "b _",   correctCode: "a",   display: "a" },
+        { word: "bà",  puzzle: "ba _",  correctCode: "huyền", display: "◌̀" },
+        { word: "bé",  puzzle: "be _",  correctCode: "sắc",   display: "◌́" },
+        { word: "bè",  puzzle: "be _",  correctCode: "huyền", display: "◌̀" },
+        { word: "bế",  puzzle: "bê _",  correctCode: "sắc",   display: "◌́" },
+        { word: "bò",  puzzle: "bo _",  correctCode: "huyền", display: "◌̀" },
+        { word: "bố",  puzzle: "bô _",  correctCode: "sắc",   display: "◌́" },
+        { word: "ca",  puzzle: "c _",   correctCode: "a",   display: "a" },
+        { word: "cá",  puzzle: "ca _",  correctCode: "sắc",   display: "◌́" },
+        { word: "cà",  puzzle: "ca _",  correctCode: "huyền", display: "◌̀" },
+        { word: "cò",  puzzle: "co _",  correctCode: "huyền", display: "◌̀" },
+        { word: "cỏ",  puzzle: "co _",  correctCode: "hỏi",   display: "◌̉" },
+        { word: "ho",  puzzle: "h _",   correctCode: "o",   display: "o" },
+        { word: "hò",  puzzle: "ho _",  correctCode: "huyền", display: "◌̀" },
+        { word: "hồ",  puzzle: "hô _",  correctCode: "huyền", display: "◌̀" },
+        { word: "hổ",  puzzle: "hô _",  correctCode: "hỏi",   display: "◌̉" },
+        { word: "kẻ",  puzzle: "ke _",  correctCode: "hỏi",   display: "◌̉" },
+        { word: "kệ",  puzzle: "kê _",  correctCode: "nặng",  display: "◌̣" },
+        { word: "kí",  puzzle: "ki _",  correctCode: "sắc",   display: "◌́" },
+        { word: "kĩ",  puzzle: "ki _",  correctCode: "ngã",   display: "◌̃" },
+        { word: "kỉ",  puzzle: "ki _",  correctCode: "hỏi",   display: "◌̉" },
+        { word: "lá",  puzzle: "la _",  correctCode: "sắc",   display: "◌́" },
+        { word: "lê",  puzzle: "l _",   correctCode: "ê",   display: "ê" },
+        { word: "lọ",  puzzle: "lo _",  correctCode: "nặng",  display: "◌̣" }
+    ];
+
+    // Các ký tự gây nhiễu xuất hiện ngẫu nhiên tăng độ thử thách
+    const WRONG_POOL = [
+        { code: "a", text: "a" }, { code: "o", text: "o" }, { code: "ê", text: "ê" },
+        { code: "sắc", text: "◌́" }, { code: "huyền", text: "◌̀" }, 
+        { code: "hỏi", text: "◌̉" }, { code: "ngã", text: "◌̃" }, { code: "nặng", text: "◌̣" }
+    ];
+
+    const TRASH_SKINS = ["🍼", "🥤", "📦", "🥫", "🛍️"];
+
+    let questionList = [];
+    let currentIdx = 0;
+    let score = 0;
+    let spawnInterval = null;
+let activeTrashElements = [];
+    let targetCode = "";
+
+    // 1. TẠO HIỆU ỨNG BONG BÓNG NƯỚC NỀN ĐẠI DƯƠNG
+    function createBgBubbles() {
+        for(let i=0; i<15; i++) {
+            let b = document.createElement("div");
+            b.className = "bubble-bg";
+            b.style.width = b.style.height = `${Math.random()*30 + 10}px`;
+            b.style.left = `${Math.random()*100}vw`;
+            b.style.animationDelay = `${Math.random()*5}s`;
+            b.style.animationDuration = `${Math.random()*5 + 5}s`;
+            document.body.appendChild(b);
+        }
+    }
+    createBgBubbles();
+
+    // 2. KHỞI CHẠY TRÒ CHƠI
+    function initGame() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("hud").style.visibility = "visible";
+        document.getElementById("target-box").style.visibility = "visible";
+        document.getElementById("oceanContainer").style.visibility = "visible";
+
+        // Trộn ngẫu nhiên lấy ra 10 từ trong kho dữ liệu từ ảnh của bạn
+        questionList = [...DATABASE_FROM_IMAGE].sort(() => Math.random() - 0.5).slice(0, 10);
+        score = 0;
+        currentIdx = 0;
+        document.getElementById("scoreDisplay").textContent = score;
+
+        loadQuestion();
+    }
+
+    // 3. TẢI CÂU HỎI MỚI
+    function loadQuestion() {
+        clearInterval(spawnInterval);
+        activeTrashElements.forEach(el => el.remove());
+        activeTrashElements = [];
+
+        if (currentIdx >= questionList.length) {
+            endGame();
+            return;
+        }
+
+        const q = questionList[currentIdx];
+        targetCode = q.correctCode;
+
+        document.getElementById("wordHintText").textContent = `Bé hãy tìm chữ/dấu để được từ: "${q.word}"`;
+        document.getElementById("displayWordPuzzle").textContent = q.puzzle;
+
+        // Sinh ngay 1 mảnh rác ĐÚNG đầu tiên
+        spawnTrashItem(true); 
+        
+        // Tăng thời gian chờ lên 1.8 giây (thay vì 1.2 giây) và giới hạn số lượng rác
+        spawnInterval = setInterval(() => {
+            // SỬA LỖI: Nếu số lượng rác trên màn hình đang nhiều hơn hoặc bằng 5, không sinh thêm nữa
+            if (activeTrashElements.length >= 5) return;
+
+            let isCorrect = Math.random() < 0.35;
+            spawnTrashItem(isCorrect);
+        }, 1800); 
+    }
+    // 4. LOGIC SINH RÁC TRÔI NỔI TRÊN MÀN HÌNH (XỬ LÝ LÀM MỜ VÒNG TRÒN VÀ CHỐNG TRÀN)
+    function spawnTrashItem(isCorrect) {
+        const container = document.getElementById("oceanContainer");
+        if (!container) return;
+        
+        const trash = document.createElement("div");
+        trash.className = "trash-item";
+
+        let itemData;
+        if (isCorrect) {
+            const q = questionList[currentIdx];
+            itemData = { code: q.correctCode, text: q.display };
+        } else {
+            let filteredWrong = WRONG_POOL.filter(w => w.code !== targetCode);
+            itemData = filteredWrong[Math.floor(Math.random() * filteredWrong.length)];
+        }
+
+        let skin = TRASH_SKINS[Math.floor(Math.random() * TRASH_SKINS.length)];
+        
+        let textToShow = itemData.text;
+        if (textToShow.includes('◌')) {
+            textToShow = textToShow.replace('◌', `<span style="opacity: 0.25; font-weight: normal;">◌</span>`);
+        }
+
+        trash.innerHTML = `
+            <div class="trash-skin">${skin}</div>
+            <div class="trash-text">${textToShow}</div>
+        `;
+
+        // CHÍNH XÁC: Chia màn hình làm 3 làn dọc cố định (0, 1, 2) để rác bay song song, không chồng chéo
+        let lane = Math.floor(Math.random() * 3); 
+        let laneHeight = (container.clientHeight - 120) / 3;
+        let finalTop = (lane * laneHeight) + 10;
+        trash.style.top = `${finalTop}px`;
+        
+        container.appendChild(trash);
+        activeTrashElements.push(trash);
+
+        trash.onclick = () => clickTrashItem(trash, itemData.code);
+
+        let posX = container.clientWidth;
+        // Cho rác trôi chậm lại một chút để bé dễ bấm trúng
+        let speed = Math.random() * 1 + 1.2; 
+
+        function drift() {
+            if (!trash.parentElement) return; 
+            posX -= speed;
+            trash.style.left = `${posX}px`;
+
+            if (posX < -150) {
+                trash.remove();
+                activeTrashElements = activeTrashElements.filter(el => el !== trash);
+            } else {
+                requestAnimationFrame(drift);
+            }
+        }
+        requestAnimationFrame(drift);
+    }
+
+    // 5. XỬ LÝ LOGIC KHI BÉ CLICK ĐẬP MẢNH RÁC
+    function clickTrashItem(element, clickedCode) {
+        const gameArea = document.getElementById("gameArea");
+
+        if (clickedCode === targetCode) {
+            // BÉ ĐẬP ĐÚNG RÁC:
+            clearInterval(spawnInterval); // Ngừng sinh thêm rác của câu này
+            
+            // Hiệu ứng thu nhỏ xoay tròn bốc hơi biến mất sinh động
+            element.style.transform = "scale(0) rotate(180deg)";
+            element.style.pointerEvents = "none";
+            element.style.transition = "all 0.3s ease-out";
+
+            // Điền chữ hoặc dấu hoàn chỉnh hiển thị lên bảng cam câu đố
+            document.getElementById("displayWordPuzzle").textContent = questionList[currentIdx].word;
+            
+            // Nháy sáng xanh lá cây dịu mắt toàn bộ màn hình để khen thưởng bé
+            gameArea.classList.add("flash-correct");
+            setTimeout(() => gameArea.classList.remove("flash-correct"), 300);
+
+            // Cộng điểm
+            score++;
+            document.getElementById("scoreDisplay").textContent = score;
+
+            // Cho bé nghỉ 1.2 giây ngắm nhìn từ hoàn chỉnh vừa đánh vần xong rồi tự động đổi câu mới
+            currentIdx++;
+            setTimeout(loadQuestion, 1200);
+
+        } else {
+            // BÉ ĐẬP SAI RÁC: Nháy màn hình màu đỏ cảnh báo chọn nhầm rác độc hại
+            gameArea.classList.add("flash-wrong");
+            setTimeout(() => gameArea.classList.remove("flash-wrong"), 300);
+
+            // Hiệu ứng mảnh rác bị rơi tuột xuống đáy biển cực nhanh và biến mất
+            element.style.transform = "translateY(150px) scale(0)";
+            element.style.opacity = "0";
+            element.style.pointerEvents = "none";
+            element.style.transition = "all 0.4s ease-in";
+            setTimeout(() => {
+                element.remove();
+                activeTrashElements = activeTrashElements.filter(el => el !== element);
+            }, 400);
+        }
+    }
+
+    // 6. MÀN HÌNH KẾT THÚC TRÒ CHƠI
+    function endGame() {
+        clearInterval(spawnInterval);
+        
+        // Ẩn tất cả các khu vực chơi
+        document.getElementById("hud").style.visibility = "hidden";
+        document.getElementById("target-box").style.visibility = "hidden";
+        document.getElementById("oceanContainer").style.visibility = "hidden";
+
+        // Hiện bảng điểm tổng kết chúc mừng bé đã dọn sạch đại dương
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("gameOverScreen").style.display = "flex";
+    }
+</script>
+</body>
+</html>
