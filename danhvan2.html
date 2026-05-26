@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Học Đánh Vần Tiếng Việt Lớp 1 - Phiên Bản Kẹo Ngọt Tràn Màn Hình</title>
+    <style>
+    /* NHÚNG FONT CHỮ CHUẨN TẬP VIẾT TIỂU HỌC (SGK) */
+    @import url('https://googleapis.com');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    
+    /* HÌNH NỀN SINH ĐỘNG: Hiệu ứng bầu trời kẹo ngọt kết hợp thảm cỏ hoạt hình nhiều tầng */
+    body, html { 
+        width: 100%; height: 100%; overflow: hidden; 
+        background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 60%, #96e6a1 100%); 
+        display: flex; justify-content: center; align-items: center; 
+        font-family: 'Mali', 'Quicksand', sans-serif; /* Font bo tròn nét đều giống chữ SGK lớp 1 */
+        -webkit-font-smoothing: antialiased;
+    }
+    
+    #gameArea {
+        width: 100vw; height: 100vh; max-width: 100%; max-height: 100%;
+        background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px);
+        overflow: hidden; padding: 2vh 2vw;
+        display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        position: relative;
+    }
+
+    /* Hiệu ứng mây bay sinh động đa tầng làm nền */
+    .animated-cloud { position: absolute; opacity: 0.3; pointer-events: none; z-index: 1; }
+    .cloud1 { top: 12vh; left: -10vw; font-size: 12vh; animation: flyRight 35s linear infinite; }
+    .cloud2 { top: 28vh; right: -10vw; font-size: 8vh; animation: flyLeft 28s linear infinite; }
+    
+    @keyframes flyRight { 0% { left: -15vw; } 100% { left: 105vw; } }
+    @keyframes flyLeft { 0% { right: -15vw; } 100% { right: 105vw; } }
+
+    #hud {
+        width: 96%; display: flex; justify-content: space-between; align-items: center; 
+        color: #2c3e50; font-size: 3.5vh; font-weight: bold;
+        background: rgba(255, 255, 255, 0.95); padding: 1.5vh 3vw; border-radius: 25px; 
+        border: 4px solid #ffa502; box-shadow: 0 6px 0 #ffa502; position: relative; z-index: 10;
+    }
+    #scoreDisplay { color: #ff4757; font-weight: 900; }
+
+    /* BẢNG ĐỀ BÀI: Chữ gợi ý được thiết kế NÉT ĐỀU, TO, RÕ RÀNG */
+    #picture-display-box {
+        width: 96%; height: 25vh; background: #ffffff; border: 6px solid #ff4757; border-radius: 35px;
+        box-shadow: 0 10px 0 #ff4757, 0 15px 30px rgba(0,0,0,0.1); 
+        display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1vh; position: relative; z-index: 10;
+    }
+    #targetImage { font-size: 10vh; line-height: 1; filter: drop-shadow(0 6px 5px rgba(0,0,0,0.1)); }
+    
+    /* FIX LỖI: Chữ câu hỏi đồng nhất, nét chữ bo tròn đều đặn cực nét chuẩn sư phạm lớp 1 */
+    #wordHintText { 
+        font-size: 5.5vh; font-weight: 700; color: #2f3542; letter-spacing: 1px;
+        background: #fff2f2; padding: 0.5vh 5vw; border-radius: 20px; 
+        border: 3px dashed #ffcccb; text-align: center; width: 85%;
+        font-family: 'Mali', sans-serif;
+    }
+
+    /* Ô TRỐNG HIỂN THỊ CHỮ TRÊN ĐƯỜNG KẺ */
+    #slotsRow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 1.5vw; margin: 1.5vh 0; min-height: 14vh; width: 96%; position: relative; z-index: 10; }
+    
+    .letter-slot {
+        width: 11vh; height: 11vh; border: 4px dashed #ff7f50; border-radius: 20px;
+        background: #ffffff; display: flex; justify-content: center; align-items: center;
+        font-size: 7vh; font-weight: 700; color: #2f3542; box-shadow: 0 6px 0 #ffa502;
+        font-family: 'Comfortaa', sans-serif; text-transform: lowercase;
+    }
+    .letter-slot.filled { border-style: solid; border-color: #2ed573; background: #e3fcef; color: #2ed573; box-shadow: 0 6px 0 #22bb59; }
+    .letter-slot.space-slot { border: none; background: transparent; box-shadow: none; width: 5vw; } 
+
+    /* KHO CHỨA BÓNG: Mở rộng diện tích để chứa bóng khổng lồ */
+    #lettersContainer { 
+        width: 96%; height: 34vh; display: flex; justify-content: center; align-items: center; 
+        flex-wrap: wrap; gap: 2.5vh 2vw; overflow: visible; position: relative; z-index: 10; 
+    }
+    
+    /* TO GẤP ĐÔI: Phóng to kích thước quả bóng từ 11vh lên 20vh, chữ bên trong siêu to */
+    .bubble-letter {
+        width: 18vh; height: 18vh; min-width: 18vh; min-height: 18vh; border-radius: 50% !important; 
+        color: white; font-size: 10vh; font-weight: 700; aspect-ratio: 1 / 1;
+        display: flex; align-items: center; justify-content: center; cursor: pointer;
+        box-shadow: inset -10px -12px 20px rgba(0,0,0,0.25), 0 12px 24px rgba(0,0,0,0.15);
+        text-shadow: 3px 3px 4px rgba(0,0,0,0.3); 
+        animation: floatBubble 4s ease-in-out infinite alternate;
+        font-family: 'Comfortaa', sans-serif; text-transform: lowercase;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+    }
+    
+    @keyframes floatBubble { 
+        0% { transform: translateY(0) rotate(-3deg); } 
+        100% { transform: translateY(-20px) rotate(3deg); } 
+    }
+
+    /* Hiệu ứng rung lắc khi bé chọn sai */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .flash-correct { animation: bgGreen 0.3s ease-out; }
+    @keyframes bgGreen { 50% { background: #cbdadb; } }
+
+    #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #2c3e50; z-index: 100; padding: 5vh; text-align: center; }
+    .screen-title { font-size: 8vh; color: #ff4757; margin-bottom: 3vh; font-weight: 900; }
+    .action-btn { padding: 2vh 8vw; font-size: 4vh; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 25px; cursor: pointer; box-shadow: 0 10px 0 #22bb59; }
+</style>
+</head>
+<body>
+<div id="gameArea">
+    <!-- Thêm mây hoạt hình trôi lơ lửng sinh động -->
+    <div class="animated-cloud cloud1">☁️</div>
+    <div class="animated-cloud cloud2">☁️</div>
+    <div id="startScreen">
+        <h1 class="screen-title" style="color: #ff9f43;">ĐÁNH VẦN CÂU NÂNG CAO 🎈<br><span style="font-size:9vh; color:#2ed573;">Minh Khang</span></h1>
+        <p style="font-size: 3.5vh; margin-bottom: 4vh; color: #57606f; font-weight: bold;"> 🧩🧩🧩🧩🧩</p>
+        <button class="action-btn" onclick="initGame()">Bắt Đầu Học Đánh Vần 🎮</button>
+    </div>
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" style="color: #2ed573;">BÉ XUẤT SẮC! 🏆</h1>
+        <p style="font-size: 4vh; margin-bottom: 3vh; color: #57606f; font-weight: bold;">Bé đã hoàn thành trọn bộ: <span id="finalScore" style="color:#ff4757; font-size:5vh;">0</span> / 10 từ ngữ</p>
+        <button class="action-btn" style="background: #ffa502; box-shadow: 0 10px 0 #e69500;" onclick="location.reload()">Học Tiếp Lượt Mới 🔄</button>
+    </div>
+    
+    <div id="hud" style="visibility: hidden;">
+        <div id="score-box">⭐ Hoàn thành: <span id="scoreDisplay">0</span> / 10</div>
+        <div id="timerDisplay">⏱️ Thời gian: 25.0s</div>
+    </div>
+    
+    <div id="picture-display-box" style="visibility: hidden;">
+        <div id="targetImage">📖</div>
+        <div id="wordHintText">kẻ ô</div>
+    </div>
+
+    <div id="slotsRow" style="visibility: hidden;"></div>
+    <div id="lettersContainer" style="visibility: hidden;"></div>
+</div>
+<script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const targetImage = document.getElementById('targetImage');
+    const wordHintText = document.getElementById('wordHintText');
+    const slotsRow = document.getElementById('slotsRow');
+    const lettersContainer = document.getElementById('lettersContainer');
+    const startScreen = document.getElementById('startScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const hud = document.getElementById('hud');
+    const pictureDisplayBox = document.getElementById('picture-display-box');
+
+    const BUBBLE_COLORS = ["#ff4757", "#1e90ff", "#2ed573", "#ffa502", "#ff6b81", "#78e08f", "#9b59b6"];
+
+    // NẠP TRỌN VẸN TOÀN BỘ 24 TỪ GHÉP VÀ MẪU CÂU TỪ HÌNH ẢNH SÁCH CỦA BẠN
+    const VIET_WORDS_DATABASE = [
+        { word: "kẻ ô", letters: ["k", "e", "hỏi", "cách", "ô"], display: ["k", "e", "◌̉", "Cách", "ô"], icon: "🏁" },
+        { word: "ô đỏ", letters: ["ô", "cách", "đ", "o", "hỏi"], display: ["ô", "Cách", "đ", "o", "◌̉"], icon: "🟥" },
+        { word: "bí đỏ", letters: ["b", "i", "sắc", "cách", "đ", "o", "hỏi"], display: ["b", "i", "◌́", "Cách", "đ", "o", "◌̉"], icon: "🎃" },
+        { word: "bó cỏ", letters: ["b", "o", "sắc", "cách", "c", "o", "hỏi"], display: ["b", "o", "◌́", "Cách", "c", "o", "◌̉"], icon: "💐" },
+        { word: "bờ đê", letters: ["b", "ơ", "huyền", "cách", "đ", "ê"], display: ["b", "ơ", "◌̀", "Cách", "đ", "ê"], icon: "🏞️" },
+        { word: "bờ hồ", letters: ["b", "ơ", "huyền", "cách", "h", "ô", "huyền"], display: ["b", "ơ", "◌̀", "Cách", "h", "ô", "◌̀"], icon: "🌅" },
+        { word: "cá cờ", letters: ["c", "a", "sắc", "cách", "c", "ơ", "huyền"], display: ["c", "a", "◌́", "Cách", "c", "ơ", "◌̀"], icon: "🐠" },
+        { word: "cá hố", letters: ["c", "a", "sắc", "cách", "h", "ô", "sắc"], display: ["c", "a", "◌́", "Cách", "h", "ô", "◌́"], icon: "🐟" },
+        { word: "cô bé", letters: ["c", "ô", "cách", "b", "e", "sắc"], display: ["c", "ô", "Cách", "b", "e", "◌́"], icon: "👧" },
+        { word: "cổ cò", letters: ["c", "ô", "hỏi", "cách", "c", "o", "huyền"], display: ["c", "ô", "◌̉", "Cách", "c", "o", "◌̀"], icon: "🦩" },
+        { word: "cờ đỏ", letters: ["c", "ơ", "huyền", "cách", "đ", "o", "hỏi"], display: ["c", "ơ", "◌̀", "Cách", "đ", "o", "◌̉"], icon: "🚩" },
+        { word: "đa đa", letters: ["đ", "a", "cách", "đ", "a"], display: ["đ", "a", "Cách", "đ", "a"], icon: "🐦" },
+        { word: "đá dế", letters: ["đ", "a", "sắc", "cách", "d", "ê", "sắc"], display: ["đ", "a", "◌́", "Cách", "d", "ê", "◌́"], icon: "🦗" },
+        { word: "đi đò", letters: ["đ", "i", "cách", "đ", "o", "huyền"], display: ["đ", "i", "Cách", "đ", "o", "◌̀"], icon: "🛶" },
+        { word: "đỡ bé", letters: ["đ", "ơ", "ngã", "cách", "b", "e", "sắc"], display: ["đ", "ơ", "◌̃", "Cách", "b", "e", "◌́"], icon: "🙌" },
+        { word: "kì đà", letters: ["k", "i", "huyền", "cách", "đ", "a", "huyền"], display: ["k", "i", "◌̀", "Cách", "đ", "a", "◌̀"], icon: "🦎" },
+        { word: "lá đỏ", letters: ["l", "a", "sắc", "cách", "đ", "o", "hỏi"], display: ["l", "a", "◌́", "Cách", "đ", "o", "◌̉"], icon: "🍁" },
+        { word: "le le", letters: ["l", "e", "cách", "l", "e"], display: ["l", "e", "Cách", "l", "e"], icon: "🦆" },
+        { word: "xe cộ", letters: ["x", "e", "cách", "c", "ô", "nặng"], display: ["x", "e", "Cách", "c", "ô", "◌̣"], icon: "🚗" },
+        { word: "bà bế bé", letters: ["b", "a", "huyền", "cách", "b", "ê", "sắc", "cách", "b", "e", "sắc"], display: ["b", "a", "◌̀", "Cách", "b", "ê", "◌́", "Cách", "b", "e", "◌́"], icon: "👵👶" },
+        { word: "bé có ô đỏ", letters: ["b", "e", "sắc", "cách", "c", "o", "sắc", "cách", "ô", "cách", "đ", "o", "hỏi"], display: ["b", "e", "◌́", "Cách", "c", "o", "◌́", "Cách", "ô", "Cách", "đ", "o", "◌̉"], icon: "👶⛱️" },
+        { word: "bà có đỗ đỏ", letters: ["b", "a", "huyền", "cách", "c", "o", "sắc", "cách", "đ", "ô", "ngã", "cách", "đ", "o", "hỏi"], display: ["b", "a", "◌̀", "Cách", "c", "o", "◌́", "Cách", "đ", "ô", "◌̃", "Cách", "đ", "o", "◌̉"], icon: "🍲" },
+        { word: "bố bê bể cá", letters: ["b", "ô", "sắc", "cách", "b", "ê", "cách", "b", "ê", "hỏi", "cách", "c", "a", "sắc"], display: ["b", "ô", "◌́", "Cách", "b", "ê", "Cách", "b", "ê", "◌̉", "Cách", "c", "a", "◌́"], icon: "👨🐟" },
+        { word: "bờ đê có dế", letters: ["b", "ơ", "huyền", "cách", "đ", "ê", "cách", "c", "o", "sắc", "cách", "d", "ê", "sắc"], display: ["b", "ơ", "◌̀", "Cách", "đ", "ê", "Cách", "c", "o", "◌́", "Cách", "d", "ê", "◌́"], icon: "🌾🦗" }
+    ];
+
+    let score = 0; let currentQuestionIdx = 0; let questionsList = [];
+    let correctSequence = []; let bubbleItemsPool = []; let currentSelectStep = 0; 
+    let isBlockClick = false; let gameOver = false;
+    let timerInterval = null; let timeLeft = 25; let audioCtx = null;
+
+    // ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
+    function initAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSoundTone(frequency, type, duration) {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    function speakVietnamese(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'vi-VN'; utterance.rate = 0.82;
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) { setTimeout(callback, 2000); }
+    }
+
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN ====================
+    function startTimer() {
+        clearInterval(timerInterval); timeLeft = 25;
+        timerDisplay.innerText = `⏱️ Thời gian: 25.0s`;
+        timerInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            timeLeft -= 0.1;
+            timerDisplay.innerText = `⏱️ Thời gian: ${Math.max(0, timeLeft).toFixed(1)}s`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeOut(); }
+        }, 100);
+    }
+
+    function handleTimeOut() {
+        isBlockClick = true; playSoundTone(150, 'sawtooth', 0.5);
+        gameArea.className = 'flash-wrong';
+        speakVietnamese("Hết giờ rồi!", function() { gameArea.className = ''; advanceToNextQuestion(); });
+    }
+
+    // ==================== THUẬT TOÁN ÉP TỔ HỢP DẤU TIẾNG VIỆT UNICODE ====================
+    function combineCharWithTone(baseChar, toneName) {
+        const toneMap = {
+            'a': { 'sắc': 'á', 'huyền': 'à', 'hỏi': 'ả', 'ngã': 'ã', 'nặng': 'ạ' },
+            'e': { 'sắc': 'é', 'huyền': 'è', 'hỏi': 'ẻ', 'ngã': 'ẽ', 'nặng': 'ẹ' },
+            'ê': { 'sắc': 'ế', 'huyền': 'ề', 'hỏi': 'ể', 'ngã': 'ễ', 'nặng': 'ệ' },
+            'o': { 'sắc': 'ó', 'huyền': 'ò', 'hỏi': 'ỏ', 'ngã': 'õ', 'nặng': 'ọ' },
+            'ô': { 'sắc': 'ố', 'huyền': 'ồ', 'hỏi': 'ổ', 'ngã': 'ỗ', 'nặng': 'ộ' },
+            'ơ': { 'sắc': 'ớ', 'huyền': 'ờ', 'hỏi': 'ở', 'ngã': 'ỡ', 'nặng': 'ợ' },
+            'i': { 'sắc': 'í', 'huyền': 'ì', 'hỏi': 'ỉ', 'ngã': 'ĩ', 'nặng': 'ị' }
+        };
+        if (toneMap[baseChar] && toneMap[baseChar][toneName]) {
+            return toneMap[baseChar][toneName];
+        }
+        return baseChar;
+    }
+
+    // ==================== KHỞI CHẠY GAME & TRỘN BỘ CÂU HỎI ====================
+    function initGame() {
+        initAudioContext();
+        startScreen.style.display = 'none'; hud.style.visibility = 'visible'; pictureDisplayBox.style.visibility = 'visible';
+        slotsRow.style.visibility = 'visible'; lettersContainer.style.visibility = 'visible';
+
+        // Bốc ngẫu nhiên 10 câu cho mỗi màn chơi từ kho dữ liệu
+        questionsList = [...VIET_WORDS_DATABASE].sort(() => Math.random() - 0.5).slice(0, 10);
+        score = 0; currentQuestionIdx = 0; gameOver = false;
+        scoreDisplay.innerText = score; loadQuestion();
+    }
+
+    function loadQuestion() {
+        isBlockClick = false; 
+        if (currentQuestionIdx >= questionsList.length) { endGame(); return; }
+        
+        const q = questionsList[currentQuestionIdx];
+        targetImage.innerText = q.icon;
+        wordHintText.innerText = q.word;
+
+        correctSequence = [...q.letters]; 
+        currentSelectStep = 0;
+
+        slotsRow.innerHTML = "";
+        let slotCount = 0;
+        q.letters.forEach((item) => {
+            if (item === "cách") {
+                slotsRow.innerHTML += `<div class="letter-slot space-slot" id="vnt-slot-${slotCount}" style="border:none; background:transparent; box-shadow:none;"></div>`;
+                slotCount++;
+            } else if (!['sắc','huyền','hỏi','ngã','nặng'].includes(item)) {
+                slotsRow.innerHTML += `<div class="letter-slot" id="vnt-slot-${slotCount}">?</div>`;
+                slotCount++;
+            }
+        });
+
+        bubbleItemsPool = [];
+        q.letters.forEach((codeName, index) => {
+            bubbleItemsPool.push({ code: codeName, text: q.display[index] });
+        });
+
+        bubbleItemsPool.sort(() => 0.5 - Math.random());
+        
+        // Tìm đoạn này trong hàm loadQuestion() của bạn và thay thế:
+    // Tìm đoạn này trong hàm loadQuestion() và thay thế:
+    lettersContainer.innerHTML = "";
+    bubbleItemsPool.forEach((item, idx) => {
+        let randomColor = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
+        
+        let displayText = item.code === "cách" ? "␣" : item.text.toLowerCase();
+        
+        // --- ĐOẠN SỬA ĐỂ LÀM MỜ VÒNG TRÒN CHẤM BI ---
+        // Nếu item.code là một trong các dấu thanh, ta tách dấu sắc ra và làm mờ vòng tròn chấm tròn bên dưới
+        if (['sắc', 'huyền', 'hỏi', 'ngã', 'nặng'].includes(item.code)) {
+            // Giả sử item.text của bạn có dạng "◌́" (gồm vòng tròn và dấu)
+            // Ta bọc chữ bằng một cấu trúc để chỉnh CSS làm mờ riêng vòng tròn:
+            // Hoặc đơn giản là giảm opacity của toàn bộ chữ trong quả bóng dấu thanh xuống một chút nếu muốn:
+            // Tuy nhiên, cách tốt nhất là đổi trực tiếp ký tự hiển thị sang màu mờ hơn bằng cách bọc span:
+            
+            // Bạn có thể chỉnh sửa kiểu hiển thị riêng cho bóng chứa dấu tại đây:
+            if (displayText.includes('◌')) {
+                displayText = displayText.replace('◌', `<span style="opacity: 0.3; font-weight: normal;">◌</span>`);
+            }
+        }
+        // --------------------------------------------
+
+        let delay = (idx * 0.3).toFixed(1);
+
+        lettersContainer.innerHTML += `
+            <div class="bubble-letter" 
+                 style="background-color: ${randomColor}; --balloon-base-color: ${randomColor}; animation-delay: ${delay}s;" 
+                 onclick="clickLetterBubble(this, '${item.code}')">
+                 ${displayText}
+            </div>`;
+    });
+        speakVietnamese(`Bé hãy đánh vần câu: ${q.word}`);
+        startTimer();
+    }
+
+    function findLastTextSlotIndex(step) {
+        let currentSlotPos = 0;
+        let lastTextSlotPos = -1;
+        
+        for (let i = 0; i < step; i++) {
+            let item = correctSequence[i];
+            if (item === "cách") {
+                currentSlotPos++;
+            } else if (!['sắc','huyền','hỏi','ngã','nặng'].includes(item)) {
+                lastTextSlotPos = currentSlotPos;
+                currentSlotPos++;
+            }
+        }
+        return lastTextSlotPos;
+    }
+
+    // ==================== LOGIC CLICK BÓNG BỐC HƠI HOÀN CHỈNH ====================
+    function clickLetterBubble(bubbleEl, clickedCode) {
+        if (isBlockClick || gameOver) return;
+        
+        let targetCode = correctSequence[currentSelectStep];
+
+        if (clickedCode === targetCode) {
+            playSoundTone(523.25, 'sine', 0.1);
+            
+            bubbleEl.style.transform = 'scale(0)';
+            bubbleEl.style.opacity = '0';
+            bubbleEl.style.pointerEvents = 'none';
+            bubbleEl.style.transition = 'all 0.2s ease-out';
+
+            let currentSlotPos = 0;
+            for (let i = 0; i < currentSelectStep; i++) {
+                if (correctSequence[i] === "cách" || !['sắc','huyền','hỏi','ngã','nặng'].includes(correctSequence[i])) {
+                    currentSlotPos++;
+                }
+            }
+
+            if (clickedCode === "cách") {
+                let slot = document.getElementById(`vnt-slot-${currentSlotPos}`);
+                if (slot) slot.innerHTML = "&nbsp;";
+            } else if (!['sắc', 'huyền', 'hỏi', 'ngã', 'nặng'].includes(clickedCode)) {
+                let slot = document.getElementById(`vnt-slot-${currentSlotPos}`);
+                if (slot) {
+                    slot.innerText = clickedCode;
+                    slot.classList.add('filled');
+                }
+            } else {
+                let targetTextSlotId = findLastTextSlotIndex(currentSelectStep);
+                let slot = document.getElementById(`vnt-slot-${targetTextSlotId}`);
+                if (slot) {
+                    let baseChar = slot.innerText;
+                    let combinedChar = combineCharWithTone(baseChar, clickedCode);
+                    slot.innerText = combinedChar;
+                }
+            }
+
+            currentSelectStep++;
+
+            if (currentSelectStep === correctSequence.length) {
+                isBlockClick = true; clearInterval(timerInterval);
+                gameArea.className = 'flash-correct';
+                playSoundTone(587.33, 'sine', 0.15); setTimeout(() => playSoundTone(880, 'sine', 0.25), 100);
+                
+                score++; scoreDisplay.innerText = score;
+                
+                speakVietnamese(`Bé giỏi quá! Câu chính xác là: ${questionsList[currentQuestionIdx].word}`, function() {
+                    gameArea.className = '';
+                    advanceToNextQuestion();
+                });
+            }
+        } else {
+            playSoundTone(180, 'sawtooth', 0.35);
+            bubbleEl.style.animation = 'none';
+            void bubbleEl.offsetWidth; 
+            bubbleEl.style.animation = 'shake 0.2s 2';
+            speakVietnamese("Bé chọn chưa đúng!");
+        }
+    }
+
+    function advanceToNextQuestion() { currentQuestionIdx++; loadQuestion(); }
+
+    function endGame() {
+        gameOver = true; clearInterval(timerInterval);
+        hud.style.visibility = 'hidden'; pictureDisplayBox.style.visibility = 'hidden'; slotsRow.style.visibility = 'hidden'; lettersContainer.style.visibility = 'hidden';
+        gameOverScreen.style.display = 'flex'; finalScore.innerText = score;
+        speakVietnamese("Tuyệt vời! Bé đã đọc và đánh vần thành công toàn bộ các mẫu câu nâng cao!");
+    }
+</script>
+</body>
+</html>
