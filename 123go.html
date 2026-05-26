@@ -272,6 +272,53 @@ buildRoundLayout();
             gameInterval = setInterval(nextBeat, intervalMs);
         }
 
+         // Hàm tạo tiếng nhạc hiệu đếm ngược dạo đầu "Ubaddada, 1, 2, 3, go!"
+        function playIntroCountdown(callback) {
+            patternText.innerText = "Chuẩn bị... 3... 2... 1... GO!";
+            patternText.style.color = "#ff007f";
+            
+            let introBeats = [
+                { delay: 0, freq: 400, vol: 0.2 },   // U-
+                { delay: 150, freq: 450, vol: 0.2 }, // bad-
+                { delay: 300, freq: 500, vol: 0.2 }, // da-
+                { delay: 450, freq: 550, vol: 0.2 }, // da
+                { delay: 800, freq: 650, vol: 0.4 },  // ONE (Phách 1)
+                { delay: 1300, freq: 650, vol: 0.4 }, // TWO (Phách 2)
+                { delay: 1800, freq: 650, vol: 0.4 }, // THREE (Phách 3)
+                { delay: 2300, freq: 900, vol: 0.5 }  // GO! (Vào game)
+            ];
+
+            introBeats.forEach(beat => {
+                setTimeout(() => {
+                    if (!isPlaying) return; // Nếu người dùng bấm dừng giữa chừng thì hủy
+                    
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = "triangle"; // Âm thanh dày và giống nhạc điện tử hơn
+                    osc.frequency.setValueAtTime(beat.freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(beat.vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.18);
+                    
+                    // Nháy đèn toàn lưới hiệu ứng theo tiếng dạo đầu
+                    gridElement.style.transform = "scale(1.03)";
+                    setTimeout(() => gridElement.style.transform = "scale(1)", 80);
+                }, beat.delay);
+            });
+
+            // Sau khi hết 2.3 giây nhạc dạo dồn phách, bắt đầu chạy ô chữ chính thức
+            setTimeout(() => {
+                if (isPlaying) {
+                    patternText.style.color = "#ffaa00";
+                    callback();
+                }
+            }, 2600);
+        }
+
         function toggleGame() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -281,6 +328,7 @@ buildRoundLayout();
             }
 
             if (isPlaying) {
+                // Thao tác dừng trò chơi
                 clearInterval(gameInterval);
                 startBtn.innerText = "BẮT ĐẦU CHƠI";
                 startBtn.style.backgroundColor = "#00ffff";
@@ -288,20 +336,27 @@ buildRoundLayout();
                 activeIndex = 0;
                 isFirstBeatOfRound = true;
                 patternText.innerText = "Bấm nút để bắt đầu thử thách";
+                patternText.style.color = "#ffaa00";
                 for (let i = 0; i < 8; i++) {
                     const el = document.getElementById(`box-${i}`);
                     if (el) el.classList.remove("active");
                 }
             } else {
+                // Thao tác bắt đầu khởi chạy game mới với nhạc dạo
                 currentRound = 0;
                 bpm = 110;
                 activeIndex = 0;
                 isFirstBeatOfRound = true;
                 buildRoundLayout();
-                startMetronome();
+                
                 startBtn.innerText = "DỪNG LẠI";
                 startBtn.style.backgroundColor = "#ff0000";
                 isPlaying = true;
+                
+                // Kích hoạt chuỗi nhạc dạo trước, sau đó mới kích hoạt vòng quay nhảy ô chữ
+                playIntroCountdown(() => {
+                    startMetronome();
+                });
             }
         }
 
