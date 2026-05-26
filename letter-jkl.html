@@ -3,186 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>English Phonics Millionaire - Official Edition</title>
+    <title>English Phonics Millionaire - Ultimate Edition</title>
     <style>
-        /* Tối ưu hóa toàn màn hình chống cuộn */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #020205;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Arial', sans-serif;
-        }
-
-        /* KHUNG GAME AI LÀ TRIỆU PHÚ: Sử dụng position absolute cố định chống vỡ hình trên iPhone */
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #010103; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', Arial, sans-serif; }
         #gameArea {
-            width: 800px;
-            height: 650px;
-            position: absolute;
-            transform-origin: center center;
-            background: radial-gradient(circle, #0b1930 0%, #020712 100%);
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 214, 252, 0.3);
-            border: 4px solid #00d6fc;
-            border-radius: 20px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            width: 800px; height: 650px; position: absolute; transform-origin: center center;
+            background: radial-gradient(circle at center, #0e1e38 0%, #030a16 100%); overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 214, 252, 0.4), inset 0 0 30px rgba(0, 214, 252, 0.1);
+            border: 4px solid #00d6fc; border-radius: 24px; padding: 25px; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
         }
-
-        /* HUD thanh thông tin trên cùng */
         #hud {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: bold;
-            background: linear-gradient(90deg, rgba(0,214,252,0.1), rgba(0,0,0,0.5), rgba(0,214,252,0.1));
-            padding: 12px 25px;
-            border-radius: 30px;
-            border: 2px solid #00d6fc;
-            box-shadow: 0 0 15px rgba(0, 214, 252, 0.2);
+            width: 100%; display: flex; justify-content: space-between; align-items: center; color: #ffffff; font-size: 20px; font-weight: bold;
+            background: linear-gradient(90deg, rgba(0,214,252,0.15) 0%, rgba(2,7,18,0.8) 50%, rgba(0,214,252,0.15) 100%);
+            padding: 12px 25px; border-radius: 50px; border: 2px solid #00d6fc; box-shadow: 0 4px 15px rgba(0, 214, 252, 0.2); position: relative; z-index: 10;
         }
-        #scoreDisplay { color: #f1c40f; text-shadow: 0 0 10px rgba(241,196,15,0.5); }
-        #questionNum { color: #00d6fc; }
-
-        /* KHUNG CÂU HỎI */
+        #scoreDisplay { color: #f1c40f; text-shadow: 0 0 10px rgba(241,196,15,0.6); font-family: monospace; font-size: 24px; }
+        #questionNum { color: #00d6fc; text-shadow: 0 0 8px rgba(0,214,252,0.4); }
+        #livesDisplay { letter-spacing: 3px; font-size: 22px; }
+        #timeBarContainer { width: 90%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; border: 1px solid rgba(0, 214, 252, 0.3); overflow: hidden; margin-top: -10px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+        #timeBar { width: 100%; height: 100%; background: linear-gradient(90deg, #00d6fc, #1dd1a1); box-shadow: 0 0 10px #00d6fc; transition: width 0.1s linear, background 0.3s ease; }
         #question-display-box {
-            width: 95%;
-            background: rgba(4, 15, 36, 0.9);
-            border: 3px solid #f1c40f;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 0 25px rgba(241,196,15,0.3);
-            margin: 20px 0;
-            min-height: 130px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 95%; background: rgba(4, 15, 36, 0.85); border: 3px solid #f1c40f; border-radius: 16px; padding: 20px; text-align: center; color: #ffffff;
+            font-size: 26px; font-weight: bold; min-height: 160px; box-shadow: 0 0 30px rgba(241,196,15,0.25), inset 0 0 15px rgba(241,196,15,0.1);
+            display: flex; justify-content: center; align-items: center; position: relative; z-index: 5;
         }
-
-        /* KHU VỰC CHỨA 4 ĐÁP ÁN DẠNG THANH DÀI */
-        #options-container {
-            width: 95%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+        #options-container { width: 95%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; position: relative; z-index: 5; }
         .quiz-option {
-            padding: 16px 25px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #ffffff;
-            background: linear-gradient(180deg, #091e3d 0%, #030d1c 100%);
-            border: 2px solid #00d6fc;
-            border-radius: 35px;
-            cursor: pointer;
-            text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding: 14px 20px; font-size: 22px; font-weight: bold; color: #ffffff; background: linear-gradient(180deg, #0c2445 0%, #041021 100%);
+            border: 2px solid #00d6fc; border-radius: 40px; cursor: pointer; text-align: left; box-shadow: 0 6px 15px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
+            transition: transform 0.1s, box-shadow 0.2s; display: flex; align-items: center; gap: 8px;
         }
-        .quiz-option::before {
-            content: attr(data-prefix);
-            color: #f1c40f;
-        }
-        
-        /* Hiệu ứng đổi màu đáp án */
-        .quiz-option.selected-choice { background: linear-gradient(180deg, #ff9f43, #ee5253) !important; border-color: #ff9f43 !important; box-shadow: 0 0 20px #ff9f43; }
-        .quiz-option.correct-choice { background: linear-gradient(180deg, #10ac84, #1dd1a1) !important; border-color: #1dd1a1 !important; box-shadow: 0 0 20px #1dd1a1; }
-        .quiz-option.wrong-choice { background: linear-gradient(180deg, #ee5253, #ff6b6b) !important; border-color: #ff6b6b !important; box-shadow: 0 0 20px #ff6b6b; }
-
-        /* MÀN HÌNH POPUP CHÈN ĐÈ */
-        #giftScreen, #gameOverScreen, #startScreen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #091936 0%, #010612 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            z-index: 100;
-            padding: 30px;
-            text-align: center;
-        }
-        .screen-title { font-size: 50px; color: #f1c40f; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 20px rgba(241,196,15,0.6); letter-spacing: 2px; }
-        .gift-box { font-size: 110px; cursor: pointer; animation: wobble 0.8s infinite; margin: 20px 0; }
-        @keyframes wobble {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-10deg) scale(1.08); }
-            75% { transform: rotate(10deg) scale(1.08); }
-        }
-
-        .action-btn { padding: 16px 50px; font-size: 24px; font-weight: bold; background: linear-gradient(180deg, #1dd1a1, #10ac84); border: none; color: white; border-radius: 40px; cursor: pointer; box-shadow: 0 8px 25px rgba(29,209,161,0.4); margin-top: 25px; transition: transform 0.1s; }
+        .quiz-option::before { content: attr(data-prefix); color: #f1c40f; text-shadow: 0 0 5px rgba(241,196,15,0.4); }
+        .quiz-option.selected-choice { background: linear-gradient(180deg, #ff9f43, #ee5253) !important; border-color: #ff9f43 !important; box-shadow: 0 0 25px #ff9f43; }
+        .quiz-option.correct-choice { background: linear-gradient(180deg, #10ac84, #1dd1a1) !important; border-color: #1dd1a1 !important; box-shadow: 0 0 25px #1dd1a1; animation: pulse 0.4s infinite alternate; }
+        .quiz-option.wrong-choice { background: linear-gradient(180deg, #ee5253, #ff6b6b) !important; border-color: #ff6b6b !important; box-shadow: 0 0 25px #ff6b6b; }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.02); } }
+        #giftScreen, #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0c2040 0%, #01050f 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; z-index: 100; padding: 30px; text-align: center; }
+        .screen-title { font-size: 52px; color: #f1c40f; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 25px rgba(241,196,15,0.7); letter-spacing: 3px; }
+        .gift-box { font-size: 120px; cursor: pointer; animation: wobble 0.6s infinite; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(241,196,15,0.4)); }
+        @keyframes wobble { 0%, 100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-8deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
+        .action-btn { padding: 16px 55px; font-size: 24px; font-weight: bold; background: linear-gradient(180deg, #1dd1a1, #10ac84); border: none; color: white; border-radius: 50px; cursor: pointer; box-shadow: 0 8px 30px rgba(29,209,161,0.5); margin-top: 25px; transition: transform 0.1s, box-shadow 0.2s; }
         .action-btn:active { transform: scale(0.95); }
-        
-        .flash-correct { animation: bgGreen 0.3s ease-out; }
-        .flash-wrong { animation: bgRed 0.3s ease-out; }
-        @keyframes bgGreen { 50% { background: #27ae60; } }
-        @keyframes bgRed { 50% { background: #c0392b; } }
+        .action-btn:hover { box-shadow: 0 0 35px #1dd1a1; }
+        .flash-correct { animation: bgGreen 0.4s ease-out; }
+        .flash-wrong { animation: bgRed 0.4s ease-out; }
+        @keyframes bgGreen { 50% { background: #1dd1a1; box-shadow: 0 0 80px #1dd1a1; } }
+        @keyframes bgRed { 50% { background: #ee5253; box-shadow: 0 0 80px #ee5253; } }
     </style>
 </head>
 <body>
-
 <div id="gameArea">
-    <!-- MÀN HÌNH KHỞI ĐỘNG (GIÚP MỞ KHÓA AUDIO CHO SAFARI IPHONE) -->
     <div id="startScreen">
-        <h1 class="screen-title">PHONICS MILLIONAIRE</h1>
-        <p style="font-size: 24px; margin-bottom: 30px; color: #00d6fc;">Vượt qua 27 câu hỏi tiếng Anh để bốc thăm quà bí ẩn!</p>
-        <button class="action-btn" onclick="initGame()">Vào Chơi Ngay 🎮</button>
+        <h1 class="screen-title" style="color: #00d6fc; text-shadow: 0 0 25px rgba(0,214,252,0.6);">PHONICS TRIỆU PHÚ</h1>
+        <p style="font-size: 26px; margin-bottom: 35px; color: #cae9ff; font-weight: 500;">Đọc mẫu câu ngẫu nhiên tiếng Anh và chọn hình ảnh phù hợp! 🎧</p>
+        <button class="action-btn" onclick="initGame()">Bắt Đầu Săn Quà 🎮</button>
     </div>
-
-    <!-- MÀN HÌNH BỐC THĂM NHẬN QUÀ -->
     <div id="giftScreen" style="display: none;">
         <h1 class="screen-title">🎁 BONUS GIFT TIME! 🎁</h1>
-        <p style="font-size: 24px; color: #cae9ff;">Bé đã xuất sắc đúng liên tiếp 5 câu! Nhấp vào hộp quà để mở!</p>
+        <p style="font-size: 26px; color: #cae9ff; margin-bottom: 10px;">Xuất sắc! Chuỗi 5 câu đúng liên tiếp giúp bé mở khóa hộp quà may mắn!</p>
         <div class="gift-box" id="clickableGift" onclick="openLuckyDraw()">🎁</div>
-        <div id="giftResult" style="font-size: 34px; font-weight: bold; color: #f1c40f; margin: 15px 0; display: none; text-shadow: 0 0 10px #f1c40f;"></div>
-        <button class="action-btn" id="nextQuestBtn" style="display: none;" onclick="continueAfterGift()">Câu Tiếp Theo ➡️</button>
+        <div id="giftResult" style="font-size: 36px; font-weight: bold; color: #f1c40f; margin: 15px 0; display: none; text-shadow: 0 0 15px #f1c40f; background: rgba(0,0,0,0.4); padding: 15px 30px; border-radius: 20px; border: 2px dashed #f1c40f;"></div>
+        <button class="action-btn" id="nextQuestBtn" style="display: none;" onclick="continueAfterGift()">Tiếp Tục Hành Trình ➡️</button>
     </div>
-
-    <!-- MÀN HÌNH KẾT THÚC THẮNG/THUA -->
     <div id="gameOverScreen" style="display: none;">
         <h1 class="screen-title" id="endTitle">GAME OVER</h1>
-        <p style="font-size: 28px; margin-bottom: 25px;">Điểm số của bé: <span id="finalScore" style="color:#f1c40f;">0</span></p>
-        <button class="action-btn" onclick="location.reload()">Chơi Lại Từ Đầu 🔄</button>
+        <p style="font-size: 30px; margin-bottom: 25px; color: #ffffff;">Tổng số điểm đạt được: <span id="finalScore" style="color:#f1c40f; font-weight: bold;">0</span></p>
+        <button class="action-btn" style="background: linear-gradient(180deg, #ff9f43, #f1c40f); box-shadow: 0 8px 25px rgba(241,196,15,0.4);" onclick="location.reload()">Thử Sức Lại Từ Đầu 🔄</button>
     </div>
-
-    <!-- KHU VỰC CHƠI CHÍNH -->
     <div id="hud" style="visibility: hidden;">
-        <div id="score-box">⭐ Score: <span id="scoreDisplay">0</span></div>
+        <div id="score-box">⭐ Điểm: <span id="scoreDisplay">0</span></div>
         <div id="questionNum">Question: 1/27</div>
         <div id="livesDisplay">💖💖💖</div>
     </div>
-    
+    <div id="timeBarContainer" style="visibility: hidden;"><div id="timeBar"></div></div>
     <div id="question-display-box" style="visibility: hidden;">Loading question...</div>
-    
     <div id="options-container" style="visibility: hidden;">
         <button class="quiz-option" data-prefix="A: " onclick="selectOption(0)"></button>
         <button class="quiz-option" data-prefix="B: " onclick="selectOption(1)"></button>
@@ -190,8 +85,8 @@
         <button class="quiz-option" data-prefix="D: " onclick="selectOption(3)"></button>
     </div>
 </div>
-
 <script>
+    // ==================== KHAI BÁO CÁC PHẦN TỬ ĐIỀU KHIỂN DOM ====================
     const gameArea = document.getElementById('gameArea');
     const scoreDisplay = document.getElementById('scoreDisplay');
     const livesDisplay = document.getElementById('livesDisplay');
@@ -199,6 +94,8 @@
     const optionsContainer = document.getElementById('options-container');
     const questionNumEl = document.getElementById('questionNum');
     const hud = document.getElementById('hud');
+    const timeBarContainer = document.getElementById('timeBarContainer');
+    const timeBar = document.getElementById('timeBar');
     
     const startScreen = document.getElementById('startScreen');
     const giftScreen = document.getElementById('giftScreen');
@@ -209,17 +106,23 @@
     const finalScore = document.getElementById('finalScore');
     const endTitle = document.getElementById('endTitle');
 
+    // ==================== KHO DỮ LIỆU TỪ VỰNG CHUẨN PHẲNG VĂN BẢN ====================
     const J_WORDS = [
         { word: "juice", icon: "🧃", isSvg: false, article: "some" },
         { word: "jug", icon: "🏺", isSvg: false, article: "a" },
-        { word: "jar", icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#00d6fc" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#00d6fc"/><path d="M14,32H50" stroke="#00d6fc" stroke-width="3" stroke-dasharray="4 3"/></svg>`, isSvg: true, article: "a" },
+        { 
+            word: "jar", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#00d6fc" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#00d6fc"/><path d="M14,32H50" stroke="#00d6fc" stroke-width="3" stroke-dasharray="4 3"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
         { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
         { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
         { word: "jam", icon: "🍯", isSvg: false, article: "some" },
         { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
         { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
     ];
-const K_WORDS = [
+
+    const K_WORDS = [
         { word: "key", icon: "🔑", isSvg: false, article: "a" },
         { word: "kite", icon: "🪁", isSvg: false, article: "a" },
         { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
@@ -227,9 +130,8 @@ const K_WORDS = [
         { word: "knife", icon: "🔪", isSvg: false, article: "a" },
         { 
             word: "kettle", 
-            icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#cc6600" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#cc6600" stroke-width="4"/></svg>`, 
-            isSvg: true, 
-            article: "a" 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#cc6600" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#cc6600" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#cc6600" stroke-width="4"/></svg>`, 
+            isSvg: true, article: "a" 
         },
         { word: "king", icon: "👑", isSvg: false, article: "a" },
         { word: "koala", icon: "🐨", isSvg: false, article: "a" }
@@ -242,30 +144,37 @@ const K_WORDS = [
         { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
         { 
             word: "ladder", 
-            icon: `<svg viewBox="0 0 64 64" width="45" height="45"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, 
-            isSvg: true, 
-            article: "a" 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, 
+            isSvg: true, article: "a" 
         },
         { word: "lock", icon: "🔒", isSvg: false, article: "a" },
         { word: "lips", icon: "👄", isSvg: false, article: "some" },
         { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
     ];
 
-    const LUCKY_GIFTS = ["🦁 Cute Teddy Bear!", "🎨 Color Painting Set!", "🚗 Super Toy Car!", "🍭 Giant Lollipop Box!", "🚀 Space Rocket Toy!"];
+    const LUCKY_GIFTS = [
+        "🦁 Gấu bông Teddy khổng lồ!", 
+        "🎨 Bộ bút sáp màu 120 chi tiết!", 
+        "🚗 Siêu xe đua điều khiển!", 
+        "🍭 Hộp kẹo mút khổng lồ!", 
+        "🚀 Phi thuyền không gian phát sáng!"
+    ];
 
-    let score = 0;
-    let lives = 3;
-    let currentQuestionIdx = 0;
-    let correctChainCount = 0; 
-    let questionsList = []; 
-    let currentCorrectAnswerIdx = -1;
-    let isBlockClick = false;
-    let gameOver = false;
+    // Mốc điểm triệu phú kịch tính cho 27 câu hỏi
+    const TRIEU_PHU_SCORES = [
+        100, 200, 300, 500, 1000,
+        2000, 3000, 6000, 10000, 14000,
+        22000, 32000, 44000, 60000, 80000,
+        100000, 150000, 250000, 400000, 600000,
+        1000000, 2000000, 4000000, 8000000, 15000000,
+        50000000, 100000000
+    ];
 
-    let audioCtx = null;
-    let backgroundMusicNode = null;
-
-    // --- SỬA CƠ CHẾ CO GIÃN TỔNG THỂ CHO IPHONE CHỐNG TRÀN VÀ ĐƠ ---
+    // CẤU HÌNH BIẾN TRẠNG THÁI GAME
+    let score = 0; let lives = 3; let currentQuestionIdx = 0; let correctChainCount = 0; 
+    let questionsList = []; let currentCorrectAnswerIdx = -1; let isBlockClick = false; let gameOver = false;
+    let timerInterval = null; let timeLeft = 10; let audioCtx = null; let backgroundMusicNode = null;
+ // ==================== CƠ CHẾ ĐIỀU KHIỂN CO GIÃN MÀN HÌNH (RESPONSIVE) ====================
     function resizeGame() {
         const scale = Math.min(window.innerWidth / 800, window.innerHeight / 650);
         gameArea.style.transform = `scale(${scale})`;
@@ -274,51 +183,37 @@ const K_WORDS = [
     window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
     resizeGame();
 
-    // Mở khóa AudioContext bảo mật iOS khi bé tương tác nhấn nút
+    // ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
     function initAudioContext() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function playSoundTone(frequency, type, duration) {
         try {
             initAudioContext();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
         } catch(e){}
     }
 
     function startBackgroundMusic() {
         try {
             initAudioContext();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'triangle'; 
-            osc.frequency.setValueAtTime(110, audioCtx.currentTime); 
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(110, audioCtx.currentTime); 
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
             setInterval(() => {
                 if(!gameOver && !isBlockClick) {
-                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
                 }
-            }, 600);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
+            }, 700);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start();
             backgroundMusicNode = osc;
         } catch(e){}
     }
@@ -327,211 +222,183 @@ const K_WORDS = [
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'en-US';
-            utterance.rate = 1.0;
+            utterance.lang = 'en-US'; utterance.rate = 0.9;
             if(callback) utterance.onend = function() { callback(); };
             window.speechSynthesis.speak(utterance);
-        } else if (callback) {
-            setTimeout(callback, 2000);
+        } else if (callback) { setTimeout(callback, 2000); }
+    }
+
+    // ==================== THUẬT TOÁN TẠO MẢNG ĐÁP ÁN PHẲNG CHỐNG LẶP ====================
+    function getUniqueWrongOptions(correctItem, pool1, pool2) {
+        let allWords = [...pool1, ...pool2];
+        let filtered = allWords.filter(item => item.word !== correctItem.word);
+        let uniqueWords = [], seen = new Set();
+        for (let item of filtered) {
+            if (!seen.has(item.word)) { seen.add(item.word); uniqueWords.push(item); }
         }
+        uniqueWords.sort(() => 0.5 - Math.random());
+        
+        // SỬA TẠI ĐÂY: Lấy chính xác 3 từ độc lập index 0, 1, 2 để tạo mảng phẳng
+        return [correctItem, uniqueWords[0], uniqueWords[1], uniqueWords[2]];
     }
 
     function buildQuizDatabase() {
         let list = [];
         for(let i = 0; i < 3; i++) {
-            list.push({ type: 'sound', target: 'J', soundName: 'jay', phonics: '/j/', options: ['Letter J', 'Letter K', 'Letter I', 'Letter H'], ansIdx: 0 });
-            list.push({ type: 'sound', target: 'K', soundName: 'kay', phonics: '/k/', options: ['Letter G', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 1 });
-            list.push({ type: 'sound', target: 'L', soundName: 'el', phonics: '/l/', options: ['Letter M', 'Letter H', 'Letter L', 'Letter J'], ansIdx: 2 });
-        }
-
-        const templates = ["What is it? It is...", "What can you see? I can see..."];
-        
-        function addVocabQuest(wordArr, wrongArr1, wrongArr2, wrongArr3) {
-            wordArr.forEach(item => {
-                const temp = templates[Math.floor(Math.random() * templates.length)];
-                const w1 = wrongArr1[Math.floor(Math.random() * wrongArr1.length)];
-                const w2 = wrongArr2[Math.floor(Math.random() * wrongArr2.length)];
-                const w3 = wrongArr3[Math.floor(Math.random() * wrongArr3.length)];
-                
-                list.push({
-                    type: 'vocab',
-                    questionText: `${temp} <span style="color:#f1c40f;">${item.article} ${item.word}</span>`,
-                    voiceText: temp.replace("...", "") + " " + item.article + " " + item.word,
-                    options: [item, w1, w2, w3],
-                    correctWord: item.word
-                });
-            });
+            list.push({ type: 'sound', soundName: 'jay', phonics: '/j/', options: ['Letter J', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 0 });
+            list.push({ type: 'sound', soundName: 'kay', phonics: '/k/', options: ['Letter G', 'Letter K', 'Letter L', 'Letter I'], ansIdx: 1 });
+            list.push({ type: 'sound', soundName: 'el', phonics: '/l/', options: ['Letter M', 'Letter H', 'Letter L', 'Letter J'], ansIdx: 2 });
         }
         
-        addVocabQuest(J_WORDS.slice(0,6), K_WORDS, L_WORDS, J_WORDS);
-        addVocabQuest(K_WORDS.slice(0,6), J_WORDS, L_WORDS, K_WORDS);
-        addVocabQuest(L_WORDS.slice(0,6), J_WORDS, K_WORDS, L_WORDS);
+        const templates = ["What is it? It is", "What can you see? I can see"];
+        
+        // Thêm câu hỏi từ vựng với cấu trúc mẫu câu và mạo từ ngẫu nhiên hợp lý
+        function generateVocabQuest(item, wrongPool1, wrongPool2) {
+            const basicTemplate = templates[Math.floor(Math.random() * templates.length)];
+            const sentenceText = `${basicTemplate} ${item.article} ${item.word}.`;
+            return {
+                type: 'vocab', correctWord: item.word, options: getUniqueWrongOptions(item, wrongPool1, wrongPool2),
+                voiceText: sentenceText,
+                questionText: `<div style="padding:10px 20px; line-height:1.4; color:#ffffff; font-size:26px;">${basicTemplate} ${item.article} <span style="color:#f1c40f; font-weight:900; text-transform:uppercase; border-bottom:3px dashed #f1c40f;">${item.word}</span>.</div>`
+            };
+        }
 
-        list.sort(() => 0.5 - Math.random());
-        questionsList = list.slice(0, 27);
+        J_WORDS.forEach(item => list.push(generateVocabQuest(item, K_WORDS, L_WORDS)));
+        K_WORDS.forEach(item => list.push(generateVocabQuest(item, J_WORDS, L_WORDS)));
+        L_WORDS.slice(0, 2).forEach(item => list.push(generateVocabQuest(item, J_WORDS, K_WORDS)));
+        
+        return list.sort(() => Math.random() - 0.5);
     }
 
-    function initGame() {
-        initAudioContext(); 
-        startScreen.style.display = 'none';
-        
-        // Hiện các cụm layout chính sau khi mở khóa thành công trên Safari iPhone
-        hud.style.visibility = 'visible';
-        questionDisplayBox.style.visibility = 'visible';
-        optionsContainer.style.visibility = 'visible';
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN (10 GIÂY) ====================
+    function startTimer() {
+        clearInterval(timerInterval); timeLeft = 10;
+        timeBar.style.width = '100%'; timeBar.style.background = 'linear-gradient(90deg, #00d6fc, #1dd1a1)';
+        timerInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            timeLeft -= 0.1; timeBar.style.width = `${(timeLeft / 10) * 100}%`;
+            if (timeLeft <= 3) timeBar.style.background = '#ee5253';
+            if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeOut(); }
+        }, 100);
+    }
 
-        buildQuizDatabase();
-        startBackgroundMusic(); 
-        loadQuestion();
+    function handleTimeOut() {
+        isBlockClick = true; playSoundTone(180, 'sawtooth', 0.6); lives--; updateLivesDisplay(); correctChainCount = 0;
+        gameArea.classList.add('flash-wrong');
+        speakVoice("Time out!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+    }
+
+    // ==================== KHỞI CHẠY VÀ HIỂN THỊ CÂU HỎI VĂN BẢN CHỮ ====================
+    function initGame() {
+        initAudioContext(); startBackgroundMusic();
+        startScreen.style.display = 'none'; hud.style.visibility = 'visible'; timeBarContainer.style.visibility = 'visible'; questionDisplayBox.style.visibility = 'visible'; optionsContainer.style.visibility = 'visible';
+        questionsList = buildQuizDatabase(); score = 0; lives = 3; currentQuestionIdx = 0; correctChainCount = 0; gameOver = false;
+        updateLivesDisplay(); loadQuestion();
     }
 
     function loadQuestion() {
-        isBlockClick = false;
-        const optionsButtons = document.querySelectorAll('.quiz-option');
-        optionsButtons.forEach(btn => btn.className = 'quiz-option'); 
-
-        questionNumEl.innerText = `Question: ${currentQuestionIdx + 1}/27`;
-        const q = questionsList[currentQuestionIdx];
+        isBlockClick = false; if (currentQuestionIdx >= questionsList.length) { endGame(true); return; }
+        const q = questionsList[currentQuestionIdx], buttons = document.querySelectorAll('.quiz-option');
+        buttons.forEach(btn => btn.className = 'quiz-option');
+        questionNumEl.innerText = `Question: ${currentQuestionIdx + 1}/${questionsList.length}`;
+        scoreDisplay.innerText = score.toLocaleString('vi-VN') + " \$";
 
         if (q.type === 'sound') {
             questionDisplayBox.innerHTML = `Which letter makes the sound <span style="color:#00d6fc; font-size:34px;">${q.phonics}</span>?`;
-            optionsButtons.forEach((btn, idx) => {
-                btn.innerHTML = `<span style="font-size: 22px;">🔤</span> ${q.options[idx]}`;
-            });
-            currentCorrectAnswerIdx = q.ansIdx;
-            speakVoice("Which letter makes the sound " + q.soundName);
-        } 
-        else if (q.type === 'vocab') {
+            buttons.forEach((btn, idx) => btn.innerHTML = `<span style="font-size:22px;">🔤</span> ${q.options[idx]}`);
+            currentCorrectAnswerIdx = q.ansIdx; speakVoice("Which letter makes the sound " + q.soundName); startTimer();
+        } else {
+            // Câu hỏi hiển thị text câu ngẫu nhiên kết hợp chính xác mạo từ (a/some)
             questionDisplayBox.innerHTML = q.questionText;
-
+            
             let scrambledOptions = [...q.options].sort(() => 0.5 - Math.random());
             currentCorrectAnswerIdx = scrambledOptions.findIndex(item => item.word === q.correctWord);
-
-            optionsButtons.forEach((btn, idx) => {
+            
+            buttons.forEach((btn, idx) => {
                 const opt = scrambledOptions[idx];
                 let iconHtml = opt.isSvg ? opt.icon : `<span style="font-size:35px; line-height:1;">${opt.icon}</span>`;
-                btn.innerHTML = `<div style="display:inline-flex; width:45px; height:45px; align-items:center; justify-content:center;">${iconHtml}</div> <span style="margin-left:5px;">${opt.word}</span>`;
+                btn.innerHTML = `<div style="display:inline-flex; width:45px; height:45px; align-items:center; justify-content:center;">${iconHtml}</div> <span style="margin-left:5px; font-size:18px; text-transform:capitalize;">(${opt.word})</span>`;
             });
-
-            speakVoice(q.voiceText);
+            speakVoice(q.voiceText); startTimer();
         }
     }
 
+    // ==================== QUY TRÌNH KIỂM TRA ĐÁP ÁN & LUCKY DRAW ====================
     function selectOption(selectedIdx) {
-        if (isBlockClick) return;
-        isBlockClick = true;
-
-        const optionsButtons = document.querySelectorAll('.quiz-option');
-        optionsButtons[selectedIdx].classList.add('selected-choice'); 
-        
-        playSoundTone(440, 'square', 0.15); 
+        if (isBlockClick || gameOver) return;
+        isBlockClick = true; clearInterval(timerInterval);
+        const buttons = document.querySelectorAll('.quiz-option');
+        buttons[selectedIdx].classList.add('selected-choice'); playSoundTone(440, 'square', 0.15);
 
         setTimeout(() => {
             if (selectedIdx === currentCorrectAnswerIdx) {
-                optionsButtons[selectedIdx].classList.remove('selected-choice');
-                optionsButtons[selectedIdx].classList.add('correct-choice'); 
-                
-                score += 10;
-                scoreDisplay.innerText = score;
-                correctChainCount++; 
-                
-                playSoundTone(587.33, 'sine', 0.2);
-                setTimeout(() => playSoundTone(880, 'sine', 0.4), 150);
-
-                speakVoice("Correct! Good job!", function() {
-                    if (correctChainCount > 0 && correctChainCount % 5 === 0) {
-showGiftScreen(); 
-                    } else {
-                        advanceToNextQuestion();
-                    }
-                });
+                buttons[selectedIdx].className = 'quiz-option correct-choice'; gameArea.classList.add('flash-correct');
+                score = TRIEU_PHU_SCORES[currentQuestionIdx]; scoreDisplay.innerText = score.toLocaleString('vi-VN') + " \$";
+                correctChainCount++; playSoundTone(587.33, 'sine', 0.2); setTimeout(() => playSoundTone(880, 'sine', 0.4), 150);
+                speakVoice("Correct!", function() { gameArea.classList.remove('flash-correct'); if (correctChainCount % 5 === 0) { showGiftScreen(); } else { advanceToNextQuestion(); } });
             } else {
-                optionsButtons[selectedIdx].classList.remove('selected-choice');
-                optionsButtons[selectedIdx].classList.add('wrong-choice'); // Chuyển sang màu đỏ báo sai
-                optionsButtons[currentCorrectAnswerIdx].classList.add('correct-choice'); // Sáng đèn đáp án đúng để bé học
-                
-                lives--;
-                updateLivesDisplay();
-                correctChainCount = 0; // Đứt chuỗi câu đúng liên tiếp
-                
-                playSoundTone(180, 'sawtooth', 0.6); // Tiếng còi báo sai trầm buồn
-
-                speakVoice("Te te te! Wrong!", function() {
-                    if (lives <= 0) {
-                        endGame(false);
-                    } else {
-                        advanceToNextQuestion();
-                    }
-                });
+                buttons[selectedIdx].className = 'quiz-option wrong-choice'; buttons[currentCorrectAnswerIdx].className = 'quiz-option correct-choice';
+                gameArea.classList.add('flash-wrong'); lives--; updateLivesDisplay(); correctChainCount = 0; playSoundTone(180, 'sawtooth', 0.6);
+                speakVoice("Wrong!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
             }
-        }, 1000); 
+        }, 1000);
     }
 
-    function advanceToNextQuestion() {
-        currentQuestionIdx++;
-        if (currentQuestionIdx >= questionsList.length) {
-            endGame(true); // Vượt qua 27 câu hỏi -> Bé thắng cuộc thành triệu phú
-        } else {
-            loadQuestion();
-        }
+    function advanceToNextQuestion() { currentQuestionIdx++; loadQuestion(); }
+// ==================== MÀN HÌNH BỐC THĂM NHẬN QUÀ (LUCKY DRAW) ====================
+    function showGiftScreen() { 
+        giftScreen.style.display = 'flex'; 
+        giftResult.style.display = 'none'; 
+        nextQuestBtn.style.display = 'none'; 
+        clickableGift.style.display = 'block'; 
+        clickableGift.innerText = "🎁"; 
+        playSoundTone(600, 'triangle', 0.3); 
     }
 
-    // --- MÀN HÌNH BỐC THĂM NHẬN QUÀ MAY MẮN ---
-    function showGiftScreen() {
-        giftScreen.style.display = 'flex';
-        giftResult.style.display = 'none';
-        nextQuestBtn.style.display = 'none';
-        clickableGift.style.display = 'block';
-        clickableGift.innerText = "🎁";
-        playSoundTone(600, 'triangle', 0.3);
+    function openLuckyDraw() { 
+        clickableGift.innerText = "🎉"; 
+        const gift = LUCKY_GIFTS[Math.floor(Math.random() * LUCKY_GIFTS.length)]; 
+        giftResult.innerText = gift; 
+        giftResult.style.display = 'block'; 
+        nextQuestBtn.style.display = 'block'; 
+        playSoundTone(523.25, 'sine', 0.1); 
+        setTimeout(() => playSoundTone(659.25, 'sine', 0.4), 300); 
+        speakVoice("Wow! You got a special bonus gift!"); 
     }
 
-    function openLuckyDraw() {
-        clickableGift.innerText = "🎉";
-        const randomGift = LUCKY_GIFTS[Math.floor(Math.random() * LUCKY_GIFTS.length)];
-        
-        giftResult.innerText = `Bé nhận được: ${randomGift}`;
-        giftResult.style.display = 'block';
-        nextQuestBtn.style.display = 'block';
-        
-        // Nhạc mở quà hoạt họa vui nhộn
-        playSoundTone(523.25, 'sine', 0.1);
-        setTimeout(() => playSoundTone(659.25, 'sine', 0.1), 100);
-        setTimeout(() => playSoundTone(783.99, 'sine', 0.1), 200);
-        setTimeout(() => playSoundTone(1046.50, 'sine', 0.4), 300);
-
-        speakVoice("Wow! You got a special bonus gift!");
+    function continueAfterGift() { 
+        giftScreen.style.display = 'none'; 
+        advanceToNextQuestion(); 
     }
 
-    function continueAfterGift() {
-        giftScreen.style.display = 'none';
-        advanceToNextQuestion();
+    function updateLivesDisplay() { 
+        livesDisplay.innerText = "💖".repeat(lives) + "🖤".repeat(3 - lives); 
     }
-
-    function updateLivesDisplay() {
-        let hearts = "";
-        for (let i = 0; i < lives; i++) hearts += "💖";
-        for (let i = lives; i < 3; i++) hearts += "🖤";
-        livesDisplay.innerText = hearts;
-    }
-
+ // ==================== MÀN HÌNH TRẠNG THÁI KẾT THÚC GAME ====================
     function endGame(isWin) {
-        gameOver = true;
-        if(backgroundMusicNode) {
-            try { backgroundMusicNode.stop(); } catch(e){}
+        gameOver = true; 
+        clearInterval(timerInterval); 
+        if (backgroundMusicNode) {
+            try { backgroundMusicNode.stop(); } catch(e) {}
         }
-        gameOverScreen.style.display = 'flex';
-        finalScore.innerText = score;
-        if (isWin) {
-            endTitle.innerText = "👑 CONGRATULATIONS! 👑";
-            endTitle.style.color = "#2ecc71";
-            speakVoice("Congratulations! You are a brilliant phonics millionaire!");
-        } else {
-            endTitle.innerText = "GAME OVER";
-            endTitle.style.color = "#ee5253";
+        
+        hud.style.visibility = 'hidden'; 
+        timeBarContainer.style.visibility = 'hidden'; 
+        questionDisplayBox.style.visibility = 'hidden'; 
+        optionsContainer.style.visibility = 'hidden';
+        gameOverScreen.style.display = 'flex'; 
+        finalScore.innerText = score.toLocaleString('vi-VN') + " \$";
+        
+        if (isWin) { 
+            endTitle.innerText = "👑 TRIỆU PHÚ PHONICS 👑"; 
+            endTitle.style.color = "#f1c40f"; 
+            speakVoice("Congratulations! You are a brilliant phonics millionaire!"); 
+        } else { 
+            endTitle.innerText = "GAME OVER"; 
+            endTitle.style.color = "#ee5253"; 
+            speakVoice("Game over! Try again next time!"); 
         }
     }
 </script>
-
 </body>
 </html>
