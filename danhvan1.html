@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Học Đánh Vần Tiếng Việt Lớp 1 - Dấu Thanh Rời</title>
+    <title>Học Đánh Vần Tiếng Việt Lớp 1 - Dấu Thanh Rời Pro</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); display: flex; justify-content: center; align-items: center; font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; }
         
         #gameArea {
             width: 800px; height: 650px; position: absolute; transform-origin: center center;
-            background: #ffffff; overflow: hidden; border: 8px solid #4a4a8a; border-radius: 35px; padding: 25px;
+            background: #ffffff; overflow: hidden; border: 8px solid #4a4a8a; border-radius: 35px; padding: 20px;
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
@@ -23,30 +23,33 @@
         #timerDisplay { color: #2ed573; font-weight: 900; }
 
         #picture-display-box {
-            width: 95%; height: 180px; background: #f1f2f6; border: 5px solid #ffa502; border-radius: 25px;
+            width: 95%; height: 170px; background: #f1f2f6; border: 5px solid #ffa502; border-radius: 25px;
             box-shadow: 0 8px 0 #ffa502; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
         }
         #targetImage { font-size: 85px; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
-        #wordHintText { font-size: 28px; font-weight: 900; color: #ff4757; letter-spacing: 2px; background: #ffffff; padding: 4px 20px; border-radius: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
+        #wordHintText { font-size: 30px; font-weight: 900; color: #ff4757; letter-spacing: 2px; background: #ffffff; padding: 4px 25px; border-radius: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); text-transform: uppercase; }
 
-        /* CÁC Ô TRỐNG HIỂN THỊ CHỮ GHÉP ĐƯỢC */
-        #slotsRow { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 15px 0; min-height: 85px; width: 95%; }
+        /* Ô TRỐNG HIỂN THỊ KÝ TỰ ĐƯỢC PHÓNG TO */
+        #slotsRow { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 10px 0; min-height: 90px; width: 95%; }
         .letter-slot {
-            width: 80px; height: 80px; border: 4px dashed #747d8c; border-radius: 20px;
+            width: 85px; height: 85px; border: 4px dashed #747d8c; border-radius: 22px;
             background: rgba(0,0,0,0.03); display: flex; justify-content: center; align-items: center;
-            font-size: 42px; font-weight: 900; color: #2f3542; box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);
+            font-size: 46px; font-weight: 900; color: #2f3542; box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);
         }
-        .letter-slot.filled { border-style: solid; border-color: #2ed573; background: #e3fcef; color: #2ed573; box-shadow: 0 5px 0 #22bb59; }
+        .letter-slot.filled { border-style: solid; border-color: #2ed573; background: #e3fcef; color: #2ed573; box-shadow: 0 6px 0 #22bb59; }
 
-        /* KHU VỰC BONG BÓNG CHỮ TRƠN VÀ DẤU THANH RỜI */
-        #lettersContainer { width: 95%; height: 140px; display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 5px; }
+        /* KHU VỰC BONG BÓNG: Thiết kế lại Flexbox chống bóp méo hình tròn */
+        #lettersContainer { width: 95%; height: 160px; display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 5px; }
+        
+        /* ĐÃ SỬA: Ép cứng tỉ lệ aspect-ratio và kích thước hình tròn tuyệt đối 1:1 */
         .bubble-letter {
-            width: 85px; height: 85px; border-radius: 50%; color: white; font-size: 40px; font-weight: 900;
+            width: 100px; height: 100px; min-width: 100px; min-height: 100px; border-radius: 50% !important; 
+            color: white; font-size: 46px; font-weight: 900; aspect-ratio: 1 / 1;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            box-shadow: inset -8px -10px 15px rgba(0,0,0,0.2), 0 8px 15px rgba(0,0,0,0.1);
+            box-shadow: inset -10px -12px 20px rgba(0,0,0,0.25), 0 10px 20px rgba(0,0,0,0.15);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3); animation: floatBubble 3s ease-in-out infinite alternate;
         }
-        @keyframes floatBubble { 0% { transform: translateY(0) rotate(-3deg); } 100% { transform: translateY(-12px) rotate(3deg); } }
+        @keyframes floatBubble { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-15px) rotate(2deg); } }
 
         .flash-correct { animation: bgGreen 0.3s ease-out; }
         .flash-wrong { animation: bgRed 0.3s ease-out; }
@@ -62,8 +65,8 @@
 <body>
 <div id="gameArea">
     <div id="startScreen">
-        <h1 class="screen-title" style="color: #ff9f43;">ĐÁNH VẦN TIẾNG VIỆT 🎈<br><span style="font-size:30px; color:#2ed573;">Chữ Trơn & Dấu Thanh Rời</span></h1>
-        <p style="font-size: 25px; margin-bottom: 35px; color: #57606f; font-weight: bold;">Bấm chữ cái trước, chọn dấu thanh sau để tạo thành từ đúng nhé! 🧩</p>
+        <h1 class="screen-title" style="color: #ff9f43;">ĐÁNH VẦN TIẾNG VIỆT 🎈<br><span style="font-size:30px; color:#2ed573;">Bóng Tròn To Rõ Tràn Viền</span></h1>
+        <p style="font-size: 25px; margin-bottom: 35px; color: #57606f; font-weight: bold;">Bong bóng chữ và dấu thanh đã được phóng to tròn xịn, dễ nhìn cho bé! 🧩</p>
         <button class="action-btn" onclick="initGame()">Bắt Đầu Học Đánh Vần 🎮</button>
     </div>
     <div id="gameOverScreen" style="display: none;">
@@ -101,22 +104,24 @@
     const hud = document.getElementById('hud');
     const pictureDisplayBox = document.getElementById('picture-display-box');
 
-    // Thuật toán co giãn thông minh giúp game phóng to căng tràn lấp kín mọi màn hình iPhone/PC
+    // ĐÃ SỬA LỖI MÉO HÌNH: Hàm co giãn tính tỷ lệ đồng nhất Math.min giúp giữ nguyên hình tròn xịn trên iPhone
     function resizeGame() {
         const targetWidth = 800; const targetHeight = 650;
         const windowWidth = window.innerWidth; const windowHeight = window.innerHeight;
-        let scaleX = windowWidth / targetWidth; let scaleY = windowHeight / targetHeight;
-        gameArea.style.transform = `scale(${scaleX}, ${scaleY})`;
+        
+        let scaleX = windowWidth / targetWidth; 
+        let scaleY = windowHeight / targetHeight;
+        let optimalScale = Math.min(scaleX, scaleY); // Lấy tỷ lệ nhỏ nhất để giữ đúng tỷ lệ 1:1 không bị méo dẹt
+
+        gameArea.style.transform = `scale(${optimalScale})`;
     }
     window.addEventListener('resize', resizeGame);
+    window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
     resizeGame();
 
-    // Bảng màu kẹo ngọt Pastel đặc trưng Wordwall cho bong bóng chữ cái
     const BUBBLE_COLORS = ["#ff4757", "#1e90ff", "#2ed573", "#ffa502", "#ff6b81", "#78e08f", "#9b59b6"];
 
-    // ==================== KHO DỮ LIỆU ĐÁNH VẦN: CHỮ TRƠN VÀ DẤU THANH RỜI ====================
-    // letters: Thứ tự bấm chính xác của bé (Chữ trơn bấm trước, dấu thanh độc lập bấm sau)
-    // display: Ký tự hiển thị lên bong bóng cho bé nhìn (Dấu thanh để trần to rõ ràng)
+    // ==================== KHO DỮ LIỆU ĐÁNH VẦN CHUẨN ĐỒ HỌA PHẲNG ====================
     const VIET_WORDS_DATABASE = [
         { word: "ba", letters: ["b", "a"], display: ["b", "a"], icon: "👨" },
         { word: "bà", letters: ["b", "a", "huyền"], display: ["b", "a", "◌̀"], icon: "👵" },
@@ -144,12 +149,11 @@
         { word: "lọ", letters: ["l", "o", "nặng"], display: ["l", "o", "◌̣"], icon: "🏺" }
     ];
 
-    // TRẠNG THÁI HỆ THỐNG GAME LỚP 1
     let score = 0; let currentQuestionIdx = 0; let questionsList = [];
     let correctSequence = []; let bubbleItemsPool = []; let currentSelectStep = 0; 
     let isBlockClick = false; let gameOver = false;
     let timerInterval = null; let timeLeft = 15; let audioCtx = null;
-   // ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
+// ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
     function initAudioContext() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -167,7 +171,6 @@
         } catch(e){}
     }
 
-    // Giọng đọc tiếng Việt hướng dẫn chuẩn cho bé lớp 1
     function speakVietnamese(textToSpeak, callback) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
@@ -178,7 +181,7 @@
         } else if (callback) { setTimeout(callback, 2000); }
     }
 
-    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN (15 GIÂY/TỪ) ====================
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN ====================
     function startTimer() {
         clearInterval(timerInterval); timeLeft = 15;
         timerDisplay.innerText = `⏱️ Thời gian: 15.0s`;
@@ -199,8 +202,7 @@
         });
     }
 
-    // ==================== THUẬT TOÁN KHOA HỌC TỰ ĐỘNG ÉP TỔ HỢP DẤU TIẾNG VIỆT ====================
-    // Hàm nhận vào chữ cái trơn và tên dấu để trả ra chữ có dấu chuẩn Unicode tiếng Việt
+    // ==================== THUẬT TOÁN ÉP TỔ HỢP DẤU TIẾNG VIỆT UNICODE ====================
     function combineCharWithTone(baseChar, toneName) {
         const toneMap = {
             'a': { 'sắc': 'á', 'huyền': 'à', 'hỏi': 'ả', 'ngã': 'ã', 'nặng': 'ạ' },
@@ -222,7 +224,6 @@
         startScreen.style.display = 'none'; hud.style.visibility = 'visible'; pictureDisplayBox.style.visibility = 'visible';
         slotsRow.style.visibility = 'visible'; lettersContainer.style.visibility = 'visible';
 
-        // Lấy ngẫu nhiên 9 từ từ kho ảnh để bé học luân phiên
         questionsList = [...VIET_WORDS_DATABASE].sort(() => Math.random() - 0.5).slice(0, 9);
         score = 0; currentQuestionIdx = 0; gameOver = false;
         scoreDisplay.innerText = score; loadQuestion();
@@ -239,20 +240,17 @@
         correctSequence = [...q.letters]; 
         currentSelectStep = 0;
 
-        // Tính số ô trống hiển thị (Chỉ tính các ký tự chữ, không tạo ô riêng cho dấu thanh)
         slotsRow.innerHTML = "";
         let textLettersCount = q.letters.filter(item => !['sắc','huyền','hỏi','ngã','nặng'].includes(item)).length;
         for (let i = 0; i < textLettersCount; i++) {
             slotsRow.innerHTML += `<div class="letter-slot" id="slot-${i}">?</div>`;
         }
 
-        // Tạo mảng đối tượng bong bóng bao gồm chữ hiển thị lên giao diện (trần dấu)
         bubbleItemsPool = [];
         q.letters.forEach((codeName, index) => {
             bubbleItemsPool.push({ code: codeName, text: q.display[index] });
         });
 
-        // Xáo trộn ngẫu nhiên thứ tự các quả bóng bay
         bubbleItemsPool.sort(() => 0.5 - Math.random());
         
         lettersContainer.innerHTML = "";
@@ -270,36 +268,30 @@
         startTimer();
     }
 
-    // ==================== LOGIC BẤM CHỌN BONG BÓNG ĐÁNH VẦN CÓ DẤU THÀNH RỜI ====================
+    // ==================== LOGIC BẤM CHỌN BONG BÓNG ĐÁNH VẦN CHUẨN TRÒN TRỊA ====================
     function clickLetterBubble(bubbleEl, clickedCode) {
         if (isBlockClick || gameOver) return;
         
-        // So khớp xem bóng vừa chọn có trùng khớp với thứ tự đánh vần chính xác hiện tại không
         let targetCode = correctSequence[currentSelectStep];
 
         if (clickedCode === targetCode) {
             playSoundTone(523.25, 'sine', 0.1);
             
-            // Xử lý nổ bóng bốc hơi
             bubbleEl.style.transform = 'scale(0)';
             bubbleEl.style.pointerEvents = 'none';
 
-            // Phân biệt: Nếu là chữ cái trơn thường
             if (!['sắc', 'huyền', 'hỏi', 'ngã', 'nặng'].includes(clickedCode)) {
-                // Điền vào ô trống tiếp theo tương ứng
-                let slotId = currentSelectStep; // Do chữ đi trước dấu nên step chính là slotId
+                let slotId = currentSelectStep; 
                 let slot = document.getElementById(`slot-${slotId}`);
                 if (slot) {
                     slot.innerText = clickedCode;
                     slot.classList.add('filled');
                 }
             } else {
-                // Nếu là DẤU THANH RỜI: Tìm nguyên âm trơn cuối cùng vừa điền để ép tổ hợp dấu lên đầu chữ cái
-                let slotId = currentSelectStep - 1; // Ô nguyên âm trơn ngay phía trước nó
+                let slotId = currentSelectStep - 1; 
                 let slot = document.getElementById(`slot-${slotId}`);
                 if (slot) {
                     let baseChar = slot.innerText;
-                    // Ép dấu tổ hợp thông minh
                     let combinedChar = combineCharWithTone(baseChar, clickedCode);
                     slot.innerText = combinedChar;
                 }
@@ -307,7 +299,6 @@
 
             currentSelectStep++;
 
-            // Hoàn thành xuất sắc toàn bộ từ vựng
             if (currentSelectStep === correctSequence.length) {
                 isBlockClick = true; clearInterval(timerInterval);
                 gameArea.className = 'flash-correct';
@@ -321,7 +312,6 @@
                 });
             }
         } else {
-            // SAI: Phạt nhấp nháy lắc lư
             playSoundTone(180, 'sawtooth', 0.35);
             bubbleEl.style.animation = 'none';
             void bubbleEl.offsetWidth; 
@@ -336,7 +326,7 @@
         gameOver = true; clearInterval(timerInterval);
         hud.style.visibility = 'hidden'; pictureDisplayBox.style.visibility = 'hidden'; slotsRow.style.visibility = 'hidden'; lettersContainer.style.visibility = 'hidden';
         gameOverScreen.style.display = 'flex'; finalScore.innerText = score;
-        speakVoice("Bé giỏi quá! Đã hoàn thành bài học đánh vần rồi!");
+        speakVietnamese("Bé giỏi quá! Đã hoàn thành bài học đánh vần rồi!");
     }
 </script>
 </body>
