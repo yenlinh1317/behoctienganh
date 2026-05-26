@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Phonics Balloon Pop - Wordwall Train Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: linear-gradient(180deg, #74b9ff 0%, #a29bfe 100%); display: flex; justify-content: center; align-items: center; font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; }
+        
+        #gameArea {
+            width: 800px; height: 650px; position: absolute; transform-origin: center center;
+            background: linear-gradient(180deg, #cae9ff 0%, #fcedfe 100%); overflow: hidden; border: 8px solid #485460; border-radius: 35px; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDUxMiA1MTIiPjxwYXRoIGZpbGw9IiNmZjQ3NTciIGQ9Ik00MTYgMzJsNjQgNjRMMjI0IDM1MmwtNjQtNjR6Ii8+PHBhdGggZmlsbD0iIzc0YjFmZiIgZD0iTTk2IDI4OGwxMjggMTI4TDMyIDQ4MHoiLz48L3N2Zz4=") 5 45, auto;
+        }
+
+        #hud {
+            width: 100%; display: flex; justify-content: space-between; align-items: center; color: #2c3e50; font-size: 22px; font-weight: bold;
+            background: rgba(255, 255, 255, 0.85); padding: 12px 25px; border-radius: 25px; border: 4px solid #ced6e0; box-shadow: 0 6px 0 #ced6e0; position: relative; z-index: 10;
+        }
+        #scoreDisplay { color: #2ed573; font-size: 26px; }
+        #timerDisplay { color: #ff4757; }
+        
+        #skyContainer { width: 100%; height: 350px; position: relative; overflow: hidden; margin-top: 5px; }
+
+        .balloon {
+            position: absolute; width: 110px; height: 135px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding-bottom: 10px;
+            box-shadow: inset -8px -10px 15px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.1);
+            cursor: pointer; animation: floatSway 4s ease-in-out infinite alternate;
+        }
+        .balloon::after { content: ""; position: absolute; bottom: -8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 10px solid inherit; }
+        .balloon-icon { font-size: 46px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); pointer-events: none; }
+        .balloon-text { font-size: 14px; font-weight: 900; color: #ffffff; background: rgba(0,0,0,0.4); padding: 1px 8px; border-radius: 8px; text-transform: uppercase; pointer-events: none; }
+        @keyframes floatSway { 0% { transform: translateX(0) rotate(-3deg); } 100% { transform: translateX(15px) rotate(3deg); } }
+
+        #trainTrack { width: 100%; height: 120px; background: rgba(0,0,0,0.05); border-top: 4px dashed #747d8c; position: relative; display: flex; align-items: center; overflow: hidden; border-radius: 20px; }
+        
+        #wordwallTrain { 
+            position: absolute; left: 50%; bottom: 10px; height: 85px; display: flex; align-items: center; gap: 10px;
+            transform: translateX(600px);
+        }
+        
+        #wordwallTrain.drive-in {
+            animation: trainFastIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+        }
+        @keyframes trainFastIn {
+            0% { transform: translateX(600px); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .train-engine { width: 90px; height: 85px; background: #ff4757; border-radius: 30px 15px 10px 10px; border: 4px solid #ffffff; box-shadow: 0 6px 0 #d63031; position: relative; order: 1; }
+        .train-engine::before { content: "🚂"; font-size: 40px; position: absolute; top: 10px; left: 15px; transform: scaleX(-1); }
+
+        .train-wagon {
+            min-width: 460px; height: 85px; background: #ff9f43; border-radius: 20px; border: 4px solid #ffffff;
+            box-shadow: 0 6px 0 #e67e22; display: flex; justify-content: center; align-items: center; padding: 10px 25px; order: 2;
+        }
+        #question-display-box { color: #ffffff; font-size: 22px; font-weight: 900; text-align: center; text-shadow: 2px 2px 0 rgba(0,0,0,0.15); line-height: 1.3; width: 100%; }
+
+        #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #2c3e50; z-index: 100; padding: 30px; text-align: center; }
+        .screen-title { font-size: 56px; color: #ff4757; margin-bottom: 20px; font-weight: 900; text-shadow: 4px 4px 0 #f1f2f6; }
+        .action-btn { padding: 18px 60px; font-size: 26px; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 25px; cursor: pointer; box-shadow: 0 10px 0 #22bb59; margin-top: 25px; transition: all 0.1s; }
+        .action-btn:active { transform: translateY(4px); box-shadow: 0 6px 0 #22bb59; }
+    </style>
+</head>
+<body>
+<div id="gameArea">
+    <div id="startScreen">
+        <h1 class="screen-title" style="color: #1e90ff;">TRAIN BALLOON POP! 🚂</h1>
+        <p style="font-size: 26px; margin-bottom: 35px; color: #57606f; font-weight: bold;">Nhìn từ vựng trên toa tàu tốc hành và chọc vỡ bóng bay chính xác nhé! 🎈</p>
+        <button class="action-btn" onclick="initGame()">Bắt Đầu Chơi 🕹️</button>
+    </div>
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" style="color: #ff4757;">HẾT GIỜ RỒI! ⏱️</h1>
+        <p style="font-size: 30px; margin-bottom: 25px; color: #57606f; font-weight: bold;">Số bóng bay đúng bé chọc được: <span id="finalScore" style="color:#2ed573; font-size:40px;">0</span> / 27</p>
+        <button class="action-btn" style="background: #ffa502; box-shadow: 0 10px 0 #e69500;" onclick="location.reload()">Chơi Lượt Mới 🔄</button>
+    </div>
+    
+    <div id="hud" style="visibility: hidden;">
+        <div id="score-box">⭐ Điểm: <span id="scoreDisplay">0</span></div>
+        <div id="timerDisplay">⏱️ Thời gian: 10s</div>
+        <div id="livesDisplay">💖💖💖</div>
+    </div>
+    
+    <div id="skyContainer"></div>
+
+    <div id="trainTrack" style="visibility: hidden;">
+        <div id="wordwallTrain">
+            <div class="train-engine"></div>
+            <div class="train-wagon">
+                <div id="question-display-box">Loading sentence...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const questionDisplayBox = document.getElementById('question-display-box');
+    const skyContainer = document.getElementById('skyContainer');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startScreen = document.getElementById('startScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const hud = document.getElementById('hud');
+    const trainTrack = document.getElementById('trainTrack');
+    const wordwallTrain = document.getElementById('wordwallTrain');
+
+    function resizeGame() {
+        const targetWidth = 800; const targetHeight = 650;
+        const windowWidth = window.innerWidth; const windowHeight = window.innerHeight;
+        let scaleX = windowWidth / targetWidth; let scaleY = windowHeight / targetHeight;
+        gameArea.style.transform = `scale(${scaleX}, ${scaleY})`;
+    }
+    window.addEventListener('resize', resizeGame);
+    resizeGame();
+
+    const J_WORDS = [
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        { word: "jar", icon: `<svg viewBox="0 0 64 64" width="50" height="50"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#485460" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#485460"/><path d="M14,32H50" stroke="#485460" stroke-width="3" stroke-dasharray="4 3"/></svg>`, isSvg: true, article: "a" },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
+    ];
+    const K_WORDS = [
+        { word: "key", icon: "🔑", isSvg: false, article: "a" },
+        { word: "kite", icon: "🪁", isSvg: false, article: "a" },
+        { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
+        { word: "kitten", icon: "🐱", isSvg: false, article: "a" },
+        { word: "knife", icon: "🔪", isSvg: false, article: "a" },
+        { word: "kettle", icon: `<svg viewBox="0 0 64 64" width="50" height="50"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#485460" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#485460" stroke-width="4"/></svg>`, isSvg: true, article: "a" },
+        { word: "king", icon: "👑", isSvg: false, article: "a" },
+        { word: "koala", icon: "🐨", isSvg: false, article: "a" }
+    ];
+    const L_WORDS = [
+{ word: "lion", icon: "🦁", isSvg: false, article: "a" },
+        { word: "lemon", icon: "🍋", isSvg: false, article: "a" },
+        { word: "leaf", icon: "🍃", isSvg: false, article: "a" },
+        { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
+        { word: "ladder", icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, isSvg: true, article: "a" },
+        { word: "lock", icon: "🔒", isSvg: false, article: "a" },
+        { word: "lips", icon: "👄", isSvg: false, article: "some" },
+        { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
+    ];
+    const BALLOON_COLORS = ["#ff4757", "#1e90ff", "#2ed573", "#ffa502", "#ff6b81", "#78e08f", "#9b59b6", "#34495e"];
+
+    let score = 0; let lives = 3; let currentQuestionIdx = 0; let questionsList = [];
+    let currentCorrectWord = ""; let isBlockClick = false; let gameOver = false;
+    let timerInterval = null; let balloonSpawnInterval = null; let trainAudioInterval = null;
+    let timeLeft = 10; let audioCtx = null; let backgroundMusicNode = null;
+
+    // ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
+    function initAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSoundTone(frequency, type, duration) {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    function playTrainChugSound() {
+        clearInterval(trainAudioInterval);
+        trainAudioInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            playSoundTone(55, 'sawtooth', 0.1);
+            setTimeout(() => { if (!gameOver && !isBlockClick) playSoundTone(45, 'sawtooth', 0.08); }, 250);
+        }, 600);
+    }
+
+    function playTrainWhistleSound() {
+        playSoundTone(587.33, 'sine', 0.25);
+        setTimeout(() => playSoundTone(587.33, 'sine', 0.5), 150);
+    }
+
+    function speakVoice(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US'; utterance.rate = 0.9;
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) { setTimeout(callback, 2000); }
+    }
+
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN ====================
+    function startTimer() {
+        clearInterval(timerInterval); timeLeft = 10;
+        timerDisplay.innerText = `⏱️ Thời gian: 10.0s`;
+        timerInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            timeLeft -= 0.1;
+            timerDisplay.innerText = `⏱️ Thời gian: ${Math.max(0, timeLeft).toFixed(1)}s`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); stopAllGameIntervals(); handleTimeOut(); }
+        }, 100);
+    }
+
+    function handleTimeOut() {
+        isBlockClick = true; playSoundTone(150, 'sawtooth', 0.5); lives--; updateLivesDisplay();
+        gameArea.classList.add('flash-wrong');
+        speakVoice("Time out!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+    }
+
+    // ==================== THUẬT TOÁN SINH CÂU HỎI & ĐÁP ÁN PHẲNG CHUẨN ====================
+    function getUniqueWrongOptions(correctItem, pool1, pool2) {
+        let allWords = [...pool1, ...pool2];
+        let filtered = allWords.filter(item => item.word !== correctItem.word);
+        let uniqueWords = [], seen = new Set();
+        for (let item of filtered) {
+            if (!seen.has(item.word)) { seen.add(item.word); uniqueWords.push(item); }
+        }
+        uniqueWords.sort(() => 0.5 - Math.random());
+        return [correctItem, uniqueWords[0], uniqueWords[1], uniqueWords[2]];
+    }
+
+    function buildQuizDatabase() {
+        let list = [];
+        const templates = ["What is it? It is", "What can you see? I can see"];
+        let allWords = [...J_WORDS, ...K_WORDS, ...L_WORDS];
+
+        for(let i = 0; i < 27; i++) {
+            let item = allWords[i % allWords.length];
+            let basicTemplate = templates[Math.floor(Math.random() * templates.length)];
+            let sentenceText = `${basicTemplate} ${item.article} ${item.word}.`;
+            list.push({
+                correctWord: item.word, correctItem: item, voiceText: sentenceText,
+                options: getUniqueWrongOptions(item, J_WORDS, K_WORDS),
+                questionText: `${basicTemplate} ${item.article} <span style="color:#f1c40f; font-weight:900; text-transform:uppercase; border-bottom:4px dashed #f1c40f;">${item.word}</span>.`
+            });
+        }
+        return list.sort(() => Math.random() - 0.5);
+    }
+
+    // ==================== KHỞI CHẠY VÀ VÒNG LẶP SINH BÓNG KHỔNG LỒ ====================
+    function initGame() {
+        initAudioContext();
+        startScreen.style.display = 'none'; hud.style.visibility = 'visible'; trainTrack.style.visibility = 'visible'; 
+        questionsList = buildQuizDatabase(); score = 0; lives = 3; currentQuestionIdx = 0; gameOver = false;
+        scoreDisplay.innerText = score; updateLivesDisplay(); loadQuestion();
+    }
+
+    function loadQuestion() {
+        isBlockClick = false; if (currentQuestionIdx >= questionsList.length) { endGame(true); return; }
+        const q = questionsList[currentQuestionIdx];
+        
+        questionDisplayBox.innerHTML = q.questionText;
+        currentCorrectWord = q.correctWord;
+        skyContainer.innerHTML = ""; 
+
+        wordwallTrain.classList.remove('drive-in');
+        void wordwallTrain.offsetWidth; 
+        wordwallTrain.classList.add('drive-in');
+
+        playTrainWhistleSound();
+        playTrainChugSound();
+
+        speakVoice(q.voiceText); startTimer();
+        startBalloonSpawnLoop(q);
+    }
+
+// Hàng đợi quản lý danh sách bóng bay luân phiên
+    let balloonQueue = [];
+
+    // VÒNG LẶP SINH BÓNG LUÂN PHIÊN CHUẨN WORDWALL (KHÔNG BỊ TRÙNG, XUẤT HIỆN ĐỀU ĐẶN)
+    function startBalloonSpawnLoop(q) {
+        clearInterval(balloonSpawnInterval);
+        
+        // Hàm nạp đầy bóng vào hàng đợi luân phiên
+        function refillBalloonQueue() {
+            let correct = q.correctItem;
+            let wrongs = q.options.filter(item => item.word !== q.correctWord);
+            
+            // Lấy chính xác 3 từ sai khác biệt nhau
+            let uniqueWrongs = [];
+            let seen = new Set();
+            for (let item of wrongs) {
+                if (!seen.has(item.word) && uniqueWrongs.length < 3) {
+                    seen.add(item.word);
+                    uniqueWrongs.push(item);
+                }
+            }
+            
+            // Gộp lại thành bộ 4 từ phẳng chuẩn [Đúng, Sai1, Sai2, Sai3] rồi xáo trộn
+            let currentSet = [correct, ...uniqueWrongs].sort(() => 0.5 - Math.random());
+            
+            // Nạp bộ 4 từ này vào hàng đợi
+            balloonQueue = [...balloonQueue, ...currentSet];
+        }
+
+        // Nạp sẵn vòng chơi đầu tiên
+        balloonQueue = [];
+        refillBalloonQueue();
+
+        // Thổi ngay quả bóng đầu tiên lập tức khi tàu vừa dừng
+        createSingleBalloon();
+
+        // Các quả bóng tiếp theo cứ sau 1.8 giây sẽ lơ lửng bay lên luân phiên
+        balloonSpawnInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            
+            // Nếu hàng đợi sắp hết bóng, tự động nạp tiếp bộ 4 từ mới (chu kỳ 2, chu kỳ 3)
+            if (balloonQueue.length <= 1) {
+                refillBalloonQueue();
+            }
+            
+            createSingleBalloon();
+        }, 1000);
+    }
+
+    function createSingleBalloon() {
+        if (balloonQueue.length === 0) return;
+        
+        let currentItem = balloonQueue.shift();
+
+        let balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        let randomColor = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+        balloon.style.backgroundColor = randomColor;
+        balloon.style.setProperty('--balloon-base-color', randomColor);
+
+        balloon.dataset.word = currentItem.word;
+        let iconHtml = currentItem.isSvg ? currentItem.icon : `<span class="balloon-icon">${currentItem.icon}</span>`;
+        balloon.innerHTML = `<div class="balloon-icon">${iconHtml}</div><span class="balloon-text">${currentItem.word}</span>`;
+
+        let randomLeft = 8 + Math.floor(Math.random() * 75);
+        balloon.style.left = `${randomLeft}%`; balloon.style.top = `350px`; 
+        skyContainer.appendChild(balloon);
+
+        // 💡 VỊ TRÍ 2: Tăng thông số tốc độ bay tịnh tiến của bóng lên cao
+        let currentTop = 350;
+        let speed = 2.5 + Math.random() * 1.3; // Tốc độ bay nhanh và dứt khoát hơn (Ban đầu là 1.2 + random)
+
+        function animateBalloon() {
+            if (gameOver || isBlockClick || !balloon.parentNode) return;
+            currentTop -= speed; balloon.style.top = `${currentTop}px`;
+            if (currentTop < -140) { balloon.remove(); } else { requestAnimationFrame(animateBalloon); }
+        }
+        requestAnimationFrame(animateBalloon);
+
+        balloon.onclick = function() { if (isBlockClick || gameOver) return; whackBalloon(balloon); };
+    }
+    function stopAllGameIntervals() { clearInterval(balloonSpawnInterval); clearInterval(trainAudioInterval); }
+
+    function whackBalloon(balloonEl) {
+        isBlockClick = true; stopAllGameIntervals();
+        let isCorrect = (balloonEl.dataset.word === currentCorrectWord);
+
+        balloonEl.style.transform = 'scale(0)'; balloonEl.style.transition = 'transform 0.12s ease-out';
+        setTimeout(() => balloonEl.remove(), 120);
+
+        if (isCorrect) {
+            gameArea.classList.add('flash-correct'); score++; scoreDisplay.innerText = score;
+            playSoundTone(587.33, 'sine', 0.15); setTimeout(() => playSoundTone(880, 'sine', 0.2), 100);
+            speakVoice("Bingo!", function() { gameArea.classList.remove('flash-correct'); advanceToNextQuestion(); });
+        } else {
+            gameArea.classList.add('flash-wrong'); lives--; updateLivesDisplay(); playSoundTone(220, 'sawtooth', 0.4);
+            speakVoice("Wrong!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+        }
+    }
+
+    function advanceToNextQuestion() { currentQuestionIdx++; loadQuestion(); }
+    function updateLivesDisplay() { livesDisplay.innerText = "💖".repeat(lives) + "🖤".repeat(3 - lives); }
+
+    function endGame(isWin) {
+        gameOver = true; stopAllGameIntervals(); if(backgroundMusicNode) try { backgroundMusicNode.stop(); } catch(e){}
+        hud.style.visibility = 'hidden'; trainTrack.style.visibility = 'hidden'; skyContainer.innerHTML = "";
+gameOverScreen.style.display = 'flex'; 
+        finalScore.innerText = score;
+        
+        if (isWin) { 
+            speakVoice("Amazing! You are the balloon train king!"); 
+        } else { 
+            speakVoice("Great try! Let's play again!"); 
+        }
+    }
+</script>
+</body>
+</html>
