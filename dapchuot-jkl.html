@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Phonics Whack-A-Mole - Wordwall Fullscreen Edition</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        
+        /* CẤU HÌNH TRÀN TOÀN MÀN HÌNH T TUYỆT ĐỐI */
+        body, html { 
+            width: 100%; height: 100%; overflow: hidden; 
+            background: linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%); 
+            display: flex; justify-content: center; align-items: center; 
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; 
+        }
+        
+   	/* 🔨 BÚA HOẠT HÌNH 3D PASTEL CHUẨN WORDWALL CHẤT LƯỢNG CAO */
+        #gameArea {
+            width: 800px; height: 650px; position: absolute; transform-origin: center center;
+            background: #ffffff; overflow: hidden; border: 8px solid #485460; border-radius: 35px; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDY0IDY0Ij48ZyBmaWx0ZXI9ImRyb3Atc2hhZG93KDAgNHB4IDRweCByZ2JhKDAsMCwwLDAuMTUpKSI+PHJlY3QgeD0iMTAiIHk9IjIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMTQiIHJ4PSI0IiBmaWxsPSIjZmY0NzU3Ii8+PHJlY3QgeD0iMzAiIHk9IjIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMTQiIHJ4PSI0IiBmaWxsPSIjZmY2YjgxIi8+PHJlY3QgeD0iMjQiIHk9IjE0IiB3aWR0aD0iMTYiIGhlaWdodD0iMjYiIHJ4PSI4IiBmaWxsPSIjZmZhNTAyIi8+PHJlY3QgeD0iMzAiIHk9IjIyIiB3aWR0aD0iNCIgaGVpZ2h0PSIxMCIgZmlsbD0iI2ZmN2Y1MCIvPjxyZWN0IHg9IjMwIiB5PSIzNCIgd2lkdGg9IjQiIGhlaWdodD0iMjAiIHJ4PSIyIiBmaWxsPSIjN2FjMWZmIi8+PHJlY3QgeD0iMzAiIHk9IjQ0IiB3aWR0aD0iNCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzcwYTFmZiIvPjwvZz48L3N2Zz4=") 24 24, auto;
+        }
+        
+        /* 🔨 HIỆU ỨNG VUNG BÚA XOAY 45 ĐỘ ĐẬP CỰC MẠNH KHI CLICK CHUỘT */
+        #gameArea:active {
+            cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDY0IDY0Ij48ZyBmaWx0ZXI9ImRyb3Atc2hhZG93KDAgNHB4IDRweCByZ2JhKDAsMCwwLDAuMTUpKSIgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDMyIDMyKSI+PHJlY3QgeD0iMTAiIHk9IjIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMTQiIHJ4PSI0IiBmaWxsPSIjZmY0NzU3Ii8+PHJlY3QgeD0iMzAiIHk9IjIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMTQiIHJ4PSI0IiBmaWxsPSIjZmY2YjgxIi8+PHJlY3QgeD0iMjQiIHk9IjE0IiB3aWR0aD0iMTYiIGhlaWdodD0iMjYiIHJ4PSI4IiBmaWxsPSIjZmZhNTAyIi8+PHJlY3QgeD0iMzAiIHk9IjIyIiB3aWR0aD0iNCIgaGVpZ2h0PSIxMCIgZmlsbD0iI2ZmN2Y1MCIvPjxyZWN0IHg9IjMwIiB5PSIzNCIgd2lkdGg9IjQiIGhlaWdodD0iMjAiIHJ4PSIyIiBmaWxsPSIjN2FjMWZmIi8+PHJlY3QgeD0iMzAiIHk9IjQ0IiB3aWR0aD0iNCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzcwYTFmZiIvPjwvZz48L3N2Zz4=") 24 24, auto;
+        }
+
+        #hud {
+            width: 100%; display: flex; justify-content: space-between; align-items: center; color: #2c3e50; font-size: 24px; font-weight: bold;
+            background: #f1f2f6; padding: 12px 25px; border-radius: 25px; border: 4px solid #ced6e0; box-shadow: 0 6px 0 #ced6e0; position: relative; z-index: 10;
+        }
+        #scoreDisplay { color: #2ed573; font-size: 30px; font-weight: 900; }
+        #timerDisplay { color: #ff4757; font-weight: 900; }
+        
+        #question-display-box {
+            width: 95%; background: #f1f2f6; border: 5px solid #ff9f43; border-radius: 25px; padding: 15px; text-align: center; color: #2c3e50;
+            font-size: 28px; font-weight: bold; min-height: 100px; box-shadow: 0 8px 0 #ff9f43;
+            display: flex; justify-content: center; align-items: center; position: relative; z-index: 5;
+        }
+
+        #moleGrid { width: 95%; height: 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 15px 0; }
+        .mole-hole {
+            background: #78e08f; border: 4px solid #38ea6c; border-radius: 30px; position: relative; overflow: hidden;
+            box-shadow: inset 0 10px 15px rgba(0,0,0,0.2), 0 6px 0 #22bb59; display: flex; justify-content: center; align-items: flex-end;
+        }
+        
+        .mole-character {
+            width: 100%; height: 100%; position: absolute; bottom: -110%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            transition: bottom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        }
+        .mole-character.up { bottom: 0; }
+        
+        .mole-item-wrapper { display: flex; flex-direction: column; align-items: center; position: absolute; top: -35px; z-index: 20; width: 100%; }
+        .mole-icon { font-size: 50px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+        .mole-text { font-size: 18px; font-weight: 900; color: #ffffff; background: #ff4757; padding: 4px 14px; border-radius: 12px; text-transform: uppercase; margin-bottom: 8px; box-shadow: 0 5px 0 #ff2a3b; text-shadow: 1px 1px 0 rgba(0,0,0,0.2); }
+
+        .flash-correct { animation: bgGreen 0.3s ease-out; }
+        .flash-wrong { animation: bgRed 0.3s ease-out; }
+        @keyframes bgGreen { 50% { background: #e3fcef; } }
+        @keyframes bgRed { 50% { background: #ffebee; } }
+
+        #gameOverScreen, #startScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #2c3e50; z-index: 100; padding: 30px; text-align: center; }
+        .screen-title { font-size: 56px; color: #ff4757; margin-bottom: 20px; font-weight: 900; text-shadow: 4px 4px 0 #f1f2f6; }
+        .action-btn { padding: 18px 60px; font-size: 26px; font-weight: bold; background: #2ed573; border: none; color: white; border-radius: 25px; cursor: pointer; box-shadow: 0 10px 0 #22bb59; margin-top: 25px; transition: all 0.1s; }
+        .action-btn:active { transform: translateY(4px); box-shadow: 0 6px 0 #22bb59; }
+    </style>
+</head>
+<body>
+<div id="gameArea">
+    <div id="startScreen">
+        <h1 class="screen-title" style="color: #ff9f43;">MOLE WORDWALL! 🔨</h1>
+        <p style="font-size: 26px; margin-bottom: 35px; color: #57606f; font-weight: bold;">Game tự động phóng to tràn màn hình iPhone và Máy tính! 🐹</p>
+        <button class="action-btn" onclick="initGame()">Bắt Đầu Đập Chuột 🕹️</button>
+    </div>
+    <div id="gameOverScreen" style="display: none;">
+        <h1 class="screen-title" style="color: #ff4757;">HẾT GIỜ RỒI! ⏱️</h1>
+        <p style="font-size: 30px; margin-bottom: 25px; color: #57606f; font-weight: bold;">Số câu đúng bé đập được: <span id="finalScore" style="color:#2ed573; font-size:40px;">0</span> / 27</p>
+        <button class="action-btn" style="background: #ffa502; box-shadow: 0 10px 0 #e69500;" onclick="location.reload()">Chơi Lượt Mới 🔄</button>
+    </div>
+    <div id="hud" style="visibility: hidden;">
+        <div id="score-box">⭐ Điểm: <span id="scoreDisplay">0</span></div>
+        <div id="timerDisplay">⏱️ Thời gian: 10s</div>
+        <div id="livesDisplay">💖💖💖</div>
+    </div>
+    <div id="question-display-box" style="visibility: hidden;">Loading sentence...</div>
+    <div id="moleGrid" style="visibility: hidden;"></div>
+</div>
+<script>
+    // ==================== KHAI BÁO CÁC PHẦN TỬ ĐIỀU KHIỂN DOM ====================
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const questionDisplayBox = document.getElementById('question-display-box');
+    const moleGrid = document.getElementById('moleGrid');
+    const timerDisplay = document.getElementById('timerDisplay');
+    
+    const startScreen = document.getElementById('startScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const hud = document.getElementById('hud');
+
+    // Thuật toán co giãn thông minh kéo phẳng căng tràn hết màn hình không bị khung đen
+    function resizeGame() {
+        const targetWidth = 800;
+        const targetHeight = 650;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Tính toán chính xác tỷ lệ kéo giãn của cả hai trục X và Y để ép game tràn viền
+        let scaleX = windowWidth / targetWidth;
+        let scaleY = windowHeight / targetHeight;
+
+        // Ép toàn bộ khung gameArea co giãn tự động theo đúng kích thước thật của thiết bị
+        gameArea.style.transform = `scale(${scaleX}, ${scaleY})`;
+    }
+    window.addEventListener('resize', resizeGame);
+    window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+    resizeGame();
+
+    // ==================== KHO DỮ LIỆU TỪ VỰNG TIẾNG ANH CHUẨN CÓ MẠO TỪ ====================
+    const J_WORDS = [
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        { 
+            word: "jar", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#485460" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#485460"/><path d="M14,32H50" stroke="#485460" stroke-width="3" stroke-dasharray="4 3"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
+    ];
+
+    const K_WORDS = [
+        { word: "key", icon: "🔑", isSvg: false, article: "a" },
+        { word: "kite", icon: "🪁", isSvg: false, article: "a" },
+        { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
+        { word: "kitten", icon: "🐱", isSvg: false, article: "a" },
+        { word: "knife", icon: "🔪", isSvg: false, article: "a" },
+        { 
+            word: "kettle", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#485460" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#485460" stroke-width="4"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "king", icon: "👑", isSvg: false, article: "a" },
+        { word: "koala", icon: "🐨", isSvg: false, article: "a" }
+    ];
+
+    const L_WORDS = [
+        { word: "lion", icon: "🦁", isSvg: false, article: "a" },
+        { word: "lemon", icon: "🍋", isSvg: false, article: "a" },
+        { word: "leaf", icon: "🍃", isSvg: false, article: "a" },
+        { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
+        { 
+            word: "ladder", 
+            icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, 
+            isSvg: true, article: "a" 
+        },
+        { word: "lock", icon: "🔒", isSvg: false, article: "a" },
+        { word: "lips", icon: "👄", isSvg: false, article: "some" },
+        { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
+    ];
+
+    // CẤU HÌNH BIẾN TRẠNG THÁI HỆ THỐNG
+    let score = 0; let lives = 3; let currentQuestionIdx = 0; let questionsList = [];
+    let currentCorrectWord = ""; let isBlockClick = false; let gameOver = false;
+    let timerInterval = null; let moleInterval = null; let activeMolesTimeout = [];
+    let timeLeft = 10; let audioCtx = null; let backgroundMusicNode = null;
+ // ==================== HỆ THỐNG ÂM THANH (WEB AUDIO API & TTS) ====================
+    function initAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSoundTone(frequency, type, duration) {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    function startBackgroundMusic() {
+        try {
+            initAudioContext();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(261.63, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            setInterval(() => {
+                if(!gameOver && !isBlockClick) {
+                    gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.4);
+                }
+            }, 800);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start();
+            backgroundMusicNode = osc;
+        } catch(e){}
+    }
+
+    function speakVoice(textToSpeak, callback) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US'; utterance.rate = 0.9;
+            if(callback) utterance.onend = function() { callback(); };
+            window.speechSynthesis.speak(utterance);
+        } else if (callback) { setTimeout(callback, 2000); }
+    }
+
+    // ==================== CƠ CHẾ ĐẾM NGƯỢC THỜI GIAN (10 GIÂY/CÂU) ====================
+    function startTimer() {
+        clearInterval(timerInterval); timeLeft = 10;
+        timerDisplay.innerText = `⏱️ Thời gian: 10.0s`;
+        timerInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+            timeLeft -= 0.1;
+            timerDisplay.innerText = `⏱️ Thời gian: ${Math.max(0, timeLeft).toFixed(1)}s`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); stopAllMoleLoops(); handleTimeOut(); }
+        }, 100);
+    }
+
+    function handleTimeOut() {
+        isBlockClick = true; playSoundTone(150, 'sawtooth', 0.5); lives--; updateLivesDisplay();
+        gameArea.classList.add('flash-wrong');
+        speakVoice("Time out!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+    }
+
+    // ==================== THUẬT TOÁN SINH CÂU HỎI NGẪU NHIÊN ====================
+    function buildQuizDatabase() {
+        let list = [];
+        const templates = ["What is it? It is", "What can you see? I can see"];
+        let allWords = [...J_WORDS, ...K_WORDS, ...L_WORDS];
+
+        for(let i = 0; i < 27; i++) {
+            let item = allWords[i % allWords.length];
+            let basicTemplate = templates[Math.floor(Math.random() * templates.length)];
+            let sentenceText = `${basicTemplate} ${item.article} ${item.word}.`;
+            list.push({
+                correctWord: item.word, correctItem: item, voiceText: sentenceText,
+                questionText: `${basicTemplate} ${item.article} <span style="color:#ff4757; font-weight:900; text-transform:uppercase; border-bottom:4px dashed #ff4757;">${item.word}</span>.`
+            });
+        }
+        return list.sort(() => Math.random() - 0.5);
+    }
+
+    // ==================== KHỞI CHẠY VÀ VÒNG LẶP CHUỘT SỢI SVG ĐỘI CHỮ NGOI LÊN ====================
+    function initGame() {
+        initAudioContext(); startBackgroundMusic();
+        startScreen.style.display = 'none'; hud.style.visibility = 'visible'; questionDisplayBox.style.visibility = 'visible'; moleGrid.style.visibility = 'visible';
+        
+        moleGrid.innerHTML = "";
+        for(let i = 0; i < 9; i++) {
+            moleGrid.innerHTML += `<div class="mole-hole"><div class="mole-character" id="mole-${i}" onclick="whackMole(${i})"></div></div>`;
+        }
+
+        questionsList = buildQuizDatabase(); score = 0; lives = 3; currentQuestionIdx = 0; gameOver = false;
+        scoreDisplay.innerText = score; updateLivesDisplay(); loadQuestion();
+    }
+
+    function loadQuestion() {
+        isBlockClick = false; if (currentQuestionIdx >= questionsList.length) { endGame(true); return; }
+        const q = questionsList[currentQuestionIdx];
+        questionDisplayBox.innerHTML = q.questionText;
+        currentCorrectWord = q.correctWord;
+        
+        for(let i = 0; i < 9; i++) { setupMoleBlank(i); }
+
+        speakVoice(q.voiceText); startTimer();
+        startMoleSpawnLoop(q);
+    }
+
+    function setupMoleBlank(holeId) {
+        let mole = document.getElementById(`mole-${holeId}`);
+        mole.className = "mole-character";
+        mole.innerHTML = "";
+        mole.dataset.word = "";
+    }
+
+   // VÒNG LẶP CHUỘT NGOI LÊN: Xáo trộn vị trí ngẫu nhiên hoàn toàn (Bé phải tìm từ đúng)
+    function startMoleSpawnLoop(q) {
+        clearInterval(moleInterval);
+        activeMolesTimeout.forEach(clearTimeout);
+        activeMolesTimeout = [];
+
+        let allWords = [...J_WORDS, ...K_WORDS, ...L_WORDS];
+
+        // Cứ sau 2.0 giây sẽ chọn ngẫu nhiên 1 trong 9 lỗ để kích hoạt 1 chú chuột nhô lên
+        moleInterval = setInterval(() => {
+            if (gameOver || isBlockClick) return;
+
+            let randomHole = Math.floor(Math.random() * 9);
+            let mole = document.getElementById(`mole-${randomHole}`);
+            
+            // Nếu lỗ này đang có chuột đứng sẵn thì bỏ qua lượt này để tránh chồng chéo
+            if (mole.classList.contains('up')) return;
+
+            // XÁO TRỘN VỊ TRÍ: Tỷ lệ xuất hiện từ đúng là 70% ở một vị trí lỗ HOÀN TOÀN NGẪU NHIÊN
+            let isCorrectMole = Math.random() < 0.7;
+            let currentItem = q.correctItem;
+
+            if (!isCorrectMole) {
+                let wrongItems = allWords.filter(item => item.word !== q.correctWord);
+                currentItem = wrongItems[Math.floor(Math.random() * wrongItems.length)];
+            }
+
+            // Đưa dữ liệu từ vựng lên mình chú chuột chũi ngẫu nhiên này
+            mole.dataset.word = currentItem.word;
+            let iconHtml = currentItem.isSvg ? currentItem.icon : `<span class="mole-icon">${currentItem.icon}</span>`;
+            
+            // Vẽ giao diện chú chuột đội chữ và hình ảnh
+            mole.innerHTML = `
+                <div class="mole-item-wrapper">
+                    <span class="mole-text">${currentItem.word}</span>
+                    <div class="mole-icon">${iconHtml}</div>
+                </div>
+                <svg viewBox="0 0 100 100" width="100%" height="100%" style="position: absolute; bottom: 0; left: 0; z-index: 1;">
+                    <path d="M15,100 C15,35 85,35 85,100 Z" fill="#eccc68" stroke="#ff7f50" stroke-width="4"/>
+                    <circle cx="35" cy="55" r="8" fill="#ffffff" stroke="#485460" stroke-width="2"/>
+                    <circle cx="35" cy="55" r="3" fill="#000000"/>
+                    <circle cx="65" cy="55" r="8" fill="#ffffff" stroke="#485460" stroke-width="2"/>
+                    <circle cx="65" cy="55" r="3" fill="#000000"/>
+                    <rect x="25" y="52" width="50" height="6" rx="3" fill="none" stroke="#70a1ff" stroke-width="3"/>
+                    <ellipse cx="50" cy="68" rx="8" ry="5" fill="#ff6b81"/>
+                    <path d="M45,78 Q50,83 55,78" fill="none" stroke="#485460" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            `;
+
+            // Cho chuột nhô lên ở vị trí lỗ ngẫu nhiên vừa chọn
+            mole.classList.add('up');
+
+            // Sau 2.5 giây chuột tự động lặn xuống
+            let individualTimeout = setTimeout(() => {
+                if (!isBlockClick && !gameOver) {
+                    mole.classList.remove('up');
+                }
+            }, 2500);
+            activeMolesTimeout.push(individualTimeout);
+
+        }, 2000);
+    }
+    function stopAllMoleLoops() {
+        clearInterval(moleInterval);
+        activeMolesTimeout.forEach(clearTimeout);
+        for(let i = 0; i < 9; i++) { document.getElementById(`mole-${i}`).classList.remove('up'); }
+    }
+
+    // ==================== LOGIC ĐẬP CHUỘT CHŨI BẰNG BÚA ====================
+    function whackMole(holeId) {
+        if (isBlockClick || gameOver) return;
+        let clickedMole = document.getElementById(`mole-${holeId}`);
+        if (!clickedMole || !clickedMole.classList.contains('up')) return;
+
+        isBlockClick = true; stopAllMoleLoops();
+        let isCorrect = (clickedMole.dataset.word === currentCorrectWord);
+
+        if (isCorrect) {
+            gameArea.classList.add('flash-correct'); score++; scoreDisplay.innerText = score;
+            playSoundTone(523.25, 'sine', 0.15);
+            speakVoice("Bingo!", function() { gameArea.classList.remove('flash-correct'); advanceToNextQuestion(); });
+        } else {
+            gameArea.classList.add('flash-wrong'); lives--; updateLivesDisplay();
+            playSoundTone(220, 'sawtooth', 0.4);
+            speakVoice("Oh no!", function() { gameArea.classList.remove('flash-wrong'); if (lives <= 0) { endGame(false); } else { advanceToNextQuestion(); } });
+        }
+    }
+
+    function advanceToNextQuestion() { currentQuestionIdx++; loadQuestion(); }
+    function updateLivesDisplay() { livesDisplay.innerText = "💖".repeat(lives) + "🖤".repeat(3 - lives); }
+
+    function endGame(isWin) {
+        gameOver = true; stopAllMoleLoops(); if(backgroundMusicNode) try { backgroundMusicNode.stop(); } catch(e){}
+        hud.style.visibility = 'hidden'; questionDisplayBox.style.visibility = 'hidden'; moleGrid.style.visibility = 'hidden';
+        gameOverScreen.style.display = 'flex'; finalScore.innerText = score;
+        if (isWin) { speakVoice("Amazing! You are the mole hunter king!"); } 
+        else { speakVoice("Great try! Let's play again!"); }
+    }
+</script>
+</body>
+</html>
