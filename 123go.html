@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say The Word On Beat - TikTok Challenge Perfect</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #ff007f;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        .info {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #00ffff;
+        }
+
+        .pattern-info {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffaa00;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            text-align: center;
+            min-height: 35px;
+        }
+
+        /* Lưới hiển thị đủ 8 ô chữ (4x2) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 650px;
+            width: 95%;
+        }
+
+        .word-box {
+            background-color: #1f1f1f;
+            border: 3px solid #333;
+            border-radius: 16px;
+            padding: 20px 5px;
+            text-align: center;
+            transition: all 0.04s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Định dạng cho ảnh SVG tự vẽ */
+        .word-box .svg-icon {
+            width: 55px;
+            height: 55px;
+            opacity: 0.25; 
+            transition: all 0.04s ease-in-out;
+        }
+
+        /* Tên chữ tiếng Anh */
+        .word-box .text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #555;
+            transition: all 0.04s ease-in-out;
+        }
+
+        /* HIỆU ỨNG KHI ĐÈN NHÁY THEO NHỊP */
+        .word-box.active {
+            background-color: #ff007f;
+            border-color: #ffffff;
+            transform: scale(1.08);
+            box-shadow: 0 0 25px #ff007f;
+        }
+
+        .word-box.active .text {
+            color: #ffffff;
+        }
+        
+        .word-box.active .svg-icon {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        /* Giữ cho màu sắc các đường nét hình vẽ SVG sáng lên khi trúng nhịp */
+        .word-box.active .svg-icon stroke {
+            stroke: #ffffff;
+        }
+        .word-box.active .svg-icon fill {
+            fill: #ffffff;
+        }
+
+        button {
+            margin-top: 35px;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            background-color: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>SAY THE WORD ON BEAT!</h1>
+    <div class="info">Vòng: <span id="round">1</span> | Tốc độ: <span id="bpm">110</span> BPM</div>
+    <div class="pattern-info" id="pattern-text">Bấm nút để bắt đầu thử thách</div>
+
+    <div class="grid-container" id="grid">
+        <!-- 8 ô chữ tự động hiển thị ở đây -->
+    </div>
+
+    <button id="start-btn" onclick="toggleGame()">BẮT ĐẦU CHƠI</button>
+
+    <script>
+        // Kho hình ảnh SVG tự vẽ chi tiết và phân biệt rõ ràng cho từng từ
+        const svgIcons = {
+            JUG: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ff007f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a7 7 0 0 0 14 0Z"/><path d="M18 11h2a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/></svg>`,
+            JAR: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8v2H8Z"/><path d="M6 9v10a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9c0-2-2-4-4-4H10C8 5 6 7 6 9Z"/></svg>`,
+            JUICE: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ffaa00" stroke-width="2"><rect x="6" y="6" width="12" height="15" rx="2"/><path d="M12 6V3m0 0h3"/></svg>`,
+            JET: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="2"><path d="M22 2 15 5 9 11 4 9 2 11l5 3 3 5 2-2-2-5 6-6Z"/></svg>`,
+            JACKET: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ff00ff" stroke-width="2"><path d="M5 3h14v18H5z M5 8h14 M12 8v13 M5 3l7 5 7-5"/></svg>`,
+            JAM: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ff0055" stroke-width="2"><path d="M8 4h8v3H8z M6 7h12v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7z M9 12h6"/></svg>`,
+            JELLYFISH: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#00ffaa" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8h16a8 8 0 0 0-8-8z M8 10v10 M12 10v12 M16 10v10"/></svg>`,
+            JELLY: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ffff00" stroke-width="2"><path d="M4 18l2-10h12l2 10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z M6 8a3 3 0 0 1 6 0 3 3 0 0 1 6 0"/></svg>`
+        };
+
+        // Danh sách 4 cặp từ hoán đổi luân phiên
+        const wordPairs = [
+            { word1: { text: "JUG", icon: svgIcons.JUG }, word2: { text: "JAR", icon: svgIcons.JAR } },         
+            { word1: { text: "JUICE", icon: svgIcons.JUICE }, word2: { text: "JET", icon: svgIcons.JET } },       
+            { word1: { text: "JACKET", icon: svgIcons.JACKET }, word2: { text: "JAM", icon: svgIcons.JAM } },      
+            { word1: { text: "JELLYFISH", icon: svgIcons.JELLYFISH }, word2: { text: "JELLY", icon: svgIcons.JELLY } }   
+        ];
+
+        // Chuỗi quy luật sắp xếp chữ cố định cho 8 ô (0: Từ thứ nhất, 1: Từ thứ hai)
+        const layouts = [
+            { name: "Nhịp xen kẽ (1-2-1-2-1-2-1-2)", sequence: [0, 1, 0, 1, 0, 1, 0, 1] },
+            { name: "Nhịp đôi (1-1-2-2-1-1-2-2)", sequence: [0, 0, 1, 1, 0, 0, 1, 1] },
+            { name: "Nhịp dồn nâng cao (1-1-1-2-2-2-2-1)", sequence: [0, 0, 0, 1, 1, 1, 1, 0] }
+        ];
+
+        let currentRound = 0;
+        let bpm = 110; 
+        let activeIndex = 0; 
+        let gameInterval = null;
+        let isPlaying = false;
+        let isFirstBeatOfRound = true; 
+        
+        let audioCtx = null; 
+
+        const gridElement = document.getElementById("grid");
+        const startBtn = document.getElementById("start-btn");
+        const roundText = document.getElementById("round");
+        const bpmText = document.getElementById("bpm");
+        const patternText = document.getElementById("pattern-text");
+
+        // Tạo cấu trúc 8 ô chữ trên màn hình
+        function buildRoundLayout() {
+            gridElement.innerHTML = "";
+            
+            let pairIndex = Math.floor(currentRound / layouts.length) % wordPairs.length;
+            let pair = wordPairs[pairIndex];
+
+            let layoutIndex = currentRound % layouts.length;
+            let currentLayout = layouts[layoutIndex];
+
+            for (let i = 0; i < 8; i++) {
+                let wordType = currentLayout.sequence[i]; 
+                let targetData = (wordType === 0) ? pair.word1 : pair.word2;
+
+                const box = document.createElement("div");
+                box.className = "word-box";
+                box.id = `box-${i}`;
+
+                // Chèn mã vẽ hình SVG trực tiếp
+                const iconContainer = document.createElement("div");
+                iconContainer.innerHTML = targetData.icon;
+
+                const textDiv = document.createElement("div");
+                textDiv.className = "text";
+                textDiv.innerText = targetData.text;
+
+                box.appendChild(iconContainer.firstChild);
+                box.appendChild(textDiv);
+                gridElement.appendChild(box);
+            }
+
+            roundText.innerText = currentRound + 1;
+            bpmText.innerText = bpm;
+            patternText.innerText = `Từ: ${pair.word1.text} & ${pair.word2.text} | ${currentLayout.name}`;
+        }
+
+        // Tạo âm thanh gõ phách
+        function playBeatSound() {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(750, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch (e) {
+                console.log("Audio Error:", e);
+            }
+        }
+
+        // Cơ chế nhảy đèn theo nhịp phách tuần tự qua 8 ô
+        function nextBeat() {
+            for (let i = 0; i < 8; i++) {
+                const el = document.getElementById(`box-${i}`);
+                if (el) el.classList.remove("active");
+            }
+
+            if (!isFirstBeatOfRound) {
+                activeIndex++;
+            } else {
+                isFirstBeatOfRound = false; 
+            }
+
+            if (activeIndex >= 8) {
+                activeIndex = 0;
+                isFirstBeatOfRound = true; 
+                currentRound++;
+                bpm += 10; 
+                clearInterval(gameInterval);
+buildRoundLayout();
+                startMetronome();
+                return;
+            }
+
+            const currentBox = document.getElementById(`box-${activeIndex}`);
+            if (currentBox) currentBox.classList.add("active");
+            
+            playBeatSound();
+        }
+
+        function startMetronome() {
+            const intervalMs = (60 / bpm) * 1000;
+            gameInterval = setInterval(nextBeat, intervalMs);
+        }
+
+        function toggleGame() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (isPlaying) {
+                clearInterval(gameInterval);
+                startBtn.innerText = "BẮT ĐẦU CHƠI";
+                startBtn.style.backgroundColor = "#00ffff";
+                isPlaying = false;
+                activeIndex = 0;
+                isFirstBeatOfRound = true;
+                patternText.innerText = "Bấm nút để bắt đầu thử thách";
+                for (let i = 0; i < 8; i++) {
+                    const el = document.getElementById(`box-${i}`);
+                    if (el) el.classList.remove("active");
+                }
+            } else {
+                currentRound = 0;
+                bpm = 110;
+                activeIndex = 0;
+                isFirstBeatOfRound = true;
+                buildRoundLayout();
+                startMetronome();
+                startBtn.innerText = "DỪNG LẠI";
+                startBtn.style.backgroundColor = "#ff0000";
+                isPlaying = true;
+            }
+        }
+
+        // Khởi động giao diện hiển thị đầu tiên
+        buildRoundLayout();
+    </script>
+</body>
+</html>
