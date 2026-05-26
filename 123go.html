@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Say The Word On Beat - TikTok Synced Fix</title>
+    <title>Say The Word On Beat - AI Voice Edition Perfect</title>
     <style>
         * {
             box-sizing: border-box;
@@ -38,27 +38,28 @@
         }
 
         .pattern-info {
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.5rem);
             font-weight: bold;
             color: #ffaa00;
             margin-bottom: 25px;
             text-transform: uppercase;
             text-align: center;
-            min-height: 35px;
+            min-height: 40px;
             width: 100%;
             word-wrap: break-word;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
         }
 
-        /* Lưới tự động thích ứng với kích thước màn hình, chống tràn chữ */
+        /* Lưới tự co giãn thích ứng mọi màn hình */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr); 
             gap: 15px;
             max-width: 650px;
             width: 100%;
+            transition: transform 0.1s ease;
         }
 
-        /* Chuyển thành lưới 2 cột khi chạy trên điện thoại di động nhỏ */
         @media (max-width: 500px) {
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -81,7 +82,6 @@
             min-width: 0; 
         }
 
-        /* Kích thước ảnh Vector co giãn linh hoạt */
         .word-box .svg-icon {
             width: clamp(40px, 10vw, 55px);
             height: clamp(40px, 10vw, 55px);
@@ -89,7 +89,6 @@
             transition: all 0.04s ease-in-out;
         }
 
-        /* Chữ tự động thu nhỏ dựa trên độ rộng màn hình, không sợ bị khuất từ JELLYFISH */
         .word-box .text {
             font-size: clamp(0.9rem, 2.5vw, 1.3rem);
             font-weight: bold;
@@ -102,12 +101,12 @@
             width: 100%;
         }
 
-        /* HIỆU ỨNG KHI ĐÈN NHÁY THEO NHỊP CHÍNH THỨC */
+        /* ĐÈN CHỈ SÁNG KHI VÀO TRẬN CHÍNH THỨC */
         .word-box.active {
             background-color: #ff007f;
             border-color: #ffffff;
-            transform: scale(1.06);
-            box-shadow: 0 0 20px #ff007f;
+            transform: scale(1.08);
+            box-shadow: 0 0 25px #ff007f;
         }
 
         .word-box.active .text {
@@ -116,13 +115,13 @@
         
         .word-box.active .svg-icon {
             opacity: 1;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
         button {
             margin-top: 35px;
             padding: 15px 40px;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             font-weight: bold;
             background-color: #00ffff;
             color: #000;
@@ -142,20 +141,17 @@
 <body>
 
     <h1>SAY THE WORD ON BEAT!</h1>
-    <div class="info">Vòng: <span id="round">1</span> | Tốc độ: Nhạc gốc TikTok</div>
+    <div class="info">Vòng: <span id="round">1</span> | Tốc độ: <span id="bpm-display">120</span> BPM</div>
     <div class="pattern-info" id="pattern-text">Bấm nút để bắt đầu thử thách</div>
 
     <div class="grid-container" id="grid">
-        <!-- 8 ô chữ sẽ tự sinh ở đây -->
+        <!-- 8 ô chữ tự động sinh ở đây -->
     </div>
 
     <button id="start-btn" onclick="toggleGame()">BẮT ĐẦU CHƠI</button>
 
-    <!-- Tệp nhạc nền gốc chứa câu đếm thoại dạo đầu mở màn -->
-    <audio id="tiktok-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" crossorigin="anonymous"></audio>
-
     <script>
-        // Sơ đồ vẽ hình Vector trực tiếp, sắc nét, không bị lỗi hiển thị hình ảnh
+        // Hệ thống vẽ hình Vector trực tiếp không lỗi ô vuông
         const svgIcons = {
             JUG: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#ff007f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a7 7 0 0 0 14 0Z"/><path d="M18 11h2a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/></svg>`,
             JAR: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8v2H8Z"/><path d="M6 9v10a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9c0-2-2-4-4-4H10C8 5 6 7 6 9Z"/></svg>`,
@@ -174,7 +170,7 @@
             { word1: { text: "JELLYFISH", icon: svgIcons.JELLYFISH }, word2: { text: "JELLY", icon: svgIcons.JELLY } }   
         ];
 
-        // Chuỗi nhịp gõ phách cố định cho 8 ô chữ
+        // ĐÃ ĐIỀN ĐỦ SỐ 100%: 0 tương ứng từ thứ 1, 1 tương ứng từ thứ 2
         const sequence1 = [0, 1, 0, 1, 0, 1, 0, 1];
         const sequence2 = [0, 0, 1, 1, 0, 0, 1, 1];
         const sequence3 = [0, 0, 0, 1, 1, 1, 1, 0];
@@ -186,21 +182,20 @@
         ];
 
         let currentRound = 0;
-        let activeIndex = -1; // -1 đại diện cho trạng thái chưa có ô nào sáng đèn
+        let activeIndex = -1; 
         let gameInterval = null;
         let isPlaying = false;
         let isFirstBeatOfRound = true; 
         
-        const beatIntervalMs = 500; 
-
-        // Độ trễ chờ Intro: Đợi chuẩn 6 giây nhạc dạo đầu chạy hết hoàn toàn mới phát đèn
-        const introDelayMs = 6000; 
+        let bpm = 120;
+        let audioCtx = null;
+        let introTimeouts = []; 
 
         const gridElement = document.getElementById("grid");
         const startBtn = document.getElementById("start-btn");
         const roundText = document.getElementById("round");
+        const bpmDisplay = document.getElementById("bpm-display");
         const patternText = document.getElementById("pattern-text");
-        const audioTrack = document.getElementById("tiktok-audio");
 
         function buildRoundLayout() {
             gridElement.innerHTML = "";
@@ -229,11 +224,70 @@
                 gridElement.appendChild(box);
             }
             roundText.innerText = currentRound + 1;
+            bpmDisplay.innerText = bpm;
             patternText.innerText = `Từ: ${pair.word1.text} & ${pair.word2.text} | ${currentLayout.name}`;
         }
 
+        // Tạo tiếng gõ phách cơ học của máy đếm nhịp
+        function playBeatSound(freq = 700, vol = 0.3, duration = 0.04) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration + 0.01);
+            } catch (e) { console.log(e); }
+        }
+
+        // Giọng AI đọc chữ tiếng Anh dạo đầu
+        function speakWord(text) {
+            if (!isPlaying) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+           utterance.rate = 1.3; 
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Chuỗi thời gian chờ phách gõ dạo đầu khớp tiếng đọc AI
+        function runAIIntroCountdown(onFinished) {
+            window.speechSynthesis.cancel(); 
+            introTimeouts = [];
+            
+            const intervals = [0, 400, 800, 1200, 1800, 2300, 2800, 3300];
+            const words = ["U", "ba", "da", "da", "One", "Two", "Three", "Go"];
+            const freqs = [400, 450, 500, 550, 650, 650, 650, 850];
+
+            intervals.forEach((delay, index) => {
+                let t = setTimeout(() => {
+                    if (!isPlaying) return;
+                    
+                    speakWord(words[index]);
+                    playBeatSound(freqs[index], 0.4, 0.08);
+                    patternText.innerText = `Chờ khởi động... ${words[index].toUpperCase()}`;
+
+                    gridElement.style.transform = "scale(1.02)";
+                    setTimeout(() => gridElement.style.transform = "scale(1)", 60);
+                }, delay);
+                introTimeouts.push(t);
+            });
+
+            // Đợi chuẩn phách AI đọc xong chữ Go! mới kích hoạt nhảy đèn ô chữ số 1
+            let finalTimeout = setTimeout(() => {
+                if (isPlaying) {
+                    onFinished();
+                }
+            }, 3800);
+            introTimeouts.push(finalTimeout);
+        }
+
         function nextBeat() {
-            // Tắt đèn tất cả các ô trước khi nhấp nháy ô tiếp theo
             for (let i = 0; i < 8; i++) {
                 const el = document.getElementById(`box-${i}`);
                 if (el) el.classList.remove("active");
@@ -249,26 +303,38 @@
                 activeIndex = 0;
                 isFirstBeatOfRound = true; 
                 currentRound++;
+                bpm += 10; 
                 clearInterval(gameInterval);
- buildRoundLayout();
-                gameInterval = setInterval(nextBeat, beatIntervalMs);
+                buildRoundLayout();
+                
+                const intervalMs = (60 / bpm) * 1000;
+                gameInterval = setInterval(nextBeat, intervalMs);
                 return;
             }
 
             const currentBox = document.getElementById(`box-${activeIndex}`);
             if (currentBox) currentBox.classList.add("active");
+            
+            playBeatSound(750, 0.3, 0.04); 
         }
 
         function toggleGame() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
             if (isPlaying) {
-                // Thao tác dừng game, tắt nhạc nền dứt khoát
                 clearInterval(gameInterval);
-                audioTrack.pause();
-                audioTrack.currentTime = 0;
+                introTimeouts.forEach(t => clearTimeout(t)); 
+                window.speechSynthesis.cancel(); 
+                
                 startBtn.innerText = "BẮT ĐẦU CHƠI";
                 startBtn.style.backgroundColor = "#00ffff";
                 isPlaying = false;
-                activeIndex = -1; // Trả về trạng thái đóng băng ẩn đèn
+                activeIndex = -1; 
                 isFirstBeatOfRound = true;
                 patternText.innerText = "Bấm nút để bắt đầu thử thách";
                 for (let i = 0; i < 8; i++) {
@@ -276,41 +342,33 @@
                     if (el) el.classList.remove("active");
                 }
             } else {
-                // Khởi tạo trạng thái ban đầu nhưng GIỮ CHO TOÀN BỘ Ô CHỮ TẮT ĐÈN
                 currentRound = 0;
-                activeIndex = 0; // Đặt sẵn chỉ số ô số 1 chuẩn bị chạy sau khi hết intro
+                bpm = 120; 
+                activeIndex = 0; 
                 isFirstBeatOfRound = true;
+                isPlaying = true;
                 
-                // Vẽ lưới chữ ban đầu ở trạng thái mờ, KHÔNG gọi kích hoạt lớp .active
                 buildRoundLayout();
+                for (let i = 0; i < 8; i++) {
+                    const el = document.getElementById(`box-${i}`);
+                    if (el) el.classList.remove("active");
+                }
                 
                 startBtn.innerText = "DỪNG LẠI";
                 startBtn.style.backgroundColor = "#ff0000";
-                isPlaying = true;
 
-                patternText.innerText = "Chuẩn bị nhạc dạo: Ubaddada... 1... 2... 3... GO!";
-                
-                audioTrack.play().then(() => {
-                    // ĐÓNG BĂNG HOÀN TOÀN: Đợi đúng 6.0 giây (nhạc dạo chạy xong) mới gọi lệnh kích hoạt đèn nhảy
-                    setTimeout(() => {
-                        if (isPlaying) {
-                            // Ô số 1 chính thức sáng đèn hồng neon khi vào phách nhạc chính
-                            const currentBox = document.getElementById(`box-${activeIndex}`);
-                            if (currentBox) currentBox.classList.add("active");
-                            
-                            // Bắt đầu chu kỳ quét đèn tự động theo phách
-                            gameInterval = setInterval(nextBeat, beatIntervalMs);
-                        }
-                    }, introDelayMs);
-                }).catch(err => {
-                    console.log("Audio Error:", err);
-                    // Nếu lỗi âm thanh trình duyệt chặn, tự động nhảy đèn cứu cánh luôn
-                    gameInterval = setInterval(nextBeat, beatIntervalMs);
+                runAIIntroCountdown(() => {
+                    buildRoundLayout();
+                    const currentBox = document.getElementById(`box-${activeIndex}`);
+                    if (currentBox) currentBox.classList.add("active");
+                    playBeatSound(750, 0.3, 0.04);
+
+                    const intervalMs = (60 / bpm) * 1000;
+                    gameInterval = setInterval(nextBeat, intervalMs);
                 });
             }
         }
 
-        // Vẽ giao diện lần đầu tiên lúc nạp trang
         buildRoundLayout();
     </script>
 </body>
