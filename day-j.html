@@ -34,13 +34,12 @@
       background-size: 50px 50px; opacity: 0.5; animation: starBlink 3s infinite alternate linear; z-index: 1;
     }
     
-    /* VỊ TRÍ CÁC HÀNH TINH BAY XA */
     .planet1 { position: absolute; top: 6%; left: 6%; font-size: 9vw; animation: spinPlanet 20s linear infinite; z-index: 2; }
     .planet2 { position: absolute; top: 6%; right: 6%; font-size: 9vw; animation: spinPlanet 35s linear infinite reverse; z-index: 2; }
     #videoContainer.landscape-mode .planet1 { font-size: 6vw; }
     #videoContainer.landscape-mode .planet2 { font-size: 6vw; }
 
-    /* ---- KHUNG TRANH EMOJI VẬT THỂ (NẰM CHÍNH GIỮA) ---- */
+    /* ---- KHUNG TRANH EMOJI VẬT THỂ ---- */
     .illustration-box {
       position: absolute; top: 18%; left: 10%; width: 80%; height: 35%;
       display: flex; align-items: center; justify-content: center; z-index: 4;
@@ -64,7 +63,6 @@
     }
     #videoContainer.landscape-mode .word-box { bottom: 12%; left: 35%; width: 55%; }
 
-    /* Khung chữ Intro mở đầu */
     #introBox { position: absolute; width: 100%; text-align: center; top: 42%; z-index: 6; }
     #videoContainer.landscape-mode #introBox { left: 32%; width: 55%; top: 40%; }
 
@@ -79,7 +77,7 @@
     #videoContainer.landscape-mode .vocab-word { font-size: 9vw; }
     .vocab-word .highlight-j { color: #ff3333; text-shadow: 4px 4px 0px #fff; }
 
-    /* ---- KHU VỰC NÚT BẤM MICRO ĐỂ QUA MẶT SAFARI SAFARI ---- */
+    /* ---- KHU VỰC NÚT BẤM MICRO THÔNG MINH ---- */
     #micButtonZone {
       position: absolute; bottom: 25%; left: 10%; width: 80%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -88,18 +86,22 @@
     #videoContainer.landscape-mode #micButtonZone { bottom: 15%; left: 35%; width: 55%; }
 
     .big-mic-btn {
-      width: 80px; height: 80px; border-radius: 50%; background: #ff3333; border: 4px solid white;
-      font-size: 35px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 20px rgba(255, 51, 51, 0.6); animation: pulseMic 0.8s infinite alternate;
+      width: 90px; height: 90px; border-radius: 50%; background: #ff3333; border: 5px solid white;
+      font-size: 40px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 25px rgba(255, 51, 51, 0.6); animation: pulseMic 0.8s infinite alternate;
     }
-    .big-mic-btn.listening { background: #2ecc71; box-shadow: 0 0 25px #2ecc71; animation: pulseMic 0.4s infinite alternate; }
+    .big-mic-btn.listening { background: #2ecc71; box-shadow: 0 0 30px #2ecc71; animation: pulseMic 0.4s infinite alternate; }
     
-    .mic-hint { color: white; font-size: 14px; margin-top: 8px; font-weight: bold; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 10px; }
+    .mic-hint { color: white; font-size: 15px; margin-top: 10px; font-weight: bold; background: rgba(0,0,0,0.7); padding: 6px 16px; border-radius: 20px; text-align: center; }
 
-    /* Nút bỏ qua nhỏ phòng hờ bé nói mãi không được */
+    /* ---- HỆ THỐNG ĐẾM CƠ HỘI (NGÔI SAO) ---- */
+    .heart-zone {
+      display: flex; gap: 8px; margin-bottom: 8px; font-size: 22px;
+    }
+
     .skip-btn {
       position: absolute; bottom: 5%; right: 5%; background: rgba(255,255,255,0.2); color: white;
-      border: 1px solid rgba(255,255,255,0.4); padding: 5px 12px; border-radius: 15px; font-size: 12px; z-index: 40;
+      border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px; border-radius: 15px; font-size: 13px; z-index: 40; cursor: pointer;
     }
 
     .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: center; width: 92vw; }
@@ -109,7 +111,7 @@
     }
     button:hover { background: #ffeaa7; transform: scale(1.03); }
 
-    /* Hiệu ứng chuyển động */
+    /* Animations */
     @keyframes move-float { 0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; } 50% { transform: translateY(-15px) rotate(2deg); opacity: 1; } }
     @keyframes move-wind { 0%, 100% { transform: rotate(-6deg); opacity: 1; } 50% { transform: rotate(8deg); opacity: 1; } }
     @keyframes move-jump { 0%, 100% { transform: translateY(0) scaleY(1); opacity: 1; } 50% { transform: translateY(-25px) scaleY(0.85); opacity: 1; } }
@@ -138,6 +140,11 @@
     <div class="teacher-lady">👩‍🏫</div>
 
     <div id="micButtonZone">
+      <div class="heart-zone" id="heartZone">
+        <span id="star1">⭐</span>
+        <span id="star2">⭐</span>
+        <span id="star3">⭐</span>
+      </div>
       <button id="bigMicAction" class="big-mic-btn" onclick="triggerVoiceListening()">🎤</button>
       <div id="micHintText" class="mic-hint">BẤM VÀO MICRO ĐỂ NÓI</div>
     </div>
@@ -177,6 +184,7 @@
     let targetWordString = "";
     let isIntroStageMode = false;
     let isWaitingForClick = false;
+    let wrongAttempts = 0; // Biến đếm số lần bé đọc sai cho từ hiện tại
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition;
@@ -199,13 +207,21 @@
       window.speechSynthesis.speak(speech);
     }
 
-    // Thiết lập hệ thống đợi bé chạm tay vào nút Mic
+    // Cập nhật giao diện số ngôi sao (lượt chơi còn lại)
+    function updateStarsUI() {
+      document.getElementById('star1').innerText = wrongAttempts < 1 ? "⭐" : "⚫";
+      document.getElementById('star2').innerText = wrongAttempts < 2 ? "⭐" : "⚫";
+      document.getElementById('star3').innerText = wrongAttempts < 3 ? "⭐" : "⚫";
+    }
+
     function prepareForKidInput(correctTargetWord, isIntro) {
       targetWordString = correctTargetWord;
       isIntroStageMode = isIntro;
       isWaitingForClick = true;
+      if (!isIntro) { wrongAttempts = 0; } // Reset số lần sai cho từ mới
+      
+      updateStarsUI();
 
-      // Ẩn chữ/ảnh tạm thời để hiện nút Mic cho bé tập trung bấm
       document.getElementById('wordBox').style.opacity = 0;
       document.getElementById('micButtonZone').style.display = "flex";
       document.getElementById('skipBtn').style.display = "block";
@@ -216,7 +232,6 @@
       document.getElementById('micHintText').innerText = "BẤM VÀO MICRO ĐỂ NÓI";
     }
 
-    // Hành động kích hoạt thu âm khi bé CHẠM vào nút Mic (Bắt buộc với Safari iOS)
     function triggerVoiceListening() {
       if (!isWaitingForClick) return;
       isWaitingForClick = false;
@@ -227,8 +242,7 @@
       document.getElementById('micHintText').innerText = "CÔ GIÁO ĐANG NGHE...";
 
       if (!SpeechRecognition) {
-        // Giả lập nếu trình duyệt hoàn toàn không hỗ trợ thu âm
-        setTimeout(() => { successAction(); }, 2000);
+        setTimeout(() => { successAction(); }, 1500);
         return;
       }
 
@@ -237,7 +251,7 @@
       recognition = new SpeechRecognition();
       recognition.lang = 'en-US';
       recognition.interimResults = false;
-      recognition.continuous = false; // Ngắt mic ngay khi bé dừng nói trên iOS
+      recognition.continuous = false;
       recognition.maxAlternatives = 1;
 
       recognition.onresult = function(event) {
@@ -253,8 +267,7 @@
 
       recognition.onerror = function(e) {
         console.log("Lỗi mic:", e);
-        // Nếu lỗi do im lặng hoặc không cấp quyền, tự động cho qua sau vài giây để không bị kẹt bài học
-        setTimeout(() => { forceSkip(); }, 1000);
+        failAction(); // Nếu không nghe thấy gì cũng tính là 1 lần thử sai
       };
 
       try { recognition.start(); } catch (err) { console.log(err); }
@@ -271,13 +284,29 @@
           if (isIntroStageMode) {
             if (targetWordString === "j") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
           } else { moveNext(); }
-        }, 1200);
+        }, 1000);
       });
     }
 
     function failAction() {
+      wrongAttempts++;
+      updateStarsUI();
+
       const micBtn = document.getElementById('bigMicAction');
       micBtn.className = "big-mic-btn";
+
+      // KIỂM TRA NẾU SAI ĐỦ 3 LẦN THÌ CHO QUA LUÔN
+      if (wrongAttempts >= 3 && !isIntroStageMode) {
+        micBtn.innerText = "💪";
+        document.getElementById('micHintText').innerText = "CỐ GẮNG LẮM! ĐI TIẾP NÀO!";
+        
+        playAudio("Good try! Let's check the next one!", 0.85, () => {
+          setTimeout(() => { forceSkip(); }, 1000);
+        });
+        return;
+      }
+
+      // Nếu chưa đủ 3 lần thì cho bé thử lại
       micBtn.innerText = "❌";
       document.getElementById('micHintText').innerText = "CHƯA ĐÚNG RỒI, THỬ LẠI NÀO!";
 
@@ -286,7 +315,7 @@
           isWaitingForClick = true;
           micBtn.innerText = "🎤";
           document.getElementById('micHintText').innerText = "BẤM ĐỂ THỬ LẠI";
-        }, 1200);
+        }, 1000);
       });
     }
 
