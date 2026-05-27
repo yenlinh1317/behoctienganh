@@ -2,133 +2,139 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bãi Biển Tiếng Anh - Học Letter K Toàn Diện</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Bãi Biển Tiếng Anh - Tối Ưu Tự Co Giãn iPhone</title>
   <link href="https://googleapis.com" rel="stylesheet">
   <style>
+    /* Reset hệ thống tối ưu tràn viền cho tai thỏ/dynamic island của iPhone */
+    * { box-sizing: border-box; }
     body {
-      margin: 0; background: #222; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 100vh;
+      margin: 0; padding: 0; background: #222;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; min-height: -webkit-fill-available;
       font-family: 'Fredoka One', 'Quicksand', sans-serif; overflow: hidden;
+      -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
     }
 
-    /* ---- KHUNG PHIM BÃI BIỂN CHÍNH ---- */
+    /* ---- KHUNG PHIM TỰ ĐỘNG CO GIÃN THEO MÀN HÌNH ĐIỆN THOẠI ---- */
     #videoContainer {
       position: relative;
       background: linear-gradient(to bottom, #74b9ff 0%, #ffeaa7 55%, #ffbe76 100%);
-      border: 8px solid #fff; border-radius: 25px; overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: all 0.3s ease;
+      border: 6px solid #fff; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      width: 92vw;
+      height: calc(92vw * 16 / 9); /* Mặc định giữ tỷ lệ dọc 9:16 siêu chuẩn */
+      max-height: 75vh;
+      margin: auto;
     }
-    .size-pc { width: 854px; height: 480px; }
-    .size-iphone { width: 360px; height: 640px; }
 
-    /* Ông mặt trời */
+    /* Nếu người dùng chọn xem màn hình ngang kiểu Youtube trên điện thoại */
+    #videoContainer.landscape-mode {
+      width: 94vw;
+      height: calc(94vw * 9 / 16);
+      max-height: 75vh;
+    }
+
+    /* --- CÁC PHẦN TỬ TRONG TRƯỜNG QUAY (TỰ ĐỘNG DI CHUYỂN THEO TỶ LỆ %) --- */
     .sun {
-      position: absolute; top: 20px; left: 30px; font-size: 70px;
-      filter: drop-shadow(0 0 20px #ffcb05);
-      animation: sunGlow 2s infinite alternate ease-in-out;
+      position: absolute; top: 4%; left: 6%; font-size: 10vw;
+      filter: drop-shadow(0 0 15px #ffcb05); animation: sunGlow 2s infinite alternate ease-in-out;
     }
-    /* Chim hải âu */
-    .bird1 { position: absolute; top: 50px; left: 30%; font-size: 24px; animation: birdFly 7s infinite linear; }
-    .bird2 { position: absolute; top: 80px; left: 50%; font-size: 20px; animation: birdFly 9s infinite linear reverse; }
+    #videoContainer.landscape-mode .sun { font-size: 6vw; }
 
-    /* Cây dừa đung đưa bãi biển */
+    .bird1 { position: absolute; top: 8%; left: -50px; font-size: 4vw; animation: birdFly 8s infinite linear; }
+    .bird2 { position: absolute; top: 14%; left: -50px; font-size: 3.5vw; animation: birdFly 11s infinite linear reverse; }
+
     .palm-tree {
-      position: absolute; bottom: 60px; right: 20px; font-size: 110px; z-index: 3;
-      transform-origin: bottom center;
-      animation: palmSway 3s infinite alternate ease-in-out;
+      position: absolute; bottom: 12%; right: 4%; font-size: 20vw; z-index: 3;
+      transform-origin: bottom center; animation: palmSway 3s infinite alternate ease-in-out;
     }
-    .size-iphone .palm-tree { font-size: 80px; bottom: 80px; right: 10px; }
+    #videoContainer.landscape-mode .palm-tree { font-size: 13vw; bottom: 12%; }
 
-    /* SÓNG BIỂN XÔ VÀO BỜ (Dâng lên rút xuống liên tục) */
+    /* Sóng biển dâng tràn bãi cát tự co giãn */
     .sea-wave {
-      position: absolute; bottom: -20px; left: -5%; width: 110%; height: 28%;
-      background: rgba(9, 132, 227, 0.75); border-radius: 50% 50% 0 0;
-      animation: waveCrash 3.5s infinite alternate ease-in-out;
-      z-index: 2;
+      position: absolute; bottom: -10px; left: -5%; width: 110%; height: 25%;
+      background: rgba(9, 132, 227, 0.75); border-radius: 45% 45% 0 0;
+      animation: waveCrash 3.5s infinite alternate ease-in-out; z-index: 2;
     }
     .sea-wave-back {
-      position: absolute; bottom: -15px; left: -10%; width: 120%; height: 33%;
-      background: rgba(116, 185, 255, 0.45); border-radius: 45% 55% 0 0;
-      animation: waveCrash 5s infinite alternate-reverse ease-in-out;
-      z-index: 1;
+      position: absolute; bottom: -5px; left: -10%; width: 120%; height: 29%;
+      background: rgba(116, 185, 255, 0.45); border-radius: 40% 50% 0 0;
+      animation: waveCrash 5s infinite alternate-reverse ease-in-out; z-index: 1;
     }
 
-    /* Thầy Cú thông thái giảng bài */
+    /* Thầy Cú thông thái tự chỉnh kích cỡ theo bề rộng iPhone */
     .owl-teacher {
-      position: absolute; bottom: 30px; left: 50px; font-size: 110px; z-index: 10;
-      filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.2));
-      animation: owlTeach 1.4s infinite alternate ease-in-out;
+      position: absolute; bottom: 14%; left: 6%; font-size: 20vw; z-index: 10;
+      filter: drop-shadow(0px 6px 10px rgba(0,0,0,0.2)); animation: owlTeach 1.4s infinite alternate ease-in-out;
     }
-    .size-iphone .owl-teacher { font-size: 85px; left: 20px; bottom: 50px; }
+    #videoContainer.landscape-mode .owl-teacher { font-size: 13vw; bottom: 14%; }
 
-    /* Khung chứa tranh ảnh và chữ */
+    /* Khung chứa tranh ảnh Emoji và Chữ tự động thu phóng cân đối */
     .illustration-box {
-      position: absolute; top: 15%; left: 25%; width: 50%; height: 45%;
+      position: absolute; top: 18%; left: 10%; width: 80%; height: 35%;
       display: flex; align-items: center; justify-content: center; z-index: 5;
     }
-    .size-iphone .illustration-box { top: 18%; left: 5%; width: 90%; height: 35%; }
+    #videoContainer.landscape-mode .illustration-box { top: 15%; left: 35%; width: 55%; height: 45%; }
 
-    #vocabEmoji { font-size: 150px; opacity: 0; display: inline-block; }
+    #vocabEmoji { font-size: 32vw; opacity: 0; display: inline-block; }
+    #videoContainer.landscape-mode #vocabEmoji { font-size: 18vw; }
 
     .word-box {
-      position: absolute; bottom: 18%; left: 25%; width: 50%; text-align: center; z-index: 5; opacity: 0;
+      position: absolute; bottom: 18%; left: 5%; width: 90%; text-align: center; z-index: 5; opacity: 0;
     }
-    .size-iphone .word-box { bottom: 15%; left: 5%; width: 90%; }
+    #videoContainer.landscape-mode .word-box { bottom: 18%; left: 35%; width: 55%; }
 
-    .letter-title { font-size: 50px; color: #fff; text-shadow: 4px 4px 0px #0984e3; margin: 0; text-transform: lowercase; }
-    .vocab-word { font-size: 65px; margin: 10px 0 0 0; text-shadow: 4px 4px 0px rgba(0,0,0,0.2); }
-    .vocab-word .highlight-k { color: #ff2a2a; text-shadow: 4px 4px 0px #fff; }
+    .letter-title { font-size: 9vw; color: #fff; text-shadow: 3px 3px 0px #0984e3; margin: 0; text-transform: lowercase; }
+    #videoContainer.landscape-mode .letter-title { font-size: 5vw; }
 
-    /* Biểu tượng Micro Nhận diện */
+    .vocab-word { font-size: 13vw; margin: 5px 0 0 0; text-shadow: 3px 3px 0px rgba(0,0,0,0.2); }
+    #videoContainer.landscape-mode .vocab-word { font-size: 8vw; }
+    .vocab-word .highlight-k { color: #ff2a2a; text-shadow: 3px 3px 0px #fff; }
+
+    /* Biểu tượng đèn báo Microphone */
     #micStatus {
-      position: absolute; top: 20px; right: 30px; font-size: 45px; z-index: 20; display: none;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      position: absolute; top: 4%; right: 6%; font-size: 8vw; z-index: 20; display: none;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
     }
+    #videoContainer.landscape-mode #micStatus { font-size: 5vw; }
     .mic-listening { animation: pulseMic 0.8s infinite alternate; }
 
-    /* ---- HỆ THỐNG HOẠT CẢNH CHUYỂN ĐỘNG ---- */
+    /* Thanh menu nút bấm */
+    .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: center; width: 92vw; }
+    button, select {
+      padding: 10px 16px; font-size: 14px; font-weight: bold; border: none; border-radius: 20px;
+      cursor: pointer; background: #fff; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-family: 'Quicksand', sans-serif; -webkit-tap-highlight-color: transparent;
+    }
+    button:active { transform: scale(0.95); background: #ffeaa7; }
+
+    /* ---- KEYFRAMES ANIMATIONS ---- */
     @keyframes move-float { 0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; } 50% { transform: translateY(-15px) rotate(3deg); opacity: 1; } }
     @keyframes move-wind { 0%, 100% { transform: rotate(-8deg); opacity: 1; } 50% { transform: rotate(10deg); opacity: 1; } }
-    @keyframes move-jump { 0%, 100% { transform: translateY(0) scaleY(1); opacity: 1; } 50% { transform: translateY(-25px) scaleY(0.9); opacity: 1; } }
-    @keyframes move-pulse { 0%, 100% { transform: scale(0.95); opacity: 1; } 50% { transform: scale(1.12); opacity: 1; } }
+    @keyframes move-jump { 0%, 100% { transform: translateY(0) scaleY(1); opacity: 1; } 50% { transform: translateY(-25px) scaleY(0.85); opacity: 1; } }
+    @keyframes move-pulse { 0%, 100% { transform: scale(0.95); opacity: 1; } 50% { transform: scale(1.1); opacity: 1; } }
     @keyframes intro-zoom { 0% { opacity: 0; transform: scale(0); } 100% { opacity: 1; transform: scale(1); } }
-
-    @keyframes owlTeach { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-8px) rotate(3deg); } }
-    @keyframes sunGlow { 0% { transform: scale(1); } 100% { transform: scale(1.06); } }
-    @keyframes birdFly { 0% { transform: translateX(-100px) translateY(0); } 100% { transform: translateX(950px) translateY(-20px); } }
-    @keyframes pulseMic { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.25); opacity: 1; } }
-    
-    /* Hiệu ứng sóng biển dâng cao tràn vào bờ cát và rút về */
-    @keyframes waveCrash {
-      0% { transform: translateY(25px) scaleY(0.95); }
-      100% { transform: translateY(-15px) scaleY(1.15); }
-    }
-    /* Cây dừa lắc lư */
-    @keyframes palmSway {
-      0% { transform: rotate(-3deg); }
-      100% { transform: rotate(4deg); }
-    }
-
-    .controls { margin-top: 25px; display: flex; gap: 12px; }
-    button, select {
-      padding: 12px 24px; font-size: 16px; font-weight: bold; border: none; border-radius: 25px;
-      cursor: pointer; background: #fff; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    button:hover { background: #ffeaa7; transform: scale(1.05); }
+    @keyframes owlTeach { 0% { transform: translateY(0) rotate(-3deg); } 100% { transform: translateY(-6px) rotate(3deg); } }
+    @keyframes birdFly { 0% { transform: translateX(-100px) translateY(0); } 100% { transform: translateX(110vw) translateY(-20px); } }
+    @keyframes pulseMic { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 1; } }
+    @keyframes waveCrash { 0% { transform: translateY(15px) scaleY(0.95); } 100% { transform: translateY(-10px) scaleY(1.1); } }
+    @keyframes palmSway { 0% { transform: rotate(-3deg); } 100% { transform: rotate(4deg); } }
+    @keyframes sunGlow { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
   </style>
 </head>
 <body>
 
-  <div class="controls" style="margin-bottom: 10px;">
-    <select id="deviceSelect" onchange="changeDevice()">
-      <option value="pc">Màn hình Máy tính / Youtube (Ngang 16:9)</option>
-      <option value="iphone">Màn hình iPhone / TikTok (Dọc 9:16)</option>
+  <!-- Menu chọn dáng màn hình iPhone phù hợp -->
+  <div class="controls" style="margin-bottom: 5px;">
+    <select id="deviceSelect" onchange="changeDeviceLayout()">
+      <option value="iphone-vertical">iPhone Màn Hình Dọc (9:16)</option>
+      <option value="iphone-horizontal">iPhone Màn Hình Ngang (16:9)</option>
     </select>
   </div>
 
-  <!-- SÂN KHẤU VIDEO BÃI BIỂN CHÍNH -->
-  <div id="videoContainer" class="size-pc">
+  <!-- SÂN KHẤU CHÍNH TỰ ĐỘNG CO GIÃN -->
+  <div id="videoContainer">
     <div class="sun">☀️</div>
     <div class="bird1">🕊️</div>
     <div class="bird2">🕊️</div>
@@ -153,10 +159,9 @@
   </div>
 
   <div class="controls">
-    <button onclick="startBeachLesson()" style="background: #2ed573; color: white;">▶ Bắt đầu bài học tương tác bãi biển</button>
+    <button onclick="startBeachLesson()" style="background: #2ed573; color: white; width: 100%; padding: 14px;">▶ Bắt đầu học trên iPhone</button>
   </div>
-
-  <script>
+<script>
     const lessonData = [
       { word: "key", emoji: "🔑", color: "#ffffff", loopEffect: "move-float" },
       { word: "kite", emoji: "🪁", color: "#fff9c4", loopEffect: "move-wind" },
@@ -169,20 +174,16 @@
     ];
     
     let currentIndex = 0;
-    
-    // Cấu hình nhận diện giọng nói
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition;
-    if (SpeechRecognition) {
-      recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-    }
 
-    function changeDevice() {
+    function changeDeviceLayout() {
       const container = document.getElementById('videoContainer');
-      container.className = document.getElementById('deviceSelect').value === 'pc' ? 'size-pc' : 'size-iphone';
+      if(document.getElementById('deviceSelect').value === 'iphone-vertical') {
+        container.className = '';
+      } else {
+        container.className = 'landscape-mode';
+      }
     }
 
     function playAudio(text, rate = 0.75, callback) {
@@ -193,74 +194,63 @@
       window.speechSynthesis.speak(speech);
     }
 
-    // Hàm kích hoạt Micro để lắng nghe bé đọc theo
     function listenToKid(correctTargetWord, isIntroStage = false) {
       const micEl = document.getElementById('micStatus');
-      if (!recognition) {
-        // Dự phòng nếu máy không hỗ trợ micro, tự động bỏ qua sau 3 giây
+      
+      if (!SpeechRecognition) {
         setTimeout(() => { isIntroStage ? enterVocabularyLoops() : moveNext(); }, 3000);
         return;
       }
 
+      if (recognition) { try { recognition.stop(); } catch(e){} }
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
       micEl.innerText = "🎤";
       micEl.className = "mic-listening";
       micEl.style.display = "block";
-      recognition.start();
+
+      try { recognition.start(); } catch (err) { console.log(err); }
 
       recognition.onresult = function(event) {
-        const kidSaid = event.results[0][0].transcript.toLowerCase().trim();
-        console.log("Bé đã nói: " + kidSaid);
+        const resultIndex = event.resultIndex;
+        const kidSaid = event.results[resultIndex].transcript.toLowerCase().trim();
 
-        // Kiểm tra xem bé phát âm đúng từ yêu cầu không
-        if (kidSaid.includes(correctTargetWord) || correctTargetWord.includes(kidSaid) || kidSaid === "let's ok" || kidSaid === "ok") {
+        if (kidSaid.includes(correctTargetWord) || correctTargetWord.includes(kidSaid) || kidSaid === "ok") {
           document.getElementById('vocabEmoji').innerText = "🎉✨";
-          micEl.className = "";
-          micEl.innerText = "👍";
+          micEl.className = ""; micEl.innerText = "👍";
           
           playAudio("Excellent! Good job!", 0.85, () => {
             setTimeout(() => {
               if (isIntroStage) {
-                // Nếu bé đọc đúng phần Intro chữ K / Sound -> Chuyển sang bước tiếp
-                if (correctTargetWord === "k") {
-                  startSoundIntroStage();
-                } else {
-                  enterVocabularyLoops();
-  }
-              } else {
-                moveNext(); // Nếu đang học từ vựng -> Chuyển sang từ tiếp theo
-              }
+                if (correctTargetWord === "k") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
+              } else { moveNext(); }
             }, 1200);
           });
         } else {
-          // Bé đọc chưa đúng -> Thầy Cú hướng dẫn đọc lại kiên nhẫn
-          micEl.className = "";
-          micEl.innerText = "❌";
+          micEl.className = ""; micEl.innerText = "❌";
           playAudio("Listen and try again", 0.8, () => {
             setTimeout(() => {
               if (isIntroStage) {
-                if (correctTargetWord === "k") startLetterKIntro();
-                else startSoundPractice();
-              } else {
-                renderWord(currentIndex);
-              }
+                if (correctTargetWord === "k") startLetterKIntro(); else startSoundPractice();
+              } else { renderWord(currentIndex); }
             }, 1200);
           });
         }
       };
 
-      // Xử lý khi micro không nghe thấy gì (Bé im lặng quá lâu hoặc bấm từ chối quyền Micro)
       recognition.onerror = function() {
-        micEl.style.display = "none";
-        if (isIntroStage) {
-          if (correctTargetWord === "k") startSoundIntroStage();
-          else enterVocabularyLoops();
-        } else {
-          moveNext();
-        }
+        micEl.style.display = "none"; micEl.className = "";
+        setTimeout(() => {
+          if (isIntroStage) {
+            if (correctTargetWord === "k") startSoundIntroStage(); else enterVocabularyLoops();
+          } else { moveNext(); }
+        }, 1500);
       };
     }
 
-    // --- PHẦN 1: MỞ ĐẦU - BÉ TẬP ĐỌC LETTER K ---
     function startLetterKIntro() {
       const mainTitle = document.getElementById('mainTitle');
       document.getElementById('micStatus').style.display = "none";
@@ -268,14 +258,11 @@
       
       playAudio("letter k", 0.75, () => {
         setTimeout(() => {
-          playAudio("your turn! say k!", 0.8, () => {
-            listenToKid("k", true);
-          });
+          playAudio("your turn! say k!", 0.8, () => { listenToKid("k", true); });
         }, 500);
       });
     }
 
-    // --- PHẦN 2: BÉ TẬP PHÁT ÂM SOUND /k/ ---
     function startSoundIntroStage() {
       const mainTitle = document.getElementById('mainTitle');
       mainTitle.innerHTML = "sound: <span style='color:#ff2a2a;'>/k/</span>";
@@ -285,16 +272,14 @@
 
     function startSoundPractice() {
       document.getElementById('micStatus').style.display = "none";
-      playAudio("k. k. k.", 0.65, () => {
+      // Phát âm chuẩn "kờ. kờ. kờ." kiểu Phonics gần gũi cho trẻ em Việt Nam
+      playAudio("kờ. kờ. kờ.", 0.65, () => {
         setTimeout(() => {
-          playAudio("your turn! say k. k. k.", 0.8, () => {
-            listenToKid("k", true);
-          });
+          playAudio("your turn! say kờ.", 0.8, () => { listenToKid("k", true); });
         }, 600);
       });
     }
 
-    // --- PHẦN 3: VÀO BÀI HỌC CHẠY CÁC TỪ VỰNG CHÍNH ---
     function enterVocabularyLoops() {
       document.getElementById('introBox').style.display = "none";
       renderWord(currentIndex);
@@ -307,10 +292,8 @@
       const textEl = document.getElementById('vocabText');
       document.getElementById('micStatus').style.display = "none";
 
-      emojiEl.style.animation = 'none';
-      boxEl.style.animation = 'none';
-      emojiEl.style.opacity = 0;
-      boxEl.style.opacity = 0;
+      emojiEl.style.animation = 'none'; boxEl.style.animation = 'none';
+      emojiEl.style.opacity = 0; boxEl.style.opacity = 0;
       
       setTimeout(() => {
         const restOfWord = current.word.slice(1);
@@ -321,16 +304,11 @@
         emojiEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
         boxEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
         
-        // Thầy Cú đọc mẫu lần 1
         playAudio(current.word, 0.75, () => {
           setTimeout(() => {
-            // Thầy Cú đọc mẫu lần 2
             playAudio(current.word, 0.75, () => {
               setTimeout(() => {
-                // Đọc lệnh yêu cầu bé nói theo
-                playAudio("your turn!", 0.85, () => {
-                  listenToKid(current.word, false);
-                });
+                playAudio("your turn!", 0.85, () => { listenToKid(current.word, false); });
               }, 400);
             });
           }, 800);
@@ -343,22 +321,20 @@
       if (currentIndex < lessonData.length) {
         renderWord(currentIndex);
       } else {
-        // ---- ĐOẠN KẾT VIDEO BÃI BIỂN HOÀN CHỈNH ----
         const emojiEl = document.getElementById('vocabEmoji');
         const boxEl = document.getElementById('wordBox');
         document.getElementById('micStatus').style.display = "none";
         
         emojiEl.innerText = "🏄‍♂️🏖️"; 
         emojiEl.style.animation = "move-pulse 1s infinite alternate ease-in-out";
-        boxEl.style.opacity = 1;
-        boxEl.style.animation = "intro-zoom 0.8s forwards";
+        boxEl.style.opacity = 1; boxEl.style.animation = "intro-zoom 0.8s forwards";
         
         const textEl = document.getElementById('vocabText');
         textEl.innerHTML = "<span style='color:#fff9c4;'>well</span> <span style='color:#ffe0b2;'>done!</span>";
         
         setTimeout(() => {
           textEl.innerHTML = "<span style='color:#ff2a2a;'>good</span><span style='color:#fff;'>bye!</span>";
-          playAudio("Wow! Splendid! Goodbye kids! See you on the beach next time!", 0.8);
+          playAudio("Wow! Splendid! Goodbye kids! See you next time!", 0.8);
         }, 1800);
       }
     }
@@ -375,9 +351,7 @@
       mainTitle.style.animation = "intro-zoom 0.6s forwards";
 
       playAudio("Let's learn letter k", 0.8, () => {
-        setTimeout(() => {
-          startLetterKIntro();
-        }, 500);
+        setTimeout(() => { startLetterKIntro(); }, 500);
       });
     }
   </script>
