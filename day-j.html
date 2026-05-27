@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Lớp Học Vũ Trụ - Học Letter J Cùng Cô Giáo</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0; background: #111;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; min-height: -webkit-fill-available;
+      font-family: 'Fredoka One', 'Quicksand', sans-serif; overflow: hidden;
+      -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
+    }
+
+    /* ---- KHUNG PHIM VŨ TRỤ SÁNG RỰC RỠ ---- */
+    #videoContainer {
+      position: relative;
+      background: radial-gradient(circle at center, #3c1b85 0%, #13063a 100%);
+      border: 8px solid #fff; border-radius: 25px; overflow: hidden;
+      box-shadow: 0 20px 50px rgba(108, 92, 231, 0.5);
+      width: 92vw; height: calc(92vw * 16 / 9); max-height: 75vh; margin: auto;
+    }
+
+    /* Chế độ màn hình ngang */
+    #videoContainer.landscape-mode {
+      width: 94vw; height: calc(94vw * 9 / 16); max-height: 75vh;
+    }
+
+    .stars {
+      position: absolute; width: 100%; height: 100%;
+      background-image: radial-gradient(#fff 2px, transparent 0);
+      background-size: 50px 50px; opacity: 0.5; animation: starBlink 3s infinite alternate linear; z-index: 1;
+    }
+    
+    /* VỊ TRÍ CÁC HÀNH TINH BAY XA */
+    .planet1 { position: absolute; top: 6%; left: 6%; font-size: 9vw; animation: spinPlanet 20s linear infinite; z-index: 2; }
+    .planet2 { position: absolute; top: 6%; right: 6%; font-size: 9vw; animation: spinPlanet 35s linear infinite reverse; z-index: 2; }
+    #videoContainer.landscape-mode .planet1 { font-size: 6vw; }
+    #videoContainer.landscape-mode .planet2 { font-size: 6vw; }
+
+    /* ---- KHUNG TRANH EMOJI VẬT THỂ (NẰM CHÍNH GIỮA) ---- */
+    .illustration-box {
+      position: absolute; top: 18%; left: 10%; width: 80%; height: 35%;
+      display: flex; align-items: center; justify-content: center; z-index: 4;
+    }
+    #videoContainer.landscape-mode .illustration-box { top: 10%; left: 35%; width: 55%; height: 45%; }
+
+    #vocabEmoji { font-size: 28vw; opacity: 0; display: inline-block; pointer-events: none; }
+    #videoContainer.landscape-mode #vocabEmoji { font-size: 16vw; }
+
+    /* ---- NHÂN VẬT CÔ GIÁO XINH XẮN (HƯỚNG VỀ PHÍA CHỮ) ---- */
+    .teacher-lady {
+      position: absolute; bottom: 12%; left: 5%; font-size: 20vw; z-index: 10;
+      filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.5)); 
+      animation: teacherSway 1.5s infinite alternate ease-in-out;
+    }
+    #videoContainer.landscape-mode .teacher-lady { font-size: 14vw; bottom: 8%; left: 5%; }
+
+    /* ---- KHUNG CHỮ ĐẬM MÀU ---- */
+    .word-box {
+      position: absolute; bottom: 18%; left: 5%; width: 90%; text-align: center; z-index: 5; opacity: 0;
+    }
+    #videoContainer.landscape-mode .word-box { bottom: 12%; left: 35%; width: 55%; }
+
+    /* Khung chữ Intro mở đầu */
+    #introBox { position: absolute; width: 100%; text-align: center; top: 42%; z-index: 6; }
+    #videoContainer.landscape-mode #introBox { left: 32%; width: 55%; top: 40%; }
+
+    /* Chữ cực đậm nét và đổ bóng dày */
+    .letter-title { 
+      font-size: 11vw; color: #ffffff; 
+      text-shadow: 5px 5px 0px #111, 0 0 20px #6c5ce7; 
+      margin: 0; text-transform: lowercase; font-weight: 900; 
+    }
+    #videoContainer.landscape-mode .letter-title { font-size: 7.5vw; }
+
+    .vocab-word { font-size: 14vw; margin: 5px 0 0 0; text-shadow: 5px 5px 0px #111; font-weight: 900; }
+    #videoContainer.landscape-mode .vocab-word { font-size: 9vw; }
+    /* Nổi bật chữ j màu đỏ */
+    .vocab-word .highlight-j { color: #ff3333; text-shadow: 4px 4px 0px #fff; }
+
+    /* Đèn báo Micro */
+    #micStatus { position: absolute; top: 4%; left: 45%; font-size: 8vw; z-index: 20; display: none; }
+    #videoContainer.landscape-mode #micStatus { font-size: 6vw; top: 6%; left: 46%; }
+    .mic-listening { animation: pulseMic 0.8s infinite alternate; }
+
+    .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: center; width: 92vw; }
+    button, select {
+      padding: 12px 20px; font-size: 15px; font-weight: bold; border: none; border-radius: 25px;
+      cursor: pointer; background: #fff; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      font-family: 'Quicksand', sans-serif;
+    }
+    button:hover { background: #ffeaa7; transform: scale(1.03); }
+
+    /* Hiệu ứng chuyển động */
+    @keyframes move-float { 0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; } 50% { transform: translateY(-15px) rotate(2deg); opacity: 1; } }
+    @keyframes move-wind { 0%, 100% { transform: rotate(-6deg); opacity: 1; } 50% { transform: rotate(8deg); opacity: 1; } }
+    @keyframes move-jump { 0%, 100% { transform: translateY(0) scaleY(1); opacity: 1; } 50% { transform: translateY(-25px) scaleY(0.85); opacity: 1; } }
+    @keyframes move-pulse { 0%, 100% { transform: scale(0.95); opacity: 1; } 50% { transform: scale(1.1); opacity: 1; } }
+    @keyframes intro-zoom { 0% { opacity: 0; transform: scale(0); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes teacherSway { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-10px) rotate(3deg); } }
+    @keyframes spinPlanet { 100% { transform: rotate(360deg); } }
+    @keyframes starBlink { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
+    @keyframes pulseMic { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div class="controls" style="margin-bottom: 5px;">
+    <select id="deviceSelect" onchange="changeDeviceLayout()">
+      <option value="iphone-vertical">iPhone Màn Hình Dọc (9:16)</option>
+      <option value="iphone-horizontal" selected>iPhone Màn Hình Ngang (16:9)</option>
+    </select>
+  </div>
+
+  <div id="videoContainer" class="landscape-mode">
+    <div class="stars"></div>
+    <div class="planet1">🪐</div>
+    <div class="planet2">🌍</div>
+    
+    <!-- Nhân vật dạy học mới: Cô giáo xinh xắn -->
+    <div class="teacher-lady">👩‍🏫</div>
+    <div id="micStatus">🎤</div>
+
+    <!-- Khung chứa ảnh từ vựng ở giữa (Ban đầu ẩn ngôi sao lấp lánh ngầm) -->
+    <div class="illustration-box">
+      <div id="vocabEmoji">✨</div>
+    </div>
+
+    <div id="wordBox" class="word-box">
+      <h1 id="vocabText" class="vocab-word">juice</h1>
+    </div>
+
+    <div id="introBox">
+      <p id="mainTitle" class="letter-title">letter j</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="startSpaceLesson()" style="background: #6c5ce7; color: white; width: 100%; padding: 14px; font-size: 16px;">▶ Bắt đầu bài học cùng Cô Giáo</button>
+  </div>
+<script>
+    // Danh sách 8 từ vựng chính xác từ ảnh của bạn
+    const lessonData = [
+      { word: "juice", emoji: "🧃", color: "#ffffff", loopEffect: "move-float" },
+      { word: "jug", emoji: "🏺", color: "#fff9c4", loopEffect: "move-wind" },
+      { word: "jar", emoji: "🍯", color: "#ffe0b2", loopEffect: "move-pulse" },
+      { word: "jet", emoji: "✈️", color: "#e1f5fe", loopEffect: "move-jump" },
+      { word: "jacket", emoji: "🧥", color: "#f5f5f5", loopEffect: "move-float" },
+      { word: "jam", emoji: "🍓", color: "#e0f2f1", loopEffect: "move-pulse" },
+      { word: "jellyfish", emoji: "🐙", color: "#fce4ec", loopEffect: "move-float" },
+      { word: "jelly", emoji: "🍮", color: "#e8f5e9", loopEffect: "move-jump" }
+    ];
+    
+    let currentIndex = 0;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    function changeDeviceLayout() {
+      const container = document.getElementById('videoContainer');
+      if(document.getElementById('deviceSelect').value === 'iphone-vertical') {
+        container.className = '';
+      } else {
+        container.className = 'landscape-mode';
+      }
+    }
+
+    function playAudio(text, rate = 0.75, callback) {
+      window.speechSynthesis.cancel();
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = 'en-US'; speech.rate = rate;
+      if (callback) speech.onend = callback;
+      window.speechSynthesis.speak(speech);
+    }
+
+    function listenToKid(correctTargetWord, isIntroStage = false) {
+      const micEl = document.getElementById('micStatus');
+      
+      if (!SpeechRecognition) {
+        setTimeout(() => { isIntroStage ? enterVocabularyLoops() : moveNext(); }, 3000);
+        return;
+      }
+
+      if (recognition) { try { recognition.stop(); } catch(e){} }
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      micEl.innerText = "🎤";
+      micEl.className = "mic-listening";
+      micEl.style.display = "block";
+
+      try { recognition.start(); } catch (err) { console.log(err); }
+
+      recognition.onresult = function(event) {
+        const resultIndex = event.resultIndex;
+        const kidSaid = event.results[resultIndex].transcript.toLowerCase().trim();
+
+        if (kidSaid.includes(correctTargetWord) || correctTargetWord.includes(kidSaid) || kidSaid === "ok") {
+          document.getElementById('vocabEmoji').innerText = "🎉✨";
+          micEl.className = ""; micEl.innerText = "👍";
+          
+          playAudio("Excellent! Good job!", 0.85, () => {
+            setTimeout(() => {
+              if (isIntroStage) {
+                if (correctTargetWord === "j") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
+              } else { moveNext(); }
+            }, 1200);
+          });
+        } else {
+          micEl.className = ""; micEl.innerText = "❌";
+          playAudio("Listen and try again", 0.8, () => {
+            setTimeout(() => {
+              if (isIntroStage) {
+                if (correctTargetWord === "j") startLetterJIntro(); else startSoundPractice();
+              } else { renderWord(currentIndex); }
+            }, 1200);
+          });
+        }
+      };
+
+      recognition.onerror = function() {
+        micEl.style.display = "none"; micEl.className = "";
+        setTimeout(() => {
+          if (isIntroStage) {
+            if (correctTargetWord === "j") startSoundIntroStage(); else enterVocabularyLoops();
+          } else { moveNext(); }
+        }, 1500);
+      };
+    }
+
+    function startLetterJIntro() {
+      const mainTitle = document.getElementById('mainTitle');
+      document.getElementById('micStatus').style.display = "none";
+      mainTitle.innerHTML = "letter <span style='color:#ff3333;'>j</span>";
+      
+      playAudio("letter j", 0.75, () => {
+        setTimeout(() => {
+          playAudio("your turn! say j!", 0.8, () => { listenToKid("j", true); });
+        }, 500);
+      });
+    }
+
+    function startSoundIntroStage() {
+      const mainTitle = document.getElementById('mainTitle');
+      mainTitle.innerHTML = "sound: <span style='color:#ff3333;'>/dʒ/</span>";
+      startSoundPractice();
+    }
+
+    function startSoundPractice() {
+      document.getElementById('micStatus').style.display = "none";
+      playAudio("giờ. giờ. giờ.", 0.65, () => {
+        setTimeout(() => {
+          playAudio("your turn! say giờ.", 0.8, () => { listenToKid("j", true); });
+        }, 600);
+      });
+    }
+
+    function enterVocabularyLoops() {
+      document.getElementById('introBox').style.display = "none";
+      
+      const emojiEl = document.getElementById('vocabEmoji');
+      emojiEl.style.opacity = 1;
+      
+      renderWord(currentIndex);
+    }
+
+    function renderWord(index) {
+      const current = lessonData[index];
+      const emojiEl = document.getElementById('vocabEmoji');
+      const boxEl = document.getElementById('wordBox');
+      const textEl = document.getElementById('vocabText');
+      document.getElementById('micStatus').style.display = "none";
+
+      emojiEl.style.animation = 'none'; boxEl.style.animation = 'none';
+      emojiEl.style.opacity = 0; boxEl.style.opacity = 0;
+      
+      setTimeout(() => {
+        const restOfWord = current.word.slice(1);
+        textEl.innerHTML = `<span class="highlight-j">j</span>${restOfWord}`;
+        textEl.style.color = current.color;
+        emojiEl.innerText = current.emoji;
+
+        // Kích hoạt hiệu ứng động duy trì liên tục cho chữ và ảnh ở giữa
+        emojiEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
+        boxEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
+        
+        playAudio(current.word, 0.75, () => {
+          setTimeout(() => {
+            playAudio(current.word, 0.75, () => {
+              setTimeout(() => {
+                playAudio("your turn!", 0.85, () => { listenToKid(current.word, false); });
+              }, 400);
+            });
+          }, 800);
+        });
+      }, 200);
+    }
+
+    function moveNext() {
+      currentIndex++;
+      if (currentIndex < lessonData.length) {
+        renderWord(currentIndex);
+      } else {
+        const emojiEl = document.getElementById('vocabEmoji');
+        const boxEl = document.getElementById('wordBox');
+        document.getElementById('micStatus').style.display = "none";
+        
+        emojiEl.innerText = "🚀🌟"; 
+        emojiEl.style.animation = "move-pulse 1s infinite alternate ease-in-out";
+        boxEl.style.opacity = 1; boxEl.style.animation = "intro-zoom 0.8s forwards";
+        
+        const textEl = document.getElementById('vocabText');
+        textEl.innerHTML = "<span style='color:#fff9c4;'>well</span> <span style='color:#ffe0b2;'>done!</span>";
+        
+        setTimeout(() => {
+          textEl.innerHTML = "<span style='color:#ff3333;'>good</span><span style='color:#fff;'>bye!</span>";
+          playAudio("Wow! Wonderful lesson! Goodbye kids! See you next time!", 0.8);
+        }, 1800);
+      }
+    }
+
+    function startSpaceLesson() {
+      window.speechSynthesis.cancel();
+      currentIndex = 0;
+      const introBox = document.getElementById('introBox');
+      const mainTitle = document.getElementById('mainTitle');
+      const emojiEl = document.getElementById('vocabEmoji');
+      
+      document.getElementById('wordBox').style.opacity = 0;
+      emojiEl.innerText = "✨";
+      emojiEl.style.opacity = 0;
+
+      introBox.style.display = "block";
+      mainTitle.style.animation = "intro-zoom 0.6s forwards";
+
+      playAudio("Let's learn letter j", 0.8, () => {
+        setTimeout(() => { startLetterJIntro(); }, 500);
+      });
+    }
+  </script>
+</body>
+</html>
