@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lớp Học Vũ Trụ - Học Letter J Cùng Cô Giáo</title>
-  <link href="https://googleapis.com" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -51,7 +50,7 @@
     #vocabEmoji { font-size: 28vw; opacity: 0; display: inline-block; pointer-events: none; }
     #videoContainer.landscape-mode #vocabEmoji { font-size: 16vw; }
 
-    /* ---- NHÂN VẬT CÔ GIÁO XINH XẮN (HƯỚNG VỀ PHÍA CHỮ) ---- */
+    /* ---- NHÂN VẬT CÔ GIÁO XINH XẮN ---- */
     .teacher-lady {
       position: absolute; bottom: 12%; left: 5%; font-size: 20vw; z-index: 10;
       filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.5)); 
@@ -69,7 +68,6 @@
     #introBox { position: absolute; width: 100%; text-align: center; top: 42%; z-index: 6; }
     #videoContainer.landscape-mode #introBox { left: 32%; width: 55%; top: 40%; }
 
-    /* Chữ cực đậm nét và đổ bóng dày */
     .letter-title { 
       font-size: 11vw; color: #ffffff; 
       text-shadow: 5px 5px 0px #111, 0 0 20px #6c5ce7; 
@@ -79,19 +77,35 @@
 
     .vocab-word { font-size: 14vw; margin: 5px 0 0 0; text-shadow: 5px 5px 0px #111; font-weight: 900; }
     #videoContainer.landscape-mode .vocab-word { font-size: 9vw; }
-    /* Nổi bật chữ j màu đỏ */
     .vocab-word .highlight-j { color: #ff3333; text-shadow: 4px 4px 0px #fff; }
 
-    /* Đèn báo Micro */
-    #micStatus { position: absolute; top: 4%; left: 45%; font-size: 8vw; z-index: 20; display: none; }
-    #videoContainer.landscape-mode #micStatus { font-size: 6vw; top: 6%; left: 46%; }
-    .mic-listening { animation: pulseMic 0.8s infinite alternate; }
+    /* ---- KHU VỰC NÚT BẤM MICRO ĐỂ QUA MẶT SAFARI SAFARI ---- */
+    #micButtonZone {
+      position: absolute; bottom: 25%; left: 10%; width: 80%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 30; display: none;
+    }
+    #videoContainer.landscape-mode #micButtonZone { bottom: 15%; left: 35%; width: 55%; }
+
+    .big-mic-btn {
+      width: 80px; height: 80px; border-radius: 50%; background: #ff3333; border: 4px solid white;
+      font-size: 35px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(255, 51, 51, 0.6); animation: pulseMic 0.8s infinite alternate;
+    }
+    .big-mic-btn.listening { background: #2ecc71; box-shadow: 0 0 25px #2ecc71; animation: pulseMic 0.4s infinite alternate; }
+    
+    .mic-hint { color: white; font-size: 14px; margin-top: 8px; font-weight: bold; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 10px; }
+
+    /* Nút bỏ qua nhỏ phòng hờ bé nói mãi không được */
+    .skip-btn {
+      position: absolute; bottom: 5%; right: 5%; background: rgba(255,255,255,0.2); color: white;
+      border: 1px solid rgba(255,255,255,0.4); padding: 5px 12px; border-radius: 15px; font-size: 12px; z-index: 40;
+    }
 
     .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: center; width: 92vw; }
     button, select {
       padding: 12px 20px; font-size: 15px; font-weight: bold; border: none; border-radius: 25px;
       cursor: pointer; background: #fff; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      font-family: 'Quicksand', sans-serif;
     }
     button:hover { background: #ffeaa7; transform: scale(1.03); }
 
@@ -104,7 +118,7 @@
     @keyframes teacherSway { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-10px) rotate(3deg); } }
     @keyframes spinPlanet { 100% { transform: rotate(360deg); } }
     @keyframes starBlink { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
-    @keyframes pulseMic { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 1; } }
+    @keyframes pulseMic { 0% { transform: scale(0.9); } 100% { transform: scale(1.1); } }
   </style>
 </head>
 <body>
@@ -121,11 +135,15 @@
     <div class="planet1">🪐</div>
     <div class="planet2">🌍</div>
     
-    <!-- Nhân vật dạy học mới: Cô giáo xinh xắn -->
     <div class="teacher-lady">👩‍🏫</div>
-    <div id="micStatus">🎤</div>
 
-    <!-- Khung chứa ảnh từ vựng ở giữa (Ban đầu ẩn ngôi sao lấp lánh ngầm) -->
+    <div id="micButtonZone">
+      <button id="bigMicAction" class="big-mic-btn" onclick="triggerVoiceListening()">🎤</button>
+      <div id="micHintText" class="mic-hint">BẤM VÀO MICRO ĐỂ NÓI</div>
+    </div>
+
+    <button id="skipBtn" class="skip-btn" style="display:none;" onclick="forceSkip()">Bỏ qua ➔</button>
+
     <div class="illustration-box">
       <div id="vocabEmoji">✨</div>
     </div>
@@ -142,8 +160,8 @@
   <div class="controls">
     <button onclick="startSpaceLesson()" style="background: #6c5ce7; color: white; width: 100%; padding: 14px; font-size: 16px;">▶ Bắt đầu bài học cùng Cô Giáo</button>
   </div>
-<script>
-    // Danh sách 8 từ vựng chính xác từ ảnh của bạn
+
+  <script>
     const lessonData = [
       { word: "juice", emoji: "🧃", color: "#ffffff", loopEffect: "move-float" },
       { word: "jug", emoji: "🏺", color: "#fff9c4", loopEffect: "move-wind" },
@@ -156,6 +174,10 @@
     ];
     
     let currentIndex = 0;
+    let targetWordString = "";
+    let isIntroStageMode = false;
+    let isWaitingForClick = false;
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition;
 
@@ -171,101 +193,145 @@
     function playAudio(text, rate = 0.75, callback) {
       window.speechSynthesis.cancel();
       const speech = new SpeechSynthesisUtterance(text);
-      speech.lang = 'en-US'; speech.rate = rate;
+      speech.lang = 'en-US'; 
+      speech.rate = rate;
       if (callback) speech.onend = callback;
       window.speechSynthesis.speak(speech);
     }
 
-    function listenToKid(correctTargetWord, isIntroStage = false) {
-      const micEl = document.getElementById('micStatus');
+    // Thiết lập hệ thống đợi bé chạm tay vào nút Mic
+    function prepareForKidInput(correctTargetWord, isIntro) {
+      targetWordString = correctTargetWord;
+      isIntroStageMode = isIntro;
+      isWaitingForClick = true;
+
+      // Ẩn chữ/ảnh tạm thời để hiện nút Mic cho bé tập trung bấm
+      document.getElementById('wordBox').style.opacity = 0;
+      document.getElementById('micButtonZone').style.display = "flex";
+      document.getElementById('skipBtn').style.display = "block";
       
+      const micBtn = document.getElementById('bigMicAction');
+      micBtn.className = "big-mic-btn";
+      micBtn.innerText = "🎤";
+      document.getElementById('micHintText').innerText = "BẤM VÀO MICRO ĐỂ NÓI";
+    }
+
+    // Hành động kích hoạt thu âm khi bé CHẠM vào nút Mic (Bắt buộc với Safari iOS)
+    function triggerVoiceListening() {
+      if (!isWaitingForClick) return;
+      isWaitingForClick = false;
+
+      const micBtn = document.getElementById('bigMicAction');
+      micBtn.className = "big-mic-btn listening";
+      micBtn.innerText = "🎧";
+      document.getElementById('micHintText').innerText = "CÔ GIÁO ĐANG NGHE...";
+
       if (!SpeechRecognition) {
-        setTimeout(() => { isIntroStage ? enterVocabularyLoops() : moveNext(); }, 3000);
+        // Giả lập nếu trình duyệt hoàn toàn không hỗ trợ thu âm
+        setTimeout(() => { successAction(); }, 2000);
         return;
       }
 
       if (recognition) { try { recognition.stop(); } catch(e){} }
+      
       recognition = new SpeechRecognition();
       recognition.lang = 'en-US';
       recognition.interimResults = false;
+      recognition.continuous = false; // Ngắt mic ngay khi bé dừng nói trên iOS
       recognition.maxAlternatives = 1;
 
-      micEl.innerText = "🎤";
-      micEl.className = "mic-listening";
-      micEl.style.display = "block";
-
-      try { recognition.start(); } catch (err) { console.log(err); }
-
       recognition.onresult = function(event) {
-        const resultIndex = event.resultIndex;
-        const kidSaid = event.results[resultIndex].transcript.toLowerCase().trim();
+        const kidSaid = event.results[0][0].transcript.toLowerCase().trim();
+        console.log("Bé nói: " + kidSaid);
 
-        if (kidSaid.includes(correctTargetWord) || correctTargetWord.includes(kidSaid) || kidSaid === "ok") {
-          document.getElementById('vocabEmoji').innerText = "🎉✨";
-          micEl.className = ""; micEl.innerText = "👍";
-          
-          playAudio("Excellent! Good job!", 0.85, () => {
-            setTimeout(() => {
-              if (isIntroStage) {
-                if (correctTargetWord === "j") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
-              } else { moveNext(); }
-            }, 1200);
-          });
+        if (kidSaid.includes(targetWordString) || targetWordString.includes(kidSaid) || kidSaid === "ok") {
+          successAction();
         } else {
-          micEl.className = ""; micEl.innerText = "❌";
-          playAudio("Listen and try again", 0.8, () => {
-            setTimeout(() => {
-              if (isIntroStage) {
-                if (correctTargetWord === "j") startLetterJIntro(); else startSoundPractice();
-              } else { renderWord(currentIndex); }
-            }, 1200);
-          });
+          failAction();
         }
       };
 
-      recognition.onerror = function() {
-        micEl.style.display = "none"; micEl.className = "";
-        setTimeout(() => {
-          if (isIntroStage) {
-            if (correctTargetWord === "j") startSoundIntroStage(); else enterVocabularyLoops();
-          } else { moveNext(); }
-        }, 1500);
+      recognition.onerror = function(e) {
+        console.log("Lỗi mic:", e);
+        // Nếu lỗi do im lặng hoặc không cấp quyền, tự động cho qua sau vài giây để không bị kẹt bài học
+        setTimeout(() => { forceSkip(); }, 1000);
       };
+
+      try { recognition.start(); } catch (err) { console.log(err); }
+    }
+
+    function successAction() {
+      document.getElementById('micButtonZone').style.display = "none";
+      document.getElementById('skipBtn').style.display = "none";
+      document.getElementById('vocabEmoji').innerText = "🎉✨";
+      document.getElementById('vocabEmoji').style.opacity = 1;
+      
+      playAudio("Excellent! Good job!", 0.85, () => {
+        setTimeout(() => {
+          if (isIntroStageMode) {
+            if (targetWordString === "j") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
+          } else { moveNext(); }
+        }, 1200);
+      });
+    }
+
+    function failAction() {
+      const micBtn = document.getElementById('bigMicAction');
+      micBtn.className = "big-mic-btn";
+      micBtn.innerText = "❌";
+      document.getElementById('micHintText').innerText = "CHƯA ĐÚNG RỒI, THỬ LẠI NÀO!";
+
+      playAudio("Listen and try again", 0.8, () => {
+        setTimeout(() => {
+          isWaitingForClick = true;
+          micBtn.innerText = "🎤";
+          document.getElementById('micHintText').innerText = "BẤM ĐỂ THỬ LẠI";
+        }, 1200);
+      });
+    }
+
+    function forceSkip() {
+      if(recognition) { try { recognition.stop(); } catch(e){} }
+      document.getElementById('micButtonZone').style.display = "none";
+      document.getElementById('skipBtn').style.display = "none";
+      if (isIntroStageMode) {
+        if (targetWordString === "j") { startSoundIntroStage(); } else { enterVocabularyLoops(); }
+      } else { 
+        moveNext(); 
+      }
     }
 
     function startLetterJIntro() {
       const mainTitle = document.getElementById('mainTitle');
-      document.getElementById('micStatus').style.display = "none";
+      document.getElementById('micButtonZone').style.display = "none";
       mainTitle.innerHTML = "letter <span style='color:#ff3333;'>j</span>";
       
       playAudio("letter j", 0.75, () => {
         setTimeout(() => {
-          playAudio("your turn! say j!", 0.8, () => { listenToKid("j", true); });
+          playAudio("your turn! say j!", 0.8, () => { prepareForKidInput("j", true); });
         }, 500);
       });
     }
 
     function startSoundIntroStage() {
+      document.getElementById('introBox').style.display = "block";
       const mainTitle = document.getElementById('mainTitle');
       mainTitle.innerHTML = "sound: <span style='color:#ff3333;'>/dʒ/</span>";
       startSoundPractice();
     }
 
     function startSoundPractice() {
-      document.getElementById('micStatus').style.display = "none";
+      document.getElementById('micButtonZone').style.display = "none";
       playAudio("giờ. giờ. giờ.", 0.65, () => {
         setTimeout(() => {
-          playAudio("your turn! say giờ.", 0.8, () => { listenToKid("j", true); });
+          playAudio("your turn! say giờ.", 0.8, () => { prepareForKidInput("j", true); });
         }, 600);
       });
     }
 
     function enterVocabularyLoops() {
       document.getElementById('introBox').style.display = "none";
-      
-      const emojiEl = document.getElementById('vocabEmoji');
-      emojiEl.style.opacity = 1;
-      
+      document.getElementById('vocabEmoji').style.opacity = 1;
       renderWord(currentIndex);
     }
 
@@ -274,7 +340,9 @@
       const emojiEl = document.getElementById('vocabEmoji');
       const boxEl = document.getElementById('wordBox');
       const textEl = document.getElementById('vocabText');
-      document.getElementById('micStatus').style.display = "none";
+      
+      document.getElementById('micButtonZone').style.display = "none";
+      document.getElementById('skipBtn').style.display = "none";
 
       emojiEl.style.animation = 'none'; boxEl.style.animation = 'none';
       emojiEl.style.opacity = 0; boxEl.style.opacity = 0;
@@ -285,15 +353,16 @@
         textEl.style.color = current.color;
         emojiEl.innerText = current.emoji;
 
-        // Kích hoạt hiệu ứng động duy trì liên tục cho chữ và ảnh ở giữa
         emojiEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
         boxEl.style.animation = `${current.loopEffect} 1.6s infinite ease-in-out`;
+        emojiEl.style.opacity = 1;
+        boxEl.style.opacity = 1;
         
         playAudio(current.word, 0.75, () => {
           setTimeout(() => {
             playAudio(current.word, 0.75, () => {
               setTimeout(() => {
-                playAudio("your turn!", 0.85, () => { listenToKid(current.word, false); });
+                playAudio("your turn!", 0.85, () => { prepareForKidInput(current.word, false); });
               }, 400);
             });
           }, 800);
@@ -308,7 +377,6 @@
       } else {
         const emojiEl = document.getElementById('vocabEmoji');
         const boxEl = document.getElementById('wordBox');
-        document.getElementById('micStatus').style.display = "none";
         
         emojiEl.innerText = "🚀🌟"; 
         emojiEl.style.animation = "move-pulse 1s infinite alternate ease-in-out";
@@ -332,6 +400,8 @@
       const emojiEl = document.getElementById('vocabEmoji');
       
       document.getElementById('wordBox').style.opacity = 0;
+      document.getElementById('micButtonZone').style.display = "none";
+      document.getElementById('skipBtn').style.display = "none";
       emojiEl.innerText = "✨";
       emojiEl.style.opacity = 0;
 
