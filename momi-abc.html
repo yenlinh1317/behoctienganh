@@ -10,103 +10,48 @@
         body { font-family: 'Quicksand', sans-serif; user-select: none; overflow: hidden; background: #1a1a2e; }
         .font-game { font-family: 'Fredoka One', cursive; }
 
-        /* --- NHÂN VẬT MOMMY LONG LEGS ĐẸP HƠN (VẼ BẰNG CSS) --- */
+        /* --- NHÂN VẬT MOMMY LONG LEGS ĐẸP HƠN --- */
         .mommy-wrap { position: relative; width: 160px; height: 190px; margin: 0 auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
-        
-        /* Tóc cột đỉnh đầu */
-        .hair-tie {
-            position: absolute; top: -5px; left: 65px;
-            width: 30px; height: 14px; background: #ffd700;
-            border: 2px solid #200010; border-radius: 6px; z-index: 10;
-        }
-        .strand {
-            position: absolute; background: #e60073;
-            border: 2.5px solid #200010; border-radius: 30px;
-            transform-origin: top center;
-        }
+        .hair-tie { position: absolute; top: -5px; left: 65px; width: 30px; height: 14px; background: #ffd700; border: 2px solid #200010; border-radius: 6px; z-index: 10; }
+        .strand { position: absolute; background: #e60073; border: 2.5px solid #200010; border-radius: 30px; transform-origin: top center; }
         .s1 { width: 14px; height: 80px; top: 5px; left: 50px; transform: rotate(25deg); animation: swing 3s infinite ease-in-out; }
         .s2 { width: 14px; height: 95px; top: 5px; left: 65px; transform: rotate(5deg); animation: swing 4s infinite ease-in-out; }
         .s3 { width: 14px; height: 75px; top: 5px; left: 80px; transform: rotate(-20deg); animation: swing 2.5s infinite ease-in-out; }
         .s4 { width: 12px; height: 60px; top: 5px; left: 95px; transform: rotate(-45deg); animation: swing 3.5s infinite ease-in-out; }
-
-        /* Khuôn mặt */
-        .mommy-head {
-            position: absolute; top: 25px; left: 35px;
-            width: 90px; height: 80px; background: #ff3399;
-            border: 3px solid #200010; border-radius: 45px 45px 40px 40px;
-            z-index: 5; box-shadow: inset -5px -5px 0px rgba(0,0,0,0.1);
-        }
-        .eye {
-            position: absolute; top: 22px; width: 26px; height: 26px;
-            background: white; border: 2.5px solid #200010; border-radius: 50%;
-        }
+        .mommy-head { position: absolute; top: 25px; left: 35px; width: 90px; height: 80px; background: #ff3399; border: 3px solid #200010; border-radius: 45px 45px 40px 40px; z-index: 5; box-shadow: inset -5px -5px 0px rgba(0,0,0,0.1); }
+        .eye { position: absolute; top: 22px; width: 26px; height: 26px; background: white; border: 2.5px solid #200010; border-radius: 50%; }
         .eye.l { left: 12px; } .eye.r { right: 12px; }
-        .pupil { 
-            position: relative; width: 14px; height: 14px; 
-            background: #0099ff; border-radius: 50%; border: 1.5px solid #200010; margin: 4px; 
-        }
-        /* Mắt long lanh */
-        .pupil::before {
-            content: ''; position: absolute; top: 1px; left: 2px;
-            width: 4px; height: 4px; background: white; border-radius: 50%;
-        }
-        /* Lông mi sắc nét */
-        .eye::after { 
-            content: '✿'; position: absolute; top: -16px; left: 2px; 
-            font-size: 14px; color: #200010; font-weight: bold;
-        }
-
-        /* Miệng cười xinh */
-        .mouth {
-            position: absolute; bottom: 14px; left: 25px;
-            width: 40px; height: 12px; background: #ff0055;
-            border-radius: 2px 2px 20px 20px; border: 2.5px solid #200010;
-            transition: 0.1s;
-        }
+        .pupil { position: relative; width: 14px; height: 14px; background: #0099ff; border-radius: 50%; border: 1.5px solid #200010; margin: 4px; }
+        .pupil::before { content: ''; position: absolute; top: 1px; left: 2px; width: 4px; height: 4px; background: white; border-radius: 50%; }
+        .eye::after { content: '✿'; position: absolute; top: -16px; left: 2px; font-size: 14px; color: #200010; font-weight: bold; }
+        .mouth { position: absolute; bottom: 14px; left: 25px; width: 40px; height: 12px; background: #ff0055; border-radius: 2px 2px 20px 20px; border: 2.5px solid #200010; transition: 0.1s; }
         .mouth.open { height: 22px; border-radius: 50%; background: #660022; }
-
-        /* Cổ và Vòng cổ quấn ngọc */
         .neck { position: absolute; top: 98px; left: 74px; width: 12px; height: 25px; background: #ff3399; border: 2.5px solid #200010; z-index: 3; }
-        .necklace {
-            position: absolute; top: 113px; left: 66px; width: 28px; height: 8px;
-            background: #ffd700; border: 1.5px solid #200010; border-radius: 10px; z-index: 4;
-        }
-
-        /* Thân và Váy đầm búp bế */
-        .body { 
-            position: absolute; top: 118px; left: 52px; width: 56px; height: 45px; 
-            background: #e60073; border: 3px solid #200010; border-radius: 15px 15px 5px 5px; z-index: 2;
-        }
-        .dress-skirt {
-            position: absolute; top: 148px; left: 43px; width: 74px; height: 25px;
-            background: #ff3399; border: 2.5px solid #200010; border-radius: 10px 10px 20px 20px; z-index: 1;
-        }
-        
-        /* Đôi chân dài đung đưa */
+        .necklace { position: absolute; top: 113px; left: 66px; width: 28px; height: 8px; background: #ffd700; border: 1.5px solid #200010; border-radius: 10px; z-index: 4; }
+        .body { position: absolute; top: 118px; left: 52px; width: 56px; height: 45px; background: #e60073; border: 3px solid #200010; border-radius: 15px 15px 5px 5px; z-index: 2; }
+        .dress-skirt { position: absolute; top: 148px; left: 43px; width: 74px; height: 25px; background: #ff3399; border: 2.5px solid #200010; border-radius: 10px 10px 20px 20px; z-index: 1; }
         .leg { position: absolute; width: 8px; height: 50px; background: #ff3399; border: 2px solid #200010; transform-origin: top center; animation: swing 4s infinite ease-in-out; z-index: 0; }
         .l1 { top: 165px; left: 58px; transform: rotate(20deg); }
         .l2 { top: 165px; right: 58px; transform: rotate(-20deg); }
-
         @keyframes swing { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
 
-        /* --- TỐI ƯU BONG BÓNG BAY TRÊN ĐIỆN THOẠI --- */
+        /* --- TỐI ƯU BONG BÓNG BAY NHIỀU TRÊN ĐIỆN THOẠI --- */
         .bubble {
-            position: absolute;
-            cursor: pointer; transition: transform 0.1s;
-            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3));
-            z-index: 20;
-            touch-action: manipulation;
+            position: absolute; cursor: pointer; transition: transform 0.1s;
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3)); z-index: 20; touch-action: manipulation;
         }
         .bubble-content {
-            background: rgba(255, 255, 255, 0.96);
-            border: 3.5px solid #ff3399; border-radius: 40px;
-            padding: 10px 20px; display: flex; align-items: center; gap: 10px;
+            background: rgba(255, 255, 255, 0.96); border: 3.5px solid #ff3399; border-radius: 40px;
+            padding: 8px 16px; display: flex; align-items: center; gap: 8px;
         }
         .slash { animation: slashAni 0.4s ease-out forwards; pointer-events: none; }
         @keyframes slashAni {
             0% { transform: scale(1) rotate(0); opacity: 1; }
             100% { transform: scale(1.4) rotate(15deg); opacity: 0; }
         }
+
+        /* Đồ họa SVG cho các từ bắt buộc */
+        .svg-icon { width: 38px; height: 38px; display: inline-block; vertical-align: middle; }
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col justify-between p-3 overflow-hidden bg-[#111122]">
@@ -120,8 +65,7 @@
         </div>
     </div>
 
-    <div id="game-zone" class="relative flex-1 w-full overflow-hidden my-2">
-        </div>
+    <div id="game-zone" class="relative flex-1 w-full overflow-hidden my-2"></div>
 
     <div class="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-3 bg-black/50 backdrop-blur-md p-3 rounded-2xl border border-white/10 z-30">
         
@@ -145,12 +89,12 @@
             <div class="bg-pink-600/10 p-3 rounded-xl border border-pink-500/20">
                 <p id="m-speech" class="text-white font-game text-base md:text-lg leading-tight text-center md:text-left">Hi! Pick a letter to start the game!</p>
             </div>
-            <div id="letter-selector" class="flex flex-wrap gap-1.5 justify-center md:justify-start overflow-y-auto max-h-24 md:max-h-none p-0.5">
-                </div>
+            <div id="letter-selector" class="flex flex-wrap gap-1.5 justify-center md:justify-start overflow-y-auto max-h-24 md:max-h-none p-0.5"></div>
         </div>
     </div>
 
     <script>
+        // GIỮ NGUYÊN HOÀN TOÀN CÁC TỪ KHÓA BẮT BUỘC THEO FILE GỐC
         const dataset = {
             "a": ["apple", "ant", "alligator", "arm", "arrow", "ambulance", "angel", "airplane"],
             "b": ["bee", "bird", "butterfly", "bus", "banana", "bear", "boy", "book", "ball"],
@@ -180,22 +124,35 @@
             "z": ["zoo", "zebra", "zucchini", "zig-zag", "zero", "zipper"]
         };
 
-        const emojiMap = {
+        // BẢN ĐỒ HÌNH ẢNH: Tự động vẽ bằng mã SVG đối với 10 từ bị lỗi hệ thống
+        const graphicsMap = {
+            "doll": `<svg class="svg-icon" viewBox="0 0 64 64"><circle cx="32" cy="20" r="12" fill="#ffccd5" stroke="#333" stroke-width="2"/><path d="M22 40 C 22 30, 42 30, 42 40 L 46 60 L 18 60 Z" fill="#ff4d6d" stroke="#333" stroke-width="2"/><circle cx="28" cy="18" r="1.5" fill="#333"/><circle cx="36" cy="18" r="1.5" fill="#333"/><path d="M28 24 Q32 28 36 24" fill="none" stroke="#ff4d6d" stroke-width="2"/></svg>`,
+            "insect": `<svg class="svg-icon" viewBox="0 0 64 64"><rect x="28" y="16" width="8" height="32" rx="4" fill="#4a5759" stroke="#333" stroke-width="2"/><circle cx="32" cy="12" r="6" fill="#100" stroke="#333" stroke-width="2"/><path d="M28 24 Q14 20 28 32 M36 24 Q50 20 36 32" fill="none" stroke="#708d81" stroke-width="2"/></svg>`,
+            "jellyfish": `<svg class="svg-icon" viewBox="0 0 64 64"><path d="M16 32 C16 16, 48 16, 48 32 Z" fill="#a2d2ff" stroke="#333" stroke-width="2"/><path d="M20 32 Q22 48 20 58 M28 32 Q30 46 32 58 M36 32 Q34 48 38 58 M44 32 Q42 46 44 58" fill="none" stroke="#bde0fe" stroke-width="2"/></svg>`,
+            "jar": `<svg class="svg-icon" viewBox="0 0 64 64"><path d="M22 22 L22 54 C22 58, 42 58, 42 54 L42 22 Z" fill="#e0f2f1" stroke="#333" stroke-width="2" opacity="0.8"/><rect x="24" y="14" width="16" height="8" rx="2" fill="#004d40" stroke="#333" stroke-width="2"/></svg>`,
+            "kettle": `<svg class="svg-icon" viewBox="0 0 64 64"><path d="M18 44 C14 28, 50 28, 46 44 Z" fill="#b0bec5" stroke="#333" stroke-width="2"/><path d="M18 36 C8 36, 12 24, 18 28" fill="none" stroke="#333" stroke-width="2"/><path d="M44 36 L54 30" stroke="#333" stroke-width="3"/></svg>`,
+            "ladder": `<svg class="svg-icon" viewBox="0 0 64 64"><line x1="22" y1="10" x2="22" y2="54" stroke="#8d6e63" stroke-width="4"/><line x1="42" y1="10" x2="42" y2="54" stroke="#8d6e63" stroke-width="4"/><line x1="22" y1="20" x2="42" y2="20" stroke="#8d6e63" stroke-width="3"/><line x1="22" y1="32" x2="42" y2="32" stroke="#8d6e63" stroke-width="3"/><line x1="22" y1="44" x2="42" y2="44" stroke="#8d6e63" stroke-width="3"/></svg>`,
+            "olive": `<svg class="svg-icon" viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="14" ry="20" fill="#556b2f" stroke="#333" stroke-width="2"/><circle cx="28" cy="24" r="3" fill="#fff" opacity="0.6"/></svg>`,
+            "ostrich": `<svg class="svg-icon" viewBox="0 0 64 64"><circle cx="32" cy="18" r="8" fill="#ffb703" stroke="#333" stroke-width="2"/><path d="M32 26 L32 50" stroke="#333" stroke-width="3"/><path d="M26 50 L38 50" stroke="#333" stroke-width="2"/><circle cx="30" cy="16" r="1.5" fill="#000"/></svg>`,
+            "window": `<svg class="svg-icon" viewBox="0 0 64 64"><rect x="16" y="12" width="32" height="40" fill="#e0f7fa" stroke="#333" stroke-width="3"/><line x1="32" y1="12" x2="32" y2="52" stroke="#333" stroke-width="2"/><line x1="16" y1="32" x2="48" y2="32" stroke="#333" stroke-width="2"/></svg>`,
+            "x-ray": `<svg class="svg-icon" viewBox="0 0 64 64"><rect x="14" y="10" width="36" height="44" rx="4" fill="#212121" stroke="#fff" stroke-width="2"/><path d="M24 20 L40 44 M40 20 L24 44 M32 14 L32 50" stroke="#e0e0e0" stroke-width="3" stroke-linecap="round"/></svg>`,
+            
+            // Các từ cũ bằng Emoji chuẩn hệ thống vẫn giữ nguyên
             "apple":"🍎","ant":"🐜","alligator":"🐊","arm":"💪","arrow":"🏹","ambulance":"🚑","angel":"👼","airplane":"✈️",
             "bee":"🐝","bird":"🐦","butterfly":"🦋","bus":"🚌","banana":"🍌","bear":"🐻","boy":"👦","book":"📖","ball":"⚽",
             "cat":"🐱","cup":"🥤","cow":"🐮","cake":"🍰","candy":"🍬","coat":"🧥","crab":"🦀","car":"🚗","clock":"⏰",
-            "dog":"🐶","donut":"🍩","duck":"🦆","doll":"🪆","dolphin":"🐬","dress":"👗","dinosaur":"🦖","drum":"🥁",
+            "dog":"🐶","donut":"🍩","duck":"🦆","dolphin":"🐬","dress":"👗","dinosaur":"🦖","drum":"🥁",
             "elephant":"🐘","elbow":"💪","egg":"🥚","eagle":"🦅","eye":"👁️","ear":"👂","elf":"🧝","eraser":"🧽",
             "fish":"🐟","frog":"🐸","fox":"🦊","fan":"➿","fence":"🚧","flag":"🚩","fork":"🍴","flower":"🌸",
             "goose":"🦢","grapes":"🍇","goat":"🐐","girl":"👧","gift":"🎁","glasses":"👓","giraffe":"🦒","guitar":"🎸",
             "horse":"🐴","house":"🏠","hen":"🐔","hippo":"🦛","heart":"❤️","hamburger":"🍔","hamster":"🐹","hat":"🎩",
-            "ice cream":"🍦","ice":"🧊","ink":"✒️","insect":"🪲","igloo":"⛺","iguana":"🦎","iron":"🧱","island":"🏝️",
-            "juice":"🧃","jug":"🏺","jar":"🫙","jet":"✈️","jacket":"🧥","jam":"🍯","jellyfish":"🪼","jelly":"🍮",
-            "key":"🔑","kite":"🪁","kangaroo":"🦘","kitten":"🐱","knife":"🔪","kettle":"🫖","king":"👑","koala":"🐨",
-            "lion":"🦁","lemon":"🍋","leaf":"🍃","lollipop":"🍭","ladder":"🪜","lock":"🔒","lips":"👄","lizard":"🦎",
+            "ice cream":"🍦","ice":"🧊","ink":"✒️","igloo":"⛺","iguana":"🦎","iron":"🧱","island":"🏝️",
+            "juice":"🧃","jug":"🏺","jet":"✈️","jacket":"🧥","jam":"🍯","jelly":"🍮",
+            "key":"🔑","kite":"🪁","kangaroo":"🦘","kitten":"🐱","knife":"🔪","king":"👑","koala":"🐨",
+            "lion":"🦁","lemon":"🍋","leaf":"🍃","lollipop":"🍭","lock":"🔒","lips":"👄","lizard":"🦎",
             "mouse":"🐭","moon":"🌙","monkey":"🐵","milk":"🥛","marker":"🖍️","mushroom":"🍄","monster":"👾","mango":"🥭",
             "nest":"🪹","nut":"🥜","net":"🕸️","noodles":"🍜","nail":"💅","necklace":"📿","nose":"👃","nurse":"👩‍⚕️",
-            "owl":"🦉","orange":"🍊","onion":"🧅","olive":"🫒","ocean":"🌊","oven":"🍳","octopus":"🐙","ostrich":"🦤",
+            "orange":"🍊","onion":"🧅","ocean":"🌊","oven":"🍳","octopus":"🐙",
             "pear":"🍐","pig":"🐷","pencil":"✏️","panda":"🐼","plate":"🍽️","penguin":"🐧","pizza":"🍕","parrot":"🦜",
             "queen":"👸","quail":"🐦","question":"❓","quiver":"🏹","quiet":"🤫","quilt":"🧵",
             "rabbit":"🐰","ring":"💍","rose":"🌹","rug":"🧶","rhino":"🦏","rain":"🌧️","robot":"🤖","rocket":"🚀",
@@ -203,8 +160,8 @@
             "train":"🚆","truck":"🚚","tie":"👔","table":"🪑","tiger":"🐯","tomato":"🍅","tent":"⛺","turtle":"🐢",
             "umbrella":"☂️","unicorn":"🦄","up":"⬆️","unhappy":"😟","uniform":"🥋","unicycle":"🚲",
             "van":"🚐","vase":"🏺","violin":"🎻","vacuum":"🧹","vegetable":"🥦","vet":"🩺","volcano":"🌋","vest":"🦺",
-            "window":"🪟","watch":"⌚","wolf":"🐺","web":"🕸️","watermelon":"🍉","whale":"🐳","wheel":"⚙️",
-            "box":"📦","fox":"🦊","xylophone":"🎹","x-ray":"🩻","x-mas":"🎄","ax":"🪓",
+            "wolf":"🐺","web":"🕸️","watermelon":"🍉","whale":"🐳","wheel":"⚙️",
+            "box":"📦","xylophone":"🎹","x-mas":"🎄","ax":"🪓",
             "yo-yo":"🪀","yogurt":"🥛","yak":"🐂","yam":"🍠","yarn":"🧶","yacht":"⛵",
             "zoo":"🦁","zebra":"🦓","zucchini":"🥒","zig-zag":"📈","zero":"0️⃣","zipper":"🤐"
         };
@@ -215,7 +172,7 @@
         let mode = 'see';
         let gameTimer = null;
 
-        // Khởi tạo nút bảng chữ cái
+        // Khởi tạo bảng chữ cái
         const selector = document.getElementById('letter-selector');
         "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
             const btn = document.createElement('button');
@@ -228,11 +185,8 @@
         function startLetter(l) {
             currentLetter = l;
             document.getElementById('game-zone').innerHTML = '';
-            
-            // Xóa bộ đếm cũ nếu có và thiết lập bộ sinh bong bóng mới nhanh hơn cho di động (mỗi 1.8 giây)
             if(gameTimer) clearInterval(gameTimer);
-            gameTimer = setInterval(spawn, 1800);
-            
+            gameTimer = setInterval(spawn, 1800); // Tốc độ sinh bóng nhanh trên điện thoại
             newRound();
         }
 
@@ -242,17 +196,15 @@
             mode = Math.random() > 0.5 ? 'see' : 'is';
             
             const article = ['a','e','i','o','u'].includes(targetWord[0]) ? 'an' : 'a';
-            
-            // TẠO CÂU HỎI VÀ CÂU TRẢ LỜI ĐỂ HIỂN THỊ + ĐỌC PHÁT ÂM TO CHO BÉ NGHE
             let fullSpeechText = "";
             let uiDisplayText = "";
 
             if (mode === 'see') {
-                fullSpeechText = `What can you see? I can see ${article} ${targetWord}`;
-                uiDisplayText = `I can see ${article} ${targetWord}`;
+                fullSpeechText = `What can you see? Find: I can see ${article} ${targetWord}`;
+                uiDisplayText = `Find: I can see ${article} ${targetWord}`;
             } else {
-                fullSpeechText = `What is it? It is ${article} ${targetWord}`;
-                uiDisplayText = `It is ${article} ${targetWord}`;
+                fullSpeechText = `What is it? Find: It is ${article} ${targetWord}`;
+                uiDisplayText = `Find: It is ${article} ${targetWord}`;
             }
             
             speak(fullSpeechText);
@@ -264,7 +216,7 @@
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'en-US';
-            msg.rate = 0.82; // Đọc tốc độ vừa phải cho bé thiếu nhi dễ bắt chước nghe theo
+            msg.rate = 0.82;
             const mouth = document.getElementById('m-mouth');
             msg.onstart = () => mouth.classList.add('open');
             msg.onend = () => {
@@ -279,21 +231,21 @@
             if(!currentLetter) return;
             const words = dataset[currentLetter];
             
-            // Tăng tần suất xuất hiện từ đúng lên (45%) giúp bé chơi trên mobile thấy từ nhanh, không bị chán
             const word = Math.random() < 0.45 ? targetWord : words[Math.floor(Math.random() * words.length)];
             const article = ['a','e','i','o','u'].includes(word[0]) ? 'an' : 'a';
             const sentence = mode === 'see' ? `I can see ${article} ${word}` : `It is ${article} ${word}`;
 
             const bubble = document.createElement('div');
             bubble.className = "bubble";
-            // Căn chỉnh khoảng cách chiều ngang an toàn (từ 5% đến 80%) để không bị tràn màn hình điện thoại
-            bubble.style.left = Math.random() * 75 + 5 + "%";
-            // Cho bong bóng bay với thời gian từ 5 đến 8 giây giúp dồn lượng bóng lên nhiều hơn
+            bubble.style.left = Math.random() * 72 + 4 + "%";
             bubble.style.animation = `floatUp ${5 + Math.random() * 3}s linear forwards`;
+
+            // Kiểm tra xem từ đó là Emoji gốc hay Đồ họa SVG tự vẽ
+            const visualContent = graphicsMap[word].includes('<svg') ? graphicsMap[word] : `<span class="text-3xl md:text-4xl">${graphicsMap[word]}</span>`;
 
             bubble.innerHTML = `
                 <div class="bubble-content shadow-lg scale-90 md:scale-100">
-                    <span class="text-3xl md:text-4xl">${emojiMap[word] || '🎈'}</span>
+                    ${visualContent}
                     <span class="text-pink-600 font-bold text-sm md:text-base whitespace-nowrap">${sentence}</span>
                 </div>
             `;
@@ -306,7 +258,6 @@
                     speak(`Correct! ${sentence}`, () => newRound());
                     setTimeout(() => bubble.remove(), 400);
                 } else {
-                    // Chạm sai sẽ làm mờ mờ đi để bé biết chọn bong bóng khác
                     bubble.style.opacity = "0.2";
                     bubble.style.pointerEvents = "none";
                 }
@@ -315,7 +266,6 @@
             document.getElementById('game-zone').appendChild(bubble);
         }
 
-        // Căn chỉnh CSS Animation: Bong bóng xuất phát chuẩn từ mép đáy vùng gameZone bay vút lên
         const style = document.createElement('style');
         style.innerHTML = `@keyframes floatUp { from { transform: translateY(105%); } to { transform: translateY(-25vh); } }`;
         document.head.appendChild(style);
