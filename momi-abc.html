@@ -177,7 +177,7 @@
         const selector = document.getElementById('letter-selector');
        "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
     const btn = document.createElement('button');
-    // Thay font-game bằng font-bold text-lg để chữ thường to và nét tròn dễ nhìn
+   // Thay font-game bằng font-bold text-lg để chữ thường to và nét tròn dễ nhìn
     btn.className = "w-9 h-9 rounded-md bg-pink-500/20 border border-pink-500/40 text-pink-300 font-bold text-lg hover:bg-pink-500 hover:text-white transition-all flex items-center justify-center flex-shrink-0";
     btn.innerText = l.toLowerCase(); // <-- Đổi thành chữ thường
     btn.onclick = () => startLetter(l);
@@ -188,7 +188,8 @@
             currentLetter = l;
             document.getElementById('game-zone').innerHTML = '';
             if(gameTimer) clearInterval(gameTimer);
-            gameTimer = setInterval(spawn, 1800); // Tốc độ sinh bóng nhanh trên điện thoại
+            // Giãn cách thời gian sinh bóng 2.2 giây để màn hình không bị quá dày đặc chữ
+            gameTimer = setInterval(spawn, 2200); 
             newRound();
         }
 
@@ -240,7 +241,10 @@
             const bubble = document.createElement('div');
             bubble.className = "bubble";
             bubble.style.left = Math.random() * 72 + 4 + "%";
-            bubble.style.animation = `floatUp ${5 + Math.random() * 3}s linear forwards`;
+            
+            // --- TĂNG THỜI GIAN BAY LÂU HƠN ---
+            // Tăng lên thành 12 đến 16 giây để bóng trôi cực kỳ chậm rãi từ dưới lên trên
+            bubble.style.animation = `floatUp ${12 + Math.random() * 4}s linear forwards`;
 
             // Kiểm tra xem từ đó là Emoji gốc hay Đồ họa SVG tự vẽ
             const visualContent = graphicsMap[word].includes('<svg') ? graphicsMap[word] : `<span class="text-3xl md:text-4xl">${graphicsMap[word]}</span>`;
@@ -266,10 +270,35 @@
             };
 
             document.getElementById('game-zone').appendChild(bubble);
+            
+            // Tự động giải phóng bộ nhớ sau khi bóng kết thúc hành trình
+            setTimeout(() => { if(bubble.parentElement) bubble.remove(); }, 16000);
         }
 
+        // --- ĐIỀU CHỈNH ĐIỂM XUẤT PHÁT THẤP HƠN VÀO KHU VỰC MOMMY ---
         const style = document.createElement('style');
-        style.innerHTML = `@keyframes floatUp { from { transform: translateY(105%); } to { transform: translateY(-25vh); } }`;
+        style.innerHTML = `
+            @keyframes floatUp { 
+                from { 
+                    /* Xuất phát thấp hẳn xuống bên dưới (vùng bảng điều khiển/nhân vật Mommy) */
+                    transform: translateY(calc(100% + 220px)); 
+                    opacity: 0.3;
+                }
+                /* Khi vừa chạm vào vùng game nhìn thấy được thì hiện rõ hoàn toàn */
+                15% {
+                    opacity: 1;
+                }
+                /* Duy trì hiển thị rõ ràng trong suốt quá trình bay */
+                85% {
+                    opacity: 1;
+                }
+                /* Bay lên gần mép trên cùng thì mờ dần rồi biến mất */
+                to { 
+                    transform: translateY(-20vh); 
+                    opacity: 0;
+                } 
+            }
+        `;
         document.head.appendChild(style);
     </script>
 </body>
