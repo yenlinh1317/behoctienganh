@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bé Vui Học Tiếng Anh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- HỆ THỐNG GIAO DIỆN HOÀN TOÀN MỚI --- */
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --bg-gradient: linear-gradient(135deg, #F3F8FF 0%, #E5EFFF 100%);
+            --card-bg: #FFFFFF;
+            --text-main: #2C3E50;
+            --shadow-soft: 0 12px 24px rgba(0,0,0,0.06);
+            --shadow-pop: 0 8px 0 #E6D05C;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Container thích ứng linh hoạt với mọi kích thước màn hình */
+        #app-container {
+            width: 100%;
+            max-width: 1100px; /* Mở rộng tối đa trên PC */
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            border: 5px solid var(--accent-color);
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        /* Thanh tiêu đề bo cong hoạt họa */
+        header {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            color: white;
+            padding: 22px 20px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        header .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            display: none;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        header .back-btn:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Vùng nội dung */
+        .content {
+            padding: 25px;
+            flex: 1;
+        }
+
+        /* --- MÀN HÌNH CHÍNH: LƯỚI TỰ ĐỘNG THEO CHIỀU XOAY --- */
+        .alphabet-grid {
+            display: grid;
+            /* Tự động tính toán số lượng cột dựa trên chiều rộng màn hình */
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 18px;
+        }
+
+        .letter-card {
+            background: #F8FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 24px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        /* Hiệu ứng nảy bong bóng khi di chuột qua */
+        .letter-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            background: #FFF;
+            border-color: var(--secondary-color);
+            box-shadow: 0 12px 20px rgba(78, 205, 196, 0.15);
+        }
+
+        .letter-card img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+        }
+
+        .letter-card div {
+            margin-top: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        /* --- MÀN HÌNH TỪ VỰNG: GRID THÍCH ỨNG --- */
+        .word-list {
+            display: grid;
+            /* Trên màn hình ngang/PC sẽ tự chia làm nhiều cột từ vựng thay vì kéo dài ngoằng */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .word-card {
+            background: #FFF;
+            border: 3px solid #E2E8F0;
+            border-radius: 24px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+
+        .word-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .word-card img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            background: #F1F5F9;
+            border-radius: 18px;
+            padding: 8px;
+        }
+
+        .word-info {
+            flex: 1;
+        }
+
+        .word-eng {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+        }
+
+        .word-vie {
+            font-size: 16px;
+            color: #64748B;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Nút âm thanh dạng 3D khối đồ chơi */
+        .audio-btn {
+            background: var(--accent-color);
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-pop);
+            transition: all 0.1s ease;
+        }
+
+        .audio-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #E6D05C;
+        }
+
+        /* Tối ưu hóa phản hồi chạm trên điện thoại */
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            #app-container { border-radius: 24px; min-height: 95vh; }
+            header { font-size: 22px; padding: 18px 15px; }
+            .alphabet-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+            .word-list { grid-template-columns: 1fr; gap: 12px; }
+            .letter-card div { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <header>
+        <button class="back-btn" id="backBtn" onclick="goHome()">⬅ Trở về</button>
+        <span id="titleText">Bảng Chữ Cái</span>
+    </header>
+
+    <div class="content">
+        <div id="homeScreen" class="alphabet-grid"></div>
+        <div id="detailScreen" class="word-list" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    const suffixes = ['e6','e7','e8','e9','ea','eb','ec','ed','ee','ef','f0','f1','f2','f3','f4','f5','f6','f7','f8','f9','fa','fb','fc','fd','fe','ff'];
+    const alphabetData = Array.from({length: 26}, (_, i) => {
+        const char = String.fromCharCode(65 + i);
+        return {
+            letterUpper: char,
+            letterLower: char.toLowerCase(),
+            icon: `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f1${suffixes[i]}.png`
+        };
+    });
+
+    // --- GIỮ NGUYÊN 100% KHO TỪ VỰNG CỦA BẠN ---
+    const wordsData = [
+        // A
+        { chu_cai: "A", tu_vung: "apple", nghia: "quả táo", anh: "1f34e", thanh: "apple" },
+        { chu_cai: "A", tu_vung: "ant", nghia: "con kiến", anh: "1f41c", thanh: "ant" },
+        { chu_cai: "A", tu_vung: "alligator", nghia: "cá sấu", anh: "1f40a", thanh: "alligator" },
+        { chu_cai: "A", tu_vung: "arm", nghia: "cánh tay", anh: "1f4aa", thanh: "arm" },
+        { chu_cai: "A", tu_vung: "arrow", nghia: "mũi tên", anh: "27a1", thanh: "arrow" },
+        { chu_cai: "A", tu_vung: "ambulance", nghia: "xe cứu thương", anh: "1f691", thanh: "ambulance" },
+        { chu_cai: "A", tu_vung: "angel", nghia: "thiên thần", anh: "1f47c", thanh: "angel" },
+        { chu_cai: "A", tu_vung: "airplane", nghia: "máy bay", anh: "2708", thanh: "airplane" },
+        // B
+        { chu_cai: "B", tu_vung: "bee", nghia: "con ong", anh: "1f41d", thanh: "bee" },
+        { chu_cai: "B", tu_vung: "bird", nghia: "con chim", anh: "1f426", thanh: "bird" },
+        { chu_cai: "B", tu_vung: "butterfly", nghia: "con bướm", anh: "1f98b", thanh: "butterfly" },
+        { chu_cai: "B", tu_vung: "bus", nghia: "xe buýt", anh: "1f68c", thanh: "bus" },
+        { chu_cai: "B", tu_vung: "banana", nghia: "quả chuối", anh: "1f34c", thanh: "banana" },
+        { chu_cai: "B", tu_vung: "bear", nghia: "con gấu", anh: "1f43b", thanh: "bear" },
+        { chu_cai: "B", tu_vung: "boy", nghia: "cậu bé", anh: "1f466", thanh: "boy" },
+        { chu_cai: "B", tu_vung: "book", nghia: "quyển sách", anh: "1f4d6", thanh: "book" },
+        { chu_cai: "B", tu_vung: "ball", nghia: "quả bóng", anh: "26bd", thanh: "ball" },
+        // C
+        { chu_cai: "C", tu_vung: "cat", nghia: "con mèo", anh: "1f431", thanh: "cat" },
+        { chu_cai: "C", tu_vung: "cup", nghia: "cái cốc", anh: "1f964", thanh: "cup" },
+        { chu_cai: "C", tu_vung: "cow", nghia: "con bò", anh: "1f404", thanh: "cow" },
+        { chu_cai: "C", tu_vung: "cake", nghia: "bánh ngọt", anh: "1f370", thanh: "cake" },
+        { chu_cai: "C", tu_vung: "candy", nghia: "kẹo", anh: "1f36c", thanh: "candy" },
+        { chu_cai: "C", tu_vung: "coat", nghia: "áo khoác", anh: "1f9e5", thanh: "coat" },
+        { chu_cai: "C", tu_vung: "crab", nghia: "con cua", anh: "1f980", thanh: "crab" },
+        { chu_cai: "C", tu_vung: "car", nghia: "ô tô", anh: "1f697", thanh: "car" },
+        { chu_cai: "C", tu_vung: "clock", nghia: "đồng hồ", anh: "1f557", thanh: "clock" },
+        // D
+        { chu_cai: "D", tu_vung: "dog", nghia: "con chó", anh: "1f436", thanh: "dog" },
+        { chu_cai: "D", tu_vung: "donut", nghia: "bánh donut", anh: "1f369", thanh: "donut" },
+        { chu_cai: "D", tu_vung: "duck", nghia: "con vịt", anh: "1f986", thanh: "duck" },
+        { chu_cai: "D", tu_vung: "doll", nghia: "búp bê", anh: "1fa80", thanh: "doll" },
+        { chu_cai: "D", tu_vung: "dolphin", nghia: "cá heo", anh: "1f42c", thanh: "dolphin" },
+        { chu_cai: "D", tu_vung: "dress", nghia: "váy dáng dài", anh: "1f457", thanh: "dress" },
+        { chu_cai: "D", tu_vung: "dinosaur", nghia: "khủng long", anh: "1f995", thanh: "dinosaur" },
+        { chu_cai: "D", tu_vung: "drum", nghia: "cái trống", anh: "1f941", thanh: "drum" },
+        // E
+        { chu_cai: "E", tu_vung: "elephant", nghia: "con voi", anh: "1f418", thanh: "elephant" },
+        { chu_cai: "E", tu_vung: "elbow", nghia: "khuỷu tay", anh: "1f4aa", thanh: "elbow" },
+        { chu_cai: "E", tu_vung: "egg", nghia: "quả trứng", anh: "1f95a", thanh: "egg" },
+        { chu_cai: "E", tu_vung: "eagle", nghia: "chim đại bàng", anh: "1f985", thanh: "eagle" },
+        { chu_cai: "E", tu_vung: "eye", nghia: "con mắt", anh: "1f441", thanh: "eye" },
+        { chu_cai: "E", tu_vung: "ear", nghia: "cái tai", anh: "1f442", thanh: "ear" },
+        { chu_cai: "E", tu_vung: "elf", nghia: "chú lùn", anh: "1f9dd", thanh: "elf" },
+        { chu_cai: "E", tu_vung: "eraser", nghia: "cục tẩy", anh: "270f", thanh: "eraser" },
+        // F
+        { chu_cai: "F", tu_vung: "fish", nghia: "con cá", anh: "1f41f", thanh: "fish" },
+        { chu_cai: "F", tu_vung: "frog", nghia: "con ếch", anh: "1f438", thanh: "frog" },
+        { chu_cai: "F", tu_vung: "fox", nghia: "con cáo", anh: "1f98a", thanh: "fox" },
+        { chu_cai: "F", tu_vung: "fan", nghia: "cái quạt", anh: "1faad", thanh: "fan" },
+        { chu_cai: "F", tu_vung: "fence", nghia: "hàng rào", anh: "1fae7", thanh: "fence" },
+        { chu_cai: "F", tu_vung: "flag", nghia: "lá cờ", anh: "1f3c1", thanh: "flag" },
+        { chu_cai: "F", tu_vung: "fork", nghia: "cái dĩa", anh: "1f374", thanh: "fork" },
+        { chu_cai: "F", tu_vung: "flower", nghia: "bông hoa", anh: "1f338", thanh: "flower" },
+        // G
+        { chu_cai: "G", tu_vung: "goose", nghia: "con ngỗng", anh: "1fabf", thanh: "goose" },
+        { chu_cai: "G", tu_vung: "grapes", nghia: "quả nho", anh: "1f347", thanh: "grapes" },
+        { chu_cai: "G", tu_vung: "goat", nghia: "con dê", anh: "1f410", thanh: "goat" },
+        { chu_cai: "G", tu_vung: "girl", nghia: "cô bé", anh: "1f467", thanh: "girl" },
+        { chu_cai: "G", tu_vung: "gift", nghia: "hộp quà", anh: "1f381", thanh: "gift" },
+        { chu_cai: "G", tu_vung: "glasses", nghia: "mắt kính", anh: "1f453", thanh: "glasses" },
+        { chu_cai: "G", tu_vung: "giraffe", nghia: "hươu cao cổ", anh: "1f992", thanh: "giraffe" },
+        { chu_cai: "G", tu_vung: "guitar", nghia: "đàn ghi-ta", anh: "1f3b8", thanh: "guitar" },
+        // H
+        { chu_cai: "H", tu_vung: "horse", nghia: "con ngựa", anh: "1f434", thanh: "horse" },
+        { chu_cai: "H", tu_vung: "house", nghia: "ngôi nhà", anh: "1f3e0", thanh: "house" },
+        { chu_cai: "H", tu_vung: "hen", nghia: "con gà mái", anh: "1f413", thanh: "hen" },
+        { chu_cai: "H", tu_vung: "hippo", nghia: "hà mã", anh: "1f99b", thanh: "hippo" },
+        { chu_cai: "H", tu_vung: "heart", nghia: "trái tim", anh: "2764", thanh: "heart" },
+        { chu_cai: "H", tu_vung: "hamburger", nghia: "bánh kẹp", anh: "1f354", thanh: "hamburger" },
+        { chu_cai: "H", tu_vung: "hamster", nghia: "chuột hamster", anh: "1f439", thanh: "hamster" },
+        { chu_cai: "H", tu_vung: "hat", nghia: "cái mũ", anh: "1f452", thanh: "hat" },
+        // I
+        { chu_cai: "I", tu_vung: "ice cream", nghia: "kem", anh: "1f366", thanh: "ice_cream" },
+        { chu_cai: "I", tu_vung: "ice", nghia: "đá băng", anh: "1f9ca", thanh: "ice" },
+        { chu_cai: "I", tu_vung: "ink", nghia: "lọ mực", anh: "1f58b", thanh: "ink" },
+        { chu_cai: "I", tu_vung: "insect", nghia: "côn trùng", anh: "1f41b", thanh: "insect" },
+        { chu_cai: "I", tu_vung: "igloo", nghia: "nhà băng", anh: "1f6d6", thanh: "igloo" },
+        { chu_cai: "I", tu_vung: "iguana", nghia: "kỳ nhông", anh: "1f98e", thanh: "iguana" },
+        { chu_cai: "I", tu_vung: "iron", nghia: "bàn là/sắt", anh: "1f9f2", thanh: "iron" },
+        { chu_cai: "I", tu_vung: "island", nghia: "hòn đảo", anh: "1f3dd", thanh: "island" },
+        // J
+        { chu_cai: "J", tu_vung: "juice", nghia: "nước ép", anh: "1f9c3", thanh: "juice" },
+        { chu_cai: "J", tu_vung: "jug", nghia: "cái bình", anh: "1f3fa", thanh: "jug" },
+        { chu_cai: "J", tu_vung: "jar", nghia: "cái hũ", anh: "1fad9", thanh: "jar" },
+        { chu_cai: "J", tu_vung: "jet", nghia: "máy bay phản lực", anh: "1f6e9", thanh: "jet" },
+        { chu_cai: "J", tu_vung: "jacket", nghia: "áo khoác", anh: "1f9e5", thanh: "jacket" },
+        { chu_cai: "J", tu_vung: "jam", nghia: "mứt quả", anh: "1f36f", thanh: "jam" },
+        { chu_cai: "J", tu_vung: "jellyfish", nghia: "con sứa", anh: "1fabc", thanh: "jellyfish" },
+        { chu_cai: "J", tu_vung: "jelly", nghia: "thạch kẹo", anh: "1f36e", thanh: "jelly" },
+        // K
+        { chu_cai: "K", tu_vung: "key", nghia: "chìa khóa", anh: "1f511", thanh: "key" },
+        { chu_cai: "K", tu_vung: "kite", nghia: "cái diều", anh: "1fa81", thanh: "kite" },
+        { chu_cai: "K", tu_vung: "kangaroo", nghia: "chuột túi", anh: "1f998", thanh: "kangaroo" },
+        { chu_cai: "K", tu_vung: "kitten", nghia: "mèo con", anh: "1f431", thanh: "kitten" },
+        { chu_cai: "K", tu_vung: "knife", nghia: "con dao", anh: "1f52a", thanh: "knife" },
+        { chu_cai: "K", tu_vung: "kettle", nghia: "ấm nước", anh: "1fad1", thanh: "kettle" },
+        { chu_cai: "K", tu_vung: "king", nghia: "nhà vua", anh: "1f451", thanh: "king" },
+        { chu_cai: "K", tu_vung: "koala", nghia: "gấu koala", anh: "1f428", thanh: "koala" },
+        // L
+        { chu_cai: "L", tu_vung: "lion", nghia: "sư tử", anh: "1f981", thanh: "lion" },
+        { chu_cai: "L", tu_vung: "lemon", nghia: "quả chanh", anh: "1f34b", thanh: "lemon" },
+        { chu_cai: "L", tu_vung: "leaf", nghia: "chiếc lá", anh: "1f343", thanh: "leaf" },
+        { chu_cai: "L", tu_vung: "lollipop", nghia: "kẹo mút", anh: "1f36d", thanh: "lollipop" },
+        { chu_cai: "L", tu_vung: "ladder", nghia: "cái thang", anh: "1fa9c", thanh: "ladder" },
+        { chu_cai: "L", tu_vung: "lock", nghia: "ổ khóa", anh: "1f512", thanh: "lock" },
+        { chu_cai: "L", tu_vung: "lips", nghia: "đôi môi", anh: "1f444", thanh: "lips" },
+        { chu_cai: "L", tu_vung: "lizard", nghia: "con thằn lằn", anh: "1f98e", thanh: "lizard" },
+        // M
+        { chu_cai: "M", tu_vung: "mouse", nghia: "con chuột", anh: "1f42d", thanh: "mouse" },
+        { chu_cai: "M", tu_vung: "moon", nghia: "mặt trăng", anh: "1f319", thanh: "moon" },
+        { chu_cai: "M", tu_vung: "monkey", nghia: "con khỉ", anh: "1f435", thanh: "monkey" },
+        { chu_cai: "M", tu_vung: "milk", nghia: "sữa", anh: "1f95b", thanh: "milk" },
+        { chu_cai: "M", tu_vung: "marker", nghia: "bút lông", anh: "1f58b", thanh: "marker" },
+        { chu_cai: "M", tu_vung: "mushroom", nghia: "cây nấm", anh: "1f344", thanh: "mushroom" },
+        { chu_cai: "M", tu_vung: "monster", nghia: "quái vật", anh: "1f47e", thanh: "monster" },
+        { chu_cai: "M", tu_vung: "mango", nghia: "quả xoài", anh: "1f96d", thanh: "mango" },
+        // N
+        { chu_cai: "N", tu_vung: "nest", nghia: "tổ chim", anh: "1fab9", thanh: "nest" },
+        { chu_cai: "N", tu_vung: "nut", nghia: "quả hạch/hạt", anh: "1f95c", thanh: "nut" },
+        { chu_cai: "N", tu_vung: "net", nghia: "cái lưới", anh: "1f3f8", thanh: "net" },
+        { chu_cai: "N", tu_vung: "noodles", nghia: "mì sợi", anh: "1f35c", thanh: "noodles" },
+        { chu_cai: "N", tu_vung: "nail", nghia: "móng tay/đinh", anh: "1f485", thanh: "nail" },
+        { chu_cai: "N", tu_vung: "necklace", nghia: "vòng cổ", anh: "1f4ff", thanh: "necklace" },
+        { chu_cai: "N", tu_vung: "nose", nghia: "cái mũi", anh: "1f443", thanh: "nose" },
+        { chu_cai: "N", tu_vung: "nurse", nghia: "y tá", anh: "1f469-200d-2695-fe0f", thanh: "nurse" },
+        // O
+        { chu_cai: "O", tu_vung: "owl", nghia: "con cú", anh: "1f989", thanh: "owl" },
+        { chu_cai: "O", tu_vung: "orange", nghia: "quả cam", anh: "1f34a", thanh: "orange" },
+        { chu_cai: "O", tu_vung: "onion", nghia: "củ hành", anh: "1f9c5", thanh: "onion" },
+        { chu_cai: "O", tu_vung: "olive", nghia: "quả ô-liu", anh: "1fad2", thanh: "olive" },
+        { chu_cai: "O", tu_vung: "ocean", nghia: "đại dương", anh: "1f30a", thanh: "ocean" },
+        { chu_cai: "O", tu_vung: "oven", nghia: "lò nướng", anh: "1f373", thanh: "oven" },
+        { chu_cai: "O", tu_vung: "octopus", nghia: "bạch tuộc", anh: "1f419", thanh: "octopus" },
+        { chu_cai: "O", tu_vung: "ostrich", nghia: "đà điểu", anh: "1f9a6", thanh: "ostrich" },
+        // P
+        { chu_cai: "P", tu_vung: "pear", nghia: "quả lê", anh: "1f350", thanh: "pear" },
+        { chu_cai: "P", tu_vung: "pig", nghia: "con heo", anh: "1f437", thanh: "pig" },
+        { chu_cai: "P", tu_vung: "pencil", nghia: "bút chì", anh: "270f", thanh: "pencil" },
+        { chu_cai: "P", tu_vung: "panda", nghia: "gấu trúc", anh: "1f43c", thanh: "panda" },
+        { chu_cai: "P", tu_vung: "plate", nghia: "cái đĩa", anh: "1f37d", thanh: "plate" },
+        { chu_cai: "P", tu_vung: "penguin", nghia: "chim cánh cụt", anh: "1f427", thanh: "penguin" },
+        { chu_cai: "P", tu_vung: "pizza", nghia: "bánh pizza", anh: "1f355", thanh: "pizza" },
+        { chu_cai: "P", tu_vung: "parrot", nghia: "con vẹt", anh: "1f99c", thanh: "parrot" },
+        // Q
+        { chu_cai: "Q", tu_vung: "queen", nghia: "nữ hoàng", anh: "1f478", thanh: "queen" },
+        { chu_cai: "Q", tu_vung: "quail", nghia: "chim cút", anh: "1fab8", thanh: "quail" },
+        { chu_cai: "Q", tu_vung: "question", nghia: "dấu hỏi", anh: "2753", thanh: "question" },
+        { chu_cai: "Q", tu_vung: "quiver", nghia: "ống đựng tên", anh: "1f3f9", thanh: "quiver" },
+        { chu_cai: "Q", tu_vung: "quiet", nghia: "im lặng", anh: "1f92b", thanh: "quiet" },
+        { chu_cai: "Q", tu_vung: "quilt", nghia: "chăn mền bông", anh: "1f9e3", thanh: "quilt" },
+        // R
+        { chu_cai: "R", tu_vung: "rabbit", nghia: "con thỏ", anh: "1f430", thanh: "rabbit" },
+        { chu_cai: "R", tu_vung: "ring", nghia: "chiếc nhẫn", anh: "1f48d", thanh: "ring" },
+        { chu_cai: "R", tu_vung: "rose", nghia: "bông hồng", anh: "1f339", thanh: "rose" },
+        { chu_cai: "R", tu_vung: "rug", nghia: "tấm thảm", anh: "1faeb", thanh: "rug" },
+        { chu_cai: "R", tu_vung: "rhino", nghia: "tê giác", anh: "1f98f", thanh: "rhino" },
+        { chu_cai: "R", tu_vung: "rain", nghia: "cơn mưa", anh: "1f327", thanh: "rain" },
+        { chu_cai: "R", tu_vung: "robot", nghia: "người máy", anh: "1f916", thanh: "robot" },
+        { chu_cai: "R", tu_vung: "rocket", nghia: "tên lửa", anh: "1f680", thanh: "rocket" },
+        // S
+        { chu_cai: "S", tu_vung: "sun", nghia: "mặt trời", anh: "2600", thanh: "sun" },
+        { chu_cai: "S", tu_vung: "star", nghia: "ngôi sao", anh: "2b50", thanh: "star" },
+        { chu_cai: "S", tu_vung: "shoes", nghia: "đôi giày", anh: "1f45f", thanh: "shoes" },
+        { chu_cai: "S", tu_vung: "snake", nghia: "con rắn", anh: "1f40d", thanh: "snake" },
+        { chu_cai: "S", tu_vung: "ship", nghia: "tàu thủy", anh: "1f6a2", thanh: "ship" },
+        { chu_cai: "S", tu_vung: "sheep", nghia: "con cừu", anh: "1f411", thanh: "sheep" },
+        { chu_cai: "S", tu_vung: "shark", nghia: "cá mập", anh: "1f988", thanh: "shark" },
+        { chu_cai: "S", tu_vung: "sock", nghia: "chiếc tất", anh: "1f9e6", thanh: "sock" },
+        // T
+        { chu_cai: "T", tu_vung: "train", nghia: "tàu hỏa", anh: "1f682", thanh: "train" },
+        { chu_cai: "T", tu_vung: "truck", nghia: "xe tải", anh: "1f69a", thanh: "truck" },
+        { chu_cai: "T", tu_vung: "tie", nghia: "cà vạt", anh: "1f454", thanh: "tie" },
+        { chu_cai: "T", tu_vung: "table", nghia: "cái bàn", anh: "1fa91", thanh: "table" },
+        { chu_cai: "T", tu_vung: "tiger", nghia: "con hổ", anh: "1f42f", thanh: "tiger" },
+        { chu_cai: "T", tu_vung: "tomato", nghia: "quả cà chua", anh: "1f345", thanh: "tomato" },
+        { chu_cai: "T", tu_vung: "tent", nghia: "cái lều", anh: "26fa", thanh: "tent" },
+        { chu_cai: "T", tu_vung: "turtle", nghia: "con rùa", anh: "1f422", thanh: "turtle" },
+        // U
+        { chu_cai: "U", tu_vung: "umbrella", nghia: "cái ô", anh: "2614", thanh: "umbrella" },
+        { chu_cai: "U", tu_vung: "unicorn", nghia: "kỳ lân", anh: "1f984", thanh: "unicorn" },
+        { chu_cai: "U", tu_vung: "up", nghia: "đi lên", anh: "2b06", thanh: "up" },
+        { chu_cai: "U", tu_vung: "unhappy", nghia: "buồn bã", anh: "1f641", thanh: "unhappy" },
+        { chu_cai: "U", tu_vung: "uniform", nghia: "đồng phục", anh: "1f454", thanh: "uniform" },
+        { chu_cai: "U", tu_vung: "unicycle", nghia: "xe một bánh", anh: "1f6f4", thanh: "unicycle" },
+        // V
+        { chu_cai: "V", tu_vung: "van", nghia: "xe tải nhỏ", anh: "1f690", thanh: "van" },
+        { chu_cai: "V", tu_vung: "vase", nghia: "bình hoa", anh: "1f3fa", thanh: "vase" },
+        { chu_cai: "V", tu_vung: "violin", nghia: "đàn vi-ô-lông", anh: "1f3bb", thanh: "violin" },
+        { chu_cai: "V", tu_vung: "vacuum", nghia: "máy hút bụi", anh: "1f9f9", thanh: "vacuum" },
+        { chu_cai: "V", tu_vung: "vegetable", nghia: "rau củ", anh: "1f966", thanh: "vegetable" },
+        { chu_cai: "V", tu_vung: "vet", nghia: "bác sĩ thú y", anh: "1f468-200d-2695-fe0f", thanh: "vet" },
+        { chu_cai: "V", tu_vung: "volcano", nghia: "núi lửa", anh: "1f30b", thanh: "volcano" },
+        { chu_cai: "V", tu_vung: "vest", nghia: "áo ghi-lê", anh: "1f9ba", thanh: "vest" },
+        // W
+        { chu_cai: "W", tu_vung: "window", nghia: "cửa sổ", anh: "1fa9f", thanh: "window" },
+        { chu_cai: "W", tu_vung: "watch", nghia: "đồng hồ đeo tay", anh: "231a", thanh: "watch" },
+        { chu_cai: "W", tu_vung: "wolf", nghia: "con sói", anh: "1f43a", thanh: "wolf" },
+        { chu_cai: "W", tu_vung: "web", nghia: "mạng nhện", anh: "1f578", thanh: "web" },
+        { chu_cai: "W", tu_vung: "watermelon", nghia: "dưa hấu", anh: "1f349", thanh: "watermelon" },
+        { chu_cai: "W", tu_vung: "whale", nghia: "cá voi", anh: "1f40b", thanh: "whale" },
+        { chu_cai: "W", tu_vung: "wheel", nghia: "bánh xe", anh: "1f6de", thanh: "wheel" },
+        // X
+        { chu_cai: "X", tu_vung: "box", nghia: "cái hộp", anh: "1f4e6", thanh: "box" },
+        { chu_cai: "X", tu_vung: "fox", nghia: "con cáo", anh: "1f98a", thanh: "fox" },
+        { chu_cai: "X", tu_vung: "xylophone", nghia: "đàn mộc cầm", anh: "1fa87", thanh: "xylophone" },
+        { chu_cai: "X", tu_vung: "x-ray", nghia: "chụp x-quang", anh: "1fa7b", thanh: "x-ray" },
+        { chu_cai: "X", tu_vung: "x-mas", nghia: "giáng sinh", anh: "1f384", thanh: "christmas" },
+        { chu_cai: "X", tu_vung: "ax", nghia: "cái rìu", anh: "1fa93", thanh: "axe" },
+        // Y
+        { chu_cai: "Y", tu_vung: "yo-yo", nghia: "đồ chơi yo-yo", anh: "1fa80", thanh: "yo-yo" },
+        { chu_cai: "Y", tu_vung: "yogurt", nghia: "sữa chua", anh: "1f9c3", thanh: "yogurt" },
+        { chu_cai: "Y", tu_vung: "yak", nghia: "bò tây tạng", anh: "1f403", thanh: "yak" },
+        { chu_cai: "Y", tu_vung: "yam", nghia: "củ khoai", anh: "1f360", thanh: "yam" },
+        { chu_cai: "Y", tu_vung: "yarn", nghia: "cuộn len", anh: "1f9f6", thanh: "yarn" },
+        { chu_cai: "Y", tu_vung: "yacht", nghia: "du thuyền", anh: "26f5", thanh: "yacht" },
+        // Z
+        { chu_cai: "Z", tu_vung: "zoo", nghia: "sở thú", anh: "1f3e1", thanh: "zoo" },
+        { chu_cai: "Z", tu_vung: "zebra", nghia: "con ngựa vằn", anh: "1f993", thanh: "zebra" },
+        { chu_cai: "Z", tu_vung: "zucchini", nghia: "bí ngòi xanh", anh: "1f952", thanh: "zucchini" },
+        { chu_cai: "Z", tu_vung: "zig-zag", nghia: "đường zigzag", anh: "30-20e3", thanh: "zigzag" },
+        { chu_cai: "Z", tu_vung: "zero", nghia: "số không", anh: "30-20e3", thanh: "zero" },
+        { chu_cai: "Z", tu_vung: "zipper", nghia: "khóa kéo", anh: "1f9f5", thanh: "zipper" }
+    ];
+
+    const homeScreen = document.getElementById('homeScreen');
+    const detailScreen = document.getElementById('detailScreen');
+    const backBtn = document.getElementById('backBtn');
+    const titleText = document.getElementById('titleText');
+
+    function initApp() {
+        homeScreen.innerHTML = alphabetData.map(item => `
+            <div class="letter-card" onclick="openLetter('${item.letterUpper}')">
+                <img src="${item.icon}" alt="${item.letterUpper}" onerror="this.src='https://placehold.co/64x64?text=${item.letterUpper}'">
+                <div>${item.letterUpper}${item.letterLower}</div>
+            </div>
+        `).join('');
+    }
+
+    function openLetter(letter) {
+        titleText.innerText = `Chữ cái: ${letter}`;
+        backBtn.style.display = 'block';
+        homeScreen.style.display = 'none';
+        detailScreen.style.display = 'grid'; // Chuyển thành dạng Grid thông minh
+
+        const filteredWords = wordsData.filter(w => w.chu_cai.toUpperCase() === letter.toUpperCase());
+
+        if(filteredWords.length === 0) {
+            detailScreen.innerHTML = `<div style="text-align:center;grid-column:1/-1;color:#64748B;padding:40px;font-weight:500;">Đang cập nhật từ vựng...</div>`;
+            return;
+        }
+
+        detailScreen.innerHTML = filteredWords.map(w => {
+            const imgUrl = (w.anh === "1fabf" || w.anh === "1fad9" || w.anh === "1fabc" || w.anh === "1f52a" || w.anh === "1fad2" || w.anh === "1f373" || w.anh === "26f5" || w.anh === "30-20e3" || w.anh.startsWith("1f")) 
+                ? `https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/${w.anh}.png`
+                : `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/${w.anh}.png`;
+
+            const cleanAudioName = w.thanh.replace(" ", "_");
+            const audioUrl = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${cleanAudioName}--_gb_1.mp3`;
+
+            return `
+                <div class="word-card">
+                    <img src="${imgUrl}" alt="${w.tu_vung}" onerror="this.src='https://placehold.co/75x75?text=🔍'">
+                    <div class="word-info">
+                        <div class="word-eng">${w.tu_vung}</div>
+                        <div class="word-vie">${w.nghia}</div>
+                    </div>
+                    <button class="audio-btn" onclick="playAudio('${audioUrl}')">🔊</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function goHome() {
+        titleText.innerText = "Bảng Chữ Cái";
+        backBtn.style.display = 'none';
+        homeScreen.style.display = 'grid';
+        detailScreen.style.display = 'none';
+    }
+
+    function playAudio(url) {
+        if(!url) return;
+        const audio = new Audio(url);
+        audio.play().catch(e => console.log("Lỗi âm thanh:", e));
+    }
+
+    initApp();
+</script>
+
+</body>
+</html>
