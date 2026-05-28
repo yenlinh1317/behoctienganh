@@ -2,99 +2,130 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>Mommy Long Legs - Word Slasher</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght=700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Quicksand', sans-serif; user-select: none; overflow: hidden; background: #1a1a2e; }
         .font-game { font-family: 'Fredoka One', cursive; }
 
-        /* --- NHÂN VẬT MOMMY LONG LEGS NÂNG CẤP --- */
-        .mommy-wrap { position: relative; width: 150px; height: 200px; }
+        /* --- NHÂN VẬT MOMMY LONG LEGS ĐẸP HƠN (VẼ BẰNG CSS) --- */
+        .mommy-wrap { position: relative; width: 160px; height: 190px; margin: 0 auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
         
-        /* Mái tóc nhiều dải buộc lại */
+        /* Tóc cột đỉnh đầu */
         .hair-tie {
-            position: absolute; top: -10px; left: 60px;
-            width: 30px; height: 15px; background: #ffd700;
-            border: 2px solid #33001a; border-radius: 5px; z-index: 10;
+            position: absolute; top: -5px; left: 65px;
+            width: 30px; height: 14px; background: #ffd700;
+            border: 2px solid #200010; border-radius: 6px; z-index: 10;
         }
         .strand {
             position: absolute; background: #e60073;
-            border: 2px solid #33001a; border-radius: 20px;
+            border: 2.5px solid #200010; border-radius: 30px;
             transform-origin: top center;
         }
-        .s1 { width: 12px; height: 70px; top: 0; left: 55px; transform: rotate(20deg); animation: swing 3s infinite ease-in-out; }
-        .s2 { width: 12px; height: 85px; top: 0; left: 65px; transform: rotate(0deg); animation: swing 4s infinite ease-in-out; }
-        .s3 { width: 12px; height: 60px; top: 0; left: 75px; transform: rotate(-25deg); animation: swing 2.5s infinite ease-in-out; }
-        .s4 { width: 10px; height: 50px; top: 0; left: 60px; transform: rotate(45deg); animation: swing 3.5s infinite ease-in-out; }
+        .s1 { width: 14px; height: 80px; top: 5px; left: 50px; transform: rotate(25deg); animation: swing 3s infinite ease-in-out; }
+        .s2 { width: 14px; height: 95px; top: 5px; left: 65px; transform: rotate(5deg); animation: swing 4s infinite ease-in-out; }
+        .s3 { width: 14px; height: 75px; top: 5px; left: 80px; transform: rotate(-20deg); animation: swing 2.5s infinite ease-in-out; }
+        .s4 { width: 12px; height: 60px; top: 5px; left: 95px; transform: rotate(-45deg); animation: swing 3.5s infinite ease-in-out; }
 
+        /* Khuôn mặt */
         .mommy-head {
-            position: absolute; top: 15px; left: 40px;
-            width: 80px; height: 75px; background: #ff3399;
-            border: 3px solid #33001a; border-radius: 40px 40px 35px 35px;
-            z-index: 5;
+            position: absolute; top: 25px; left: 35px;
+            width: 90px; height: 80px; background: #ff3399;
+            border: 3px solid #200010; border-radius: 45px 45px 40px 40px;
+            z-index: 5; box-shadow: inset -5px -5px 0px rgba(0,0,0,0.1);
         }
         .eye {
-            position: absolute; top: 25px; width: 22px; height: 22px;
-            background: white; border: 2px solid #33001a; border-radius: 50%;
+            position: absolute; top: 22px; width: 26px; height: 26px;
+            background: white; border: 2.5px solid #200010; border-radius: 50%;
         }
         .eye.l { left: 12px; } .eye.r { right: 12px; }
-        .pupil { width: 10px; height: 10px; background: #0080ff; border-radius: 50%; margin: 4px; }
-        .eye::after { content: '///'; position: absolute; top: -15px; left: 0; font-size: 14px; font-weight: bold; color: #33001a; }
+        .pupil { 
+            position: relative; width: 14px; height: 14px; 
+            background: #0099ff; border-radius: 50%; border: 1.5px solid #200010; margin: 4px; 
+        }
+        /* Mắt long lanh */
+        .pupil::before {
+            content: ''; position: absolute; top: 1px; left: 2px;
+            width: 4px; height: 4px; background: white; border-radius: 50%;
+        }
+        /* Lông mi sắc nét */
+        .eye::after { 
+            content: '✿'; position: absolute; top: -16px; left: 2px; 
+            font-size: 14px; color: #200010; font-weight: bold;
+        }
 
+        /* Miệng cười xinh */
         .mouth {
-            position: absolute; bottom: 12px; left: 20px;
-            width: 40px; height: 10px; background: #660033;
-            border-radius: 0 0 20px 20px; border: 2px solid #33001a;
+            position: absolute; bottom: 14px; left: 25px;
+            width: 40px; height: 12px; background: #ff0055;
+            border-radius: 2px 2px 20px 20px; border: 2.5px solid #200010;
             transition: 0.1s;
         }
-        .mouth.open { height: 20px; border-radius: 50%; }
+        .mouth.open { height: 22px; border-radius: 50%; background: #660022; }
 
-        .neck { position: absolute; top: 85px; left: 75px; width: 10px; height: 40px; background: #ff3399; border: 2px solid #33001a; }
-        .body { position: absolute; top: 120px; left: 55px; width: 50px; height: 50px; background: #ff3399; border: 3px solid #33001a; border-radius: 20px; }
+        /* Cổ và Vòng cổ quấn ngọc */
+        .neck { position: absolute; top: 98px; left: 74px; width: 12px; height: 25px; background: #ff3399; border: 2.5px solid #200010; z-index: 3; }
+        .necklace {
+            position: absolute; top: 113px; left: 66px; width: 28px; height: 8px;
+            background: #ffd700; border: 1.5px solid #200010; border-radius: 10px; z-index: 4;
+        }
+
+        /* Thân và Váy đầm búp bế */
+        .body { 
+            position: absolute; top: 118px; left: 52px; width: 56px; height: 45px; 
+            background: #e60073; border: 3px solid #200010; border-radius: 15px 15px 5px 5px; z-index: 2;
+        }
+        .dress-skirt {
+            position: absolute; top: 148px; left: 43px; width: 74px; height: 25px;
+            background: #ff3399; border: 2.5px solid #200010; border-radius: 10px 10px 20px 20px; z-index: 1;
+        }
         
-        .leg { position: absolute; width: 8px; height: 100px; background: #ff3399; border: 2px solid #33001a; transform-origin: top center; animation: swing 4s infinite ease-in-out; }
-        .l1 { top: 140px; left: 45px; transform: rotate(30deg); }
-        .l2 { top: 140px; right: 35px; transform: rotate(-30deg); }
+        /* Đôi chân dài đung đưa */
+        .leg { position: absolute; width: 8px; height: 50px; background: #ff3399; border: 2px solid #200010; transform-origin: top center; animation: swing 4s infinite ease-in-out; z-index: 0; }
+        .l1 { top: 165px; left: 58px; transform: rotate(20deg); }
+        .l2 { top: 165px; right: 58px; transform: rotate(-20deg); }
 
-        @keyframes swing { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+        @keyframes swing { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
 
-        /* --- BONG BÓNG VÀ HIỆU ỨNG CHÉM --- */
+        /* --- TỐI ƯU BONG BÓNG BAY TRÊN ĐIỆN THOẠI --- */
         .bubble {
-            position: absolute; bottom: -150px;
+            position: absolute;
             cursor: pointer; transition: transform 0.1s;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3));
+            z-index: 20;
+            touch-action: manipulation;
         }
         .bubble-content {
-            background: rgba(255, 255, 255, 0.95);
-            border: 4px solid #ff3399; border-radius: 50px;
-            padding: 15px 30px; display: flex; align-items: center; gap: 15px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 3.5px solid #ff3399; border-radius: 40px;
+            padding: 10px 20px; display: flex; align-items: center; gap: 10px;
         }
         .slash { animation: slashAni 0.4s ease-out forwards; pointer-events: none; }
         @keyframes slashAni {
             0% { transform: scale(1) rotate(0); opacity: 1; }
-            100% { transform: scale(1.5) rotate(10deg); opacity: 0; }
+            100% { transform: scale(1.4) rotate(15deg); opacity: 0; }
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between p-4 overflow-hidden">
+<body class="h-screen w-screen flex flex-col justify-between p-3 overflow-hidden bg-[#111122]">
 
-    <div class="flex justify-between items-center w-full max-w-5xl mx-auto z-10">
-        <div class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border-2 border-pink-500 text-pink-400 font-game text-2xl shadow-lg">
+    <div class="flex justify-between items-center w-full max-w-5xl mx-auto z-30">
+        <div class="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border-2 border-pink-500 text-pink-400 font-game text-xl shadow-lg">
             SCORE: <span id="score">0</span>
         </div>
-        <div class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border-2 border-blue-500 text-blue-300 font-bold">
+        <div class="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border-2 border-blue-500 text-blue-300 font-bold text-sm md:text-base">
             TARGET: <span id="target-ui" class="text-white">Select a letter</span>
         </div>
     </div>
 
-    <div id="game-zone" class="relative flex-1 w-full overflow-hidden">
+    <div id="game-zone" class="relative flex-1 w-full overflow-hidden my-2">
         </div>
 
-    <div class="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6 bg-black/40 backdrop-blur-xl p-4 rounded-3xl border border-white/10">
+    <div class="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-3 bg-black/50 backdrop-blur-md p-3 rounded-2xl border border-white/10 z-30">
         
-        <div class="mommy-wrap scale-75 md:scale-100">
+        <div class="mommy-wrap scale-90 md:scale-100 flex-shrink-0">
             <div class="strand s1"></div><div class="strand s2"></div>
             <div class="strand s3"></div><div class="strand s4"></div>
             <div class="hair-tie"></div>
@@ -104,15 +135,17 @@
                 <div id="m-mouth" class="mouth"></div>
             </div>
             <div class="neck"></div>
+            <div class="necklace"></div>
             <div class="body"></div>
+            <div class="dress-skirt"></div>
             <div class="leg l1"></div><div class="leg l2"></div>
         </div>
 
-        <div class="flex-1 flex flex-col gap-3">
-            <div class="bg-pink-600/20 p-4 rounded-2xl border border-pink-500/30">
-                <p id="m-speech" class="text-white font-game text-xl leading-tight">Hi! Pick a letter to start the game!</p>
+        <div class="flex-1 flex flex-col gap-2 w-full">
+            <div class="bg-pink-600/10 p-3 rounded-xl border border-pink-500/20">
+                <p id="m-speech" class="text-white font-game text-base md:text-lg leading-tight text-center md:text-left">Hi! Pick a letter to start the game!</p>
             </div>
-            <div id="letter-selector" class="flex flex-wrap gap-2 justify-center md:justify-start">
+            <div id="letter-selector" class="flex flex-wrap gap-1.5 justify-center md:justify-start overflow-y-auto max-h-24 md:max-h-none p-0.5">
                 </div>
         </div>
     </div>
@@ -171,7 +204,7 @@
             "umbrella":"☂️","unicorn":"🦄","up":"⬆️","unhappy":"😟","uniform":"🥋","unicycle":"🚲",
             "van":"🚐","vase":"🏺","violin":"🎻","vacuum":"🧹","vegetable":"🥦","vet":"🩺","volcano":"🌋","vest":"🦺",
             "window":"🪟","watch":"⌚","wolf":"🐺","web":"🕸️","watermelon":"🍉","whale":"🐳","wheel":"⚙️",
-            "box":"📦","xylophone":"🎹","x-ray":"🩻","x-mas":"🎄","ax":"🪓",
+            "box":"📦","fox":"🦊","xylophone":"🎹","x-ray":"🩻","x-mas":"🎄","ax":"🪓",
             "yo-yo":"🪀","yogurt":"🥛","yak":"🐂","yam":"🍠","yarn":"🧶","yacht":"⛵",
             "zoo":"🦁","zebra":"🦓","zucchini":"🥒","zig-zag":"📈","zero":"0️⃣","zipper":"🤐"
         };
@@ -180,12 +213,13 @@
         let targetWord = '';
         let score = 0;
         let mode = 'see';
+        let gameTimer = null;
 
-        // Khởi tạo bảng chữ cái
+        // Khởi tạo nút bảng chữ cái
         const selector = document.getElementById('letter-selector');
         "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
             const btn = document.createElement('button');
-            btn.className = "w-10 h-10 rounded-lg bg-pink-500/20 border border-pink-500/50 text-pink-300 font-game hover:bg-pink-500 hover:text-white transition-all";
+            btn.className = "w-9 h-9 rounded-md bg-pink-500/20 border border-pink-500/40 text-pink-300 font-game hover:bg-pink-500 hover:text-white transition-all text-sm flex items-center justify-center flex-shrink-0";
             btn.innerText = l.toUpperCase();
             btn.onclick = () => startLetter(l);
             selector.appendChild(btn);
@@ -194,6 +228,11 @@
         function startLetter(l) {
             currentLetter = l;
             document.getElementById('game-zone').innerHTML = '';
+            
+            // Xóa bộ đếm cũ nếu có và thiết lập bộ sinh bong bóng mới nhanh hơn cho di động (mỗi 1.8 giây)
+            if(gameTimer) clearInterval(gameTimer);
+            gameTimer = setInterval(spawn, 1800);
+            
             newRound();
         }
 
@@ -202,17 +241,30 @@
             targetWord = words[Math.floor(Math.random() * words.length)];
             mode = Math.random() > 0.5 ? 'see' : 'is';
             
-            const question = mode === 'see' ? "What can you see?" : "What is it?";
-            speak(question);
-            document.getElementById('target-ui').innerText = question;
-         mode === 'see' ? `Find: I can see a...` : `Find: It is a...`;
+            const article = ['a','e','i','o','u'].includes(targetWord[0]) ? 'an' : 'a';
+            
+            // TẠO CÂU HỎI VÀ CÂU TRẢ LỜI ĐỂ HIỂN THỊ + ĐỌC PHÁT ÂM TO CHO BÉ NGHE
+            let fullSpeechText = "";
+            let uiDisplayText = "";
+
+            if (mode === 'see') {
+                fullSpeechText = `What can you see? I can see ${article} ${targetWord}`;
+                uiDisplayText = `I can see ${article} ${targetWord}`;
+            } else {
+                fullSpeechText = `What is it? It is ${article} ${targetWord}`;
+                uiDisplayText = `It is ${article} ${targetWord}`;
+            }
+            
+            speak(fullSpeechText);
+            document.getElementById('target-ui').innerText = uiDisplayText;
         }
 
         function speak(text, callback) {
+            if(!window.speechSynthesis) return;
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'en-US';
-            msg.rate = 0.8;
+            msg.rate = 0.82; // Đọc tốc độ vừa phải cho bé thiếu nhi dễ bắt chước nghe theo
             const mouth = document.getElementById('m-mouth');
             msg.onstart = () => mouth.classList.add('open');
             msg.onend = () => {
@@ -226,19 +278,23 @@
         function spawn() {
             if(!currentLetter) return;
             const words = dataset[currentLetter];
-            const word = Math.random() < 0.3 ? targetWord : words[Math.floor(Math.random() * words.length)];
+            
+            // Tăng tần suất xuất hiện từ đúng lên (45%) giúp bé chơi trên mobile thấy từ nhanh, không bị chán
+            const word = Math.random() < 0.45 ? targetWord : words[Math.floor(Math.random() * words.length)];
             const article = ['a','e','i','o','u'].includes(word[0]) ? 'an' : 'a';
             const sentence = mode === 'see' ? `I can see ${article} ${word}` : `It is ${article} ${word}`;
 
             const bubble = document.createElement('div');
             bubble.className = "bubble";
-            bubble.style.left = Math.random() * 70 + 5 + "%";
-            bubble.style.animation = `floatUp ${7 + Math.random() * 3}s linear forwards`;
+            // Căn chỉnh khoảng cách chiều ngang an toàn (từ 5% đến 80%) để không bị tràn màn hình điện thoại
+            bubble.style.left = Math.random() * 75 + 5 + "%";
+            // Cho bong bóng bay với thời gian từ 5 đến 8 giây giúp dồn lượng bóng lên nhiều hơn
+            bubble.style.animation = `floatUp ${5 + Math.random() * 3}s linear forwards`;
 
             bubble.innerHTML = `
-                <div class="bubble-content shadow-2xl">
-                    <span class="text-4xl">${emojiMap[word] || '🎈'}</span>
-                    <span class="text-pink-600 font-bold text-lg whitespace-nowrap">${sentence}</span>
+                <div class="bubble-content shadow-lg scale-90 md:scale-100">
+                    <span class="text-3xl md:text-4xl">${emojiMap[word] || '🎈'}</span>
+                    <span class="text-pink-600 font-bold text-sm md:text-base whitespace-nowrap">${sentence}</span>
                 </div>
             `;
 
@@ -247,22 +303,21 @@
                     score += 10;
                     document.getElementById('score').innerText = score;
                     bubble.classList.add('slash');
-                    speak(sentence, () => newRound());
+                    speak(`Correct! ${sentence}`, () => newRound());
                     setTimeout(() => bubble.remove(), 400);
                 } else {
-                    bubble.style.opacity = "0.3";
+                    // Chạm sai sẽ làm mờ mờ đi để bé biết chọn bong bóng khác
+                    bubble.style.opacity = "0.2";
+                    bubble.style.pointerEvents = "none";
                 }
             };
 
             document.getElementById('game-zone').appendChild(bubble);
-            setTimeout(() => bubble.remove(), 10000);
         }
 
-        setInterval(spawn, 2500);
-
-        // Responsive animation speed
+        // Căn chỉnh CSS Animation: Bong bóng xuất phát chuẩn từ mép đáy vùng gameZone bay vút lên
         const style = document.createElement('style');
-        style.innerHTML = `@keyframes floatUp { from { transform: translateY(110vh); } to { transform: translateY(-20vh); } }`;
+        style.innerHTML = `@keyframes floatUp { from { transform: translateY(105%); } to { transform: translateY(-25vh); } }`;
         document.head.appendChild(style);
     </script>
 </body>
