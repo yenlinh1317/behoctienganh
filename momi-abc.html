@@ -200,11 +200,11 @@
             let uiDisplayText = "";
 
             if (mode === 'see') {
-                fullSpeechText = `What can you see? Find: I can see ${article} ${targetWord}`;
-                uiDisplayText = `Find: I can see ${article} ${targetWord}`;
+                fullSpeechText = `What can you see? I can see ${article} ${targetWord}`;
+                uiDisplayText = `I can see ${article} ${targetWord}`;
             } else {
-                fullSpeechText = `What is it? Find: It is ${article} ${targetWord}`;
-                uiDisplayText = `Find: It is ${article} ${targetWord}`;
+                fullSpeechText = `What is it? It is ${article} ${targetWord}`;
+                uiDisplayText = `It is ${article} ${targetWord}`;
             }
             
             speak(fullSpeechText);
