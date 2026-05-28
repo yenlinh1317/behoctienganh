@@ -39,11 +39,12 @@
         .bubble {
             position: absolute; cursor: pointer; transition: transform 0.1s;
             filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3)); z-index: 20; touch-action: manipulation;
-        }
-        .bubble-content {
-            background: rgba(255, 255, 255, 0.96); border: 3.5px solid #ff3399; border-radius: 40px;
-            padding: 8px 16px; display: flex; align-items: center; gap: 8px;
-        }
+       .bubble-content {
+    background: rgba(255, 255, 255, 0.96); border: 3.5px solid #ff3399; border-radius: 40px;
+    padding: 8px 16px; display: flex; align-items: center; gap: 8px;
+    font-family: 'Quicksand', sans-serif !important; /* Dùng font chữ tròn trịa */
+    text-transform: none !important; /* Bắt buộc hiện chữ thường */
+}
         .slash { animation: slashAni 0.4s ease-out forwards; pointer-events: none; }
         @keyframes slashAni {
             0% { transform: scale(1) rotate(0); opacity: 1; }
@@ -174,13 +175,14 @@
 
         // Khởi tạo bảng chữ cái
         const selector = document.getElementById('letter-selector');
-        "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
-            const btn = document.createElement('button');
-            btn.className = "w-9 h-9 rounded-md bg-pink-500/20 border border-pink-500/40 text-pink-300 font-game hover:bg-pink-500 hover:text-white transition-all text-sm flex items-center justify-center flex-shrink-0";
-            btn.innerText = l.toUpperCase();
-            btn.onclick = () => startLetter(l);
-            selector.appendChild(btn);
-        });
+       "abcdefghijklmnopqrstuvwxyz".split('').forEach(l => {
+    const btn = document.createElement('button');
+    // Thay font-game bằng font-bold text-lg để chữ thường to và nét tròn dễ nhìn
+    btn.className = "w-9 h-9 rounded-md bg-pink-500/20 border border-pink-500/40 text-pink-300 font-bold text-lg hover:bg-pink-500 hover:text-white transition-all flex items-center justify-center flex-shrink-0";
+    btn.innerText = l.toLowerCase(); // <-- Đổi thành chữ thường
+    btn.onclick = () => startLetter(l);
+    selector.appendChild(btn);
+});
 
         function startLetter(l) {
             currentLetter = l;
