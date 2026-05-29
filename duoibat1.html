@@ -102,9 +102,12 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     // Hàm tự động đo đạc lại kích thước màn hình tràn viền
+    // Hàm tự động đo đạc lại kích thước màn hình tràn viền hoàn chỉnh
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        
+        generateObstacles(); // Cập nhật lại vị trí cây cối đá cuội theo màn hình mới
         
         // Đặt người chơi ở vị trí an toàn giữa màn hình khi mới vào game
         if (player.x === 0 && player.y === 0) {
@@ -119,7 +122,6 @@
     
     // Kích hoạt đo màn hình ngay khi vừa tải trang
     resizeCanvas();
-
     let score = 0;
     let timeElapsed = 0;
     let isMathMode = false;
