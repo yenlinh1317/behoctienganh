@@ -17,13 +17,12 @@
             align-items: center;
             height: 100vh;
         }
-        #gameCanvas {
-            background-color: #f4f6f7;
-            border: 5px solid #2d3748;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            cursor: none; /* Ẩn chuột thật để thay bằng người vàng GrabPack */
-        }
+       canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1a1d24; /* Màu nền game Prototype của bạn */
+}
         #mathModal {
             display: none;
             position: absolute;
@@ -85,7 +84,7 @@
 <body>
 
 <div id="hud">🏆 ĐIỂM SỐ: <span id="scoreText">0</span> | ⏳ THỜI GIAN NGUY HIỂM: <span id="timeText">0</span>s</div>
-<canvas id="gameCanvas" width="900" height="550"></canvas>
+<canvas id="gameCanvas"></canvas>
 
 <!-- Bảng toán trắc nghiệm bấm chọn trên nền sáng -->
 <div id="mathModal">
@@ -102,6 +101,24 @@
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    // Hàm tự động đo đạc lại kích thước màn hình tràn viền
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Đặt người chơi ở vị trí an toàn giữa màn hình khi mới vào game
+        if (player.x === 0 && player.y === 0) {
+            player.x = canvas.width / 2;
+            player.y = canvas.height * 0.8;
+        }
+    }
+    
+    // Lắng nghe sự kiện co giãn trình duyệt hoặc xoay ngang/dọc điện thoại
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', () => { setTimeout(resizeCanvas, 200); });
+    
+    // Kích hoạt đo màn hình ngay khi vừa tải trang
+    resizeCanvas();
 
     let score = 0;
     let timeElapsed = 0;
