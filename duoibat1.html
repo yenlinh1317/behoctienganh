@@ -320,7 +320,7 @@
         requestAnimationFrame(updateGame);
     }
 
-    // HÀM TẠO CÂU HỎI TRẮC NGHIỆM CHUẨN PHẠM VI 0 ĐẾN 10 (CÓ ĐỌC LOA)
+    // HÀM TẠO CÂU HỎI CHUẨN LỚP 1: KHÔNG BAO GIỜ BỊ SỐ ÂM CHO CẢ 3 DẠNG BÀI
     function triggerMathQuiz() {
         isMathMode = true;
         const modal = document.getElementById("mathModal");
@@ -358,10 +358,12 @@
                 textToSpeak = `Bé hãy tính: ${n1} trừ ${n2} bằng mấy?`;
             }
             
+            // TẠO ĐÁP ÁN NHIỄU CHUẨN (TUYỆT ĐỐI KHÔNG ÂM)
             let correctNum = parseInt(correctAnswer);
-            let wrong1 = correctNum + 1 > 10 ? correctNum - 1 : correctNum + 1;
-            let wrong2 = correctNum - 2 < 0 ? correctNum + 2 : correctNum - 2;
-            if (wrong1 === wrong2) wrong2 = correctNum + 3 > 10 ? correctNum - 3 : correctNum + 3;
+            let wrong1 = (correctNum + 1 > 10) ? correctNum - 1 : correctNum + 1;
+            let wrong2 = (correctNum - 2 < 0) ? correctNum + 2 : correctNum - 2;
+            if (wrong1 === wrong2) wrong2 = (correctNum + 3 > 10) ? correctNum - 3 : correctNum + 3;
+            
             options = [correctAnswer, wrong1.toString(), wrong2.toString()];
         } 
         else if (luaChon === 1) {
@@ -402,21 +404,43 @@
             questionText.innerText = cauDoRandom.de;
             textToSpeak = cauDoRandom.nghe; 
 
-            let wrong1 = correctNum + 1 > 10 ? correctNum - 1 : correctNum + 1;
-            let wrong2 = correctNum - 1 < 0 ? correctNum + 2 : correctNum - 1;
+            // SỬA LỖI ĐÁP ÁN NHIỄU TOÁN ĐỐ: KHÔNG ĐỂ BỊ TRỪ RA SỐ ÂM KHÔNG MONG MUỐN
+            let wrong1 = (correctNum + 1 > 10) ? correctNum - 1 : correctNum + 1;
+            let wrong2 = (correctNum - 1 < 0) ? correctNum + 2 : correctNum - 1;
+            if (wrong1 === wrong2) wrong2 = (correctNum + 3 > 10) ? correctNum - 3 : correctNum + 3;
+            
             options = [correctAnswer, wrong1.toString(), wrong2.toString()];
         }
 
         // TỰ ĐỘNG PHÁT ÂM THANH GIỌNG NÓI TIẾNG VIỆT
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); 
-            let utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'vi-VN'; 
-            utterance.rate = 0.85; 
-            window.speechSynthesis.speak(utterance);
-        }
+        window.docCauHoiHienTai = function() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                let utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'vi-VN'; 
+                utterance.rate = 0.85; 
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+
+        window.docCauHoiHienTai();
 
         options.sort(() => Math.random() - 0.5);
+
+        // THÊM NÚT LOA ĐỌC LẠI
+        const speakerBtn = document.createElement("button");
+        speakerBtn.style.background = "#2ecc71";
+        speakerBtn.style.color = "white";
+        speakerBtn.style.border = "none";
+        speakerBtn.style.padding = "8px 15px";
+        speakerBtn.style.fontSize = "16px";
+        speakerBtn.style.borderRadius = "8px";
+        speakerBtn.style.cursor = "pointer";
+        speakerBtn.style.marginBottom = "15px";
+        speakerBtn.style.width = "100%";
+        speakerBtn.innerText = "🔊 BẤM VÀO ĐÂY ĐỂ NGHE ĐỌC ĐỀ BÀI";
+        speakerBtn.onclick = () => window.docCauHoiHienTai();
+        optionsBox.appendChild(speakerBtn);
 
         options.forEach(opt => {
             const btn = document.createElement("button");
