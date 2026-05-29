@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toán Lớp 1: Chạy Trốn Gã Hề Trên Bản Đồ Ngoại Cảnh Chân Thực</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f0f3f5;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #gameCanvas {
+            background-color: #f4f6f7;
+            border: 5px solid #2d3748;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            cursor: none; /* Ẩn chuột thật để thay bằng người vàng GrabPack */
+        }
+        #mathModal {
+            display: none;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.98);
+            border: 4px solid #ff4d4d;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 420px;
+            z-index: 10;
+            color: #111;
+        }
+        #mathQuestion {
+            font-size: 38px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 15px 0;
+            text-shadow: 1px 1px #ddd;
+            word-wrap: break-word;
+        }
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .option-btn {
+            background: linear-gradient(135deg, #1e90ff, #0056b3);
+            color: white;
+            border: 2px solid #fff;
+            padding: 12px 25px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            min-width: 70px;
+            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3);
+            transition: 0.1s;
+        }
+        .option-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #007acc, #004488);
+        }
+        #hud {
+            position: absolute;
+            top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2d3748;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div id="hud">🏆 ĐIỂM SỐ: <span id="scoreText">0</span> | ⏳ THỜI GIAN NGUY HIỂM: <span id="timeText">0</span>s</div>
+<canvas id="gameCanvas" width="900" height="550"></canvas>
+
+<!-- Bảng toán trắc nghiệm bấm chọn trên nền sáng -->
+<div id="mathModal">
+    <div style="color: #ff4d4d; font-weight: bold; font-size: 18px;">⚠️ PROTOTYPE ĐÃ ĐUỔI KỊP BẠN!</div>
+    <div style="font-size: 14px; margin-top: 5px; color: #555;">Bé hãy lắng nghe và bấm chọn đáp án đúng để trốn thoát:</div>
+    
+    <div id="mathQuestion">0 + 0 = ?</div>
+    
+    <div class="options-container" id="optionsBox">
+        <!-- Các nút đáp án lựa chọn tự động sinh ở đây -->
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let score = 0;
+    let timeElapsed = 0;
+    let isMathMode = false;
+
+    // Tọa độ người chơi màu vàng có GrabPack
+    const player = { x: 450, y: 450, radius: 15 };
+    
+    // Gã hề Prototype chạy siêu nhanh (Tốc độ tăng tiến cao hơn)
+    const prototype = { x: 100, y: 100, radius: 40, speed: 4.2 };
+
+    let correctAnswer = "";
+
+    // DANH SÁCH VẬT THỂ NGOẠI CẢNH CHÂN THỰC KHÔNG KẺ Ô
+    const obstacles = [
+        { x: 200, y: 120, type: 'wall', w: 140, h: 25 },
+        { x: 580, y: 380, type: 'wall', w: 150, h: 25 },
+        { x: 420, y: 200, type: 'bush', r: 28 },
+        { x: 130, y: 420, type: 'bush', r: 22 },
+        { x: 760, y: 140, type: 'bush', r: 32 },
+        { x: 300, y: 320, type: 'rock', r: 12 }, 
+        { x: 680, y: 180, type: 'rock', r: 16 },
+        { x: 480, y: 460, type: 'rock', r: 10 }
+    ];
+
+    // Di chuyển chuột để điều khiển Người Vàng
+    canvas.addEventListener("mousemove", (e) => {
+        if (isMathMode) return;
+        const rect = canvas.getBoundingClientRect();
+        player.x = e.clientX - rect.left;
+        player.y = e.clientY - rect.top;
+    });
+
+    // Cứ mỗi 3 giây gã hề lại tăng tốc đuổi bắt kịch tính
+    setInterval(() => {
+        if (!isMathMode) {
+            timeElapsed++;
+            document.getElementById("timeText").innerText = timeElapsed;
+            if (timeElapsed % 3 === 0) {
+                prototype.speed += 0.5; 
+            }
+        }
+    }, 1000);
+
+    // HÀM VẼ NGOẠI CẢNH NỀN SÁNG CHÂN THỰC CHUYÊN NGHIỆP
+    function drawScenery() {
+        // Nền đất phẳng tự nhiên
+        ctx.fillStyle = "#f4f6f7";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Vẽ các vật thể có đổ bóng tầng lớp
+        obstacles.forEach(obs => {
+            if (obs.type === 'wall') {
+                ctx.fillStyle = "#7f8c8d";
+                ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                ctx.strokeStyle = "#2c3e50";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+                ctx.beginPath();
+                ctx.moveTo(obs.x + obs.w/2, obs.y);
+                ctx.lineTo(obs.x + obs.w/2, obs.y + obs.h);
+                ctx.stroke();
+            } 
+            else if (obs.type === 'bush') {
+                ctx.fillStyle = "#27ae60"; 
+                ctx.beginPath(); ctx.arc(obs.x, obs.y + 2, obs.r, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#2ecc71"; 
+                ctx.beginPath(); ctx.arc(obs.x - 8, obs.y - 4, obs.r * 0.75, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(obs.x + 8, obs.y - 4, obs.r * 0.75, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(obs.x, obs.y - 8, obs.r * 0.6, 0, Math.PI * 2); ctx.fill();
+            } 
+            else if (obs.type === 'rock') {
+                ctx.fillStyle = "#bdc3c7";
+                ctx.beginPath(); ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#95a5a6"; ctx.lineWidth = 2; ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(obs.x - obs.r/2, obs.y); ctx.lineTo(obs.x + obs.r/3, obs.y - obs.r/3); ctx.stroke();
+            }
+        });
+    }
+
+    // VẼ CHI TIẾT GÃ HỀ PROTOTYPE CHUẨN 2 TAY DÀI VÀ ĐÈN BỤNG THEO ẢNH
+    function drawPrototype(x, y) {
+        ctx.save();
+
+        // 1. MŨ HỀ 3 CHÓP (Đỏ trái - Xanh giữa - Vàng phải)
+        ctx.fillStyle = "#a81d1d"; 
+        ctx.beginPath(); ctx.moveTo(x, y - 20);
+        ctx.bezierCurveTo(x - 45, y - 45, x - 70, y - 10, x - 60, y + 25);
+        ctx.lineTo(x - 25, y + 15); ctx.fill();
+        
+        ctx.fillStyle = "#2962ff"; 
+        ctx.beginPath(); ctx.moveTo(x - 20, y - 35);
+        ctx.bezierCurveTo(x, y - 65, x, y - 65, x + 20, y - 35); ctx.fill();
+
+        ctx.fillStyle = "#c2a649"; 
+        ctx.beginPath(); ctx.moveTo(x, y - 20);
+        ctx.bezierCurveTo(x + 45, y - 45, x + 65, y - 10, x + 60, y + 20);
+        ctx.lineTo(x + 25, y + 15); ctx.fill();
+
+        ctx.fillStyle = "#e5c158";
+        ctx.beginPath(); ctx.arc(x - 60, y + 25, 5, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 60, y + 20, 5, 0, Math.PI*2); ctx.fill();
+
+        // 2. KHUÔN MẶT TRÒN TRẮNG VÀ NỤ CƯỜI RĂNG THÉP
+        ctx.fillStyle = "#eaebed";
+        ctx.beginPath(); ctx.arc(x, y, prototype.radius, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "#222"; ctx.lineWidth = 3; ctx.stroke();
+
+        ctx.fillStyle = "#111";
+        ctx.beginPath(); ctx.arc(x - 14, y - 10, 11, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 14, y - 10, 11, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#ffd000"; 
+        ctx.beginPath(); ctx.arc(x + 10, y - 8, 4, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = "#fff"; ctx.strokeStyle = "#000"; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x - 28, y + 12); ctx.quadraticCurveTo(x, y + 38, x + 28, y + 12);
+        ctx.quadraticCurveTo(x, y + 6, x - 28, y + 12); ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        for (let i = -22; i <= 22; i += 5) { ctx.moveTo(x + i, y + 14); ctx.lineTo(x + i, y + 22); }
+        ctx.stroke();
+
+        // 3. ÁO CỔ CỒN HỀ MÀU XANH DƯƠNG + NƠ ĐỎ GIỮA CỔ
+        ctx.fillStyle = "#1e88e5"; 
+        ctx.fillRect(x - 25, y + 40, 50, 40);
+        
+        ctx.fillStyle = "#d32f2f"; 
+        ctx.fillRect(x - 12, y + 42, 24, 10);
+        ctx.beginPath(); ctx.arc(x - 8, y + 58, 6, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 8, y + 58, 6, 0, Math.PI*2); ctx.fill();
+
+        // 4. KHỐI MÁY MÓC Ở BỤNG CÓ ĐÈN VÀNG PHÁT SÁNG
+        ctx.fillStyle = "#37474f"; 
+        ctx.fillRect(x - 20, y + 80, 40, 30);
+        ctx.save(); ctx.shadowBlur = 20; ctx.shadowColor = "#ffeb3b"; ctx.fillStyle = "#ffeb3b";
+        ctx.beginPath(); ctx.arc(x, y + 95, 10, 0, Math.PI*2); ctx.fill(); ctx.restore();
+
+        // 5. HAI CÁNH TAY XƯƠNG THÉP DÀI BUÔNG THÕNG ĐẦY ĐỦ ĐANG QUÉT MÓNG VUỐT
+        ctx.strokeStyle = "#455a64"; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(x - 25, y + 45); ctx.lineTo(x - 55, y + 85); ctx.lineTo(x - 45, y + 130); ctx.stroke();
+        ctx.strokeStyle = "#78909c"; ctx.lineWidth = 2;
+        for(let i=0; i<4; i++) { ctx.beginPath(); ctx.moveTo(x - 45, y + 130); ctx.lineTo(x - 60 + (i*10), y + 155); ctx.stroke(); }
+
+        ctx.strokeStyle = "#455a64"; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(x + 25, y + 45); ctx.lineTo(x + 55, y + 85); ctx.lineTo(x + 45, y + 130); ctx.stroke();
+        ctx.strokeStyle = "#78909c"; ctx.lineWidth = 2;
+     for(let i=0; i<4; i++) { ctx.beginPath(); ctx.moveTo(x + 45, y + 130); ctx.lineTo(x + 30 + (i*10), y + 155); ctx.stroke(); }
+
+        ctx.restore();
+    }
+
+    // VẼ BÉ LÀ NGƯỜI VÀNG CÓ BALO GRABPACK (BÀN TAY ĐỎ VÀ XANH PHÍA TRƯỚC)
+    function drawPlayer(x, y) {
+        ctx.save();
+        ctx.fillStyle = "#222"; ctx.fillRect(x - 18, y - 8, 36, 16);
+        ctx.strokeStyle = "#cca010"; ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.moveTo(x - 15, y); ctx.lineTo(x - 35, y - 10); ctx.stroke(); 
+        ctx.beginPath(); ctx.moveTo(x + 15, y); ctx.lineTo(x + 35, y - 10); ctx.stroke(); 
+
+        ctx.fillStyle = "#ff3838";
+        ctx.beginPath(); ctx.arc(x - 38, y - 10, 8, 0, Math.PI*2); ctx.fill(); 
+        ctx.fillRect(x - 45, y - 22, 4, 12); ctx.fillRect(x - 40, y - 24, 4, 14); ctx.fillRect(x - 35, y - 22, 4, 12);
+
+        ctx.fillStyle = "#1e90ff";
+        ctx.beginPath(); ctx.arc(x + 38, y - 10, 8, 0, Math.PI*2); ctx.fill(); 
+        ctx.fillRect(x + 33, y - 22, 4, 12); ctx.fillRect(x + 37, y - 24, 4, 14); ctx.fillRect(x + 42, y - 22, 4, 12);
+
+        ctx.fillStyle = "#ffdd00";
+        ctx.beginPath(); ctx.arc(x, y - 22, 10, 0, Math.PI*2); ctx.fill();
+        ctx.fillRect(x - 10, y - 10, 20, 24);
+        ctx.fillRect(x - 9, y + 14, 7, 18); ctx.fillRect(x + 2, y + 14, 7, 18);
+        ctx.restore();
+    }
+
+    // Vòng lặp cập nhật trò chơi liên tục
+    function updateGame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Vẽ ngoại cảnh làm nền trắng trước
+        drawScenery();
+
+        if (!isMathMode) {
+            // Đuổi bắt mục tiêu người vàng di chuyển
+            const dx = player.x - prototype.x;
+            const dy = player.y - prototype.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance > 5) {
+                prototype.x += (dx / distance) * prototype.speed;
+                prototype.y += (dy / distance) * prototype.speed;
+            }
+
+            // Kiểm tra va chạm cơ thể
+            if (distance < (player.radius + prototype.radius + 35)) {
+                triggerMathQuiz();
+            }
+        }
+
+        // Vẽ các nhân vật lên màn hình canvas trên nền ngoại cảnh
+        drawPlayer(player.x, player.y);
+        drawPrototype(prototype.x, prototype.y);
+        requestAnimationFrame(updateGame);
+    }
+
+    // HÀM TẠO CÂU HỎI TRẮC NGHIỆM CHUẨN PHẠM VI 0 ĐẾN 10 (CÓ ĐỌC LOA)
+    function triggerMathQuiz() {
+        isMathMode = true;
+        const modal = document.getElementById("mathModal");
+        const questionText = document.getElementById("mathQuestion");
+        const optionsBox = document.getElementById("optionsBox");
+        
+        modal.style.display = "block";
+        modal.style.left = (canvas.offsetLeft + canvas.width/2 - 210) + "px";
+        modal.style.top = (canvas.offsetTop + canvas.height/2 - 140) + "px";
+        optionsBox.innerHTML = ""; // Xóa các nút cũ
+
+        questionText.style.fontSize = "42px";
+        questionText.style.color = "#d32f2f";
+
+        const luaChon = Math.floor(Math.random() * 3); 
+        let options = []; 
+        let textToSpeak = ""; 
+
+        if (luaChon === 0) {
+            // DẠNG 1: CỘNG TRỪ PHẠM VI 10
+            let n1 = Math.floor(Math.random() * 11); 
+            let isPlus = Math.random() > 0.5;
+            
+            if (isPlus) {
+                let n2 = Math.floor(Math.random() * (11 - n1)); 
+                let ans = n1 + n2;
+                correctAnswer = ans.toString();
+                questionText.innerText = `${n1} + ${n2} = ?`;
+                textToSpeak = `Bé hãy tính: ${n1} cộng ${n2} bằng mấy?`;
+            } else {
+                let n2 = Math.floor(Math.random() * (n1 + 1)); 
+                let ans = n1 - n2;
+                correctAnswer = ans.toString();
+                questionText.innerText = `${n1} - ${n2} = ?`;
+                textToSpeak = `Bé hãy tính: ${n1} trừ ${n2} bằng mấy?`;
+            }
+            
+            let correctNum = parseInt(correctAnswer);
+            let wrong1 = correctNum + 1 > 10 ? correctNum - 1 : correctNum + 1;
+            let wrong2 = correctNum - 2 < 0 ? correctNum + 2 : correctNum - 2;
+            if (wrong1 === wrong2) wrong2 = correctNum + 3 > 10 ? correctNum - 3 : correctNum + 3;
+            options = [correctAnswer, wrong1.toString(), wrong2.toString()];
+        } 
+        else if (luaChon === 1) {
+            // DẠNG 2: TOÁN SO SÁNH
+            let n1 = Math.floor(Math.random() * 11);
+            let n2 = Math.floor(Math.random() * 11);
+            questionText.innerText = `${n1}  ...  ${n2}`;
+            
+            if (n1 > n2) {
+                correctAnswer = ">";
+                textToSpeak = `So sánh: ${n1} lớn hơn, bé hơn hay bằng ${n2}?`;
+            } else if (n1 < n2) {
+                correctAnswer = "<";
+                textToSpeak = `So sánh: ${n1} lớn hơn, bé hơn hay bằng ${n2}?`;
+            } else {
+                correctAnswer = "=";
+                textToSpeak = `So sánh: ${n1} lớn hơn, bé hơn hay bằng ${n2}?`;
+            }
+            options = [">", "<", "="];
+        } 
+        else {
+            // DẠNG 3: BÀI TOÁN ĐỐ CÓ LỜI VĂN PHẠM VI 10
+            questionText.style.fontSize = "18px";
+            questionText.style.color = "#333333";
+            
+            let n1 = Math.floor(Math.random() * 5) + 2; 
+            let n2 = Math.floor(Math.random() * 4) + 1; 
+            
+            const cacBaiToanDo = [
+                { de: `Bé có ${n1} quả bóng, Prototype cho thêm ${n2} quả nữa. Hỏi bé có tất cả mấy quả bóng?`, ans: n1 + n2, nghe: `Bé có ${n1} quả bóng, Pro tô típ cho thêm ${n2} quả nữa. Hỏi bé có tất cả mấy quả bóng?` },
+                { de: `Trên cây có ${n1} con chim, sau đó bay đi mất ${n2} con. Hỏi trên cây còn lại mấy con chim?`, ans: n1 - n2, nghe: `Trên cây có ${n1} con chim, sau đó bay đi mất ${n2} con. Hỏi trên cây còn lại mấy con chim?` },
+                { de: `Hộp bút có ${n1 + n2} viên phấn, cô giáo lấy đi ${n2} viên để viết bảng. Hỏi trong hộp còn mấy viên?`, ans: n1, nghe: `Hộp bút có ${n1 + n2} viên phấn, cô giáo lấy đi ${n2} viên để viết bảng. Hỏi trong hộp còn mấy viên?` }
+            ];
+            
+            let cauDoRandom = cacBaiToanDo[Math.floor(Math.random() * cacBaiToanDo.length)];
+            let correctNum = cauDoRandom.ans;
+            correctAnswer = correctNum.toString();
+            questionText.innerText = cauDoRandom.de;
+            textToSpeak = cauDoRandom.nghe; 
+
+            let wrong1 = correctNum + 1 > 10 ? correctNum - 1 : correctNum + 1;
+            let wrong2 = correctNum - 1 < 0 ? correctNum + 2 : correctNum - 1;
+            options = [correctAnswer, wrong1.toString(), wrong2.toString()];
+        }
+
+        // TỰ ĐỘNG PHÁT ÂM THANH GIỌNG NÓI TIẾNG VIỆT
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            let utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'vi-VN'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        options.sort(() => Math.random() - 0.5);
+
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswerSelected(opt);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    // HÀM KIỂM TRA ĐÁP ÁN KHI BÉ CLICK CHUỘT VÀO NÚT BẤM
+    function checkAnswerSelected(selectedOpt) {
+        if (selectedOpt === correctAnswer) {
+            score += 10;
+            document.getElementById("scoreText").innerText = score;
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+            // Đẩy gã hề về góc xa biên để bé có khoảng cách an toàn chạy tiếp
+            prototype.x = 50;
+            prototype.y = 50;
+            
+            isMathMode = false;
+            document.getElementById("mathModal").style.display = "none";
+        } else {
+            if ('speechSynthesis' in window) {
+                let saiUtterance = new SpeechSynthesisUtterance("Chưa đúng rồi bé ơi, hãy nghe lại câu hỏi và chọn lại nhé");
+                saiUtterance.lang = 'vi-VN';
+                window.speechSynthesis.speak(saiUtterance);
+            }
+            alert("🤡 Chưa đúng rồi bé ơi! Hãy suy nghĩ và chọn lại nút đáp án chính xác nhé!");
+        }
+    }
+
+    // Kích hoạt chạy game ngay lập tức từ đầu
+    updateGame();
+</script>
+
+</body>
+</html>
