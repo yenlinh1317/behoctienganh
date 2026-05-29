@@ -133,17 +133,19 @@
     let correctAnswer = "";
 
     // DANH SÁCH VẬT THỂ NGOẠI CẢNH CHÂN THỰC KHÔNG KẺ Ô
-    const obstacles = [
-        { x: 200, y: 120, type: 'wall', w: 140, h: 25 },
-        { x: 580, y: 380, type: 'wall', w: 150, h: 25 },
-        { x: 420, y: 200, type: 'bush', r: 28 },
-        { x: 130, y: 420, type: 'bush', r: 22 },
-        { x: 760, y: 140, type: 'bush', r: 32 },
-        { x: 300, y: 320, type: 'rock', r: 12 }, 
-        { x: 680, y: 180, type: 'rock', r: 16 },
-        { x: 480, y: 460, type: 'rock', r: 10 }
-    ];
-
+    // Cấu trúc chướng ngại vật ngoại cảnh tự động tính theo tỷ lệ tràn màn hình
+    let obstacles = [];
+    function generateObstacles() {
+        obstacles = [
+            { x: canvas.width * 0.2, y: canvas.height * 0.2, type: 'wall', w: 130, h: 22 },
+            { x: canvas.width * 0.65, y: canvas.height * 0.7, type: 'wall', w: 140, h: 22 },
+            { x: canvas.width * 0.45, y: canvas.height * 0.35, type: 'bush', r: 26 },
+            { x: canvas.width * 0.15, y: canvas.height * 0.75, type: 'bush', r: 22 },
+            { x: canvas.width * 0.8, y: canvas.height * 0.25, type: 'bush', r: 30 },
+            { x: canvas.width * 0.3, y: canvas.height * 0.55, type: 'rock', r: 12 },
+            { x: canvas.width * 0.7, y: canvas.height * 0.4, type: 'rock', r: 15 }
+        ];
+    }
     // Di chuyển chuột để điều khiển Người Vàng
      // 1. SỬA LỖI DI CHUYỂN BẰNG CHUỘT TRÊN MÁY TÍNH (GIỮ NGUYÊN)
     canvas.addEventListener("mousemove", (e) => {
