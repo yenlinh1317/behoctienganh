@@ -127,12 +127,27 @@
     ];
 
     // Di chuyển chuột để điều khiển Người Vàng
+     // 1. SỬA LỖI DI CHUYỂN BẰNG CHUỘT TRÊN MÁY TÍNH (GIỮ NGUYÊN)
     canvas.addEventListener("mousemove", (e) => {
         if (isMathMode) return;
         const rect = canvas.getBoundingClientRect();
         player.x = e.clientX - rect.left;
         player.y = e.clientY - rect.top;
     });
+
+    // 2. KÍCH HOẠT DI CHUYỂN BẰNG NGÓN TAY TRÊN ĐIỆN THOẠI IPHONE / ANDROID 📱
+    function handleTouch(e) {
+        if (isMathMode) return;
+        e.preventDefault(); // Ngăn chặn màn hình điện thoại bị cuộn lên xuống khi bé đang chơi
+        const rect = canvas.getBoundingClientRect();
+        // Lấy tọa độ ngón tay đầu tiên chạm vào màn hình
+        const touch = e.touches[0];
+        player.x = touch.clientX - rect.left;
+        player.y = touch.clientY - rect.top;
+    }
+
+    canvas.addEventListener("touchstart", handleTouch, { passive: false });
+    canvas.addEventListener("touchmove", handleTouch, { passive: false });
 
     // Cứ mỗi 3 giây gã hề lại tăng tốc đuổi bắt kịch tính
     setInterval(() => {
