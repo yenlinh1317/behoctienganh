@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toán Lớp 1: Chạy Trốn Gã Hề Trên Bản Đồ Ngoại Cảnh Chân Thực</title>
+    <!-- Thẻ meta ép màn hình co giãn tự động ôm khít tỉ lệ dọc ngang tràn màn hình điện thoại -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Toán Lớp 1: Trốn Thoát Gã Hề Prototype Fullscreen</title>
     <style>
-        body {
+        /* Tối ưu tràn viền 100% không để lại thanh cuộn hay vạch đen */
+        html, body {
             margin: 0;
-            background-color: #f0f3f5;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            color: #333;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f5f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            position: relative;
         }
-       canvas {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-    background-color: #1a1d24; /* Màu nền game Prototype của bạn */
-}
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        /* Hộp thoại câu hỏi tự động căn giữa màn hình tuyệt đối trên mọi thiết bị */
         #mathModal {
             display: none;
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background-color: rgba(255, 255, 255, 0.98);
             border: 4px solid #ff4d4d;
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            width: 420px;
+            width: 90%;
+            max-width: 440px;
             z-index: 10;
-            color: #111;
+            box-sizing: border-box;
         }
         #mathQuestion {
-            font-size: 38px;
+            font-size: 42px;
             font-weight: bold;
             color: #d32f2f;
             margin: 15px 0;
@@ -47,37 +52,48 @@
         .options-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
+            gap: 12px;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+            width: 100%;
         }
+        /* Nút bấm trắc nghiệm số to rõ ràng cho bé lớp 1 dễ thao tác click */
         .option-btn {
             background: linear-gradient(135deg, #1e90ff, #0056b3);
             color: white;
             border: 2px solid #fff;
-            padding: 12px 25px;
-            font-size: 22px;
+            padding: 12px 20px;
+            font-size: 24px;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
-            min-width: 70px;
-            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3);
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.2);
             transition: 0.1s;
+            box-sizing: border-box;
         }
         .option-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
             background: linear-gradient(135deg, #007acc, #004488);
         }
         #hud {
             position: absolute;
-            top: 25px;
-            font-size: 22px;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
             font-weight: bold;
             color: #2d3748;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 5px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 15px;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            z-index: 5;
+        }
+        @media (min-width: 768px) {
+            #hud { font-size: 22px; top: 25px; }
         }
     </style>
 </head>
@@ -86,55 +102,26 @@
 <div id="hud">🏆 ĐIỂM SỐ: <span id="scoreText">0</span> | ⏳ THỜI GIAN NGUY HIỂM: <span id="timeText">0</span>s</div>
 <canvas id="gameCanvas"></canvas>
 
-<!-- Bảng toán trắc nghiệm bấm chọn trên nền sáng -->
+<!-- Bảng toán trắc nghiệm bấm chọn tự động phát tiếng -->
 <div id="mathModal">
-    <div style="color: #ff4d4d; font-weight: bold; font-size: 18px;">⚠️ PROTOTYPE ĐÃ ĐUỔI KỊP BẠN!</div>
-    <div style="font-size: 14px; margin-top: 5px; color: #555;">Bé hãy lắng nghe và bấm chọn đáp án đúng để trốn thoát:</div>
-    
+    <div style="color: #ff4d4d; font-weight: bold; font-size: 16px; letter-spacing: 1px;">⚠️ PROTOTYPE ĐÃ ĐUỔI KỊP BẠN!</div>
+    <div style="font-size: 13px; margin-top: 4px; color: #555;">Bé hãy lắng nghe và bấm chọn nút đáp án đúng để trốn thoát:</div>
     <div id="mathQuestion">0 + 0 = ?</div>
-    
-    <div class="options-container" id="optionsBox">
-        <!-- Các nút đáp án lựa chọn tự động sinh ở đây -->
-    </div>
+    <div class="options-container" id="optionsBox"></div>
 </div>
 
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-    // Hàm tự động đo đạc lại kích thước màn hình tràn viền
-    // Hàm tự động đo đạc lại kích thước màn hình tràn viền hoàn chỉnh
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        generateObstacles(); // Cập nhật lại vị trí cây cối đá cuội theo màn hình mới
-        
-        // Đặt người chơi ở vị trí an toàn giữa màn hình khi mới vào game
-        if (player.x === 0 && player.y === 0) {
-            player.x = canvas.width / 2;
-            player.y = canvas.height * 0.8;
-        }
-    }
-    
-    // Lắng nghe sự kiện co giãn trình duyệt hoặc xoay ngang/dọc điện thoại
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('orientationchange', () => { setTimeout(resizeCanvas, 200); });
-    
-    // Kích hoạt đo màn hình ngay khi vừa tải trang
-    resizeCanvas();
-    let score = 0;
+let score = 0;
     let timeElapsed = 0;
     let isMathMode = false;
 
-    // Tọa độ người chơi màu vàng có GrabPack
-    const player = { x: 450, y: 450, radius: 15 };
-    
-    // Gã hề Prototype chạy siêu nhanh (Tốc độ tăng tiến cao hơn)
+    // Khai báo thông tin nhân vật lên trước để hàm đo màn hình đọc được dữ liệu
+    const player = { x: 0, y: 0, radius: 15 };
     const prototype = { x: 100, y: 100, radius: 40, speed: 4.2 };
-
     let correctAnswer = "";
 
-    // DANH SÁCH VẬT THỂ NGOẠI CẢNH CHÂN THỰC KHÔNG KẺ Ô
     // Cấu trúc chướng ngại vật ngoại cảnh tự động tính theo tỷ lệ tràn màn hình
     let obstacles = [];
     function generateObstacles() {
@@ -148,13 +135,34 @@
             { x: canvas.width * 0.7, y: canvas.height * 0.4, type: 'rock', r: 15 }
         ];
     }
-    // Di chuyển chuột để điều khiển Người Vàng
-     // 1. SỬA LỖI DI CHUYỂN BẰNG CHUỘT TRÊN MÁY TÍNH (GIỮ NGUYÊN)
+
+    // Hàm tự động đo đạc lại kích thước màn hình tràn viền hoàn chỉnh
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        generateObstacles(); // Cập nhật lại vị trí cây cối đá cuội theo màn hình mới
+        
+        // Đặt người chơi ở vị trí an toàn giữa màn hình khi mới vào game hoặc khi xoay dọc/ngang máy
+        if (player.x === 0 || player.x > canvas.width || player.y > canvas.height) {
+            player.x = canvas.width / 2;
+            player.y = canvas.height * 0.8;
+        }
+    }
+    
+    // Lắng nghe sự kiện co giãn trình duyệt hoặc xoay ngang/dọc điện thoại
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', () => { setTimeout(resizeCanvas, 200); });
+    
+    // Kích hoạt đo màn hình sau khi toàn bộ nhân vật và hàm ngoại cảnh đã sẵn sàng
+    resizeCanvas();
+
+    // 1. ĐIỀU KHIỂN DI CHUYỂN BẰNG CHUỘT TRÊN MÁY TÍNH
     canvas.addEventListener("mousemove", (e) => {
         if (isMathMode) return;
         const rect = canvas.getBoundingClientRect();
-        player.x = e.clientX - rect.left;
-        player.y = e.clientY - rect.top;
+        player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, e.clientX - rect.left));
+        player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, e.clientY - rect.top));
     });
 
     // 2. KÍCH HOẠT DI CHUYỂN BẰNG NGÓN TAY TRÊN ĐIỆN THOẠI IPHONE / ANDROID 📱
@@ -162,10 +170,9 @@
         if (isMathMode) return;
         e.preventDefault(); // Ngăn chặn màn hình điện thoại bị cuộn lên xuống khi bé đang chơi
         const rect = canvas.getBoundingClientRect();
-        // Lấy tọa độ ngón tay đầu tiên chạm vào màn hình
         const touch = e.touches[0];
-        player.x = touch.clientX - rect.left;
-        player.y = touch.clientY - rect.top;
+        player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, touch.clientX - rect.left));
+        player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, touch.clientY - rect.top));
     }
 
     canvas.addEventListener("touchstart", handleTouch, { passive: false });
@@ -184,11 +191,9 @@
 
     // HÀM VẼ NGOẠI CẢNH NỀN SÁNG CHÂN THỰC CHUYÊN NGHIỆP
     function drawScenery() {
-        // Nền đất phẳng tự nhiên
         ctx.fillStyle = "#f4f6f7";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Vẽ các vật thể có đổ bóng tầng lớp
         obstacles.forEach(obs => {
             if (obs.type === 'wall') {
                 ctx.fillStyle = "#7f8c8d";
@@ -217,8 +222,7 @@
             }
         });
     }
-
-    // VẼ CHI TIẾT GÃ HỀ PROTOTYPE CHUẨN 2 TAY DÀI VÀ ĐÈN BỤNG THEO ẢNH
+// VẼ CHI TIẾT GÃ HỀ PROTOTYPE CHUẨN 2 TAY DÀI VÀ ĐÈN BỤNG THEO ẢNH
     function drawPrototype(x, y) {
         ctx.save();
 
@@ -284,7 +288,7 @@
         ctx.strokeStyle = "#455a64"; ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(x + 25, y + 45); ctx.lineTo(x + 55, y + 85); ctx.lineTo(x + 45, y + 130); ctx.stroke();
         ctx.strokeStyle = "#78909c"; ctx.lineWidth = 2;
-     for(let i=0; i<4; i++) { ctx.beginPath(); ctx.moveTo(x + 45, y + 130); ctx.lineTo(x + 30 + (i*10), y + 155); ctx.stroke(); }
+        for(let i=0; i<4; i++) { ctx.beginPath(); ctx.moveTo(x + 45, y + 130); ctx.lineTo(x + 30 + (i*10), y + 155); ctx.stroke(); }
 
         ctx.restore();
     }
@@ -341,8 +345,7 @@
         drawPrototype(prototype.x, prototype.y);
         requestAnimationFrame(updateGame);
     }
-
-    // HÀM TẠO CÂU HỎI CHUẨN LỚP 1: KHÔNG BAO GIỜ BỊ SỐ ÂM CHO CẢ 3 DẠNG BÀI
+// HÀM TẠO CÂU HỎI CHUẨN LỚP 1: KHÔNG BAO GIỜ BỊ SỐ ÂM CHO CẢ 3 DẠNG BÀI
     function triggerMathQuiz() {
         isMathMode = true;
         const modal = document.getElementById("mathModal");
@@ -350,9 +353,7 @@
         const optionsBox = document.getElementById("optionsBox");
         
         modal.style.display = "block";
-        modal.style.left = (canvas.offsetLeft + canvas.width/2 - 210) + "px";
-        modal.style.top = (canvas.offsetTop + canvas.height/2 - 140) + "px";
-        optionsBox.innerHTML = ""; // Xóa các nút cũ
+        optionsBox.innerHTML = ""; // Xóa các nút cũ phòng lặp đáp án
 
         questionText.style.fontSize = "42px";
         questionText.style.color = "#d32f2f";
@@ -380,7 +381,7 @@
                 textToSpeak = `Bé hãy tính: ${n1} trừ ${n2} bằng mấy?`;
             }
             
-            // TẠO ĐÁP ÁN NHIỄU CHUẨN (TUYỆT ĐỐI KHÔNG ÂM)
+            // TẠO ĐÁP ÁN NHIỄU CHUẨN (TUYỆT ĐỐI KHÔNG ÂM, KHÔNG QUÁ 10)
             let correctNum = parseInt(correctAnswer);
             let wrong1 = (correctNum + 1 > 10) ? correctNum - 1 : correctNum + 1;
             let wrong2 = (correctNum - 2 < 0) ? correctNum + 2 : correctNum - 2;
@@ -389,7 +390,7 @@
             options = [correctAnswer, wrong1.toString(), wrong2.toString()];
         } 
         else if (luaChon === 1) {
-            // DẠNG 2: TOÁN SO SÁNH
+            // DẠNG 2: TOÁN SO SÁNH (>, <, =)
             let n1 = Math.floor(Math.random() * 11);
             let n2 = Math.floor(Math.random() * 11);
             questionText.innerText = `${n1}  ...  ${n2}`;
@@ -426,7 +427,7 @@
             questionText.innerText = cauDoRandom.de;
             textToSpeak = cauDoRandom.nghe; 
 
-            // SỬA LỖI ĐÁP ÁN NHIỄU TOÁN ĐỐ: KHÔNG ĐỂ BỊ TRỪ RA SỐ ÂM KHÔNG MONG MUỐN
+            // Kiểm soát đáp án nhiễu toán đố an toàn không bị số âm
             let wrong1 = (correctNum + 1 > 10) ? correctNum - 1 : correctNum + 1;
             let wrong2 = (correctNum - 1 < 0) ? correctNum + 2 : correctNum - 1;
             if (wrong1 === wrong2) wrong2 = (correctNum + 3 > 10) ? correctNum - 3 : correctNum + 3;
@@ -440,7 +441,7 @@
                 window.speechSynthesis.cancel(); 
                 let utterance = new SpeechSynthesisUtterance(textToSpeak);
                 utterance.lang = 'vi-VN'; 
-                utterance.rate = 0.85; 
+                utterance.rate = 0.85; // Đọc chậm rãi, rành mạch cho bé dễ nghe
                 window.speechSynthesis.speak(utterance);
             }
         };
@@ -451,19 +452,15 @@
 
         // THÊM NÚT LOA ĐỌC LẠI
         const speakerBtn = document.createElement("button");
+        speakerBtn.className = "option-btn";
         speakerBtn.style.background = "#2ecc71";
-        speakerBtn.style.color = "white";
-        speakerBtn.style.border = "none";
-        speakerBtn.style.padding = "8px 15px";
-        speakerBtn.style.fontSize = "16px";
-        speakerBtn.style.borderRadius = "8px";
-        speakerBtn.style.cursor = "pointer";
         speakerBtn.style.marginBottom = "15px";
-        speakerBtn.style.width = "100%";
+        speakerBtn.style.fontSize = "16px";
         speakerBtn.innerText = "🔊 BẤM VÀO ĐÂY ĐỂ NGHE ĐỌC ĐỀ BÀI";
         speakerBtn.onclick = () => window.docCauHoiHienTai();
         optionsBox.appendChild(speakerBtn);
 
+        // Sinh 3 nút đáp án số to rõ ràng
         options.forEach(opt => {
             const btn = document.createElement("button");
             btn.className = "option-btn";
@@ -480,7 +477,7 @@
             document.getElementById("scoreText").innerText = score;
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
-            // Đẩy gã hề về góc xa biên để bé có khoảng cách an toàn chạy tiếp
+            // Đẩy gã hề về góc xa biên an toàn (x=50, y=50) để bé kịp chạy trốn tiếp vòng mới
             prototype.x = 50;
             prototype.y = 50;
             
@@ -488,15 +485,16 @@
             document.getElementById("mathModal").style.display = "none";
         } else {
             if ('speechSynthesis' in window) {
-                let saiUtterance = new SpeechSynthesisUtterance("Chưa đúng rồi bé ơi, hãy nghe lại câu hỏi và chọn lại nhé");
-                saiUtterance.lang = 'vi-VN';
-                window.speechSynthesis.speak(saiUtterance);
+                let saiUtter = new SpeechSynthesisUtterance("Chưa đúng rồi bé ơi, hãy nghe lại câu hỏi và chọn lại nhé");
+                saiUtter.lang = 'vi-VN';
+                window.speechSynthesis.speak(saiUtter);
             }
             alert("🤡 Chưa đúng rồi bé ơi! Hãy suy nghĩ và chọn lại nút đáp án chính xác nhé!");
         }
     }
 
-    // Kích hoạt chạy game ngay lập tức từ đầu
+    // Kích hoạt đo đạc màn hình ngay từ lúc khởi động tràn viền và chạy game
+    resizeCanvas();
     updateGame();
 </script>
 
