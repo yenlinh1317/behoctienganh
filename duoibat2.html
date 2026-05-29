@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Learn English with Mommy Long Legs</title>
+    <style>
+        /* Tối ưu tràn màn hình không bị thanh cuộn ở cả điện thoại và máy tính */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f5f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            position: relative;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        /* Bảng câu hỏi tự căn giữa màn hình cảm ứng tuyệt đối */
+        #mathModal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.98);
+            border: 4px solid #ff4757;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+        #mathQuestion {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff4757;
+            margin: 12px 0;
+            line-height: 1.4;
+        }
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+        /* NÚT ĐÁP ÁN: Chữ tiếng Anh thô bên trái - Ảnh (Emoji hoặc SVG của bạn) căn bên phải */
+        .option-btn {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            border: 2px solid #fff;
+            padding: 10px 20px;
+            font-size: 26px; 
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.2);
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .option-btn:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #ff2f44, #ff4757);
+        }
+        /* Khung chứa ảnh SVG hoặc Emoji to rõ bên góc nút bấm */
+        .option-img-box {
+            font-size: 42px; 
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+        }
+        /* Đồng bộ kích thước hình vẽ SVG của bạn nằm gọn ghẽ */
+        .option-img-box svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #hud {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #2f3542;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            z-index: 5;
+        }
+        @media (min-width: 768px) {
+            #hud { font-size: 22px; top: 25px; }
+            #mathQuestion { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="hud">🏆 SCORE: <span id="scoreText">0</span> | ⏳ TIME: <span id="timeText">0</span>s</div>
+<canvas id="gameCanvas"></canvas>
+
+<!-- Bảng câu hỏi tương tác trắc nghiệm tinh gọn -->
+<div id="mathModal">
+    <div style="color: #ff4757; font-weight: bold; font-size: 16px; letter-spacing: 1px;">💖 MOMMY LONG LEGS CAUGHT YOU! 💖</div>
+    <div style="font-size: 13px; margin-top: 4px; color: #555;">Look at the green sample sentence and tap the correct button:</div>
+    <div id="mathQuestion">Question & Answer Sample</div>
+    <div class="options-container" id="optionsBox"></div>
+</div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let score = 0;
+    let timeElapsed = 0;
+    let isMathMode = false;
+
+    // Khởi tạo vị trí nhân vật cơ bản
+    const player = { x: 0, y: 0, radius: 15 };
+    const prototype = { x: 100, y: 100, radius: 35, speed: 4.2 };
+    let correctAnswer = "";
+
+    // GỘP CHUẨN TOÀN BỘ DANH SÁCH DỮ LIỆU TỪ VỰNG J, K, L THAM KHẢO TỪ BẠN GỬI
+    const J_WORDS = [
+        { word: "juice", icon: "🧃", isSvg: false, article: "some" },
+        { word: "jug", icon: "🏺", isSvg: false, article: "a" },
+        { id: "jar", word: "jar", icon: `<svg viewBox="0 0 64 64" width="50" height="50"><path d="M44,16V10a2,2,0,0,0-2-2H22a2,2,0,0,0-2,2v6A12,12,0,0,0,10,28V50a6,6,0,0,0,6,6H48a6,6,0,0,0,6-6V28A12,12,0,0,0,44,16Z" fill="#e0f7fa" stroke="#485460" stroke-width="4"/><rect x="22" y="5" width="20" height="5" rx="2" fill="#485460"/><path d="M14,32H50" stroke="#485460" stroke-width="3" stroke-dasharray="4 3"/></svg>`, isSvg: true, article: "a" },
+        { word: "jet", icon: "🛩️", isSvg: false, article: "a" },
+        { word: "jacket", icon: "🧥", isSvg: false, article: "a" },
+        { word: "jam", icon: "🍯", isSvg: false, article: "some" },
+        { word: "jellyfish", icon: "🐙", isSvg: false, article: "a" },
+        { word: "jelly", icon: "🍮", isSvg: false, article: "some" }
+    ];
+    const K_WORDS = [
+        { word: "key", icon: "🔑", isSvg: false, article: "a" },
+        { word: "kite", icon: "🪁", isSvg: false, article: "a" },
+        { word: "kangaroo", icon: "🦘", isSvg: false, article: "a" },
+        { word: "kitten", icon: "🐱", isSvg: false, article: "a" },
+        { word: "knife", icon: "🔪", isSvg: false, article: "a" },
+        { id: "kettle", word: "kettle", icon: `<svg viewBox="0 0 64 64" width="50" height="50"><path d="M48,42a16,16,0,1,1-32,0c0-6,4-12,10-14V22a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v6C44,30,48,36,48,42Z" fill="#ffb74d" stroke="#485460" stroke-width="4"/><path d="M16,38L6,34v-5l10,5" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M44,30c5-2,10,2,8,8" fill="none" stroke="#485460" stroke-width="4" stroke-linecap="round"/><path d="M26,13a6,6,0,0,1,12,0" fill="none" stroke="#485460" stroke-width="4"/></svg>`, isSvg: true, article: "a" },
+        { word: "king", icon: "👑", isSvg: false, article: "a" },
+        { word: "koala", icon: "🐨", isSvg: false, article: "a" }
+    ];
+    const L_WORDS = [
+        { word: "lion", icon: "🦁", isSvg: false, article: "a" },
+        { word: "lemon", icon: "🍋", isSvg: false, article: "a" },
+        { word: "leaf", icon: "🍃", isSvg: false, article: "a" },
+        { word: "lollipop", icon: "🍭", isSvg: false, article: "a" },
+        { id: "ladder", word: "ladder", icon: `<svg viewBox="0 0 64 64" width="55" height="55"><path d="M22,8V56M42,8V56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/><path d="M22,18H42M22,28H42M22,38H42M22,48H42" stroke="#cd853f" stroke-width="4" stroke-linecap="round"/></svg>`, isSvg: true, article: "a" },
+        { word: "lock", icon: "🔒", isSvg: false, article: "a" },
+        { word: "lips", icon: "👄", isSvg: false, article: "some" },
+        { word: "lizard", icon: "🦎", isSvg: false, article: "a" }
+    ];
+
+    // Gộp 3 mảng thành 1 danh sách tổng để game trích xuất dữ liệu
+    const wordList = [...J_WORDS, ...K_WORDS, ...L_WORDS];
+// Thiết kế cấu trúc chướng ngại vật ngoại cảnh thiên nhiên linh hoạt không ô lưới
+    let obstacles = [];
+    function generateObstacles() {
+        obstacles = [
+            { x: canvas.width * 0.2, y: canvas.height * 0.2, type: 'wall', w: 130, h: 22 },
+            { x: canvas.width * 0.65, y: canvas.height * 0.7, type: 'wall', w: 140, h: 22 },
+            { x: canvas.width * 0.45, y: canvas.height * 0.35, type: 'bush', r: 26 },
+            { x: canvas.width * 0.15, y: canvas.height * 0.75, type: 'bush', r: 22 },
+            { x: canvas.width * 0.8, y: canvas.height * 0.25, type: 'bush', r: 30 },
+            { x: canvas.width * 0.3, y: canvas.height * 0.55, type: 'rock', r: 12 },
+            { x: canvas.width * 0.7, y: canvas.height * 0.4, type: 'rock', r: 15 }
+        ];
+    }
+
+    // Tự động căn chỉnh Responsive co giãn tràn toàn bộ viền màn hình dọc ngang
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        generateObstacles();
+        if (player.x === 0 && player.y === 0) {
+            player.x = canvas.width / 2;
+            player.y = canvas.height * 0.8;
+        }
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', () => { setTimeout(resizeCanvas, 200); });
+
+    function updatePosition(x, y) {
+        if (isMathMode) return;
+        player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, x));
+        player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, y));
+    }
+
+    canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        updatePosition(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    function handleTouch(e) {
+        if (isMathMode) return;
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0]; // Sửa lỗi bắt đa điểm trên màn hình cảm ứng iPhone
+        updatePosition(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+    canvas.addEventListener("touchstart", handleTouch, { passive: false });
+    canvas.addEventListener("touchmove", handleTouch, { passive: false });
+
+    // Tốc độ rượt đuổi tăng tiến nhanh dần theo thời gian sống sót
+    setInterval(() => {
+        if (!isMathMode) {
+            timeElapsed++;
+            document.getElementById("timeText").innerText = timeElapsed;
+            if (timeElapsed % 3 === 0) prototype.speed += 0.4; 
+        }
+    }, 1000);
+
+    function drawScenery() {
+        ctx.fillStyle = "#f4f6f7"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        obstacles.forEach(obs => {
+            if (obs.type === 'wall') {
+                ctx.fillStyle = "#a4b0be"; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                ctx.strokeStyle = "#57606f"; ctx.lineWidth = 1.5; ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+            } else if (obs.type === 'bush') {
+                ctx.fillStyle = "#27ae60"; ctx.beginPath(); ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#2ecc71"; ctx.beginPath(); ctx.arc(obs.x - 6, obs.y - 4, obs.r * 0.7, 0, Math.PI * 2); ctx.fill();
+            } else if (obs.type === 'rock') {
+                ctx.fillStyle = "#bdc3c7"; ctx.beginPath(); ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2); ctx.fill();
+            }
+        });
+    }
+
+    // VẼ CHI TIẾT CHUẨN ĐỒ HỌA TRANH VẼ: MOMMY LONG LEGS ĐÚNG 2 CHÂN CO GIÃN
+    let waveTime = 0;
+    function drawPrototype(x, y) {
+        ctx.save();
+        waveTime += 0.15;
+        let flexibleWave = Math.sin(waveTime) * 12;
+
+        // CHUẨN TRANH VẼ: Vẽ đúng 2 chân dài mảnh khảnh uốn cong đàn hồi màu hồng sẫm
+        ctx.strokeStyle = "#ff69b4"; ctx.lineWidth = 5;
+        // Chân trái
+        ctx.beginPath(); ctx.moveTo(x - 8, y + 25);
+        ctx.bezierCurveTo(x - 35, y + 50 + flexibleWave, x - 30, y + 70, x - 25, y + 95); ctx.stroke();
+        // Chân phải
+        ctx.beginPath(); ctx.moveTo(x + 8, y + 25);
+        ctx.bezierCurveTo(x + 35, y + 50 + flexibleWave, x + 30, y + 70, x + 25, y + 95); ctx.stroke();
+
+        // Đôi ủng cao cổ màu hồng cánh sen đậm dưới chân nhện búp bê
+        ctx.fillStyle = "#ff1493";
+        ctx.fillRect(x - 30, y + 90, 10, 8);
+        ctx.fillRect(x + 20, y + 90, 10, 8);
+
+        // 2 cánh tay dài cao su vung vẩy co giãn mềm mại linh hoạt bắt người vàng
+        ctx.beginPath(); ctx.moveTo(x - 18, y + 5); ctx.bezierCurveTo(x - 65 - flexibleWave, y - 5, x - 70, y + 20, x - 60, y + 45); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x + 18, y + 5); ctx.bezierCurveTo(x + 65 + flexibleWave, y - 5, x + 70, y + 20, x + 60, y + 45); ctx.stroke();
+        ctx.fillStyle = "#e60073";
+        ctx.beginPath(); ctx.arc(x - 60, y + 45, 6, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 60, y + 45, 6, 0, Math.PI*2); ctx.fill();
+
+        // CHUẨN TRANH VẼ: Mái tóc bím đuôi ngựa buộc cao nhiều lọn sóng xinh xắn bồng bềnh rủ lệch
+        ctx.fillStyle = "#ff6b81";
+        ctx.beginPath(); ctx.moveTo(x, y - 25); ctx.bezierCurveTo(x - 40, y - 65, x - 55, y - 20, x - 35, y + 5); ctx.lineTo(x - 15, y - 15); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(x - 10, y - 25); ctx.bezierCurveTo(x - 35, y - 50, x - 45, y - 10, x - 30, y); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(x + 5, y - 25); ctx.bezierCurveTo(x + 25, y - 45, x + 35, y - 20, x + 25, y - 5); ctx.fill();
+
+        // Chun buộc tóc ngọc bích màu xanh cyan xinh xắn nổi bật
+        ctx.fillStyle = "#00d2d3";
+        ctx.fillRect(x - 22, y - 28, 8, 8); ctx.fillRect(x + 14, y - 28, 8, 8);
+
+        // Khuôn mặt có hồn má hồng búp bê dễ thương
+        ctx.fillStyle = "#ffb6c1"; ctx.beginPath(); ctx.arc(x, y, prototype.radius, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "#ff69b4"; ctx.lineWidth = 2.5; ctx.stroke();
+
+        // Đôi mắt búp bê to tròn màu xanh ngọc bích long lanh quét mục tiêu dính viền mi đen sâu thẳm hệt như ảnh gửi
+        ctx.fillStyle = "#00d2d3"; ctx.beginPath(); ctx.arc(x - 12, y - 6, 9, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x + 12, y - 6, 9, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#2ecc71"; ctx.beginPath(); ctx.arc(x - 10, y - 5, 5, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x + 10, y - 5, 5, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x - 12, y - 7, 2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x + 8, y - 7, 2, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = "rgba(255, 71, 87, 0.4)"; ctx.beginPath(); ctx.arc(x - 22, y + 4, 5, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x + 22, y + 4, 5, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = "#ff1493"; ctx.beginPath(); ctx.arc(x, y + 13, 11, 0, Math.PI); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.fillRect(x - 7, y + 13, 14, 2);
+
+        // Chiếc váy màu hồng cánh sen cắt ngắn rộng xòe uốn dẻo
+        ctx.fillStyle = "#ff69b4"; ctx.fillRect(x - 15, y + 25, 30, 20);
+        ctx.fillStyle = "#00d2d3"; ctx.fillRect(x - 11, y + 23, 22, 4);
+
+        ctx.restore();
+    }
+
+    // Người chơi màu vàng GrabPack hoàn toàn bám sát đề bài
+    function drawPlayer(x, y) {
+        ctx.save();
+        ctx.fillStyle = "#2f3542"; ctx.fillRect(x - 18, y - 8, 36, 16);
+        ctx.strokeStyle = "#eccc68"; ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.moveTo(x - 15, y); ctx.lineTo(x - 35, y - 10); ctx.stroke(); 
+        ctx.beginPath(); ctx.moveTo(x + 15, y); ctx.lineTo(x + 35, y - 10); ctx.stroke(); 
+
+        ctx.fillStyle = "#ff4757"; ctx.beginPath(); ctx.arc(x - 38, y - 10, 8, 0, Math.PI*2); ctx.fill(); 
+        ctx.fillRect(x - 45, y - 22, 4, 12); ctx.fillRect(x - 40, y - 24, 4, 14); ctx.fillRect(x - 35, y - 22, 4, 12);
+
+        ctx.fillStyle = "#1e90ff"; ctx.beginPath(); ctx.arc(x + 38, y - 10, 8, 0, Math.PI*2); ctx.fill(); 
+        ctx.fillRect(x + 33, y - 22, 4, 12); ctx.fillRect(x + 37, y - 24, 4, 14); ctx.fillRect(x + 42, y - 22, 4, 12);
+
+        ctx.fillStyle = "#ffa502"; ctx.beginPath(); ctx.arc(x, y - 22, 10, 0, Math.PI*2); ctx.fill();
+        ctx.fillRect(x - 10, y - 10, 20, 24);
+        ctx.fillRect(x - 9, y + 14, 7, 18); ctx.fillRect(x + 2, y + 14, 7, 18);
+        ctx.restore();
+    }
+
+    // Vòng lặp rượt đuổi chính của game (SỬA LỖI TRUYỀN TỌA ĐỘ PROTOTYPE PHÁT HIỆN GÃ HỀ HIỆN LÊN NGAY)
+    function updateGame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawScenery();
+
+        if (!isMathMode) {
+            const dx = player.x - prototype.x;
+            const dy = player.y - prototype.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance > 5) {
+                prototype.x += (dx / distance) * prototype.speed;
+                prototype.y += (dy / distance) * prototype.speed;
+            }
+
+            if (distance < (player.radius + prototype.radius + 35)) {
+                triggerEnglishQuiz();
+            }
+        }
+
+        drawPlayer(player.x, player.y);
+        drawPrototype(prototype.x, prototype.y); // Vá lỗi: Luôn truyền đúng vị trí đuổi bắt của Mommy
+        requestAnimationFrame(updateGame);
+    }
+// HÀM TẠO CÂU HỎI TIẾNG ANH: TỰ ĐỘNG NHẬN DIỆN VÀ NHÚNG HÌNH SVG ĐỘC QUYỀN CỦA BẠN
+    function triggerEnglishQuiz() {
+        isMathMode = true;
+        const modal = document.getElementById("mathModal");
+        const questionText = document.getElementById("mathQuestion");
+        const optionsBox = document.getElementById("optionsBox");
+        
+        modal.style.display = "block";
+        optionsBox.innerHTML = ""; // Xóa sạch các nút cũ phòng lặp lại đáp án
+
+        // Chọn ngẫu nhiên 1 từ khóa chính xác trong danh sách tổng
+        const selectedItem = wordList[Math.floor(Math.random() * wordList.length)];
+        const itemWord = selectedItem.word;
+        const itemArticle = selectedItem.article; 
+
+        // Xác định ngẫu nhiên mẫu câu hỏi giao tiếp lớp 1
+        const cauHoiKieu = Math.random() > 0.5 ? "What is it?" : "What can you see?";
+        let textToSpeak = "";
+
+        // Đưa mẫu câu hỏi và câu mẫu trả lời đầy đủ lên trên để bé đối chiếu làm bài học
+        if (cauHoiKieu === "What is it?") {
+            questionText.innerHTML = `Mommy asks: "${cauHoiKieu}"<br><span style="color:#2ecc71; font-size:24px; font-weight:bold;">-> It is ${itemArticle} ${itemWord}.</span>`;
+            textToSpeak = `What is it?`;
+        } else {
+            questionText.innerHTML = `Mommy asks: "${cauHoiKieu}"<br><span style="color:#2ecc71; font-size:24px; font-weight:bold;">-> I can see ${itemArticle} ${itemWord}.</span>`;
+            textToSpeak = `What can you see?`;
+        }
+
+        correctAnswer = itemWord; // Gán từ khóa trúng làm đích so sánh logic
+
+        // Lọc loại trừ an toàn để sinh ngẫu nhiên 2 từ sai khác biệt hoàn toàn, không trùng lắp
+        let filterList = wordList.filter(i => i.word !== itemWord);
+        let fake1 = filterList[Math.floor(Math.random() * filterList.length)];
+        let filterList2 = filterList.filter(i => i.word !== fake1.word);
+        let fake2 = filterList2[Math.floor(Math.random() * filterList2.length)];
+
+        // Gom đủ 3 object đáp án phân tách độc lập
+        let optionsData = [
+            { text: itemWord, icon: selectedItem.icon, isSvg: selectedItem.isSvg },
+            { text: fake1.word, icon: fake1.icon, isSvg: fake1.isSvg },
+            { text: fake2.word, icon: fake2.icon, isSvg: fake2.isSvg }
+        ];
+
+        // Loa phát thanh tự động đọc câu hỏi tiếng Anh Mỹ chuẩn bản xứ Hoa Kỳ
+        window.speakEnglishQuestion = function() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US'; utterance.rate = 0.75; 
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+        window.speakEnglishQuestion();
+
+        optionsData.sort(() => Math.random() - 0.5); // Xáo trộn vị trí 3 nút bấm
+
+        // Nút loa hỗ trợ nghe lại giọng đọc
+        const speakerBtn = document.createElement("button");
+        speakerBtn.style.background = "#2ecc71"; speakerBtn.style.color = "white"; speakerBtn.style.border = "none";
+        speakerBtn.style.padding = "10px 15px"; speakerBtn.style.fontSize = "16px"; speakerBtn.style.borderRadius = "10px";
+        speakerBtn.style.cursor = "pointer"; speakerBtn.style.marginBottom = "10px"; speakerBtn.style.width = "100%";
+        speakerBtn.style.fontWeight = "bold";
+        speakerBtn.innerText = `🔊 LISTEN AGAIN`;
+        speakerBtn.onclick = () => window.speakEnglishQuestion();
+        optionsBox.appendChild(speakerBtn);
+
+        // Sinh 3 nút đáp án tinh gọn: Chữ tiếng Anh thô bên trái - Ảnh 3D hệ thống siêu rõ nét bên phải
+        optionsData.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            
+            // Từ vựng tiếng Anh thô căn lề bên trái nút bấm
+            const txtSpan = document.createElement("span");
+            txtSpan.innerText = opt.text;
+            btn.appendChild(txtSpan);
+            
+            // Khung chứa ảnh thông minh căn lề bên phải nút bấm
+            const imgSpan = document.createElement("span");
+            imgSpan.className = "option-img-box";
+            
+            // KIỂM TRA ĐIỀU KIỆN Đề bài: Nếu là SVG thì nhúng mã HTML vẽ, ngược lại hiện text Emoji thông thường
+            if (opt.isSvg) {
+                imgSpan.innerHTML = opt.icon; // Nhúng thẳng code SVG của bạn vào nút bấm
+            } else {
+                imgSpan.innerText = opt.icon;  // Hiện Emoji hệ thống
+            }
+            
+            btn.appendChild(imgSpan);
+            btn.onclick = () => checkEnglishAnswer(opt.text);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    // Hàm kiểm tra đáp án khi bấm chọn nút
+    function checkEnglishAnswer(selectedOpt) {
+        if (selectedOpt === correctAnswer) {
+            score += 10;
+            document.getElementById("scoreText").innerText = score;
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+            // Đẩy Mommy Long Legs lùi xa về vị trí xuất phát góc màn hình để bé tiếp tục chạy trốn
+            prototype.x = 60; prototype.y = 60;
+            isMathMode = false;
+            document.getElementById("mathModal").style.display = "none";
+        } else {
+            if ('speechSynthesis' in window) {
+                let saiUtter = new SpeechSynthesisUtterance("Try again!");
+                saiUtter.lang = 'en-US'; window.speechSynthesis.speak(saiUtter);
+            }
+            alert("💖 Mommy says: Try again! Bé hãy nhìn chữ gợi ý ở câu mẫu màu xanh phía trên xem là từ gì rồi bấm chọn nút đúng nhé!");
+        }
+    }
+
+    // Kích hoạt đo đạc màn hình tràn viền và khởi động chạy game ngay lập tức từ đầu
+    resizeCanvas();
+    updateGame();
+</script>
+
+</body>
+</html>
