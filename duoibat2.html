@@ -351,6 +351,7 @@
         requestAnimationFrame(updateGame);
     }
 // HÀM TẠO CÂU HỎI TIẾNG ANH: TỰ ĐỘNG NHẬN DIỆN VÀ NHÚNG HÌNH SVG ĐỘC QUYỀN CỦA BẠN
+    // HÀM TẠO CÂU HỎI TIẾNG ANH: ĐÃ SỬA LỖI ĐỂ TỰ ĐỘNG ĐỌC TRỌN VẸN CẢ CÂU HỎI VÀ CÂU TRẢ LỜI MẪU
     function triggerEnglishQuiz() {
         isMathMode = true;
         const modal = document.getElementById("mathModal");
@@ -360,81 +361,78 @@
         modal.style.display = "block";
         optionsBox.innerHTML = ""; // Xóa sạch các nút cũ phòng lặp lại đáp án
 
-        // Chọn ngẫu nhiên 1 từ khóa chính xác trong danh sách tổng
+        // Chọn ngẫu nhiên 1 từ khóa chính xác trong danh sách 24 từ vựng của bạn
         const selectedItem = wordList[Math.floor(Math.random() * wordList.length)];
         const itemWord = selectedItem.word;
         const itemArticle = selectedItem.article; 
 
         // Xác định ngẫu nhiên mẫu câu hỏi giao tiếp lớp 1
         const cauHoiKieu = Math.random() > 0.5 ? "What is it?" : "What can you see?";
-        let textToSpeak = "";
+        let fullTextToSpeak = ""; // Biến lưu chuỗi âm thanh dài để máy đọc trọn vẹn
 
-        // Đưa mẫu câu hỏi và câu mẫu trả lời đầy đủ lên trên để bé đối chiếu làm bài học
+        // Thiết lập chữ hiển thị và gộp cả Câu hỏi + Câu trả lời mẫu vào chuỗi giọng nói
         if (cauHoiKieu === "What is it?") {
             questionText.innerHTML = `Mommy asks: "${cauHoiKieu}"<br><span style="color:#2ecc71; font-size:24px; font-weight:bold;">-> It is ${itemArticle} ${itemWord}.</span>`;
-            textToSpeak = `What is it?`;
+            fullTextToSpeak = `What is it? It is ${itemArticle} ${itemWord}.`; // Máy sẽ đọc toàn bộ câu hỏi và câu trả lời
         } else {
             questionText.innerHTML = `Mommy asks: "${cauHoiKieu}"<br><span style="color:#2ecc71; font-size:24px; font-weight:bold;">-> I can see ${itemArticle} ${itemWord}.</span>`;
-            textToSpeak = `What can you see?`;
+            fullTextToSpeak = `What can you see? I can see ${itemArticle} ${itemWord}.`; // Máy sẽ đọc toàn bộ câu hỏi và câu trả lời
         }
 
-        correctAnswer = itemWord; // Gán từ khóa trúng làm đích so sánh logic
+        correctAnswer = itemWord; // Gán từ khóa đúng để kiểm tra kết quả bấm
 
-        // Lọc loại trừ an toàn để sinh ngẫu nhiên 2 từ sai khác biệt hoàn toàn, không trùng lắp
+        // Sinh 2 đáp án sai từ bộ lọc loại trừ an toàn, cam kết không trùng lặp danh từ
         let filterList = wordList.filter(i => i.word !== itemWord);
         let fake1 = filterList[Math.floor(Math.random() * filterList.length)];
         let filterList2 = filterList.filter(i => i.word !== fake1.word);
         let fake2 = filterList2[Math.floor(Math.random() * filterList2.length)];
 
-        // Gom đủ 3 object đáp án phân tách độc lập
         let optionsData = [
             { text: itemWord, icon: selectedItem.icon, isSvg: selectedItem.isSvg },
             { text: fake1.word, icon: fake1.icon, isSvg: fake1.isSvg },
             { text: fake2.word, icon: fake2.icon, isSvg: fake2.isSvg }
         ];
 
-        // Loa phát thanh tự động đọc câu hỏi tiếng Anh Mỹ chuẩn bản xứ Hoa Kỳ
+        // LẬP TRÌNH LOA PHÁT THANH: TỰ ĐỘNG ĐỌC NỐI LIỀN MẠCH CẢ CÂU HỎI LẪN CÂU MẪU
         window.speakEnglishQuestion = function() {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                let utterance = new SpeechSynthesisUtterance(textToSpeak);
-                utterance.lang = 'en-US'; utterance.rate = 0.75; 
+                window.speechSynthesis.cancel(); // Tắt âm thanh cũ ngay lập tức
+                let utterance = new SpeechSynthesisUtterance(fullTextToSpeak); // Truyền chuỗi câu dài vào để đọc
+                utterance.lang = 'en-US'; // Giọng nữ chuẩn Anh - Mỹ bản xứ
+                utterance.rate = 0.72;    // Đọc chậm rãi, nhấn rõ mạo từ "a" hoặc "some" cho bé dễ bắt chước
                 window.speechSynthesis.speak(utterance);
             }
         };
-        window.speakEnglishQuestion();
+        window.speakEnglishQuestion(); // Tự động phát âm thanh ngay khi bị Mommy tóm
 
-        optionsData.sort(() => Math.random() - 0.5); // Xáo trộn vị trí 3 nút bấm
+        optionsData.sort(() => Math.random() - 0.5); // Xáo trộn ngẫu nhiên vị trí các nút bấm
 
-        // Nút loa hỗ trợ nghe lại giọng đọc
+        // Nút loa xanh lá hỗ trợ bé chủ động click để nghe lại trọn vẹn cả câu
         const speakerBtn = document.createElement("button");
         speakerBtn.style.background = "#2ecc71"; speakerBtn.style.color = "white"; speakerBtn.style.border = "none";
         speakerBtn.style.padding = "10px 15px"; speakerBtn.style.fontSize = "16px"; speakerBtn.style.borderRadius = "10px";
         speakerBtn.style.cursor = "pointer"; speakerBtn.style.marginBottom = "10px"; speakerBtn.style.width = "100%";
         speakerBtn.style.fontWeight = "bold";
-        speakerBtn.innerText = `🔊 LISTEN AGAIN`;
+        speakerBtn.innerText = `🔊 LISTEN AGAIN (Nghe Mommy đọc cả câu mẫu)`;
         speakerBtn.onclick = () => window.speakEnglishQuestion();
         optionsBox.appendChild(speakerBtn);
 
-        // Sinh 3 nút đáp án tinh gọn: Chữ tiếng Anh thô bên trái - Ảnh 3D hệ thống siêu rõ nét bên phải
+        // Sinh 3 nút đáp án chứa từ thô tiếng Anh bên trái và hình vẽ (Emoji/SVG của bạn) bên phải
         optionsData.forEach(opt => {
             const btn = document.createElement("button");
             btn.className = "option-btn";
             
-            // Từ vựng tiếng Anh thô căn lề bên trái nút bấm
             const txtSpan = document.createElement("span");
             txtSpan.innerText = opt.text;
             btn.appendChild(txtSpan);
             
-            // Khung chứa ảnh thông minh căn lề bên phải nút bấm
             const imgSpan = document.createElement("span");
             imgSpan.className = "option-img-box";
             
-            // KIỂM TRA ĐIỀU KIỆN Đề bài: Nếu là SVG thì nhúng mã HTML vẽ, ngược lại hiện text Emoji thông thường
             if (opt.isSvg) {
-                imgSpan.innerHTML = opt.icon; // Nhúng thẳng code SVG của bạn vào nút bấm
+                imgSpan.innerHTML = opt.icon; // Nhúng trực tiếp hình vẽ tay cái hũ/cái thang/ấm nước của bạn
             } else {
-                imgSpan.innerText = opt.icon;  // Hiện Emoji hệ thống
+                imgSpan.innerText = opt.icon; // Hiện ảnh icon hệ thống thông dụng
             }
             
             btn.appendChild(imgSpan);
@@ -442,7 +440,6 @@
             optionsBox.appendChild(btn);
         });
     }
-
     // Hàm kiểm tra đáp án khi bấm chọn nút
     function checkEnglishAnswer(selectedOpt) {
         if (selectedOpt === correctAnswer) {
