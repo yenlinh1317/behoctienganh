@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Học Vần - Tiếng Việt 1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#FFFBF0;font-size:15px;color:#222}
+.hdr{background:linear-gradient(135deg,#2E7D32,#66BB6A);padding:12px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr h1{color:#fff;font-size:19px;font-weight:700}
+.hdr p{color:#C8E6C9;font-size:11px;margin-top:2px}
+.nav{display:flex;gap:5px;padding:9px 12px;justify-content:center;flex-wrap:wrap;background:#fff;border-bottom:2px solid #C8E6C9}
+.nb{padding:6px 13px;border:2px solid #81C784;border-radius:99px;background:#fff;color:#2E7D32;cursor:pointer;font-size:12px;font-weight:700;transition:all .15s}
+.nb.active,.nb:hover{background:#2E7D32;color:#fff;border-color:#2E7D32}
+.main{max-width:700px;margin:0 auto;padding:12px}
+.page{display:none}.page.active{display:block}
+
+/* BANG VAN */
+.nhom{margin-bottom:14px}
+.nhom-hdr{font-size:12px;font-weight:700;padding:5px 12px;border-radius:7px;margin-bottom:7px;border-left:4px solid}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}
+.bc{background:#fff;border:2.5px solid #e0e0e0;border-radius:11px;padding:8px 4px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.bc:hover{border-color:#2E7D32;transform:translateY(-2px);box-shadow:0 4px 10px rgba(46,125,50,.15)}
+.bc.done{border-color:#2E7D32;background:#F1F8E9}
+.bc .bvt{font-size:15px;font-weight:700;color:#1B5E20;line-height:1.3}
+.bc .bsub{font-size:10px;color:#aaa;margin-top:1px}
+.bc .bck{position:absolute;top:-4px;right:-4px;background:#2E7D32;color:#fff;border-radius:50%;width:15px;height:15px;font-size:9px;display:flex;align-items:center;justify-content:center}
+.sbar{display:flex;align-items:center;background:#fff;border-radius:9px;padding:6px 11px;border:2px solid #C8E6C9;margin-bottom:11px;gap:8px;font-size:12px}
+.sbar .sp{font-weight:700;color:#2E7D32;margin-left:auto;font-size:15px}
+
+/* HOC BAI */
+.prog{height:6px;background:#C8E6C9;border-radius:99px;margin-bottom:12px;overflow:hidden}
+.progf{height:100%;background:linear-gradient(90deg,#2E7D32,#81C784);border-radius:99px;transition:width .4s}
+.lbox{background:#fff;border-radius:16px;padding:16px;border:2.5px solid #C8E6C9;box-shadow:0 2px 10px rgba(46,125,50,.08)}
+.lt{font-size:19px;font-weight:700;text-align:center;margin-bottom:11px}
+.stabs{display:flex;gap:4px;margin-bottom:11px;justify-content:center;flex-wrap:wrap}
+.stab{padding:5px 10px;border:2px solid #ddd;border-radius:99px;font-size:11px;cursor:pointer;color:#aaa;font-weight:700}
+.stab.active{background:#2E7D32;color:#fff;border-color:#2E7D32}
+.stab.donet{border-color:#2E7D32;color:#2E7D32}
+
+/* BUOC 1: NHAN BIET */
+.nb1{background:#F9FBE7;border:2px solid #DCE775;border-radius:12px;padding:14px;margin-bottom:12px;text-align:center}
+.nb1-s{font-size:19px;font-weight:600;color:#33691E;line-height:1.7;margin-bottom:10px}
+.nb1-s .hl{color:#E65100;font-weight:700}
+.nb1-tip{font-size:12px;color:#888;margin-bottom:8px}
+
+/* BUOC 2: DOC */
+.doc-box{background:#E8F5E9;border-radius:12px;padding:14px;margin-bottom:12px}
+.van-row{display:flex;justify-content:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.van-btn{font-size:36px;font-weight:700;color:#1B5E20;cursor:pointer;padding:4px 10px;border-radius:8px;transition:all .15s;user-select:none;border:2px solid transparent}
+.van-btn:hover{background:#C8E6C9;border-color:#81C784}
+.van-btn:active{transform:scale(.93)}
+.ghep-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.ghep-am{background:#BBDEFB;border:2px solid #90CAF9;border-radius:8px;padding:5px 12px;font-size:18px;font-weight:700;color:#1565C0;cursor:pointer}
+.ghep-van{background:#C8E6C9;border:2px solid #81C784;border-radius:8px;padding:5px 12px;font-size:18px;font-weight:700;color:#1B5E20;cursor:pointer}
+.ghep-res{background:#2E7D32;color:#fff;border-radius:8px;padding:5px 14px;font-size:18px;font-weight:700;cursor:pointer}
+.tu-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:6px}
+.tu-item{background:#fff;border:2px solid #A5D6A7;border-radius:9px;padding:4px 10px;font-size:14px;font-weight:700;color:#1B5E20;cursor:pointer;transition:all .15s}
+.tu-item:hover{background:#E8F5E9;transform:scale(1.04)}
+/* Tu voi anh (3 anh) */
+.anh-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.anh-item{text-align:center;cursor:pointer;transition:all .15s}
+.anh-item:hover{transform:scale(1.05)}
+.anh-emoji{font-size:36px;display:block;margin-bottom:3px}
+.anh-text{font-size:14px;font-weight:700;color:#1B5E20}
+
+/* BUOC 3: VIET */
+.viet-box{background:#FFF9C4;border:2px solid #FDD835;border-radius:12px;padding:14px;margin-bottom:12px}
+.viet-dong{font-family:'Segoe UI',cursive;font-size:26px;color:#33691E;margin-bottom:8px;text-align:center;letter-spacing:4px}
+.viet-hint{font-size:12px;color:#888;text-align:center;margin-bottom:10px}
+.viet-input{width:100%;border:2px solid #FDD835;border-radius:8px;padding:8px 12px;font-size:22px;text-align:center;background:#FFFDE7;color:#33691E;outline:none;font-family:'Segoe UI',Arial}
+.viet-input:focus{border-color:#F9A825}
+.viet-check{margin-top:8px;text-align:center;font-size:13px;font-weight:700;min-height:20px}
+.viet-check.ok{color:#2E7D32}.viet-check.err{color:#C62828}
+
+/* BUOC 4: DOC CAU */
+.doc-cau-box{background:#E3F2FD;border-radius:12px;padding:14px;margin-bottom:12px;font-size:19px;font-weight:600;color:#0D47A1;line-height:1.8;text-align:center}
+.doc-cau-box .hl{color:#E65100;font-weight:700;cursor:pointer;text-decoration:underline}
+
+/* NAV BTN */
+.nbts{display:flex;gap:7px;justify-content:space-between;margin-top:12px;align-items:center;flex-wrap:wrap}
+.btn{padding:7px 15px;border:none;border-radius:99px;cursor:pointer;font-size:13px;font-weight:700;transition:all .15s}
+.bprev{background:#eee;color:#666}.bprev:hover{background:#ddd}
+.bnext{background:#2E7D32;color:#fff;box-shadow:0 3px 0 #1B5E20}.bnext:hover{background:#388E3C}
+.bhome{background:#E8F5E9;color:#2E7D32}.bhome:hover{background:#C8E6C9}
+.bspeak{background:#1565C0;color:#fff;border:none;border-radius:99px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:700}
+.bspeak:hover{background:#0D47A1}
+.plus{color:#aaa;font-size:18px;font-weight:700}
+.arrow{color:#aaa;font-size:18px;font-weight:700}
+
+/* QUIZ */
+.qbox{background:#FFF3E0;border-radius:12px;padding:13px;margin-bottom:10px}
+.qq{font-size:15px;font-weight:700;color:#E65100;text-align:center;margin-bottom:10px}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.qo{background:#fff;border:3px solid #FFCC80;border-radius:11px;padding:11px;text-align:center;cursor:pointer;font-size:20px;font-weight:700;transition:all .15s}
+.qo:hover{background:#FFF3E0}
+.qo.correct{background:#C8E6C9;border-color:#4CAF50}
+.qo.wrong{background:#FFCDD2;border-color:#F44336}
+
+/* THANH TICH */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:8px 18px;border-radius:99px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>📗 Học Vần - Tiếng Việt Lớp 1</h1>
+  <p>Sách giáo khoa "Kết nối tri thức với cuộc sống"</p>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="showTab('van',this)">📚 Bảng vần</button>
+  <button class="nb" onclick="showTab('hoc',this)">✏️ Học bài</button>
+  <button class="nb" onclick="showTab('luyen',this)">🎯 Luyện tập</button>
+  <button class="nb" onclick="showTab('tt',this)">🏆 Thành tích</button>
+</div>
+<div class="main">
+<div id="pg-van" class="page active"></div>
+<div id="pg-hoc" class="page"></div>
+<div id="pg-luyen" class="page">
+  <div class="lbox">
+    <div class="lt" style="color:#E65100">🎯 Luyện tập nhận biết vần</div>
+    <div class="sbar"><span>🎯</span><span>Điểm:</span><span class="sp" id="qs">0</span><span id="qstr" style="font-size:11px;color:#aaa;margin-left:5px"></span></div>
+    <div id="qa"></div>
+    <div id="qm" style="text-align:center;font-size:13px;font-weight:700;min-height:20px;margin-top:5px"></div>
+  </div>
+</div>
+<div id="pg-tt" class="page">
+  <div class="lbox"><div class="lt" style="color:#2E7D32">🏆 Thành tích</div><div id="ttc"></div></div>
+</div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ============================================================
+// DU LIEU CHINH XAC THEO SACH GIAO KHOA
+// Cau nhan biet, am ghep mau, tu doc, cau viet dung theo tung bai
+// ============================================================
+const NHOMS = [
+{ten:"Vần kết thúc bằng N", mau:"#E8F5E9", bc:"#2E7D32", bdr:"#2E7D32", bais:[
+  {id:31, van:["an","ăn","ân"], mauVan:"#00897B",
+   nhanBiet:"Ngựa vằn và hươu cao cổ là đôi bạn thân.",
+   amGhep:{am:"b", van:"an", ketQua:"bạn"},
+   docTu:["bản","nhãn","gắn","lặn","bạn","gần"],
+   docAnh:[{e:"👫",t:"bạn thân"},{e:"🧣",t:"khăn rằn"},{e:"🍒",t:"quả mận"}],
+   viet1:"an  ăn  ân", viet2:"bạn thân  khăn rằn",
+   docCau:"Ngựa vằn và hươu cao cổ là đôi bạn thân."},
+  {id:32, van:["on","ôn","ơn"], mauVan:"#00897B",
+   nhanBiet:"Sơn ca véo von: Mẹ ơi, con đã lớn khôn.",
+   amGhep:{am:"c", van:"on", ketQua:"con"},
+   docTu:["giòn","ngon","bốn","nhộn","gọn","lớn"],
+   docAnh:[{e:"🎩",t:"nón lá"},{e:"🦡",t:"con chồn"},{e:"🐦",t:"sơn ca"}],
+   viet1:"on  ôn  ơn", viet2:"con chồn  sơn ca",
+   docCau:"Sơn ca véo von: Mẹ ơi, con đã lớn khôn."},
+  {id:33, van:["en","ên","in","un"], mauVan:"#00897B",
+   nhanBiet:"Cún con nhìn thấy dế mèn trên tàu lá.",
+   amGhep:{am:"m", van:"en", ketQua:"mèn"},
+   docTu:["khèn","sen","nến","nghển","chín","mịn","cún","vun"],
+   docAnh:[{e:"🕯️",t:"ngọn nến"},{e:"🔦",t:"đèn pin"},{e:"🐶",t:"cún con"}],
+   viet1:"en  ên  in  un", viet2:"đèn pin  nến  cún",
+   docCau:"Cún con nhìn thấy dế mèn trên tàu lá."},
+]},
+{ten:"Vần kết thúc bằng M", mau:"#F3E5F5", bc:"#6A1B9A", bdr:"#6A1B9A", bais:[
+  {id:34, van:["am","ăm","âm"], mauVan:"#6A1B9A",
+   nhanBiet:"Nhện ngắm nghĩa tấm lưới vừa làm xong.",
+   amGhep:{am:"l", van:"am", ketQua:"lăm"},
+   docTu:["cam","khám","ăm","cằm","đậm","nhắm"],
+   docAnh:[{e:"🍊",t:"quả cam"},{e:"🎋",t:"tăm tre"},{e:"🌿",t:"củ sâm"}],
+   viet1:"am  ăm  âm", viet2:"tăm tre  củ sâm",
+   docCau:"Nhện ngắm nghĩa tấm lưới vừa làm xong."},
+  {id:36, van:["om","ôm","ơm"], mauVan:"#6A1B9A",
+   nhanBiet:"Hương cốm thơm thôn xóm.",
+   amGhep:{am:"x", van:"om", ketQua:"xóm"},
+   docTu:["khóm","vòm","nộm","tôm","bòm","rom"],
+   docAnh:[{e:"🦗",t:"đom đóm"},{e:"🐕",t:"chó đốm"},{e:"🍚",t:"mâm cơm"}],
+   viet1:"om  ôm  ơm", viet2:"chó đốm  mâm cơm",
+   docCau:"Hương cốm thơm thôn xóm."},
+  {id:37, van:["em","êm","im","um"], mauVan:"#6A1B9A",
+   nhanBiet:"Chị em Hà chơi trốn tìm. Hà tủm tỉm đếm: một, hai, ba,...",
+   amGhep:{am:"đ", van:"êm", ketQua:"đếm"},
+   docTu:["hẻm","kem","mềm","nếm","mim","tìm","chụm","mũm"],
+   docAnh:[{e:"📮",t:"tem thư"},{e:"🏠",t:"thềm nhà"},{e:"😄",t:"tủm tỉm"}],
+   viet1:"em  êm  im  um", viet2:"thềm nhà  tủm tỉm",
+   docCau:"Chị em Hà chơi trốn tìm. Hà tủm tỉm đếm: một, hai, ba,..."},
+]},
+{ten:"Vần đôi", mau:"#FFF3E0", bc:"#E65100", bdr:"#E65100", bais:[
+  {id:38, van:["ai","ay","ây"], mauVan:"#E65100",
+   nhanBiet:"Hai bạn thi nhảy dây.",
+   amGhep:{am:"h", van:"ai", ketQua:"hai"},
+   docTu:["bài","lái","nảy","tay","đạy","lấy"],
+   docAnh:[{e:"🍇",t:"chùm vải"},{e:"🚜",t:"máy cày"},{e:"☁️",t:"đám mây"}],
+   viet1:"ai  ay  ây", viet2:"chùm vải  đám mây",
+   docCau:"Hai bạn thi nhảy dây."},
+  {id:41, van:["ui","ưi"], mauVan:"#E65100",
+   nhanBiet:"Bà gửi cho Hà túi kẹo.",
+   amGhep:{am:"t", van:"ui", ketQua:"túi"},
+   docTu:["bùi","mũi","sủi","cưỡi","gửi","ngủi"],
+   docAnh:[{e:"⛰️",t:"dãy núi"},{e:"🌿",t:"bụi cỏ"},{e:"📮",t:"gửi thư"}],
+   viet1:"ui  ưi", viet2:"dãy núi  gửi thư",
+   docCau:"Bà gửi cho Hà túi kẹo."},
+  {id:42, van:["ao","eo"], mauVan:"#E65100",
+   nhanBiet:"Ao thu lạnh lẽo nước trong veo.",
+   amGhep:{am:"l", van:"eo", ketQua:"lẽo"},
+   docTu:["chào","dao","sáo","dẻo","đẹo","kẹo"],
+   docAnh:[{e:"⭐",t:"ngôi sao"},{e:"🍎",t:"quả táo"},{e:"🍬",t:"cái kẹo"},{e:"🪷",t:"ao bèo"}],
+   viet1:"ao  eo", viet2:"ngôi sao  ao bèo",
+   docCau:"Ao thu lạnh lẽo nước trong veo."},
+  {id:44, van:["iu","ưu"], mauVan:"#E65100",
+   nhanBiet:"Bà đã nghỉ hưu mà luôn bận bịu.",
+   amGhep:{am:"h", van:"ưu", ketQua:"hưu"},
+   docTu:["dịu","địu","xíu","hưu","mưu","lựu"],
+   docAnh:[{e:"🪓",t:"cái rìu"},{e:"🎒",t:"cái địu"},{e:"🍎",t:"quả lựu"},{e:"🐑",t:"con cừu"}],
+   viet1:"iu  ưu", viet2:"cái rìu  quả lựu",
+   docCau:"Bà đã nghỉ hưu mà luôn bận bịu."},
+]},
+{ten:"Vần -c và -t", mau:"#FFF9C4", bc:"#F57F17", bdr:"#F57F17", bais:[
+  {id:46, van:["ac","ăc","âc"], mauVan:"#E65100",
+   nhanBiet:"Tây Bắc có ruộng bậc thang, có thác nước.",
+   amGhep:{am:"th", van:"ac", ketQua:"thác"},
+   docTu:["lạc","nhạc","mặc","nhắc","gấc","giấc"],
+   docAnh:[{e:"👨‍⚕️",t:"bác sĩ"},{e:"👕",t:"mắc áo"},{e:"🎃",t:"quả gấc"}],
+   viet1:"ac  ăc  âc", viet2:"mắc áo  quả gấc",
+   docCau:"Tây Bắc có ruộng bậc thang, có thác nước."},
+  {id:48, van:["at","ăt","ât"], mauVan:"#E65100",
+   nhanBiet:"Nam bắt nhịp cho tất cả các bạn hát.",
+   amGhep:{am:"h", van:"at", ketQua:"hát"},
+   docTu:["bát","lạt","sắt","gặt","đất","gạt"],
+   docAnh:[{e:"🏖️",t:"bãi cát"},{e:"☀️",t:"mặt trời"},{e:"🔥",t:"bật lửa"}],
+   viet1:"at  ăt  ât", viet2:"mặt trời  bật lửa",
+   docCau:"Nam bắt nhịp cho tất cả các bạn hát."},
+  {id:49, van:["ot","ôt","ơt"], mauVan:"#E65100",
+   nhanBiet:"Vườn nhà bà có ớt, rau ngót và cà rốt.",
+   amGhep:{am:"ng", van:"ot", ketQua:"ngót"},
+   docTu:["ngọt","vớt","cột","tốt","thốt","vọt"],
+   docAnh:[{e:"🫐",t:"quả nhót"},{e:"🍃",t:"lá lốt"},{e:"🌶️",t:"quả ớt"}],
+   viet1:"ot  ôt  ơt", viet2:"lá lốt  quả ớt",
+   docCau:"Vườn nhà bà có ớt, rau ngót và cà rốt."},
+  {id:51, van:["et","êt","it"], mauVan:"#E65100",
+   nhanBiet:"Đôi vẹt ríu rít mãi không hết chuyện.",
+   amGhep:{am:"v", van:"et", ketQua:"vẹt"},
+   docTu:["két","dệt","lít","sét","nết","mít","vịt","tết"],
+   docAnh:[{e:"🦜",t:"con vẹt"},{e:"🌿",t:"bồ kết"},{e:"🍈",t:"quả mít"}],
+   viet1:"et  êt  it", viet2:"bồ kết  quả mít",
+   docCau:"Đôi vẹt ríu rít mãi không hết chuyện."},
+  {id:52, van:["ut","ưt"], mauVan:"#E65100",
+   nhanBiet:"Cầu thủ số 7 thu hút khán giả bằng một cú sút dứt điểm.",
+   amGhep:{am:"s", van:"ut", ketQua:"sút"},
+   docTu:["bụt","hụt","lụt","sụt","dứt","mứt","nứt","sút"],
+   docAnh:[{e:"✏️",t:"bút chì"},{e:"🍬",t:"mứt dừa"},{e:"🪨",t:"nứt nẻ"}],
+   viet1:"ut  ưt", viet2:"bút chì  mứt dừa",
+   docCau:"Cầu thủ số 7 thu hút khán giả bằng một cú sút dứt điểm."},
+]},
+{ten:"Vần -p", mau:"#FFEBEE", bc:"#C62828", bdr:"#C62828", bais:[
+  {id:54, van:["op","ôp","ơp"], mauVan:"#C62828",
+   nhanBiet:"Mưa rào lộp độp, ếch nhái tụ họp thi hát, cá cờ há miệng đớp mưa.",
+   amGhep:{am:"h", van:"op", ketQua:"họp"},
+   docTu:["cọp","hộp","họp","góp","tốp","lớp","xốp","lợp"],
+   docAnh:[{e:"🐯",t:"con cọp"},{e:"🚗",t:"lốp xe"},{e:"⚡",t:"tia chớp"}],
+   viet1:"op  ôp  ơp", viet2:"lốp xe  tia chớp",
+   docCau:"Mưa rào lộp độp, ếch nhái tụ họp thi hát, cá cờ há miệng đớp mưa."},
+]},
+{ten:"Vần -nh và -ch", mau:"#E0F7FA", bc:"#006064", bdr:"#006064", bais:[
+  {id:57, van:["anh","ênh","inh"], mauVan:"#006064",
+   nhanBiet:"Con kênh xinh xinh chảy qua cánh đồng.",
+   amGhep:{am:"c", van:"anh", ketQua:"cảnh"},
+   docTu:["chanh","kênh","kính","mảnh","ghềnh","chỉnh","cạnh","lệnh","thịnh"],
+   docAnh:[{e:"🍋",t:"quả chanh"},{e:"🏞️",t:"bờ kênh"},{e:"🕶️",t:"kính râm"}],
+   viet1:"anh  ênh  inh", viet2:"chanh  kênh  kính",
+   docCau:"Con kênh xinh xinh chảy qua cánh đồng."},
+  {id:58, van:["ach","êch","ich"], mauVan:"#006064",
+   nhanBiet:"Ếch con thích đọc sách.",
+   amGhep:{am:"s", van:"ach", ketQua:"sách"},
+   docTu:["vách","chếch","bích","tách","mếch","xích","sạch","lệch","kịch"],
+   docAnh:[{e:"📚",t:"sách vở"},{e:"👨‍👦",t:"chênh lệch"},{e:"📅",t:"tờ lịch"}],
+   viet1:"ach  êch  ich", viet2:"sách  chênh lệch  lịch",
+   docCau:"Ếch con thích đọc sách."},
+]},
+{ten:"Vần -ng và vần iê-", mau:"#FCE4EC", bc:"#880E4F", bdr:"#880E4F", bais:[
+  {id:61, van:["ong","ông","ung","ưng"], mauVan:"#880E4F",
+   nhanBiet:"Những bông hồng rung rinh trong gió.",
+   amGhep:{am:"tr", van:"ong", ketQua:"trong"},
+   docTu:["dòng","võng","bổng","cộng","thúng","vũng","đựng","hửng"],
+   docAnh:[{e:"🎡",t:"chong chóng"},{e:"🌺",t:"bông súng"},{e:"🍙",t:"bánh chưng"}],
+   viet1:"ong  ông  ung  ưng", viet2:"bông súng  bánh chưng",
+   docCau:"Những bông hồng rung rinh trong gió."},
+  {id:63, van:["iêng","iêm","yên"], mauVan:"#880E4F",
+   nhanBiet:"Yến phụng có bộ lông tím biêng biếc, trông rất diêm dúa.",
+   amGhep:{am:"b", van:"iêng", ketQua:"biêng"},
+   docTu:["kiễng","liêng","riêng","diêm","kiếm","xiêm","yên","yến"],
+   docAnh:[{e:"🍑",t:"sầu riêng"},{e:"🐟",t:"cá kiếm"},{e:"🐦",t:"tổ yến"}],
+   viet1:"iêng  iêm  yên", viet2:"sầu riêng  cá kiếm  yến",
+   docCau:"Yến phụng có bộ lông tím biêng biếc, trông rất diêm dúa."},
+  {id:64, van:["iêt","iêu","yêu"], mauVan:"#880E4F",
+   nhanBiet:"Em yêu sách. Nhờ có sách, em biết nhiều điều hay.",
+   amGhep:{am:"b", van:"iêt", ketQua:"biết"},
+   docTu:["chiết","viết","việt","chiều","diều","kiều","yêu","yếu","yểu"],
+   docAnh:[{e:"🌡️",t:"nhiệt kế"},{e:"🪁",t:"con diều"},{e:"🤱",t:"yêu chiều"}],
+   viet1:"iêt  iêu  yêu", viet2:"nhiệt kế  yêu chiều",
+   docCau:"Em yêu sách. Nhờ có sách, em biết nhiều điều hay."},
+]},
+{ten:"Vần uô-", mau:"#E0F2F1", bc:"#004D40", bdr:"#004D40", bais:[
+  {id:66, van:["uôi","uôm"], mauVan:"#004D40",
+   nhanBiet:"Thuyền buồm xuôi theo chiều gió.",
+   amGhep:{am:"x", van:"uôi", ketQua:"xuôi"},
+   docTu:["muối","muối","nguội","tuổi","buồm","muốm","nhuốm","nhuộm"],
+   docAnh:[{e:"🏞️",t:"con suối"},{e:"🌅",t:"buổi sáng"},{e:"🍑",t:"quả muỗm"}],
+   viet1:"uôi  uôm", viet2:"con suối  quả muỗm",
+   docCau:"Thuyền buồm xuôi theo chiều gió."},
+  {id:67, van:["uôc","uôt"], mauVan:"#004D40",
+   nhanBiet:"Mẹ vuốt tóc và buộc nơ cho Hà.",
+   amGhep:{am:"b", van:"uôc", ketQua:"buộc"},
+   docTu:["cuốc","luộc","ruốc","thuộc","buốt","muốt","ruột","tuột"],
+   docAnh:[{e:"🔥",t:"ngọn đuốc"},{e:"💊",t:"viên thuốc"},{e:"🐭",t:"con chuột"}],
+   viet1:"uôc  uôt", viet2:"ngọn đuốc  con chuột",
+   docCau:"Mẹ vuốt tóc và buộc nơ cho Hà."},
+]},
+{ten:"Vần ươ-", mau:"#F9FBE7", bc:"#827717", bdr:"#827717", bais:[
+  {id:69, van:["ươi","ươu"], mauVan:"#827717",
+   nhanBiet:"Chim khướu biết bắt chước tiếng người.",
+   amGhep:{am:"ng", van:"ươi", ketQua:"người"},
+   docTu:["buổi","cưỡi","lưỡi","mười","bướu","hươu","khướu","rượu"],
+   docAnh:[{e:"😊",t:"tươi cười"},{e:"🍋",t:"quả bưởi"},{e:"🐌",t:"ốc bươu"}],
+   viet1:"ươi  ươu", viet2:"tươi cười  ốc bươu",
+   docCau:"Chim khướu biết bắt chước tiếng người."},
+  {id:72, van:["ươm","ươp"], mauVan:"#827717",
+   nhanBiet:"Hoa mướp vàng ươm, bướm bay rập rờn.",
+   amGhep:{am:"b", van:"ươm", ketQua:"bướm"},
+   docTu:["chườm","đượm","gươm","ướm","muốp","nướp","ướp"],
+   docAnh:[{e:"🦋",t:"con bướm"},{e:"🚗",t:"nườm nượp"},{e:"🥒",t:"giàn mướp"}],
+   viet1:"ươm  ươp", viet2:"con bướm  giàn mướp",
+   docCau:"Hoa mướp vàng ươm, bướm bay rập rờn."},
+  {id:73, van:["ươn","ương"], mauVan:"#827717",
+   nhanBiet:"Đường tới trường lượn theo sườn đồi.",
+   amGhep:{am:"l", van:"ươn", ketQua:"lượn"},
+   docTu:["luơn","ruộn","suồn","vượn","hướng","phương","sương","tướng"],
+   docAnh:[{e:"🌿",t:"khu vườn"},{e:"🌫️",t:"hạt sương"},{e:"🛣️",t:"con đường"}],
+   viet1:"ươn  ương", viet2:"khu vườn  con đường",
+   docCau:"Đường tới trường lượn theo sườn đồi."},
+]},
+{ten:"Vần oa-, uâ-", mau:"#F3E5F5", bc:"#4A148C", bdr:"#4A148C", bais:[
+  {id:76, van:["oan","oăn","oat","oăt"], mauVan:"#4A148C",
+   nhanBiet:"Trên phim hoạt hình, voi bước khoan thai, thỏ chạy thoăn thoắt.",
+   amGhep:{am:"kh", van:"oan", ketQua:"khoan"},
+   docTu:["hoạt","choắt","toán","ngoắn","xoan","thoăn"],
+   docAnh:[{e:"🌸",t:"hoa xoan"},{e:"💇",t:"tóc xoăn"},{e:"🎬",t:"hoạt hình"},{e:"✏️",t:"nhọn hoắt"}],
+   viet1:"oan  oăn  oat  oăt", viet2:"tóc xoăn  nhọn hoắt",
+   docCau:"Trên phim hoạt hình, voi bước khoan thai, thỏ chạy thoăn thoắt."},
+  {id:78, van:["uân","uât"], mauVan:"#4A148C",
+   nhanBiet:"Chúng em xem chương trình nghệ thuật chào xuân.",
+   amGhep:{am:"x", van:"uân", ketQua:"xuân"},
+   docTu:["chuẩn","huẩn","khuất","luật","thuật","tuần","xuất"],
+   docAnh:[{e:"👮",t:"tuần tra"},{e:"🌸",t:"mùa xuân"},{e:"🥋",t:"võ thuật"}],
+   viet1:"uân  uât", viet2:"tuần tra  võ thuật",
+   docCau:"Chúng em xem chương trình nghệ thuật chào xuân."},
+]},
+{ten:"Vần uyê-", mau:"#EDE7F6", bc:"#311B92", bdr:"#311B92", bais:[
+  {id:79, van:["uyên","uyêt"], mauVan:"#311B92",
+   nhanBiet:"Bà kể chuyện hay tuyệt.",
+   amGhep:{am:"ch", van:"uyên", ketQua:"chuyện"},
+   docTu:["chuyến","luyện","thuyền","truyện","duyệt","khuyết","tuyết","tuyệt"],
+   docAnh:[{e:"⛵",t:"con thuyền"},{e:"🌙",t:"trăng khuyết"},{e:"🐴",t:"truyền thuyết"}],
+   viet1:"uyên  uyêt", viet2:"con thuyền  truyền thuyết",
+   docCau:"Bà kể chuyện hay tuyệt."},
+]},
+];
+
+const ALL = NHOMS.flatMap(n=>n.bais.map(b=>({...b,nhom:n.ten,mauNhom:n.mau,bcNhom:n.bc})));
+
+let S={
+  done:JSON.parse(localStorage.getItem('tv1v3_done')||'[]'),
+  stars:parseInt(localStorage.getItem('tv1v3_stars')||'0'),
+  qs:0,qstr:0,cur:null,step:0,vietVal:''
+};
+function sv(){localStorage.setItem('tv1v3_done',JSON.stringify(S.done));localStorage.setItem('tv1v3_stars',S.stars);}
+
+function showTab(t,el){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+t).classList.add('active');
+  if(t==='van')rVan();
+  if(t==='luyen')genQ();
+  if(t==='tt')rTT();
+}
+
+function rVan(){
+  document.getElementById('pg-van').innerHTML=
+    `<div class="sbar"><span>⭐</span><span>Sao thu thập:</span><span class="sp">${S.stars} ⭐</span></div>`+
+    NHOMS.map(n=>`
+      <div class="nhom">
+        <div class="nhom-hdr" style="background:${n.mau};color:${n.bc};border-color:${n.bdr}">${n.ten}</div>
+        <div class="bgrid">${n.bais.map(b=>`
+          <div class="bc ${S.done.includes(b.id)?'done':''}" onclick="startL(${b.id})">
+            ${S.done.includes(b.id)?'<div class="bck">✓</div>':''}
+            <div class="bvt">${b.van.join('\n')}</div>
+            <div class="bsub">Bài ${b.id}</div>
+          </div>`).join('')}
+        </div>
+      </div>`).join('');
+}
+
+function startL(id){
+  S.cur=ALL.find(b=>b.id===id);
+  S.step=0;S.vietVal='';
+  document.querySelectorAll('.nb')[1].click();
+  rStep();
+}
+
+function rStep(){
+  const b=S.cur;
+  const pct=(S.step/4*100);
+  const snames=['1. Nhận biết','2. Đọc','3. Viết','4. Đọc câu'];
+  let html=`<div class="prog"><div class="progf" style="width:${pct}%"></div></div>
+  <div class="lbox">
+  <div class="lt" style="color:${b.bcNhom}">Bài ${b.id}: ${b.van.join(' - ')}</div>
+  <div class="stabs">${snames.map((n,i)=>`<div class="stab ${i<S.step?'donet':i===S.step?'active':''}" onclick="if(${i}<${S.step})gotoS(${i})">${n}</div>`).join('')}</div>`;
+
+  if(S.step===0) html+=s0(b);
+  else if(S.step===1) html+=s1(b);
+  else if(S.step===2) html+=s2(b);
+  else html+=s3(b);
+
+  html+=`<div class="nbts">
+    <button class="btn bhome" onclick="goHome()">🏠 Trang chủ</button>
+    ${S.step>0?`<button class="btn bprev" onclick="pvS()">← Quay lại</button>`:''}
+    ${S.step<3?`<button class="btn bnext" onclick="nxS()">Tiếp theo →</button>`
+              :`<button class="btn bnext" style="background:#2E7D32" onclick="doneL()">🌟 Hoàn thành!</button>`}
+  </div></div>`;
+  document.getElementById('pg-hoc').innerHTML=html;
+}
+
+// BUOC 1: NHAN BIET
+function s0(b){
+  const s=b.nhanBiet;
+  const re=new RegExp('('+b.van.join('|')+')','g');
+  const sHL=s.replace(re,'<span class="hl">$1</span>');
+  return `<div class="nb1">
+    <p class="nb1-tip">Tìm vần <b>${b.van.join(', ')}</b> trong câu dưới đây:</p>
+    <p class="nb1-s">${sHL}</p>
+    <button class="bspeak" onclick="sp('${s}')">🔊 Nghe đọc câu</button>
+  </div>`;
+}
+
+// BUOC 2: DOC
+function s1(b){
+  // Hien thi van
+  let h=`<div class="doc-box">
+    <div class="van-row">`;
+  b.van.forEach(v=>h+=`<span class="van-btn" onclick="sp('${v}')" title="Bấm để nghe">${v}</span>`);
+  h+=`</div>
+    <div style="text-align:center;font-size:12px;color:#555;margin-bottom:10px">⬆ Bấm vào vần để nghe phát âm</div>
+    <div style="background:#fff;border-radius:9px;padding:10px;margin-bottom:10px">
+    <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:6px;text-align:center">Ghép âm:</div>
+    <div class="ghep-row">
+      <span class="ghep-am" onclick="sp('${b.amGhep.am}')">${b.amGhep.am}</span>
+      <span class="plus">+</span>
+      <span class="ghep-van" onclick="sp('${b.amGhep.van}')">${b.amGhep.van}</span>
+      <span class="arrow">→</span>
+      <span class="ghep-res" onclick="sp('${b.amGhep.ketQua}')">${b.amGhep.ketQua}</span>
+    </div></div>
+    <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:6px">Đọc các tiếng:</div>
+    <div class="tu-row">${b.docTu.map(t=>`<span class="tu-item" onclick="sp('${t}')">${t}</span>`).join('')}</div>
+    <div style="font-size:12px;font-weight:700;color:#555;margin:10px 0 6px">Đọc từ (bấm để nghe):</div>
+    <div class="anh-row">${b.docAnh.map(w=>`
+      <div class="anh-item" onclick="sp('${w.t}')">
+        <span class="anh-emoji">${w.e}</span>
+        <span class="anh-text">${w.t}</span>
+      </div>`).join('')}</div>
+  </div>`;
+  return h;
+}
+
+// BUOC 3: VIET
+function s2(b){
+  return `<div class="viet-box">
+    <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:6px;text-align:center">Mẫu viết (theo sách):</div>
+    <div class="viet-dong">${b.viet1}</div>
+    <div class="viet-dong">${b.viet2}</div>
+    <div class="viet-hint">Hãy tập viết vào vở ô ly rồi gõ vào ô bên dưới để kiểm tra</div>
+    <input class="viet-input" type="text" placeholder="Gõ: ${b.viet1.split('  ')[0]}" 
+      oninput="S.vietVal=this.value" value="${S.vietVal}"
+      onkeydown="if(event.key==='Enter')chkViet()">
+    <div style="text-align:center;margin-top:7px">
+      <button class="btn bnext" style="background:#F9A825" onclick="chkViet()">✓ Kiểm tra</button>
+    </div>
+    <div class="viet-check" id="vc"></div>
+  </div>`;
+}
+
+function chkViet(){
+  const b=S.cur;
+  const v=S.vietVal.trim().toLowerCase();
+  const targets=b.viet1.replace(/\s+/g,' ').split('  ').concat(b.viet2.split('  ')).map(x=>x.trim().toLowerCase());
+  const ok=targets.some(t=>v===t||v.includes(t)||t.includes(v));
+  const el=document.getElementById('vc');
+  if(el){
+    if(ok){el.textContent='✅ Đúng rồi! Giỏi lắm! +1 ⭐';el.className='viet-check ok';S.stars++;sv();toast('🌟 +1 ⭐');}
+    else{el.textContent=`❌ Thử lại! Mẫu: ${b.viet1.split('  ')[0]}`;el.className='viet-check err';}
+  }
+}
+
+// BUOC 4: DOC CAU
+function s3(b){
+  const re=new RegExp('('+b.van.join('|')+')','g');
+  const sHL=b.docCau.replace(re,'<span class="hl" onclick="sp(\'$1\')">$1</span>');
+  return `<div class="doc-cau-box">${sHL}</div>
+    <div style="text-align:center;margin-bottom:10px">
+      <button class="bspeak" onclick="sp('${b.docCau}')">🔊 Nghe đọc cả câu</button>
+    </div>
+    <div style="background:#F1F8E9;border-radius:10px;padding:10px">
+      <div style="font-size:12px;font-weight:700;color:#2E7D32;margin-bottom:6px">Ôn lại các từ đã học:</div>
+      <div class="anh-row">${b.docAnh.map(w=>`
+        <div class="anh-item" onclick="sp('${w.t}')">
+          <span class="anh-emoji">${w.e}</span>
+          <span class="anh-text">${w.t}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function gotoS(i){if(i<S.step){S.step=i;rStep();}}
+function nxS(){S.step=Math.min(3,S.step+1);S.vietVal='';rStep();}
+function pvS(){S.step=Math.max(0,S.step-1);S.vietVal='';rStep();}
+function goHome(){rVan();document.querySelectorAll('.nb')[0].click();}
+function doneL(){
+  const b=S.cur;
+  if(!S.done.includes(b.id)){S.done.push(b.id);S.stars+=5;sv();toast('🌟 Hoàn thành bài '+b.id+'! +5 ⭐');}
+  goHome();
+}
+
+// LUYEN TAP
+function genQ(){
+  const b=ALL[Math.floor(Math.random()*ALL.length)];
+  const tp=Math.random()>.5?'van':'tu';
+  let h='';
+  if(tp==='van'){
+    const c=b.van[Math.floor(Math.random()*b.van.length)];
+    const av=ALL.flatMap(x=>x.van);
+    const opts=[c];let t=0;
+    while(opts.length<4&&t<100){const r=av[Math.floor(Math.random()*av.length)];if(!opts.includes(r))opts.push(r);t++;}
+    for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]];}
+    h=`<div class="qbox">
+      <div class="qq">Nghe rồi chọn vần đúng:<br>
+      <button class="bspeak" style="margin-top:6px" onclick="sp('${c}')">🔊 Nghe vần</button></div>
+      <div class="qopts">${opts.map(o=>`<div class="qo" onclick="ansQ(this,'${o}','${c}')">${o}</div>`).join('')}</div>
+    </div>`;
+  } else {
+    const w=b.docAnh[Math.floor(Math.random()*b.docAnh.length)];
+    const ow=ALL.filter(x=>x.id!==b.id).flatMap(x=>x.docAnh);
+    const opts=[w];let t=0;
+    while(opts.length<4&&t<100){const r=ow[Math.floor(Math.random()*ow.length)];if(!opts.find(o=>o.t===r.t))opts.push(r);t++;}
+    for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]];}
+    h=`<div class="qbox">
+      <div class="qq">Từ nào có vần <b style="font-size:22px;color:#E65100">${b.van[0]}</b>?</div>
+      <div class="qopts">${opts.map(o=>`<div class="qo" onclick="ansQ(this,'${o.t}','${w.t}')" style="font-size:14px">${o.e}<br>${o.t}</div>`).join('')}</div>
+    </div>`;
+  }
+  document.getElementById('qa').innerHTML=h;
+  document.getElementById('qm').textContent='';
+}
+
+function ansQ(el,c,ok){
+  document.querySelectorAll('#qa .qo').forEach(o=>o.style.pointerEvents='none');
+  if(c===ok){
+    el.classList.add('correct');S.qs+=10;S.qstr++;S.stars++;sv();
+    document.getElementById('qm').textContent=S.qstr>=3?`🔥 Chuỗi ${S.qstr}! +10`:'✅ Đúng! +10';
+    document.getElementById('qm').style.color='#2E7D32';
+    toast(S.qstr>=3?'🔥 Tuyệt vời!':'🎉 Đúng rồi!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#qa .qo').forEach(o=>{if(o.textContent.includes(ok))o.classList.add('correct');});
+    S.qstr=0;document.getElementById('qm').textContent='❌ Sai rồi! Cố lên!';
+    document.getElementById('qm').style.color='#C62828';
+  }
+  document.getElementById('qs').textContent=S.qs;
+  document.getElementById('qstr').textContent=S.qstr>=2?`🔥 x${S.qstr}`:'';
+  setTimeout(genQ,1700);
+}
+
+function rTT(){
+  const tot=ALL.length,done=S.done.length,pct=Math.round(done/tot*100);
+  document.getElementById('ttc').innerHTML=`
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:52px">🏆</div>
+      <div style="font-size:22px;font-weight:700;color:#2E7D32;margin-top:6px">${S.stars} ⭐</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">Hoàn thành ${done}/${tot} bài (${pct}%)</div>
+    </div>
+    <div class="prog" style="height:12px;margin-bottom:14px"><div class="progf" style="width:${pct}%"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div style="background:#F9FBE7;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:24px">📚</div><div style="font-size:20px;font-weight:700;color:#F57F17">${done}</div>
+        <div style="font-size:10px;color:#aaa">Bài xong</div>
+      </div>
+      <div style="background:#E8F5E9;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:24px">🎯</div><div style="font-size:20px;font-weight:700;color:#2E7D32">${S.qs}</div>
+        <div style="font-size:10px;color:#aaa">Điểm luyện</div>
+      </div>
+      <div style="background:#E3F2FD;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:24px">⭐</div><div style="font-size:20px;font-weight:700;color:#1565C0">${S.stars}</div>
+        <div style="font-size:10px;color:#aaa">Tổng sao</div>
+      </div>
+    </div>
+    <div style="font-weight:700;font-size:12px;margin-bottom:7px">Bài đã học:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">
+      ${ALL.map(b=>`<span style="background:${S.done.includes(b.id)?'#C8E6C9':'#F5F5F5'};color:${S.done.includes(b.id)?'#2E7D32':'#ccc'};border-radius:7px;padding:3px 8px;font-size:12px;font-weight:700">${b.van[0]}${S.done.includes(b.id)?' ✓':''}</span>`).join('')}
+    </div>
+    <div style="text-align:center">
+      <button onclick="if(confirm('Xóa toàn bộ tiến trình?')){S.done=[];S.stars=0;S.qs=0;sv();rTT();rVan();}" 
+        style="background:#FFEBEE;color:#C62828;border:2px solid #FFCDD2;border-radius:99px;padding:7px 14px;cursor:pointer;font-size:11px">🗑️ Xóa tiến trình</button>
+    </div>`;
+}
+
+function sp(t){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';u.rate=0.75;
+  window.speechSynthesis.cancel();window.speechSynthesis.speak(u);
+}
+function toast(m){
+  const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+rVan();
+</script>
+</body>
+</html>
