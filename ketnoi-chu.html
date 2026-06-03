@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Học Chữ Tiếng Việt 1 – Bài 1 đến 28</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --xanh:#1565C0;--xanh-nhat:#E3F2FD;--xanh-vien:#90CAF9;
+  --cam:#E65100;--cam-nhat:#FFF3E0;--cam-vien:#FFCC80;
+  --xanh-la:#2E7D32;--xanh-la-nhat:#E8F5E9;--xanh-la-vien:#A5D6A7;
+  --vang:#F9A825;--vang-nhat:#FFFDE7;--vang-vien:#FDD835;
+  --tim:#6A1B9A;--tim-nhat:#F3E5F5;
+  --bg:#FFFBF0;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:#222;font-size:15px}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#1A237E,#1565C0,#0288D1);padding:13px 16px;text-align:center;position:sticky;top:0;z-index:200;box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.hdr h1{font-family:'Baloo 2',cursive;color:#fff;font-size:21px;font-weight:800;letter-spacing:.3px;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.hdr p{color:#B3E5FC;font-size:11px;margin-top:2px}
+
+/* NAV TABS */
+.nav{display:flex;gap:5px;padding:9px 12px;justify-content:center;flex-wrap:wrap;background:#fff;border-bottom:2px solid var(--xanh-vien)}
+.nt{padding:6px 14px;border:2px solid var(--xanh-vien);border-radius:99px;background:#fff;color:var(--xanh);cursor:pointer;font-size:12px;font-weight:800;transition:all .15s;font-family:'Nunito',sans-serif}
+.nt.on,.nt:hover{background:var(--xanh);color:#fff;border-color:var(--xanh)}
+
+.main{max-width:700px;margin:0 auto;padding:12px}
+.pg{display:none}.pg.on{display:block}
+
+/* SCORE BAR */
+.sbar{display:flex;align-items:center;background:#fff;border-radius:10px;padding:7px 13px;border:2px solid var(--xanh-vien);margin-bottom:12px;gap:8px;font-size:12px;font-weight:700}
+.sbar .sval{font-size:17px;font-weight:800;color:var(--xanh);margin-left:auto}
+
+/* BANG BAI - GRID CHON BAI */
+.nhom{margin-bottom:14px}
+.nhom-label{font-size:12px;font-weight:800;padding:5px 12px;border-radius:8px;margin-bottom:8px;border-left:4px solid;font-family:'Nunito',sans-serif}
+.bai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px}
+.bai-card{background:#fff;border:2.5px solid #e0e0e0;border-radius:12px;padding:10px 4px 8px;text-align:center;cursor:pointer;transition:all .2s;position:relative;user-select:none}
+.bai-card:hover{transform:translateY(-3px);box-shadow:0 5px 14px rgba(21,101,192,.2);border-color:var(--xanh)}
+.bai-card.done{border-color:var(--xanh);background:var(--xanh-nhat)}
+.bai-card .bc-chu{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:#0D47A1;line-height:1.2}
+.bai-card .bc-so{font-size:10px;color:#aaa;margin-top:1px;font-weight:700}
+.bai-card .bc-check{position:absolute;top:-5px;right:-5px;background:var(--xanh);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:800}
+
+/* THANH PROGRESS */
+.prog{height:6px;background:var(--xanh-vien);border-radius:99px;margin-bottom:13px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--xanh),#29B6F6);border-radius:99px;transition:width .5s ease}
+
+/* KHUNG BAI HOC */
+.lbox{background:#fff;border-radius:18px;padding:16px;border:2.5px solid var(--xanh-vien);box-shadow:0 3px 14px rgba(21,101,192,.09)}
+.l-title{font-family:'Baloo 2',cursive;font-size:23px;font-weight:800;text-align:center;color:#0D47A1;margin-bottom:12px}
+
+/* STEP TABS */
+.stabs{display:flex;gap:4px;margin-bottom:12px;justify-content:center;flex-wrap:wrap}
+.stab{padding:5px 11px;border:2px solid #ddd;border-radius:99px;font-size:11px;cursor:pointer;color:#bbb;font-weight:800;font-family:'Nunito',sans-serif;transition:all .15s}
+.stab.on{background:var(--xanh);color:#fff;border-color:var(--xanh)}
+.stab.dk{border-color:var(--xanh);color:var(--xanh)}
+
+/* ====== BUOC 1: NHAN BIET ====== */
+.b1-box{background:#F1F8E9;border:2px solid #C5E1A5;border-radius:14px;padding:14px;margin-bottom:12px}
+.b1-hint{font-size:12px;color:#558B2F;font-weight:800;margin-bottom:8px;text-align:center}
+.b1-cau{font-family:'Baloo 2',cursive;font-size:22px;font-weight:700;color:#1B5E20;line-height:1.7;text-align:center;margin-bottom:10px}
+.b1-cau .hl{color:var(--cam);font-weight:800;text-decoration:2px underline var(--cam)}
+/* Bai 1 dac biet: chu lon */
+.chu-to{font-family:'Baloo 2',cursive;font-size:96px;font-weight:800;color:var(--xanh);text-align:center;cursor:pointer;line-height:1;display:block;transition:transform .12s;margin:8px 0}
+.chu-to:active{transform:scale(.91)}
+.chu-nho-note{font-size:12px;color:#888;text-align:center;margin-top:4px}
+
+/* ====== BUOC 2: DOC ====== */
+.b2-box{background:var(--xanh-nhat);border:2px solid var(--xanh-vien);border-radius:14px;padding:14px;margin-bottom:12px}
+/* CHU CAI HOC - click de nghe */
+.chua-hoc{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.ch-btn{font-family:'Baloo 2',cursive;font-size:52px;font-weight:800;color:var(--xanh);cursor:pointer;line-height:1;padding:4px 8px;border-radius:10px;transition:all .13s;user-select:none;border:2px solid transparent}
+.ch-btn:hover{background:var(--xanh-vien);border-color:var(--xanh)}
+.ch-btn:active{transform:scale(.9)}
+/* Bang ghep am */
+.ghep-wrap{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ghep-blk{background:#fff;border:2px solid var(--xanh-vien);border-radius:12px;padding:10px 12px;min-width:110px;text-align:center}
+.ghep-blk .gb-row{display:flex;gap:5px;justify-content:center;margin-bottom:4px}
+.gb-am{background:var(--xanh-nhat);border:2px solid var(--xanh-vien);border-radius:7px;padding:4px 10px;font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:var(--xanh);cursor:pointer;min-width:34px}
+.gb-vn{background:#E8F5E9;border:2px solid #A5D6A7;border-radius:7px;padding:4px 10px;font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:var(--xanh-la);cursor:pointer;min-width:34px}
+.gb-kq{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--xanh);cursor:pointer;background:var(--xanh-nhat);border:2px solid var(--xanh);border-radius:9px;padding:4px 14px;margin-top:4px;display:inline-block;transition:background .13s}
+.gb-kq:hover{background:var(--xanh-vien)}
+.gb-mu{font-size:13px;color:#aaa;margin-bottom:3px}
+/* Hang tieng doc */
+.tieng-hang{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:8px 0}
+.tieng-item{background:#fff;border:2px solid var(--xanh-vien);border-radius:9px;padding:5px 12px;font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;color:var(--xanh);cursor:pointer;transition:all .13s}
+.tieng-item:hover{background:var(--xanh-nhat);transform:scale(1.05)}
+/* Tu co anh */
+.tu-hang{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}
+.tu-card{text-align:center;cursor:pointer;transition:transform .13s}
+.tu-card:hover{transform:scale(1.07)}
+.tu-e{font-size:38px;display:block;margin-bottom:3px}
+.tu-t{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:#0D47A1}
+
+/* ====== BUOC 3: TO VA VIET ====== */
+.b3-box{background:var(--vang-nhat);border:2px solid var(--vang-vien);border-radius:14px;padding:14px;margin-bottom:12px}
+.b3-title{font-size:12px;color:#5D4037;font-weight:800;text-align:center;margin-bottom:8px}
+.b3-mau{font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#0D47A1;text-align:center;margin-bottom:6px;letter-spacing:3px}
+.b3-hint{font-size:11px;color:#888;text-align:center;margin-bottom:9px}
+.b3-input{width:100%;border:2.5px solid var(--vang-vien);border-radius:10px;padding:9px 13px;font-family:'Baloo 2',cursive;font-size:24px;text-align:center;background:#FFFDE7;color:#0D47A1;outline:none}
+.b3-input:focus{border-color:var(--cam)}
+.b3-fb{text-align:center;font-size:13px;font-weight:800;min-height:21px;margin-top:8px}
+.b3-fb.ok{color:var(--xanh-la)}.b3-fb.err{color:#C62828}
+
+/* ====== BUOC 4: DOC CAU ====== */
+.b4-box{background:#EDE7F6;border:2px solid #CE93D8;border-radius:14px;padding:14px;margin-bottom:12px;font-family:'Baloo 2',cursive;font-size:21px;font-weight:700;color:#4A148C;line-height:1.9;text-align:center}
+.b4-box .hl{color:var(--cam);font-weight:800;cursor:pointer;text-decoration:2px underline var(--cam)}
+.on-tu-box{background:var(--xanh-nhat);border-radius:12px;padding:10px;margin-top:10px}
+.on-tu-title{font-size:12px;font-weight:800;color:var(--xanh);margin-bottom:7px;text-align:center}
+
+/* BUTTONS */
+.nav-btns{display:flex;gap:7px;justify-content:space-between;margin-top:13px;align-items:center;flex-wrap:wrap}
+.btn{padding:7px 16px;border:none;border-radius:99px;cursor:pointer;font-size:13px;font-weight:800;transition:all .15s;font-family:'Nunito',sans-serif}
+.btn-prev{background:#ECEFF1;color:#607D8B}.btn-prev:hover{background:#CFD8DC}
+.btn-next{background:var(--xanh);color:#fff;box-shadow:0 3px 0 #0D47A1}.btn-next:hover{background:#1976D2}
+.btn-home{background:var(--xanh-nhat);color:var(--xanh)}.btn-home:hover{background:var(--xanh-vien)}
+.btn-check{background:var(--vang);color:#fff;box-shadow:0 2px 0 #E65100}.btn-check:hover{background:#FFB300}
+.btn-speak{background:var(--cam);color:#fff;border:none;border-radius:99px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;transition:all .15s}
+.btn-speak:hover{background:#BF360C}
+
+/* LUYEN TAP QUIZ */
+.q-box{background:var(--cam-nhat);border:2px solid var(--cam-vien);border-radius:13px;padding:13px;margin-bottom:10px}
+.q-hoi{font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;color:var(--cam);text-align:center;margin-bottom:11px}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.qo{background:#fff;border:3px solid var(--cam-vien);border-radius:12px;padding:12px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;transition:all .15s}
+.qo:hover{background:var(--cam-nhat)}
+.qo.dung{background:#C8E6C9;border-color:#4CAF50}
+.qo.sai{background:#FFCDD2;border-color:#F44336}
+
+/* THANH TICH */
+.tt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.tt-card{border-radius:12px;padding:11px;text-align:center}
+.tt-num{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;margin-top:2px}
+.tt-lbl{font-size:10px;color:#aaa;font-weight:700;margin-top:1px}
+.done-list{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.done-tag{border-radius:8px;padding:3px 9px;font-size:12px;font-weight:800;font-family:'Baloo 2',cursive}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(13,71,161,.92);color:#fff;padding:9px 20px;border-radius:99px;font-size:13px;font-weight:800;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap;font-family:'Nunito',sans-serif}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>📘 Học Chữ Tiếng Việt Lớp 1</h1>
+  <p>Bài 1–28 · Sách "Kết nối tri thức với cuộc sống"</p>
+</div>
+
+<div class="nav">
+  <button class="nt on" onclick="doTab('bang',this)">📚 Bảng bài</button>
+  <button class="nt" onclick="doTab('hoc',this)">✏️ Học bài</button>
+  <button class="nt" onclick="doTab('luyen',this)">🎯 Luyện tập</button>
+  <button class="nt" onclick="doTab('tt',this)">🏆 Thành tích</button>
+</div>
+
+<div class="main">
+  <div id="pg-bang" class="pg on"></div>
+  <div id="pg-hoc" class="pg"></div>
+  <div id="pg-luyen" class="pg">
+    <div class="lbox">
+      <div class="l-title">🎯 Luyện tập nhận biết chữ</div>
+      <div class="sbar"><span>🏅</span><span>Điểm:</span><span class="sval" id="q-diem">0</span><span id="q-chuoi" style="font-size:11px;color:#aaa;margin-left:6px"></span></div>
+      <div id="q-area"></div>
+      <div id="q-msg" style="text-align:center;font-size:13px;font-weight:800;min-height:21px;margin-top:6px"></div>
+    </div>
+  </div>
+  <div id="pg-tt" class="pg">
+    <div class="lbox"><div class="l-title">🏆 Thành tích</div><div id="tt-nd"></div></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ============================================================
+// DU LIEU CHINH XAC - CHEP NGUYEN VAN TU SACH
+// ============================================================
+const NHOMS = [
+{n:"Bài 1–4", c:"#E3F2FD", bc:"#1565C0",
+ bais:[
+  // BAI 1: A a — chi co chu A + cau
+  {id:1, tieu:"A a",
+   cauNB:"Nam và Hà ca hát.",
+   // Bai 1 chi co phan doc "a" + to viet, khong co bang ghep
+   docChuLon:"A a",
+   docTieng:[],
+   ghep:[],
+   docAnh:[],
+   vietMau:"a",
+   cauDoc:"Nam và Hà ca hát."},
+
+  // BAI 2: B b — b+a→ba, b+à→bà; anh: ba, bà, ba ba
+  {id:2, tieu:"B b",
+   cauNB:"Bà cho bé búp bê.",
+   ghep:[
+     {am:"b", vn:"a", kq:"ba"},
+     {am:"b", vn:"à", kq:"bà"},
+   ],
+   docTieng:[],
+   docAnh:[{e:"3️⃣",t:"ba"},{e:"👵",t:"bà"},{e:"🐢",t:"ba ba"}],
+   vietMau:"b  b  bà",
+   cauDoc:"Bà cho bé búp bê."},
+
+  // BAI 3: C c — c+a→ca, c+á→cá; anh: ca, cà, cá
+  {id:3, tieu:"C c",
+   cauNB:"Nam và bố câu cá.",
+   ghep:[
+     {am:"c", vn:"a", kq:"ca"},
+     {am:"c", vn:"á", kq:"cá"},
+   ],
+   docTieng:[],
+   docAnh:[{e:"☕",t:"ca"},{e:"🍆",t:"cà"},{e:"🐟",t:"cá"}],
+   vietMau:"c  c  cá",
+   cauDoc:"Nam và bố câu cá."},
+
+  // BAI 4: E e Ê ê — b+e→bé, b+ê→bế; anh: bè, bé, bế
+  {id:4, tieu:"E e  Ê ê",
+   cauNB:"Bé kể mẹ nghe về bạn bè.",
+   ghep:[
+     {am:"b", vn:"e", kq:"bé"},
+     {am:"b", vn:"ê", kq:"bế"},
+   ],
+   docTieng:[],
+   docAnh:[{e:"🪵",t:"bè"},{e:"👶",t:"bé"},{e:"🤱",t:"bế"}],
+   vietMau:"e  e  ê  ê  bé  bế",
+   cauDoc:"Bé kể mẹ nghe về bạn bè."},
+]},
+
+{n:"Bài 6–9", c:"#E8F5E9", bc:"#2E7D32",
+ bais:[
+  // BAI 6: O o — b+o→bò, c+o→cỏ; tieng: bò bó bỏ cò có cỏ; anh: bò, cò, cỏ
+  {id:6, tieu:"O o",
+   cauNB:"Đàn bò gặm cỏ.",
+   ghep:[
+     {am:"b", vn:"o", kq:"bò"},
+     {am:"c", vn:"o", kq:"cỏ"},
+   ],
+   docTieng:["bò","bó","bỏ","cò","có","cỏ"],
+   docAnh:[{e:"🐄",t:"bò"},{e:"🦩",t:"cò"},{e:"🌿",t:"cỏ"}],
+   vietMau:"o  o  bò  cỏ",
+   cauDoc:"Đàn bò gặm cỏ."},
+
+  // BAI 7: Ô ô — b+ô→bố, b+ô→bộ; tieng: bố bổ bộ cô cổ cọ; anh: bố, cô bé, cổ cò
+  {id:7, tieu:"Ô ô",
+   cauNB:"Bố và Hà đi bộ trên hè phố.",
+   ghep:[
+     {am:"b", vn:"ô", kq:"bố"},
+     {am:"b", vn:"ô", kq:"bộ"},
+   ],
+   docTieng:["bố","bổ","bộ","cô","cổ","cọ"],
+   docAnh:[{e:"👨",t:"bố"},{e:"👧",t:"cô bé"},{e:"🐦",t:"cổ cò"}],
+   vietMau:"ô  ô  cổ  cò",
+   cauDoc:"Bố và Hà đi bộ trên hè phố."},
+
+  // BAI 8: D d Đ đ — d+e→dẻ, đ+a→đa; tieng: da dẻ dế đá đò đổ; anh: đá dế, đa đa, ô đỏ
+  {id:8, tieu:"D d  Đ đ",
+   cauNB:"Dưới gốc đa, các bạn chơi dung dăng dung dẻ.",
+   ghep:[
+     {am:"d", vn:"e", kq:"dẻ"},
+     {am:"đ", vn:"a", kq:"đa"},
+   ],
+   docTieng:["da","dẻ","dế","đá","đò","đổ"],
+   docAnh:[{e:"🪲",t:"đá dế"},{e:"🐓",t:"đa đa"},{e:"☂️",t:"ô đỏ"}],
+   vietMau:"d  d  đ  đ  đá  dế",
+   cauDoc:"Dưới gốc đa, các bạn chơi dung dăng dung dẻ."},
+
+  // BAI 9: Ơ ơ — b+ờ→bờ, d+ờ→dỡ; tieng: bờ bở cờ cỡ đờ đỡ; anh: bờ đê, cá cờ, đỡ bé
+  {id:9, tieu:"Ơ ơ",
+   cauNB:"Tàu dỡ hàng ở cảng.",
+   ghep:[
+     {am:"b", vn:"ờ", kq:"bờ"},
+     {am:"d", vn:"ờ", kq:"dỡ"},
+   ],
+   docTieng:["bờ","bở","cờ","cỡ","đờ","đỡ"],
+   docAnh:[{e:"🏞️",t:"bờ đê"},{e:"🐟",t:"cá cờ"},{e:"🤱",t:"đỡ bé"}],
+   vietMau:"ờ  ờ  đỡ  bé",
+   cauDoc:"Tàu dỡ hàng ở cảng."},
+]},
+
+{n:"Bài 11–14", c:"#FFF9C4", bc:"#F57F17",
+ bais:[
+  // BAI 11: I i K k — k+i→ki, k+ì→kì; tieng: kề kế kệ kí kỉ kĩ; anh: bí đỏ, kẻ ô, đi đò, kì đà
+  {id:11, tieu:"I i  K k",
+   cauNB:"Nam vẽ kì đà.",
+   ghep:[
+     {am:"k", vn:"i", kq:"ki"},
+     {am:"k", vn:"ì", kq:"kì"},
+   ],
+   docTieng:["kề","kế","kệ","kí","kỉ","kĩ"],
+   docAnh:[{e:"🎃",t:"bí đỏ"},{e:"📐",t:"kẻ ô"},{e:"⛵",t:"đi đò"},{e:"🦎",t:"kì đà"}],
+   vietMau:"i  i  k  k  kì đà",
+   cauDoc:"Nam vẽ kì đà."},
+
+  // BAI 12: H h L l — h+ô→hồ, l+e→le; tieng: hé ho hồ li lọ lỡ; anh: lá đỏ, bờ hồ, cá hổ, le le
+  {id:12, tieu:"H h  L l",
+   cauNB:"Le le bơi trên hồ.",
+   ghep:[
+     {am:"h", vn:"ô", kq:"hồ"},
+     {am:"l", vn:"e", kq:"le"},
+   ],
+   docTieng:["hé","ho","hồ","li","lọ","lỡ"],
+   docAnh:[{e:"🍁",t:"lá đỏ"},{e:"🏞️",t:"bờ hồ"},{e:"🐟",t:"cá hổ"},{e:"🦆",t:"le le"}],
+   vietMau:"h  h  l  l  hồ  le le",
+   cauDoc:"Le le bơi trên hồ."},
+
+  // BAI 13: U u Ư ư — đ+u→đủ, l+ư→lừ; tieng: dù đủ hũ cử dự lữ; anh: dù, đu đủ, hổ dữ
+  {id:13, tieu:"U u  Ư ư",
+   cauNB:"Đu đủ chín ngọt lừ.",
+   ghep:[
+     {am:"đ", vn:"u", kq:"đủ"},
+     {am:"l", vn:"ư", kq:"lừ"},
+   ],
+   docTieng:["dù","đủ","hũ","cử","dự","lữ"],
+   docAnh:[{e:"🪂",t:"dù"},{e:"🥭",t:"đu đủ"},{e:"🐯",t:"hổ dữ"}],
+   vietMau:"u  u  ư  ư  dù  hổ dữ",
+   cauDoc:"Đu đủ chín ngọt lừ."},
+
+  // BAI 14: Ch ch Kh kh — ch+u→chú, kh+i→khỉ; tieng: chè chỉ chợ khế kho khô; anh: lá khô, chú khỉ, chợ cá
+  {id:14, tieu:"Ch ch  Kh kh",
+   cauNB:"Mấy chú khỉ ăn chuối.",
+   ghep:[
+     {am:"ch", vn:"u", kq:"chú"},
+     {am:"kh", vn:"i", kq:"khỉ"},
+   ],
+   docTieng:["chè","chỉ","chợ","khế","kho","khô"],
+   docAnh:[{e:"🍂",t:"lá khô"},{e:"🐒",t:"chú khỉ"},{e:"🐟",t:"chợ cá"}],
+   vietMau:"ch  ch  kh  kh  chú khỉ",
+   cauDoc:"Mấy chú khỉ ăn chuối."},
+]},
+
+{n:"Bài 16–19", c:"#FCE4EC", bc:"#880E4F",
+ bais:[
+  // BAI 16: M m N n — m+e→mẹ, n+ờ→nơ; tieng: má mẹ mõ na nề nở; anh: cá mè, lá me, nơ đỏ, ca nô
+  {id:16, tieu:"M m  N n",
+   cauNB:"Mẹ mua nơ cho Hà.",
+   ghep:[
+     {am:"m", vn:"e", kq:"mẹ"},
+     {am:"n", vn:"ờ", kq:"nơ"},
+   ],
+   docTieng:["má","mẹ","mõ","na","nề","nở"],
+   docAnh:[{e:"🐟",t:"cá mè"},{e:"🌿",t:"lá me"},{e:"🎀",t:"nơ đỏ"},{e:"🚤",t:"ca nô"}],
+   vietMau:"m  m  n  n  cá mè  nơ đỏ",
+   cauDoc:"Mẹ mua nơ cho Hà."},
+
+  // BAI 17: G g Gi gi — g+a→gà, gi+ô→giỏ; tieng: ga gõ gụ giá giò giỗ; anh: gà gô, đồ gỗ, giá đỗ, cụ già
+  {id:17, tieu:"G g  Gi gi",
+   cauNB:"Hà có giỏ trứng gà.",
+   ghep:[
+     {am:"g", vn:"a", kq:"gà"},
+     {am:"gi", vn:"ô", kq:"giỏ"},
+   ],
+   docTieng:["ga","gõ","gụ","giá","giò","giỗ"],
+   docAnh:[{e:"🐓",t:"gà gô"},{e:"🪑",t:"đồ gỗ"},{e:"🌱",t:"giá đỗ"},{e:"👴",t:"cụ già"}],
+   vietMau:"g  g  gi  gi  gà gô  giá đỗ",
+   cauDoc:"Hà có giỏ trứng gà."},
+
+  // BAI 18: Gh gh Nh nh — gh+e→ghé, nh+a→nhà; tieng: ghẹ ghé ghi nhà nhẹ nhỏ; anh: ghế đá, ghẹ đỏ, nhà gỗ, lá nho
+  {id:18, tieu:"Gh gh  Nh nh",
+   cauNB:"Hà ghé nhà bà. Nhà bà ở ngõ nhỏ.",
+   ghep:[
+     {am:"gh", vn:"e", kq:"ghé"},
+     {am:"nh", vn:"a", kq:"nhà"},
+   ],
+   docTieng:["ghẹ","ghé","ghi","nhà","nhẹ","nhỏ"],
+   docAnh:[{e:"🪑",t:"ghế đá"},{e:"🦀",t:"ghẹ đỏ"},{e:"🏠",t:"nhà gỗ"},{e:"🍇",t:"lá nho"}],
+   vietMau:"gh  gh  nh  nh  ghẹ  lá nho",
+   cauDoc:"Hà ghé nhà bà. Nhà bà ở ngõ nhỏ."},
+
+  // BAI 19: Ng ng Ngh ngh — ng+ô→ngõ, ngh+e→nghé; tieng: ngã ngủ ngự nghe nghé nghĩ; anh: ngã ba, ngõ nhỏ, củ nghệ, nghỉ hè
+  {id:19, tieu:"Ng ng  Ngh ngh",
+   cauNB:"Nghé theo mẹ ra ngõ.",
+   ghep:[
+     {am:"ng", vn:"ô", kq:"ngõ"},
+     {am:"ngh", vn:"e", kq:"nghé"},
+   ],
+   docTieng:["ngã","ngủ","ngự","nghe","nghé","nghĩ"],
+   docAnh:[{e:"🏙️",t:"ngã ba"},{e:"🏘️",t:"ngõ nhỏ"},{e:"🌿",t:"củ nghệ"},{e:"🏃",t:"nghỉ hè"}],
+   vietMau:"ng  ng  ngh  ngh  ngõ  củ nghệ",
+   cauDoc:"Nghé theo mẹ ra ngõ."},
+]},
+
+{n:"Bài 21–24", c:"#F3E5F5", bc:"#4A148C",
+ bais:[
+  // BAI 21: R r S s — r+a→ra, s+e→sẽ; tieng: rạ rế rổ sẵn sẽ sò; anh: rổ rá, cá rô, su su, chữ số
+  {id:21, tieu:"R r  S s",
+   cauNB:"Bầy sẻ non ríu ra ríu rít bên mẹ.",
+   ghep:[
+     {am:"r", vn:"a", kq:"ra"},
+     {am:"s", vn:"e", kq:"sẽ"},
+   ],
+   docTieng:["rạ","rế","rổ","sẵn","sẽ","sò"],
+   docAnh:[{e:"🧺",t:"rổ rá"},{e:"🐟",t:"cá rô"},{e:"🥒",t:"su su"},{e:"🔢",t:"chữ số"}],
+   vietMau:"r  r  s  s  rổ rá  su su",
+   cauDoc:"Bầy sẻ non ríu ra ríu rít bên mẹ."},
+
+  // BAI 22: T t Tr tr — t+ô→tô, tr+e→tre; tieng: tá tạ tẻ trê trò trổ; anh: ô tô, sư tử, cá trê, tre ngà
+  {id:22, tieu:"T t  Tr tr",
+   cauNB:"Nam tô bức tranh cây tre.",
+   ghep:[
+     {am:"t", vn:"ô", kq:"tô"},
+     {am:"tr", vn:"e", kq:"tre"},
+   ],
+   docTieng:["tá","tạ","tẻ","trê","trò","trổ"],
+   docAnh:[{e:"🚗",t:"ô tô"},{e:"🦁",t:"sư tử"},{e:"🐟",t:"cá trê"},{e:"🎋",t:"tre ngà"}],
+   vietMau:"t  t  tr  tr  ô tô  cá trê",
+   cauDoc:"Nam tô bức tranh cây tre."},
+
+  // BAI 23: Th th ia — th+u→thu, ch+ia→chia; tieng: thẻ thọ thơ đĩa mía thìa; anh: thủ đô, lá thư, thìa dĩa, lá tía tô
+  {id:23, tieu:"Th th  ia",
+   cauNB:"Trung thu, bé được chia quà.",
+   ghep:[
+     {am:"th", vn:"u", kq:"thu"},
+     {am:"ch", vn:"ia", kq:"chia"},
+   ],
+   docTieng:["thẻ","thọ","thơ","đĩa","mía","thìa"],
+   docAnh:[{e:"🏛️",t:"thủ đô"},{e:"📬",t:"lá thư"},{e:"🍴",t:"thìa dĩa"},{e:"🌿",t:"lá tía tô"}],
+   vietMau:"th  th  ia  ia  thủ đô  thìa",
+   cauDoc:"Trung thu, bé được chia quà."},
+
+  // BAI 24: ua ưa — m+ua→múa, đ+ưa→đưa; tieng: cua đũa rùa cửa dứa nhựa; anh: cà chua, múa ô, dưa lê, cửa sổ
+  {id:24, tieu:"ua  ưa",
+   cauNB:"Mẹ đưa Hà đến lớp học múa.",
+   ghep:[
+     {am:"m", vn:"ua", kq:"múa"},
+     {am:"đ", vn:"ưa", kq:"đưa"},
+   ],
+   docTieng:["cua","đũa","rùa","cửa","dứa","nhựa"],
+   docAnh:[{e:"🍅",t:"cà chua"},{e:"💃",t:"múa ô"},{e:"🍈",t:"dưa lê"},{e:"🚪",t:"cửa sổ"}],
+   vietMau:"ua  ua  ưa  ưa  cà chua  dưa lê",
+   cauDoc:"Mẹ đưa Hà đến lớp học múa."},
+]},
+
+{n:"Bài 26–28", c:"#E8EAF6", bc:"#283593",
+ bais:[
+  // BAI 26: Ph ph Qu qu — ph+ô→phố, qu+e→quê; tieng: phà phí phở quạ quê quế; anh: pha trà, phố cổ, quê nhà, quả khế
+  {id:26, tieu:"Ph ph  Qu qu",
+   cauNB:"Cả nhà từ phố về thăm quê.",
+   ghep:[
+     {am:"ph", vn:"ô", kq:"phố"},
+     {am:"qu", vn:"ê", kq:"quê"},
+   ],
+   docTieng:["phà","phí","phở","quạ","quê","quế"],
+   docAnh:[{e:"☕",t:"pha trà"},{e:"🏘️",t:"phố cổ"},{e:"🌳",t:"quê nhà"},{e:"🍑",t:"quả khế"}],
+   vietMau:"ph  ph  qu  qu  pha trà  quê nhà",
+   cauDoc:"Cả nhà từ phố về thăm quê."},
+
+  // BAI 27: V v X x — v+e→vẽ, x+e→xe; tieng: võ vở vua xịa xứ xưa; anh: vở vẽ, vỉa hè, xe lu, thị xã
+  {id:27, tieu:"V v  X x",
+   cauNB:"Hà vẽ xe đạp.",
+   ghep:[
+     {am:"v", vn:"e", kq:"vẽ"},
+     {am:"x", vn:"e", kq:"xe"},
+   ],
+   docTieng:["võ","vở","vua","xịa","xứ","xưa"],
+   docAnh:[{e:"📓",t:"vở vẽ"},{e:"🛤️",t:"vỉa hè"},{e:"🚜",t:"xe lu"},{e:"🏘️",t:"thị xã"}],
+   vietMau:"v  v  x  x  vở vẽ  xe lu",
+   cauDoc:"Hà vẽ xe đạp."},
+
+  // BAI 28: Y y — qu+y→quý; tieng: quy quỳ quý quỵ quỷ ý; anh: y tá, dã quỳ, đá quý
+  {id:28, tieu:"Y y",
+   cauNB:"Thời gian quý hơn vàng bạc.",
+   ghep:[
+     {am:"qu", vn:"y", kq:"quý"},
+   ],
+   docTieng:["quy","quỳ","quý","quỵ","quỷ","ý"],
+   docAnh:[{e:"👩‍⚕️",t:"y tá"},{e:"🌼",t:"dã quỳ"},{e:"💎",t:"đá quý"}],
+   vietMau:"y  y  y tá  đá quý",
+   cauDoc:"Thời gian quý hơn vàng bạc."},
+]},
+];
+
+const ALL = NHOMS.flatMap(n=>n.bais.map(b=>({...b, nhomMau:n.c, nhomBC:n.bc})));
+
+// Trang thai
+let S = {
+  done: JSON.parse(localStorage.getItem('tv1c_done')||'[]'),
+  sao: parseInt(localStorage.getItem('tv1c_sao')||'0'),
+  qDiem: 0, qChuoi: 0,
+  cur: null, step: 0, nhapViet: ''
+};
+function luu(){
+  localStorage.setItem('tv1c_done', JSON.stringify(S.done));
+  localStorage.setItem('tv1c_sao', S.sao);
+}
+
+// ---- DIEU HUONG ----
+function doTab(tab, el){
+  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-'+tab).classList.add('on');
+  if(tab==='bang') veiBang();
+  if(tab==='luyen') sinhCauHoi();
+  if(tab==='tt') veiTT();
+}
+
+// ---- BANG BAI ----
+function veiBang(){
+  document.getElementById('pg-bang').innerHTML =
+    `<div class="sbar"><span>⭐</span><span>Sao đã thu thập:</span><span class="sval">${S.sao} ⭐</span></div>` +
+    NHOMS.map(n=>`
+      <div class="nhom">
+        <div class="nhom-label" style="background:${n.c};color:${n.bc};border-color:${n.bc}">${n.n}</div>
+        <div class="bai-grid">${n.bais.map(b=>`
+          <div class="bai-card ${S.done.includes(b.id)?'done':''}" onclick="batDauBai(${b.id})">
+            ${S.done.includes(b.id)?`<div class="bc-check">✓</div>`:''}
+            <div class="bc-chu">${b.tieu.split('  ')[0]}</div>
+            <div class="bc-so">Bài ${b.id}</div>
+          </div>`).join('')}
+        </div>
+      </div>`).join('');
+}
+
+// ---- HOC BAI ----
+function batDauBai(id){
+  S.cur = ALL.find(b=>b.id===id);
+  S.step = 0; S.nhapViet = '';
+  document.querySelectorAll('.nt')[1].click();
+  veiBuoc();
+}
+
+function veiBuoc(){
+  const b = S.cur;
+  const pct = (S.step/4*100);
+  const tenBuoc = ['1. Nhận biết','2. Đọc','3. Tô và viết','4. Đọc câu'];
+  let h = `
+    <div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div>
+    <div class="lbox">
+    <div class="l-title" style="color:${b.nhomBC}">Bài ${b.id}: ${b.tieu}</div>
+    <div class="stabs">${tenBuoc.map((t,i)=>`
+      <div class="stab ${i<S.step?'dk':i===S.step?'on':''}" 
+           onclick="if(${i}<${S.step}){S.step=${i};veiBuoc()}">${t}</div>`).join('')}
+    </div>`;
+
+  if(S.step===0) h += buoc1(b);
+  else if(S.step===1) h += buoc2(b);
+  else if(S.step===2) h += buoc3(b);
+  else h += buoc4(b);
+
+  h += `<div class="nav-btns">
+    <button class="btn btn-home" onclick="veNha()">🏠 Trang chủ</button>
+    ${S.step>0?`<button class="btn btn-prev" onclick="S.step--;S.nhapViet='';veiBuoc()">← Quay lại</button>`:''}
+    ${S.step<3
+      ?`<button class="btn btn-next" onclick="S.step++;S.nhapViet='';veiBuoc()">Tiếp theo →</button>`
+      :`<button class="btn btn-next" style="background:#2E7D32;box-shadow:0 3px 0 #1B5E20" onclick="xongBai()">🌟 Hoàn thành!</button>`}
+  </div></div>`;
+
+  document.getElementById('pg-hoc').innerHTML = h;
+}
+
+// BUOC 1: NHAN BIET
+function buoc1(b){
+  // Bai 1 dac biet: chi co chu A + cau, khong co bang ghep
+  const chuHL = b.cauNB; // highlight se lam don gian
+  let h = `<div class="b1-box">
+    <p class="b1-hint">Nhận ra chữ <b>${b.tieu}</b> trong câu:</p>
+    <p class="b1-cau">${toMau(b.cauNB, b.tieu)}</p>
+    <button class="btn-speak" onclick="noi('${b.cauNB}')">🔊 Nghe đọc câu</button>
+  </div>`;
+  if(b.id===1){
+    h += `<div style="text-align:center">
+      <span class="chu-to" onclick="noi('a')">A  a</span>
+      <p class="chu-nho-note">Bấm vào chữ để nghe phát âm</p>
+    </div>`;
+  }
+  return h;
+}
+
+// BUOC 2: DOC
+function buoc2(b){
+  let h = `<div class="b2-box">`;
+
+  // Chu cai hoc lon - click de nghe
+  h += `<div class="chua-hoc">`;
+  b.tieu.split('  ').forEach(phan => {
+    h += `<span class="ch-btn" onclick="noi('${phan.trim()}')" title="Bấm để nghe">${phan.trim()}</span>`;
+  });
+  h += `</div><p style="font-size:11px;color:#888;text-align:center;margin-bottom:10px">⬆ Bấm vào chữ để nghe</p>`;
+
+  // Bang ghep am (neu co)
+  if(b.ghep && b.ghep.length){
+    h += `<div style="font-size:12px;font-weight:800;color:#555;text-align:center;margin-bottom:7px">Ghép âm:</div>
+    <div class="ghep-wrap">`;
+    b.ghep.forEach(g => {
+      h += `<div class="ghep-blk">
+        <p class="gb-mu">${g.am} + ${g.vn} → ${g.kq}</p>
+        <div class="gb-row">
+          <span class="gb-am" onclick="noi('${g.am}')">${g.am}</span>
+          <span style="align-self:center;color:#aaa;font-size:16px;font-weight:800">+</span>
+          <span class="gb-vn" onclick="noi('${g.vn}')">${g.vn}</span>
+        </div>
+        <span class="gb-kq" onclick="noi('${g.kq}')">${g.kq}</span>
+      </div>`;
+    });
+    h += `</div>`;
+  }
+
+  // Hang tieng doc (neu co)
+  if(b.docTieng && b.docTieng.length){
+    h += `<div style="font-size:12px;font-weight:800;color:#555;margin:10px 0 6px;text-align:center">Đọc các tiếng:</div>
+    <div class="tieng-hang">${b.docTieng.map(t=>`<span class="tieng-item" onclick="noi('${t}')">${t}</span>`).join('')}</div>`;
+  }
+
+  // Tu co anh
+  if(b.docAnh && b.docAnh.length){
+    h += `<div style="font-size:12px;font-weight:800;color:#555;margin:10px 0 6px;text-align:center">Đọc từ (bấm để nghe):</div>
+    <div class="tu-hang">${b.docAnh.map(w=>`
+      <div class="tu-card" onclick="noi('${w.t}')">
+        <span class="tu-e">${w.e}</span>
+        <span class="tu-t">${w.t}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+// BUOC 3: TO VA VIET
+function buoc3(b){
+  return `<div class="b3-box">
+    <p class="b3-title">Mẫu tô và viết (đúng theo sách):</p>
+    <div class="b3-mau">${b.vietMau}</div>
+    <p class="b3-hint">Tập tô theo mẫu trong vở ô li, rồi gõ vào ô bên dưới để kiểm tra:</p>
+    <input class="b3-input" type="text" placeholder="Gõ chữ để kiểm tra..."
+      value="${S.nhapViet}"
+      oninput="S.nhapViet=this.value"
+      onkeydown="if(event.key==='Enter')kiemTraViet()">
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn btn-check" onclick="kiemTraViet()">✓ Kiểm tra</button>
+    </div>
+    <div class="b3-fb" id="viet-fb"></div>
+  </div>`;
+}
+
+function kiemTraViet(){
+  const b = S.cur;
+  const nhap = S.nhapViet.trim().toLowerCase().replace(/\s+/g,'');
+  // Cac dap an chap nhan: tung o trong mau viet
+  const dapAn = b.vietMau.split(/\s{2,}/).map(x=>x.trim().toLowerCase().replace(/\s+/g,''));
+  const ok = dapAn.some(d => nhap === d || (nhap.length >= 1 && (nhap.includes(d)||d.includes(nhap))));
+  const el = document.getElementById('viet-fb');
+  if(el){
+    if(ok){
+      el.textContent = '✅ Đúng rồi! Bé giỏi lắm! +1 ⭐';
+      el.className = 'b3-fb ok';
+      S.sao++; luu(); hienToast('🌟 +1 ⭐');
+    } else {
+      el.textContent = `❌ Thử lại nhé! Mẫu: "${b.vietMau.split('  ')[0]}"`;
+      el.className = 'b3-fb err';
+    }
+  }
+}
+
+// BUOC 4: DOC CAU
+function buoc4(b){
+  let h = `<div class="b4-box">${toMau(b.cauDoc, b.tieu)}</div>
+    <div style="text-align:center;margin-bottom:11px">
+      <button class="btn-speak" onclick="noi('${b.cauDoc}')">🔊 Nghe đọc cả câu</button>
+    </div>`;
+  if(b.docAnh && b.docAnh.length){
+    h += `<div class="on-tu-box">
+      <p class="on-tu-title">Ôn lại từ đã học:</p>
+      <div class="tu-hang">${b.docAnh.map(w=>`
+        <div class="tu-card" onclick="noi('${w.t}')">
+          <span class="tu-e">${w.e}</span>
+          <span class="tu-t">${w.t}</span>
+        </div>`).join('')}</div>
+    </div>`;
+  }
+  return h;
+}
+
+function xongBai(){
+  const b = S.cur;
+  if(!S.done.includes(b.id)){
+    S.done.push(b.id);
+    S.sao += 5;
+    luu();
+    hienToast('🌟 Xong bài '+b.id+'! +5 ⭐');
+  }
+  veNha();
+}
+function veNha(){
+  veiBang();
+  document.querySelectorAll('.nt')[0].click();
+}
+
+// ---- TÔ MAU ---- highlight cac chu/van trong cau
+function toMau(cau, tieu){
+  // Lay chu chinh can hoc (phan dau: A, B, Ch, Kh...)
+  const chuChinh = tieu.split(/\s+/).filter(x=>/[a-zA-Z\u00C0-\u1EF9]/i.test(x));
+  if(!chuChinh.length) return cau;
+  // Highlight tung tieng trong cau neu chua chu can hoc (case-insensitive)
+  const tiengs = cau.split(/(\s+|[.,!?;:])/);
+  return tiengs.map(tok => {
+    if(!tok.trim() || /^[\s.,!?;:]+$/.test(tok)) return tok;
+    const match = chuChinh.some(ch => {
+      const re = new RegExp(ch.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'i');
+      return re.test(tok);
+    });
+    if(match) return '<span class="hl" onclick="noi(\''+tok.replace(/'/g,"&#39;")+'\')">'+tok+'</span>';
+    return tok;
+  }).join('');
+}
+
+// ---- LUYEN TAP ----
+function sinhCauHoi(){
+  const b = ALL[Math.floor(Math.random()*ALL.length)];
+  let opts, correct;
+  // Chon tu co anh ngau nhien
+  const arrTu = ALL.filter(x=>x.docAnh&&x.docAnh.length>0);
+  const bTu = arrTu[Math.floor(Math.random()*arrTu.length)];
+  const w = bTu.docAnh[Math.floor(Math.random()*bTu.docAnh.length)];
+  correct = w.t;
+  const khac = ALL.filter(x=>x.id!==bTu.id).flatMap(x=>x.docAnh||[]);
+  opts = [w];
+  let t=0;
+  while(opts.length<4 && t<100){
+    const r = khac[Math.floor(Math.random()*khac.length)];
+    if(r && !opts.find(o=>o.t===r.t)) opts.push(r);
+    t++;
+  }
+  while(opts.length<4) opts.push({e:'❓',t:'???'+opts.length});
+  for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]];}
+
+  document.getElementById('q-area').innerHTML = `<div class="q-box">
+    <p class="q-hoi">Chữ <b style="font-size:26px;color:#1565C0">${bTu.tieu.split('  ')[0]}</b> có trong từ nào?</p>
+    <div class="q-opts">${opts.map(o=>`
+      <div class="qo" onclick="traLoiCH(this,'${o.t}','${correct}')">
+        <div>${o.e}</div><div>${o.t}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+  document.getElementById('q-msg').textContent='';
+}
+
+function traLoiCH(el, chon, dung){
+  document.querySelectorAll('#q-area .qo').forEach(o=>o.style.pointerEvents='none');
+  const ok = chon===dung;
+  if(ok){
+    el.classList.add('dung');
+    S.qDiem+=10; S.qChuoi++;
+    S.sao++; luu();
+    const msg = S.qChuoi>=3?`🔥 Chuỗi ${S.qChuoi}! +10 điểm`:'✅ Đúng! +10 điểm';
+    document.getElementById('q-msg').textContent=msg;
+    document.getElementById('q-msg').style.color='#2E7D32';
+    hienToast(S.qChuoi>=3?'🔥 Tuyệt vời!':'🎉 Đúng rồi!');
+  } else {
+    el.classList.add('sai');
+    document.querySelectorAll('#q-area .qo').forEach(o=>{
+      if(o.textContent.includes(dung)) o.classList.add('dung');
+    });
+    S.qChuoi=0;
+    document.getElementById('q-msg').textContent='❌ Sai rồi! Cố lên nào!';
+    document.getElementById('q-msg').style.color='#C62828';
+  }
+  document.getElementById('q-diem').textContent=S.qDiem;
+  document.getElementById('q-chuoi').textContent=S.qChuoi>=2?`🔥 x${S.qChuoi}`:'';
+  setTimeout(sinhCauHoi, 1700);
+}
+
+// ---- THANH TICH ----
+function veiTT(){
+  const tong=ALL.length, xong=S.done.length, phan=Math.round(xong/tong*100);
+  document.getElementById('tt-nd').innerHTML=`
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:54px">🏆</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:#1565C0;margin-top:6px">${S.sao} ⭐</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">Hoàn thành ${xong}/${tong} bài (${phan}%)</div>
+    </div>
+    <div class="prog" style="height:13px;margin-bottom:14px"><div class="prog-fill" style="width:${phan}%"></div></div>
+    <div class="tt-grid">
+      <div class="tt-card" style="background:#E3F2FD">
+        <div style="font-size:26px">📚</div>
+        <div class="tt-num" style="color:#1565C0">${xong}</div>
+        <div class="tt-lbl">Bài xong</div>
+      </div>
+      <div class="tt-card" style="background:#E8F5E9">
+        <div style="font-size:26px">🎯</div>
+        <div class="tt-num" style="color:#2E7D32">${S.qDiem}</div>
+        <div class="tt-lbl">Điểm luyện</div>
+      </div>
+      <div class="tt-card" style="background:#FFF9C4">
+        <div style="font-size:26px">⭐</div>
+        <div class="tt-num" style="color:#F57F17">${S.sao}</div>
+        <div class="tt-lbl">Tổng sao</div>
+      </div>
+    </div>
+    <div style="font-family:'Baloo 2',cursive;font-size:13px;font-weight:800;margin-bottom:8px;color:#555">Bài đã học:</div>
+    <div class="done-list">${ALL.map(b=>`
+      <span class="done-tag" style="background:${S.done.includes(b.id)?'#BBDEFB':'#F5F5F5'};color:${S.done.includes(b.id)?'#1565C0':'#ccc'}">
+        ${b.tieu.split('  ')[0]}${S.done.includes(b.id)?' ✓':''}
+      </span>`).join('')}
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button onclick="if(confirm('Xóa toàn bộ tiến trình?')){S.done=[];S.sao=0;S.qDiem=0;luu();veiTT();veiBang();}"
+        style="background:#FFEBEE;color:#C62828;border:2px solid #FFCDD2;border-radius:99px;padding:7px 15px;cursor:pointer;font-size:12px;font-weight:800">🗑️ Xóa tiến trình</button>
+    </div>`;
+}
+
+// ---- UTILS ----
+function noi(t){
+  if(!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang='vi-VN'; u.rate=0.75;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+function hienToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent=msg; el.classList.add('on');
+  setTimeout(()=>el.classList.remove('on'), 1900);
+}
+
+// Khoi dong
+veiBang();
+</script>
+</body>
+</html>
