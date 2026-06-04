@@ -1,0 +1,716 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--sky:#6EC6F5;--sun:#FFD93D;--grass:#7BC67E;--coral:#FF6B6B;--purple:#A78BFA;--mint:#6EE7B7;--orange:#FFA07A;--pink:#F9A8D4;
+--card:#fff;--bg:#F0F8FF;--shadow:0 4px 16px rgba(0,0,0,0.12);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden}
+.app{max-width:780px;margin:0 auto;padding:12px}
+.header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:14px;box-shadow:var(--shadow)}
+.header-title{color:#fff;font-family:'Fredoka One',cursive;font-size:22px;flex:1}
+.header-sub{color:rgba(255,255,255,0.85);font-size:13px}
+.stars-bar{display:flex;gap:4px;align-items:center}
+.star{font-size:18px;transition:.2s}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.nav-btn{flex:1;min-width:100px;padding:10px 8px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav-btn span.ico{font-size:20px}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.15)}
+.nav-btn.active{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
+.nb-units{background:linear-gradient(135deg,#FFD93D,#FF8C00);color:#7c3a00}
+.nb-listen{background:linear-gradient(135deg,#6EC6F5,#3A86FF);color:#0c2461}
+.nb-speak{background:linear-gradient(135deg,#FF6B9D,#C0392B);color:#fff}
+.nb-write{background:linear-gradient(135deg,#6EE7B7,#059669);color:#064e3b}
+.nb-games{background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff}
+.screen{background:var(--card);border-radius:20px;padding:20px;box-shadow:var(--shadow);min-height:380px}
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.unit-card{background:linear-gradient(135deg,var(--c1),var(--c2));border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
+.unit-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.15)}
+.unit-card .emoji{font-size:28px;margin-bottom:6px}
+.unit-card .uname{font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.unit-card .utopic{font-size:11px;color:rgba(255,255,255,0.9)}
+.lesson-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.back-btn{background:#f1f5f9;border:none;border-radius:10px;padding:8px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px}
+.back-btn:hover{background:#e2e8f0}
+.lesson-title{font-family:'Fredoka One',cursive;font-size:20px;color:#4338CA}
+.lesson-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.ltab{padding:7px 14px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;background:#fff;transition:.2s}
+.ltab.active{background:#4338CA;color:#fff;border-color:#4338CA}
+.ltab:hover:not(.active){background:#f1f5f9}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.vocab-card{border-radius:14px;border:2px solid #e2e8f0;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;background:#fff}
+.vocab-card:hover{transform:scale(1.04);border-color:#6366F1;box-shadow:0 4px 14px rgba(99,102,241,0.2)}
+.vocab-card .vemoji{font-size:36px;margin-bottom:6px}
+.vocab-card .vword{font-weight:800;font-size:14px;color:#1e293b}
+.vocab-card .vtrans{font-size:12px;color:#64748b;margin-top:2px}
+.vocab-card .vphon{font-size:11px;color:#94a3b8}
+.vocab-card.flipped{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-color:#6366F1}
+.vocab-card.flipped .vword,.vocab-card.flipped .vtrans,.vocab-card.flipped .vphon{color:#fff}
+.quiz-box{background:#f8fafc;border-radius:16px;padding:20px}
+.quiz-q{font-size:16px;font-weight:700;color:#1e293b;margin-bottom:16px;text-align:center}
+.quiz-emoji{font-size:56px;text-align:center;margin-bottom:12px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-opt{padding:12px;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;text-align:center;transition:.2s;background:#fff}
+.quiz-opt:hover{border-color:#6366F1;background:#f1f5ff}
+.quiz-opt.correct{background:#d1fae5;border-color:#10B981;color:#065F46}
+.quiz-opt.wrong{background:#fee2e2;border-color:#EF4444;color:#991B1B}
+.progress-bar{height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:16px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:4px;transition:.3s}
+.score-display{text-align:center;font-size:14px;font-weight:700;color:#64748b;margin-bottom:12px}
+.listen-section{text-align:center}
+.big-emoji{font-size:80px;margin:10px 0}
+.word-display{font-family:'Fredoka One',cursive;font-size:36px;color:#4338CA;margin:8px 0}
+.phonetic{font-size:16px;color:#64748b;margin-bottom:12px}
+.translation{font-size:18px;color:#1e293b;font-weight:700;margin-bottom:16px}
+.play-btn{background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s}
+.play-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(99,102,241,0.4)}
+.nav-arrows{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.arr-btn{background:#f1f5f9;border:none;border-radius:10px;padding:8px 20px;cursor:pointer;font-size:18px}
+.arr-btn:hover{background:#e2e8f0}
+.game-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.match-card{border-radius:12px;border:2px solid #e2e8f0;padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;min-height:70px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;background:#fff}
+.match-card:hover{border-color:#6366F1;background:#f8faff}
+.match-card.selected{background:#EEF2FF;border-color:#6366F1;color:#4338CA}
+.match-card.matched{background:#d1fae5;border-color:#10B981;color:#065F46}
+.match-card.wrong-shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.spell-area{text-align:center}
+.spell-word-display{display:flex;gap:6px;justify-content:center;margin:12px 0;flex-wrap:wrap}
+.spell-slot{width:38px;height:42px;border-bottom:3px solid #6366F1;display:flex;align-items:flex-end;justify-content:center;font-size:22px;font-weight:800;color:#4338CA;padding-bottom:2px}
+.letter-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.letter-btn{width:36px;height:36px;border-radius:8px;border:2px solid #e2e8f0;background:#fff;font-size:16px;font-weight:800;cursor:pointer;transition:.2s}
+.letter-btn:hover{background:#EEF2FF;border-color:#6366F1}
+.letter-btn:disabled{opacity:.4;cursor:not-allowed}
+.result-banner{text-align:center;padding:16px;border-radius:14px;margin-top:12px;font-size:16px;font-weight:700}
+.result-banner.win{background:#d1fae5;color:#065F46}
+.result-banner.lose{background:#fee2e2;color:#991B1B}
+.section-title{font-family:'Fredoka One',cursive;font-size:16px;color:#4338CA;margin-bottom:10px}
+.trace-area{border:2px dashed #c7d2fe;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px}
+.trace-letter{font-family:'Fredoka One',cursive;font-size:72px;color:#c7d2fe;margin:8px 0}
+.writing-input{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:16px;font-family:'Nunito',sans-serif;margin-bottom:8px;outline:none}
+.writing-input:focus{border-color:#6366F1}
+.submit-btn{background:linear-gradient(135deg,#10B981,#059669);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.abc-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.abc-card{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:10px;padding:8px 12px;text-align:center;cursor:pointer;color:#fff;min-width:48px;transition:.2s}
+.abc-card:hover{transform:scale(1.08)}
+.abc-letter{font-family:'Fredoka One',cursive;font-size:20px}
+.abc-word{font-size:10px;opacity:.9}
+.congrats{text-align:center;padding:20px}
+.congrats-emoji{font-size:60px;margin-bottom:8px}
+.congrats-title{font-family:'Fredoka One',cursive;font-size:28px;color:#4338CA;margin-bottom:8px}
+.congrats-sub{color:#64748b;font-size:14px}
+.try-again{background:linear-gradient(135deg,#FF6B6B,#C0392B);color:#fff;border:none;border-radius:12px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:12px}
+.sentence-box{background:#f1f5f9;border-radius:12px;padding:14px;margin-bottom:12px;font-size:15px;font-weight:700;color:#1e293b;line-height:1.8}
+.highlight{color:#4338CA;font-family:'Fredoka One',cursive;font-size:17px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.number-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.num-card{background:linear-gradient(135deg,#FF6B9D,#A855F7);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:.2s;color:#fff}
+.num-card:hover{transform:scale(1.05)}
+.num-big{font-family:'Fredoka One',cursive;font-size:24px}
+.num-word{font-size:11px;font-weight:700}
+.value-box{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:12px 16px;margin-bottom:12px;border-left:4px solid #F59E0B}
+.value-title{font-weight:800;color:#92400E;font-size:13px;margin-bottom:4px}
+.value-text{color:#78350F;font-size:13px}
+</style>
+
+<h2 class="sr-only">Phần mềm học Tiếng Anh - Family and Friends 1</h2>
+
+<div class="app">
+<div class="header">
+  <div>
+    <div class="header-title">🌟 Family & Friends 1</div>
+    <div class="header-sub">Tiếng Anh lớp 1 · 6 Units</div>
+  </div>
+  <div style="text-align:right">
+    <div class="stars-bar" id="stars-display">
+      <span>⭐</span><span id="score-count" style="color:#FFD93D;font-weight:800;font-size:14px">0 điểm</span>
+    </div>
+    <div style="color:rgba(255,255,255,0.8);font-size:11px;margin-top:2px" id="level-txt">Người mới bắt đầu</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn nb-units active" onclick="showPage('units')"><span class="ico">📚</span>Bài học</button>
+  <button class="nav-btn nb-listen" onclick="showPage('listen')"><span class="ico">👂</span>Nghe</button>
+  <button class="nav-btn nb-speak" onclick="showPage('speak')"><span class="ico">🗣️</span>Nói</button>
+  <button class="nav-btn nb-write" onclick="showPage('write')"><span class="ico">✏️</span>Viết</button>
+  <button class="nav-btn nb-games" onclick="showPage('games')"><span class="ico">🎮</span>Trò chơi</button>
+</div>
+
+<div class="screen" id="main-screen">
+  <div id="page-units" class="tab-content active">
+    <div class="section-title">📚 Chọn bài học</div>
+    <div class="unit-grid" id="unit-grid"></div>
+  </div>
+
+  <div id="page-listen" class="tab-content">
+    <div class="section-title">👂 Luyện nghe từ vựng</div>
+    <div id="listen-unit-select"></div>
+    <div id="listen-content" style="display:none">
+      <div class="lesson-header">
+        <button class="back-btn" onclick="document.getElementById('listen-content').style.display='none';document.getElementById('listen-unit-select').style.display='block'">← Quay lại</button>
+        <span id="listen-unit-title" style="font-weight:800;color:#3A86FF"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="listen-progress" style="width:0%"></div></div>
+      <div class="score-display" id="listen-idx-display">Từ 1 / 5</div>
+      <div class="listen-section">
+        <div class="big-emoji" id="listen-emoji">🍎</div>
+        <div class="word-display" id="listen-word">apple</div>
+        <div class="phonetic" id="listen-phon">/ˈæpəl/</div>
+        <div class="translation" id="listen-trans">quả táo</div>
+        <button class="play-btn" onclick="speakWord()">🔊 Nghe phát âm</button>
+      </div>
+      <div class="nav-arrows">
+        <button class="arr-btn" onclick="listenNav(-1)">◀</button>
+        <button class="arr-btn" onclick="listenNav(1)">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-speak" class="tab-content">
+    <div class="section-title">🗣️ Luyện nói - Câu mẫu</div>
+    <div id="speak-content"></div>
+  </div>
+
+  <div id="page-write" class="tab-content">
+    <div class="section-title">✏️ Luyện viết chữ cái</div>
+    <div class="abc-row" id="abc-row"></div>
+    <div id="write-area"></div>
+  </div>
+
+  <div id="page-games" class="tab-content">
+    <div class="section-title">🎮 Trò chơi</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:linear-gradient(135deg,#FF6B6B,#FF8E53);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('match')">
+        <div style="font-size:32px">🃏</div>
+        <div style="color:#fff;font-weight:800;font-size:14px">Ghép thẻ</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:11px">Nối từ với hình</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#4ECDC4,#44A08D);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('spell')">
+        <div style="font-size:32px">🔤</div>
+        <div style="color:#fff;font-weight:800;font-size:14px">Đánh vần</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:11px">Sắp xếp chữ cái</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#A78BFA,#6D28D9);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('quiz')">
+        <div style="font-size:32px">❓</div>
+        <div style="color:#fff;font-weight:800;font-size:14px">Trắc nghiệm</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:11px">Chọn đáp án đúng</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#F9A8D4,#EC4899);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('number')">
+        <div style="font-size:32px">🔢</div>
+        <div style="color:#fff;font-weight:800;font-size:14px">Học số</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:11px">1 đến 10</div>
+      </div>
+    </div>
+    <div id="game-area"></div>
+  </div>
+
+  <div id="page-unit-detail" class="tab-content">
+    <div class="lesson-header">
+      <button class="back-btn" id="back-from-unit" onclick="showPage('units')">← Bài học</button>
+      <span class="lesson-title" id="unit-detail-title"></span>
+    </div>
+    <div class="lesson-tabs" id="unit-lesson-tabs"></div>
+    <div id="unit-lesson-content"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const UNITS=[
+{id:'starter',name:'Starter',topic:'Xin chào!',emoji:'👋',c1:'#FF9A9E',c2:'#FAD0C4',
+vocab:[
+{e:'👧',w:'Rosy',p:'/ˈroʊzi/',t:'Rosy (tên nhân vật)'},
+{e:'👦',w:'Tim',p:'/tɪm/',t:'Tim (tên nhân vật)'},
+{e:'👶',w:'Billy',p:'/ˈbɪli/',t:'Billy (tên nhân vật)'},
+{e:'🤝',w:'hello',p:'/həˈloʊ/',t:'xin chào'},
+{e:'👋',w:'goodbye',p:'/ˌɡʊdˈbaɪ/',t:'tạm biệt'},
+],
+grammar:["What's your name? → I'm Rosy.","Hello! / Goodbye!","Listen to the teacher.","Stand up. / Sit down."],
+letters:[{l:'A',w:'apple',e:'🍎'},{l:'B',w:'bat',e:'🏏'}],
+value:'Chào hỏi mọi người',
+numbers:[{n:1,w:'one'},{n:2,w:'two'}]},
+
+{id:'unit1',name:'Unit 1',topic:'Màu sắc',emoji:'🎨',c1:'#A1C4FD',c2:'#C2E9FB',
+vocab:[
+{e:'🔴',w:'red',p:'/red/',t:'màu đỏ'},
+{e:'💚',w:'green',p:'/ɡriːn/',t:'màu xanh lá'},
+{e:'💙',w:'blue',p:'/bluː/',t:'màu xanh dương'},
+{e:'🖤',w:'black',p:'/blæk/',t:'màu đen'},
+{e:'💛',w:'yellow',p:'/ˈjeloʊ/',t:'màu vàng'},
+],
+grammar:["What color is it?","It's green.","It's red.","What color is it? → It's blue."],
+letters:[{l:'C',w:'cat',e:'🐱'},{l:'D',w:'dog',e:'🐶'}],
+value:'Giữ gìn sạch sẽ và gọn gàng',
+numbers:[{n:3,w:'three'},{n:4,w:'four'}]},
+
+{id:'unit2',name:'Unit 2',topic:'Đồ dùng học tập',emoji:'🎒',c1:'#FFECD2',c2:'#FCB69F',
+vocab:[
+{e:'🪑',w:'chair',p:'/tʃer/',t:'cái ghế'},
+{e:'🪵',w:'desk',p:'/desk/',t:'cái bàn học'},
+{e:'🖍️',w:'crayon',p:'/ˈkreɪɑːn/',t:'bút sáp màu'},
+{e:'✏️',w:'pencil',p:'/ˈpensl/',t:'bút chì'},
+{e:'📓',w:'notebook',p:'/ˈnoʊtbʊk/',t:'quyển vở'},
+],
+grammar:["What's this?","It's a notebook.","It's a desk.","What's this? → It's a chair."],
+letters:[{l:'E',w:'egg',e:'🥚'},{l:'F',w:'fish',e:'🐟'}],
+value:'Chơi đùa có phép tắc',
+numbers:[{n:5,w:'five'},{n:6,w:'six'}]},
+
+{id:'unit3',name:'Unit 3',topic:'Đồ chơi',emoji:'🧸',c1:'#D4FC79',c2:'#96E6A1',
+vocab:[
+{e:'✈️',w:'plane',p:'/pleɪn/',t:'máy bay'},
+{e:'🪆',w:'puppet',p:'/ˈpʌpɪt/',t:'con rối'},
+{e:'🤖',w:'robot',p:'/ˈroʊbɑːt/',t:'người máy'},
+{e:'🎈',w:'balloon',p:'/bəˈluːn/',t:'quả bóng bay'},
+{e:'🧸',w:'teddy bear',p:'/ˈtedi ber/',t:'gấu bông'},
+],
+grammar:["Is it a plane?","Yes, it is.","No, it isn't.","Is it a balloon? → Yes, it is!"],
+letters:[{l:'G',w:'girl',e:'👧'},{l:'H',w:'hat',e:'🎩'},{l:'I',w:'insect',e:'🐛'}],
+value:'Tử tế với mọi người',
+numbers:[{n:7,w:'seven'},{n:8,w:'eight'}]},
+
+{id:'unit4',name:'Unit 4',topic:'Động vật',emoji:'🦁',c1:'#F093FB',c2:'#F5576C',
+vocab:[
+{e:'🐦',w:'bird',p:'/bɜːrd/',t:'con chim'},
+{e:'🐻',w:'bear',p:'/ber/',t:'con gấu'},
+{e:'🦛',w:'hippo',p:'/ˈhɪpoʊ/',t:'con hà mã'},
+{e:'🐊',w:'crocodile',p:'/ˈkrɑːkədaɪl/',t:'con cá sấu'},
+{e:'🐯',w:'tiger',p:'/ˈtaɪɡər/',t:'con hổ'},
+],
+grammar:["What are they?","They're bears.","They're hippos.","What are they? → They're tigers!"],
+letters:[{l:'J',w:'juice',e:'🧃'},{l:'K',w:'key',e:'🔑'},{l:'L',w:'lion',e:'🦁'},{l:'M',w:'mango',e:'🥭'}],
+value:'Yêu quý động vật',
+numbers:[{n:9,w:'nine'},{n:10,w:'ten'}]},
+
+{id:'unit5',name:'Unit 5',topic:'Cơ thể',emoji:'🧍',c1:'#4FACFE',c2:'#00F2FE',
+vocab:[
+{e:'💪',w:'arms',p:'/ɑːrmz/',t:'cánh tay (số nhiều)'},
+{e:'👃',w:'nose',p:'/noʊz/',t:'mũi'},
+{e:'😊',w:'face',p:'/feɪs/',t:'gương mặt'},
+{e:'🦵',w:'legs',p:'/leɡz/',t:'chân (số nhiều)'},
+{e:'🤚',w:'fingers',p:'/ˈfɪŋɡərz/',t:'ngón tay (số nhiều)'},
+{e:'👐',w:'hands',p:'/hændz/',t:'bàn tay (số nhiều)'},
+],
+grammar:["This is my nose.","These are my arms.","This is my face.","These are my hands."],
+letters:[],
+value:'Bảo vệ cơ thể dưới nắng',
+numbers:[]},
+
+{id:'unit6',name:'Unit 6',topic:'Hộp cơm',emoji:'🍱',c1:'#43E97B',c2:'#38F9D7',
+vocab:[
+{e:'🎒',w:'lunchbox',p:'/ˈlʌntʃbɑːks/',t:'hộp cơm trưa'},
+{e:'🥪',w:'sandwich',p:'/ˈsænwɪtʃ/',t:'bánh mì kẹp'},
+{e:'🥤',w:'drink',p:'/drɪŋk/',t:'thức uống'},
+{e:'🍌',w:'banana',p:'/bəˈnænə/',t:'quả chuối'},
+{e:'🍪',w:'cookie',p:'/ˈkʊki/',t:'bánh quy'},
+{e:'🍐',w:'pear',p:'/per/',t:'quả lê'},
+],
+grammar:["I have a pear.","I have an apple.","I have two sandwiches.","I have a banana."],
+letters:[],
+value:'Chia sẻ với bạn bè',
+numbers:[]}
+];
+
+const ALL_VOCAB=UNITS.flatMap(u=>u.vocab.map(v=>({...v,unit:u.name})));
+const NUMBERS=[
+{n:1,w:'one',e:'1️⃣'},{n:2,w:'two',e:'2️⃣'},{n:3,w:'three',e:'3️⃣'},{n:4,w:'four',e:'4️⃣'},{n:5,w:'five',e:'5️⃣'},
+{n:6,w:'six',e:'6️⃣'},{n:7,w:'seven',e:'7️⃣'},{n:8,w:'eight',e:'8️⃣'},{n:9,w:'nine',e:'9️⃣'},{n:10,w:'ten',e:'🔟'}
+];
+
+let totalScore=0, currentUnit=null, listenIdx=0, listenVocab=[], currentPage='units';
+
+function addScore(pts){
+totalScore+=pts;
+document.getElementById('score-count').textContent=totalScore+' điểm';
+const lvl=totalScore<50?'Người mới bắt đầu':totalScore<150?'Đang tiến bộ':'Siêu sao ⭐';
+document.getElementById('level-txt').textContent=lvl;
+}
+
+function showPage(page){
+currentPage=page;
+document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+document.getElementById('page-'+page).classList.add('active');
+document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+const map={units:'nb-units',listen:'nb-listen',speak:'nb-speak',write:'nb-write',games:'nb-games','unit-detail':'nb-units'};
+if(map[page]) document.querySelector('.'+map[page])?.classList.add('active');
+if(page==='write') buildWritePage();
+if(page==='speak') buildSpeakPage();
+if(page==='listen') buildListenSelect();
+}
+
+function buildUnits(){
+const g=document.getElementById('unit-grid');
+g.innerHTML=UNITS.map(u=>`<div class="unit-card" style="--c1:${u.c1};--c2:${u.c2}" onclick="openUnit('${u.id}')">
+<div class="emoji">${u.emoji}</div>
+<div class="uname">${u.name}: Hello!</div>
+<div class="utopic">${u.topic}</div>
+</div>`).join('');
+}
+
+function openUnit(id){
+currentUnit=UNITS.find(u=>u.id===id);
+if(!currentUnit)return;
+showPage('unit-detail');
+document.getElementById('unit-detail-title').textContent=currentUnit.emoji+' '+currentUnit.name+' - '+currentUnit.topic;
+const tabs=['📖 Từ vựng','🎵 Ngữ pháp','🔢 Số','🔤 Chữ cái','💡 Giá trị','✅ Kiểm tra'];
+const ids=['vtab','gtab','ntab','ltab2','vatab','qtab'];
+document.getElementById('unit-lesson-tabs').innerHTML=tabs.map((t,i)=>`<button class="ltab ${i===0?'active':''}" onclick="switchLessonTab('${ids[i]}')">${t}</button>`).join('');
+renderLessonTab('vtab');
+}
+
+function switchLessonTab(id){
+document.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+renderLessonTab(id);
+}
+
+function renderLessonTab(id){
+const c=document.getElementById('unit-lesson-content');
+if(!currentUnit)return;
+if(id==='vtab'){
+c.innerHTML=`<div class="vocab-grid">${currentUnit.vocab.map((v,i)=>`
+<div class="vocab-card" onclick="flipCard(this,'${v.w}')" id="vc${i}">
+<div class="vemoji">${v.e}</div>
+<div class="vword">${v.w}</div>
+<div class="vphon">${v.p}</div>
+<div class="vtrans">${v.t}</div>
+</div>`).join('')}</div>
+<p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:10px">👆 Bấm vào thẻ để nghe & lật thẻ!</p>`;
+}else if(id==='gtab'){
+c.innerHTML=`<div style="margin-bottom:12px">${currentUnit.grammar.map(g=>`
+<div class="sentence-box">💬 <span class="highlight">${g.split('→')[0]}</span>${g.includes('→')?'<br>→ <span style="color:#059669;font-weight:700">'+g.split('→')[1]+'</span>':''}</div>`).join('')}</div>
+<p style="color:#64748b;font-size:13px;text-align:center">Bấm vào câu để nghe phát âm</p>`;
+c.querySelectorAll('.sentence-box').forEach(b=>b.addEventListener('click',()=>{
+const txt=b.textContent.replace('💬','').trim();
+speak(txt);addScore(2);
+}));
+}else if(id==='ntab'){
+const nums=currentUnit.numbers.length?currentUnit.numbers:NUMBERS;
+c.innerHTML=`<div class="number-row">${nums.map(n=>`
+<div class="num-card" onclick="speak('${n.n} ${n.w}');addScore(2)">
+<div class="num-big">${n.n}</div>
+<div class="num-word">${n.w}</div>
+</div>`).join('')}</div>
+<div style="background:#EEF2FF;border-radius:12px;padding:14px;text-align:center">
+<div style="font-size:32px">🔢</div>
+<div style="font-weight:700;color:#4338CA;font-size:14px;margin-top:6px">Bấm vào số để nghe đọc!</div>
+</div>`;
+}else if(id==='ltab2'){
+if(!currentUnit.letters.length){
+c.innerHTML=`<div style="text-align:center;padding:24px;color:#94a3b8">
+<div style="font-size:40px">📝</div>
+<div style="font-size:14px;margin-top:8px">Unit này ôn tập chữ cái từ các bài trước</div>
+<button class="play-btn" onclick="showPage('write')" style="margin-top:12px">Đến trang luyện viết →</button>
+</div>`;return;
+}
+c.innerHTML=`<div class="vocab-grid">${currentUnit.letters.map(l=>`
+<div class="vocab-card" onclick="speak('${l.l} for ${l.w}');addScore(2)">
+<div class="vemoji">${l.e}</div>
+<div class="vword" style="font-size:20px;font-family:'Fredoka One',cursive">${l.l}${l.l.toLowerCase()}</div>
+<div class="vtrans">${l.w}</div>
+</div>`).join('')}</div>`;
+}else if(id==='vatab'){
+c.innerHTML=`<div class="value-box">
+<div class="value-title">💡 Bài học về giá trị sống</div>
+<div class="value-text">${currentUnit.value}</div>
+</div>
+<div style="background:#FFF9C4;border-radius:12px;padding:14px">
+<div style="font-weight:700;color:#92400E;font-size:13px;margin-bottom:8px">🌟 Bạn đã làm tốt chưa?</div>
+${['Tôi luôn chào hỏi khi gặp người lớn','Tôi giữ gìn đồ dùng học tập sạch sẽ','Tôi chia sẻ với bạn bè'].map(s=>`
+<label style="display:flex;gap:8px;align-items:center;margin-bottom:8px;cursor:pointer">
+<input type="checkbox" onchange="addScore(5)" style="width:18px;height:18px">
+<span style="font-size:13px;color:#78350F">${s}</span>
+</label>`).join('')}
+</div>`;
+}else if(id==='qtab'){
+buildQuiz(currentUnit.vocab);
+}
+}
+
+function flipCard(el,word){
+el.classList.toggle('flipped');
+speak(word);addScore(3);
+}
+
+let quizState={questions:[],current:0,correct:0};
+function buildQuiz(vocab){
+const c=document.getElementById('unit-lesson-content');
+if(!vocab||!vocab.length){c.innerHTML='<p>Chưa có câu hỏi</p>';return;}
+const q=shuffle([...vocab]).slice(0,Math.min(5,vocab.length));
+quizState={questions:q,current:0,correct:0};
+showQuizQ(c);
+}
+
+function showQuizQ(c){
+if(!c)c=document.getElementById('unit-lesson-content');
+const qs=quizState;
+if(qs.current>=qs.questions.length){
+c.innerHTML=`<div class="congrats"><div class="congrats-emoji">${qs.correct===qs.questions.length?'🏆':'⭐'}</div>
+<div class="congrats-title">${qs.correct===qs.questions.length?'Xuất sắc!':'Cố lên nhé!'}</div>
+<div class="congrats-sub">Đúng ${qs.correct}/${qs.questions.length} câu!</div>
+<button class="try-again" onclick="buildQuiz(currentUnit.vocab)">Làm lại</button></div>`;
+addScore(qs.correct*10);return;
+}
+const q=qs.questions[qs.current];
+const pool=ALL_VOCAB.filter(v=>v.w!==q.w);
+const wrong=shuffle(pool).slice(0,3).map(v=>v.t);
+const opts=shuffle([q.t,...wrong]);
+c.innerHTML=`<div class="quiz-box">
+<div class="progress-bar"><div class="progress-fill" style="width:${(qs.current/qs.questions.length)*100}%"></div></div>
+<div class="score-display">Câu ${qs.current+1}/${qs.questions.length} · Đúng: ${qs.correct}</div>
+<div class="quiz-emoji">${q.e}</div>
+<div class="quiz-q">"${q.w}" có nghĩa là gì?</div>
+<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkQuiz(this,'${o}','${q.t}')">${o}</div>`).join('')}</div>
+</div>`;
+}
+
+function checkQuiz(el,chosen,correct){
+document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+if(chosen===correct){
+el.classList.add('correct');
+quizState.correct++;addScore(10);
+setTimeout(()=>showQuizQ(),800);
+}else{
+el.classList.add('wrong');
+document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
+setTimeout(()=>showQuizQ(),1200);
+}
+quizState.current++;
+}
+
+function buildListenSelect(){
+const d=document.getElementById('listen-unit-select');
+d.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">
+${UNITS.map(u=>`<div style="background:linear-gradient(135deg,${u.c1},${u.c2});border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="startListen('${u.id}')">
+<div style="font-size:24px">${u.emoji}</div>
+<div style="font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.3)">${u.name}</div>
+<div style="font-size:11px;color:rgba(255,255,255,0.9)">${u.topic}</div>
+</div>`).join('')}</div>`;
+}
+
+function startListen(uid){
+const u=UNITS.find(x=>x.id===uid);
+if(!u||!u.vocab.length)return;
+listenVocab=u.vocab;listenIdx=0;
+document.getElementById('listen-unit-select').style.display='none';
+document.getElementById('listen-content').style.display='block';
+document.getElementById('listen-unit-title').textContent=u.emoji+' '+u.name+' - '+u.topic;
+updateListenDisplay();
+}
+
+function updateListenDisplay(){
+const v=listenVocab[listenIdx];
+document.getElementById('listen-emoji').textContent=v.e;
+document.getElementById('listen-word').textContent=v.w;
+document.getElementById('listen-phon').textContent=v.p;
+document.getElementById('listen-trans').textContent=v.t;
+document.getElementById('listen-progress').style.width=((listenIdx+1)/listenVocab.length*100)+'%';
+document.getElementById('listen-idx-display').textContent=`Từ ${listenIdx+1} / ${listenVocab.length}`;
+speak(v.w);
+}
+
+function listenNav(d){
+listenIdx=(listenIdx+d+listenVocab.length)%listenVocab.length;
+updateListenDisplay();addScore(1);
+}
+function speakWord(){const v=listenVocab[listenIdx];speak(v.w);addScore(1);}
+
+function buildSpeakPage(){
+const d=document.getElementById('speak-content');
+const phrases=UNITS.flatMap(u=>u.grammar);
+d.innerHTML=`<div style="margin-bottom:10px;color:#64748b;font-size:13px">Bấm vào câu để nghe - cùng luyện nói theo nhé! 🎤</div>
+${phrases.map(p=>`<div class="sentence-box" onclick="speak('${p.replace(/'/g,"\\'")}');addScore(2)" style="cursor:pointer">
+💬 <span class="highlight">${p.split('→')[0]}</span>${p.includes('→')?'<br>→ <span style="color:#059669;font-weight:700">'+p.split('→')[1]+'</span>':''}
+</div>`).join('')}`;
+}
+
+const ABC_DATA=[
+{l:'A',w:'apple',e:'🍎'},{l:'B',w:'bat',e:'🏏'},{l:'C',w:'cat',e:'🐱'},
+{l:'D',w:'dog',e:'🐶'},{l:'E',w:'egg',e:'🥚'},{l:'F',w:'fish',e:'🐟'},
+{l:'G',w:'girl',e:'👧'},{l:'H',w:'hat',e:'🎩'},{l:'I',w:'insect',e:'🐛'},
+{l:'J',w:'juice',e:'🧃'},{l:'K',w:'kangaroo',e:'🦘'},{l:'L',w:'lion',e:'🦁'},
+{l:'M',w:'mango',e:'🥭'}
+];
+
+function buildWritePage(){
+const r=document.getElementById('abc-row');
+r.innerHTML=ABC_DATA.map(a=>`<div class="abc-card" onclick="showLetterWrite('${a.l}','${a.w}','${a.e}')">
+<div class="abc-letter">${a.l}${a.l.toLowerCase()}</div>
+<div class="abc-word">${a.w}</div>
+</div>`).join('');
+showLetterWrite('A','apple','🍎');
+}
+
+function showLetterWrite(l,w,e){
+const d=document.getElementById('write-area');
+const shuffled=shuffle([...w.split('')].concat(shuffle('abcdefghijklm'.split('')))).slice(0,w.length+4);
+d.innerHTML=`<div class="trace-area">
+<div style="color:#94a3b8;font-size:12px;margin-bottom:4px">Chữ cái hôm nay:</div>
+<div class="trace-letter">${l} ${l.toLowerCase()}</div>
+<div style="font-size:28px;margin-bottom:4px">${e}</div>
+<div style="font-weight:800;font-size:15px;color:#4338CA">${w}</div>
+</div>
+<div style="margin-bottom:12px">
+<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:6px">📝 Gõ từ vào đây:</div>
+<input class="writing-input" id="writ-input" placeholder="Gõ '${w}' ở đây..." oninput="checkWriting(this,'${w}')">
+<div id="writ-result" style="height:24px;font-weight:700;font-size:14px;text-align:center"></div>
+</div>
+<div>
+<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:6px">🔤 Ví dụ câu:</div>
+<div class="sentence-box" onclick="speak('${l} for ${w}');addScore(1)" style="cursor:pointer">
+<span class="highlight">${l.toUpperCase()}</span> for <span class="highlight">${w}</span> ${e}
+</div>
+</div>`;
+}
+
+function checkWriting(inp,word){
+const v=inp.value.toLowerCase().trim();
+const r=document.getElementById('writ-result');
+if(v===word){r.textContent='✅ Đúng rồi! Xuất sắc!';r.style.color='#059669';addScore(15);speak('Excellent!');}
+else if(word.startsWith(v)&&v.length>0){r.textContent='👍 Tiếp tục nào...';r.style.color='#F59E0B';}
+else if(v.length>0){r.textContent='❌ Thử lại nhé!';r.style.color='#EF4444';}
+else{r.textContent='';}
+}
+
+let gameState={};
+function startGame(type){
+const area=document.getElementById('game-area');
+if(type==='match'){
+const pool=shuffle(ALL_VOCAB).slice(0,4);
+const cards=[...pool.map(v=>({id:v.w,show:v.e,type:'pic'})),...pool.map(v=>({id:v.w,show:v.w,type:'word'}))];
+const shuffled=shuffle(cards);
+gameState={type:'match',selected:null,matched:[],items:shuffled};
+area.innerHTML=`<div style="margin-bottom:10px;font-weight:700;color:#4338CA;font-size:14px">Ghép hình với từ tương ứng!</div>
+<div class="game-grid" id="match-grid">${shuffled.map((c,i)=>`<div class="match-card" id="mc${i}" onclick="matchClick(${i})">${c.show}</div>`).join('')}</div>
+<div id="match-msg" style="text-align:center;margin-top:8px;font-weight:700;font-size:14px"></div>`;
+}else if(type==='spell'){
+const v=shuffle(ALL_VOCAB)[0];
+const letters=shuffle(v.w.split('').concat(shuffle('aeiou'.split(''))).slice(0,v.w.length+3));
+gameState={type:'spell',word:v,input:[],letters};
+area.innerHTML=`<div class="spell-area">
+<div style="font-size:40px;margin-bottom:6px">${v.e}</div>
+<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:10px">Sắp xếp chữ cái để tạo thành từ:</div>
+<div class="spell-word-display" id="spell-slots">${v.w.split('').map(()=>`<div class="spell-slot"></div>`).join('')}</div>
+<div class="letter-btns">${letters.map((l,i)=>`<button class="letter-btn" id="lb${i}" onclick="addLetter(${i},'${l}')">${l}</button>`).join('')}</div>
+<button class="arr-btn" onclick="startGame('spell')" style="margin-right:8px">🔄 Mới</button>
+<div id="spell-result" class="result-banner" style="display:none"></div>
+</div>`;
+}else if(type==='quiz'){
+const pool=shuffle(ALL_VOCAB).slice(0,5);
+quizState={questions:pool,current:0,correct:0};
+area.innerHTML=`<div id="game-quiz-inner"></div>`;
+showGameQuiz();
+}else if(type==='number'){
+area.innerHTML=`<div style="margin-bottom:10px;font-weight:700;color:#4338CA;font-size:14px">🔢 Học số từ 1-10</div>
+<div class="number-row" style="grid-template-columns:repeat(5,1fr)">${NUMBERS.map(n=>`
+<div class="num-card" onclick="speak('${n.w}');addScore(2)" style="cursor:pointer">
+<div class="num-big">${n.e}</div>
+<div class="num-word">${n.w}</div>
+</div>`).join('')}</div>
+<div style="margin-top:12px">
+<div style="font-weight:700;font-size:14px;color:#4338CA;margin-bottom:8px">❓ Đố vui: Click đáp án đúng!</div>
+<div id="num-quiz"></div>
+</div>`;
+buildNumQuiz();
+}
+}
+
+function buildNumQuiz(){
+const q=NUMBERS[Math.floor(Math.random()*NUMBERS.length)];
+const wrongs=shuffle(NUMBERS.filter(n=>n.n!==q.n)).slice(0,3).map(n=>n.w);
+const opts=shuffle([q.w,...wrongs]);
+document.getElementById('num-quiz').innerHTML=`<div style="font-size:40px;text-align:center;margin-bottom:8px">${q.e} (${q.n})</div>
+<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkNumQuiz(this,'${o}','${q.w}')">${o}</div>`).join('')}</div>`;
+}
+
+function checkNumQuiz(el,chosen,correct){
+document.querySelectorAll('#num-quiz .quiz-opt').forEach(b=>b.style.pointerEvents='none');
+if(chosen===correct){el.classList.add('correct');addScore(10);setTimeout(buildNumQuiz,800);}
+else{el.classList.add('wrong');document.querySelectorAll('#num-quiz .quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});setTimeout(buildNumQuiz,1200);}
+}
+
+function showGameQuiz(){
+const area=document.getElementById('game-quiz-inner');
+const qs=quizState;
+if(qs.current>=qs.questions.length){
+area.innerHTML=`<div class="congrats"><div class="congrats-emoji">${qs.correct===qs.questions.length?'🏆':'⭐'}</div>
+<div class="congrats-title">Kết quả: ${qs.correct}/${qs.questions.length}</div>
+<button class="try-again" onclick="startGame('quiz')">Chơi lại</button></div>`;
+addScore(qs.correct*10);return;
+}
+const q=qs.questions[qs.current];
+const wrong=shuffle(ALL_VOCAB.filter(v=>v.w!==q.w)).slice(0,3).map(v=>v.t);
+const opts=shuffle([q.t,...wrong]);
+area.innerHTML=`<div class="quiz-box">
+<div class="progress-bar"><div class="progress-fill" style="width:${(qs.current/qs.questions.length)*100}%"></div></div>
+<div class="score-display">Câu ${qs.current+1}/${qs.questions.length}</div>
+<div class="quiz-emoji">${q.e}</div>
+<div class="quiz-q">"${q.w}" nghĩa là gì?</div>
+<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkGameQuiz(this,'${o}','${q.t}')">${o}</div>`).join('')}</div>
+</div>`;
+}
+
+function checkGameQuiz(el,chosen,correct){
+document.querySelectorAll('#game-quiz-inner .quiz-opt').forEach(b=>b.style.pointerEvents='none');
+if(chosen===correct){el.classList.add('correct');quizState.correct++;addScore(10);setTimeout(()=>{quizState.current++;showGameQuiz();},800);}
+else{el.classList.add('wrong');document.querySelectorAll('#game-quiz-inner .quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});setTimeout(()=>{quizState.current++;showGameQuiz();},1200);}
+}
+
+function matchClick(idx){
+const gs=gameState;
+const item=gs.items[idx];
+const el=document.getElementById('mc'+idx);
+if(gs.matched.includes(item.id)||el.classList.contains('matched'))return;
+if(!gs.selected){
+gs.selected={idx,item};
+el.classList.add('selected');
+speak(item.type==='word'?item.show:'');
+}else{
+const prev=gs.selected;
+if(prev.idx===idx){gs.selected=null;el.classList.remove('selected');return;}
+if(prev.item.id===item.id){
+document.getElementById('mc'+prev.idx).classList.replace('selected','matched');
+el.classList.add('matched');
+gs.matched.push(item.id);
+gs.selected=null;addScore(15);
+document.getElementById('match-msg').textContent='✅ Đúng rồi! +15 điểm';
+if(gs.matched.length===gs.items.length/2){
+setTimeout(()=>{document.getElementById('match-msg').innerHTML='🏆 Xuất sắc! <button class="try-again" onclick="startGame(\'match\')">Chơi lại</button>';},500);
+}
+}else{
+el.classList.add('wrong-shake');
+document.getElementById('mc'+prev.idx).classList.remove('selected');
+document.getElementById('mc'+prev.idx).classList.add('wrong-shake');
+setTimeout(()=>{el.classList.remove('wrong-shake');document.getElementById('mc'+prev.idx).classList.remove('wrong-shake');},400);
+gs.selected=null;
+document.getElementById('match-msg').textContent='❌ Thử lại!';
+}
+}
+}
+
+function addLetter(idx,l){
+const gs=gameState;
+if(gs.input.length>=gs.word.w.length)return;
+gs.input.push({idx,l});
+document.getElementById('lb'+idx).disabled=true;
+const slots=document.querySelectorAll('.spell-slot');
+slots[gs.input.length-1].textContent=l;
+if(gs.input.length===gs.word.w.length){
+const typed=gs.input.map(x=>x.l).join('');
+const r=document.getElementById('spell-result');
+r.style.display='block';
+if(typed===gs.word.w){r.className='result-banner win';r.textContent='🎉 Đúng rồi! Tuyệt vời!';addScore(20);speak('Excellent!');}
+else{r.className='result-banner lose';r.textContent='❌ Sai rồi! Hãy thử lại nhé!';
+setTimeout(()=>{gs.input=[];document.querySelectorAll('.letter-btn').forEach(b=>b.disabled=false);document.querySelectorAll('.spell-slot').forEach(s=>s.textContent='');r.style.display='none';},1500);}
+}
+}
+
+function shuffle(arr){return arr.sort(()=>Math.random()-.5);}
+function speak(text){if('speechSynthesis'in window&&text){const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}}
+
+buildUnits();
+buildWritePage();
+</script>
