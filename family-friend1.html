@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family & Friends – Unit 1: What colour is it?</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#FF4757;--green:#2ED573;--blue:#1E90FF;--black:#2F3542;--white:#DDD;
+  --yellow:#FFC312;--pink:#FF6B9D;--orange:#FF8C00;--purple:#8B5CF6;
+  --bg:#FFF9F0;--card:#FFFFFF;--shadow:0 8px 32px rgba(0,0,0,0.12);--radius:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Baloo 2',cursive;background:var(--bg);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(circle at 20% 20%,rgba(255,71,87,.08) 0%,transparent 50%),
+             radial-gradient(circle at 80% 80%,rgba(30,144,255,.08) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+.container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px;}
+
+/* HEADER */
+.header{text-align:center;padding:28px 20px 8px;animation:bounceIn .8s ease;}
+.header h1{font-size:clamp(26px,5vw,44px);font-weight:800;
+  background:linear-gradient(135deg,#FF4757,#FF8C00,#FFC312);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
+.header p{font-size:17px;color:#666;margin-top:6px;}
+
+/* PROGRESS */
+.progress-wrap{background:#e8e8e8;border-radius:50px;height:12px;margin:14px 0;overflow:hidden;}
+.progress-bar{height:100%;background:linear-gradient(90deg,#FF4757,#FFC312);border-radius:50px;transition:width .6s ease;width:0%;}
+.progress-label{display:flex;justify-content:space-between;font-size:13px;color:#888;margin-top:4px;}
+
+/* TABS */
+.tabs{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap;justify-content:center;}
+.tab{padding:12px 22px;border:none;border-radius:50px;font-family:'Baloo 2',cursive;
+  font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:8px;}
+.tab.listen{background:#FFE5E8;color:#FF4757;}
+.tab.speak{background:#E5F6FF;color:#1E90FF;}
+.tab.read{background:#E8F9EE;color:#00B894;}
+.tab.write{background:#FFF3E0;color:#FF8C00;}
+.tab:hover,.tab.active{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
+.tab.listen.active{background:#FF4757;color:white;}
+.tab.speak.active{background:#1E90FF;color:white;}
+.tab.read.active{background:#00B894;color:white;}
+.tab.write.active{background:#FF8C00;color:white;}
+
+/* SECTION */
+.section{display:none;animation:fadeSlide .5s ease;}
+.section.active{display:block;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin-bottom:20px;}
+.section-title{font-size:21px;font-weight:800;color:#333;margin-bottom:5px;display:flex;align-items:center;gap:10px;}
+.section-subtitle{font-size:14px;color:#888;margin-bottom:22px;}
+
+/* COLOUR GRID */
+.colour-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;margin:12px 0;}
+.colour-item{border-radius:16px;padding:18px 10px;text-align:center;cursor:pointer;
+  transition:all .3s;border:3px solid transparent;}
+.colour-item:hover,.colour-item.selected{transform:scale(1.08);border-color:#FFC312;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);background:rgba(255,195,18,.12)!important;}
+.colour-item .swatch{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;
+  border:4px solid rgba(255,255,255,.7);box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.colour-item .cname{font-size:15px;font-weight:700;}
+.colour-item .cvi{font-size:12px;color:#aaa;margin-top:2px;}
+
+/* BUTTONS */
+.audio-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;
+  background:linear-gradient(135deg,#FF4757,#FF6B9D);color:white;border:none;border-radius:50px;
+  font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;cursor:pointer;
+  transition:all .3s;box-shadow:0 6px 20px rgba(255,71,87,.4);}
+.audio-btn:hover{transform:translateY(-2px);}
+.audio-btn.playing{background:linear-gradient(135deg,#00B894,#00CEC9);}
+.check-btn{padding:12px 26px;background:linear-gradient(135deg,#00B894,#00CEC9);color:white;
+  border:none;border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(0,184,148,.3);margin:8px 4px;}
+.check-btn:hover{transform:translateY(-2px);}
+.reset-btn{padding:12px 26px;background:#F8F9FA;color:#666;border:2px solid #e0e0e0;
+  border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .3s;margin:8px 4px;}
+.reset-btn:hover{background:#e0e0e0;}
+
+/* QUIZ */
+.quiz-q{background:linear-gradient(135deg,#667eea18,#764ba214);border-radius:16px;
+  padding:22px;text-align:center;margin:14px 0;}
+.quiz-q .q-text{font-size:21px;font-weight:800;color:#333;margin-bottom:8px;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.quiz-opt{padding:13px 18px;border:3px solid #e0e0e0;border-radius:14px;background:white;
+  font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;cursor:pointer;
+  transition:all .3s;display:flex;align-items:center;gap:10px;}
+.quiz-opt:hover{border-color:#1E90FF;background:#E5F6FF;transform:scale(1.03);}
+.quiz-opt.correct{border-color:#00B894;background:#E8F9EE;color:#00B894;animation:pulse .4s ease;}
+.quiz-opt.wrong{border-color:#FF4757;background:#FFF0F0;color:#FF4757;animation:shake .4s ease;}
+.opt-swatch{width:26px;height:26px;border-radius:50%;border:2px solid rgba(0,0,0,.1);flex-shrink:0;}
+.score-area{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0;}
+.score-badge{background:linear-gradient(135deg,#FFC312,#FF8C00);color:white;
+  padding:7px 18px;border-radius:50px;font-size:15px;font-weight:800;}
+.feedback{font-size:19px;animation:bounceIn .4s ease;}
+
+/* =========== SPEAK MIC =========== */
+.speak-word-card{border-radius:18px;padding:22px;margin:12px 0;border:2px solid;
+  transition:all .3s;}
+.speak-word-card .big-word{font-size:38px;font-weight:800;letter-spacing:2px;display:block;}
+.speak-word-card .phonetic{font-size:15px;color:#888;margin:4px 0 12px;}
+.speak-word-card .obj{font-size:13px;color:#aaa;margin-bottom:14px;}
+.speak-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+/* MIC BUTTON */
+.mic-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;
+  background:linear-gradient(135deg,#1E90FF,#0652DD);color:white;border:none;
+  border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(30,144,255,.4);}
+.mic-btn:hover{transform:translateY(-2px);}
+.mic-btn.recording{background:linear-gradient(135deg,#FF4757,#FF6B9D);
+  animation:micPulse .7s ease infinite;}
+.mic-btn.no-support{background:#ccc;cursor:not-allowed;box-shadow:none;}
+
+/* MIC RESULT BOX */
+.mic-result{margin-top:12px;padding:14px 18px;border-radius:14px;font-size:15px;font-weight:700;display:none;}
+.mic-result.show{display:block;animation:fadeSlide .4s ease;}
+.mic-result.ok{background:#E8F9EE;border:2px solid #00B894;color:#00B894;}
+.mic-result.partial{background:#FFF8E1;border:2px solid #FFC312;color:#E67E00;}
+.mic-result.fail{background:#FFF0F0;border:2px solid #FF4757;color:#FF4757;}
+
+/* LISTEN CARDS */
+.listen-card{background:linear-gradient(135deg,#FFF5F5,#FFF0F5);border-radius:14px;
+  padding:20px;margin:10px 0;border:2px solid #FFD5DC;display:flex;align-items:center;
+  gap:18px;cursor:pointer;transition:all .3s;}
+.listen-card:hover{transform:translateX(5px);border-color:#FF4757;}
+
+/* READ */
+.story-card{background:linear-gradient(135deg,#F0FFF4,#E8F9EE);border-radius:16px;
+  padding:26px;border:2px solid #B8E6C8;margin:12px 0;}
+.story-text{font-size:19px;line-height:2.2;color:#333;}
+.highlight{font-weight:800;padding:2px 8px;border-radius:8px;cursor:pointer;
+  transition:all .3s;display:inline-block;}
+.highlight:hover{transform:scale(1.12);}
+.col-red{background:#FFE5E7;color:#FF4757;}
+.col-green{background:#E5F9EC;color:#00894a;}
+.col-blue{background:#E5F0FF;color:#1E90FF;}
+.col-black{background:#F0F0F0;color:#2F3542;}
+.col-yellow{background:#FFF8E1;color:#c68000;}
+.col-pink{background:#FFE5F0;color:#FF6B9D;}
+.col-orange{background:#FFF3E0;color:#FF6500;}
+.col-purple{background:#F3E8FF;color:#8B5CF6;}
+.col-white{background:#F0F0F0;color:#555;}
+
+.match-word{padding:10px 18px;border:3px solid #e0e0e0;border-radius:12px;
+  background:white;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;user-select:none;}
+.match-word:hover{transform:scale(1.05);}
+.match-word.selected-mw{border-color:#1E90FF;background:#E5F6FF;}
+.match-word.matched-ok{border-color:#00B894;color:#00B894;background:#E8F9EE;}
+.match-color{width:50px;height:50px;border-radius:50%;border:3px solid #e0e0e0;cursor:pointer;
+  transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.match-color:hover,.match-color.selected-mc{border-color:#FFC312;transform:scale(1.12);
+  box-shadow:0 4px 14px rgba(0,0,0,.2);}
+.match-color.matched-ok{border-color:#00B894;box-shadow:0 4px 14px rgba(0,184,148,.35);}
+
+/* WRITE */
+.blank-input{border:none;border-bottom:3px solid #1E90FF;background:transparent;
+  font-family:'Baloo 2',cursive;font-size:19px;font-weight:700;color:#333;
+  width:130px;text-align:center;outline:none;padding:4px;}
+.blank-input:focus{border-color:#FFC312;}
+.blank-input.ok-ans{border-color:#00B894;color:#00B894;}
+.blank-input.bad-ans{border-color:#FF4757;color:#FF4757;}
+
+/* DRAG LETTERS */
+.drag-letters{display:flex;flex-wrap:wrap;gap:10px;padding:16px;background:#F8F9FA;
+  border-radius:12px;min-height:56px;}
+.drop-zone{display:flex;gap:10px;flex-wrap:wrap;border:3px dashed #BAE3FF;border-radius:12px;
+  padding:16px;min-height:60px;background:#F0FAFF;align-items:center;justify-content:center;}
+.drop-zone .ph{color:#BAE3FF;font-size:15px;font-weight:600;}
+.letter-tile{width:42px;height:42px;background:white;border:3px solid #1E90FF;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;
+  color:#1E90FF;cursor:grab;transition:all .2s;user-select:none;}
+.letter-tile:hover{transform:scale(1.1);background:#E5F6FF;}
+.letter-tile.in-zone{border-color:#00B894;color:#00B894;background:#E8F9EE;}
+
+/* COLOURING GAME */
+.colour-shape-row{background:#F8F9FA;border-radius:16px;padding:18px;margin:10px 0;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.shape-preview{width:56px;height:56px;border-radius:10px;border:3px solid #ccc;
+  display:flex;align-items:center;justify-content:center;font-size:30px;transition:all .4s;}
+
+/* DIALOGUE */
+.bubble-teacher{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.bubble-student{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;flex-direction:row-reverse;}
+.bubble{padding:13px 18px;font-size:17px;font-weight:700;color:#333;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.bubble.teacher{background:white;border-radius:0 16px 16px 16px;}
+.bubble.student{background:#E5F6FF;border-radius:16px 0 16px 16px;color:#1E90FF;}
+
+/* CELEBRATION */
+.celebration{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);
+  z-index:100;display:none;align-items:center;justify-content:center;}
+.celebration.show{display:flex;}
+.celeb-box{background:white;border-radius:24px;padding:38px;text-align:center;
+  animation:bounceIn .5s ease;max-width:340px;width:90%;}
+.celeb-emoji{font-size:68px;display:block;animation:spin 1s ease;}
+.celeb-title{font-size:30px;font-weight:800;color:#FF4757;margin:10px 0;}
+.celeb-sub{font-size:17px;color:#666;}
+.celeb-stars{font-size:30px;letter-spacing:8px;margin:10px 0;}
+.celeb-btn{margin-top:18px;padding:13px 30px;background:linear-gradient(135deg,#FFC312,#FF8C00);
+  color:white;border:none;border-radius:50px;font-family:'Baloo 2',cursive;
+  font-size:17px;font-weight:800;cursor:pointer;}
+.confetti-piece{position:fixed;width:10px;height:10px;top:-10px;animation:confettiFall linear infinite;}
+
+/* ANIMATIONS */
+@keyframes bounceIn{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes fadeSlide{0%{opacity:0;transform:translateY(18px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes micPulse{0%,100%{box-shadow:0 6px 20px rgba(255,71,87,.4)}50%{box-shadow:0 6px 32px rgba(255,71,87,.85)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div style="font-size:22px;letter-spacing:4px;">⭐ ⭐ ⭐</div>
+  <h1>🎨 What colour is it?</h1>
+  <p>Family and Friends Starter — Unit 1</p>
+</div>
+
+<div style="padding:0 8px;">
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-label"><span id="progressLabel">Bắt đầu học nào! 🚀</span><span id="scoreTotal">⭐ 0 điểm</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tab listen active" onclick="switchTab('listen')">👂 Nghe</button>
+  <button class="tab speak" onclick="switchTab('speak')">🗣️ Nói</button>
+  <button class="tab read" onclick="switchTab('read')">📖 Đọc</button>
+  <button class="tab write" onclick="switchTab('write')">✏️ Viết</button>
+</div>
+
+<!-- ======= NGHE ======= -->
+<div class="section active" id="section-listen">
+  <div class="card">
+    <div class="section-title">👂 Nghe từ vựng màu sắc</div>
+    <div class="section-subtitle">Nhấn vào từng màu để nghe phát âm — lặp lại to theo nhé! 🔊</div>
+    <div class="colour-grid" id="colourGrid"></div>
+    <p style="font-size:13px;color:#aaa;text-align:center;margin-top:8px;">💡 Nhấn vào swatch để nghe phát âm tiếng Anh</p>
+  </div>
+  <div class="card">
+    <div class="section-title">🎯 Nghe và chọn màu đúng!</div>
+    <div class="section-subtitle">Nhìn câu hỏi, nhấn 🔊 nghe rồi chọn đáp án! 🎮</div>
+    <div id="listenQuiz"></div>
+    <div class="score-area" style="margin-top:14px;">
+      <div class="score-badge" id="listenScore">0/0 đúng</div>
+      <span class="feedback" id="listenFeedback"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">🎵 Chant: What colour is it?</div>
+    <div class="section-subtitle">Nghe và hát theo bé nhé! 🎶</div>
+    <div style="background:linear-gradient(135deg,#FFF5F5,#FFF0F5);border-radius:16px;padding:22px;text-align:center;">
+      <div style="font-size:20px;font-weight:800;color:#333;line-height:2.2;">
+        🎵 "What colour is it?<br>
+        It's <span style="color:#FF4757">red</span>! It's <span style="color:#FF4757">red</span>! 🔴<br>
+        What colour is it?<br>
+        It's <span style="color:#1E90FF">blue</span>! It's <span style="color:#1E90FF">blue</span>! 🔵<br>
+        What colour is it?<br>
+        It's <span style="color:#00B894">green</span>! It's <span style="color:#00B894">green</span>! 🟢"
+      </div>
+      <button class="audio-btn" style="margin-top:14px;" onclick="singChant(this)">🎵 Hát cùng bé!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= NÓI ======= -->
+<div class="section" id="section-speak">
+  <div class="card">
+    <div class="section-title">🗣️ Luyện nói — Nghe mẫu & đọc to!</div>
+    <div class="section-subtitle">Nhấn 🔊 nghe mẫu → nhấn 🎤 đọc to → AI chấm phát âm tự động! 💪</div>
+    <div id="speakWords"></div>
+  </div>
+  <div class="card">
+    <div class="section-title">💬 Hội thoại: What colour is it?</div>
+    <div class="section-subtitle">Nhấn vào màu để trả lời câu hỏi của cô giáo! 👫</div>
+    <div id="dialogueArea"></div>
+  </div>
+  <div class="card">
+    <div class="section-title">🎨 Nhìn hình — nói to màu — nhấn đúng!</div>
+    <div class="section-subtitle">Nhìn emoji, nói to màu của nó rồi nhấn xác nhận! 🖌️</div>
+    <div id="namingGame"></div>
+  </div>
+</div>
+
+<!-- ======= ĐỌC ======= -->
+<div class="section" id="section-read">
+  <div class="card">
+    <div class="section-title">📖 Câu chuyện màu sắc</div>
+    <div class="section-subtitle">Nhấn vào các từ màu sắc để nghe và xem màu! 🌈</div>
+    <div class="story-card"><div class="story-text" id="storyText"></div></div>
+  </div>
+  <div class="card">
+    <div class="section-title">🔗 Nối từ với màu đúng!</div>
+    <div class="section-subtitle">Nhấn từ → nhấn màu tương ứng! 🎯</div>
+    <div id="matchingGame"></div>
+    <div class="score-area" style="margin-top:10px;">
+      <button class="check-btn" onclick="checkMatching()">✅ Kiểm tra</button>
+      <button class="reset-btn" onclick="resetMatching()">🔄 Làm lại</button>
+      <span class="feedback" id="matchFeedback"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">❓ Trắc nghiệm đọc hiểu</div>
+    <div class="section-subtitle">Đọc câu chuyện rồi chọn đáp án đúng! 📚</div>
+    <div id="readQuiz"></div>
+    <div class="score-area">
+      <div class="score-badge" id="readScore">0/0 đúng</div>
+      <span class="feedback" id="readFeedback"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ======= VIẾT ======= -->
+<div class="section" id="section-write">
+  <div class="card">
+    <div class="section-title">✏️ Điền tên màu vào chỗ trống</div>
+    <div class="section-subtitle">Nhìn swatch màu rồi gõ tên tiếng Anh vào ô trống! 📝</div>
+    <div id="fillBlanks"></div>
+    <div class="score-area" style="margin-top:14px;">
+      <button class="check-btn" onclick="checkFillBlanks()">✅ Kiểm tra</button>
+      <button class="reset-btn" onclick="resetFillBlanks()">🔄 Làm lại</button>
+      <span class="feedback" id="fillFeedback"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">🧩 Xếp chữ cái thành từ</div>
+    <div class="section-subtitle">Nhấn/kéo chữ cái để ghép thành từ màu sắc! 🔤</div>
+    <div id="wordBuilder"></div>
+  </div>
+  <div class="card">
+    <div class="section-title">🖼️ Tô màu theo hướng dẫn</div>
+    <div class="section-subtitle">Đọc hướng dẫn rồi chọn đúng màu để tô! 🎨</div>
+    <div id="coloringGame"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- CELEBRATION -->
+<div class="celebration" id="celebration">
+  <div class="celeb-box">
+    <span class="celeb-emoji" id="celebEmoji">🎉</span>
+    <div class="celeb-title" id="celebTitle">Tuyệt vời!</div>
+    <div class="celeb-sub" id="celebSub">Bé làm đúng rồi!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="celeb-btn" onclick="closeCeleb()">Tiếp tục! 🚀</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const COLOURS = [
+  {en:'red',   vi:'Đỏ',       hex:'#FF4757', emoji:'🔴', obj:'🍎 quả táo',   phonetic:'/rɛd/'},
+  {en:'green', vi:'Xanh lá',  hex:'#2ED573', emoji:'🟢', obj:'🌿 lá cây',    phonetic:'/ɡriːn/'},
+  {en:'blue',  vi:'Xanh dương',hex:'#1E90FF',emoji:'🔵', obj:'💧 nước biển', phonetic:'/bluː/'},
+  {en:'black', vi:'Đen',      hex:'#2F3542', emoji:'⚫', obj:'🐈‍⬛ mèo đen', phonetic:'/blæk/'},
+  {en:'white', vi:'Trắng',    hex:'#E0E0E0', emoji:'⚪', obj:'☁️ đám mây',   phonetic:'/waɪt/'},
+  {en:'yellow',vi:'Vàng',     hex:'#FFC312', emoji:'🟡', obj:'🌟 ngôi sao',  phonetic:'/ˈjɛloʊ/'},
+  {en:'pink',  vi:'Hồng',     hex:'#FF6B9D', emoji:'🩷', obj:'🌸 hoa anh đào',phonetic:'/pɪŋk/'},
+  {en:'orange',vi:'Cam',      hex:'#FF8C00', emoji:'🟠', obj:'🍊 quả cam',   phonetic:'/ˈɒrɪndʒ/'},
+];
+
+let totalScore=0, listenQScore=0, listenQTotal=0, readQScore=0, readQTotal=0;
+let currentListenQ=0, currentReadQ=0;
+let matchState={}, selectedMW=null;
+let wbIdx=0, draggedId=null;
+
+/* ============================================================
+   UTILS
+============================================================ */
+function speak(text,rate=0.85){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=rate;u.pitch=1.1;
+  window.speechSynthesis.speak(u);
+}
+function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
+function updateProgress(){
+  const steps=[listenQTotal>0?listenQScore/listenQTotal:0,readQTotal>0?readQScore/readQTotal:0];
+  const pct=Math.round(steps.reduce((a,b)=>a+b,0)/steps.length*100)||0;
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('scoreTotal').textContent='⭐ '+totalScore+' điểm';
+  const labs=['Bắt đầu học nào! 🚀','Đang học tốt! 💪','Tiến bộ rồi! 🌟','Gần xong rồi! 🔥','Xuất sắc! 🏆'];
+  document.getElementById('progressLabel').textContent=labs[Math.floor(pct/25)];
+}
+function celebrate(emoji,title,sub,stars){
+  document.getElementById('celebEmoji').textContent=emoji;
+  document.getElementById('celebTitle').textContent=title;
+  document.getElementById('celebSub').textContent=sub;
+  document.getElementById('celebStars').textContent=stars||'⭐⭐⭐';
+  document.getElementById('celebration').classList.add('show');
+  launchConfetti();
+}
+function closeCeleb(){document.getElementById('celebration').classList.remove('show');}
+function launchConfetti(){
+  const cs=['#FF4757','#FFC312','#2ED573','#1E90FF','#FF6B9D','#FF8C00'];
+  for(let i=0;i<44;i++){
+    const c=document.createElement('div');c.className='confetti-piece';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=cs[Math.floor(Math.random()*cs.length)];
+    c.style.borderRadius=Math.random()>.5?'50%':'0';
+    c.style.animationDuration=(1.5+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*.8)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+/* ============================================================
+   TAB
+============================================================ */
+function switchTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('section-'+tab).classList.add('active');
+  document.querySelector('.tab.'+tab).classList.add('active');
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+}
+
+/* ============================================================
+   LISTEN
+============================================================ */
+function buildColourGrid(){
+  const g=document.getElementById('colourGrid');g.innerHTML='';
+  COLOURS.forEach(c=>{
+    const d=document.createElement('div');d.className='colour-item';
+    d.style.background=c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'22';
+    d.innerHTML=`<div style="font-size:28px;margin-bottom:4px;">${c.emoji}</div>
+      <div class="swatch" style="background:${c.hex};"></div>
+      <div class="cname" style="color:${c.hex==='#E0E0E0'?'#555':c.hex}">${c.en}</div>
+      <div class="cvi">${c.vi}</div>`;
+    d.onclick=()=>{
+      document.querySelectorAll('.colour-item').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');speak(c.en);
+    };g.appendChild(d);
+  });
+}
+const listenQuestions=[
+  {q:'🔴 What colour is it?',en:'red',opts:['red','blue','green','yellow']},
+  {q:'🔵 What colour is it?',en:'blue',opts:['pink','blue','black','orange']},
+  {q:'🟢 What colour is it?',en:'green',opts:['green','white','red','pink']},
+  {q:'🟡 What colour is it?',en:'yellow',opts:['orange','yellow','blue','black']},
+  {q:'🩷 What colour is it?',en:'pink',opts:['pink','red','purple','orange']},
+  {q:'🟠 What colour is it?',en:'orange',opts:['yellow','green','orange','white']},
+];
+function buildListenQuiz(){currentListenQ=0;listenQScore=0;listenQTotal=listenQuestions.length;renderListenQ();}
+function renderListenQ(){
+  const qa=document.getElementById('listenQuiz');
+  if(currentListenQ>=listenQuestions.length){
+    qa.innerHTML=`<div style="text-align:center;padding:22px;">
+      <div style="font-size:52px;">🎉</div>
+      <div style="font-size:20px;font-weight:800;color:#00B894;">Hoàn thành! ${listenQScore}/${listenQuestions.length} câu đúng!</div>
+      <button class="check-btn" style="margin-top:14px;" onclick="buildListenQuiz()">🔄 Làm lại!</button></div>`;
+    document.getElementById('listenScore').textContent=listenQScore+'/'+listenQuestions.length+' đúng';
+    if(listenQScore===listenQuestions.length)celebrate('🌈','Nghe xuất sắc!','Bé nghe cực giỏi!','⭐⭐⭐');
+    return;
+  }
+  const q=listenQuestions[currentListenQ];
+  const opts=shuffle(q.opts);
+  qa.innerHTML=`<div class="quiz-q">
+      <div class="q-text">${q.q}</div>
+      <button class="audio-btn" style="margin-top:6px;" onclick="speak('${q.en}')">🔊 Nghe lại</button>
+    </div>
+    <div class="quiz-options">
+      ${opts.map(o=>{const col=COLOURS.find(c=>c.en===o);
+        return`<button class="quiz-opt" onclick="checkListenQ('${o}','${q.en}',this)">
+          <div class="opt-swatch" style="background:${col?col.hex:'#ccc'};"></div>
+          ${col?col.emoji:''} ${o}</button>`;}).join('')}
+    </div>
+    <div style="text-align:right;color:#aaa;font-size:13px;margin-top:6px;">Câu ${currentListenQ+1}/${listenQuestions.length}</div>`;
+}
+function checkListenQ(chosen,correct,btn){
+  document.querySelectorAll('#listenQuiz .quiz-opt').forEach(b=>b.disabled=true);
+  if(chosen===correct){btn.classList.add('correct');listenQScore++;totalScore+=10;
+    document.getElementById('listenFeedback').textContent='✅ Đúng rồi! +10 điểm 🎉';speak('Correct! '+correct);}
+  else{btn.classList.add('wrong');
+    document.querySelectorAll('#listenQuiz .quiz-opt').forEach(b=>{if(b.textContent.trim().includes(correct))b.classList.add('correct');});
+    document.getElementById('listenFeedback').textContent='❌ Chưa đúng! Đáp án: '+correct;speak(correct);}
+  document.getElementById('listenScore').textContent=listenQScore+'/'+(currentListenQ+1)+' đúng';
+  updateProgress();
+  setTimeout(()=>{currentListenQ++;document.getElementById('listenFeedback').textContent='';renderListenQ();},1900);
+}
+function singChant(btn){
+  btn.textContent='🎵 Đang hát...';btn.classList.add('playing');
+  const lines=['What colour is it?','It is red!','What colour is it?','It is blue!','What colour is it?','It is green!','Great singing!'];
+  let i=0;function next(){if(i<lines.length){speak(lines[i],0.75);i++;setTimeout(next,1600);}
+    else{btn.textContent='🎵 Hát cùng bé!';btn.classList.remove('playing');}}next();
+}
+
+/* ============================================================
+   SPEAK — WEB SPEECH RECOGNITION
+============================================================ */
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let activeRecognition=null;
+
+function buildSpeakSection(){
+  const hasMic=!!SpeechRecognition;
+  const sw=document.getElementById('speakWords');
+  sw.innerHTML=COLOURS.map((c,i)=>`
+    <div class="speak-word-card" style="border-color:${c.hex==='#E0E0E0'?'#ccc':c.hex}20;background:${c.hex==='#E0E0E0'?'#F5F5F5':c.hex}12;">
+      <span class="big-word" style="color:${c.hex==='#E0E0E0'?'#555':c.hex}">${c.emoji} ${c.en.toUpperCase()}</span>
+      <div class="phonetic">${c.phonetic} &nbsp;|&nbsp; ${c.vi}</div>
+      <div class="obj">${c.obj}</div>
+      <div class="speak-actions">
+        <button class="audio-btn" style="font-size:14px;padding:10px 20px;" onclick="speak('${c.en}')">🔊 Nghe mẫu</button>
+        ${hasMic
+          ?`<button class="mic-btn" id="mic-${i}" onclick="startMic('${c.en}',${i})">🎤 Bé đọc to!</button>`
+          :`<button class="mic-btn no-support" disabled>🎤 Trình duyệt không hỗ trợ mic</button>`}
+      </div>
+      <div class="mic-result" id="micResult-${i}"></div>
+    </div>`).join('');
+  buildDialogue();
+  buildNamingGame();
+}
+
+function startMic(targetWord, idx){
+  if(!SpeechRecognition){alert('Trình duyệt không hỗ trợ nhận giọng nói. Dùng Chrome nhé!');return;}
+  const btn=document.getElementById('mic-'+idx);
+  const resultBox=document.getElementById('micResult-'+idx);
+
+  // If already recording this one, stop
+  if(activeRecognition){
+    try{activeRecognition.stop();}catch(e){}
+    activeRecognition=null;
+    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');
+    return;
+  }
+
+  const rec=new SpeechRecognition();
+  rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=5;
+  activeRecognition=rec;
+  btn.textContent='⏹ Đang nghe...';btn.classList.add('recording');
+  resultBox.className='mic-result show partial';resultBox.textContent='🎤 Đang nghe bé nói...';
+
+  rec.onresult=(e)=>{
+    const transcripts=[];
+    for(let i=0;i<e.results[0].length;i++)transcripts.push(e.results[0][i].transcript.trim().toLowerCase());
+    const target=targetWord.toLowerCase();
+    const exact=transcripts.some(t=>t===target||t.includes(target));
+    const close=transcripts.some(t=>levenshtein(t,target)<=1);
+    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
+    if(exact){
+      resultBox.className='mic-result show ok';
+      resultBox.textContent='✅ Xuất sắc! Bé đọc đúng: "'+transcripts[0]+'" 🎉';
+      totalScore+=8;updateProgress();speak('Excellent! Perfect pronunciation!');
+    } else if(close){
+      resultBox.className='mic-result show partial';
+      resultBox.textContent='🟡 Gần đúng rồi! Bé nói: "'+transcripts[0]+'" — Thử lại nhé!';
+      speak('Good try! Try again: '+target);
+    } else {
+      resultBox.className='mic-result show fail';
+      resultBox.textContent='❌ Bé nói: "'+transcripts[0]+'" — Đúng phải là: "'+target+'"';
+      speak('Try again! The word is: '+target);
+    }
+  };
+  rec.onerror=(e)=>{
+    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
+    resultBox.className='mic-result show fail';
+    if(e.error==='not-allowed')resultBox.textContent='⚠️ Chưa cho phép dùng mic! Cho phép trong trình duyệt nhé.';
+    else if(e.error==='no-speech')resultBox.textContent='🔇 Không nghe thấy gì. Nói to hơn nhé bé!';
+    else resultBox.textContent='⚠️ Lỗi: '+e.error+'. Thử lại nhé!';
+  };
+  rec.onend=()=>{
+    if(btn.classList.contains('recording')){
+      btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
+      if(resultBox.textContent.includes('Đang nghe')){
+        resultBox.className='mic-result show fail';resultBox.textContent='🔇 Không nghe thấy. Nói to hơn nhé!';
+      }
+    }
+  };
+  rec.start();
+}
+
+function levenshtein(a,b){
+  const dp=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);
+  for(let j=0;j<=b.length;j++)dp[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)
+    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[a.length][b.length];
+}
+
+function buildDialogue(){
+  const da=document.getElementById('dialogueArea');
+  da.innerHTML=`<div style="background:#F8F9FA;border-radius:16px;padding:22px;">
+    <div class="bubble-teacher">
+      <div style="font-size:38px;">👩‍🏫</div>
+      <div class="bubble teacher">What colour is it? 🤔 <button onclick="speak('What colour is it?')" style="border:none;background:none;cursor:pointer;font-size:17px;">🔊</button></div>
+    </div>
+    <div class="bubble-student">
+      <div style="font-size:38px;">👦</div>
+      <div class="bubble student">It's <span id="dialogueAns" style="font-weight:800;">...</span>! <button onclick="speakDialogueAns()" style="border:none;background:none;cursor:pointer;font-size:17px;">🔊</button></div>
+    </div>
+    <div style="text-align:center;margin-top:14px;">
+      <div style="font-size:13px;color:#888;margin-bottom:10px;">Nhấn vào màu để trả lời! 👇</div>
+      <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;">
+        ${COLOURS.map(c=>`<button onclick="answerDialogue('${c.en}')"
+          style="padding:9px 17px;border:3px solid ${c.hex==='#E0E0E0'?'#ccc':c.hex};border-radius:50px;
+          background:${c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'18'};font-family:'Baloo 2',cursive;
+          font-size:14px;font-weight:700;color:${c.hex==='#E0E0E0'?'#555':c.hex};cursor:pointer;transition:all .2s;"
+          onmouseover="this.style.background='${c.hex}44'" onmouseout="this.style.background='${c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'18'}'"
+          >${c.emoji} ${c.en}</button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+let dialogueCurrent='red';
+function answerDialogue(colour){
+  dialogueCurrent=colour;
+  const col=COLOURS.find(c=>c.en===colour);
+  document.getElementById('dialogueAns').innerHTML=`<span style="color:${col.hex==='#E0E0E0'?'#555':col.hex}">${col.emoji} ${colour}</span>`;
+  speak('It is '+colour+'!');totalScore+=3;updateProgress();
+}
+function speakDialogueAns(){if(dialogueCurrent)speak('It is '+dialogueCurrent+'!');}
+
+function buildNamingGame(){
+  const ng=document.getElementById('namingGame');
+  const items=shuffle(COLOURS).slice(0,4);
+  ng.innerHTML=`<div style="text-align:center;margin-bottom:14px;">
+      <div style="font-size:68px;">${items[0].emoji}</div>
+      <div style="font-size:14px;color:#888;margin-top:4px;">${items[0].obj}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;">
+      ${items.map(c=>`<button onclick="checkNaming('${c.en}','${items[0].en}',this)"
+        style="padding:11px 22px;border:3px solid ${c.hex==='#E0E0E0'?'#ccc':c.hex};border-radius:50px;
+        background:white;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
+        color:${c.hex==='#E0E0E0'?'#555':c.hex};cursor:pointer;transition:all .2s;">${c.emoji} ${c.en}</button>`).join('')}
+    </div>
+    <div id="ngFb" style="text-align:center;margin-top:10px;font-size:19px;"></div>`;
+}
+function checkNaming(chosen,correct,btn){
+  if(chosen===correct){
+    btn.style.background='#E8F9EE';btn.style.borderColor='#00B894';
+    document.getElementById('ngFb').textContent='✅ Đúng rồi! 🎉';
+    speak('Correct! '+correct);totalScore+=5;updateProgress();
+    setTimeout(buildNamingGame,1700);
+  }else{
+    btn.style.background='#FFF0F0';btn.style.borderColor='#FF4757';
+    document.getElementById('ngFb').textContent='❌ Thử lại nhé!';
+    speak(correct);
+  }
+}
+
+/* ============================================================
+   READ
+============================================================ */
+function buildReadSection(){
+  document.getElementById('storyText').innerHTML=`
+    <span>Look at the toys! 🧸</span><br><br>
+    <span>This ball is <span class="highlight col-red" onclick="speak('red')">red</span>. 🔴</span><br>
+    <span>This crayon is <span class="highlight col-blue" onclick="speak('blue')">blue</span>. 🖍️</span><br>
+    <span>This pencil is <span class="highlight col-green" onclick="speak('green')">green</span>. ✏️</span><br>
+    <span>This hat is <span class="highlight col-yellow" onclick="speak('yellow')">yellow</span>. 🎩</span><br>
+    <span>This block is <span class="highlight col-orange" onclick="speak('orange')">orange</span>. 🟠</span><br>
+    <span>This robot is <span class="highlight col-pink" onclick="speak('pink')">pink</span>. 🤖</span><br><br>
+    <span style="font-weight:800;color:#333;">What colour is it? It's <span class="highlight col-red" onclick="speak('red')">red</span>! 🌈</span>`;
+  buildMatchingGame();
+  buildReadQuiz();
+}
+function buildMatchingGame(){
+  const items=COLOURS.slice(0,6);matchState={};selectedMW=null;
+  document.getElementById('matchingGame').innerHTML=`
+    <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;">
+      <div>
+        <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:9px;">📝 Từ tiếng Anh</div>
+        <div id="matchWords" style="display:flex;flex-direction:column;gap:8px;">
+          ${shuffle(items).map(c=>`<div class="match-word" id="mw-${c.en}" onclick="selectMW('${c.en}',this)">${c.en}</div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:9px;">🎨 Màu sắc</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${shuffle(items).map(c=>`<div class="match-color" id="mc-${c.en}" style="background:${c.hex==='#E0E0E0'?'#D8D8D8':c.hex};" onclick="selectMC('${c.en}',this)" title="${c.en}">${c.emoji}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function selectMW(word,el){
+  document.querySelectorAll('.match-word').forEach(w=>w.classList.remove('selected-mw'));
+  el.classList.add('selected-mw');selectedMW=word;speak(word);
+}
+function selectMC(color,el){
+  if(!selectedMW)return;
+  el.classList.add('selected-mc');
+  matchState[selectedMW]=color;
+  const col=COLOURS.find(c=>c.en===color);
+  document.getElementById('mw-'+selectedMW).style.borderColor=col?col.hex:'#ccc';
+  selectedMW=null;document.querySelectorAll('.match-word').forEach(w=>w.classList.remove('selected-mw'));
+}
+function checkMatching(){
+  let ok=0,total=Object.keys(matchState).length;
+  Object.entries(matchState).forEach(([w,c])=>{
+    if(w===c){ok++;
+      document.getElementById('mc-'+c)?.classList.add('matched-ok');
+      document.getElementById('mw-'+w)?.classList.add('matched-ok');
+    }
+  });
+  document.getElementById('matchFeedback').textContent=`${ok}/${total} đúng! ${ok===total?'🎉 Hoàn hảo!':'Thử lại nhé!'}`;
+  if(ok>0){totalScore+=ok*8;updateProgress();}
+  if(ok===6)celebrate('🌈','Nối đúng hết!','Bé thông minh quá!','⭐⭐⭐');
+}
+function resetMatching(){matchState={};selectedMW=null;buildMatchingGame();document.getElementById('matchFeedback').textContent='';}
+
+const readQs=[
+  {q:'What colour is the ball? 🔴',correct:'red',opts:['red','blue','green','yellow']},
+  {q:'What colour is the crayon? 🔵',correct:'blue',opts:['pink','blue','black','orange']},
+  {q:'What colour is the hat? 🟡',correct:'yellow',opts:['green','white','yellow','pink']},
+];
+function buildReadQuiz(){currentReadQ=0;readQScore=0;readQTotal=readQs.length;renderReadQ();}
+function renderReadQ(){
+  const qa=document.getElementById('readQuiz');
+  if(currentReadQ>=readQs.length){
+    qa.innerHTML=`<div style="text-align:center;padding:20px;">
+      <div style="font-size:52px;">📚</div>
+      <div style="font-size:20px;font-weight:800;color:#00B894;">${readQScore}/${readQs.length} câu đúng!</div>
+      <button class="check-btn" style="margin-top:14px;" onclick="buildReadQuiz()">🔄 Làm lại!</button></div>`;
+    return;
+  }
+  const q=readQs[currentReadQ];const opts=shuffle(q.opts);
+  qa.innerHTML=`<div class="quiz-q"><div class="q-text">${q.q}</div></div>
+    <div class="quiz-options">
+      ${opts.map(o=>{const col=COLOURS.find(c=>c.en===o);
+        return`<button class="quiz-opt" onclick="checkReadQ('${o}','${q.correct}',this)">
+          <div class="opt-swatch" style="background:${col?col.hex:'#ccc'};"></div>${col?col.emoji:''} ${o}</button>`;}).join('')}
+    </div>
+    <div style="text-align:right;color:#aaa;font-size:13px;margin-top:6px;">Câu ${currentReadQ+1}/${readQs.length}</div>`;
+}
+function checkReadQ(chosen,correct,btn){
+  document.querySelectorAll('#readQuiz .quiz-opt').forEach(b=>b.disabled=true);
+  if(chosen===correct){btn.classList.add('correct');readQScore++;totalScore+=10;
+    document.getElementById('readFeedback').textContent='✅ Đúng! +10 điểm 🎉';speak('Correct!');}
+  else{btn.classList.add('wrong');
+    document.querySelectorAll('#readQuiz .quiz-opt').forEach(b=>{if(b.textContent.includes(correct))b.classList.add('correct');});
+    document.getElementById('readFeedback').textContent='❌ Đáp án: '+correct;speak(correct);}
+  document.getElementById('readScore').textContent=readQScore+'/'+(currentReadQ+1)+' đúng';
+  updateProgress();
+  setTimeout(()=>{currentReadQ++;document.getElementById('readFeedback').textContent='';renderReadQ();},1900);
+}
+
+/* ============================================================
+   WRITE
+============================================================ */
+function buildWriteSection(){
+  /* --- FILL BLANKS (swatch → name) --- */
+  const items=COLOURS.slice(0,6);
+  document.getElementById('fillBlanks').innerHTML=items.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;margin:12px 0;flex-wrap:wrap;">
+      <div style="width:42px;height:42px;border-radius:50%;background:${c.hex};border:3px solid rgba(0,0,0,.1);flex-shrink:0;"></div>
+      <span style="font-size:18px;font-weight:700;color:#333;">${c.emoji} This is </span>
+      <input class="blank-input" id="blank-${i}" placeholder="???" autocomplete="off" spellcheck="false" data-answer="${c.en}">
+      <span style="font-size:18px;font-weight:700;color:#333;">.</span>
+      <span style="font-size:19px;" id="bfb-${i}"></span>
+    </div>`).join('');
+
+  buildWordBuilder();
+  buildColouringGame();
+}
+function checkFillBlanks(){
+  let ok=0,tot=0;
+  document.querySelectorAll('.blank-input').forEach(inp=>{
+    tot++;const ans=inp.dataset.answer,val=inp.value.trim().toLowerCase();
+    const fb=document.getElementById('bfb-'+inp.id.split('-')[1]);
+    if(val===ans){inp.classList.add('ok-ans');inp.classList.remove('bad-ans');fb.textContent='✅';ok++;totalScore+=8;}
+    else{inp.classList.add('bad-ans');inp.classList.remove('ok-ans');fb.textContent='❌ ('+ans+')';}
+  });
+  document.getElementById('fillFeedback').textContent=`${ok}/${tot} đúng! ${ok===tot?'🎉 Hoàn hảo!':'Cố lên nhé!'}`;
+  updateProgress();
+  if(ok===tot)celebrate('✏️','Viết đúng hết!','Bé viết giỏi quá!','⭐⭐⭐');
+}
+function resetFillBlanks(){
+  document.querySelectorAll('.blank-input').forEach(inp=>{inp.value='';inp.classList.remove('ok-ans','bad-ans');});
+  document.querySelectorAll('[id^="bfb-"]').forEach(e=>e.textContent='');
+  document.getElementById('fillFeedback').textContent='';
+}
+
+/* --- WORD BUILDER --- */
+const wbWords=['red','green','blue','yellow','pink','orange'];
+function buildWordBuilder(){
+  const word=wbWords[wbIdx%wbWords.length];
+  const col=COLOURS.find(c=>c.en===word);
+  const letters=shuffle([...word]);
+  document.getElementById('wordBuilder').innerHTML=`
+    <div style="text-align:center;margin-bottom:14px;">
+      <div style="font-size:58px;">${col.emoji}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px;">${col.vi} — Ghép chữ cái thành từ!</div>
+    </div>
+    <div class="drag-letters" id="lPool">
+      ${letters.map((l,i)=>`<div class="letter-tile" draggable="true" data-letter="${l}" id="lt-${i}"
+        ondragstart="onDragStart(event,${i})" onclick="clickTile('${l}',${i})">${l.toUpperCase()}</div>`).join('')}
+    </div>
+    <div style="font-size:13px;color:#aaa;text-align:center;margin:5px 0 7px;">Kéo xuống ô bên dưới 👇</div>
+    <div class="drop-zone" id="lZone" ondragover="event.preventDefault()" ondrop="onDrop(event)">
+      <span class="ph">Kéo chữ cái vào đây 🎯</span>
+    </div>
+    <div style="display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;">
+      <button class="check-btn" onclick="checkWB('${word}')">✅ Kiểm tra</button>
+      <button class="reset-btn" onclick="clearZone()">🗑️ Xóa zone</button>
+      <button class="reset-btn" onclick="wbIdx++;buildWordBuilder()">⏭ Từ tiếp theo</button>
+    </div>
+    <div id="wbFb" style="font-size:19px;margin-top:10px;min-height:28px;"></div>`;
+}
+function onDragStart(e,id){draggedId=id;e.dataTransfer.effectAllowed='move';}
+function onDrop(e){
+  e.preventDefault();if(draggedId===null)return;
+  const tile=document.getElementById('lt-'+draggedId);if(!tile)return;
+  tile.classList.add('in-zone');
+  const zone=document.getElementById('lZone');
+  zone.appendChild(tile);
+  const ph=zone.querySelector('.ph');if(ph)ph.remove();
+  draggedId=null;
+}
+function clickTile(letter,id){
+  const tile=document.getElementById('lt-'+id);if(!tile)return;
+  const zone=document.getElementById('lZone');
+  const pool=document.getElementById('lPool');
+  if(pool&&pool.contains(tile)){tile.classList.add('in-zone');zone.appendChild(tile);
+    const ph=zone.querySelector('.ph');if(ph)ph.remove();}
+  else{tile.classList.remove('in-zone');pool.appendChild(tile);}
+}
+function clearZone(){
+  const zone=document.getElementById('lZone');const pool=document.getElementById('lPool');
+  if(!zone||!pool)return;
+  [...zone.querySelectorAll('.letter-tile')].forEach(t=>{t.classList.remove('in-zone');pool.appendChild(t);});
+  if(!zone.querySelector('.ph'))zone.innerHTML='<span class="ph">Kéo chữ cái vào đây 🎯</span>';
+}
+function checkWB(correct){
+  const zone=document.getElementById('lZone');
+  const tiles=[...zone.querySelectorAll('.letter-tile')];
+  const attempt=tiles.map(t=>t.dataset.letter).join('');
+  const fb=document.getElementById('wbFb');
+  if(attempt===correct){
+    fb.textContent='✅ Đúng! "'+correct.toUpperCase()+'" 🎉';totalScore+=15;updateProgress();
+    wbIdx++;setTimeout(buildWordBuilder,1900);
+    celebrate('🔤','Xếp chữ đúng!',correct.toUpperCase()+'!','⭐⭐⭐');
+  }else if(!attempt){fb.textContent='👆 Kéo chữ vào ô trước nhé!';}
+  else{fb.textContent='❌ Thử lại! Gợi ý: '+correct[0].toUpperCase()+'...';speak('Try again! '+correct);}
+}
+
+/* --- COLOURING GAME (đảm bảo đáp án luôn có trong lựa chọn) --- */
+const colourShapes=[
+  {shape:'⭕',label:'vòng tròn',correct:'red'},
+  {shape:'⬛',label:'hình vuông',correct:'blue'},
+  {shape:'🔺',label:'tam giác',correct:'green'},
+  {shape:'💛',label:'hình tim',correct:'yellow'},
+  {shape:'🩷',label:'hình trái tim',correct:'pink'},
+];
+function buildColouringGame(){
+  const cg=document.getElementById('coloringGame');
+  cg.innerHTML=colourShapes.map((s,i)=>{
+    // Always include correct answer + 4 random distractors
+    const correctCol=COLOURS.find(c=>c.en===s.correct);
+    const distractors=shuffle(COLOURS.filter(c=>c.en!==s.correct)).slice(0,3);
+    const choices=shuffle([correctCol,...distractors]);
+    return`<div class="colour-shape-row" id="csr-${i}">
+      <div class="shape-preview" id="sp-${i}">${s.shape}</div>
+      <div>
+        <div style="font-size:15px;font-weight:800;color:#333;">Tô màu <strong style="color:${correctCol.hex==='#E0E0E0'?'#555':correctCol.hex}">${s.correct}</strong> cho ${s.label}! 🖌️</div>
+        <div style="font-size:13px;color:#888;">Chọn màu đúng:</div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;">
+        ${choices.map(c=>`<button onclick="colourShape(${i},'${c.en}','${s.correct}')"
+          style="width:38px;height:38px;border-radius:50%;background:${c.hex==='#E0E0E0'?'#D8D8D8':c.hex};
+          border:3px solid ${c.hex==='#E0E0E0'?'#bbb':c.hex};cursor:pointer;transition:all .2s;"
+          title="${c.en}" onmouseover="this.style.transform='scale(1.18)'" onmouseout="this.style.transform='scale(1)'"></button>`).join('')}
+      </div>
+      <div id="csfb-${i}" style="font-size:19px;min-width:30px;"></div>
+    </div>`;
+  }).join('');
+}
+function colourShape(idx,chosen,correct){
+  const col=COLOURS.find(c=>c.en===chosen);
+  const correctCol=COLOURS.find(c=>c.en===correct);
+  const fb=document.getElementById('csfb-'+idx);
+  const sp=document.getElementById('sp-'+idx);
+  if(chosen===correct){
+    sp.style.background=col.hex==='#E0E0E0'?'#D8D8D8':col.hex;
+    sp.style.borderColor=col.hex==='#E0E0E0'?'#bbb':col.hex;
+    sp.textContent='✅';
+    fb.textContent='✅ +8đ';totalScore+=8;updateProgress();speak('Correct! '+correct);
+  }else{
+    fb.textContent='❌ Phải là '+correct+'!';speak('Try again! It is '+correct+'!');
+    // Flash wrong color briefly
+    sp.style.background=col.hex==='#E0E0E0'?'#D8D8D8':col.hex;
+    setTimeout(()=>{sp.style.background='';sp.style.borderColor='#ccc';},600);
+  }
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+buildColourGrid();
+buildListenQuiz();
+buildSpeakSection();
+buildReadSection();
+buildWriteSection();
+updateProgress();
+</script>
+</body>
+</html>
