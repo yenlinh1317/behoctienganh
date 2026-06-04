@@ -1,0 +1,596 @@
+
+<style>
+:root{--listen:#e24b4a;--speak:#ba7517;--read:#0f6e56;--write:#185fa5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,system-ui),sans-serif}
+#app{padding:12px}
+.hd{background:linear-gradient(135deg,#534AB7,#0F6E56);border-radius:var(--border-radius-lg);padding:14px 18px;color:#fff;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.logo{font-size:32px;animation:bop 1.2s ease-in-out infinite}
+@keyframes bop{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hd-t{font-size:18px;font-weight:500}
+.hd-s{font-size:12px;opacity:.85}
+.pts{margin-left:auto;background:rgba(255,255,255,.2);border-radius:var(--border-radius-md);padding:6px 12px;text-align:center}
+.pts-n{font-size:20px;font-weight:500}
+.pts-l{font-size:11px;opacity:.85}
+.skill-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.sk{border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 6px;text-align:center;cursor:pointer;background:var(--color-background-primary);transition:all .18s}
+.sk:hover{transform:translateY(-2px)}
+.sk-i{font-size:20px;display:block;margin-bottom:3px}
+.sk-l{font-size:12px;font-weight:500;color:var(--color-text-secondary)}
+.sk.listen{border-color:var(--listen)}.sk.listen .sk-l{color:var(--listen)}
+.sk.speak{border-color:var(--speak)}.sk.speak .sk-l{color:var(--speak)}
+.sk.read{border-color:var(--read)}.sk.read .sk-l{color:var(--read)}
+.sk.write{border-color:var(--write)}.sk.write .sk-l{color:var(--write)}
+.sk.on.listen{background:var(--listen);border-color:var(--listen)}.sk.on.listen .sk-l,.sk.on.listen .sk-i{color:#fff!important;filter:none!important}
+.sk.on.speak{background:var(--speak);border-color:var(--speak)}.sk.on.speak .sk-l,.sk.on.speak .sk-i{color:#fff!important}
+.sk.on.read{background:var(--read);border-color:var(--read)}.sk.on.read .sk-l,.sk.on.read .sk-i{color:#fff!important}
+.sk.on.write{background:var(--write);border-color:var(--write)}.sk.on.write .sk-l,.sk.on.write .sk-i{color:#fff!important}
+.unit-scroller{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.ub{border:1.5px solid var(--color-border-tertiary);border-radius:8px;padding:4px 8px;font-size:11px;font-weight:500;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s;min-width:32px;text-align:center}
+.ub:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.ub.on{background:#534AB7;color:#fff;border-color:#534AB7}
+.ub.done{background:#e1f5ee;border-color:#0f6e56;color:#0f6e56}
+.panel{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:16px;min-height:300px}
+.ph{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.story{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.8;color:var(--color-text-primary);border-left:3px solid var(--listen)}
+.story b{color:var(--listen);font-weight:500}
+.pbar{background:var(--color-background-secondary);border-radius:20px;height:7px;margin:5px 0 3px;overflow:hidden}
+.pf{height:100%;border-radius:20px;transition:width .5s}
+.pf.listen{background:var(--listen)}.pf.speak{background:var(--speak)}.pf.read{background:var(--read)}.pf.write{background:var(--write)}
+.pi{font-size:10px;color:var(--color-text-secondary);text-align:right;margin-bottom:8px}
+.qtext{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.opt{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 14px;font-size:13px;cursor:pointer;color:var(--color-text-primary);transition:all .15s;font-family:inherit}
+.opt:hover{border-color:var(--color-border-primary)}
+.opt.ok{background:#e1f5ee;border-color:#0f6e56;color:#0f6e56}
+.opt.ng{background:#fcebeb;border-color:#e24b4a;color:#a32d2d}
+.fb{text-align:center;padding:9px 12px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;margin-top:8px;display:none}
+.fb.show{display:block}
+.fb.ok{background:#e1f5ee;color:#0f6e56}
+.fb.ng{background:#fcebeb;color:#a32d2d}
+.speak-scene{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:10px;border-left:3px solid var(--speak)}
+.ex-box{background:#faeeda;border-radius:var(--border-radius-md);padding:9px 12px;font-size:12px;color:#633806;margin:8px 0}
+.sinput{width:100%;border:1.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;font-size:13px;color:var(--color-text-primary);background:var(--color-background-primary);font-family:inherit;outline:none}
+.sinput:focus{border-color:#534AB7}
+.rtext{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.9;color:var(--color-text-primary);border-left:3px solid var(--read)}
+.rtext .hi{background:#e1f5ee;border-radius:3px;padding:0 3px;font-weight:500;color:#0f6e56}
+.r-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.r-opt{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 16px;font-size:13px;cursor:pointer;color:var(--color-text-primary);transition:all .15s;font-family:inherit}
+.r-opt:hover{border-color:var(--read);}
+.r-opt.ok{background:#e1f5ee;border-color:#0f6e56;color:#0f6e56}
+.r-opt.ng{background:#fcebeb;border-color:#e24b4a;color:#a32d2d}
+.wprompt{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 13px;font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;border-left:3px solid var(--write)}
+.wbank{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.wchip{background:#e6f1fb;border:1.5px solid #b5d4f4;border-radius:20px;padding:4px 11px;font-size:12px;font-weight:500;color:#185fa5;cursor:pointer;transition:all .15s;user-select:none}
+.wchip:hover{background:#b5d4f4}
+.wchip.used{background:var(--color-background-secondary);border-color:var(--color-border-tertiary);color:var(--color-text-secondary);cursor:default}
+.blanks{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.brow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--color-text-primary)}
+.bin{border:none;border-bottom:1.5px solid var(--write);background:transparent;font-size:13px;font-weight:500;color:var(--write);font-family:inherit;outline:none;min-width:80px;padding:2px 4px;text-align:center}
+.btn-check{background:#185fa5;color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:13px;cursor:pointer;font-family:inherit}
+.btn-check:hover{background:#0c447c}
+.navrow{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.nbtn{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--color-text-secondary);transition:all .15s}
+.nbtn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.nbtn.next{background:#534AB7;color:#fff;border-color:#534AB7}
+.pop-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:999;background:rgba(0,0,0,.3)}
+.popup{background:var(--color-background-primary);border-radius:var(--border-radius-xl,16px);padding:28px 36px;text-align:center;border:1.5px solid var(--color-border-secondary);max-width:320px;width:90%}
+.pop-ic{font-size:44px;margin-bottom:8px}
+.pop-t{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.pop-s{font-size:13px;color:var(--color-text-secondary);margin-bottom:14px}
+.pop-btn{background:#534AB7;color:#fff;border:none;border-radius:20px;padding:9px 22px;font-size:13px;cursor:pointer;font-family:inherit}
+</style>
+<div id="app">
+<div class="hd">
+  <span class="logo">🐒</span>
+  <div><div class="hd-t">Fun for Starters — 45 Units</div><div class="hd-s">Cambridge YLE · 4 skills per unit</div></div>
+  <div class="pts"><div class="pts-n" id="pts">⭐ 0</div><div class="pts-l">points</div></div>
+</div>
+<div class="skill-row">
+  <div class="sk listen on" onclick="setSk('listen')"><span class="sk-i">🎧</span><span class="sk-l">Listening</span></div>
+  <div class="sk speak" onclick="setSk('speak')"><span class="sk-i">🗣️</span><span class="sk-l">Speaking</span></div>
+  <div class="sk read" onclick="setSk('read')"><span class="sk-i">📖</span><span class="sk-l">Reading</span></div>
+  <div class="sk write" onclick="setSk('write')"><span class="sk-i">✏️</span><span class="sk-l">Writing</span></div>
+</div>
+<div class="unit-scroller" id="ubars"></div>
+<div class="panel" id="panel"></div>
+<div id="pop-container"></div>
+</div>
+<script>
+var pts=0,sk='listen',cu=1,qi=0,ans=false;
+var UNITS=[
+  [1,"Say hello!","Greetings & alphabet"],
+  [2,"Numbers, numbers, numbers","Numbers 1–20"],
+  [3,"What's your name?","Names & spelling"],
+  [4,"Red, blue and yellow","Colours"],
+  [5,"Answering questions","Classroom language"],
+  [6,"Animals and aliens","Animals & body parts"],
+  [7,"Look, listen, smile, draw","Body & senses"],
+  [8,"In my clothes cupboard","Clothes"],
+  [9,"Funny monsters","Description"],
+  [10,"Our families","Family members"],
+  [11,"Whose is it?","Possessives: his/her/their"],
+  [12,"Who's got the red balloon?","People in public"],
+  [13,"Who can do this?","Abilities: can/can't"],
+  [14,"Big, small, happy or sad?","Adjectives"],
+  [15,"One, two, three animals","Animals & numbers"],
+  [16,"What's your favourite fruit?","Fruit & vegetables"],
+  [17,"What's on the menu?","Food & drinks"],
+  [18,"A colourful house","Rooms & furniture"],
+  [19,"What's in your bedroom?","Bedroom objects"],
+  [20,"Ben and Kim live here!","House & home"],
+  [21,"Play with us!","Toys & transport"],
+  [22,"In our bags and in our school","School objects"],
+  [23,"At our school","School & classroom"],
+  [24,"What's the class doing?","Present continuous"],
+  [25,"Animal challenge","Wild animals"],
+  [26,"How many pets?","Pets & numbers"],
+  [27,"Food I really like!","Food vocabulary"],
+  [28,"My favourite food day","Meals & food"],
+  [29,"We're in the toy shop today","Shopping & toys"],
+  [30,"Monsters in the park","Prepositions"],
+  [31,"Coming and going","Transport"],
+  [32,"Happy birthday!","Birthdays & parties"],
+  [33,"On the beach","Beach & weather"],
+  [34,"Let's go to the park","Park activities"],
+  [35,"What, who and where?","Question words"],
+  [36,"Great games, great hobbies!","Hobbies & games"],
+  [37,"Let's play","Sports"],
+  [38,"My favourites","Favourite things"],
+  [39,"One foot, two feet","Plurals"],
+  [40,"Night and day","Time & routines"],
+  [41,"Trains, boats and planes","Transport"],
+  [42,"About a phone","Technology"],
+  [43,"What are they saying?","Phrases & dialogue"],
+  [44,"About us","Personal information"],
+  [45,"Happy ending!","Review all topics"]
+];
+var done={};
+
+var DATA={
+  listen:[
+    {s:"<b>Hello!</b> I'm <b>Sam</b>. What's your name? My name is <b>Lucy</b>! Nice to meet you!",qs:[{q:"What is the boy's name?",o:["Sam","Ben","Nick","Tom"],c:0},{q:"What does Lucy say at the end?",o:["Goodbye","Nice to meet you","Hello","See you"],c:1},{q:"How does Sam greet Lucy?",o:["Good morning","Nice to meet you","Hello","Bye"],c:2}]},
+    {s:"Listen! <b>One</b> cat, <b>two</b> dogs, <b>three</b> balls, <b>five</b> apples, <b>eight</b> books on the table.",qs:[{q:"How many cats are there?",o:["1","2","3","5"],c:0},{q:"How many books are on the table?",o:["3","5","7","8"],c:3},{q:"How many apples?",o:["1","3","5","7"],c:2}]},
+    {s:"<b>Tom</b> has a name. <b>Smo</b> is a boy. <b>Lucy</b> is a girl. <b>Kim</b> and <b>Nick</b> are friends.",qs:[{q:"Who is a girl?",o:["Tom","Smo","Lucy","Kim"],c:2},{q:"Who is a boy?",o:["Lucy","Smo","Kim","Nick"],c:1},{q:"Who are friends?",o:["Tom and Smo","Lucy and Smo","Kim and Nick","Tom and Lucy"],c:2}]},
+    {s:"<b>Red</b> + blue = purple. <b>Yellow</b> + blue = green. <b>White</b> + black = grey. <b>Red</b> + white = pink.",qs:[{q:"What do red and blue make?",o:["green","yellow","purple","orange"],c:2},{q:"What do yellow and blue make?",o:["purple","green","orange","pink"],c:1},{q:"What do red and white make?",o:["grey","brown","pink","orange"],c:2}]},
+    {s:"How are <b>you</b>? Fine, thank you! <b>Tick</b> the box. <b>Draw</b> a line. <b>Write</b> yes. Put a <b>cross</b>.",qs:[{q:"What does 'tick' mean?",o:["draw a cross","write a word","put a check mark","colour it"],c:2},{q:"What is the answer to 'How are you?'",o:["My name is Lucy","Fine, thank you","I can swim","I like cats"],c:1},{q:"What does 'draw a line' mean?",o:["write","colour","make a line","tick the box"],c:2}]},
+    {s:"I can see an <b>elephant</b>. It has a very long <b>nose</b>. A <b>mouse</b> has big <b>ears</b>. An <b>alien</b> has got six <b>arms</b>.",qs:[{q:"What does the elephant have?",o:["long arms","long nose","big ears","long tail"],c:1},{q:"What does the mouse have?",o:["long nose","big ears","six arms","long tail"],c:1},{q:"How many arms does the alien have?",o:["two","four","six","eight"],c:2}]},
+    {s:"I can <b>smile</b> with my mouth. I can <b>kick</b> a ball with my feet. I can <b>wave</b> with my hand. I can <b>listen</b> with my ears.",qs:[{q:"What do you kick with?",o:["hands","ears","feet","eyes"],c:2},{q:"What do you wave with?",o:["feet","hand","ears","nose"],c:1},{q:"What do you listen with?",o:["eyes","nose","mouth","ears"],c:3}]},
+    {s:"<b>Tom</b> is wearing a <b>red</b> shirt, <b>blue</b> trousers and <b>white</b> shoes. His <b>hat</b> is green.",qs:[{q:"What colour is Tom's shirt?",o:["blue","green","red","white"],c:2},{q:"What colour is Tom's hat?",o:["red","blue","white","green"],c:3},{q:"What colour are Tom's shoes?",o:["red","blue","white","green"],c:2}]},
+    {s:"The <b>monster</b> has two <b>heads</b> and six <b>funny</b> tails! Its arms are very <b>long</b> and its hands are very <b>small</b>.",qs:[{q:"How many heads does the monster have?",o:["one","two","three","four"],c:1},{q:"What are the monster's arms like?",o:["short","big","long","small"],c:2},{q:"What are the monster's hands like?",o:["big","long","small","funny"],c:2}]},
+    {s:"Sam lives with his <b>mum</b> and <b>dad</b>. He has three <b>sisters</b> and two <b>brothers</b>. His <b>grandma</b> lives next door.",qs:[{q:"How many sisters does Sam have?",o:["one","two","three","four"],c:2},{q:"How many brothers does Sam have?",o:["one","two","three","four"],c:1},{q:"Who lives next door?",o:["mum","dad","grandma","sister"],c:2}]},
+    {s:"<b>Nick's</b> mouse is by the clock. <b>Lucy's</b> kite is red. <b>Anna's</b> paints are on the table. <b>Bill's</b> watch is black.",qs:[{q:"Whose kite is red?",o:["Nick's","Lucy's","Anna's","Bill's"],c:1},{q:"Where are Anna's paints?",o:["on the floor","by the clock","on the table","in the box"],c:2},{q:"What colour is Bill's watch?",o:["red","blue","white","black"],c:3}]},
+    {s:"In the <b>park</b> I can see a baby with a red <b>balloon</b>! Two <b>women</b> have got flowers. A <b>man</b> has got a dog.",qs:[{q:"What colour is the baby's balloon?",o:["blue","green","red","yellow"],c:2},{q:"What have the two women got?",o:["a dog","a balloon","flowers","a book"],c:2},{q:"What has the man got?",o:["a cat","a dog","a ball","a kite"],c:1}]},
+    {s:"<b>Alphabet</b> can fly and jump. <b>Bean</b> can sing. <b>Carrot</b> can read and jump. <b>Egg</b> can swim.",qs:[{q:"Who can swim?",o:["Alphabet","Bean","Carrot","Egg"],c:3},{q:"Who can sing?",o:["Alphabet","Bean","Carrot","Egg"],c:1},{q:"Can Carrot fly?",o:["Yes","No","Maybe","I don't know"],c:1}]},
+    {s:"This is a <b>clean</b> car. This is an <b>ugly</b> spider. This is a <b>short</b> skirt. This is a <b>young</b> woman.",qs:[{q:"What is the car like?",o:["dirty","old","clean","ugly"],c:2},{q:"How many spiders?",o:["one","two","three","four"],c:0},{q:"What is the skirt like?",o:["long","short","big","clean"],c:1}]},
+    {s:"A <b>chicken</b> is small and brown. A <b>tiger</b> is orange and black. A <b>hippo</b> is big and grey. A <b>zebra</b> is black and white.",qs:[{q:"What colour is a tiger?",o:["grey","brown","orange and black","black and white"],c:2},{q:"What colour is a zebra?",o:["orange","grey","brown","black and white"],c:3},{q:"What is a hippo like?",o:["small and brown","big and grey","orange and black","black and white"],c:1}]},
+    {s:"It's a <b>banana</b>. It's long and yellow. A <b>watermelon</b> is big and green. A <b>lemon</b> is yellow and sour. A <b>mango</b> is orange.",qs:[{q:"What colour is a banana?",o:["green","red","yellow","orange"],c:2},{q:"What is a watermelon like?",o:["small and yellow","big and green","long and yellow","small and orange"],c:1},{q:"What colour is a mango?",o:["yellow","green","red","orange"],c:3}]},
+    {s:"Today's menu! <b>Burger and chips</b>! We also have <b>chicken</b>, <b>rice</b> and <b>tomatoes</b>. For drinks: <b>water</b>, <b>juice</b> and <b>milk</b>.",qs:[{q:"What is on today's menu first?",o:["rice","pizza","burger and chips","chicken"],c:2},{q:"Is there juice to drink?",o:["yes","no","maybe","I don't know"],c:0},{q:"What drink is NOT mentioned?",o:["water","juice","milk","cola"],c:3}]},
+    {s:"The <b>bedroom</b> is pink. The <b>kitchen</b> is yellow. The <b>bathroom</b> is blue. The <b>living room</b> is green.",qs:[{q:"What colour is the bedroom?",o:["yellow","blue","pink","green"],c:2},{q:"What colour is the kitchen?",o:["pink","yellow","blue","red"],c:1},{q:"What colour is the living room?",o:["pink","blue","yellow","green"],c:3}]},
+    {s:"In my <b>bedroom</b> there is an <b>armchair</b>, a <b>desk</b>, a <b>computer</b>, a <b>phone</b> and a big <b>TV</b>.",qs:[{q:"What is in the bedroom?",o:["a bath","a cooker","an armchair","a washing machine"],c:2},{q:"How many items are mentioned?",o:["3","4","5","6"],c:2},{q:"Is there a TV?",o:["yes","no","maybe","I don't know"],c:0}]},
+    {s:"<b>Ben and Kim</b> live in a <b>house</b>. There is a <b>living room</b> with a TV. The <b>kitchen</b> has a big fridge.",qs:[{q:"What is in the living room?",o:["a fridge","a TV","a bed","a bath"],c:1},{q:"What is big in the kitchen?",o:["table","cooker","fridge","sink"],c:2},{q:"Do Ben and Kim live in a flat?",o:["yes","no","maybe","I don't know"],c:1}]},
+    {s:"<b>Anna</b> is playing with a <b>bus</b>. <b>Dan</b> is riding a <b>bike</b>. <b>Grace</b> has got a <b>boat</b>. <b>Sam</b> loves <b>trains</b>.",qs:[{q:"What is Anna playing with?",o:["train","boat","bus","bike"],c:2},{q:"Who is riding a bike?",o:["Anna","Dan","Grace","Sam"],c:1},{q:"Who loves trains?",o:["Anna","Dan","Grace","Sam"],c:3}]},
+    {s:"In my bag: a <b>pencil</b>, a <b>rubber</b>, a <b>ruler</b>, a <b>book</b> and a <b>crayon</b>. On my desk: a <b>computer</b>.",qs:[{q:"What is in the bag?",o:["a computer","a tablet","a pencil","a phone"],c:2},{q:"What is on the desk?",o:["a pencil","a ruler","a computer","a book"],c:2},{q:"How many things are in the bag?",o:["3","4","5","6"],c:2}]},
+    {s:"<b>May</b> is 8 years old. She is in class <b>7</b>. Her teacher is <b>Mrs Green</b>. She has <b>22</b> children in her class.",qs:[{q:"How old is May?",o:["7","8","9","10"],c:1},{q:"What class is she in?",o:["5","6","7","8"],c:2},{q:"How many children are in May's class?",o:["19","20","22","25"],c:2}]},
+    {s:"<b>Tom and Nick</b> are drawing a <b>rocket</b>. <b>Lucy</b> is reading a <b>book</b>. <b>Ben</b> is eating a <b>banana</b>. <b>Sam</b> is sleeping!",qs:[{q:"What are Tom and Nick drawing?",o:["a house","a car","a rocket","a monster"],c:2},{q:"Who is reading?",o:["Tom","Lucy","Ben","Sam"],c:1},{q:"Who is sleeping?",o:["Tom","Lucy","Ben","Sam"],c:3}]},
+    {s:"In the jungle: a <b>tiger</b>, a <b>giraffe</b>, a <b>hippo</b>, a <b>parrot</b> and a <b>monkey</b>. Tom has three pet <b>snakes</b>!",qs:[{q:"How many snakes does Tom have?",o:["one","two","three","four"],c:2},{q:"Is there a giraffe in the jungle?",o:["yes","no","maybe","I don't know"],c:0},{q:"What is also in the jungle?",o:["dog","cat","tiger","horse"],c:2}]},
+    {s:"<b>May</b> has got <b>lots of pets</b>! She has a dog, three mice and a favourite pet: <b>Mr Crocodile</b>! He is 5 years old.",qs:[{q:"What is May's favourite pet?",o:["a dog","a mouse","a crocodile","a cat"],c:2},{q:"How many mice does she have?",o:["one","two","three","four"],c:2},{q:"How old is Mr Crocodile?",o:["3","4","5","6"],c:2}]},
+    {s:"<b>Bill's</b> big breakfast: <b>eggs</b>, <b>beans</b>, <b>bread</b> and <b>juice</b>. Lucy likes food with the letter '<b>c</b>': carrots, chocolate, cake!",qs:[{q:"What does Bill have for breakfast?",o:["pizza","eggs and beans","rice","noodles"],c:1},{q:"What letter does Lucy's food have?",o:["b","c","d","e"],c:1},{q:"Does Lucy like chocolate?",o:["yes","no","maybe","I don't know"],c:0}]},
+    {s:"My favourite food is <b>pizza</b>! For breakfast I eat <b>bread</b> and drink <b>milk</b>. For dinner I eat <b>rice</b> and <b>chicken</b>.",qs:[{q:"What is the person's favourite food?",o:["rice","bread","pizza","chicken"],c:2},{q:"What do they drink for breakfast?",o:["juice","water","milk","tea"],c:2},{q:"What do they eat for dinner?",o:["bread and eggs","pizza","rice and chicken","beans"],c:2}]},
+    {s:"Welcome to the <b>toy shop</b>! There are <b>twelve</b> toys in the cupboard. A robot costs <b>fifteen</b> pounds. A doll costs <b>eight</b> pounds.",qs:[{q:"How many toys are in the cupboard?",o:["ten","eleven","twelve","thirteen"],c:2},{q:"How much is the robot?",o:["eight","ten","twelve","fifteen"],c:3},{q:"How much is the doll?",o:["five","eight","ten","twelve"],c:1}]},
+    {s:"In the <b>park</b>: a green monster is <b>behind</b> the tree. A blue monster is <b>in front of</b> the flowers. A red monster is <b>under</b> the chair.",qs:[{q:"Where is the green monster?",o:["in front of the flowers","behind the tree","under the chair","on the bench"],c:1},{q:"Where is the blue monster?",o:["behind the tree","on the flowers","in front of the flowers","under the chair"],c:2},{q:"Where is the red monster?",o:["behind the tree","in front of flowers","on the bench","under the chair"],c:3}]},
+    {s:"Sue Smile drives a <b>car</b>. She flies a <b>helicopter</b>. She loves riding her <b>motorbike</b>. She goes everywhere!",qs:[{q:"What does Sue drive?",o:["bus","train","car","plane"],c:2},{q:"What does Sue fly?",o:["plane","helicopter","kite","bird"],c:1},{q:"What does Sue ride?",o:["horse","bike","skateboard","motorbike"],c:3}]},
+    {s:"<b>Happy birthday</b>! There is a <b>cake</b>, <b>balloons</b> and lots of <b>food</b>! What is your <b>favourite animal</b>? Have you got a <b>jacket</b>?",qs:[{q:"What is at the birthday party?",o:["pizza only","cake and balloons","only drinks","nothing"],c:1},{q:"What is asked about?",o:["your age","your name","your favourite animal","your school"],c:2},{q:"What item of clothing is mentioned?",o:["hat","shoes","jacket","trousers"],c:2}]},
+    {s:"At the <b>beach</b>: the <b>sun</b> is shining! There is a big <b>boat</b> in the sea. I can see a <b>coconut</b> under the tree. A <b>monkey</b> is in the tree!",qs:[{q:"What is shining?",o:["moon","stars","sun","lamp"],c:2},{q:"Where is the coconut?",o:["in the sea","in the tree","under the tree","on the boat"],c:2},{q:"Where is the monkey?",o:["in the sea","under the tree","on the boat","in the tree"],c:3}]},
+    {s:"In the <b>park</b>: the big boy is <b>flying a kite</b>. A man is <b>waving</b>. The small boy is <b>kicking a ball</b>. The woman is <b>picking up a pear</b>.",qs:[{q:"What is the big boy doing?",o:["kicking a ball","waving","flying a kite","sitting"],c:2},{q:"What is the small boy doing?",o:["flying a kite","waving","picking up fruit","kicking a ball"],c:3},{q:"What is the man doing?",o:["sleeping","kicking","waving","running"],c:2}]},
+    {s:"<b>Who</b>'s this? It's <b>Tony</b>! <b>What</b>'s this? It's a <b>hat</b>. <b>Where</b>'s your crocodile? It's <b>here</b>!",qs:[{q:"Who is Tony?",o:["a girl","a woman","a boy","a teacher"],c:2},{q:"Where is the crocodile?",o:["there","here","behind the tree","in the box"],c:1},{q:"What is the question word for a place?",o:["Who","What","Where","How"],c:2}]},
+    {s:"<b>Kim</b> likes playing computer games in the <b>evening</b>. She plays on her <b>computer</b>. She and her friends listen to funny <b>music</b> on it.",qs:[{q:"When does Kim play computer games?",o:["morning","afternoon","evening","night"],c:2},{q:"What does she play on?",o:["phone","tablet","computer","TV"],c:2},{q:"What do Kim and her friends listen to?",o:["stories","music","news","podcasts"],c:1}]},
+    {s:"<b>Alex</b> loves <b>swimming</b> at the beach. <b>Anna</b> plays <b>tennis</b> in the park. <b>Mark</b> wants to play <b>football</b> in the garden.",qs:[{q:"Where does Alex swim?",o:["pool","park","beach","school"],c:2},{q:"Where does Anna play tennis?",o:["beach","school","home","park"],c:3},{q:"Where does Mark want to play football?",o:["park","beach","garden","school"],c:2}]},
+    {s:"<b>My favourites</b>: boots, socks and trousers are <b>clothes</b>. Blue, green and grey are <b>colours</b>. Donkey, chicken and tiger are <b>animals</b>.",qs:[{q:"What category is 'boots, socks, trousers'?",o:["food","animals","clothes","sports"],c:2},{q:"What category is 'blue, green, grey'?",o:["animals","colours","sports","food"],c:1},{q:"What category is 'donkey, chicken, tiger'?",o:["clothes","colours","food","animals"],c:3}]},
+    {s:"One <b>mouse</b> — lots of <b>mice</b>. One <b>foot</b> — two <b>feet</b>. One <b>child</b> — four <b>children</b>. One <b>sheep</b> — seven <b>sheep</b>.",qs:[{q:"What is the plural of 'mouse'?",o:["mouses","mices","mice","mouse"],c:2},{q:"What is the plural of 'foot'?",o:["foots","feet","feets","foot"],c:1},{q:"What is the plural of 'child'?",o:["childs","childrens","children","child"],c:2}]},
+    {s:"<b>Morning</b>: get up and have breakfast. <b>Afternoon</b>: have lunch. <b>Evening</b>: have dinner. <b>Night</b>: go to bed!",qs:[{q:"When do you have breakfast?",o:["night","afternoon","evening","morning"],c:3},{q:"When do you have lunch?",o:["morning","afternoon","evening","night"],c:1},{q:"When do you go to bed?",o:["morning","afternoon","evening","night"],c:3}]},
+    {s:"<b>Sue Smile</b> drives a car, flies a helicopter and rides a motorbike. Now she is on a <b>train</b>! She loves <b>coming and going</b>!",qs:[{q:"What is Sue on now?",o:["car","helicopter","motorbike","train"],c:3},{q:"Can Sue fly?",o:["yes","no","maybe","I don't know"],c:0},{q:"What does Sue love?",o:["swimming","singing","coming and going","dancing"],c:2}]},
+    {s:"<b>People</b> use a <b>phone</b> to talk to their friends. You can take <b>photos</b> with it. Mrs Bean puts it in her <b>bag</b>.",qs:[{q:"What is a phone used for?",o:["eating","sleeping","talking to friends","writing"],c:2},{q:"What can you take with a phone?",o:["videos only","photos","nothing","drawings"],c:1},{q:"Where does Mrs Bean put her phone?",o:["pocket","desk","bag","table"],c:2}]},
+    {s:"<b>Goodbye!</b> Thank you! <b>Bye!</b> <b>Pardon?</b> See you! <b>Oh dear!</b> Cool, thanks! <b>Here you are!</b>",qs:[{q:"What do you say when leaving?",o:["Pardon?","Thank you","Goodbye!","Oh dear!"],c:2},{q:"What do you say when you don't understand?",o:["Thank you","Goodbye","Pardon?","Here you are"],c:2},{q:"What do you say when you give something?",o:["Pardon?","Oh dear!","Goodbye","Here you are!"],c:3}]},
+    {s:"<b>What's your name?</b> How old are you? <b>What's your teacher's name?</b> What are your friends' names? <b>What sports do you do?</b>",qs:[{q:"What does the girl answer first?",o:["her age","her sport","her name","her school"],c:2},{q:"What subject is asked about?",o:["music","art","sports","science"],c:2},{q:"Who is asked about besides friends?",o:["parents","teacher","neighbours","siblings"],c:1}]},
+    {s:"<b>Happy ending!</b> Let's do a crossword! <b>Alphabet</b>, <b>numbers</b>, <b>animals</b>, <b>food</b>, <b>toys</b> — all in one fun puzzle!",qs:[{q:"What activity is it?",o:["a quiz","a game","a crossword","a race"],c:2},{q:"Is 'alphabet' a topic?",o:["yes","no","maybe","I don't know"],c:0},{q:"Is 'sports' a topic in this crossword?",o:["yes","no","maybe","I don't know"],c:1}]}
+  ],
+  speak:[
+    [{q:"How do you greet someone in English?",a:"Hello! / Hi! How are you?"},
+     {q:"How do you ask someone's name?",a:"What's your name?"},
+     {q:"How do you say goodbye?",a:"Goodbye! / Bye! / See you!"}],
+    [{q:"How many pencils are on your desk?",a:"There are (number) pencils."},
+     {q:"Say the numbers 11 to 20.",a:"Eleven, twelve, thirteen, fourteen, fifteen…"},
+     {q:"How many children are in your class?",a:"There are (number) children in my class."}],
+    [{q:"What is a good boy's name in English?",a:"A good boy's name is (Tom / Ben / Nick)."},
+     {q:"How do you spell your name?",a:"My name is ___. It's spelled T-O-M."},
+     {q:"What is your teacher's name?",a:"My teacher's name is (Mrs / Mr ___ )."}],
+    [{q:"What colour is the sky?",a:"The sky is blue."},
+     {q:"What colour is your favourite thing?",a:"My favourite colour is (red / blue / green)."},
+     {q:"Mix red and yellow — what colour do you get?",a:"Red and yellow make orange."}],
+    [{q:"How do you say 'yes' in class?",a:"Yes! / That's right! / I know!"},
+     {q:"What does 'draw a line' mean?",a:"It means make a line on the paper."},
+     {q:"Ask your friend: Do you like English?",a:"Do you like English? Yes, I do! / No, I don't."}],
+    [{q:"Name three animals you can see at the zoo.",a:"I can see an elephant, a tiger and a giraffe."},
+     {q:"Does an alien have a nose?",a:"Yes! / No! An alien has got (big / small) eyes."},
+     {q:"What does a monkey do?",a:"A monkey climbs and eats bananas."}],
+    [{q:"What can you do with your mouth?",a:"I can smile, eat and talk."},
+     {q:"What can you do with your feet?",a:"I can kick, run and jump."},
+     {q:"Point to your ear! What is this?",a:"This is my ear. I listen with it."}],
+    [{q:"What are you wearing today?",a:"I'm wearing a (blue shirt / red dress)."},
+     {q:"What colour are your shoes?",a:"My shoes are (white / black / blue)."},
+     {q:"Describe your favourite item of clothing.",a:"My favourite is my (red hat / green jacket)."}],
+    [{q:"Describe a funny monster!",a:"My monster has three eyes and six arms!"},
+     {q:"What colour is your monster?",a:"It is purple and green."},
+     {q:"Is your monster big or small?",a:"My monster is very big / small."}],
+    [{q:"How many people are in your family?",a:"There are (number) people in my family."},
+     {q:"Describe your mum or dad.",a:"My mum is (tall / kind / funny)."},
+     {q:"Have you got brothers or sisters?",a:"Yes, I have (one brother). / No, I haven't."}],
+    [{q:"Whose bag is this? (point to your bag)",a:"It's my bag. It's mine!"},
+     {q:"Say: This is my pencil. What's the question?",a:"Whose pencil is this? It's mine!"},
+     {q:"Is this his ball or her ball?",a:"It's his ball. / It's her ball."}],
+    [{q:"Describe someone in the park.",a:"This woman has got red hair and a green bag."},
+     {q:"Who's got a balloon in the picture?",a:"The baby has got a red balloon!"},
+     {q:"How many children can you see?",a:"I can see (number) children."}],
+    [{q:"What can you do?",a:"I can swim / run / sing / draw!"},
+     {q:"What can't you do?",a:"I can't fly / play guitar."},
+     {q:"Ask your friend: Can you ride a bike?",a:"Can you ride a bike? Yes, I can! / No, I can't."}],
+    [{q:"Describe this book. Is it big or small?",a:"This book is (big / small / old / new)."},
+     {q:"Are your shoes clean or dirty today?",a:"My shoes are (clean / dirty) today."},
+     {q:"What is something beautiful near you?",a:"This (flower / picture) is very beautiful."}],
+    [{q:"Name five wild animals.",a:"Tiger, elephant, giraffe, hippo, zebra."},
+     {q:"Describe a tiger.",a:"A tiger is orange and black. It can run fast!"},
+     {q:"Which animal is your favourite? Why?",a:"My favourite is the elephant because it is big."}],
+    [{q:"What is your favourite fruit?",a:"My favourite fruit is (mango / apple / banana)."},
+     {q:"Name three vegetables.",a:"Carrots, tomatoes and potatoes."},
+     {q:"Is a tomato a fruit or a vegetable?",a:"A tomato is actually a fruit!"}],
+    [{q:"What do you eat for lunch?",a:"For lunch I eat (rice / sandwich / soup)."},
+     {q:"Name three things to drink.",a:"Water, juice and milk."},
+     {q:"What is your favourite food?",a:"My favourite food is (pizza / noodles / rice)."}],
+    [{q:"What colour is your bedroom?",a:"My bedroom is (blue / yellow / white)."},
+     {q:"Name the rooms in a house.",a:"Bedroom, kitchen, bathroom, living room, hall."},
+     {q:"Where do you watch TV?",a:"I watch TV in the living room."}],
+    [{q:"What is in your bedroom?",a:"In my bedroom there is a bed, a desk and a lamp."},
+     {q:"Describe your bedroom.",a:"My bedroom is (big / small / tidy / messy)."},
+     {q:"Where do you sleep?",a:"I sleep in my bedroom."}],
+    [{q:"Describe your house or flat.",a:"I live in a (big / small) (house / flat)."},
+     {q:"What is in your living room?",a:"There is a sofa, a TV and some chairs."},
+     {q:"What is your favourite room? Why?",a:"My favourite room is the kitchen because I love food!"}],
+    [{q:"What toys do you have at home?",a:"I have got a (bike / ball / robot / kite)."},
+     {q:"How do you travel to school?",a:"I go to school by (bus / car / bike / foot)."},
+     {q:"Name three things that go on the road.",a:"A car, a bus and a motorbike."}],
+    [{q:"What is in your school bag?",a:"In my bag: a book, a pencil, a ruler and a rubber."},
+     {q:"Describe your school bag.",a:"My bag is (red / blue / big / small)."},
+     {q:"What is on your desk right now?",a:"On my desk there is a (book / pencil / computer)."}],
+    [{q:"How many children are in your class?",a:"There are (number) children in my class."},
+     {q:"What is your teacher's name?",a:"My teacher's name is (Mrs / Mr ___ )."},
+     {q:"What is your favourite subject at school?",a:"My favourite subject is (English / Maths / Art)."}],
+    [{q:"What is the teacher doing now?",a:"The teacher is (talking / writing / smiling)."},
+     {q:"What are you doing right now?",a:"I am (studying / sitting / reading)."},
+     {q:"Ask a friend: What are you doing?",a:"What are you doing? I'm studying English!"}],
+    [{q:"Name five wild animals in the jungle.",a:"Tiger, monkey, giraffe, hippo, parrot."},
+     {q:"Describe a giraffe.",a:"A giraffe is tall and yellow. It has a long neck!"},
+     {q:"Can a hippo swim?",a:"Yes! A hippo can swim in the river."}],
+    [{q:"How many pets have you got?",a:"I've got (one dog / two cats / no pets)."},
+     {q:"Describe your pet (or a pet you want).",a:"My dog is brown and small. It loves running!"},
+     {q:"What is a good name for a pet?",a:"A good name for a dog is (Chocolate / Mango / Tiger)."}],
+    [{q:"What is your favourite food?",a:"My favourite food is (pizza / rice / noodles)."},
+     {q:"What food don't you like?",a:"I don't like (mushrooms / onions / fish)."},
+     {q:"What food has the letter 'c' in it?",a:"Carrot, cake, chicken, chocolate, coconut!"}],
+    [{q:"What do you eat for breakfast?",a:"For breakfast I eat (bread / eggs / cereal)."},
+     {q:"What is your favourite ice cream flavour?",a:"My favourite is (chocolate / strawberry / vanilla)."},
+     {q:"Write your favourite food day menu!",a:"Breakfast: eggs. Lunch: pizza. Dinner: rice and chicken!"}],
+    [{q:"What toys do you like in a toy shop?",a:"I like (robots / dolls / bikes / games)!"},
+     {q:"How much is a (toy)? It's (number) pounds.",a:"It's fifteen pounds. That's expensive!"},
+     {q:"Do you prefer robots or dolls?",a:"I prefer (robots / dolls) because they are (cool / fun)."}],
+    [{q:"Where is the monster?",a:"The monster is behind / in front of / under the tree."},
+     {q:"Describe where things are in your room.",a:"My book is on the desk. My bag is under the chair."},
+     {q:"Put your pencil on your head! Where is it?",a:"It's on my head!"}],
+    [{q:"How do you come to school?",a:"I come to school by (bus / car / bike / foot)."},
+     {q:"Name five types of transport.",a:"Car, bus, bike, plane, train."},
+     {q:"Would you like to fly a helicopter? Why?",a:"Yes! Because it is exciting / cool!"}],
+    [{q:"When is your birthday?",a:"My birthday is in (June / December / March)."},
+     {q:"What do you want for your birthday?",a:"I want a (bike / game / book / phone)!"},
+     {q:"How do you say 'Happy Birthday' in Vietnamese?",a:"Chúc mừng sinh nhật! In English: Happy Birthday!"}],
+    [{q:"What can you do at the beach?",a:"I can swim, build sandcastles and play!"},
+     {q:"What do you take to the beach?",a:"I take a towel, sunscreen and a ball."},
+     {q:"Describe a beach scene.",a:"There is sand, sea and sunshine. A boat is in the water!"}],
+    [{q:"What are people doing in the park?",a:"People are running, kicking balls and flying kites."},
+     {q:"Describe what the big boy is doing.",a:"The big boy is flying a kite / kicking a ball."},
+     {q:"What do you like doing in the park?",a:"I like (playing football / feeding the ducks)."}],
+    [{q:"Ask: Who is this?",a:"Who is this? It's (Tony / Lucy / Sam)."},
+     {q:"Ask: Where is the cat?",a:"Where is the cat? It's on the chair."},
+     {q:"Ask: What colour is the hat?",a:"What colour is the hat? It's (red / blue)."}],
+    [{q:"What are your hobbies?",a:"My hobbies are (reading / drawing / playing games)."},
+     {q:"Do you like computer games?",a:"Yes, I love them! / No, I prefer (sport / reading)."},
+     {q:"What game do you play in the evening?",a:"In the evening I play (football / chess / video games)."}],
+    [{q:"What sports can you do?",a:"I can play (football / tennis / basketball)!"},
+     {q:"What sport do you love watching?",a:"I love watching (football / swimming / gymnastics)."},
+     {q:"Can you bounce a ball? Show me!",a:"Yes, I can bounce, catch, throw and kick a ball!"}],
+    [{q:"What is your favourite animal?",a:"My favourite animal is the (dog / cat / dolphin)."},
+     {q:"What is your favourite colour?",a:"My favourite colour is (purple / green / red)."},
+     {q:"What is your favourite hobby?",a:"My favourite hobby is (drawing / swimming / gaming)."}],
+    [{q:"What is the plural of 'mouse'?",a:"The plural of mouse is mice!"},
+     {q:"Say five irregular plurals.",a:"Mouse-mice, foot-feet, child-children, sheep-sheep, fish-fish."},
+     {q:"How many feet does a spider have?",a:"A spider has eight feet!"}],
+    [{q:"What do you do in the morning?",a:"In the morning I get up, have breakfast and go to school."},
+     {q:"What time do you go to bed?",a:"I go to bed at (eight / nine / ten) o'clock."},
+     {q:"What do you do at night?",a:"At night I (read / watch TV / sleep)."}],
+    [{q:"Name five types of transport.",a:"Car, bus, train, plane, boat."},
+     {q:"How do you say 'motorbike' — spell it.",a:"M-O-T-O-R-B-I-K-E!"},
+     {q:"Would you rather go by plane or train?",a:"I'd rather go by (plane / train) because it's (faster / nicer)."}],
+    [{q:"What can you do with a phone?",a:"I can call friends, take photos and play games!"},
+     {q:"Where do you put your phone?",a:"I put my phone in my (bag / pocket / desk)."},
+     {q:"How many phones are in your house?",a:"There are (number) phones in my house."}],
+    [{q:"How do you say goodbye in English?",a:"Goodbye! / Bye! / See you later!"},
+     {q:"What do you say when someone gives you something?",a:"Thank you! / Thanks a lot!"},
+     {q:"What do you say if you don't understand?",a:"Pardon? / Sorry? / Can you say that again?"}],
+    [{q:"How old are you?",a:"I am (seven / eight / nine) years old."},
+     {q:"What sports do you do?",a:"I (swim / play football / do gymnastics)."},
+     {q:"What are your friends' names?",a:"My friends' names are (Anna and Kim / Ben and Tom)."}],
+    [{q:"What words do you know for food?",a:"Apple, banana, pizza, rice, chicken, cake!"},
+     {q:"What words do you know for animals?",a:"Cat, dog, elephant, tiger, monkey, snake!"},
+     {q:"What is your favourite word in English? Why?",a:"My favourite word is 'rainbow' — it sounds beautiful!"}]
+  ],
+  read:[
+    {t:"This is <span class='hi'>Sam</span>. He is a <span class='hi'>monkey</span>. Sam has got a <span class='hi'>red</span> ball. He loves to <span class='hi'>play</span>!",qs:[{type:'yn',q:"Sam is a monkey.",a:true},{type:'yn',q:"The ball is blue.",a:false},{type:'ch',q:"What does Sam love?",o:["sleep","eat","play","climb"],c:2}]},
+    {t:"There are <span class='hi'>twelve</span> children. <span class='hi'>Seven</span> girls and <span class='hi'>five</span> boys. There are <span class='hi'>twenty</span> books on the shelf.",qs:[{type:'yn',q:"There are twelve children.",a:true},{type:'yn',q:"There are eight boys.",a:false},{type:'ch',q:"How many books?",o:["seven","twelve","fifteen","twenty"],c:3}]},
+    {t:"This is <span class='hi'>Lucy</span>. She is <span class='hi'>eight</span> years old. Her favourite name is <span class='hi'>Grace</span>. She has a cat called <span class='hi'>Mango</span>.",qs:[{type:'yn',q:"Lucy is eight years old.",a:true},{type:'yn',q:"Lucy's cat is called Tiger.",a:false},{type:'ch',q:"What is Lucy's favourite name?",o:["Anna","Kim","Grace","May"],c:2}]},
+    {t:"I can see a <span class='hi'>red</span> apple, a <span class='hi'>yellow</span> banana, a <span class='hi'>green</span> frog and a <span class='hi'>blue</span> sky.",qs:[{type:'yn',q:"The apple is red.",a:true},{type:'yn',q:"The sky is green.",a:false},{type:'ch',q:"What colour is the banana?",o:["red","orange","green","yellow"],c:3}]},
+    {t:"In the <span class='hi'>classroom</span>: <span class='hi'>draw</span> a line. <span class='hi'>Tick</span> the box. <span class='hi'>Write</span> yes. Put a <span class='hi'>cross</span>. <span class='hi'>Circle</span> the word.",qs:[{type:'yn',q:"You draw a line in the classroom.",a:true},{type:'yn',q:"You put a tick in a circle.",a:false},{type:'ch',q:"What do you do with a box?",o:["draw it","write in it","tick it","cross it"],c:2}]},
+    {t:"The <span class='hi'>elephant</span> is big and <span class='hi'>grey</span>. The <span class='hi'>mouse</span> has big ears. The <span class='hi'>alien</span> has got six arms and a <span class='hi'>blue</span> body.",qs:[{type:'yn',q:"The elephant is grey.",a:true},{type:'yn',q:"The mouse has a long nose.",a:false},{type:'ch',q:"What colour is the alien's body?",o:["grey","red","yellow","blue"],c:3}]},
+    {t:"I <span class='hi'>smile</span> with my mouth. I <span class='hi'>listen</span> to music with my ears. I <span class='hi'>look</span> at books with my eyes. I <span class='hi'>wave</span> my hand.",qs:[{type:'yn',q:"You listen with your ears.",a:true},{type:'yn',q:"You wave with your feet.",a:false},{type:'ch',q:"What do you do with your eyes?",o:["kick","listen","look","wave"],c:2}]},
+    {t:"<span class='hi'>Kim</span> is wearing a <span class='hi'>yellow</span> dress and <span class='hi'>pink</span> shoes. She has a <span class='hi'>purple</span> bag. Her hat is <span class='hi'>orange</span>.",qs:[{type:'yn',q:"Kim is wearing a yellow dress.",a:true},{type:'yn',q:"Kim's shoes are blue.",a:false},{type:'ch',q:"What colour is Kim's bag?",o:["yellow","pink","purple","orange"],c:2}]},
+    {t:"The <span class='hi'>monster</span> is very big! It has got <span class='hi'>two</span> heads, <span class='hi'>six</span> funny tails and very <span class='hi'>long</span> arms.",qs:[{type:'yn',q:"The monster is small.",a:false},{type:'yn',q:"The monster has two heads.",a:true},{type:'ch',q:"How many tails does it have?",o:["two","four","six","eight"],c:2}]},
+    {t:"Sam lives in a big <span class='hi'>house</span> with his mum, dad and three <span class='hi'>sisters</span>. Their dog is called <span class='hi'>Chocolate</span>.",qs:[{type:'yn',q:"Sam has three sisters.",a:true},{type:'yn',q:"The cat is called Chocolate.",a:false},{type:'ch',q:"Where does Sam live?",o:["a flat","a school","a big house","a farm"],c:2}]},
+    {t:"This is <span class='hi'>Nick's</span> mouse. It is <span class='hi'>his</span>. These are <span class='hi'>Lucy's</span> paints. They are <span class='hi'>hers</span>. The kite is <span class='hi'>theirs</span>.",qs:[{type:'yn',q:"The mouse belongs to Nick.",a:true},{type:'yn',q:"The paints are Nick's.",a:false},{type:'ch',q:"Whose mouse is it?",o:["Lucy's","Anna's","Nick's","Bill's"],c:2}]},
+    {t:"In the <span class='hi'>park</span>: two girls have got a <span class='hi'>duck</span>. A man has got a <span class='hi'>dog</span>. A woman has got a <span class='hi'>book</span>.",qs:[{type:'yn',q:"Two girls have got a duck.",a:true},{type:'yn',q:"The man has got a horse.",a:false},{type:'ch',q:"What has the woman got?",o:["a bag","a dog","a book","flowers"],c:2}]},
+    {t:"<span class='hi'>Alphabet</span> can fly and jump but cannot swim. <span class='hi'>Bean</span> can only sing. <span class='hi'>Carrot</span> can read, jump and run.",qs:[{type:'yn',q:"Alphabet can swim.",a:false},{type:'yn',q:"Bean can sing.",a:true},{type:'ch',q:"What can Carrot do?",o:["fly","swim","sing","read and jump"],c:3}]},
+    {t:"This is a <span class='hi'>clean</span> car. An <span class='hi'>old</span> woman. A <span class='hi'>dirty</span> shoe. A <span class='hi'>new</span> phone. A <span class='hi'>short</span> skirt.",qs:[{type:'yn',q:"The car is clean.",a:true},{type:'yn',q:"The skirt is long.",a:false},{type:'ch',q:"What is the phone like?",o:["old","dirty","small","new"],c:3}]},
+    {t:"A <span class='hi'>chicken</span> is small and brown. A <span class='hi'>crocodile</span> is big and <span class='hi'>green</span>. A <span class='hi'>polar bear</span> is white. A <span class='hi'>tiger</span> can run fast.",qs:[{type:'yn',q:"A crocodile is green.",a:true},{type:'yn',q:"A polar bear is brown.",a:false},{type:'ch',q:"Which animal can run fast?",o:["chicken","crocodile","polar bear","tiger"],c:3}]},
+    {t:"It is a <span class='hi'>banana</span>. It is long and <span class='hi'>yellow</span>. A <span class='hi'>lemon</span> is also yellow. A <span class='hi'>mango</span> is orange and sweet.",qs:[{type:'yn',q:"A banana is long and yellow.",a:true},{type:'yn',q:"A mango is green.",a:false},{type:'ch',q:"What colour is a lemon?",o:["orange","green","yellow","red"],c:2}]},
+    {t:"Today's menu: <span class='hi'>burger</span> and chips! We also have <span class='hi'>chicken</span> and <span class='hi'>rice</span>. For drinks: <span class='hi'>water</span> and <span class='hi'>juice</span>.",qs:[{type:'yn',q:"Burger and chips is on the menu.",a:true},{type:'yn',q:"Pizza is on the menu.",a:false},{type:'ch',q:"What drink is mentioned?",o:["tea","water","lemonade","coffee"],c:1}]},
+    {t:"My <span class='hi'>bedroom</span> is pink. My <span class='hi'>kitchen</span> is yellow. The <span class='hi'>hall</span> has a photo. The clock is in the <span class='hi'>kitchen</span>.",qs:[{type:'yn',q:"The bedroom is pink.",a:true},{type:'yn',q:"The photo is in the bedroom.",a:false},{type:'ch',q:"Where is the clock?",o:["hall","bedroom","bathroom","kitchen"],c:3}]},
+    {t:"In my <span class='hi'>bedroom</span>: an armchair, a <span class='hi'>desk</span>, a big <span class='hi'>TV</span>, a <span class='hi'>phone</span> and a <span class='hi'>computer</span>.",qs:[{type:'yn',q:"There is a desk in the bedroom.",a:true},{type:'yn',q:"There is a bath in the bedroom.",a:false},{type:'ch',q:"How many items are listed?",o:["three","four","five","six"],c:2}]},
+    {t:"A <span class='hi'>living room</span> is part of a house. Families <span class='hi'>sit</span> in it and watch <span class='hi'>TV</span>. Some put <span class='hi'>posters</span> on the walls.",qs:[{type:'yn',q:"A living room is in a house.",a:true},{type:'yn',q:"People cook in the living room.",a:false},{type:'ch',q:"What do families do in the living room?",o:["sleep","cook","sit and watch TV","study"],c:2}]},
+    {t:"<span class='hi'>Anna</span> is playing with a bus. <span class='hi'>Dan</span> rides a bike. <span class='hi'>Grace</span> has a boat. <span class='hi'>Jill</span> drives a toy car.",qs:[{type:'yn',q:"Anna is playing with a bus.",a:true},{type:'yn',q:"Grace has a toy car.",a:false},{type:'ch',q:"Who rides a bike?",o:["Anna","Dan","Grace","Jill"],c:1}]},
+    {t:"In my bag: a <span class='hi'>pencil</span>, a <span class='hi'>rubber</span>, a <span class='hi'>ruler</span> and a <span class='hi'>book</span>. My crayon is red. My eraser is pink.",qs:[{type:'yn',q:"There is a pencil in the bag.",a:true},{type:'yn',q:"The crayon is blue.",a:false},{type:'ch',q:"What colour is the eraser?",o:["blue","red","yellow","pink"],c:3}]},
+    {t:"<span class='hi'>May</span> is 8 years old, in class 7. Her teacher is <span class='hi'>Mrs Green</span>. There are <span class='hi'>22</span> children in her class.",qs:[{type:'yn',q:"May is 8 years old.",a:true},{type:'yn',q:"May is in class 5.",a:false},{type:'ch',q:"What is May's teacher called?",o:["Mr Green","Mrs Blue","Mrs Green","Miss Brown"],c:2}]},
+    {t:"<span class='hi'>Tom and Nick</span> are drawing a rocket. <span class='hi'>Lucy</span> is reading. <span class='hi'>Anna</span> is jumping. The teacher is <span class='hi'>smiling</span>.",qs:[{type:'yn',q:"Tom is drawing a rocket.",a:true},{type:'yn',q:"Lucy is sleeping.",a:false},{type:'ch',q:"What is the teacher doing?",o:["reading","drawing","smiling","jumping"],c:2}]},
+    {t:"In the <span class='hi'>jungle</span>: a tiger, a giraffe, a hippo and a <span class='hi'>parrot</span>. Tom has three pet <span class='hi'>snakes</span> at home.",qs:[{type:'yn',q:"There is a parrot in the jungle.",a:true},{type:'yn',q:"Tom has two snakes.",a:false},{type:'ch',q:"How many snakes does Tom have?",o:["one","two","three","four"],c:2}]},
+    {t:"<span class='hi'>May</span> has lots of pets. She has a dog, three mice and a crocodile called <span class='hi'>Mr Croc</span>. He eats mum's cooking!",qs:[{type:'yn',q:"May has three mice.",a:true},{type:'yn',q:"The crocodile is called Mr Mouse.",a:false},{type:'ch',q:"What does Mr Croc eat?",o:["fish","grass","mum's cooking","plants"],c:2}]},
+    {t:"<span class='hi'>Bill</span> loves eggs, beans and bread for breakfast. <span class='hi'>Lucy</span> likes food with the letter 'c': <span class='hi'>carrots</span>, <span class='hi'>chocolate</span> and cake!",qs:[{type:'yn',q:"Bill loves eggs for breakfast.",a:true},{type:'yn',q:"Lucy likes food with the letter 'b'.",a:false},{type:'ch',q:"What does Lucy like?",o:["apples","carrots and chocolate","bananas","fish"],c:1}]},
+    {t:"My favourite food is <span class='hi'>pizza</span>! For breakfast: <span class='hi'>bread</span> and milk. For dinner: <span class='hi'>rice</span> and chicken.",qs:[{type:'yn',q:"The person loves pizza.",a:true},{type:'yn',q:"They eat rice for breakfast.",a:false},{type:'ch',q:"What do they eat for dinner?",o:["pizza","bread","rice and chicken","eggs"],c:2}]},
+    {t:"The <span class='hi'>toy shop</span> is busy. There are <span class='hi'>twelve</span> toys in the cupboard. The man is cleaning the <span class='hi'>floor</span>.",qs:[{type:'yn',q:"There are twelve toys in the cupboard.",a:true},{type:'yn',q:"The woman is cleaning the floor.",a:false},{type:'ch',q:"What is the man doing?",o:["selling toys","holding a doll","cleaning the floor","counting money"],c:2}]},
+    {t:"A <span class='hi'>green</span> monster is <span class='hi'>behind</span> the tree. A <span class='hi'>blue</span> monster is in <span class='hi'>front of</span> the flowers. A <span class='hi'>red</span> monster is <span class='hi'>under</span> the chair.",qs:[{type:'yn',q:"The green monster is behind the tree.",a:true},{type:'yn',q:"The red monster is on the bench.",a:false},{type:'ch',q:"Where is the blue monster?",o:["behind the tree","in front of the flowers","on the bench","under the chair"],c:1}]},
+    {t:"<span class='hi'>Sue Smile</span> drives a car, flies a helicopter and loves riding her <span class='hi'>motorbike</span>. She goes everywhere fast!",qs:[{type:'yn',q:"Sue can fly a helicopter.",a:true},{type:'yn',q:"Sue travels by train.",a:false},{type:'ch',q:"What does Sue ride?",o:["horse","bike","motorbike","skateboard"],c:2}]},
+    {t:"At the birthday party: a <span class='hi'>cake</span>, <span class='hi'>balloons</span> and lots of friends! The cake has <span class='hi'>seven</span> candles.",qs:[{type:'yn',q:"There is a cake at the party.",a:true},{type:'yn',q:"The cake has ten candles.",a:false},{type:'ch',q:"How many candles does the cake have?",o:["five","six","seven","eight"],c:2}]},
+    {t:"At the <span class='hi'>beach</span>: the sun is shining. A big <span class='hi'>boat</span> is in the sea. A <span class='hi'>monkey</span> is in the palm tree!",qs:[{type:'yn',q:"The sun is shining.",a:true},{type:'yn',q:"The monkey is in the water.",a:false},{type:'ch',q:"Where is the monkey?",o:["in the sea","on the boat","in the palm tree","under the tree"],c:2}]},
+    {t:"In the <span class='hi'>park</span>: the big boy is flying a <span class='hi'>kite</span>. The woman is <span class='hi'>picking up a pear</span>. The dog is running!",qs:[{type:'yn',q:"The boy is flying a kite.",a:true},{type:'yn',q:"The woman is kicking a ball.",a:false},{type:'ch',q:"What is the boy flying?",o:["a balloon","a plane","a kite","a bird"],c:2}]},
+    {t:"<span class='hi'>Who</span>'s this? It's Tony! <span class='hi'>What</span>'s this? A hat. <span class='hi'>Where</span>'s the crocodile? It's here, next to Tony!",qs:[{type:'yn',q:"Tony has a hat.",a:true},{type:'yn',q:"The crocodile is behind Tony.",a:false},{type:'ch',q:"Where is the crocodile?",o:["in the water","on the table","next to Tony","behind the tree"],c:2}]},
+    {t:"<span class='hi'>Kim</span> likes computer games in the evening. She plays on her <span class='hi'>computer</span> and listens to music with her <span class='hi'>friends</span>.",qs:[{type:'yn',q:"Kim likes computer games.",a:true},{type:'yn',q:"Kim plays alone.",a:false},{type:'ch',q:"When does Kim play games?",o:["morning","afternoon","evening","night"],c:2}]},
+    {t:"<span class='hi'>Alex</span> loves swimming at the beach. <span class='hi'>Anna</span> plays tennis in the park. <span class='hi'>Mark</span> plays football in the garden.",qs:[{type:'yn',q:"Alex loves swimming.",a:true},{type:'yn',q:"Anna plays football.",a:false},{type:'ch',q:"Where does Anna play tennis?",o:["beach","school","home","park"],c:3}]},
+    {t:"My favourites: <span class='hi'>boots</span>, socks and trousers are <span class='hi'>clothes</span>. <span class='hi'>Blue</span>, green and grey are colours. <span class='hi'>Football</span> and tennis are sports.",qs:[{type:'yn',q:"Boots are clothes.",a:true},{type:'yn',q:"Blue is an animal.",a:false},{type:'ch',q:"What category is football?",o:["clothes","colours","food","sports"],c:3}]},
+    {t:"One <span class='hi'>mouse</span> — lots of <span class='hi'>mice</span>. One foot — two <span class='hi'>feet</span>. One child — four <span class='hi'>children</span>.",qs:[{type:'yn',q:"The plural of foot is feet.",a:true},{type:'yn',q:"The plural of mouse is mouses.",a:false},{type:'ch',q:"What is the plural of child?",o:["childs","childrens","children","child"],c:2}]},
+    {t:"In the <span class='hi'>morning</span>: wake up and eat breakfast. In the <span class='hi'>afternoon</span>: have lunch. At <span class='hi'>night</span>: sleep!",qs:[{type:'yn',q:"You eat breakfast in the morning.",a:true},{type:'yn',q:"You sleep in the morning.",a:false},{type:'ch',q:"When do you have lunch?",o:["morning","afternoon","evening","night"],c:1}]},
+    {t:"<span class='hi'>Sue Smile</span> loves trains! She is on the <span class='hi'>train</span> now. She can also ride a <span class='hi'>bike</span> and fly a <span class='hi'>helicopter</span>.",qs:[{type:'yn',q:"Sue is on a train.",a:true},{type:'yn',q:"Sue can't ride a bike.",a:false},{type:'ch',q:"What else can Sue fly?",o:["plane","kite","helicopter","drone"],c:2}]},
+    {t:"<span class='hi'>Mrs Bean</span> has a phone. She puts it in her <span class='hi'>brown bag</span>. People use phones to talk to <span class='hi'>friends</span> and take <span class='hi'>photos</span>.",qs:[{type:'yn',q:"Mrs Bean has a phone.",a:true},{type:'yn',q:"Mrs Bean puts her phone in a blue bag.",a:false},{type:'ch',q:"What can you take with a phone?",o:["videos only","notes","photos","drawings"],c:2}]},
+    {t:"<b>Goodbye!</b> <span class='hi'>Bye!</span> See you! <span class='hi'>Thank you!</span> <span class='hi'>Pardon?</span> <span class='hi'>Oh dear!</span> Cool, thanks! <span class='hi'>Here you are!</span>",qs:[{type:'yn',q:"'Goodbye' and 'Bye' mean the same.",a:true},{type:'yn',q:"'Pardon?' means 'Thank you!'.",a:false},{type:'ch',q:"What do you say if you don't hear?",o:["Goodbye","Thank you","Pardon?","See you"],c:2}]},
+    {t:"<span class='hi'>Kim</span> is 9 years old. She is in class 12. Her eyes are <span class='hi'>brown</span>. She plays the <span class='hi'>piano</span>.",qs:[{type:'yn',q:"Kim is 9 years old.",a:true},{type:'yn',q:"Kim plays the guitar.",a:false},{type:'ch',q:"What colour are Kim's eyes?",o:["blue","green","brown","black"],c:2}]},
+    {t:"Let's do the <span class='hi'>crossword</span>! We have <span class='hi'>food</span> words, <span class='hi'>animal</span> words and <span class='hi'>number</span> words. It's fun!",qs:[{type:'yn',q:"The crossword has food words.",a:true},{type:'yn',q:"The crossword only has sport words.",a:false},{type:'ch',q:"What kind of activity is this?",o:["a quiz","a crossword","a race","a game show"],c:1}]}
+  ],
+  write:[
+    {pr:"Say hello! Complete the words:",wb:["hello","name","spell","write","friend"],bl:[{p:"H _ l l _",k:"hello"},{p:"My _ _ _ _ is Sam.",k:"name"},{p:"Can you _ _ _ _ _ _?",k:"friend"}]},
+    {pr:"Write the numbers as words:",wb:["five","eight","eleven","fifteen","twenty"],bl:[{p:"5 →",k:"five"},{p:"8 →",k:"eight"},{p:"11 →",k:"eleven"},{p:"20 →",k:"twenty"}]},
+    {pr:"Write these English names correctly:",wb:["Ben","Lucy","Kim","Mark","Grace"],bl:[{p:"B _ n",k:"Ben"},{p:"L _ c _",k:"Lucy"},{p:"K _ m",k:"Kim"},{p:"G r _ c _",k:"Grace"}]},
+    {pr:"Write the colours:",wb:["red","blue","green","yellow","purple"],bl:[{p:"Sky is ___ .",k:"blue"},{p:"Grass is ___ .",k:"green"},{p:"The sun is ___ .",k:"yellow"},{p:"A cherry is ___ .",k:"red"}]},
+    {pr:"Write classroom words:",wb:["tick","cross","draw","write","circle"],bl:[{p:"Put a ___ in the box.",k:"tick"},{p:"___ a line.",k:"draw"},{p:"___ the correct word.",k:"circle"},{p:"Put a ___ if it's wrong.",k:"cross"}]},
+    {pr:"Write animal words:",wb:["elephant","mouse","alien","giraffe","tiger"],bl:[{p:"It has a long nose: ___",k:"elephant"},{p:"It has big ears and is small: ___",k:"mouse"},{p:"It has a long neck: ___",k:"giraffe"},{p:"It is orange and black: ___",k:"tiger"}]},
+    {pr:"Write body part words:",wb:["eye","ear","nose","mouth","hand"],bl:[{p:"_ y _",k:"eye"},{p:"_ a r",k:"ear"},{p:"n _ s _",k:"nose"},{p:"m _ _ t h",k:"mouth"}]},
+    {pr:"Complete the clothing words:",wb:["hat","shoes","shirt","dress","trousers"],bl:[{p:"I wear a ___ on my head.",k:"hat"},{p:"I wear ___ on my feet.",k:"shoes"},{p:"Girls often wear a ___ .",k:"dress"},{p:"Boys often wear a ___ .",k:"shirt"}]},
+    {pr:"Write adjectives to describe the monster:",wb:["big","funny","long","small","ugly"],bl:[{p:"The monster is very ___ !",k:"big"},{p:"Its arms are ___ .",k:"long"},{p:"Its hands are ___ .",k:"small"},{p:"The monster looks very ___ !",k:"funny"}]},
+    {pr:"Write family words:",wb:["mum","dad","sister","brother","grandma"],bl:[{p:"My ___ is kind.",k:"mum"},{p:"His ___ is tall.",k:"dad"},{p:"Her ___ is young.",k:"sister"},{p:"My ___ is funny.",k:"brother"}]},
+    {pr:"Write possessives: his, her, their",wb:["his","her","their","mine","ours"],bl:[{p:"The mouse is ___ (Nick).",k:"his"},{p:"The paints are ___ (Lucy).",k:"her"},{p:"The kite is ___ (Kim and Tom).",k:"their"},{p:"This is ___ bag.",k:"my"}]},
+    {pr:"Write people words:",wb:["woman","man","boy","girl","baby"],bl:[{p:"A young female: ___",k:"girl"},{p:"A young male: ___",k:"boy"},{p:"An adult female: ___",k:"woman"},{p:"An adult male: ___",k:"man"}]},
+    {pr:"Write can or can't:",wb:["can","can't","fly","swim","sing"],bl:[{p:"Alphabet ___ fly. (Yes)",k:"can"},{p:"Bean ___ fly. (No)",k:"can't"},{p:"Egg ___ swim. (Yes)",k:"can"},{p:"Carrot ___ swim. (No)",k:"can't"}]},
+    {pr:"Write adjectives:",wb:["clean","dirty","old","new","short"],bl:[{p:"The car is ___ (not dirty).",k:"clean"},{p:"The shoe is ___ (not clean).",k:"dirty"},{p:"The skirt is ___ (not long).",k:"short"},{p:"The phone is ___ (not old).",k:"new"}]},
+    {pr:"Write animal names:",wb:["chicken","tiger","zebra","hippo","crocodile"],bl:[{p:"Big, green, in the river: ___",k:"crocodile"},{p:"Black and white stripes: ___",k:"zebra"},{p:"Orange and black, fast: ___",k:"tiger"},{p:"Big, grey, loves water: ___",k:"hippo"}]},
+    {pr:"Write fruit and vegetable words:",wb:["apple","banana","mango","lemon","carrot"],bl:[{p:"Long and yellow, monkeys like it: ___",k:"banana"},{p:"Round, red, crunchy: ___",k:"apple"},{p:"Orange, sweet, tropical: ___",k:"mango"},{p:"Yellow and sour: ___",k:"lemon"}]},
+    {pr:"Write food and drink words:",wb:["burger","chicken","rice","water","juice"],bl:[{p:"B _ r _ _ r",k:"burger"},{p:"C h _ _ _ _ n",k:"chicken"},{p:"R _ _ _",k:"rice"},{p:"J _ _ _ _",k:"juice"}]},
+    {pr:"Write rooms in a house:",wb:["bedroom","kitchen","bathroom","living room","hall"],bl:[{p:"You sleep here: ___",k:"bedroom"},{p:"You cook here: ___",k:"kitchen"},{p:"You have a bath here: ___",k:"bathroom"},{p:"You watch TV here: ___",k:"living room"}]},
+    {pr:"Write bedroom objects:",wb:["desk","lamp","computer","armchair","phone"],bl:[{p:"You sit and work at a ___ .",k:"desk"},{p:"It gives light: ___",k:"lamp"},{p:"You type on a ___ .",k:"computer"},{p:"You call people on a ___ .",k:"phone"}]},
+    {pr:"Write house words:",wb:["sofa","television","poster","kitchen","armchair"],bl:[{p:"You sit on a ___ .",k:"sofa"},{p:"You watch a ___ .",k:"television"},{p:"You put it on a wall: ___",k:"poster"},{p:"You cook in the ___ .",k:"kitchen"}]},
+    {pr:"Write transport and toy words:",wb:["bus","bike","boat","train","plane"],bl:[{p:"It goes on water: ___",k:"boat"},{p:"It has two wheels: ___",k:"bike"},{p:"It flies: ___",k:"plane"},{p:"Many people ride this on roads: ___",k:"bus"}]},
+    {pr:"Write school bag words:",wb:["pencil","rubber","ruler","book","crayon"],bl:[{p:"p _ n _ _ l",k:"pencil"},{p:"r _ b _ _ r",k:"rubber"},{p:"r _ l _ r",k:"ruler"},{p:"c r _ _ _ n",k:"crayon"}]},
+    {pr:"Write school words:",wb:["cupboard","keyboard","board","desk","teacher"],bl:[{p:"The ___ writes on the board.",k:"teacher"},{p:"Books go in the ___ .",k:"cupboard"},{p:"You type on a ___ .",k:"keyboard"},{p:"You write on the ___ .",k:"board"}]},
+    {pr:"Write -ing verbs:",wb:["drawing","reading","eating","sleeping","painting"],bl:[{p:"Tom is ___ a rocket.",k:"drawing"},{p:"Lucy is ___ a book.",k:"reading"},{p:"Ben is ___ a banana.",k:"eating"},{p:"Sam is ___ on his desk.",k:"sleeping"}]},
+    {pr:"Write wild animal words:",wb:["tiger","giraffe","hippo","parrot","monkey"],bl:[{p:"It has a long neck: ___",k:"giraffe"},{p:"It is orange and black: ___",k:"tiger"},{p:"It is big and grey, loves water: ___",k:"hippo"},{p:"It is colourful and can talk: ___",k:"parrot"}]},
+    {pr:"Write pet words and numbers:",wb:["dog","cat","mouse","crocodile","snake"],bl:[{p:"It barks: ___",k:"dog"},{p:"It meows: ___",k:"cat"},{p:"It is small with big ears: ___",k:"mouse"},{p:"Tom's unusual pet: ___",k:"crocodile"}]},
+    {pr:"Write food words with 'c':",wb:["carrot","cake","chicken","chocolate","coconut"],bl:[{p:"c _ r r _ t",k:"carrot"},{p:"c _ k _",k:"cake"},{p:"c h _ c k _ n",k:"chicken"},{p:"c h _ c _ l _ t _",k:"chocolate"}]},
+    {pr:"Write your favourite food day menu:",wb:["eggs","bread","rice","pizza","chicken"],bl:[{p:"Breakfast: I eat ___ .",k:"eggs"},{p:"Lunch: I eat ___ .",k:"pizza"},{p:"Dinner: I eat ___ .",k:"rice"},{p:"I also like ___ .",k:"chicken"}]},
+    {pr:"Write toy shop words:",wb:["robot","doll","ball","kite","keyboard"],bl:[{p:"The computer is the robot's face: ___",k:"keyboard"},{p:"Children play with this: ___",k:"doll"},{p:"You fly this: ___",k:"kite"},{p:"You kick this: ___",k:"ball"}]},
+    {pr:"Write prepositions:",wb:["in","on","under","behind","next to"],bl:[{p:"The cat is ___ the chair.",k:"on"},{p:"The fish is ___ the water.",k:"in"},{p:"The dog is ___ the table.",k:"under"},{p:"The monster is ___ the tree.",k:"behind"}]},
+    {pr:"Write transport words:",wb:["car","plane","helicopter","motorbike","train"],bl:[{p:"It flies and has blades: ___",k:"helicopter"},{p:"It goes on tracks: ___",k:"train"},{p:"Two wheels, engine: ___",k:"motorbike"},{p:"It flies very high: ___",k:"plane"}]},
+    {pr:"Write birthday words:",wb:["cake","candles","balloon","present","party"],bl:[{p:"You blow it out: ___",k:"candles"},{p:"You cut and eat it: ___",k:"cake"},{p:"You open a ___ .",k:"present"},{p:"You blow up a ___ .",k:"balloon"}]},
+    {pr:"Write beach words:",wb:["sand","sea","boat","coconut","shell"],bl:[{p:"You walk on it at the beach: ___",k:"sand"},{p:"You swim in the ___ .",k:"sea"},{p:"You sail in a ___ .",k:"boat"},{p:"You find it on the beach: ___",k:"shell"}]},
+    {pr:"Write park activity words:",wb:["running","flying","kicking","waving","picking"],bl:[{p:"The boy is ___ a kite.",k:"flying"},{p:"The small boy is ___ a ball.",k:"kicking"},{p:"The man is ___ hello.",k:"waving"},{p:"The woman is ___ up a pear.",k:"picking"}]},
+    {pr:"Write question words:",wb:["Who","What","Where","How","Whose"],bl:[{p:"___ is this? It's Tony.",k:"Who"},{p:"___ is this? A hat.",k:"What"},{p:"___ 's the crocodile? Here!",k:"Where"},{p:"___ 's hat is this? Tony's.",k:"Whose"}]},
+    {pr:"Write hobby words:",wb:["playing","listening","drawing","singing","fishing"],bl:[{p:"Kim likes ___ computer games.",k:"playing"},{p:"She likes ___ to music.",k:"listening"},{p:"Nick likes ___ pictures.",k:"drawing"},{p:"Grace loves ___ .",k:"fishing"}]},
+    {pr:"Write sport words:",wb:["football","swimming","tennis","basketball","cricket"],bl:[{p:"You play it with a racket: ___",k:"tennis"},{p:"You do it in water: ___",k:"swimming"},{p:"You kick a round ball: ___",k:"football"},{p:"You shoot hoops: ___",k:"basketball"}]},
+    {pr:"Write category names:",wb:["clothes","colours","animals","sports","food"],bl:[{p:"Dog, cat, tiger: ___",k:"animals"},{p:"Red, blue, green: ___",k:"colours"},{p:"Boots, dress, hat: ___",k:"clothes"},{p:"Tennis, football, swimming: ___",k:"sports"}]},
+    {pr:"Write irregular plurals:",wb:["mice","feet","children","sheep","fish"],bl:[{p:"mouse → ___",k:"mice"},{p:"foot → ___",k:"feet"},{p:"child → ___",k:"children"},{p:"sheep → ___",k:"sheep"}]},
+    {pr:"Write parts of the day:",wb:["morning","afternoon","evening","night","lunch"],bl:[{p:"You get up in the ___ .",k:"morning"},{p:"You eat lunch in the ___ .",k:"afternoon"},{p:"You have dinner in the ___ .",k:"evening"},{p:"You sleep at ___ .",k:"night"}]},
+    {pr:"Write transport words:",wb:["bike","plane","lorry","motorbike","helicopter"],bl:[{p:"b _ k _",k:"bike"},{p:"p l _ n _",k:"plane"},{p:"l _ r r _",k:"lorry"},{p:"h _ l _ c _ p t _ r",k:"helicopter"}]},
+    {pr:"Write technology words:",wb:["phone","numbers","bag","school","friends"],bl:[{p:"You talk to your ___ on a phone.",k:"friends"},{p:"A phone has letters and ___ .",k:"numbers"},{p:"Mrs Bean puts it in her ___ .",k:"bag"},{p:"She teaches at a ___ .",k:"school"}]},
+    {pr:"Write polite phrases:",wb:["Goodbye","Thank you","Pardon","Sorry","Here"],bl:[{p:"___ ! I'm leaving!",k:"Goodbye"},{p:"___ very much!",k:"Thank you"},{p:"___ ? I didn't hear.",k:"Pardon"},{p:"___ you are! (giving something)",k:"Here"}]},
+    {pr:"Write personal information words:",wb:["name","age","teacher","friends","sports"],bl:[{p:"What's your ___ ? Kim.",k:"name"},{p:"How old are you? I'm eight — that's my ___ .",k:"age"},{p:"What are your ___ ' names? Anna and Tom.",k:"friends"},{p:"What ___ do you do? Swimming!",k:"sports"}]},
+    {pr:"Write mixed words from all units:",wb:["crossword","alphabet","animal","number","food"],bl:[{p:"A ___ has across and down words.",k:"crossword"},{p:"a-b-c-d is the ___ .",k:"alphabet"},{p:"A tiger is a wild ___ .",k:"animal"},{p:"Pizza is a type of ___ .",k:"food"}]}
+  ]
+};
+
+function upPts(){document.getElementById('pts').textContent='⭐ '+pts;}
+function buildUBars(){
+  var c=document.getElementById('ubars');c.innerHTML='';
+  UNITS.forEach(function(u,i){
+    var b=document.createElement('button');b.className='ub'+(done[u[0]]?' done':'')+(cu===u[0]?' on':'');
+    b.textContent=u[0];b.title=u[1];
+    b.onclick=function(){cu=u[0];qi=0;ans=false;buildUBars();render();};
+    c.appendChild(b);
+  });
+}
+function setSk(s){
+  sk=s;qi=0;ans=false;
+  document.querySelectorAll('.sk').forEach(function(el){el.classList.remove('on');});
+  document.querySelector('.sk.'+s).classList.add('on');
+  render();
+}
+function render(){
+  var p=document.getElementById('panel');
+  if(sk==='listen')renderListen(p);
+  else if(sk==='speak')renderSpeak(p);
+  else if(sk==='read')renderRead(p);
+  else if(sk==='write')renderWrite(p);
+}
+function setFb(id,cls,txt){
+  var el=document.getElementById(id);if(!el)return;
+  if(!txt){el.className='fb';el.textContent='';return;}
+  el.className='fb '+cls+' show';el.textContent=txt;
+}
+
+function renderListen(p){
+  var di=DATA.listen[cu-1];var q=di.qs[qi%di.qs.length];var tot=di.qs.length;
+  p.innerHTML='<div class="ph">🎧 <span>Listening — Unit '+cu+': '+UNITS[cu-1][1]+'</span></div>'
+    +'<div class="pbar"><div class="pf listen" style="width:'+Math.round((qi%tot+1)/tot*100)+'%"></div></div>'
+    +'<div class="pi">Q '+(qi%tot+1)+' / '+tot+'</div>'
+    +'<div class="story">🔊 Listen and read:<br><br>'+di.s+'</div>'
+    +'<div class="qtext">'+q.q+'</div>'
+    +'<div class="opts" id="lopts"></div>'
+    +'<div class="fb" id="lfb"></div>'
+    +'<div class="navrow"><button class="nbtn" onclick="qi=0;ans=false;render()">↺</button>'
+    +'<button class="nbtn next" onclick="nextQ()">Next ▶</button></div>';
+  q.o.forEach(function(o,i){
+    var b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.onclick=function(){
+      if(ans)return;ans=true;
+      document.querySelectorAll('#lopts .opt').forEach(function(x){x.onclick=null;});
+      if(i===q.c){b.classList.add('ok');setFb('lfb','ok','✅ Correct! Well done! +1 ⭐');pts++;upPts();}
+      else{b.classList.add('ng');document.querySelectorAll('#lopts .opt')[q.c].classList.add('ok');setFb('lfb','ng','❌ Not quite! The answer is "'+q.o[q.c]+'"');}
+    };
+    document.getElementById('lopts').appendChild(b);
+  });
+}
+
+function renderSpeak(p){
+  var pr=DATA.speak[cu-1];var q=pr[qi%pr.length];var tot=pr.length;
+  p.innerHTML='<div class="ph">🗣️ <span>Speaking — Unit '+cu+': '+UNITS[cu-1][1]+'</span></div>'
+    +'<div class="pbar"><div class="pf speak" style="width:'+Math.round((qi%tot+1)/tot*100)+'%"></div></div>'
+    +'<div class="pi">Q '+(qi%tot+1)+' / '+tot+'</div>'
+    +'<div class="speak-scene"><b>🐒 Rô-bốt hỏi:</b><br><br><em>'+q.q+'</em></div>'
+    +'<input class="sinput" id="spin" placeholder="Type your answer here..." />'
+    +'<div class="ex-box">💡 Example answer: '+q.a+'</div>'
+    +'<div class="fb" id="sfb"></div>'
+    +'<div class="navrow">'
+    +'<button class="nbtn" onclick="checkSpeak()">Check ✓</button>'
+    +'<button class="nbtn next" onclick="nextQ()">Next ▶</button></div>';
+}
+function checkSpeak(){
+  var v=document.getElementById('spin').value.trim();
+  if(v.length<2){setFb('sfb','ng','Please type something!');return;}
+  setFb('sfb','ok','✅ Great practice! Compare with the example above. +1 ⭐');pts++;upPts();
+}
+
+function renderRead(p){
+  var d=DATA.read[cu-1];var q=d.qs[qi%d.qs.length];var tot=d.qs.length;
+  p.innerHTML='<div class="ph">📖 <span>Reading — Unit '+cu+': '+UNITS[cu-1][1]+'</span></div>'
+    +'<div class="pbar"><div class="pf read" style="width:'+Math.round((qi%tot+1)/tot*100)+'%"></div></div>'
+    +'<div class="pi">Q '+(qi%tot+1)+' / '+tot+'</div>'
+    +'<div class="rtext">'+d.t+'</div>'
+    +'<div class="qtext">'+q.q+'</div>'
+    +'<div class="r-opts" id="ropts"></div>'
+    +'<div class="fb" id="rfb"></div>'
+    +'<div class="navrow"><button class="nbtn" onclick="qi=0;ans=false;render()">↺</button>'
+    +'<button class="nbtn next" onclick="nextQ()">Next ▶</button></div>';
+  if(q.type==='yn'){
+    ['Yes','No'].forEach(function(o,i){
+      var b=document.createElement('button');b.className='r-opt';b.textContent=o;
+      b.onclick=function(){
+        if(ans)return;ans=true;
+        document.querySelectorAll('#ropts .r-opt').forEach(function(x){x.onclick=null;});
+        var correct=(i===0)===q.a;
+        if(correct){b.classList.add('ok');setFb('rfb','ok','✅ Correct! +1 ⭐');pts++;upPts();}
+        else{b.classList.add('ng');document.querySelectorAll('#ropts .r-opt')[q.a?0:1].classList.add('ok');setFb('rfb','ng','❌ The answer is '+(q.a?'Yes':'No'));}
+      };
+      document.getElementById('ropts').appendChild(b);
+    });
+  } else {
+    q.o.forEach(function(o,i){
+      var b=document.createElement('button');b.className='r-opt';b.textContent=o;
+      b.onclick=function(){
+        if(ans)return;ans=true;
+        document.querySelectorAll('#ropts .r-opt').forEach(function(x){x.onclick=null;});
+        if(i===q.c){b.classList.add('ok');setFb('rfb','ok','✅ Correct! +1 ⭐');pts++;upPts();}
+        else{b.classList.add('ng');document.querySelectorAll('#ropts .r-opt')[q.c].classList.add('ok');setFb('rfb','ng','❌ The answer is "'+q.o[q.c]+'"');}
+      };
+      document.getElementById('ropts').appendChild(b);
+    });
+  }
+}
+
+function renderWrite(p){
+  var d=DATA.write[cu-1];
+  p.innerHTML='<div class="ph">✏️ <span>Writing — Unit '+cu+': '+UNITS[cu-1][1]+'</span></div>'
+    +'<div class="wprompt">'+d.pr+'</div>'
+    +'<div class="wbank" id="wbank"></div>'
+    +'<div class="blanks" id="blanks"></div>'
+    +'<div style="text-align:center"><button class="btn-check" onclick="checkWrite()">Check answers ✓</button></div>'
+    +'<div class="fb" id="wfb"></div>'
+    +'<div class="navrow"><button class="nbtn" onclick="render()">↺</button>'
+    +'<button class="nbtn next" onclick="nextQ()">Next Unit ▶</button></div>';
+  d.wb.forEach(function(w){
+    var c=document.createElement('span');c.className='wchip';c.textContent=w;
+    c.onclick=function(){
+      if(c.classList.contains('used'))return;
+      var ins=document.querySelector('.bin:not([data-filled])');
+      if(ins){ins.value=w;ins.dataset.filled='1';c.classList.add('used');}
+    };
+    document.getElementById('wbank').appendChild(c);
+  });
+  var bl=document.getElementById('blanks');
+  d.bl.forEach(function(b,i){
+    var row=document.createElement('div');row.className='brow';
+    var parts=b.p.split('___');
+    if(parts.length===2){
+      row.innerHTML='<span>'+parts[0]+'</span><input class="bin" id="bi'+i+'" data-key="'+b.k+'" placeholder="___" /><span>'+parts[1]+'</span>';
+    } else {
+      row.innerHTML='<span>'+b.p+' </span><input class="bin" id="bi'+i+'" data-key="'+b.k+'" placeholder="___" />';
+    }
+    bl.appendChild(row);
+  });
+}
+function checkWrite(){
+  var inputs=document.querySelectorAll('.bin');var cor=0,tot=inputs.length;
+  inputs.forEach(function(inp){
+    var k=inp.dataset.key;
+    if(inp.value.trim().toLowerCase()===k.toLowerCase()){inp.style.color='#0f6e56';inp.style.borderBottomColor='#0f6e56';cor++;}
+    else{inp.style.color='#e24b4a';inp.style.borderBottomColor='#e24b4a';}
+  });
+  if(cor===tot){setFb('wfb','ok','✅ Perfect! All '+tot+' correct! +2 ⭐');pts+=2;upPts();markDone();}
+  else if(cor>0){setFb('wfb','ok','✅ '+cor+'/'+tot+' correct! +'+cor+' ⭐');pts+=cor;upPts();}
+  else setFb('wfb','ng','❌ Try again! Use the word bank above.');
+}
+
+function nextQ(){
+  qi++;ans=false;
+  if(qi>0&&qi%3===0)markDone();
+  render();
+}
+function markDone(){
+  done[cu]=true;buildUBars();
+}
+function showPopup(ic,t,s){
+  var c=document.getElementById('pop-container');
+  c.innerHTML='<div class="pop-wrap"><div class="popup"><div class="pop-ic">'+ic+'</div><div class="pop-t">'+t+'</div><div class="pop-s">'+s+'</div><button class="pop-btn" onclick="document.getElementById(\'pop-container\').innerHTML=\'\'">Continue ▶</button></div></div>';
+}
+
+buildUBars();render();
+</script>
