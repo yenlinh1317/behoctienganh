@@ -1,347 +1,459 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family & Friends – Unit 1: What colour is it?</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Family & Friends Starter — Học Tiếng Anh 🌈</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--red:#FF4757;--green:#2ED573;--blue:#1E90FF;--black:#2F3542;--white:#DDD;
-  --yellow:#FFC312;--pink:#FF6B9D;--orange:#FF8C00;--purple:#8B5CF6;
-  --bg:#FFF9F0;--card:#FFFFFF;--shadow:0 8px 32px rgba(0,0,0,0.12);--radius:20px;}
+:root{
+  --bg:#FFF8EF;--card:#fff;--shadow:0 8px 32px rgba(0,0,0,.11);--r:18px;
+  --accent:#FF4757;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Baloo 2',cursive;background:var(--bg);min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
-  background:radial-gradient(circle at 20% 20%,rgba(255,71,87,.08) 0%,transparent 50%),
-             radial-gradient(circle at 80% 80%,rgba(30,144,255,.08) 0%,transparent 50%);
-  pointer-events:none;z-index:0;}
-.container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px;}
+body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 
-/* HEADER */
-.header{text-align:center;padding:28px 20px 8px;animation:bounceIn .8s ease;}
-.header h1{font-size:clamp(26px,5vw,44px);font-weight:800;
-  background:linear-gradient(135deg,#FF4757,#FF8C00,#FFC312);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
-.header p{font-size:17px;color:#666;margin-top:6px;}
+/* ── SIDEBAR ── */
+#sidebar{position:fixed;left:0;top:0;width:230px;height:100%;background:#fff;
+  box-shadow:4px 0 20px rgba(0,0,0,.08);overflow-y:auto;z-index:50;
+  transition:transform .3s;padding:16px 0 40px;}
+#sidebar.hidden{transform:translateX(-230px);}
+.sidebar-header{padding:18px 16px 10px;font-size:18px;font-weight:800;color:#333;
+  display:flex;align-items:center;gap:8px;}
+.unit-btn{display:flex;align-items:center;gap:10px;width:100%;padding:11px 16px;
+  border:none;background:none;text-align:left;font-family:"Baloo 2",cursive;
+  font-size:14px;font-weight:700;color:#555;cursor:pointer;transition:all .2s;
+  border-left:4px solid transparent;}
+.unit-btn:hover{background:#F8F9FA;color:#333;}
+.unit-btn.active{color:#fff;border-left-color:transparent;}
+.unit-btn .unit-icon{font-size:20px;width:28px;text-align:center;}
+.unit-btn .unit-label{flex:1;line-height:1.3;}
+.unit-progress{font-size:11px;opacity:.75;margin-top:2px;}
 
-/* PROGRESS */
-.progress-wrap{background:#e8e8e8;border-radius:50px;height:12px;margin:14px 0;overflow:hidden;}
-.progress-bar{height:100%;background:linear-gradient(90deg,#FF4757,#FFC312);border-radius:50px;transition:width .6s ease;width:0%;}
-.progress-label{display:flex;justify-content:space-between;font-size:13px;color:#888;margin-top:4px;}
+/* ── MAIN ── */
+#main{margin-left:230px;padding:20px 24px;min-height:100vh;
+  transition:margin .3s;max-width:900px;}
+#main.full{margin-left:0;}
 
-/* TABS */
-.tabs{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap;justify-content:center;}
-.tab{padding:12px 22px;border:none;border-radius:50px;font-family:'Baloo 2',cursive;
-  font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:8px;}
-.tab.listen{background:#FFE5E8;color:#FF4757;}
-.tab.speak{background:#E5F6FF;color:#1E90FF;}
-.tab.read{background:#E8F9EE;color:#00B894;}
-.tab.write{background:#FFF3E0;color:#FF8C00;}
-.tab:hover,.tab.active{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
-.tab.listen.active{background:#FF4757;color:white;}
-.tab.speak.active{background:#1E90FF;color:white;}
-.tab.read.active{background:#00B894;color:white;}
-.tab.write.active{background:#FF8C00;color:white;}
-
-/* SECTION */
-.section{display:none;animation:fadeSlide .5s ease;}
-.section.active{display:block;}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin-bottom:20px;}
-.section-title{font-size:21px;font-weight:800;color:#333;margin-bottom:5px;display:flex;align-items:center;gap:10px;}
-.section-subtitle{font-size:14px;color:#888;margin-bottom:22px;}
-
-/* COLOUR GRID */
-.colour-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;margin:12px 0;}
-.colour-item{border-radius:16px;padding:18px 10px;text-align:center;cursor:pointer;
-  transition:all .3s;border:3px solid transparent;}
-.colour-item:hover,.colour-item.selected{transform:scale(1.08);border-color:#FFC312;
-  box-shadow:0 8px 24px rgba(0,0,0,.18);background:rgba(255,195,18,.12)!important;}
-.colour-item .swatch{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;
-  border:4px solid rgba(255,255,255,.7);box-shadow:0 4px 12px rgba(0,0,0,.2);}
-.colour-item .cname{font-size:15px;font-weight:700;}
-.colour-item .cvi{font-size:12px;color:#aaa;margin-top:2px;}
-
-/* BUTTONS */
-.audio-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;
-  background:linear-gradient(135deg,#FF4757,#FF6B9D);color:white;border:none;border-radius:50px;
-  font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;cursor:pointer;
-  transition:all .3s;box-shadow:0 6px 20px rgba(255,71,87,.4);}
-.audio-btn:hover{transform:translateY(-2px);}
-.audio-btn.playing{background:linear-gradient(135deg,#00B894,#00CEC9);}
-.check-btn{padding:12px 26px;background:linear-gradient(135deg,#00B894,#00CEC9);color:white;
-  border:none;border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
-  cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(0,184,148,.3);margin:8px 4px;}
-.check-btn:hover{transform:translateY(-2px);}
-.reset-btn{padding:12px 26px;background:#F8F9FA;color:#666;border:2px solid #e0e0e0;
-  border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
-  cursor:pointer;transition:all .3s;margin:8px 4px;}
-.reset-btn:hover{background:#e0e0e0;}
-
-/* QUIZ */
-.quiz-q{background:linear-gradient(135deg,#667eea18,#764ba214);border-radius:16px;
-  padding:22px;text-align:center;margin:14px 0;}
-.quiz-q .q-text{font-size:21px;font-weight:800;color:#333;margin-bottom:8px;}
-.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
-.quiz-opt{padding:13px 18px;border:3px solid #e0e0e0;border-radius:14px;background:white;
-  font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;cursor:pointer;
-  transition:all .3s;display:flex;align-items:center;gap:10px;}
-.quiz-opt:hover{border-color:#1E90FF;background:#E5F6FF;transform:scale(1.03);}
-.quiz-opt.correct{border-color:#00B894;background:#E8F9EE;color:#00B894;animation:pulse .4s ease;}
-.quiz-opt.wrong{border-color:#FF4757;background:#FFF0F0;color:#FF4757;animation:shake .4s ease;}
-.opt-swatch{width:26px;height:26px;border-radius:50%;border:2px solid rgba(0,0,0,.1);flex-shrink:0;}
-.score-area{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0;}
-.score-badge{background:linear-gradient(135deg,#FFC312,#FF8C00);color:white;
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+#menuToggle{border:none;background:none;font-size:24px;cursor:pointer;padding:4px;}
+.topbar-title{font-size:22px;font-weight:800;color:#333;flex:1;}
+.total-score{background:linear-gradient(135deg,#FFC312,#FF8C00);color:white;
   padding:7px 18px;border-radius:50px;font-size:15px;font-weight:800;}
-.feedback{font-size:19px;animation:bounceIn .4s ease;}
 
-/* =========== SPEAK MIC =========== */
-.speak-word-card{border-radius:18px;padding:22px;margin:12px 0;border:2px solid;
-  transition:all .3s;}
-.speak-word-card .big-word{font-size:38px;font-weight:800;letter-spacing:2px;display:block;}
-.speak-word-card .phonetic{font-size:15px;color:#888;margin:4px 0 12px;}
-.speak-word-card .obj{font-size:13px;color:#aaa;margin-bottom:14px;}
-.speak-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+/* ── TABS ── */
+.tabs{display:flex;gap:7px;margin:14px 0;flex-wrap:wrap;}
+.tab{padding:10px 20px;border:none;border-radius:50px;font-family:"Baloo 2",cursive;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;
+  align-items:center;gap:7px;}
+.tab.t-listen{background:#FFE5E8;color:#FF4757;}
+.tab.t-speak{background:#E5F6FF;color:#1E90FF;}
+.tab.t-read{background:#E8F9EE;color:#00B894;}
+.tab.t-write{background:#FFF3E0;color:#FF8C00;}
+.tab:hover,.tab.active{transform:translateY(-3px);box-shadow:0 5px 18px rgba(0,0,0,.14);}
+.tab.t-listen.active{background:#FF4757;color:white;}
+.tab.t-speak.active{background:#1E90FF;color:white;}
+.tab.t-read.active{background:#00B894;color:white;}
+.tab.t-write.active{background:#FF8C00;color:white;}
 
-/* MIC BUTTON */
-.mic-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;
+/* ── SECTION ── */
+.section{display:none;animation:fadeUp .4s ease;}
+.section.active{display:block;}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:24px;margin-bottom:18px;}
+.card-title{font-size:20px;font-weight:800;color:#333;margin-bottom:4px;}
+.card-sub{font-size:13px;color:#999;margin-bottom:20px;}
+
+/* ── VOCAB GRID ── */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:12px;}
+.vocab-item{border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;
+  transition:all .3s;border:3px solid transparent;}
+.vocab-item:hover,.vocab-item.sel{transform:scale(1.08);border-color:#FFC312;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);}
+.vocab-item .v-emoji{font-size:28px;}
+.vocab-item .v-en{font-size:14px;font-weight:800;margin-top:6px;}
+.vocab-item .v-vi{font-size:11px;color:#aaa;margin-top:2px;}
+
+/* ── QUIZ ── */
+.quiz-wrap{background:#F5F0FF18;border-radius:14px;padding:20px;margin:12px 0;}
+.quiz-q-text{font-size:20px;font-weight:800;color:#333;margin-bottom:12px;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.qopt{padding:12px 16px;border:3px solid #e0e0e0;border-radius:13px;background:white;
+  font-family:"Baloo 2",cursive;font-size:15px;font-weight:700;cursor:pointer;
+  transition:all .25s;display:flex;align-items:center;gap:8px;}
+.qopt:hover{border-color:#1E90FF;background:#E5F6FF;transform:scale(1.03);}
+.qopt.ok{border-color:#00B894;background:#E8F9EE;color:#00B894;}
+.qopt.bad{border-color:#FF4757;background:#FFF0F0;color:#FF4757;}
+.qswatch{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,.1);flex-shrink:0;}
+.score-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0;}
+.score-badge{background:linear-gradient(135deg,#FFC312,#FF8C00);color:white;
+  padding:6px 16px;border-radius:50px;font-size:14px;font-weight:800;}
+.feedback-txt{font-size:18px;}
+
+/* ── BUTTONS ── */
+.btn-audio{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;
+  background:linear-gradient(135deg,#FF4757,#FF6B9D);color:white;border:none;
+  border-radius:50px;font-family:"Baloo 2",cursive;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .3s;box-shadow:0 5px 16px rgba(255,71,87,.35);}
+.btn-audio:hover{transform:translateY(-2px);}
+.btn-audio.playing{background:linear-gradient(135deg,#00B894,#00CEC9);}
+.btn-check{padding:11px 24px;background:linear-gradient(135deg,#00B894,#00CEC9);
+  color:white;border:none;border-radius:50px;font-family:"Baloo 2",cursive;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;
+  box-shadow:0 5px 16px rgba(0,184,148,.3);margin:7px 4px;}
+.btn-check:hover{transform:translateY(-2px);}
+.btn-reset{padding:11px 24px;background:#F5F5F5;color:#666;border:2px solid #ddd;
+  border-radius:50px;font-family:"Baloo 2",cursive;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .3s;margin:7px 4px;}
+.btn-reset:hover{background:#e0e0e0;}
+.btn-mic{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;
   background:linear-gradient(135deg,#1E90FF,#0652DD);color:white;border:none;
-  border-radius:50px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
-  cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(30,144,255,.4);}
-.mic-btn:hover{transform:translateY(-2px);}
-.mic-btn.recording{background:linear-gradient(135deg,#FF4757,#FF6B9D);
-  animation:micPulse .7s ease infinite;}
-.mic-btn.no-support{background:#ccc;cursor:not-allowed;box-shadow:none;}
-
-/* MIC RESULT BOX */
-.mic-result{margin-top:12px;padding:14px 18px;border-radius:14px;font-size:15px;font-weight:700;display:none;}
-.mic-result.show{display:block;animation:fadeSlide .4s ease;}
+  border-radius:50px;font-family:"Baloo 2",cursive;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .3s;box-shadow:0 5px 16px rgba(30,144,255,.35);margin:4px;}
+.btn-mic:hover{transform:translateY(-2px);}
+.btn-mic.rec{background:linear-gradient(135deg,#FF4757,#FF6B9D);animation:micPulse .7s infinite;}
+.btn-mic.nosup{background:#ccc;cursor:not-allowed;box-shadow:none;}
+.mic-result{margin-top:10px;padding:12px 16px;border-radius:12px;font-size:14px;
+  font-weight:700;display:none;}
+.mic-result.show{display:block;}
 .mic-result.ok{background:#E8F9EE;border:2px solid #00B894;color:#00B894;}
-.mic-result.partial{background:#FFF8E1;border:2px solid #FFC312;color:#E67E00;}
+.mic-result.try{background:#FFF8E1;border:2px solid #FFC312;color:#c68000;}
 .mic-result.fail{background:#FFF0F0;border:2px solid #FF4757;color:#FF4757;}
 
-/* LISTEN CARDS */
-.listen-card{background:linear-gradient(135deg,#FFF5F5,#FFF0F5);border-radius:14px;
-  padding:20px;margin:10px 0;border:2px solid #FFD5DC;display:flex;align-items:center;
-  gap:18px;cursor:pointer;transition:all .3s;}
-.listen-card:hover{transform:translateX(5px);border-color:#FF4757;}
+/* ── SPEAK WORD CARD ── */
+.speak-card{border-radius:16px;padding:20px;margin:10px 0;border:2px solid;}
+.speak-big{font-size:36px;font-weight:800;letter-spacing:2px;display:block;margin-bottom:4px;}
+.speak-ph{font-size:13px;color:#888;margin-bottom:10px;}
 
-/* READ */
-.story-card{background:linear-gradient(135deg,#F0FFF4,#E8F9EE);border-radius:16px;
-  padding:26px;border:2px solid #B8E6C8;margin:12px 0;}
-.story-text{font-size:19px;line-height:2.2;color:#333;}
-.highlight{font-weight:800;padding:2px 8px;border-radius:8px;cursor:pointer;
+/* ── STORY ── */
+.story-box{background:linear-gradient(135deg,#F0FFF4,#E8F9EE);border-radius:14px;
+  padding:22px;border:2px solid #B8E6C8;margin:10px 0;}
+.story-txt{font-size:18px;line-height:2.2;color:#333;}
+.hw{font-weight:800;padding:2px 7px;border-radius:7px;cursor:pointer;
   transition:all .3s;display:inline-block;}
-.highlight:hover{transform:scale(1.12);}
-.col-red{background:#FFE5E7;color:#FF4757;}
-.col-green{background:#E5F9EC;color:#00894a;}
-.col-blue{background:#E5F0FF;color:#1E90FF;}
-.col-black{background:#F0F0F0;color:#2F3542;}
-.col-yellow{background:#FFF8E1;color:#c68000;}
-.col-pink{background:#FFE5F0;color:#FF6B9D;}
-.col-orange{background:#FFF3E0;color:#FF6500;}
-.col-purple{background:#F3E8FF;color:#8B5CF6;}
-.col-white{background:#F0F0F0;color:#555;}
+.hw:hover{transform:scale(1.12);}
 
-.match-word{padding:10px 18px;border:3px solid #e0e0e0;border-radius:12px;
-  background:white;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;user-select:none;}
+/* ── MATCH ── */
+.match-word{padding:9px 16px;border:3px solid #ddd;border-radius:11px;background:white;
+  font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;user-select:none;}
 .match-word:hover{transform:scale(1.05);}
-.match-word.selected-mw{border-color:#1E90FF;background:#E5F6FF;}
-.match-word.matched-ok{border-color:#00B894;color:#00B894;background:#E8F9EE;}
-.match-color{width:50px;height:50px;border-radius:50%;border:3px solid #e0e0e0;cursor:pointer;
-  transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:18px;}
-.match-color:hover,.match-color.selected-mc{border-color:#FFC312;transform:scale(1.12);
-  box-shadow:0 4px 14px rgba(0,0,0,.2);}
-.match-color.matched-ok{border-color:#00B894;box-shadow:0 4px 14px rgba(0,184,148,.35);}
+.match-word.smw{border-color:#1E90FF;background:#E5F6FF;}
+.match-word.mok{border-color:#00B894;color:#00B894;background:#E8F9EE;}
+.match-color{width:46px;height:46px;border-radius:50%;border:3px solid #ddd;
+  cursor:pointer;transition:all .25s;display:flex;align-items:center;
+  justify-content:center;font-size:16px;}
+.match-color:hover,.match-color.smc{border-color:#FFC312;transform:scale(1.12);}
+.match-color.mok{border-color:#00B894;}
 
-/* WRITE */
-.blank-input{border:none;border-bottom:3px solid #1E90FF;background:transparent;
-  font-family:'Baloo 2',cursive;font-size:19px;font-weight:700;color:#333;
-  width:130px;text-align:center;outline:none;padding:4px;}
-.blank-input:focus{border-color:#FFC312;}
-.blank-input.ok-ans{border-color:#00B894;color:#00B894;}
-.blank-input.bad-ans{border-color:#FF4757;color:#FF4757;}
+/* ── WRITE ── */
+.blank-inp{border:none;border-bottom:3px solid #1E90FF;background:transparent;
+  font-family:"Baloo 2",cursive;font-size:18px;font-weight:700;color:#333;
+  width:120px;text-align:center;outline:none;padding:3px;}
+.blank-inp:focus{border-color:#FFC312;}
+.blank-inp.bok{border-color:#00B894;color:#00B894;}
+.blank-inp.bbad{border-color:#FF4757;color:#FF4757;}
 
-/* DRAG LETTERS */
-.drag-letters{display:flex;flex-wrap:wrap;gap:10px;padding:16px;background:#F8F9FA;
-  border-radius:12px;min-height:56px;}
-.drop-zone{display:flex;gap:10px;flex-wrap:wrap;border:3px dashed #BAE3FF;border-radius:12px;
-  padding:16px;min-height:60px;background:#F0FAFF;align-items:center;justify-content:center;}
-.drop-zone .ph{color:#BAE3FF;font-size:15px;font-weight:600;}
-.letter-tile{width:42px;height:42px;background:white;border:3px solid #1E90FF;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;
-  color:#1E90FF;cursor:grab;transition:all .2s;user-select:none;}
-.letter-tile:hover{transform:scale(1.1);background:#E5F6FF;}
-.letter-tile.in-zone{border-color:#00B894;color:#00B894;background:#E8F9EE;}
+/* ── WORD BUILDER ── */
+.tile-pool{display:flex;flex-wrap:wrap;gap:9px;padding:14px;background:#F8F9FA;
+  border-radius:11px;min-height:52px;}
+.drop-zone{display:flex;gap:9px;flex-wrap:wrap;border:3px dashed #BAE3FF;
+  border-radius:11px;padding:14px;min-height:58px;background:#F0FAFF;
+  align-items:center;justify-content:center;}
+.drop-zone .ph{color:#BAE3FF;font-size:14px;font-weight:600;}
+.ltile{width:40px;height:40px;background:white;border:3px solid #1E90FF;
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#1E90FF;cursor:grab;user-select:none;
+  transition:all .2s;}
+.ltile:hover{transform:scale(1.1);background:#E5F6FF;}
+.ltile.inz{border-color:#00B894;color:#00B894;background:#E8F9EE;}
 
-/* COLOURING GAME */
-.colour-shape-row{background:#F8F9FA;border-radius:16px;padding:18px;margin:10px 0;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.shape-preview{width:56px;height:56px;border-radius:10px;border:3px solid #ccc;
-  display:flex;align-items:center;justify-content:center;font-size:30px;transition:all .4s;}
+/* ── COLOUR SHAPES ── */
+.cs-row{background:#F8F9FA;border-radius:14px;padding:16px;margin:9px 0;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.cs-preview{width:54px;height:54px;border-radius:9px;border:3px solid #ccc;
+  display:flex;align-items:center;justify-content:center;font-size:28px;transition:all .4s;}
 
-/* DIALOGUE */
-.bubble-teacher{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
-.bubble-student{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;flex-direction:row-reverse;}
-.bubble{padding:13px 18px;font-size:17px;font-weight:700;color:#333;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);}
-.bubble.teacher{background:white;border-radius:0 16px 16px 16px;}
-.bubble.student{background:#E5F6FF;border-radius:16px 0 16px 16px;color:#1E90FF;}
+/* ── DIALOGUE ── */
+.bub-wrap{background:#F8F9FA;border-radius:14px;padding:20px;}
+.bub-t{display:flex;gap:11px;margin-bottom:12px;align-items:flex-start;}
+.bub-s{display:flex;gap:11px;margin-bottom:12px;align-items:flex-start;flex-direction:row-reverse;}
+.bubble{padding:12px 16px;font-size:16px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.09);}
+.bub-tea{background:white;border-radius:0 14px 14px 14px;color:#333;}
+.bub-stu{background:#E5F6FF;border-radius:14px 0 14px 14px;color:#1E90FF;}
 
-/* CELEBRATION */
-.celebration{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);
-  z-index:100;display:none;align-items:center;justify-content:center;}
-.celebration.show{display:flex;}
-.celeb-box{background:white;border-radius:24px;padding:38px;text-align:center;
-  animation:bounceIn .5s ease;max-width:340px;width:90%;}
-.celeb-emoji{font-size:68px;display:block;animation:spin 1s ease;}
-.celeb-title{font-size:30px;font-weight:800;color:#FF4757;margin:10px 0;}
-.celeb-sub{font-size:17px;color:#666;}
-.celeb-stars{font-size:30px;letter-spacing:8px;margin:10px 0;}
-.celeb-btn{margin-top:18px;padding:13px 30px;background:linear-gradient(135deg,#FFC312,#FF8C00);
-  color:white;border:none;border-radius:50px;font-family:'Baloo 2',cursive;
-  font-size:17px;font-weight:800;cursor:pointer;}
-.confetti-piece{position:fixed;width:10px;height:10px;top:-10px;animation:confettiFall linear infinite;}
+/* ── HOME SCREEN ── */
+#homeScreen{animation:fadeUp .5s ease;}
+.home-hero{text-align:center;padding:30px 20px;}
+.home-hero h1{font-size:clamp(28px,6vw,52px);font-weight:800;
+  background:linear-gradient(135deg,#FF4757,#FF8C00,#FFC312);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
+.home-hero p{font-size:17px;color:#777;margin-top:8px;}
+.units-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:20px 0;}
+.unit-card{border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;
+  border:3px solid transparent;color:white;position:relative;overflow:hidden;}
+.unit-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.2);}
+.unit-card .uc-icon{font-size:36px;margin-bottom:8px;}
+.unit-card .uc-title{font-size:15px;font-weight:800;line-height:1.3;}
+.unit-card .uc-prog{font-size:12px;opacity:.8;margin-top:6px;}
+.unit-card .uc-stars{font-size:14px;margin-top:4px;}
+.prog-mini{height:6px;background:rgba(255,255,255,.3);border-radius:50px;margin-top:8px;overflow:hidden;}
+.prog-mini-fill{height:100%;background:rgba(255,255,255,.9);border-radius:50px;transition:width .6s;}
 
-/* ANIMATIONS */
+/* ── CELEBRATION ── */
+.celeb-overlay{position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;}
+.celeb-overlay.show{display:flex;}
+.celeb-box{background:white;border-radius:22px;padding:36px;text-align:center;
+  animation:bounceIn .5s ease;max-width:320px;width:90%;}
+.celeb-emoji{font-size:66px;display:block;animation:spin 1s ease;}
+.celeb-title{font-size:28px;font-weight:800;color:#FF4757;margin:10px 0;}
+.celeb-sub{font-size:16px;color:#666;}
+.celeb-stars{font-size:28px;letter-spacing:8px;margin:8px 0;}
+.celeb-btn{margin-top:16px;padding:12px 28px;background:linear-gradient(135deg,#FFC312,#FF8C00);
+  color:white;border:none;border-radius:50px;font-family:"Baloo 2",cursive;
+  font-size:16px;font-weight:800;cursor:pointer;}
+.conf{position:fixed;width:10px;height:10px;top:-10px;animation:confFall linear infinite;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes bounceIn{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
-@keyframes fadeSlide{0%{opacity:0;transform:translateY(18px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-8px)}50%{transform:translateX(8px)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes micPulse{0%,100%{box-shadow:0 6px 20px rgba(255,71,87,.4)}50%{box-shadow:0 6px 32px rgba(255,71,87,.85)}}
-@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes micPulse{0%,100%{box-shadow:0 5px 18px rgba(255,71,87,.35)}50%{box-shadow:0 5px 28px rgba(255,71,87,.85)}}
+@keyframes confFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+@media(max-width:600px){
+  #sidebar{width:200px;}
+  #main{margin-left:0;padding:14px;}
+  #main.full{margin-left:0;}
+  .tabs{gap:5px;}
+  .tab{font-size:12px;padding:8px 14px;}
+}
 </style>
 </head>
 <body>
-<div class="container">
 
-<div class="header">
-  <div style="font-size:22px;letter-spacing:4px;">⭐ ⭐ ⭐</div>
-  <h1>🎨 What colour is it?</h1>
-  <p>Family and Friends Starter — Unit 1</p>
-</div>
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">🌈 Family & Friends</div>
+  <button class="unit-btn" id="sb-home" onclick="showHome()">
+    <span class="unit-icon">🏠</span>
+    <span class="unit-label">Trang chủ</span>
+  </button>
+  <hr style="margin:8px 12px;border-color:#f0f0f0;">
+  <button class="unit-btn" id="sb-starter" onclick="loadUnit('starter')" title="Starter: Hello!">
+    <span class="unit-icon">👋</span>
+    <span class="unit-label">
+      <div>Starter</div>
+      <div class="unit-progress" id="prog-starter">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit1" onclick="loadUnit('unit1')" title="Unit 1: What colour is it?">
+    <span class="unit-icon">🎨</span>
+    <span class="unit-label">
+      <div>Unit 1</div>
+      <div class="unit-progress" id="prog-unit1">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit2" onclick="loadUnit('unit2')" title="Unit 2: What's this?">
+    <span class="unit-icon">🎒</span>
+    <span class="unit-label">
+      <div>Unit 2</div>
+      <div class="unit-progress" id="prog-unit2">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit3" onclick="loadUnit('unit3')" title="Unit 3: Is it a plane?">
+    <span class="unit-icon">✈️</span>
+    <span class="unit-label">
+      <div>Unit 3</div>
+      <div class="unit-progress" id="prog-unit3">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit4" onclick="loadUnit('unit4')" title="Unit 4: This is my mum!">
+    <span class="unit-icon">👨‍👩‍👧</span>
+    <span class="unit-label">
+      <div>Unit 4</div>
+      <div class="unit-progress" id="prog-unit4">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit5" onclick="loadUnit('unit5')" title="Unit 5: He's happy!">
+    <span class="unit-icon">😊</span>
+    <span class="unit-label">
+      <div>Unit 5</div>
+      <div class="unit-progress" id="prog-unit5">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit6" onclick="loadUnit('unit6')" title="Unit 6: They're bears!">
+    <span class="unit-icon">🐻</span>
+    <span class="unit-label">
+      <div>Unit 6</div>
+      <div class="unit-progress" id="prog-unit6">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit7" onclick="loadUnit('unit7')" title="Unit 7: Are they teachers?">
+    <span class="unit-icon">👩‍🏫</span>
+    <span class="unit-label">
+      <div>Unit 7</div>
+      <div class="unit-progress" id="prog-unit7">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit8" onclick="loadUnit('unit8')" title="Unit 8: I've got a shirt!">
+    <span class="unit-icon">👕</span>
+    <span class="unit-label">
+      <div>Unit 8</div>
+      <div class="unit-progress" id="prog-unit8">0% hoàn thành</div>
+    </span>
+  </button>
+  <button class="unit-btn" id="sb-unit9" onclick="loadUnit('unit9')" title="Unit 9: I like plums!">
+    <span class="unit-icon">🍑</span>
+    <span class="unit-label">
+      <div>Unit 9</div>
+      <div class="unit-progress" id="prog-unit9">0% hoàn thành</div>
+    </span>
+  </button>
+</nav>
 
-<div style="padding:0 8px;">
-  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-  <div class="progress-label"><span id="progressLabel">Bắt đầu học nào! 🚀</span><span id="scoreTotal">⭐ 0 điểm</span></div>
-</div>
-
-<div class="tabs">
-  <button class="tab listen active" onclick="switchTab('listen')">👂 Nghe</button>
-  <button class="tab speak" onclick="switchTab('speak')">🗣️ Nói</button>
-  <button class="tab read" onclick="switchTab('read')">📖 Đọc</button>
-  <button class="tab write" onclick="switchTab('write')">✏️ Viết</button>
-</div>
-
-<!-- ======= NGHE ======= -->
-<div class="section active" id="section-listen">
-  <div class="card">
-    <div class="section-title">👂 Nghe từ vựng màu sắc</div>
-    <div class="section-subtitle">Nhấn vào từng màu để nghe phát âm — lặp lại to theo nhé! 🔊</div>
-    <div class="colour-grid" id="colourGrid"></div>
-    <p style="font-size:13px;color:#aaa;text-align:center;margin-top:8px;">💡 Nhấn vào swatch để nghe phát âm tiếng Anh</p>
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <button id="menuToggle" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title" id="topTitle">🌈 Chào mừng bé học tiếng Anh!</div>
+    <div class="total-score" id="totalScoreDisp">⭐ 0 điểm</div>
   </div>
-  <div class="card">
-    <div class="section-title">🎯 Nghe và chọn màu đúng!</div>
-    <div class="section-subtitle">Nhìn câu hỏi, nhấn 🔊 nghe rồi chọn đáp án! 🎮</div>
-    <div id="listenQuiz"></div>
-    <div class="score-area" style="margin-top:14px;">
-      <div class="score-badge" id="listenScore">0/0 đúng</div>
-      <span class="feedback" id="listenFeedback"></span>
+
+  <!-- HOME SCREEN -->
+  <div id="homeScreen">
+    <div class="home-hero">
+      <div style="font-size:26px;letter-spacing:4px;margin-bottom:8px;">⭐ ⭐ ⭐</div>
+      <h1>Học Tiếng Anh Cùng Family & Friends! 🌈</h1>
+      <p>Starter + 9 Units — Đầy đủ 4 kỹ năng: Nghe 👂 Nói 🗣️ Đọc 📖 Viết ✏️</p>
+      <p style="margin-top:6px;font-size:14px;color:#aaa;">Nhấn vào bài học để bắt đầu! 👇</p>
     </div>
+    <div class="units-grid" id="homeGrid"></div>
   </div>
-  <div class="card">
-    <div class="section-title">🎵 Chant: What colour is it?</div>
-    <div class="section-subtitle">Nghe và hát theo bé nhé! 🎶</div>
-    <div style="background:linear-gradient(135deg,#FFF5F5,#FFF0F5);border-radius:16px;padding:22px;text-align:center;">
-      <div style="font-size:20px;font-weight:800;color:#333;line-height:2.2;">
-        🎵 "What colour is it?<br>
-        It's <span style="color:#FF4757">red</span>! It's <span style="color:#FF4757">red</span>! 🔴<br>
-        What colour is it?<br>
-        It's <span style="color:#1E90FF">blue</span>! It's <span style="color:#1E90FF">blue</span>! 🔵<br>
-        What colour is it?<br>
-        It's <span style="color:#00B894">green</span>! It's <span style="color:#00B894">green</span>! 🟢"
+
+  <!-- UNIT VIEW -->
+  <div id="unitView" style="display:none;">
+    <!-- UNIT HEADER -->
+    <div class="card" id="unitHeader" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:22px 24px;margin-bottom:14px;">
+      <div style="font-size:40px;" id="uIcon">🎨</div>
+      <div style="font-size:22px;font-weight:800;margin-top:6px;" id="uTitle">Unit 1</div>
+      <div style="font-size:14px;opacity:.85;margin-top:4px;" id="uGrammar">What colour is it? It's green.</div>
+      <div style="background:rgba(255,255,255,.25);border-radius:50px;height:8px;margin-top:12px;overflow:hidden;">
+        <div id="unitProgressBar" style="height:100%;background:rgba(255,255,255,.9);border-radius:50px;transition:width .6s;width:0%;"></div>
       </div>
-      <button class="audio-btn" style="margin-top:14px;" onclick="singChant(this)">🎵 Hát cùng bé!</button>
+      <div style="font-size:12px;opacity:.75;margin-top:4px;" id="unitProgressTxt">0% hoàn thành</div>
     </div>
-  </div>
-</div>
 
-<!-- ======= NÓI ======= -->
-<div class="section" id="section-speak">
-  <div class="card">
-    <div class="section-title">🗣️ Luyện nói — Nghe mẫu & đọc to!</div>
-    <div class="section-subtitle">Nhấn 🔊 nghe mẫu → nhấn 🎤 đọc to → AI chấm phát âm tự động! 💪</div>
-    <div id="speakWords"></div>
-  </div>
-  <div class="card">
-    <div class="section-title">💬 Hội thoại: What colour is it?</div>
-    <div class="section-subtitle">Nhấn vào màu để trả lời câu hỏi của cô giáo! 👫</div>
-    <div id="dialogueArea"></div>
-  </div>
-  <div class="card">
-    <div class="section-title">🎨 Nhìn hình — nói to màu — nhấn đúng!</div>
-    <div class="section-subtitle">Nhìn emoji, nói to màu của nó rồi nhấn xác nhận! 🖌️</div>
-    <div id="namingGame"></div>
-  </div>
-</div>
-
-<!-- ======= ĐỌC ======= -->
-<div class="section" id="section-read">
-  <div class="card">
-    <div class="section-title">📖 Câu chuyện màu sắc</div>
-    <div class="section-subtitle">Nhấn vào các từ màu sắc để nghe và xem màu! 🌈</div>
-    <div class="story-card"><div class="story-text" id="storyText"></div></div>
-  </div>
-  <div class="card">
-    <div class="section-title">🔗 Nối từ với màu đúng!</div>
-    <div class="section-subtitle">Nhấn từ → nhấn màu tương ứng! 🎯</div>
-    <div id="matchingGame"></div>
-    <div class="score-area" style="margin-top:10px;">
-      <button class="check-btn" onclick="checkMatching()">✅ Kiểm tra</button>
-      <button class="reset-btn" onclick="resetMatching()">🔄 Làm lại</button>
-      <span class="feedback" id="matchFeedback"></span>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab t-listen active" id="tab-listen" onclick="switchTab('listen')">👂 Nghe</button>
+      <button class="tab t-speak" id="tab-speak" onclick="switchTab('speak')">🗣️ Nói</button>
+      <button class="tab t-read" id="tab-read" onclick="switchTab('read')">📖 Đọc</button>
+      <button class="tab t-write" id="tab-write" onclick="switchTab('write')">✏️ Viết</button>
     </div>
-  </div>
-  <div class="card">
-    <div class="section-title">❓ Trắc nghiệm đọc hiểu</div>
-    <div class="section-subtitle">Đọc câu chuyện rồi chọn đáp án đúng! 📚</div>
-    <div id="readQuiz"></div>
-    <div class="score-area">
-      <div class="score-badge" id="readScore">0/0 đúng</div>
-      <span class="feedback" id="readFeedback"></span>
-    </div>
-  </div>
-</div>
 
-<!-- ======= VIẾT ======= -->
-<div class="section" id="section-write">
-  <div class="card">
-    <div class="section-title">✏️ Điền tên màu vào chỗ trống</div>
-    <div class="section-subtitle">Nhìn swatch màu rồi gõ tên tiếng Anh vào ô trống! 📝</div>
-    <div id="fillBlanks"></div>
-    <div class="score-area" style="margin-top:14px;">
-      <button class="check-btn" onclick="checkFillBlanks()">✅ Kiểm tra</button>
-      <button class="reset-btn" onclick="resetFillBlanks()">🔄 Làm lại</button>
-      <span class="feedback" id="fillFeedback"></span>
+    <!-- NGHE -->
+    <div class="section active" id="section-listen">
+      <div class="card">
+        <div class="card-title">👂 Từ vựng — Nhấn để nghe phát âm</div>
+        <div class="card-sub">Nghe kỹ rồi lặp lại to theo nhé! 🔊</div>
+        <div class="vocab-grid" id="vocabGrid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 Trắc nghiệm nghe</div>
+        <div class="card-sub">Nhấn 🔊 nghe từ rồi chọn đáp án đúng! 🎮</div>
+        <div id="listenQuizArea"></div>
+        <div class="score-row">
+          <div class="score-badge" id="listenScoreBadge">0/0 đúng</div>
+          <span class="feedback-txt" id="listenFb"></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎵 Chant — Hát theo bài!</div>
+        <div class="card-sub">Nghe và hát theo cô giáo nhé! 🎶</div>
+        <div id="chantArea"></div>
+      </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="section-title">🧩 Xếp chữ cái thành từ</div>
-    <div class="section-subtitle">Nhấn/kéo chữ cái để ghép thành từ màu sắc! 🔤</div>
-    <div id="wordBuilder"></div>
-  </div>
-  <div class="card">
-    <div class="section-title">🖼️ Tô màu theo hướng dẫn</div>
-    <div class="section-subtitle">Đọc hướng dẫn rồi chọn đúng màu để tô! 🎨</div>
-    <div id="coloringGame"></div>
-  </div>
-</div>
 
-</div><!-- /container -->
+    <!-- NÓI -->
+    <div class="section" id="section-speak">
+      <div class="card">
+        <div class="card-title">🗣️ Luyện nói — AI chấm phát âm!</div>
+        <div class="card-sub">Nhấn 🔊 nghe mẫu → nhấn 🎤 đọc to → xem kết quả! 💪</div>
+        <div id="speakCardsArea"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">💬 Hội thoại</div>
+        <div class="card-sub">Nhấn vào từ để trả lời cô giáo! 👫</div>
+        <div id="dialogueArea"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎨 Trò chơi: Nhìn và nói!</div>
+        <div class="card-sub">Nói to từ rồi chọn đáp án đúng! 🖌️</div>
+        <div id="namingGameArea"></div>
+      </div>
+    </div>
+
+    <!-- ĐỌC -->
+    <div class="section" id="section-read">
+      <div class="card">
+        <div class="card-title">📖 Câu chuyện</div>
+        <div class="card-sub">Nhấn vào từ in đậm để nghe và xem nghĩa! 🌈</div>
+        <div class="story-box"><div id="storyArea"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔗 Nối từ với hình đúng!</div>
+        <div class="card-sub">Nhấn từ → nhấn hình tương ứng! 🎯</div>
+        <div id="matchingArea"></div>
+        <div class="score-row">
+          <button class="btn-check" onclick="checkMatching()">✅ Kiểm tra</button>
+          <button class="btn-reset" onclick="resetMatching()">🔄 Làm lại</button>
+          <span class="feedback-txt" id="matchFb"></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">❓ Trắc nghiệm đọc hiểu</div>
+        <div class="card-sub">Đọc câu chuyện rồi trả lời câu hỏi! 📚</div>
+        <div id="readQuizArea"></div>
+        <div class="score-row">
+          <div class="score-badge" id="readScoreBadge">0/0 đúng</div>
+          <span class="feedback-txt" id="readFb"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIẾT -->
+    <div class="section" id="section-write">
+      <div class="card">
+        <div class="card-title">✏️ Điền từ vào chỗ trống</div>
+        <div class="card-sub">Nhìn hình rồi gõ từ tiếng Anh vào ô trống! 📝</div>
+        <div id="fillBlanksArea"></div>
+        <div class="score-row">
+          <button class="btn-check" onclick="checkFill()">✅ Kiểm tra</button>
+          <button class="btn-reset" onclick="resetFill()">🔄 Làm lại</button>
+          <span class="feedback-txt" id="fillFb"></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🧩 Xếp chữ cái thành từ</div>
+        <div class="card-sub">Nhấn hoặc kéo chữ cái để ghép từ! 🔤</div>
+        <div id="wbArea"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🖼️ Tô màu theo hướng dẫn</div>
+        <div class="card-sub">Đọc hướng dẫn rồi chọn đúng màu! 🎨</div>
+        <div id="colourShapeArea"></div>
+      </div>
+    </div>
+
+  </div><!-- /unitView -->
+</div><!-- /main -->
 
 <!-- CELEBRATION -->
-<div class="celebration" id="celebration">
+<div class="celeb-overlay" id="celebOverlay">
   <div class="celeb-box">
     <span class="celeb-emoji" id="celebEmoji">🎉</span>
     <div class="celeb-title" id="celebTitle">Tuyệt vời!</div>
@@ -355,62 +467,176 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
 /* ============================================================
    DATA
 ============================================================ */
-const COLOURS = [
-  {en:'red',   vi:'Đỏ',       hex:'#FF4757', emoji:'🔴', obj:'🍎 quả táo',   phonetic:'/rɛd/'},
-  {en:'green', vi:'Xanh lá',  hex:'#2ED573', emoji:'🟢', obj:'🌿 lá cây',    phonetic:'/ɡriːn/'},
-  {en:'blue',  vi:'Xanh dương',hex:'#1E90FF',emoji:'🔵', obj:'💧 nước biển', phonetic:'/bluː/'},
-  {en:'black', vi:'Đen',      hex:'#2F3542', emoji:'⚫', obj:'🐈‍⬛ mèo đen', phonetic:'/blæk/'},
-  {en:'white', vi:'Trắng',    hex:'#E0E0E0', emoji:'⚪', obj:'☁️ đám mây',   phonetic:'/waɪt/'},
-  {en:'yellow',vi:'Vàng',     hex:'#FFC312', emoji:'🟡', obj:'🌟 ngôi sao',  phonetic:'/ˈjɛloʊ/'},
-  {en:'pink',  vi:'Hồng',     hex:'#FF6B9D', emoji:'🩷', obj:'🌸 hoa anh đào',phonetic:'/pɪŋk/'},
-  {en:'orange',vi:'Cam',      hex:'#FF8C00', emoji:'🟠', obj:'🍊 quả cam',   phonetic:'/ˈɒrɪndʒ/'},
-];
+const UNITS = [{"id": "starter", "title": "Starter: Hello!", "icon": "👋", "color": "#667eea", "vocab": [{"en": "hello", "vi": "Xin chào", "emoji": "👋", "phonetic": "/həˈloʊ/"}, {"en": "goodbye", "vi": "Tạm biệt", "emoji": "🤚", "phonetic": "/ɡʊdˈbaɪ/"}, {"en": "please", "vi": "Làm ơn", "emoji": "🙏", "phonetic": "/pliːz/"}, {"en": "thank you", "vi": "Cảm ơn", "emoji": "😊", "phonetic": "/θæŋk juː/"}, {"en": "yes", "vi": "Có/Vâng", "emoji": "✅", "phonetic": "/jɛs/"}, {"en": "no", "vi": "Không", "emoji": "❌", "phonetic": "/noʊ/"}], "grammar": "What's your name? I'm Rosy.", "story": "Hello! I'm Rosy. Hello! I'm Tim. Hello! I'm Billy. Goodbye, Rosy! Goodbye, Tim!", "value": "Be polite 🤝", "listen_qs": [{"q": "👋 Chào hỏi tiếng Anh là gì?", "correct": "hello", "opts": ["hello", "goodbye", "yes", "no"]}, {"q": "🤚 Tạm biệt tiếng Anh là gì?", "correct": "goodbye", "opts": ["hello", "goodbye", "please", "thank you"]}, {"q": "🙏 Làm ơn tiếng Anh là gì?", "correct": "please", "opts": ["yes", "no", "please", "goodbye"]}, {"q": "✅ Có / Vâng tiếng Anh là gì?", "correct": "yes", "opts": ["yes", "no", "hello", "please"]}], "fill_blanks": [{"pre": "👋", "suf": "_____ ! (Xin chào)", "ans": "hello"}, {"pre": "🤚", "suf": "_____ ! (Tạm biệt)", "ans": "goodbye"}, {"pre": "🙏", "suf": "_____ ! (Làm ơn)", "ans": "please"}, {"pre": "✅", "suf": "_____ ! (Vâng)", "ans": "yes"}], "wb_words": ["hello", "yes", "no", "please"], "read_qs": [{"q": "Rosy says: '_____ ! I'm Rosy.'", "correct": "Hello", "opts": ["Hello", "Goodbye", "Please", "Yes"]}, {"q": "At the end: 'Goodbye, Tim! _____!'", "correct": "Goodbye", "opts": ["Hello", "Goodbye", "Please", "Thank you"]}], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}]}, {"id": "unit1", "title": "Unit 1: What colour is it?", "icon": "🎨", "color": "#FF4757", "vocab": [{"en": "red", "vi": "Đỏ", "emoji": "🔴", "phonetic": "/rɛd/"}, {"en": "green", "vi": "Xanh lá", "emoji": "🟢", "phonetic": "/ɡriːn/"}, {"en": "blue", "vi": "Xanh dương", "emoji": "🔵", "phonetic": "/bluː/"}, {"en": "black", "vi": "Đen", "emoji": "⚫", "phonetic": "/blæk/"}, {"en": "white", "vi": "Trắng", "emoji": "⚪", "phonetic": "/waɪt/"}, {"en": "yellow", "vi": "Vàng", "emoji": "🟡", "phonetic": "/ˈjɛloʊ/"}, {"en": "pink", "vi": "Hồng", "emoji": "🩷", "phonetic": "/pɪŋk/"}, {"en": "orange", "vi": "Cam", "emoji": "🟠", "phonetic": "/ˈɒrɪndʒ/"}], "grammar": "What colour is it? It's green.", "story": "Look at the toys! This ball is red. This crayon is blue. This pencil is green. The hat is yellow. What colour is it? It's red!", "value": "Be polite 🤝", "listen_qs": [{"q": "🔴 What colour?", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "🔵 What colour?", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "🟢 What colour?", "correct": "green", "opts": ["green", "white", "red", "pink"]}, {"q": "🟡 What colour?", "correct": "yellow", "opts": ["orange", "yellow", "blue", "black"]}, {"q": "🩷 What colour?", "correct": "pink", "opts": ["pink", "red", "white", "orange"]}, {"q": "🟠 What colour?", "correct": "orange", "opts": ["yellow", "green", "orange", "white"]}], "fill_blanks": [{"pre": "🔴", "suf": "This is _____ .", "ans": "red"}, {"pre": "🟢", "suf": "This is _____ .", "ans": "green"}, {"pre": "🔵", "suf": "This is _____ .", "ans": "blue"}, {"pre": "🟡", "suf": "This is _____ .", "ans": "yellow"}, {"pre": "🩷", "suf": "This is _____ .", "ans": "pink"}, {"pre": "🟠", "suf": "This is _____ .", "ans": "orange"}], "wb_words": ["red", "green", "blue", "yellow", "pink", "orange"], "read_qs": [{"q": "What colour is the ball? 🔴", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "What colour is the crayon? 🔵", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "What colour is the hat? 🟡", "correct": "yellow", "opts": ["green", "white", "yellow", "pink"]}], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}, {"shape": "💛", "correct": "yellow", "label": "hình thoi"}, {"shape": "🩷", "correct": "pink", "label": "trái tim"}]}, {"id": "unit2", "title": "Unit 2: What's this?", "icon": "🎒", "color": "#00B894", "vocab": [{"en": "desk", "vi": "Bàn học", "emoji": "🪑", "phonetic": "/dɛsk/"}, {"en": "chair", "vi": "Ghế", "emoji": "🪑", "phonetic": "/tʃɛr/"}, {"en": "crayon", "vi": "Bút màu", "emoji": "🖍️", "phonetic": "/ˈkreɪɒn/"}, {"en": "pencil", "vi": "Bút chì", "emoji": "✏️", "phonetic": "/ˈpɛnsəl/"}, {"en": "notebook", "vi": "Vở", "emoji": "📓", "phonetic": "/ˈnoʊtbʊk/"}, {"en": "bag", "vi": "Túi xách", "emoji": "🎒", "phonetic": "/bæɡ/"}], "grammar": "What's this? It's a notebook.", "story": "What's this? It's a notebook! What's this? It's a pencil! What's this? It's a bag! It's a train!", "value": "Be kind 💛", "listen_qs": [{"q": "📓 What's this?", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "✏️ What's this?", "correct": "pencil", "opts": ["crayon", "pencil", "chair", "notebook"]}, {"q": "🎒 What's this?", "correct": "bag", "opts": ["bag", "desk", "chair", "pencil"]}, {"q": "🖍️ What's this?", "correct": "crayon", "opts": ["pencil", "crayon", "notebook", "bag"]}], "fill_blanks": [{"pre": "📓", "suf": "It's a _____ .", "ans": "notebook"}, {"pre": "✏️", "suf": "It's a _____ .", "ans": "pencil"}, {"pre": "🎒", "suf": "It's a _____ .", "ans": "bag"}, {"pre": "🖍️", "suf": "It's a _____ .", "ans": "crayon"}, {"pre": "🪑", "suf": "It's a _____ .", "ans": "chair"}], "wb_words": ["desk", "chair", "pencil", "bag", "notebook", "crayon"], "read_qs": [{"q": "What's this? 📓", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "What's this? 🎒", "correct": "bag", "opts": ["bag", "desk", "chair", "crayon"]}, {"q": "What's this? ✏️", "correct": "pencil", "opts": ["pencil", "crayon", "desk", "notebook"]}], "colour_shapes": [{"shape": "📓", "correct": "blue", "label": "cuốn vở"}, {"shape": "✏️", "correct": "yellow", "label": "bút chì"}, {"shape": "🎒", "correct": "red", "label": "cái túi"}]}, {"id": "unit3", "title": "Unit 3: Is it a plane?", "icon": "✈️", "color": "#6C5CE7", "vocab": [{"en": "plane", "vi": "Máy bay", "emoji": "✈️", "phonetic": "/pleɪn/"}, {"en": "puppet", "vi": "Con rối", "emoji": "🪆", "phonetic": "/ˈpʌpɪt/"}, {"en": "robot", "vi": "Robot", "emoji": "🤖", "phonetic": "/ˈroʊbɒt/"}, {"en": "balloon", "vi": "Bóng bay", "emoji": "🎈", "phonetic": "/bəˈluːn/"}, {"en": "teddy", "vi": "Gấu bông", "emoji": "🧸", "phonetic": "/ˈtɛdi/"}, {"en": "car", "vi": "Ô tô", "emoji": "🚗", "phonetic": "/kɑːr/"}], "grammar": "Is it a plane? Yes, it is. / No, it isn't.", "story": "Is it a plane? Yes, it is! Is it a robot? No, it isn't. It's a teddy! Is it a robot? Yes!", "value": "Be polite 🤝", "listen_qs": [{"q": "✈️ What is it?", "correct": "plane", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🤖 What is it?", "correct": "robot", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🎈 What is it?", "correct": "balloon", "opts": ["balloon", "teddy", "car", "plane"]}, {"q": "🧸 What is it?", "correct": "teddy", "opts": ["robot", "puppet", "teddy", "plane"]}], "fill_blanks": [{"pre": "✈️", "suf": "It's a _____ .", "ans": "plane"}, {"pre": "🤖", "suf": "It's a _____ .", "ans": "robot"}, {"pre": "🎈", "suf": "It's a _____ .", "ans": "balloon"}, {"pre": "🧸", "suf": "It's a _____ .", "ans": "teddy"}, {"pre": "🚗", "suf": "It's a _____ .", "ans": "car"}], "wb_words": ["plane", "robot", "balloon", "teddy", "car", "puppet"], "read_qs": [{"q": "Is it a plane? ✈️", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a robot", "It's a balloon"]}, {"q": "Is it a robot? 🧸", "correct": "No, it isn't", "opts": ["Yes, it is", "No, it isn't", "It's a plane", "It's a car"]}, {"q": "Is it a balloon? 🎈", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a teddy", "It's a car"]}], "colour_shapes": [{"shape": "✈️", "correct": "blue", "label": "máy bay"}, {"shape": "🤖", "correct": "red", "label": "robot"}, {"shape": "🎈", "correct": "yellow", "label": "bóng bay"}]}, {"id": "unit4", "title": "Unit 4: This is my mum!", "icon": "👨‍👩‍👧", "color": "#FF8C00", "vocab": [{"en": "mum", "vi": "Mẹ", "emoji": "👩", "phonetic": "/mʌm/"}, {"en": "dad", "vi": "Bố", "emoji": "👨", "phonetic": "/dæd/"}, {"en": "brother", "vi": "Anh/Em trai", "emoji": "👦", "phonetic": "/ˈbrʌðər/"}, {"en": "sister", "vi": "Chị/Em gái", "emoji": "👧", "phonetic": "/ˈsɪstər/"}, {"en": "grandpa", "vi": "Ông", "emoji": "👴", "phonetic": "/ˈɡrænpɑː/"}, {"en": "grandma", "vi": "Bà", "emoji": "👵", "phonetic": "/ˈɡrænmɑː/"}], "grammar": "This is my mum.", "story": "This is my grandpa. This is my mum. This is my brother. Hello, brother! This is my grandma.", "value": "Love your family ❤️", "listen_qs": [{"q": "👩 Who is this?", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "👨 Who is this?", "correct": "dad", "opts": ["mum", "dad", "brother", "grandpa"]}, {"q": "👧 Who is this?", "correct": "sister", "opts": ["mum", "sister", "grandma", "brother"]}, {"q": "👴 Who is this?", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}], "fill_blanks": [{"pre": "👩", "suf": "This is my _____ .", "ans": "mum"}, {"pre": "👨", "suf": "This is my _____ .", "ans": "dad"}, {"pre": "👧", "suf": "This is my _____ .", "ans": "sister"}, {"pre": "👦", "suf": "This is my _____ .", "ans": "brother"}, {"pre": "👴", "suf": "This is my _____ .", "ans": "grandpa"}, {"pre": "👵", "suf": "This is my _____ .", "ans": "grandma"}], "wb_words": ["mum", "dad", "sister", "brother", "grandpa", "grandma"], "read_qs": [{"q": "Who is this? 👩", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "Who is this? 👴", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}, {"q": "Who is this? 👦", "correct": "brother", "opts": ["sister", "brother", "dad", "grandpa"]}], "colour_shapes": [{"shape": "👩", "correct": "red", "label": "mẹ mặc áo đỏ"}, {"shape": "👨", "correct": "blue", "label": "bố mặc áo xanh"}]}, {"id": "unit5", "title": "Unit 5: He's happy!", "icon": "😊", "color": "#FFC312", "vocab": [{"en": "happy", "vi": "Vui vẻ", "emoji": "😊", "phonetic": "/ˈhæpi/"}, {"en": "sad", "vi": "Buồn", "emoji": "😢", "phonetic": "/sæd/"}, {"en": "hungry", "vi": "Đói", "emoji": "😋", "phonetic": "/ˈhʌŋɡri/"}, {"en": "thirsty", "vi": "Khát nước", "emoji": "😰", "phonetic": "/ˈθɜːrsti/"}, {"en": "hot", "vi": "Nóng", "emoji": "🥵", "phonetic": "/hɒt/"}, {"en": "cold", "vi": "Lạnh", "emoji": "🥶", "phonetic": "/koʊld/"}], "grammar": "He's happy. She's cold.", "story": "She's happy! He's sad. She's hungry. He's thirsty. She's cold! He's hot. Are you happy? Yes, I am!", "value": "Share with friends 🤝", "listen_qs": [{"q": "😊 How is he/she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "😢 How is he/she?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "😋 How is he/she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}, {"q": "🥶 How is he/she?", "correct": "cold", "opts": ["hot", "cold", "sad", "hungry"]}], "fill_blanks": [{"pre": "😊", "suf": "She's _____ .", "ans": "happy"}, {"pre": "😢", "suf": "He's _____ .", "ans": "sad"}, {"pre": "😋", "suf": "She's _____ .", "ans": "hungry"}, {"pre": "🥶", "suf": "He's _____ .", "ans": "cold"}, {"pre": "🥵", "suf": "She's _____ .", "ans": "hot"}], "wb_words": ["happy", "sad", "hungry", "cold", "thirsty", "hot"], "read_qs": [{"q": "She's 😊. How is she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "He's 😢. How is he?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "She's 😋. How is she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}], "colour_shapes": [{"shape": "😊", "correct": "yellow", "label": "mặt vui"}, {"shape": "😢", "correct": "blue", "label": "mặt buồn"}]}, {"id": "unit6", "title": "Unit 6: They're bears!", "icon": "🐻", "color": "#2ED573", "vocab": [{"en": "bird", "vi": "Chim", "emoji": "🐦", "phonetic": "/bɜːrd/"}, {"en": "bear", "vi": "Gấu", "emoji": "🐻", "phonetic": "/bɛr/"}, {"en": "hippo", "vi": "Hà mã", "emoji": "🦛", "phonetic": "/ˈhɪpoʊ/"}, {"en": "crocodile", "vi": "Cá sấu", "emoji": "🐊", "phonetic": "/ˈkrɒkədaɪl/"}, {"en": "tiger", "vi": "Hổ", "emoji": "🐯", "phonetic": "/ˈtaɪɡər/"}, {"en": "lion", "vi": "Sư tử", "emoji": "🦁", "phonetic": "/ˈlaɪən/"}], "grammar": "What are they? They're bears.", "story": "Look! They're crocodiles! They're birds! They're tigers! What are they? They're bears! Roar!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🐻🐻 What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "🐦🐦 What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "🦛🦛 What are they?", "correct": "hippos", "opts": ["bears", "tigers", "hippos", "lions"]}, {"q": "🐯🐯 What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "fill_blanks": [{"pre": "🐻🐻", "suf": "They're _____ .", "ans": "bears"}, {"pre": "🐦🐦", "suf": "They're _____ .", "ans": "birds"}, {"pre": "🦛🦛", "suf": "They're _____ .", "ans": "hippos"}, {"pre": "🐯🐯", "suf": "They're _____ .", "ans": "tigers"}, {"pre": "🦁🦁", "suf": "They're _____ .", "ans": "lions"}], "wb_words": ["bird", "bear", "hippo", "tiger", "lion", "crocodile"], "read_qs": [{"q": "They're 🐻🐻. What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "They're 🐦🐦. What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "They're 🐯🐯. What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "colour_shapes": [{"shape": "🐻", "correct": "orange", "label": "con gấu"}, {"shape": "🐦", "correct": "red", "label": "con chim"}, {"shape": "🐊", "correct": "green", "label": "cá sấu"}]}, {"id": "unit7", "title": "Unit 7: Are they teachers?", "icon": "👩‍🏫", "color": "#E84393", "vocab": [{"en": "teacher", "vi": "Giáo viên", "emoji": "👩‍🏫", "phonetic": "/ˈtiːtʃər/"}, {"en": "pupil", "vi": "Học sinh", "emoji": "🧑‍🎓", "phonetic": "/ˈpjuːpəl/"}, {"en": "waiter", "vi": "Người phục vụ", "emoji": "🧑‍🍳", "phonetic": "/ˈweɪtər/"}, {"en": "vet", "vi": "Bác sĩ thú y", "emoji": "👨‍⚕️", "phonetic": "/vɛt/"}, {"en": "builder", "vi": "Thợ xây", "emoji": "👷", "phonetic": "/ˈbɪldər/"}, {"en": "doctor", "vi": "Bác sĩ", "emoji": "🩺", "phonetic": "/ˈdɒktər/"}], "grammar": "Are they teachers? Yes, they are. / No, they aren't.", "story": "What are they? They're builders! Are they teachers? No, they aren't! They're pupils! Hello, pupils!", "value": "Help each other 🤝", "listen_qs": [{"q": "👩‍🏫 What is she?", "correct": "teacher", "opts": ["teacher", "pupil", "waiter", "vet"]}, {"q": "👷 What is he?", "correct": "builder", "opts": ["builder", "doctor", "teacher", "waiter"]}, {"q": "🧑‍🎓 What are they?", "correct": "pupils", "opts": ["pupils", "teachers", "vets", "waiters"]}, {"q": "🩺 What is he?", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "fill_blanks": [{"pre": "👩‍🏫", "suf": "She's a _____ .", "ans": "teacher"}, {"pre": "👷", "suf": "He's a _____ .", "ans": "builder"}, {"pre": "🧑‍🎓", "suf": "He's a _____ .", "ans": "pupil"}, {"pre": "🩺", "suf": "He's a _____ .", "ans": "doctor"}, {"pre": "👨‍⚕️", "suf": "She's a _____ .", "ans": "vet"}], "wb_words": ["teacher", "pupil", "waiter", "builder", "doctor", "vet"], "read_qs": [{"q": "Are they teachers? 👩‍🏫👩‍🏫", "correct": "Yes, they are", "opts": ["Yes, they are", "No, they aren't", "They're pupils", "They're builders"]}, {"q": "Are they builders? 🧑‍🎓🧑‍🎓", "correct": "No, they aren't", "opts": ["Yes, they are", "No, they aren't", "They're teachers", "They're doctors"]}, {"q": "What is she? 🩺", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "colour_shapes": [{"shape": "👩‍🏫", "correct": "red", "label": "cô giáo"}, {"shape": "👷", "correct": "yellow", "label": "thợ xây"}]}, {"id": "unit8", "title": "Unit 8: I've got a shirt!", "icon": "👕", "color": "#1E90FF", "vocab": [{"en": "jumper", "vi": "Áo len", "emoji": "🧥", "phonetic": "/ˈdʒʌmpər/"}, {"en": "shirt", "vi": "Áo sơ mi", "emoji": "👔", "phonetic": "/ʃɜːrt/"}, {"en": "jacket", "vi": "Áo khoác", "emoji": "🥼", "phonetic": "/ˈdʒækɪt/"}, {"en": "hat", "vi": "Mũ", "emoji": "🎩", "phonetic": "/hæt/"}, {"en": "belt", "vi": "Thắt lưng", "emoji": "🪢", "phonetic": "/bɛlt/"}, {"en": "socks", "vi": "Tất/Vớ", "emoji": "🧦", "phonetic": "/sɒks/"}], "grammar": "I've got a shirt.", "story": "I've got a jumper! I've got a jacket! I've got a hat! Look, I've got a hat too! Thanks, Grandma!", "value": "Share with others 🎁", "listen_qs": [{"q": "👔 What have you got?", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "🎩 What have you got?", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "🧦 What have you got?", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}, {"q": "🥼 What have you got?", "correct": "jacket", "opts": ["jacket", "shirt", "belt", "socks"]}], "fill_blanks": [{"pre": "👔", "suf": "I've got a _____ .", "ans": "shirt"}, {"pre": "🎩", "suf": "I've got a _____ .", "ans": "hat"}, {"pre": "🧦", "suf": "I've got _____ .", "ans": "socks"}, {"pre": "🥼", "suf": "I've got a _____ .", "ans": "jacket"}, {"pre": "🧥", "suf": "I've got a _____ .", "ans": "jumper"}], "wb_words": ["shirt", "jumper", "jacket", "hat", "belt", "socks"], "read_qs": [{"q": "What have you got? 👔", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "What have you got? 🎩", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "I've got _____ . 🧦", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}], "colour_shapes": [{"shape": "👔", "correct": "blue", "label": "áo sơ mi"}, {"shape": "🎩", "correct": "black", "label": "cái mũ"}, {"shape": "🧦", "correct": "red", "label": "đôi vớ"}]}, {"id": "unit9", "title": "Unit 9: I like plums!", "icon": "🍑", "color": "#8B5CF6", "vocab": [{"en": "raisins", "vi": "Nho khô", "emoji": "🍇", "phonetic": "/ˈreɪzənz/"}, {"en": "plums", "vi": "Mận", "emoji": "🍑", "phonetic": "/plʌmz/"}, {"en": "crisps", "vi": "Bánh giòn", "emoji": "🥨", "phonetic": "/krɪsps/"}, {"en": "cakes", "vi": "Bánh ngọt", "emoji": "🎂", "phonetic": "/keɪks/"}, {"en": "milk", "vi": "Sữa", "emoji": "🥛", "phonetic": "/mɪlk/"}, {"en": "bananas", "vi": "Chuối", "emoji": "🍌", "phonetic": "/bəˈnɑːnəz/"}], "grammar": "I like plums. I don't like raisins.", "story": "I like raisins! I don't like raisins. I like plums! I don't like plums. I like cakes! Share the cakes!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🍑 What do you like?", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "🎂 What do you like?", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}, {"q": "🥛 What do you like?", "correct": "milk", "opts": ["milk", "bananas", "raisins", "crisps"]}, {"q": "🍌 What do you like?", "correct": "bananas", "opts": ["plums", "cakes", "bananas", "milk"]}], "fill_blanks": [{"pre": "🍑", "suf": "I like _____ .", "ans": "plums"}, {"pre": "🎂", "suf": "I like _____ .", "ans": "cakes"}, {"pre": "🥛", "suf": "I like _____ .", "ans": "milk"}, {"pre": "🍌", "suf": "I don't like _____ .", "ans": "bananas"}, {"pre": "🍇", "suf": "I don't like _____ .", "ans": "raisins"}], "wb_words": ["plums", "cakes", "milk", "raisins", "crisps", "bananas"], "read_qs": [{"q": "Tim says: 'I like _____!' 🍑", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "Rosy says: 'I don't like _____!' 🍇", "correct": "raisins", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "They both like: 🎂", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}], "colour_shapes": [{"shape": "🍑", "correct": "pink", "label": "quả mận"}, {"shape": "🍌", "correct": "yellow", "label": "quả chuối"}, {"shape": "🎂", "correct": "orange", "label": "cái bánh"}]}];
 
-let totalScore=0, listenQScore=0, listenQTotal=0, readQScore=0, readQTotal=0;
-let currentListenQ=0, currentReadQ=0;
-let matchState={}, selectedMW=null;
-let wbIdx=0, draggedId=null;
+const COLOUR_HEX = {"red": "#FF4757", "green": "#2ED573", "blue": "#1E90FF", "black": "#2F3542", "white": "#E0E0E0", "yellow": "#FFC312", "pink": "#FF6B9D", "orange": "#FF8C00", "purple": "#8B5CF6", "brown": "#8B4513"};
+
+/* ============================================================
+   STATE
+============================================================ */
+let totalScore = 0;
+let unitScores = {};   // {unitId: score}
+let unitMaxScores = {};
+let currentUnit = null;
+let listenQIdx = 0, listenQScore = 0, listenQTotal = 0;
+let readQIdx = 0, readQScore = 0, readQTotal = 0;
+let matchState = {}, selMW = null;
+let wbIdx = 0, draggedTile = null;
+let activeRec = null;
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 /* ============================================================
    UTILS
 ============================================================ */
-function speak(text,rate=0.85){
-  if(!window.speechSynthesis)return;
+function speak(text, rate=0.85){
+  if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';u.rate=rate;u.pitch=1.1;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=rate; u.pitch=1.1;
   window.speechSynthesis.speak(u);
 }
-function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
-function updateProgress(){
-  const steps=[listenQTotal>0?listenQScore/listenQTotal:0,readQTotal>0?readQScore/readQTotal:0];
-  const pct=Math.round(steps.reduce((a,b)=>a+b,0)/steps.length*100)||0;
-  document.getElementById('progressBar').style.width=pct+'%';
-  document.getElementById('scoreTotal').textContent='⭐ '+totalScore+' điểm';
-  const labs=['Bắt đầu học nào! 🚀','Đang học tốt! 💪','Tiến bộ rồi! 🌟','Gần xong rồi! 🔥','Xuất sắc! 🏆'];
-  document.getElementById('progressLabel').textContent=labs[Math.floor(pct/25)];
-}
-function celebrate(emoji,title,sub,stars){
-  document.getElementById('celebEmoji').textContent=emoji;
-  document.getElementById('celebTitle').textContent=title;
-  document.getElementById('celebSub').textContent=sub;
-  document.getElementById('celebStars').textContent=stars||'⭐⭐⭐';
-  document.getElementById('celebration').classList.add('show');
+function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+
+function celebrate(emoji, title, sub, stars){
+  document.getElementById('celebEmoji').textContent = emoji;
+  document.getElementById('celebTitle').textContent = title;
+  document.getElementById('celebSub').textContent = sub;
+  document.getElementById('celebStars').textContent = stars||'⭐⭐⭐';
+  document.getElementById('celebOverlay').classList.add('show');
   launchConfetti();
 }
-function closeCeleb(){document.getElementById('celebration').classList.remove('show');}
+function closeCeleb(){ document.getElementById('celebOverlay').classList.remove('show'); }
 function launchConfetti(){
   const cs=['#FF4757','#FFC312','#2ED573','#1E90FF','#FF6B9D','#FF8C00'];
-  for(let i=0;i<44;i++){
-    const c=document.createElement('div');c.className='confetti-piece';
+  for(let i=0;i<48;i++){
+    const c=document.createElement('div'); c.className='conf';
     c.style.left=Math.random()*100+'vw';
     c.style.background=cs[Math.floor(Math.random()*cs.length)];
     c.style.borderRadius=Math.random()>.5?'50%':'0';
     c.style.animationDuration=(1.5+Math.random()*2)+'s';
     c.style.animationDelay=(Math.random()*.8)+'s';
     document.body.appendChild(c);
-    setTimeout(()=>c.remove(),4000);
+    setTimeout(()=>c.remove(),4200);
   }
+}
+
+function levenshtein(a,b){
+  const dp=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);
+  for(let j=0;j<=b.length;j++) dp[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++)
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[a.length][b.length];
+}
+
+function addScore(pts){
+  totalScore += pts;
+  document.getElementById('totalScoreDisp').textContent = '⭐ '+totalScore+' điểm';
+  if(currentUnit){
+    unitScores[currentUnit.id] = (unitScores[currentUnit.id]||0) + pts;
+    updateUnitProgress();
+  }
+}
+
+function updateUnitProgress(){
+  if(!currentUnit) return;
+  const max = currentUnit.vocab.length*5 + currentUnit.listen_qs.length*10 + currentUnit.fill_blanks.length*8 + currentUnit.wb_words.length*15;
+  unitMaxScores[currentUnit.id] = max;
+  const sc = unitScores[currentUnit.id]||0;
+  const pct = Math.min(100, Math.round(sc/max*100));
+  document.getElementById('unitProgressBar').style.width = pct+'%';
+  document.getElementById('unitProgressTxt').textContent = pct+'% hoàn thành';
+  document.getElementById('prog-'+currentUnit.id).textContent = pct+'% hoàn thành';
+  // Update sidebar button
+  const sb = document.getElementById('sb-'+currentUnit.id);
+  if(sb) sb.style.background = currentUnit.color+'22';
+  // Update home card
+  const hcFill = document.getElementById('hcf-'+currentUnit.id);
+  if(hcFill) hcFill.style.width = pct+'%';
+  const hcStars = document.getElementById('hcs-'+currentUnit.id);
+  if(hcStars) hcStars.textContent = pct>=100?'⭐⭐⭐':pct>=50?'⭐⭐':pct>0?'⭐':'';
+}
+
+/* ============================================================
+   SIDEBAR & NAVIGATION
+============================================================ */
+let sidebarOpen = true;
+function toggleSidebar(){
+  sidebarOpen = !sidebarOpen;
+  document.getElementById('sidebar').classList.toggle('hidden', !sidebarOpen);
+  document.getElementById('main').classList.toggle('full', !sidebarOpen);
+}
+function setActiveSidebar(id){
+  document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
+  const btn = document.getElementById('sb-'+id);
+  if(btn){ btn.classList.add('active'); btn.style.color='white'; btn.style.background=currentUnit?currentUnit.color:id==='home'?'#667eea':'#999'; }
+}
+
+function showHome(){
+  currentUnit = null;
+  document.getElementById('homeScreen').style.display = 'block';
+  document.getElementById('unitView').style.display = 'none';
+  document.getElementById('topTitle').textContent = '🌈 Chào mừng bé học tiếng Anh!';
+  setActiveSidebar('home');
+  buildHomeGrid();
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
+function buildHomeGrid(){
+  const g = document.getElementById('homeGrid');
+  g.innerHTML = UNITS.map(u=>`
+    <div class="unit-card" style="background:linear-gradient(135deg,${u.color},${u.color}cc);"
+         onclick="loadUnit('${u.id}')">
+      <div class="uc-icon">${u.icon}</div>
+      <div class="uc-title">${u.title}</div>
+      <div class="uc-prog">${u.vocab.length} từ vựng • 4 kỹ năng</div>
+      <div class="uc-stars" id="hcs-${u.id}"></div>
+      <div class="prog-mini"><div class="prog-mini-fill" id="hcf-${u.id}" style="width:0%"></div></div>
+    </div>`).join('');
+}
+
+function loadUnit(id){
+  currentUnit = UNITS.find(u=>u.id===id);
+  if(!currentUnit) return;
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  if(activeRec){try{activeRec.stop();}catch(e){}activeRec=null;}
+
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('unitView').style.display = 'block';
+  document.getElementById('topTitle').textContent = currentUnit.icon+' '+currentUnit.title;
+
+  // Header colour
+  const hdr = document.getElementById('unitHeader');
+  hdr.style.background = 'linear-gradient(135deg,'+currentUnit.color+','+currentUnit.color+'aa)';
+  document.getElementById('uIcon').textContent = currentUnit.icon;
+  document.getElementById('uTitle').textContent = currentUnit.title;
+  document.getElementById('uGrammar').textContent = '📝 '+currentUnit.grammar;
+
+  // Reset quiz state
+  listenQIdx=0; listenQScore=0; listenQTotal=currentUnit.listen_qs.length;
+  readQIdx=0; readQScore=0; readQTotal=currentUnit.read_qs.length;
+  matchState={}; selMW=null; wbIdx=0;
+
+  // Build all sections
+  buildVocabGrid();
+  buildListenQuiz();
+  buildChant();
+  buildSpeakCards();
+  buildDialogue();
+  buildNamingGame();
+  buildStory();
+  buildMatching();
+  buildReadQuiz();
+  buildFillBlanks();
+  buildWordBuilder();
+  buildColourShapes();
+  updateUnitProgress();
+
+  // Switch to listen tab
+  switchTab('listen');
+  setActiveSidebar(id);
+  // Scroll to top
+  document.getElementById('main').scrollTop = 0;
+  window.scrollTo(0,0);
 }
 
 /* ============================================================
@@ -420,227 +646,233 @@ function switchTab(tab){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('section-'+tab).classList.add('active');
-  document.querySelector('.tab.'+tab).classList.add('active');
-  window.speechSynthesis&&window.speechSynthesis.cancel();
+  document.getElementById('tab-'+tab).classList.add('active');
+  window.speechSynthesis && window.speechSynthesis.cancel();
 }
 
 /* ============================================================
-   LISTEN
+   LISTEN — VOCAB GRID
 ============================================================ */
-function buildColourGrid(){
-  const g=document.getElementById('colourGrid');g.innerHTML='';
-  COLOURS.forEach(c=>{
-    const d=document.createElement('div');d.className='colour-item';
-    d.style.background=c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'22';
-    d.innerHTML=`<div style="font-size:28px;margin-bottom:4px;">${c.emoji}</div>
-      <div class="swatch" style="background:${c.hex};"></div>
-      <div class="cname" style="color:${c.hex==='#E0E0E0'?'#555':c.hex}">${c.en}</div>
-      <div class="cvi">${c.vi}</div>`;
-    d.onclick=()=>{
-      document.querySelectorAll('.colour-item').forEach(x=>x.classList.remove('selected'));
-      d.classList.add('selected');speak(c.en);
-    };g.appendChild(d);
-  });
+function buildVocabGrid(){
+  const g = document.getElementById('vocabGrid');
+  g.innerHTML = currentUnit.vocab.map(v=>{
+    const hex = COLOUR_HEX[v.en] || '#888';
+    const isCname = Object.keys(COLOUR_HEX).includes(v.en);
+    const bg = isCname ? hex+'22' : '#F5F5F5';
+    return `<div class="vocab-item" style="background:${bg};" onclick="onVocabClick(this,'${v.en}')">
+      <div class="v-emoji">${v.emoji}</div>
+      ${isCname?`<div style="width:44px;height:44px;border-radius:50%;background:${hex};border:3px solid rgba(255,255,255,.7);margin:6px auto;box-shadow:0 3px 10px rgba(0,0,0,.2);"></div>`:''}
+      <div class="v-en" style="color:${isCname?hex:'#333'}">${v.en}</div>
+      <div class="v-vi">${v.vi}</div>
+      <div style="font-size:11px;color:#bbb;margin-top:1px;">${v.phonetic}</div>
+    </div>`;
+  }).join('');
 }
-const listenQuestions=[
-  {q:'🔴 What colour is it?',en:'red',opts:['red','blue','green','yellow']},
-  {q:'🔵 What colour is it?',en:'blue',opts:['pink','blue','black','orange']},
-  {q:'🟢 What colour is it?',en:'green',opts:['green','white','red','pink']},
-  {q:'🟡 What colour is it?',en:'yellow',opts:['orange','yellow','blue','black']},
-  {q:'🩷 What colour is it?',en:'pink',opts:['pink','red','purple','orange']},
-  {q:'🟠 What colour is it?',en:'orange',opts:['yellow','green','orange','white']},
-];
-function buildListenQuiz(){currentListenQ=0;listenQScore=0;listenQTotal=listenQuestions.length;renderListenQ();}
+function onVocabClick(el, word){
+  document.querySelectorAll('.vocab-item').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  speak(word);
+  addScore(2);
+}
+
+/* ============================================================
+   LISTEN — QUIZ
+============================================================ */
+function buildListenQuiz(){ listenQIdx=0; listenQScore=0; renderListenQ(); }
 function renderListenQ(){
-  const qa=document.getElementById('listenQuiz');
-  if(currentListenQ>=listenQuestions.length){
-    qa.innerHTML=`<div style="text-align:center;padding:22px;">
+  const qa = document.getElementById('listenQuizArea');
+  if(listenQIdx >= currentUnit.listen_qs.length){
+    qa.innerHTML = `<div style="text-align:center;padding:20px;">
       <div style="font-size:52px;">🎉</div>
-      <div style="font-size:20px;font-weight:800;color:#00B894;">Hoàn thành! ${listenQScore}/${listenQuestions.length} câu đúng!</div>
-      <button class="check-btn" style="margin-top:14px;" onclick="buildListenQuiz()">🔄 Làm lại!</button></div>`;
-    document.getElementById('listenScore').textContent=listenQScore+'/'+listenQuestions.length+' đúng';
-    if(listenQScore===listenQuestions.length)celebrate('🌈','Nghe xuất sắc!','Bé nghe cực giỏi!','⭐⭐⭐');
+      <div style="font-size:20px;font-weight:800;color:#00B894;">${listenQScore}/${currentUnit.listen_qs.length} câu đúng!</div>
+      <button class="btn-check" style="margin-top:12px;" onclick="buildListenQuiz()">🔄 Làm lại!</button></div>`;
+    document.getElementById('listenScoreBadge').textContent = listenQScore+'/'+currentUnit.listen_qs.length+' đúng';
+    if(listenQScore===currentUnit.listen_qs.length) celebrate('🌈','Nghe xuất sắc!','Bé nghe cực giỏi!','⭐⭐⭐');
     return;
   }
-  const q=listenQuestions[currentListenQ];
-  const opts=shuffle(q.opts);
-  qa.innerHTML=`<div class="quiz-q">
-      <div class="q-text">${q.q}</div>
-      <button class="audio-btn" style="margin-top:6px;" onclick="speak('${q.en}')">🔊 Nghe lại</button>
+  const q = currentUnit.listen_qs[listenQIdx];
+  const opts = shuffle(q.opts);
+  qa.innerHTML = `<div class="quiz-wrap">
+    <div style="text-align:center;margin-bottom:10px;">
+      <button class="btn-audio" onclick="speak('${q.correct}')">🔊 Nghe từ</button>
     </div>
-    <div class="quiz-options">
-      ${opts.map(o=>{const col=COLOURS.find(c=>c.en===o);
-        return`<button class="quiz-opt" onclick="checkListenQ('${o}','${q.en}',this)">
-          <div class="opt-swatch" style="background:${col?col.hex:'#ccc'};"></div>
-          ${col?col.emoji:''} ${o}</button>`;}).join('')}
+    <div class="quiz-q-text">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>{
+        const hex = COLOUR_HEX[o]||'#ccc';
+        return `<button class="qopt" onclick="checkListenQ('${o}','${q.correct}',this)">
+          <div class="qswatch" style="background:${hex};"></div>${o}</button>`;
+      }).join('')}
     </div>
-    <div style="text-align:right;color:#aaa;font-size:13px;margin-top:6px;">Câu ${currentListenQ+1}/${listenQuestions.length}</div>`;
+    <div style="text-align:right;color:#bbb;font-size:12px;margin-top:6px;">Câu ${listenQIdx+1}/${currentUnit.listen_qs.length}</div>
+  </div>`;
 }
-function checkListenQ(chosen,correct,btn){
-  document.querySelectorAll('#listenQuiz .quiz-opt').forEach(b=>b.disabled=true);
-  if(chosen===correct){btn.classList.add('correct');listenQScore++;totalScore+=10;
-    document.getElementById('listenFeedback').textContent='✅ Đúng rồi! +10 điểm 🎉';speak('Correct! '+correct);}
-  else{btn.classList.add('wrong');
-    document.querySelectorAll('#listenQuiz .quiz-opt').forEach(b=>{if(b.textContent.trim().includes(correct))b.classList.add('correct');});
-    document.getElementById('listenFeedback').textContent='❌ Chưa đúng! Đáp án: '+correct;speak(correct);}
-  document.getElementById('listenScore').textContent=listenQScore+'/'+(currentListenQ+1)+' đúng';
-  updateProgress();
-  setTimeout(()=>{currentListenQ++;document.getElementById('listenFeedback').textContent='';renderListenQ();},1900);
-}
-function singChant(btn){
-  btn.textContent='🎵 Đang hát...';btn.classList.add('playing');
-  const lines=['What colour is it?','It is red!','What colour is it?','It is blue!','What colour is it?','It is green!','Great singing!'];
-  let i=0;function next(){if(i<lines.length){speak(lines[i],0.75);i++;setTimeout(next,1600);}
-    else{btn.textContent='🎵 Hát cùng bé!';btn.classList.remove('playing');}}next();
+function checkListenQ(chosen, correct, btn){
+  document.querySelectorAll('#listenQuizArea .qopt').forEach(b=>b.disabled=true);
+  const fb = document.getElementById('listenFb');
+  if(chosen===correct){
+    btn.classList.add('ok'); listenQScore++; addScore(10);
+    fb.textContent='✅ Đúng rồi! +10 điểm 🎉'; speak('Correct! '+correct);
+  } else {
+    btn.classList.add('bad');
+    document.querySelectorAll('#listenQuizArea .qopt').forEach(b=>{if(b.textContent.trim().startsWith(correct))b.classList.add('ok');});
+    fb.textContent='❌ Đáp án: '+correct; speak(correct);
+  }
+  document.getElementById('listenScoreBadge').textContent = listenQScore+'/'+(listenQIdx+1)+' đúng';
+  setTimeout(()=>{listenQIdx++; fb.textContent=''; renderListenQ();}, 1900);
 }
 
 /* ============================================================
-   SPEAK — WEB SPEECH RECOGNITION
+   LISTEN — CHANT
 ============================================================ */
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-let activeRecognition=null;
-
-function buildSpeakSection(){
-  const hasMic=!!SpeechRecognition;
-  const sw=document.getElementById('speakWords');
-  sw.innerHTML=COLOURS.map((c,i)=>`
-    <div class="speak-word-card" style="border-color:${c.hex==='#E0E0E0'?'#ccc':c.hex}20;background:${c.hex==='#E0E0E0'?'#F5F5F5':c.hex}12;">
-      <span class="big-word" style="color:${c.hex==='#E0E0E0'?'#555':c.hex}">${c.emoji} ${c.en.toUpperCase()}</span>
-      <div class="phonetic">${c.phonetic} &nbsp;|&nbsp; ${c.vi}</div>
-      <div class="obj">${c.obj}</div>
-      <div class="speak-actions">
-        <button class="audio-btn" style="font-size:14px;padding:10px 20px;" onclick="speak('${c.en}')">🔊 Nghe mẫu</button>
-        ${hasMic
-          ?`<button class="mic-btn" id="mic-${i}" onclick="startMic('${c.en}',${i})">🎤 Bé đọc to!</button>`
-          :`<button class="mic-btn no-support" disabled>🎤 Trình duyệt không hỗ trợ mic</button>`}
+function buildChant(){
+  const u = currentUnit;
+  const words3 = u.vocab.slice(0,3).map(v=>v.en);
+  const chant = words3.map(w=>`What is it? It's ${w}!`).join(' ');
+  document.getElementById('chantArea').innerHTML = `
+    <div style="background:linear-gradient(135deg,#FFF5F5,#FFF0F5);border-radius:14px;padding:20px;text-align:center;">
+      <div style="font-size:19px;font-weight:800;color:#333;line-height:2.2;">
+        ${words3.map((w,i)=>`🎵 "What is it? — It's <strong style="color:${currentUnit.color}">${w}</strong>!" ${u.vocab[i].emoji}`).join('<br>')}
       </div>
-      <div class="mic-result" id="micResult-${i}"></div>
-    </div>`).join('');
-  buildDialogue();
-  buildNamingGame();
+      <button class="btn-audio" style="margin-top:14px;" id="chantBtn" onclick="playChant(this)">🎵 Hát cùng bé!</button>
+    </div>`;
+}
+function playChant(btn){
+  btn.textContent='🎵 Đang hát...'; btn.classList.add('playing');
+  const words = currentUnit.vocab.slice(0,3).map(v=>v.en);
+  const lines = [];
+  words.forEach(w=>{ lines.push('What is it?'); lines.push('It is '+w+'!'); });
+  lines.push('Great singing!');
+  let i=0;
+  function next(){ if(i<lines.length){speak(lines[i],0.75);i++;setTimeout(next,1500);}
+    else{btn.textContent='🎵 Hát cùng bé!';btn.classList.remove('playing');} }
+  next();
 }
 
-function startMic(targetWord, idx){
-  if(!SpeechRecognition){alert('Trình duyệt không hỗ trợ nhận giọng nói. Dùng Chrome nhé!');return;}
-  const btn=document.getElementById('mic-'+idx);
-  const resultBox=document.getElementById('micResult-'+idx);
-
-  // If already recording this one, stop
-  if(activeRecognition){
-    try{activeRecognition.stop();}catch(e){}
-    activeRecognition=null;
-    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');
-    return;
-  }
-
-  const rec=new SpeechRecognition();
-  rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=5;
-  activeRecognition=rec;
-  btn.textContent='⏹ Đang nghe...';btn.classList.add('recording');
-  resultBox.className='mic-result show partial';resultBox.textContent='🎤 Đang nghe bé nói...';
-
+/* ============================================================
+   SPEAK — CARDS WITH MIC
+============================================================ */
+function buildSpeakCards(){
+  const hasMic = !!SpeechRec;
+  document.getElementById('speakCardsArea').innerHTML = currentUnit.vocab.map((v,i)=>{
+    const hex = COLOUR_HEX[v.en]||currentUnit.color;
+    const isCname = !!COLOUR_HEX[v.en];
+    return `<div class="speak-card" style="border-color:${hex}30;background:${hex}0a;">
+      <span class="speak-big" style="color:${hex}">${v.emoji} ${v.en.toUpperCase()}</span>
+      <div class="speak-ph">${v.phonetic} | ${v.vi}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+        <button class="btn-audio" style="font-size:13px;padding:9px 18px;" onclick="speak('${v.en}')">🔊 Nghe mẫu</button>
+        ${hasMic
+          ? `<button class="btn-mic" id="micBtn-${i}" onclick="startMic('${v.en}',${i})">🎤 Bé đọc to!</button>`
+          : `<button class="btn-mic nosup" disabled>🎤 Dùng Chrome để có mic</button>`}
+      </div>
+      <div class="mic-result" id="micRes-${i}"></div>
+    </div>`;
+  }).join('');
+}
+function startMic(target, idx){
+  if(!SpeechRec){alert('Dùng Chrome nhé!');return;}
+  const btn=document.getElementById('micBtn-'+idx);
+  const res=document.getElementById('micRes-'+idx);
+  if(activeRec){try{activeRec.stop();}catch(e){}activeRec=null;btn.textContent='🎤 Bé đọc to!';btn.classList.remove('rec');return;}
+  const rec=new SpeechRec(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=5;
+  activeRec=rec;
+  btn.textContent='⏹ Đang nghe...'; btn.classList.add('rec');
+  res.className='mic-result show try'; res.textContent='🎤 Đang nghe bé nói...';
   rec.onresult=(e)=>{
-    const transcripts=[];
-    for(let i=0;i<e.results[0].length;i++)transcripts.push(e.results[0][i].transcript.trim().toLowerCase());
-    const target=targetWord.toLowerCase();
-    const exact=transcripts.some(t=>t===target||t.includes(target));
-    const close=transcripts.some(t=>levenshtein(t,target)<=1);
-    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
-    if(exact){
-      resultBox.className='mic-result show ok';
-      resultBox.textContent='✅ Xuất sắc! Bé đọc đúng: "'+transcripts[0]+'" 🎉';
-      totalScore+=8;updateProgress();speak('Excellent! Perfect pronunciation!');
-    } else if(close){
-      resultBox.className='mic-result show partial';
-      resultBox.textContent='🟡 Gần đúng rồi! Bé nói: "'+transcripts[0]+'" — Thử lại nhé!';
-      speak('Good try! Try again: '+target);
+    const ts=[]; for(let i=0;i<e.results[0].length;i++) ts.push(e.results[0][i].transcript.trim().toLowerCase());
+    btn.textContent='🎤 Bé đọc to!'; btn.classList.remove('rec'); activeRec=null;
+    const t=target.toLowerCase();
+    if(ts.some(x=>x===t||x.includes(t))){
+      res.className='mic-result show ok'; res.textContent='✅ Xuất sắc! Đọc đúng: "'+ts[0]+'" 🎉';
+      addScore(8); speak('Excellent! Perfect!');
+    } else if(ts.some(x=>levenshtein(x,t)<=1)){
+      res.className='mic-result show try'; res.textContent='🟡 Gần đúng: "'+ts[0]+'" — Thử lại nhé!';
+      speak('Good try! '+t);
     } else {
-      resultBox.className='mic-result show fail';
-      resultBox.textContent='❌ Bé nói: "'+transcripts[0]+'" — Đúng phải là: "'+target+'"';
-      speak('Try again! The word is: '+target);
+      res.className='mic-result show fail'; res.textContent='❌ Bé nói: "'+ts[0]+'" — Phải là: "'+t+'"';
+      speak('Try again! '+t);
     }
   };
   rec.onerror=(e)=>{
-    btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
-    resultBox.className='mic-result show fail';
-    if(e.error==='not-allowed')resultBox.textContent='⚠️ Chưa cho phép dùng mic! Cho phép trong trình duyệt nhé.';
-    else if(e.error==='no-speech')resultBox.textContent='🔇 Không nghe thấy gì. Nói to hơn nhé bé!';
-    else resultBox.textContent='⚠️ Lỗi: '+e.error+'. Thử lại nhé!';
+    btn.textContent='🎤 Bé đọc to!'; btn.classList.remove('rec'); activeRec=null;
+    res.className='mic-result show fail';
+    res.textContent=e.error==='not-allowed'?'⚠️ Cho phép mic trước nhé!':e.error==='no-speech'?'🔇 Không nghe thấy. Nói to hơn!':'⚠️ Lỗi: '+e.error;
   };
   rec.onend=()=>{
-    if(btn.classList.contains('recording')){
-      btn.textContent='🎤 Bé đọc to!';btn.classList.remove('recording');activeRecognition=null;
-      if(resultBox.textContent.includes('Đang nghe')){
-        resultBox.className='mic-result show fail';resultBox.textContent='🔇 Không nghe thấy. Nói to hơn nhé!';
-      }
+    if(btn.classList.contains('rec')){btn.textContent='🎤 Bé đọc to!';btn.classList.remove('rec');activeRec=null;
+      if(res.textContent.includes('Đang nghe')){res.className='mic-result show fail';res.textContent='🔇 Không nghe thấy gì!';}
     }
   };
   rec.start();
 }
 
-function levenshtein(a,b){
-  const dp=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);
-  for(let j=0;j<=b.length;j++)dp[0][j]=j;
-  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)
-    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
-  return dp[a.length][b.length];
-}
-
+/* ============================================================
+   SPEAK — DIALOGUE
+============================================================ */
+let dlgCurrent='';
 function buildDialogue(){
-  const da=document.getElementById('dialogueArea');
-  da.innerHTML=`<div style="background:#F8F9FA;border-radius:16px;padding:22px;">
-    <div class="bubble-teacher">
-      <div style="font-size:38px;">👩‍🏫</div>
-      <div class="bubble teacher">What colour is it? 🤔 <button onclick="speak('What colour is it?')" style="border:none;background:none;cursor:pointer;font-size:17px;">🔊</button></div>
-    </div>
-    <div class="bubble-student">
-      <div style="font-size:38px;">👦</div>
-      <div class="bubble student">It's <span id="dialogueAns" style="font-weight:800;">...</span>! <button onclick="speakDialogueAns()" style="border:none;background:none;cursor:pointer;font-size:17px;">🔊</button></div>
-    </div>
-    <div style="text-align:center;margin-top:14px;">
-      <div style="font-size:13px;color:#888;margin-bottom:10px;">Nhấn vào màu để trả lời! 👇</div>
-      <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;">
-        ${COLOURS.map(c=>`<button onclick="answerDialogue('${c.en}')"
-          style="padding:9px 17px;border:3px solid ${c.hex==='#E0E0E0'?'#ccc':c.hex};border-radius:50px;
-          background:${c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'18'};font-family:'Baloo 2',cursive;
-          font-size:14px;font-weight:700;color:${c.hex==='#E0E0E0'?'#555':c.hex};cursor:pointer;transition:all .2s;"
-          onmouseover="this.style.background='${c.hex}44'" onmouseout="this.style.background='${c.hex==='#E0E0E0'?'#F5F5F5':c.hex+'18'}'"
-          >${c.emoji} ${c.en}</button>`).join('')}
+  const u=currentUnit;
+  const promptWord = u.vocab[0].en;
+  dlgCurrent='';
+  const btnStyle=v=>`padding:9px 16px;border:3px solid ${COLOUR_HEX[v.en]||u.color};border-radius:50px;
+    background:${(COLOUR_HEX[v.en]||u.color)+'18'};font-family:"Baloo 2",cursive;font-size:13px;font-weight:700;
+    color:${COLOUR_HEX[v.en]||u.color};cursor:pointer;transition:all .2s;margin:3px;`;
+  document.getElementById('dialogueArea').innerHTML = `<div class="bub-wrap">
+    <div class="bub-t"><div style="font-size:36px;">👩‍🏫</div>
+      <div class="bubble bub-tea">
+        <span id="dlgQ">${u.grammar.split('?')[0]}?</span>
+        <button onclick="speak('${u.grammar.split('?')[0]}?')" style="border:none;background:none;cursor:pointer;font-size:16px;">🔊</button>
+      </div></div>
+    <div class="bub-s"><div style="font-size:36px;">👦</div>
+      <div class="bubble bub-stu">
+        <span id="dlgAns">...</span>
+        <button onclick="if(dlgCurrent)speak(dlgCurrent)" style="border:none;background:none;cursor:pointer;font-size:16px;">🔊</button>
+      </div></div>
+    <div style="text-align:center;margin-top:12px;">
+      <div style="font-size:13px;color:#888;margin-bottom:8px;">Nhấn để trả lời 👇</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:5px;">
+        ${u.vocab.map(v=>`<button onclick="answerDlg('${v.en}')" style="${btnStyle(v)}">${v.emoji} ${v.en}</button>`).join('')}
       </div>
     </div>
   </div>`;
 }
-let dialogueCurrent='red';
-function answerDialogue(colour){
-  dialogueCurrent=colour;
-  const col=COLOURS.find(c=>c.en===colour);
-  document.getElementById('dialogueAns').innerHTML=`<span style="color:${col.hex==='#E0E0E0'?'#555':col.hex}">${col.emoji} ${colour}</span>`;
-  speak('It is '+colour+'!');totalScore+=3;updateProgress();
+function answerDlg(word){
+  dlgCurrent=word;
+  const v=currentUnit.vocab.find(x=>x.en===word);
+  const hex=COLOUR_HEX[word]||currentUnit.color;
+  document.getElementById('dlgAns').innerHTML=`<span style="color:${hex}">${v?v.emoji:''} ${word}</span>`;
+  speak(word); addScore(3);
 }
-function speakDialogueAns(){if(dialogueCurrent)speak('It is '+dialogueCurrent+'!');}
 
+/* ============================================================
+   SPEAK — NAMING GAME
+============================================================ */
 function buildNamingGame(){
-  const ng=document.getElementById('namingGame');
-  const items=shuffle(COLOURS).slice(0,4);
+  const ng=document.getElementById('namingGameArea');
+  const items=shuffle(currentUnit.vocab).slice(0,4);
+  const target=items[0];
   ng.innerHTML=`<div style="text-align:center;margin-bottom:14px;">
-      <div style="font-size:68px;">${items[0].emoji}</div>
-      <div style="font-size:14px;color:#888;margin-top:4px;">${items[0].obj}</div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;">
-      ${items.map(c=>`<button onclick="checkNaming('${c.en}','${items[0].en}',this)"
-        style="padding:11px 22px;border:3px solid ${c.hex==='#E0E0E0'?'#ccc':c.hex};border-radius:50px;
-        background:white;font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;
-        color:${c.hex==='#E0E0E0'?'#555':c.hex};cursor:pointer;transition:all .2s;">${c.emoji} ${c.en}</button>`).join('')}
-    </div>
-    <div id="ngFb" style="text-align:center;margin-top:10px;font-size:19px;"></div>`;
+    <div style="font-size:66px;">${target.emoji}</div>
+    <div style="font-size:13px;color:#888;margin-top:4px;">${target.vi}</div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;">
+    ${items.map(v=>{const hex=COLOUR_HEX[v.en]||currentUnit.color;
+      return`<button onclick="checkNaming('${v.en}','${target.en}',this)"
+        style="padding:11px 20px;border:3px solid ${hex};border-radius:50px;background:white;
+        font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;color:${hex};cursor:pointer;transition:all .2s;"
+        >${v.emoji} ${v.en}</button>`;}).join('')}
+  </div>
+  <div id="ngFb" style="text-align:center;margin-top:10px;font-size:18px;min-height:26px;"></div>`;
 }
 function checkNaming(chosen,correct,btn){
+  const hex=COLOUR_HEX[chosen]||currentUnit.color;
   if(chosen===correct){
     btn.style.background='#E8F9EE';btn.style.borderColor='#00B894';
     document.getElementById('ngFb').textContent='✅ Đúng rồi! 🎉';
-    speak('Correct! '+correct);totalScore+=5;updateProgress();
+    speak('Correct! '+correct); addScore(5);
     setTimeout(buildNamingGame,1700);
-  }else{
+  } else {
     btn.style.background='#FFF0F0';btn.style.borderColor='#FF4757';
     document.getElementById('ngFb').textContent='❌ Thử lại nhé!';
     speak(correct);
@@ -648,258 +880,249 @@ function checkNaming(chosen,correct,btn){
 }
 
 /* ============================================================
-   READ
+   READ — STORY
 ============================================================ */
-function buildReadSection(){
-  document.getElementById('storyText').innerHTML=`
-    <span>Look at the toys! 🧸</span><br><br>
-    <span>This ball is <span class="highlight col-red" onclick="speak('red')">red</span>. 🔴</span><br>
-    <span>This crayon is <span class="highlight col-blue" onclick="speak('blue')">blue</span>. 🖍️</span><br>
-    <span>This pencil is <span class="highlight col-green" onclick="speak('green')">green</span>. ✏️</span><br>
-    <span>This hat is <span class="highlight col-yellow" onclick="speak('yellow')">yellow</span>. 🎩</span><br>
-    <span>This block is <span class="highlight col-orange" onclick="speak('orange')">orange</span>. 🟠</span><br>
-    <span>This robot is <span class="highlight col-pink" onclick="speak('pink')">pink</span>. 🤖</span><br><br>
-    <span style="font-weight:800;color:#333;">What colour is it? It's <span class="highlight col-red" onclick="speak('red')">red</span>! 🌈</span>`;
-  buildMatchingGame();
-  buildReadQuiz();
+function buildStory(){
+  const colMap={'red':'col-r','green':'col-g','blue':'col-b','black':'col-k',
+    'white':'col-w','yellow':'col-y','pink':'col-p','orange':'col-o'};
+  // Highlight vocab words in story
+  let txt = currentUnit.story;
+  currentUnit.vocab.forEach(v=>{
+    const hex=COLOUR_HEX[v.en]||currentUnit.color;
+    const bg=COLOUR_HEX[v.en]?hex+'28':'#F0F8FF';
+    const col=COLOUR_HEX[v.en]?hex:currentUnit.color;
+    const re=new RegExp('\\b'+v.en+'\\b','gi');
+    txt=txt.replace(re,`<span class="hw" style="background:${bg};color:${col};" onclick="speak('${v.en}')">${v.en}</span>`);
+  });
+  document.getElementById('storyArea').innerHTML=`<div class="story-txt">${txt.replace(/\. /g,'. <br>')}</div>`;
 }
-function buildMatchingGame(){
-  const items=COLOURS.slice(0,6);matchState={};selectedMW=null;
-  document.getElementById('matchingGame').innerHTML=`
-    <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;">
+
+/* ============================================================
+   READ — MATCHING
+============================================================ */
+function buildMatching(){
+  const items=currentUnit.vocab.slice(0,Math.min(6,currentUnit.vocab.length));
+  matchState={}; selMW=null;
+  document.getElementById('matchingArea').innerHTML=`
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;">
       <div>
-        <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:9px;">📝 Từ tiếng Anh</div>
-        <div id="matchWords" style="display:flex;flex-direction:column;gap:8px;">
-          ${shuffle(items).map(c=>`<div class="match-word" id="mw-${c.en}" onclick="selectMW('${c.en}',this)">${c.en}</div>`).join('')}
+        <div style="font-size:12px;color:#888;font-weight:700;margin-bottom:8px;">📝 Từ tiếng Anh</div>
+        <div id="mWords" style="display:flex;flex-direction:column;gap:7px;">
+          ${shuffle(items).map(v=>`<div class="match-word" id="mw-${v.en}" onclick="selMatchWord('${v.en}',this)">${v.en}</div>`).join('')}
         </div>
       </div>
       <div>
-        <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:9px;">🎨 Màu sắc</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          ${shuffle(items).map(c=>`<div class="match-color" id="mc-${c.en}" style="background:${c.hex==='#E0E0E0'?'#D8D8D8':c.hex};" onclick="selectMC('${c.en}',this)" title="${c.en}">${c.emoji}</div>`).join('')}
+        <div style="font-size:12px;color:#888;font-weight:700;margin-bottom:8px;">🎨 Hình / Màu</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          ${shuffle(items).map(v=>{
+            const hex=COLOUR_HEX[v.en]||currentUnit.color;
+            return`<div class="match-color" id="mc-${v.en}" style="background:${hex};"
+              onclick="selMatchColor('${v.en}',this)">${v.emoji}</div>`;}).join('')}
         </div>
       </div>
     </div>`;
 }
-function selectMW(word,el){
-  document.querySelectorAll('.match-word').forEach(w=>w.classList.remove('selected-mw'));
-  el.classList.add('selected-mw');selectedMW=word;speak(word);
+function selMatchWord(w,el){
+  document.querySelectorAll('.match-word').forEach(x=>x.classList.remove('smw'));
+  el.classList.add('smw'); selMW=w; speak(w);
 }
-function selectMC(color,el){
-  if(!selectedMW)return;
-  el.classList.add('selected-mc');
-  matchState[selectedMW]=color;
-  const col=COLOURS.find(c=>c.en===color);
-  document.getElementById('mw-'+selectedMW).style.borderColor=col?col.hex:'#ccc';
-  selectedMW=null;document.querySelectorAll('.match-word').forEach(w=>w.classList.remove('selected-mw'));
+function selMatchColor(c,el){
+  if(!selMW)return;
+  el.classList.add('smc');
+  matchState[selMW]=c;
+  const hex=COLOUR_HEX[c]||currentUnit.color;
+  document.getElementById('mw-'+selMW).style.borderColor=hex;
+  selMW=null; document.querySelectorAll('.match-word').forEach(x=>x.classList.remove('smw'));
 }
 function checkMatching(){
-  let ok=0,total=Object.keys(matchState).length;
+  let ok=0,tot=Object.keys(matchState).length;
   Object.entries(matchState).forEach(([w,c])=>{
     if(w===c){ok++;
-      document.getElementById('mc-'+c)?.classList.add('matched-ok');
-      document.getElementById('mw-'+w)?.classList.add('matched-ok');
-    }
+      document.getElementById('mc-'+c)?.classList.add('mok');
+      document.getElementById('mw-'+w)?.classList.add('mok');}
   });
-  document.getElementById('matchFeedback').textContent=`${ok}/${total} đúng! ${ok===total?'🎉 Hoàn hảo!':'Thử lại nhé!'}`;
-  if(ok>0){totalScore+=ok*8;updateProgress();}
-  if(ok===6)celebrate('🌈','Nối đúng hết!','Bé thông minh quá!','⭐⭐⭐');
+  document.getElementById('matchFb').textContent=`${ok}/${tot} đúng! ${ok===tot?'🎉 Hoàn hảo!':'Thử lại nhé!'}`;
+  if(ok>0) addScore(ok*8);
+  if(ok>=currentUnit.vocab.slice(0,6).length) celebrate('🌈','Nối đúng hết!','Bé thông minh quá!','⭐⭐⭐');
 }
-function resetMatching(){matchState={};selectedMW=null;buildMatchingGame();document.getElementById('matchFeedback').textContent='';}
+function resetMatching(){matchState={};selMW=null;buildMatching();document.getElementById('matchFb').textContent='';}
 
-const readQs=[
-  {q:'What colour is the ball? 🔴',correct:'red',opts:['red','blue','green','yellow']},
-  {q:'What colour is the crayon? 🔵',correct:'blue',opts:['pink','blue','black','orange']},
-  {q:'What colour is the hat? 🟡',correct:'yellow',opts:['green','white','yellow','pink']},
-];
-function buildReadQuiz(){currentReadQ=0;readQScore=0;readQTotal=readQs.length;renderReadQ();}
+/* ============================================================
+   READ — QUIZ
+============================================================ */
+function buildReadQuiz(){ readQIdx=0; readQScore=0; renderReadQ(); }
 function renderReadQ(){
-  const qa=document.getElementById('readQuiz');
-  if(currentReadQ>=readQs.length){
-    qa.innerHTML=`<div style="text-align:center;padding:20px;">
-      <div style="font-size:52px;">📚</div>
-      <div style="font-size:20px;font-weight:800;color:#00B894;">${readQScore}/${readQs.length} câu đúng!</div>
-      <button class="check-btn" style="margin-top:14px;" onclick="buildReadQuiz()">🔄 Làm lại!</button></div>`;
+  const qa=document.getElementById('readQuizArea');
+  if(readQIdx>=currentUnit.read_qs.length){
+    qa.innerHTML=`<div style="text-align:center;padding:18px;">
+      <div style="font-size:50px;">📚</div>
+      <div style="font-size:20px;font-weight:800;color:#00B894;">${readQScore}/${currentUnit.read_qs.length} câu đúng!</div>
+      <button class="btn-check" style="margin-top:12px;" onclick="buildReadQuiz()">🔄 Làm lại!</button></div>`;
     return;
   }
-  const q=readQs[currentReadQ];const opts=shuffle(q.opts);
-  qa.innerHTML=`<div class="quiz-q"><div class="q-text">${q.q}</div></div>
-    <div class="quiz-options">
-      ${opts.map(o=>{const col=COLOURS.find(c=>c.en===o);
-        return`<button class="quiz-opt" onclick="checkReadQ('${o}','${q.correct}',this)">
-          <div class="opt-swatch" style="background:${col?col.hex:'#ccc'};"></div>${col?col.emoji:''} ${o}</button>`;}).join('')}
+  const q=currentUnit.read_qs[readQIdx]; const opts=shuffle(q.opts);
+  qa.innerHTML=`<div class="quiz-wrap">
+    <div class="quiz-q-text">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>{const hex=COLOUR_HEX[o]||currentUnit.color;
+        return`<button class="qopt" onclick="checkReadQ('${o}','${q.correct}',this)">
+          <div class="qswatch" style="background:${hex};"></div>${o}</button>`;}).join('')}
     </div>
-    <div style="text-align:right;color:#aaa;font-size:13px;margin-top:6px;">Câu ${currentReadQ+1}/${readQs.length}</div>`;
+    <div style="text-align:right;color:#bbb;font-size:12px;margin-top:6px;">Câu ${readQIdx+1}/${currentUnit.read_qs.length}</div>
+  </div>`;
 }
 function checkReadQ(chosen,correct,btn){
-  document.querySelectorAll('#readQuiz .quiz-opt').forEach(b=>b.disabled=true);
-  if(chosen===correct){btn.classList.add('correct');readQScore++;totalScore+=10;
-    document.getElementById('readFeedback').textContent='✅ Đúng! +10 điểm 🎉';speak('Correct!');}
-  else{btn.classList.add('wrong');
-    document.querySelectorAll('#readQuiz .quiz-opt').forEach(b=>{if(b.textContent.includes(correct))b.classList.add('correct');});
-    document.getElementById('readFeedback').textContent='❌ Đáp án: '+correct;speak(correct);}
-  document.getElementById('readScore').textContent=readQScore+'/'+(currentReadQ+1)+' đúng';
-  updateProgress();
-  setTimeout(()=>{currentReadQ++;document.getElementById('readFeedback').textContent='';renderReadQ();},1900);
+  document.querySelectorAll('#readQuizArea .qopt').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('readFb');
+  if(chosen===correct){btn.classList.add('ok');readQScore++;addScore(10);
+    fb.textContent='✅ Đúng! +10 điểm 🎉';speak('Correct!');}
+  else{btn.classList.add('bad');
+    document.querySelectorAll('#readQuizArea .qopt').forEach(b=>{if(b.textContent.trim().startsWith(correct))b.classList.add('ok');});
+    fb.textContent='❌ Đáp án: '+correct;speak(correct);}
+  document.getElementById('readScoreBadge').textContent=readQScore+'/'+(readQIdx+1)+' đúng';
+  setTimeout(()=>{readQIdx++;fb.textContent='';renderReadQ();},1900);
 }
 
 /* ============================================================
-   WRITE
+   WRITE — FILL BLANKS
 ============================================================ */
-function buildWriteSection(){
-  /* --- FILL BLANKS (swatch → name) --- */
-  const items=COLOURS.slice(0,6);
-  document.getElementById('fillBlanks').innerHTML=items.map((c,i)=>`
-    <div style="display:flex;align-items:center;gap:12px;margin:12px 0;flex-wrap:wrap;">
-      <div style="width:42px;height:42px;border-radius:50%;background:${c.hex};border:3px solid rgba(0,0,0,.1);flex-shrink:0;"></div>
-      <span style="font-size:18px;font-weight:700;color:#333;">${c.emoji} This is </span>
-      <input class="blank-input" id="blank-${i}" placeholder="???" autocomplete="off" spellcheck="false" data-answer="${c.en}">
-      <span style="font-size:18px;font-weight:700;color:#333;">.</span>
-      <span style="font-size:19px;" id="bfb-${i}"></span>
+function buildFillBlanks(){
+  document.getElementById('fillBlanksArea').innerHTML = currentUnit.fill_blanks.map((b,i)=>`
+    <div style="display:flex;align-items:center;gap:11px;margin:12px 0;flex-wrap:wrap;">
+      <span style="font-size:30px;">${b.pre}</span>
+      <span style="font-size:17px;font-weight:700;color:#333;">${b.suf.split('_____')[0]}</span>
+      <input class="blank-inp" id="bi-${i}" placeholder="???" autocomplete="off" spellcheck="false" data-ans="${b.ans}">
+      <span style="font-size:17px;font-weight:700;color:#333;">${b.suf.split('_____')[1]||''}</span>
+      <span style="font-size:18px;min-width:24px;" id="bifb-${i}"></span>
     </div>`).join('');
-
-  buildWordBuilder();
-  buildColouringGame();
 }
-function checkFillBlanks(){
+function checkFill(){
   let ok=0,tot=0;
-  document.querySelectorAll('.blank-input').forEach(inp=>{
-    tot++;const ans=inp.dataset.answer,val=inp.value.trim().toLowerCase();
-    const fb=document.getElementById('bfb-'+inp.id.split('-')[1]);
-    if(val===ans){inp.classList.add('ok-ans');inp.classList.remove('bad-ans');fb.textContent='✅';ok++;totalScore+=8;}
-    else{inp.classList.add('bad-ans');inp.classList.remove('ok-ans');fb.textContent='❌ ('+ans+')';}
+  document.querySelectorAll('.blank-inp').forEach((inp,i)=>{
+    tot++;const ans=inp.dataset.ans, val=inp.value.trim().toLowerCase();
+    const fb=document.getElementById('bifb-'+i);
+    if(val===ans){inp.classList.add('bok');inp.classList.remove('bbad');fb.textContent='✅';ok++;addScore(8);}
+    else{inp.classList.add('bbad');inp.classList.remove('bok');fb.textContent='❌ ('+ans+')';}
   });
-  document.getElementById('fillFeedback').textContent=`${ok}/${tot} đúng! ${ok===tot?'🎉 Hoàn hảo!':'Cố lên nhé!'}`;
-  updateProgress();
-  if(ok===tot)celebrate('✏️','Viết đúng hết!','Bé viết giỏi quá!','⭐⭐⭐');
+  document.getElementById('fillFb').textContent=`${ok}/${tot} đúng! ${ok===tot?'🎉 Hoàn hảo!':'Cố lên nhé!'}`;
+  if(ok===tot) celebrate('✏️','Viết đúng hết!','Bé viết giỏi quá!','⭐⭐⭐');
 }
-function resetFillBlanks(){
-  document.querySelectorAll('.blank-input').forEach(inp=>{inp.value='';inp.classList.remove('ok-ans','bad-ans');});
-  document.querySelectorAll('[id^="bfb-"]').forEach(e=>e.textContent='');
-  document.getElementById('fillFeedback').textContent='';
+function resetFill(){
+  document.querySelectorAll('.blank-inp').forEach((inp,i)=>{inp.value='';inp.classList.remove('bok','bbad');document.getElementById('bifb-'+i).textContent='';});
+  document.getElementById('fillFb').textContent='';
 }
 
-/* --- WORD BUILDER --- */
-const wbWords=['red','green','blue','yellow','pink','orange'];
+/* ============================================================
+   WRITE — WORD BUILDER
+============================================================ */
 function buildWordBuilder(){
-  const word=wbWords[wbIdx%wbWords.length];
-  const col=COLOURS.find(c=>c.en===word);
+  const words=currentUnit.wb_words;
+  const word=words[wbIdx%words.length];
+  const v=currentUnit.vocab.find(x=>x.en===word)||{emoji:'❓',vi:word};
   const letters=shuffle([...word]);
-  document.getElementById('wordBuilder').innerHTML=`
-    <div style="text-align:center;margin-bottom:14px;">
-      <div style="font-size:58px;">${col.emoji}</div>
-      <div style="font-size:13px;color:#888;margin-top:4px;">${col.vi} — Ghép chữ cái thành từ!</div>
+  document.getElementById('wbArea').innerHTML=`
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:58px;">${v.emoji}</div>
+      <div style="font-size:13px;color:#888;margin-top:2px;">${v.vi} — Ghép chữ cái thành từ!</div>
     </div>
-    <div class="drag-letters" id="lPool">
-      ${letters.map((l,i)=>`<div class="letter-tile" draggable="true" data-letter="${l}" id="lt-${i}"
-        ondragstart="onDragStart(event,${i})" onclick="clickTile('${l}',${i})">${l.toUpperCase()}</div>`).join('')}
+    <div class="tile-pool" id="tPool">
+      ${letters.map((l,i)=>`<div class="ltile" draggable="true" data-l="${l}" id="lt-${i}"
+        ondragstart="onDS(event,${i})" onclick="clickTile('${l}',${i})">${l.toUpperCase()}</div>`).join('')}
     </div>
-    <div style="font-size:13px;color:#aaa;text-align:center;margin:5px 0 7px;">Kéo xuống ô bên dưới 👇</div>
-    <div class="drop-zone" id="lZone" ondragover="event.preventDefault()" ondrop="onDrop(event)">
+    <div style="font-size:12px;color:#bbb;text-align:center;margin:5px 0 6px;">Kéo xuống ô bên dưới 👇</div>
+    <div class="drop-zone" id="tZone" ondragover="event.preventDefault()" ondrop="onDrop(event)">
       <span class="ph">Kéo chữ cái vào đây 🎯</span>
     </div>
-    <div style="display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;">
-      <button class="check-btn" onclick="checkWB('${word}')">✅ Kiểm tra</button>
-      <button class="reset-btn" onclick="clearZone()">🗑️ Xóa zone</button>
-      <button class="reset-btn" onclick="wbIdx++;buildWordBuilder()">⏭ Từ tiếp theo</button>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+      <button class="btn-check" onclick="checkWB('${word}')">✅ Kiểm tra</button>
+      <button class="btn-reset" onclick="clearZone()">🗑️ Xóa</button>
+      <button class="btn-reset" onclick="wbIdx++;buildWordBuilder()">⏭ Từ tiếp</button>
     </div>
-    <div id="wbFb" style="font-size:19px;margin-top:10px;min-height:28px;"></div>`;
+    <div id="wbFb" style="font-size:18px;margin-top:10px;min-height:24px;"></div>`;
 }
-function onDragStart(e,id){draggedId=id;e.dataTransfer.effectAllowed='move';}
+function onDS(e,id){ draggedTile=id; e.dataTransfer.effectAllowed='move'; }
 function onDrop(e){
-  e.preventDefault();if(draggedId===null)return;
-  const tile=document.getElementById('lt-'+draggedId);if(!tile)return;
-  tile.classList.add('in-zone');
-  const zone=document.getElementById('lZone');
-  zone.appendChild(tile);
-  const ph=zone.querySelector('.ph');if(ph)ph.remove();
-  draggedId=null;
+  e.preventDefault(); if(draggedTile===null)return;
+  const t=document.getElementById('lt-'+draggedTile); if(!t)return;
+  t.classList.add('inz');
+  const z=document.getElementById('tZone'); z.appendChild(t);
+  const ph=z.querySelector('.ph'); if(ph)ph.remove();
+  draggedTile=null;
 }
-function clickTile(letter,id){
-  const tile=document.getElementById('lt-'+id);if(!tile)return;
-  const zone=document.getElementById('lZone');
-  const pool=document.getElementById('lPool');
-  if(pool&&pool.contains(tile)){tile.classList.add('in-zone');zone.appendChild(tile);
-    const ph=zone.querySelector('.ph');if(ph)ph.remove();}
-  else{tile.classList.remove('in-zone');pool.appendChild(tile);}
+function clickTile(l,id){
+  const t=document.getElementById('lt-'+id); if(!t)return;
+  const z=document.getElementById('tZone'), p=document.getElementById('tPool');
+  if(p&&p.contains(t)){t.classList.add('inz');z.appendChild(t);const ph=z.querySelector('.ph');if(ph)ph.remove();}
+  else{t.classList.remove('inz');p.appendChild(t);}
 }
 function clearZone(){
-  const zone=document.getElementById('lZone');const pool=document.getElementById('lPool');
-  if(!zone||!pool)return;
-  [...zone.querySelectorAll('.letter-tile')].forEach(t=>{t.classList.remove('in-zone');pool.appendChild(t);});
-  if(!zone.querySelector('.ph'))zone.innerHTML='<span class="ph">Kéo chữ cái vào đây 🎯</span>';
+  const z=document.getElementById('tZone'), p=document.getElementById('tPool');
+  if(!z||!p)return;
+  [...z.querySelectorAll('.ltile')].forEach(t=>{t.classList.remove('inz');p.appendChild(t);});
+  if(!z.querySelector('.ph')) z.innerHTML='<span class="ph">Kéo chữ cái vào đây 🎯</span>';
 }
 function checkWB(correct){
-  const zone=document.getElementById('lZone');
-  const tiles=[...zone.querySelectorAll('.letter-tile')];
-  const attempt=tiles.map(t=>t.dataset.letter).join('');
+  const z=document.getElementById('tZone');
+  const attempt=[...z.querySelectorAll('.ltile')].map(t=>t.dataset.l).join('');
   const fb=document.getElementById('wbFb');
   if(attempt===correct){
-    fb.textContent='✅ Đúng! "'+correct.toUpperCase()+'" 🎉';totalScore+=15;updateProgress();
-    wbIdx++;setTimeout(buildWordBuilder,1900);
+    fb.textContent='✅ Đúng! "'+correct.toUpperCase()+'" 🎉'; addScore(15);
+    wbIdx++; setTimeout(buildWordBuilder,1900);
     celebrate('🔤','Xếp chữ đúng!',correct.toUpperCase()+'!','⭐⭐⭐');
-  }else if(!attempt){fb.textContent='👆 Kéo chữ vào ô trước nhé!';}
-  else{fb.textContent='❌ Thử lại! Gợi ý: '+correct[0].toUpperCase()+'...';speak('Try again! '+correct);}
+  } else if(!attempt){ fb.textContent='👆 Kéo chữ vào ô trước nhé!'; }
+  else { fb.textContent='❌ Thử lại! Gợi ý: '+correct[0].toUpperCase()+'...'; speak('Try again! '+correct); }
 }
 
-/* --- COLOURING GAME (đảm bảo đáp án luôn có trong lựa chọn) --- */
-const colourShapes=[
-  {shape:'⭕',label:'vòng tròn',correct:'red'},
-  {shape:'⬛',label:'hình vuông',correct:'blue'},
-  {shape:'🔺',label:'tam giác',correct:'green'},
-  {shape:'💛',label:'hình tim',correct:'yellow'},
-  {shape:'🩷',label:'hình trái tim',correct:'pink'},
-];
-function buildColouringGame(){
-  const cg=document.getElementById('coloringGame');
-  cg.innerHTML=colourShapes.map((s,i)=>{
-    // Always include correct answer + 4 random distractors
-    const correctCol=COLOURS.find(c=>c.en===s.correct);
-    const distractors=shuffle(COLOURS.filter(c=>c.en!==s.correct)).slice(0,3);
-    const choices=shuffle([correctCol,...distractors]);
-    return`<div class="colour-shape-row" id="csr-${i}">
-      <div class="shape-preview" id="sp-${i}">${s.shape}</div>
+/* ============================================================
+   WRITE — COLOUR SHAPES
+============================================================ */
+function buildColourShapes(){
+  const shapes=currentUnit.colour_shapes||[];
+  if(!shapes.length){
+    document.getElementById('colourShapeArea').innerHTML='<div style="color:#aaa;text-align:center;padding:16px;">Không có bài tô màu cho unit này.</div>';
+    return;
+  }
+  document.getElementById('colourShapeArea').innerHTML=shapes.map((s,i)=>{
+    const correctHex=COLOUR_HEX[s.correct]||'#999';
+    // Always include correct + 3 random distractors from COLOUR_HEX keys
+    const allCols=Object.keys(COLOUR_HEX);
+    const distractors=shuffle(allCols.filter(c=>c!==s.correct)).slice(0,3);
+    const choices=shuffle([s.correct,...distractors]);
+    return`<div class="cs-row" id="csr-${i}">
+      <div class="cs-preview" id="csp-${i}">${s.shape}</div>
       <div>
-        <div style="font-size:15px;font-weight:800;color:#333;">Tô màu <strong style="color:${correctCol.hex==='#E0E0E0'?'#555':correctCol.hex}">${s.correct}</strong> cho ${s.label}! 🖌️</div>
-        <div style="font-size:13px;color:#888;">Chọn màu đúng:</div>
+        <div style="font-size:14px;font-weight:800;color:#333;">Tô màu <strong style="color:${correctHex}">${s.correct}</strong> cho ${s.label}! 🖌️</div>
+        <div style="font-size:12px;color:#888;">Chọn màu đúng:</div>
       </div>
-      <div style="display:flex;gap:9px;flex-wrap:wrap;">
-        ${choices.map(c=>`<button onclick="colourShape(${i},'${c.en}','${s.correct}')"
-          style="width:38px;height:38px;border-radius:50%;background:${c.hex==='#E0E0E0'?'#D8D8D8':c.hex};
-          border:3px solid ${c.hex==='#E0E0E0'?'#bbb':c.hex};cursor:pointer;transition:all .2s;"
-          title="${c.en}" onmouseover="this.style.transform='scale(1.18)'" onmouseout="this.style.transform='scale(1)'"></button>`).join('')}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${choices.map(c=>{const hex=COLOUR_HEX[c];
+          return`<button onclick="colourShape(${i},'${c}','${s.correct}')"
+            style="width:36px;height:36px;border-radius:50%;background:${hex};border:3px solid ${hex};
+            cursor:pointer;transition:all .2s;" title="${c}"
+            onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></button>`;}).join('')}
       </div>
-      <div id="csfb-${i}" style="font-size:19px;min-width:30px;"></div>
+      <div id="csfb-${i}" style="font-size:18px;min-width:24px;"></div>
     </div>`;
   }).join('');
 }
 function colourShape(idx,chosen,correct){
-  const col=COLOURS.find(c=>c.en===chosen);
-  const correctCol=COLOURS.find(c=>c.en===correct);
-  const fb=document.getElementById('csfb-'+idx);
-  const sp=document.getElementById('sp-'+idx);
+  const hex=COLOUR_HEX[chosen]||'#999', correctHex=COLOUR_HEX[correct]||'#999';
+  const fb=document.getElementById('csfb-'+idx), sp=document.getElementById('csp-'+idx);
+  sp.style.background=hex; sp.style.borderColor=hex;
   if(chosen===correct){
-    sp.style.background=col.hex==='#E0E0E0'?'#D8D8D8':col.hex;
-    sp.style.borderColor=col.hex==='#E0E0E0'?'#bbb':col.hex;
-    sp.textContent='✅';
-    fb.textContent='✅ +8đ';totalScore+=8;updateProgress();speak('Correct! '+correct);
-  }else{
-    fb.textContent='❌ Phải là '+correct+'!';speak('Try again! It is '+correct+'!');
-    // Flash wrong color briefly
-    sp.style.background=col.hex==='#E0E0E0'?'#D8D8D8':col.hex;
-    setTimeout(()=>{sp.style.background='';sp.style.borderColor='#ccc';},600);
+    sp.style.fontSize='22px'; sp.textContent='✅';
+    fb.textContent='✅ +8đ'; addScore(8); speak('Correct! '+correct);
+  } else {
+    fb.textContent='❌ Phải là '+correct+'!'; speak('Try again! It is '+correct+'!');
+    setTimeout(()=>{sp.style.background=''; sp.style.borderColor='#ccc';},700);
   }
 }
 
 /* ============================================================
    INIT
 ============================================================ */
-buildColourGrid();
-buildListenQuiz();
-buildSpeakSection();
-buildReadSection();
-buildWriteSection();
-updateProgress();
+showHome();
+buildHomeGrid();
 </script>
 </body>
 </html>
