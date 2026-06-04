@@ -1,0 +1,716 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--font-sans);}
+#app{width:100%;max-width:420px;margin:0 auto;padding:0 0 16px;}
+.scr{display:none;} .scr.on{display:block;}
+
+/* HOME */
+.hero{background:#534AB7;border-radius:16px;padding:18px 16px;margin-bottom:14px;text-align:center;}
+.hero-title{font-size:21px;font-weight:500;color:#fff;}
+.hero-sub{font-size:12px;color:#CECBF6;margin-top:2px;}
+.hero-prog{background:rgba(255,255,255,.22);border-radius:20px;height:8px;margin:12px 0 4px;}
+.hero-fill{background:#fff;border-radius:20px;height:8px;transition:width .5s;}
+.hero-lbl{font-size:11px;color:#CECBF6;}
+.ugrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.ucard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;}
+.ucard:active{opacity:.8;}
+.ucard.done{border-color:#1D9E75;}
+.uem{font-size:28px;display:block;margin-bottom:5px;}
+.uname{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.3;}
+.uvn{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.ust{font-size:11px;color:#BA7517;margin-top:3px;}
+.qrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:4px;}
+.qbtn{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:12px 8px;cursor:pointer;font-size:13px;color:var(--color-text-primary);text-align:center;}
+.qbtn:active{opacity:.8;}
+
+/* NAV */
+.bbtn{background:none;border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:7px 14px;cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;display:inline-flex;align-items:center;gap:5px;}
+.bbtn:active{background:var(--color-background-secondary);}
+
+/* UNIT LIST */
+.uhdr{background:var(--color-background-secondary);border-radius:14px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.uhem{font-size:36px;} .uhtitle{font-size:17px;font-weight:500;color:var(--color-text-primary);} .uhsub{font-size:12px;color:var(--color-text-secondary);}
+.litem{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:13px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.litem:active{background:var(--color-background-secondary);}
+.lic{font-size:20px;width:30px;text-align:center;flex-shrink:0;}
+.ltit{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.lsub{font-size:11px;color:var(--color-text-secondary);}
+.lbadge{margin-left:auto;font-size:10px;border-radius:20px;padding:3px 9px;font-weight:500;flex-shrink:0;}
+.bw{background:#E1F5EE;color:#0F6E56;} .bg{background:#EEEDFE;color:#3C3489;} .bl{background:#FAEEDA;color:#633806;} .bn{background:#FAECE7;color:#712B13;} .bs{background:#FBEAF0;color:#4B1528;} .br{background:#E6F1FB;color:#0C447C;}
+
+/* LESSON */
+.lhdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.lhem{font-size:26px;} .lhtit{font-size:15px;font-weight:500;color:var(--color-text-primary);} .lhsub{font-size:11px;color:var(--color-text-secondary);}
+
+/* SPEAK BUTTON */
+.speak-btn{display:flex;align-items:center;gap:8px;background:#EEEDFE;border:none;border-radius:12px;padding:10px 16px;cursor:pointer;font-size:14px;font-weight:500;color:#3C3489;margin-bottom:10px;width:100%;}
+.speak-btn:active{background:#CECBF6;}
+.speak-btn.speaking{background:#534AB7;color:#fff;}
+.speak-pulse{width:12px;height:12px;border-radius:50%;background:#7F77DD;flex-shrink:0;}
+.speak-btn.speaking .speak-pulse{background:#fff;animation:pulse 0.6s infinite alternate;}
+@keyframes pulse{from{opacity:1;transform:scale(1);}to{opacity:.4;transform:scale(0.7);}}
+
+/* VOCAB */
+.vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.vc{background:var(--color-background-primary);border:2px solid var(--color-border-tertiary);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;min-height:115px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .15s;}
+.vc:active,.vc.flip{border-color:#7F77DD;background:#EEEDFE;}
+.vem{font-size:34px;margin-bottom:6px;} .ven{font-size:15px;font-weight:500;color:var(--color-text-primary);} .vvn{font-size:12px;color:var(--color-text-secondary);margin-top:2px;} .vpr{font-size:11px;color:#534AB7;margin-top:2px;}
+.hint{background:var(--color-background-secondary);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+
+/* ALPHA */
+.agrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px;}
+.ac{background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.ac:active,.ac.sel{border-color:#BA7517;background:#FAEEDA;}
+.abig{font-size:32px;font-weight:500;color:#633806;} .asm{font-size:20px;color:#854F0B;} .aword{font-size:11px;color:var(--color-text-secondary);margin-top:4px;}
+.adet{background:#FAEEDA;border-radius:14px;padding:16px;margin-bottom:10px;display:none;text-align:center;}
+.adet.on{display:block;}
+.adetbig{font-size:50px;font-weight:500;color:#412402;margin-bottom:6px;} .adetw{font-size:14px;color:#633806;margin-bottom:4px;} .adettrace{font-size:22px;color:#854F0B;letter-spacing:8px;}
+
+/* NUMBERS */
+.ngrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px;}
+.nc{background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.nc:active,.nc.sel{border-color:#0F6E56;background:#E1F5EE;}
+.nbig{font-size:34px;font-weight:500;color:#085041;} .nword{font-size:12px;color:var(--color-text-secondary);} .nvn{font-size:11px;color:#0F6E56;}
+.ndots{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin:6px 0 4px;}
+.nd{width:16px;height:16px;border-radius:50%;background:#5DCAA5;display:inline-block;}
+
+/* GRAMMAR */
+.gbox{background:var(--color-background-secondary);border-radius:14px;padding:14px;margin-bottom:12px;}
+.gpat{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.gpat2{font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;}
+.gex{font-size:13px;color:var(--color-text-secondary);padding:7px 10px;background:var(--color-background-primary);border-radius:8px;border-left:3px solid #7F77DD;margin-bottom:5px;}
+.gex span{color:#534AB7;font-weight:500;}
+.fq{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:12px;margin-bottom:8px;}
+.fqtxt{font-size:14px;color:var(--color-text-primary);margin-bottom:8px;}
+.fopts{display:flex;gap:8px;flex-wrap:wrap;}
+.fo{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:20px;padding:7px 16px;cursor:pointer;font-size:13px;transition:all .15s;}
+.fo:active{opacity:.8;} .fo.ok{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56;} .fo.no{background:#FAECE7;border-color:#D85A30;color:#993C1D;}
+
+/* GAME ENGINES */
+.game-wrap{margin-bottom:12px;}
+.game-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.game-score{font-size:14px;font-weight:500;color:#BA7517;}
+.game-progress{font-size:12px;color:var(--color-text-secondary);}
+.game-pbar{background:var(--color-background-tertiary);border-radius:10px;height:6px;margin-bottom:14px;}
+.game-pfill{background:#7F77DD;border-radius:10px;height:6px;transition:width .4s;}
+
+/* COLOUR GAME */
+.cg-card{background:var(--color-background-secondary);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:12px;}
+.cg-em{font-size:64px;margin-bottom:8px;}
+.cg-q{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.cg-hint{font-size:13px;color:var(--color-text-secondary);margin-bottom:14px;}
+.cg-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.cb{height:62px;border-radius:12px;border:3px solid transparent;cursor:pointer;font-size:15px;font-weight:500;transition:all .15s;}
+.cb:active{transform:scale(.97);}
+.cb.ok{border-color:#1D9E75!important;box-shadow:0 0 0 4px #9FE1CB;}
+.cb.no{opacity:.4;}
+.cg-fb{text-align:center;font-size:16px;min-height:28px;margin-top:10px;font-weight:500;}
+.next-btn{width:100%;background:#534AB7;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;cursor:pointer;margin-top:10px;}
+.next-btn:active{opacity:.8;}
+
+/* MATCHING GAME */
+.match-q{background:var(--color-background-secondary);border-radius:14px;padding:16px;text-align:center;margin-bottom:12px;}
+.match-em{font-size:56px;margin-bottom:6px;}
+.match-word{font-size:20px;font-weight:500;color:var(--color-text-primary);}
+.match-sub{font-size:13px;color:var(--color-text-secondary);margin-top:3px;}
+.match-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px;}
+.mo{background:var(--color-background-primary);border:2px solid var(--color-border-tertiary);border-radius:12px;padding:13px 8px;cursor:pointer;font-size:14px;text-align:center;transition:all .15s;min-height:50px;display:flex;align-items:center;justify-content:center;}
+.mo:active{opacity:.8;}
+.mo.ok{border-color:#1D9E75;background:#E1F5EE;color:#085041;pointer-events:none;}
+.mo.no{border-color:#D85A30;background:#FAECE7;color:#993C1D;}
+
+/* STORY */
+.story-card{background:var(--color-background-secondary);border-radius:16px;padding:16px;margin-bottom:12px;}
+.story-em{font-size:60px;text-align:center;margin-bottom:10px;}
+.bubble{background:var(--color-background-primary);border-radius:14px;border:1.5px solid var(--color-border-tertiary);padding:13px 15px;margin-bottom:8px;}
+.bsp{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;}
+.btxt{font-size:17px;font-weight:500;color:var(--color-text-primary);line-height:1.4;}
+.bvn{font-size:12px;color:var(--color-text-secondary);margin-top:4px;}
+.snav{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.sbtn{background:none;border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:9px 18px;cursor:pointer;font-size:13px;color:var(--color-text-primary);}
+.sbtn:disabled{opacity:.3;pointer-events:none;}
+.sbtn:active{background:var(--color-background-secondary);}
+.sstep{font-size:12px;color:var(--color-text-secondary);}
+
+/* REVIEW QUIZ */
+.rq{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:14px;margin-bottom:10px;}
+.rqtxt{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;}
+.ropts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.ro{background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);border-radius:10px;padding:11px 8px;cursor:pointer;font-size:13px;text-align:center;transition:all .15s;}
+.ro:active{opacity:.8;}
+.ro.ok{background:#E1F5EE;border-color:#1D9E75;color:#085041;}
+.ro.no{background:#FAECE7;border-color:#D85A30;color:#993C1D;}
+
+/* HANDWRITING */
+.hwgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.hw{background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.hw:active{background:#EEEDFE;border-color:#534AB7;}
+.hwbig{font-size:40px;font-weight:500;color:#534AB7;} .hwsm{font-size:24px;color:#7F77DD;}
+
+/* DONE */
+.donebox{background:#E1F5EE;border:1.5px solid #5DCAA5;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px;}
+.doneem{font-size:44px;margin-bottom:6px;} .donetit{font-size:17px;font-weight:500;color:#085041;margin-bottom:2px;} .donesub{font-size:13px;color:#0F6E56;}
+.xp{display:inline-block;background:#1D9E75;color:#fff;border-radius:20px;padding:4px 14px;font-size:13px;margin-top:8px;}
+.donebtn-wrap{text-align:center;margin:14px 0;}
+.donebtn{background:#534AB7;color:#fff;border:none;border-radius:12px;padding:13px 28px;font-size:15px;cursor:pointer;}
+.donebtn:active{opacity:.8;}
+
+/* PROGRESS */
+.prow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.prname{font-size:13px;color:var(--color-text-primary);flex:1;min-width:0;}
+.prbar{width:88px;background:var(--color-background-tertiary);border-radius:10px;height:6px;flex-shrink:0;}
+.prfill{background:#7F77DD;border-radius:10px;height:6px;transition:width .5s;}
+.prpct{font-size:11px;color:var(--color-text-secondary);min-width:28px;text-align:right;}
+.totstats{background:var(--color-background-secondary);border-radius:12px;padding:14px;margin-top:12px;text-align:center;font-size:14px;color:var(--color-text-primary);line-height:1.9;}
+
+/* ANIM */
+@keyframes pop{0%{transform:scale(.8);opacity:0;}60%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+.pop{animation:pop .25s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.shake{animation:shake .3s ease;}
+</style>
+
+<h2 class="sr-only">Family and Friends Starter - App học tiếng Anh cho bé với giọng đọc và trò chơi nhiều câu hỏi</h2>
+<div id="app">
+
+<div id="s-home" class="scr on">
+  <div class="hero">
+    <div class="hero-title">🌟 Family &amp; Friends Starter</div>
+    <div class="hero-sub">Học tiếng Anh vui cùng bé · Learn English!</div>
+    <div class="hero-prog"><div class="hero-fill" id="hfill" style="width:0%"></div></div>
+    <div class="hero-lbl" id="hlbl">Bắt đầu nào! · Let's go!</div>
+  </div>
+  <div class="ugrid" id="ugrid"></div>
+  <div class="qrow">
+    <div class="qbtn" onclick="go('s-prog')">📊 Tiến độ · Progress</div>
+    <div class="qbtn" onclick="launchRevQuiz()">🔁 Ôn tập · Review</div>
+  </div>
+</div>
+
+<div id="s-unit" class="scr">
+  <button class="bbtn" onclick="go('s-home')">← Trang chủ</button>
+  <div class="uhdr" id="uhdr"></div>
+  <div id="ulist"></div>
+</div>
+
+<div id="s-lesson" class="scr">
+  <button class="bbtn" id="lback">← Quay lại</button>
+  <div class="lhdr" id="lhdr"></div>
+  <div id="lcontent"></div>
+</div>
+
+<div id="s-prog" class="scr">
+  <button class="bbtn" onclick="go('s-home')">← Trang chủ</button>
+  <div style="font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;">📊 Tiến độ của bé · My Progress</div>
+  <div id="proglist"></div>
+  <div class="totstats" id="totstats"></div>
+</div>
+
+<div id="s-revquiz" class="scr">
+  <button class="bbtn" onclick="go('s-home')">← Trang chủ</button>
+  <div style="font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;">🔁 Ôn tập tổng hợp</div>
+  <div id="rqcontent"></div>
+</div>
+
+</div>
+
+<script>
+const W=window,D=document;
+let synth=W.speechSynthesis;
+let curUnit=null,curLesson=null,stIdx=0,prog={},stars={};
+let cgIdx=0,cgData=[],cgScore=0;
+let mgIdx=0,mgData=[],mgScore=0;
+
+const NW=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const NVN=['','một','hai','ba','bốn','năm','sáu','bảy','tám','chín','mười','mười một','mười hai','mười ba','mười bốn','mười lăm','mười sáu','mười bảy','mười tám','mười chín','hai mươi'];
+
+const COLORS=[
+  {n:'red',bg:'#E24B4A',fg:'#fff',em:'🔴'},
+  {n:'green',bg:'#639922',fg:'#fff',em:'🟢'},
+  {n:'blue',bg:'#378ADD',fg:'#fff',em:'🔵'},
+  {n:'black',bg:'#2C2C2A',fg:'#fff',em:'⚫'},
+  {n:'white',bg:'#F1EFE8',fg:'#333',em:'⚪'},
+  {n:'yellow',bg:'#EF9F27',fg:'#fff',em:'🟡'}
+];
+
+const UNITS=[
+  {id:'s0',emoji:'👋',name:'Hello!',vn:'Xin chào!',lessons:[
+    {id:'s0l1',type:'vocab',badge:'bw',title:'Words: Greetings',vn:'Từ vựng chào hỏi',
+     vocab:[{en:'Hello',vn:'Xin chào',em:'👋',pr:'Hello'},{en:'Goodbye',vn:'Tạm biệt',em:'🙋',pr:'Goodbye'},{en:'Rosy',vn:'Rosy - bé gái',em:'👧',pr:'Rosy'},{en:'Tim',vn:'Tim - bé trai',em:'👦',pr:'Tim'},{en:'Billy',vn:'Billy - em bé',em:'👶',pr:'Billy'}]},
+    {id:'s0l2',type:'grammar',badge:'bg',title:"Grammar: What's your name?",vn:'Tên bạn là gì?',
+     pat:"What's your name?",pvn:"Tên bạn là gì?",pat2:"I'm [name].",p2vn:"Tôi là [tên].",
+     exs:[{q:"What's your name?",a:"I'm Rosy."},{q:"What's your name?",a:"I'm Tim."}],
+     fills:[{t:"___ 's your name?",opts:["What","Hello"],ans:"What"},{t:"I ___ Rosy.",opts:["am","is"],ans:"am"},{t:"___ goodbye!",opts:["Say","What"],ans:"Say"}]},
+    {id:'s0l3',type:'alpha',badge:'bl',title:'Letters: Aa Bb',vn:'Chữ cái Aa Bb',
+     letters:[{U:'A',l:'a',w1:'apple',w2:'Annie',em:'🍎',say:'A for apple'},{U:'B',l:'b',w1:'boy',w2:'bat',em:'🦇',say:'B for boy'}]},
+    {id:'s0l4',type:'nums',badge:'bn',title:'Numbers: 1, 2',vn:'Số 1 và 2',nums:[1,2]},
+    {id:'s0l5',type:'story',badge:'bs',title:'Story: Hello!',vn:'Câu chuyện xin chào',
+     scenes:[{em:'👧👦',sp:'Rosy',txt:'Hello, Tim!',vn:'Xin chào, Tim!'},{em:'👦😊',sp:'Tim',txt:"What's your name?",vn:'Tên bạn là gì?'},{em:'👧💬',sp:'Rosy',txt:"I'm Rosy!",vn:'Tôi là Rosy!'},{em:'👶👋',sp:'Billy',txt:'Goodbye!',vn:'Tạm biệt!'}]}
+  ]},
+  {id:'u1',emoji:'🎨',name:'What colour is it?',vn:'Màu sắc là gì?',lessons:[
+    {id:'u1l1',type:'vocab',badge:'bw',title:'Words: Colours',vn:'Từ vựng màu sắc',
+     vocab:[{en:'red',vn:'màu đỏ',em:'🔴',pr:'red'},{en:'green',vn:'xanh lá',em:'🟢',pr:'green'},{en:'blue',vn:'xanh dương',em:'🔵',pr:'blue'},{en:'black',vn:'màu đen',em:'⚫',pr:'black'},{en:'white',vn:'màu trắng',em:'⚪',pr:'white'},{en:'yellow',vn:'màu vàng',em:'🟡',pr:'yellow'}]},
+    {id:'u1l2',type:'grammar',badge:'bg',title:"Grammar: What colour is it?",vn:'Màu gì vậy?',
+     pat:"What colour is it?",pvn:"Màu gì vậy?",pat2:"It's [colour].",p2vn:"Nó màu [màu sắc].",
+     exs:[{q:"What colour is it?",a:"It's blue."},{q:"What colour is it?",a:"It's red."}],
+     fills:[{t:"What colour ___ it?",opts:["is","am"],ans:"is"},{t:"It ___ blue.",opts:["is","am"],ans:"is"},{t:"___ 's green.",opts:["It","Is"],ans:"It"}]},
+    {id:'u1l3',type:'colorgame',badge:'bg',title:'Game: Colour quiz! 🎮',vn:'Trò chơi nhận biết màu sắc'},
+    {id:'u1l4',type:'alpha',badge:'bl',title:'Letters: Cc Dd',vn:'Chữ cái Cc Dd',
+     letters:[{U:'C',l:'c',w1:'cat',w2:'car',em:'🐱',say:'C for cat'},{U:'D',l:'d',w1:'dog',w2:'duck',em:'🐶',say:'D for dog'}]},
+    {id:'u1l5',type:'nums',badge:'bn',title:'Numbers: 3, 4',vn:'Số 3 và 4',nums:[3,4]},
+    {id:'u1l6',type:'story',badge:'bs',title:'Story: Colours!',vn:'Câu chuyện màu sắc',
+     scenes:[{em:'🖍️🎨',sp:'Billy',txt:'What colour is it?',vn:'Màu gì vậy?'},{em:'👧💙',sp:'Rosy',txt:"It's blue!",vn:'Màu xanh!'},{em:'👦❤️',sp:'Tim',txt:"It's red!",vn:'Màu đỏ!'},{em:'👩😮',sp:'Mum',txt:'Oh no!',vn:'Ôi trời ơi!'}]}
+  ]},
+  {id:'u2',emoji:'✏️',name:"What's this?",vn:'Cái này là gì?',lessons:[
+    {id:'u2l1',type:'vocab',badge:'bw',title:'Words: Classroom',vn:'Đồ dùng lớp học',
+     vocab:[{en:'pencil',vn:'bút chì',em:'✏️',pr:'pencil'},{en:'desk',vn:'bàn học',em:'🪑',pr:'desk'},{en:'chair',vn:'ghế ngồi',em:'💺',pr:'chair'},{en:'crayon',vn:'bút màu',em:'🖍️',pr:'crayon'},{en:'notebook',vn:'quyển vở',em:'📓',pr:'notebook'}]},
+    {id:'u2l2',type:'grammar',badge:'bg',title:"Grammar: What's this?",vn:'Cái này là gì?',
+     pat:"What's this?",pvn:"Cái này là gì?",pat2:"It's a [noun].",p2vn:"Đây là một cái [danh từ].",
+     exs:[{q:"What's this?",a:"It's a pencil."},{q:"What's this?",a:"It's a chair."}],
+     fills:[{t:"___ 's this?",opts:["What","It"],ans:"What"},{t:"It ___ a chair.",opts:["is","am"],ans:"is"},{t:"It's a ___ .",opts:["desk","is"],ans:"desk"}]},
+    {id:'u2l3',type:'matching',badge:'bg',title:'Game: Match it! 🎮',vn:'Ghép từ với hình',
+     pairs:[{em:'✏️',en:'pencil',vn:'bút chì'},{em:'📓',en:'notebook',vn:'quyển vở'},{em:'💺',en:'chair',vn:'ghế ngồi'},{em:'🖍️',en:'crayon',vn:'bút màu'},{em:'🪑',en:'desk',vn:'bàn học'},{em:'🎒',en:'bag',vn:'cặp sách'}]},
+    {id:'u2l4',type:'alpha',badge:'bl',title:'Letters: Ee Ff',vn:'Chữ cái Ee Ff',
+     letters:[{U:'E',l:'e',w1:'egg',w2:'elephant',em:'🥚',say:'E for egg'},{U:'F',l:'f',w1:'fish',w2:'farm',em:'🐟',say:'F for fish'}]},
+    {id:'u2l5',type:'nums',badge:'bn',title:'Numbers: 5, 6',vn:'Số 5 và 6',nums:[5,6]},
+    {id:'u2l6',type:'story',badge:'bs',title:"Story: What's this?",vn:'Câu chuyện đồ dùng',
+     scenes:[{em:'👧📓',sp:'Rosy',txt:"What's this?",vn:'Cái này là gì?'},{em:'👦💬',sp:'Tim',txt:"It's a notebook!",vn:'Đây là quyển vở!'},{em:'👧🖍️',sp:'Rosy',txt:"It's a crayon. It's red!",vn:'Đây là bút màu. Nó màu đỏ!'},{em:'👦😄',sp:'Tim',txt:"It's blue!",vn:'Nó màu xanh!'}]}
+  ]},
+  {id:'u3',emoji:'✈️',name:'Is it a plane?',vn:'Có phải máy bay?',lessons:[
+    {id:'u3l1',type:'vocab',badge:'bw',title:'Words: Toys',vn:'Đồ chơi',
+     vocab:[{en:'plane',vn:'máy bay',em:'✈️',pr:'plane'},{en:'puppet',vn:'búp bê tay',em:'🤹',pr:'puppet'},{en:'robot',vn:'người máy',em:'🤖',pr:'robot'},{en:'balloon',vn:'bóng bay',em:'🎈',pr:'balloon'},{en:'teddy',vn:'gấu bông',em:'🧸',pr:'teddy'}]},
+    {id:'u3l2',type:'grammar',badge:'bg',title:'Grammar: Is it a...?',vn:'Có phải... không?',
+     pat:"Is it a [noun]?",pvn:"Đây có phải là [danh từ] không?",pat2:"Yes, it is. / No, it isn't.",p2vn:"Có, đúng. / Không, không phải.",
+     exs:[{q:"Is it a plane?",a:"Yes, it is."},{q:"Is it a balloon?",a:"No, it isn't."}],
+     fills:[{t:"Is ___ a teddy?",opts:["it","is"],ans:"it"},{t:"Yes, it ___.",opts:["is","am"],ans:"is"},{t:"No, it ___ .",opts:["isn't","aren't"],ans:"isn't"}]},
+    {id:'u3l3',type:'colorgame',badge:'bg',title:'Game: Colour quiz! 🎮',vn:'Ôn lại màu sắc'},
+    {id:'u3l4',type:'alpha',badge:'bl',title:'Letters: Gg Hh Ii',vn:'Chữ cái Gg Hh Ii',
+     letters:[{U:'G',l:'g',w1:'girl',w2:'guitar',em:'🎸',say:'G for girl'},{U:'H',l:'h',w1:'hat',w2:'horse',em:'🐎',say:'H for hat'},{U:'I',l:'i',w1:'insect',w2:'ill',em:'🐛',say:'I for insect'}]},
+    {id:'u3l5',type:'nums',badge:'bn',title:'Numbers: 7, 8',vn:'Số 7 và 8',nums:[7,8]},
+    {id:'u3l6',type:'story',badge:'bs',title:'Story: Toys!',vn:'Câu chuyện đồ chơi',
+     scenes:[{em:'👧🎁',sp:'Rosy',txt:"Is it a teddy?",vn:'Có phải gấu bông không?'},{em:'👦❌',sp:'Tim',txt:"No, it isn't!",vn:'Không phải!'},{em:'👦✈️',sp:'Tim',txt:"Is it a plane?",vn:'Có phải máy bay không?'},{em:'👶😄',sp:'Billy',txt:"Yes, it is!",vn:'Đúng rồi!'}]}
+  ]},
+  {id:'r1',emoji:'⭐',name:'Review 1',vn:'Ôn tập bài 1–3',lessons:[
+    {id:'r1l1',type:'review',badge:'br',title:'Review Quiz 1 ⭐',vn:'Ôn tập tổng hợp',
+     qs:[{q:"What colour is 🔴?",os:["red","blue","green","black"],c:0},{q:"What's this? ✈️",os:["balloon","plane","teddy","robot"],c:1},{q:"It ___ a chair.",os:["am","are","is","be"],c:2},{q:"Hello nghĩa là?",os:["Tạm biệt","Xin chào","Cái gì","Màu gì"],c:1},{q:"Letter A → từ nào?",os:["bat","apple","cat","dog"],c:1},{q:"Is it a plane? → Yes, ___",os:["it is","I am","it are","is it"],c:0},{q:"What's this? 📓",os:["pencil","chair","notebook","crayon"],c:2},{q:"Colour of 🟢?",os:["red","yellow","blue","green"],c:3}]}
+  ]},
+  {id:'u4',emoji:'👨‍👩‍👧',name:'This is my mum!',vn:'Đây là mẹ tôi!',lessons:[
+    {id:'u4l1',type:'vocab',badge:'bw',title:'Words: Family',vn:'Từ vựng gia đình',
+     vocab:[{en:'mum',vn:'mẹ',em:'👩',pr:'mum'},{en:'dad',vn:'bố',em:'👨',pr:'dad'},{en:'brother',vn:'anh/em trai',em:'👦',pr:'brother'},{en:'sister',vn:'chị/em gái',em:'👧',pr:'sister'},{en:'grandma',vn:'bà',em:'👵',pr:'grandma'},{en:'grandpa',vn:'ông',em:'👴',pr:'grandpa'}]},
+    {id:'u4l2',type:'grammar',badge:'bg',title:'Grammar: This is my...',vn:'Đây là ... của tôi',
+     pat:"This is my [family].",pvn:"Đây là [gia đình] của tôi.",pat2:"",p2vn:"",
+     exs:[{q:"(chỉ mẹ)",a:"This is my mum."},{q:"(chỉ ông)",a:"This is my grandpa."}],
+     fills:[{t:"This is ___ mum.",opts:["my","your"],ans:"my"},{t:"This is my ___.",opts:["dad","is"],ans:"dad"},{t:"___ is my sister.",opts:["This","Is"],ans:"This"}]},
+    {id:'u4l3',type:'matching',badge:'bg',title:'Game: Family match! 🎮',vn:'Ghép tên thành viên',
+     pairs:[{em:'👩',en:'mum',vn:'mẹ'},{em:'👨',en:'dad',vn:'bố'},{em:'👦',en:'brother',vn:'anh/em trai'},{em:'👧',en:'sister',vn:'chị/em gái'},{em:'👵',en:'grandma',vn:'bà'},{em:'👴',en:'grandpa',vn:'ông'}]},
+    {id:'u4l4',type:'alpha',badge:'bl',title:'Letters: Jj Kk Ll',vn:'Chữ cái Jj Kk Ll',
+     letters:[{U:'J',l:'j',w1:'jug',w2:'juice',em:'🍶',say:'J for jug'},{U:'K',l:'k',w1:'kangaroo',w2:'key',em:'🦘',say:'K for kangaroo'},{U:'L',l:'l',w1:'lion',w2:'lollipop',em:'🦁',say:'L for lion'}]},
+    {id:'u4l5',type:'nums',badge:'bn',title:'Numbers: 9, 10',vn:'Số 9 và 10',nums:[9,10]},
+    {id:'u4l6',type:'story',badge:'bs',title:'Story: My family!',vn:'Câu chuyện gia đình',
+     scenes:[{em:'👧👩',sp:'Rosy',txt:'This is my mum!',vn:'Đây là mẹ tôi!'},{em:'👩😊',sp:'Mum',txt:'Hello!',vn:'Xin chào!'},{em:'👦👨',sp:'Tim',txt:'This is my dad.',vn:'Đây là bố tôi.'},{em:'👴👵',sp:'Grandpa',txt:'Hello everyone!',vn:'Xin chào mọi người!'}]}
+  ]},
+  {id:'u5',emoji:'😊',name:"He's happy!",vn:'Anh ấy vui vẻ!',lessons:[
+    {id:'u5l1',type:'vocab',badge:'bw',title:'Words: Feelings',vn:'Từ vựng cảm xúc',
+     vocab:[{en:'happy',vn:'vui vẻ',em:'😊',pr:'happy'},{en:'sad',vn:'buồn bã',em:'😢',pr:'sad'},{en:'hungry',vn:'đói bụng',em:'🍽️',pr:'hungry'},{en:'thirsty',vn:'khát nước',em:'💧',pr:'thirsty'},{en:'hot',vn:'nóng nực',em:'🌡️',pr:'hot'},{en:'cold',vn:'lạnh giá',em:'🥶',pr:'cold'}]},
+    {id:'u5l2',type:'grammar',badge:'bg',title:"Grammar: He's / She's",vn:"Anh ấy / Cô ấy...",
+     pat:"He's [feeling].",pvn:"Anh ấy [cảm xúc].",pat2:"She's [feeling].",p2vn:"Cô ấy [cảm xúc].",
+     exs:[{q:"(bé trai cười vui)",a:"He's happy."},{q:"(bé gái run lạnh)",a:"She's cold."}],
+     fills:[{t:"___ 's happy.",opts:["He","She"],ans:"He"},{t:"She ___ hungry.",opts:["is","am"],ans:"is"},{t:"He's ___ .",opts:["sad","sad's"],ans:"sad"}]},
+    {id:'u5l3',type:'matching',badge:'bg',title:'Game: Feelings match! 🎮',vn:'Ghép cảm xúc',
+     pairs:[{em:'😊',en:'happy',vn:'vui vẻ'},{em:'😢',en:'sad',vn:'buồn bã'},{em:'🍽️',en:'hungry',vn:'đói bụng'},{em:'💧',en:'thirsty',vn:'khát nước'},{em:'🌡️',en:'hot',vn:'nóng nực'},{em:'🥶',en:'cold',vn:'lạnh giá'}]},
+    {id:'u5l4',type:'alpha',badge:'bl',title:'Letters: Mm Nn Oo',vn:'Chữ cái Mm Nn Oo',
+     letters:[{U:'M',l:'m',w1:'man',w2:'mango',em:'🥭',say:'M for mango'},{U:'N',l:'n',w1:'nose',w2:'neck',em:'👃',say:'N for nose'},{U:'O',l:'o',w1:'orange',w2:'octopus',em:'🍊',say:'O for orange'}]},
+    {id:'u5l5',type:'nums',badge:'bn',title:'Numbers: 11, 12',vn:'Số 11 và 12',nums:[11,12]},
+    {id:'u5l6',type:'story',badge:'bs',title:"Story: Feelings!",vn:'Câu chuyện cảm xúc',
+     scenes:[{em:'👦😊',sp:'Tim',txt:"He's happy!",vn:'Anh ấy vui!'},{em:'👧😢',sp:'Rosy',txt:"She's sad.",vn:'Cô ấy buồn.'},{em:'👶🍽️',sp:'Billy',txt:"He's hungry!",vn:'Em đói bụng!'},{em:'👩🥶',sp:'Mum',txt:"She's cold!",vn:'Mẹ lạnh quá!'}]}
+  ]},
+  {id:'u6',emoji:'🐻',name:"They're bears!",vn:'Chúng là những con gấu!',lessons:[
+    {id:'u6l1',type:'vocab',badge:'bw',title:'Words: Animals',vn:'Từ vựng động vật',
+     vocab:[{en:'bird',vn:'con chim',em:'🐦',pr:'bird'},{en:'bear',vn:'con gấu',em:'🐻',pr:'bear'},{en:'hippo',vn:'con hà mã',em:'🦛',pr:'hippo'},{en:'crocodile',vn:'con cá sấu',em:'🐊',pr:'crocodile'},{en:'tiger',vn:'con hổ',em:'🐯',pr:'tiger'}]},
+    {id:'u6l2',type:'grammar',badge:'bg',title:"Grammar: They're...",vn:"Chúng là...",
+     pat:"They're [animals].",pvn:"Chúng là [động vật].",pat2:"What are they?",p2vn:"Chúng là gì?",
+     exs:[{q:"(2 con gấu)",a:"They're bears."},{q:"(3 con hổ)",a:"They're tigers."}],
+     fills:[{t:"They ___ bears.",opts:["are","is"],ans:"are"},{t:"What ___ they?",opts:["is","are"],ans:"are"},{t:"They're ___ .",opts:["tigers","tiger's"],ans:"tigers"}]},
+    {id:'u6l3',type:'matching',badge:'bg',title:'Game: Animals match! 🎮',vn:'Ghép động vật',
+     pairs:[{em:'🐦',en:'bird',vn:'chim'},{em:'🐻',en:'bear',vn:'gấu'},{em:'🦛',en:'hippo',vn:'hà mã'},{em:'🐊',en:'crocodile',vn:'cá sấu'},{em:'🐯',en:'tiger',vn:'hổ'},{em:'🦁',en:'lion',vn:'sư tử'}]},
+    {id:'u6l4',type:'alpha',badge:'bl',title:'Letters: Pp Qq Rr',vn:'Chữ cái Pp Qq Rr',
+     letters:[{U:'P',l:'p',w1:'panda',w2:'pen',em:'🐼',say:'P for panda'},{U:'Q',l:'q',w1:'queen',w2:'quilt',em:'👑',say:'Q for queen'},{U:'R',l:'r',w1:'river',w2:'rainbow',em:'🌈',say:'R for rainbow'}]},
+    {id:'u6l5',type:'nums',badge:'bn',title:'Numbers: 13, 14',vn:'Số 13 và 14',nums:[13,14]},
+    {id:'u6l6',type:'story',badge:'bs',title:"Story: Animals!",vn:'Câu chuyện động vật',
+     scenes:[{em:'🐻🐻',sp:'Tim',txt:"What are they?",vn:'Chúng là gì?'},{em:'👧💬',sp:'Rosy',txt:"They're bears!",vn:'Chúng là gấu!'},{em:'🐯🐯',sp:'Tim',txt:"They're tigers!",vn:'Chúng là hổ!'},{em:'😲🐊',sp:'Both',txt:'Crocodiles! Run!',vn:'Cá sấu! Chạy thôi!'}]}
+  ]},
+  {id:'r2',emoji:'⭐',name:'Review 2',vn:'Ôn tập bài 4–6',lessons:[
+    {id:'r2l1',type:'review',badge:'br',title:'Review Quiz 2 ⭐',vn:'Ôn tập tổng hợp',
+     qs:[{q:"Grandma nghĩa là?",os:["mẹ","bố","bà","ông"],c:2},{q:"He's ___ (😢)",os:["happy","sad","hungry","cold"],c:1},{q:"They ___ bears.",os:["am","is","are","be"],c:2},{q:"Letter P → từ nào?",os:["apple","panda","orange","queen"],c:1},{q:"Crocodile là con gì?",os:["hổ","gấu","cá sấu","chim"],c:2},{q:"She ___ cold.",os:["am","is","are","be"],c:1},{q:"This is ___ mum.",os:["my","am","your","is"],c:0},{q:"What animal is 🐦?",os:["bear","bird","hippo","tiger"],c:1}]}
+  ]},
+  {id:'u7',emoji:'👩‍🏫',name:'Are they teachers?',vn:'Họ là giáo viên?',lessons:[
+    {id:'u7l1',type:'vocab',badge:'bw',title:'Words: Jobs',vn:'Từ vựng nghề nghiệp',
+     vocab:[{en:'teacher',vn:'giáo viên',em:'👩‍🏫',pr:'teacher'},{en:'pupil',vn:'học sinh',em:'🎒',pr:'pupil'},{en:'vet',vn:'bác sĩ thú y',em:'🐾',pr:'vet'},{en:'waiter',vn:'bồi bàn',em:'🍽️',pr:'waiter'},{en:'builder',vn:'thợ xây',em:'🏗️',pr:'builder'}]},
+    {id:'u7l2',type:'grammar',badge:'bg',title:'Grammar: Are they...?',vn:'Họ có phải... không?',
+     pat:"Are they [jobs]?",pvn:"Họ có phải [nghề] không?",pat2:"Yes, they are. / No, they aren't.",p2vn:"Có, đúng. / Không phải.",
+     exs:[{q:"Are they teachers?",a:"Yes, they are."},{q:"Are they vets?",a:"No, they aren't."}],
+     fills:[{t:"Are ___ teachers?",opts:["they","it"],ans:"they"},{t:"No, they ___.",opts:["aren't","isn't"],ans:"aren't"},{t:"___ they builders?",opts:["Are","Is"],ans:"Are"}]},
+    {id:'u7l3',type:'matching',badge:'bg',title:'Game: Jobs match! 🎮',vn:'Ghép nghề nghiệp',
+     pairs:[{em:'👩‍🏫',en:'teacher',vn:'giáo viên'},{em:'🎒',en:'pupil',vn:'học sinh'},{em:'🐾',en:'vet',vn:'bác sĩ thú y'},{em:'🍽️',en:'waiter',vn:'bồi bàn'},{em:'🏗️',en:'builder',vn:'thợ xây'},{em:'👮',en:'police',vn:'cảnh sát'}]},
+    {id:'u7l4',type:'alpha',badge:'bl',title:'Letters: Ss Tt Uu',vn:'Chữ cái Ss Tt Uu',
+     letters:[{U:'S',l:'s',w1:'sofa',w2:'sock',em:'🛋️',say:'S for sofa'},{U:'T',l:'t',w1:'turtle',w2:'towel',em:'🐢',say:'T for turtle'},{U:'U',l:'u',w1:'umbrella',w2:'up',em:'☂️',say:'U for umbrella'}]},
+    {id:'u7l5',type:'nums',badge:'bn',title:'Numbers: 15, 16',vn:'Số 15 và 16',nums:[15,16]},
+    {id:'u7l6',type:'story',badge:'bs',title:'Story: Jobs!',vn:'Câu chuyện nghề nghiệp',
+     scenes:[{em:'👩‍🏫📚',sp:'Rosy',txt:'Are they teachers?',vn:'Họ có phải giáo viên không?'},{em:'👦✅',sp:'Tim',txt:'Yes, they are!',vn:'Đúng, họ là giáo viên!'},{em:'🍽️',sp:'Tim',txt:'Are they waiters?',vn:'Họ có phải bồi bàn không?'},{em:'👧❌',sp:'Rosy',txt:"No, they aren't!",vn:'Không phải!'}]}
+  ]},
+  {id:'u8',emoji:'👕',name:"I've got a shirt!",vn:'Tôi có một cái áo!',lessons:[
+    {id:'u8l1',type:'vocab',badge:'bw',title:'Words: Clothes',vn:'Từ vựng quần áo',
+     vocab:[{en:'shirt',vn:'áo sơ mi',em:'👔',pr:'shirt'},{en:'jacket',vn:'áo khoác',em:'🧥',pr:'jacket'},{en:'jumper',vn:'áo len',em:'🧶',pr:'jumper'},{en:'hat',vn:'cái mũ',em:'🎩',pr:'hat'},{en:'belt',vn:'thắt lưng',em:'👖',pr:'belt'},{en:'sock',vn:'tất vớ',em:'🧦',pr:'sock'}]},
+    {id:'u8l2',type:'grammar',badge:'bg',title:"Grammar: I've got a...",vn:'Tôi có một cái...',
+     pat:"I've got a [clothes].",pvn:"Tôi có một cái [quần áo].",pat2:"",p2vn:"",
+     exs:[{q:"(cầm cái áo)",a:"I've got a shirt."},{q:"(đội mũ)",a:"I've got a hat."}],
+     fills:[{t:"I ___ got a jacket.",opts:["have","had"],ans:"have"},{t:"I've got a ___ .",opts:["hat","have"],ans:"hat"},{t:"I've got a ___ .",opts:["sock","socks"],ans:"sock"}]},
+    {id:'u8l3',type:'matching',badge:'bg',title:'Game: Clothes match! 🎮',vn:'Ghép quần áo',
+     pairs:[{em:'👔',en:'shirt',vn:'áo sơ mi'},{em:'🧥',en:'jacket',vn:'áo khoác'},{em:'🎩',en:'hat',vn:'cái mũ'},{em:'👖',en:'belt',vn:'thắt lưng'},{em:'🧦',en:'sock',vn:'tất vớ'},{em:'🧣',en:'scarf',vn:'khăn quàng'}]},
+    {id:'u8l4',type:'alpha',badge:'bl',title:'Letters: Vv Ww Xx',vn:'Chữ cái Vv Ww Xx',
+     letters:[{U:'V',l:'v',w1:'violin',w2:'vase',em:'🎻',say:'V for violin'},{U:'W',l:'w',w1:'woman',w2:'wall',em:'🧱',say:'W for woman'},{U:'X',l:'x',w1:'box',w2:'fox',em:'📦',say:'X for box'}]},
+    {id:'u8l5',type:'nums',badge:'bn',title:'Numbers: 17, 18',vn:'Số 17 và 18',nums:[17,18]},
+    {id:'u8l6',type:'story',badge:'bs',title:"Story: Clothes!",vn:'Câu chuyện quần áo',
+     scenes:[{em:'👔✨',sp:'Tim',txt:"I've got a shirt!",vn:'Tôi có áo sơ mi!'},{em:'🧥👧',sp:'Rosy',txt:"I've got a jacket.",vn:'Tôi có áo khoác.'},{em:'🎩👶',sp:'Billy',txt:"I've got a hat!",vn:'Em có cái mũ!'},{em:'😊',sp:'All',txt:"We've got clothes!",vn:'Chúng ta có quần áo!'}]}
+  ]},
+  {id:'u9',emoji:'🍒',name:'I like plums!',vn:'Tôi thích mận!',lessons:[
+    {id:'u9l1',type:'vocab',badge:'bw',title:'Words: Food',vn:'Từ vựng đồ ăn',
+     vocab:[{en:'plum',vn:'quả mận',em:'🍑',pr:'plum'},{en:'raisins',vn:'nho khô',em:'🍇',pr:'raisins'},{en:'crisps',vn:'khoai tây chiên',em:'🥔',pr:'crisps'},{en:'cake',vn:'bánh ngọt',em:'🎂',pr:'cake'},{en:'milkshake',vn:'sữa lắc',em:'🥤',pr:'milkshake'},{en:'apple',vn:'quả táo',em:'🍎',pr:'apple'}]},
+    {id:'u9l2',type:'grammar',badge:'bg',title:"Grammar: I like / I don't like",vn:'Thích / Không thích',
+     pat:"I like [food].",pvn:"Tôi thích [đồ ăn].",pat2:"I don't like [food].",p2vn:"Tôi không thích [đồ ăn].",
+     exs:[{q:"(thích mận)",a:"I like plums!"},{q:"(không thích nho khô)",a:"I don't like raisins."}],
+     fills:[{t:"I ___ plums.",opts:["like","likes"],ans:"like"},{t:"I don't ___ crisps.",opts:["like","likes"],ans:"like"},{t:"I like ___ .",opts:["cake","cakes"],ans:"cake"}]},
+    {id:'u9l3',type:'matching',badge:'bg',title:'Game: Food match! 🎮',vn:'Ghép đồ ăn',
+     pairs:[{em:'🍑',en:'plum',vn:'quả mận'},{em:'🍇',en:'raisins',vn:'nho khô'},{em:'🎂',en:'cake',vn:'bánh ngọt'},{em:'🥤',en:'milkshake',vn:'sữa lắc'},{em:'🍎',en:'apple',vn:'quả táo'},{em:'🥔',en:'crisps',vn:'khoai chiên'}]},
+    {id:'u9l4',type:'alpha',badge:'bl',title:'Letters: Yy Zz',vn:'Chữ cái Yy Zz',
+     letters:[{U:'Y',l:'y',w1:'yogurt',w2:'yo-yo',em:'🪀',say:'Y for yogurt'},{U:'Z',l:'z',w1:'zebra',w2:'zoo',em:'🦓',say:'Z for zebra'}]},
+    {id:'u9l5',type:'nums',badge:'bn',title:'Numbers: 19, 20',vn:'Số 19 và 20',nums:[19,20]},
+    {id:'u9l6',type:'story',badge:'bs',title:'Story: Food!',vn:'Câu chuyện đồ ăn',
+     scenes:[{em:'🍑😋',sp:'Tim',txt:'I like plums!',vn:'Tôi thích mận!'},{em:'👧🍎',sp:'Rosy',txt:'I like apples.',vn:'Tôi thích táo.'},{em:'👶❌🎂',sp:'Billy',txt:"I don't like cake!",vn:'Em không thích bánh!'},{em:'😲👩',sp:'Mum',txt:'Really?!',vn:'Thật sao?!'}]}
+  ]},
+  {id:'r3',emoji:'⭐',name:'Review 3',vn:'Ôn tập bài 7–9',lessons:[
+    {id:'r3l1',type:'review',badge:'br',title:'Review Quiz 3 ⭐',vn:'Ôn tập tổng hợp',
+     qs:[{q:"Teacher nghĩa là?",os:["học sinh","giáo viên","bác sĩ","thợ xây"],c:1},{q:"I've got a ___ (🎩)",os:["shirt","jacket","hat","belt"],c:2},{q:"I ___ like crisps.",os:["don't","doesn't","aren't","isn't"],c:0},{q:"Letter Z → từ nào?",os:["yogurt","vase","zebra","umbrella"],c:2},{q:"I like plums. Chủ đề là?",os:["Màu sắc","Đồ ăn","Cảm xúc","Quần áo"],c:1},{q:"Are they pupils? → Yes, ___ are.",os:["no","they","he","she"],c:1},{q:"Waiter là nghề gì?",os:["giáo viên","thợ xây","bồi bàn","bác sĩ"],c:2},{q:"I ___ got a sock.",os:["have","has"],ans:0,c:0}]}
+  ]},
+  {id:'hw',emoji:'✍️',name:'Handwriting A–Z',vn:'Luyện viết chữ cái',lessons:[
+    {id:'hwl1',type:'hw',badge:'bl',title:'Write A – H',vn:'Viết chữ A đến H',range:['A','B','C','D','E','F','G','H']},
+    {id:'hwl2',type:'hw',badge:'bl',title:'Write I – Q',vn:'Viết chữ I đến Q',range:['I','J','K','L','M','N','O','P','Q']},
+    {id:'hwl3',type:'hw',badge:'bl',title:'Write R – Z',vn:'Viết chữ R đến Z',range:['R','S','T','U','V','W','X','Y','Z']}
+  ]}
+];
+
+function save(){
+  try{localStorage.setItem('ffp3',JSON.stringify(prog));localStorage.setItem('ffs3',JSON.stringify(stars));}catch(e){}
+  updateHero();
+}
+function load(){
+  try{prog=JSON.parse(localStorage.getItem('ffp3')||'{}');}catch(e){prog={};}
+  try{stars=JSON.parse(localStorage.getItem('ffs3')||'{}');}catch(e){stars={};}
+}
+function updateHero(){
+  const total=UNITS.reduce((s,u)=>s+u.lessons.length,0);
+  const done=Object.keys(prog).filter(k=>prog[k]).length;
+  const pct=Math.round(done/total*100);
+  const f=D.getElementById('hfill'),l=D.getElementById('hlbl');
+  if(f) f.style.width=pct+'%';
+  if(l) l.textContent=pct===100?'Hoàn thành tất cả! 🎉':`${pct}% · ${done}/${total} bài`;
+}
+function go(id){
+  D.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  D.getElementById(id).classList.add('on');
+  if(id==='s-home'){buildHome();}
+  if(id==='s-prog'){buildProg();}
+  W.scrollTo(0,0);
+}
+function buildHome(){
+  const g=D.getElementById('ugrid');
+  if(!g) return;
+  g.innerHTML='';
+  UNITS.forEach(u=>{
+    const done=u.lessons.filter(l=>prog[l.id]).length;
+    const tot=u.lessons.length;
+    const el=D.createElement('div');
+    el.className='ucard'+(done===tot?' done':'');
+    el.innerHTML=`<span class="uem">${u.emoji}</span><div class="uname">${u.name}</div><div class="uvn">${u.vn}</div><div class="ust">${done===tot?'★★★':'☆☆☆'} ${done}/${tot}</div>`;
+    el.onclick=()=>openUnit(u);
+    g.appendChild(el);
+  });
+  updateHero();
+}
+function openUnit(u){
+  curUnit=u;
+  D.getElementById('uhdr').innerHTML=`<div class="uhem">${u.emoji}</div><div><div class="uhtitle">${u.name}</div><div class="uhsub">${u.vn}</div></div>`;
+  const ll=D.getElementById('ulist'); ll.innerHTML='';
+  const tE={vocab:'📚',grammar:'💬',alpha:'🔤',nums:'🔢',matching:'🎮',colorgame:'🎮',story:'📖',review:'⭐',hw:'✍️'};
+  u.lessons.forEach(l=>{
+    const d=prog[l.id];
+    const el=D.createElement('div'); el.className='litem';
+    el.innerHTML=`<div class="lic">${d?'✅':tE[l.type]||'📝'}</div><div style="flex:1;min-width:0;"><div class="ltit">${l.title}</div><div class="lsub">${l.vn}</div></div><span class="lbadge ${l.badge}">${{bw:'words',bg:'game',bl:'letters',bn:'numbers',bs:'story',br:'review'}[l.badge]}</span>`;
+    el.onclick=()=>openLesson(l);
+    ll.appendChild(el);
+  });
+  go('s-unit');
+}
+function openLesson(l){
+  curLesson=l;
+  D.getElementById('lback').onclick=()=>openUnit(curUnit);
+  const tE={vocab:'📚',grammar:'💬',alpha:'🔤',nums:'🔢',matching:'🎮',colorgame:'🎮',story:'📖',review:'⭐',hw:'✍️'};
+  D.getElementById('lhdr').innerHTML=`<div class="lhem">${tE[l.type]||'📝'}</div><div><div class="lhtit">${l.title}</div><div class="lhsub">${l.vn}</div></div>`;
+  const c=D.getElementById('lcontent');
+  if(l.type==='vocab') c.innerHTML=buildVocab(l);
+  else if(l.type==='grammar') c.innerHTML=buildGrammar(l);
+  else if(l.type==='alpha') c.innerHTML=buildAlpha(l);
+  else if(l.type==='nums') c.innerHTML=buildNums(l);
+  else if(l.type==='matching'){initMG(l);c.innerHTML=buildMG();}
+  else if(l.type==='colorgame'){initCG();c.innerHTML=buildCGHtml();}
+  else if(l.type==='story'){stIdx=0;c.innerHTML=buildStory(l);}
+  else if(l.type==='review') c.innerHTML=buildReview(l);
+  else if(l.type==='hw') c.innerHTML=buildHW(l);
+  else c.innerHTML='<p style="padding:1rem;color:var(--color-text-secondary);">Sắp ra mắt · Coming soon...</p>';
+  go('s-lesson');
+}
+
+/* SPEAK */
+function speak(txt,lang){
+  if(!synth) return;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang=lang||'en-US'; u.rate=0.85; u.pitch=1.1;
+  synth.speak(u);
+}
+function speakBtn(txt,btnId){
+  const el=D.getElementById(btnId);
+  if(el) el.classList.add('speaking');
+  speak(txt,'en-US');
+  setTimeout(()=>{if(el)el.classList.remove('speaking');},2000);
+}
+
+/* VOCAB */
+function buildVocab(l){
+  const cards=l.vocab.map((v,i)=>`<div class="vc" id="vc${i}" onclick="flipVC(${i},'${v.pr}')"><div class="vem">${v.em}</div><div class="ven">${v.en}</div><div class="vvn">${v.vn}</div><div class="vpr">${v.pr}</div></div>`).join('');
+  const allWords=l.vocab.map(v=>`"${v.en}"`).join(', ');
+  return `<button class="speak-btn" id="speak-all-btn" onclick="speakAllVocab(${JSON.stringify(l.vocab.map(v=>v.pr))})"><div class="speak-pulse"></div>🔊 Nghe tất cả từ · Hear all words</button><div class="hint">💡 Bấm thẻ nghe phát âm · Tap card to hear!</div><div class="vgrid">${cards}</div>${doneBtn(l.id)}`;
+}
+function flipVC(i,pr){
+  const el=D.getElementById('vc'+i);
+  el.classList.toggle('flip');
+  el.classList.add('pop');
+  setTimeout(()=>el.classList.remove('pop'),300);
+  speak(pr,'en-US');
+}
+let vocabIdx=0;
+function speakAllVocab(words){
+  const btn=D.getElementById('speak-all-btn');
+  if(btn) btn.classList.add('speaking');
+  let i=0;
+  function next(){
+    if(i>=words.length){if(btn)btn.classList.remove('speaking');return;}
+    const u=new SpeechSynthesisUtterance(words[i]);
+    u.lang='en-US';u.rate=0.8;u.pitch=1.1;
+    u.onend=()=>{i++;setTimeout(next,600);};
+    synth.speak(u);
+    i===0&&synth.cancel()&&synth.speak(u);
+    i++;
+  }
+  synth.cancel();
+  function sayNext(idx){
+    if(idx>=words.length){if(btn)btn.classList.remove('speaking');return;}
+    const u2=new SpeechSynthesisUtterance(words[idx]);
+    u2.lang='en-US';u2.rate=0.8;u2.pitch=1.1;
+    u2.onend=()=>setTimeout(()=>sayNext(idx+1),500);
+    synth.speak(u2);
+  }
+  sayNext(0);
+}
+
+/* ALPHABET */
+function buildAlpha(l){
+  window._aLen=l.letters.length;
+  const cards=l.letters.map((lt,i)=>`<div class="ac" id="ac${i}" onclick="showA(${i},'${lt.say}')"><div class="abig">${lt.U}</div><div class="asm">${lt.l}</div><div class="aword">${lt.w1}</div></div>`).join('');
+  const dets=l.letters.map((lt,i)=>`<div class="adet" id="ad${i}"><div class="adetbig">${lt.U}${lt.l}</div><div class="adetw">${lt.em} ${lt.w1} · ${lt.w2}</div><div class="adettrace">${lt.U}${lt.U} ${lt.l}${lt.l}</div><button class="speak-btn" style="margin-top:10px;" onclick="speak('${lt.say}','en-US')"><div class="speak-pulse"></div>🔊 ${lt.say}</button></div>`).join('');
+  return `<div class="agrid">${cards}</div>${dets}${doneBtn(l.id)}`;
+}
+function showA(i,say){
+  for(let j=0;j<window._aLen;j++){
+    const d=D.getElementById('ad'+j),c=D.getElementById('ac'+j);
+    if(d)d.classList.toggle('on',j===i);
+    if(c)c.classList.toggle('sel',j===i);
+  }
+  speak(say,'en-US');
+}
+
+/* NUMBERS */
+function buildNums(l){
+  const cards=l.nums.map(n=>`<div class="nc" onclick="tapNum(this,${n})"><div class="nbig">${n}</div><div class="nword">${NW[n]}</div><div class="nvn">${NVN[n]}</div><div class="ndots">${Array(Math.min(n,20)).fill('<div class="nd"></div>').join('')}</div></div>`).join('');
+  return `<div class="ngrid">${cards}</div><div class="hint">👆 Bấm để nghe đọc số · Tap to hear the number!</div>${doneBtn(l.id)}`;
+}
+function tapNum(el,n){
+  el.classList.toggle('sel');
+  el.classList.add('pop');
+  setTimeout(()=>el.classList.remove('pop'),300);
+  speak(NW[n],'en-US');
+}
+
+/* GRAMMAR */
+function buildGrammar(l){
+  const exs=l.exs.map(e=>`<div class="gex"><span>${e.q}</span> → ${e.a}</div>`).join('');
+  const fills=l.fills.map((f,i)=>`<div class="fq"><div class="fqtxt">${f.t}</div><div class="fopts">${f.opts.map(o=>`<div class="fo" onclick="chkF(this,'${o}','${f.ans}')">${o}</div>`).join('')}</div></div>`).join('');
+  const speakExs=l.exs.map(e=>e.a).join('. ');
+  return `<div class="gbox"><button class="speak-btn" onclick="speak('${l.pat}','en-US')"><div class="speak-pulse"></div>🔊 ${l.pat}</button><div class="gpat">${l.pvn}</div>${l.pat2?`<button class="speak-btn" style="margin-top:8px;" onclick="speak('${l.pat2}','en-US')"><div class="speak-pulse"></div>🔊 ${l.pat2}</button><div class="gpat2">${l.p2vn}</div>`:''}<div style="margin-top:10px;">${exs}</div></div><div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;">✏️ Điền vào chỗ trống · Fill in the blank:</div><div>${fills}</div>${doneBtn(l.id)}`;
+}
+function chkF(el,chosen,ans){
+  el.closest('.fopts').querySelectorAll('.fo').forEach(o=>o.classList.remove('ok','no'));
+  el.classList.add(chosen===ans?'ok':'no');
+  el.classList.add('pop');
+  if(chosen===ans) speak(ans,'en-US');
+}
+
+/* COLOUR GAME - multi-round */
+function initCG(){
+  cgData=[...COLORS].sort(()=>Math.random()-.5);
+  cgIdx=0; cgScore=0;
+}
+function buildCGHtml(){
+  const total=cgData.length;
+  const pct=Math.round(cgIdx/total*100);
+  if(cgIdx>=total) return buildCGResult();
+  const tgt=cgData[cgIdx];
+  const opts=[...COLORS].sort(()=>Math.random()-.5);
+  const cards=opts.map(c=>`<button class="cb" id="cb_${c.n}" style="background:${c.bg};color:${c.fg};" onclick="chkCG('${c.n}','${tgt.n}')">${c.n}</button>`).join('');
+  return `<div class="game-top"><span class="game-score">⭐ ${cgScore}/${total}</span><span class="game-progress">Câu ${cgIdx+1}/${total}</span></div><div class="game-pbar"><div class="game-pfill" style="width:${pct}%"></div></div><div class="cg-card"><div class="cg-em">${tgt.em}</div><div class="cg-q">What colour is it?</div><div class="cg-hint">Màu gì? · Bấm đáp án đúng!</div><div class="cg-opts">${cards}</div><div class="cg-fb" id="cgfb"></div></div>`;
+}
+function buildCGResult(){
+  const total=COLORS.length;
+  const pct=Math.round(cgScore/total*100);
+  const msg=pct===100?'Xuất sắc! 🏆':pct>=80?'Rất giỏi! 🌟':pct>=60?'Tốt lắm! 😊':'Cố lên nhé! 💪';
+  return `<div class="cg-card"><div class="cg-em">🎉</div><div class="cg-q">${msg}</div><div style="font-size:15px;color:var(--color-text-secondary);margin:6px 0;">${cgScore}/${total} câu đúng · correct</div><button class="next-btn" onclick="initCG();D.getElementById('lcontent').innerHTML=buildCGHtml();">🔄 Chơi lại · Play again</button></div>${doneBtn(curLesson.id)}`;
+}
+function chkCG(chosen,tgt){
+  D.querySelectorAll('.cb').forEach(b=>b.style.pointerEvents='none');
+  const fb=D.getElementById('cgfb');
+  if(chosen===tgt){
+    D.getElementById('cb_'+chosen).classList.add('ok');
+    fb.textContent='🎉 Đúng rồi! · Correct!'; fb.style.color='#085041';
+    cgScore++;
+    speak(tgt,'en-US');
+  } else {
+    D.getElementById('cb_'+chosen).classList.add('no');
+    D.getElementById('cb_'+tgt).classList.add('ok');
+    fb.textContent='❌ '+tgt+' · Thử lại sau!'; fb.style.color='#993C1D';
+    const se=D.getElementById('cb_'+chosen);
+    se.classList.add('shake');
+  }
+  cgIdx++;
+  setTimeout(()=>{ D.getElementById('lcontent').innerHTML=buildCGHtml(); },1600);
+}
+
+/* MATCHING GAME - multi-round */
+function initMG(l){
+  mgData=[...l.pairs].sort(()=>Math.random()-.5);
+  mgIdx=0; mgScore=0;
+}
+function buildMG(){
+  const total=mgData.length;
+  const pct=Math.round(mgIdx/total*100);
+  if(mgIdx>=total) return buildMGResult();
+  const cur=mgData[mgIdx];
+  const opts=[...mgData].sort(()=>Math.random()-.5).slice(0,4);
+  if(!opts.find(o=>o.en===cur.en)) opts[0]=cur;
+  opts.sort(()=>Math.random()-.5);
+  const cards=opts.map(o=>`<div class="mo" id="mo_${o.en.replace(/[^a-z]/gi,'')}" onclick="chkMG('${o.en}','${cur.en}')">${o.vn}</div>`).join('');
+  return `<div class="game-top"><span class="game-score">⭐ ${mgScore}/${total}</span><span class="game-progress">Câu ${mgIdx+1}/${total}</span></div><div class="game-pbar"><div class="game-pfill" style="width:${pct}%"></div></div><div class="match-q"><div class="match-em">${cur.em}</div><button class="speak-btn" style="margin:6px auto;width:auto;display:inline-flex;" onclick="speak('${cur.en}','en-US')"><div class="speak-pulse"></div>🔊 ${cur.en}</button><div class="match-sub">Nghĩa tiếng Việt là gì? · What does it mean?</div></div><div class="match-opts">${cards}</div>`;
+}
+function buildMGResult(){
+  const total=mgData.length;
+  const pct=Math.round(mgScore/total*100);
+  const msg=pct===100?'Hoàn hảo! 🏆':pct>=80?'Rất giỏi! 🌟':pct>=60?'Tốt lắm! 😊':'Cố lên! 💪';
+  return `<div class="cg-card"><div class="cg-em">🎉</div><div class="cg-q">${msg}</div><div style="font-size:15px;color:var(--color-text-secondary);margin:6px 0;">${mgScore}/${total} câu đúng · correct</div><button class="next-btn" onclick="initMG(curLesson);D.getElementById('lcontent').innerHTML=buildMG();">🔄 Chơi lại · Play again</button></div>${doneBtn(curLesson.id)}`;
+}
+function chkMG(chosen,correct){
+  D.querySelectorAll('.mo').forEach(m=>m.style.pointerEvents='none');
+  const safeC=correct.replace(/[^a-z]/gi,'');
+  const safeChosen=chosen.replace(/[^a-z]/gi,'');
+  D.querySelectorAll('.mo').forEach(m=>{
+    const id=m.id.replace('mo_','');
+    if(id===safeC) m.classList.add('ok');
+  });
+  if(chosen!==correct){
+    const el=D.getElementById('mo_'+safeChosen);
+    if(el){el.classList.add('no');el.classList.add('shake');}
+  } else {
+    mgScore++;
+    speak(correct,'en-US');
+  }
+  mgIdx++;
+  setTimeout(()=>{ D.getElementById('lcontent').innerHTML=buildMG(); },1400);
+}
+
+/* STORY */
+function buildStory(l){
+  const sc=l.scenes[stIdx];
+  const done=stIdx===l.scenes.length-1;
+  return `<div class="story-card"><div class="story-em">${sc.em}</div><div class="bubble"><div class="bsp">${sc.sp} nói · says:</div><button class="speak-btn" onclick="speakBtn('${sc.txt}','spbtn_story')" id="spbtn_story" style="margin-bottom:6px;"><div class="speak-pulse"></div>🔊 ${sc.txt}</button><div class="bvn">${sc.vn}</div></div></div><div class="snav"><button class="sbtn" onclick="navSt(-1)" ${stIdx===0?'disabled':''}>← Trước</button><span class="sstep">${stIdx+1} / ${l.scenes.length}</span><button class="sbtn" onclick="navSt(1)" ${done?'disabled':''}>Tiếp →</button></div>${done?doneBtn(l.id):''}`;
+}
+function navSt(d){
+  stIdx=Math.max(0,Math.min(curLesson.scenes.length-1,stIdx+d));
+  D.getElementById('lcontent').innerHTML=buildStory(curLesson);
+}
+
+/* REVIEW - multi-round với progress bar */
+function buildReview(l){
+  const qs=l.qs.map((q,i)=>`<div class="rq" id="rq${i}"><div class="rqtxt">${i+1}. ${q.q}</div><div class="ropts">${q.os.map((o,j)=>`<div class="ro" onclick="chkRev(this,${j},${q.c},'rq${i}')">${o}</div>`).join('')}</div></div>`).join('');
+  return `<div class="hint">⭐ Chọn câu trả lời đúng · Choose the correct answer! (${l.qs.length} câu)</div>${qs}${doneBtn(l.id)}`;
+}
+function chkRev(el,chosen,correct,qid){
+  const c=el.closest('.ropts');
+  if(c.querySelector('.ok')||c.querySelector('.no')) return;
+  c.querySelectorAll('.ro').forEach((o,i)=>{if(i===correct)o.classList.add('ok');});
+  if(chosen!==correct){el.classList.add('no');el.classList.add('shake');}
+  else{el.classList.add('pop');speak(el.textContent,'vi-VN');}
+}
+
+/* HANDWRITING */
+function buildHW(l){
+  const cards=l.range.map(lt=>`<div class="hw" onclick="speak('${lt}','en-US');this.classList.add('pop');setTimeout(()=>this.classList.remove('pop'),300)"><div class="hwbig">${lt}</div><div class="hwsm">${lt.toLowerCase()}</div></div>`).join('');
+  return `<div class="hint">✍️ Bấm nghe tên chữ · Tap to hear! Lấy giấy bút tập viết theo!</div><div class="hwgrid">${cards}</div>${doneBtn(l.id)}`;
+}
+
+/* DONE */
+function doneBtn(id){
+  if(prog[id]) return `<div class="donebox"><div class="doneem">🌟</div><div class="donetit">Hoàn thành! · Completed!</div><div class="donesub">Bé giỏi lắm!</div><div class="xp">+10 XP ⭐</div></div>`;
+  return `<div class="donebtn-wrap"><button class="donebtn" onclick="markDone('${id}')">✅ Hoàn thành bài học!</button></div>`;
+}
+function markDone(id){
+  prog[id]=true;stars[id]=3;save();
+  const w=D.querySelector('.donebtn-wrap');
+  if(w) w.outerHTML=`<div class="donebox pop"><div class="doneem">🎉</div><div class="donetit">Tuyệt vời! · Well done!</div><div class="donesub">Bé học rất giỏi!</div><div class="xp">+10 XP ⭐⭐⭐</div></div>`;
+}
+
+/* PROGRESS */
+function buildProg(){
+  let html='';
+  UNITS.forEach(u=>{
+    const done=u.lessons.filter(l=>prog[l.id]).length;
+    const tot=u.lessons.length;
+    const pct=Math.round(done/tot*100);
+    html+=`<div class="prow"><span style="font-size:18px;">${u.emoji}</span><span class="prname">${u.name}</span><div class="prbar"><div class="prfill" style="width:${pct}%"></div></div><span class="prpct">${pct}%</span></div>`;
+  });
+  const td=Object.keys(prog).filter(k=>prog[k]).length;
+  const ta=UNITS.reduce((s,u)=>s+u.lessons.length,0);
+  const ts=Object.values(stars).reduce((s,v)=>s+v,0);
+  D.getElementById('proglist').innerHTML=html;
+  D.getElementById('totstats').innerHTML=`⭐ ${ts} sao · ${td}/${ta} bài hoàn thành`;
+}
+
+/* GLOBAL REVIEW QUIZ */
+function launchRevQuiz(){
+  const all=UNITS.flatMap(u=>u.lessons.filter(l=>l.type==='review'));
+  const pick=all[Math.floor(Math.random()*all.length)];
+  D.getElementById('rqcontent').innerHTML=buildReview(pick)+`<div style="margin-top:12px;text-align:center;"><button onclick="launchRevQuiz()" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:12px 22px;cursor:pointer;font-size:14px;color:var(--color-text-primary);">🔄 Bộ câu hỏi mới · New quiz</button></div>`;
+  go('s-revquiz');
+}
+
+load();
+buildHome();
+</script>
