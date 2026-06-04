@@ -12,11 +12,13 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
+.section{animation:fadeUp .35s ease;}
 
 /* ── SIDEBAR ── */
 #sidebar{position:fixed;left:0;top:0;width:230px;height:100%;background:#fff;
   box-shadow:4px 0 20px rgba(0,0,0,.08);overflow-y:auto;z-index:50;
   transition:transform .3s;padding:16px 0 40px;}
+@media(min-width:769px){#sidebar{transform:none!important;}}
 #sidebar.hidden{transform:translateX(-230px);}
 .sidebar-header{padding:18px 16px 10px;font-size:18px;font-weight:800;color:#333;
   display:flex;align-items:center;gap:8px;}
@@ -32,7 +34,7 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 
 /* ── MAIN ── */
 #main{margin-left:230px;padding:20px 24px;min-height:100vh;
-  transition:margin .3s;max-width:900px;}
+  transition:margin .3s;max-width:960px;}
 #main.full{margin-left:0;}
 
 /* ── TOPBAR ── */
@@ -56,6 +58,8 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 .tab.t-speak.active{background:#1E90FF;color:white;}
 .tab.t-read.active{background:#00B894;color:white;}
 .tab.t-write.active{background:#FF8C00;color:white;}
+.tab.t-game{background:#F0E8FF;color:#8B5CF6;}
+.tab.t-game.active{background:#8B5CF6;color:white;}
 
 /* ── SECTION ── */
 .section{display:none;animation:fadeUp .4s ease;}
@@ -147,6 +151,7 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 .match-color.mok{border-color:#00B894;}
 
 /* ── WRITE ── */
+.write-sub{display:none;animation:fadeUp .3s ease;}.write-sub.active{display:block;}
 .blank-inp{border:none;border-bottom:3px solid #1E90FF;background:transparent;
   font-family:"Baloo 2",cursive;font-size:18px;font-weight:700;color:#333;
   width:120px;text-align:center;outline:none;padding:3px;}
@@ -186,8 +191,11 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 #homeScreen{animation:fadeUp .5s ease;}
 .home-hero{text-align:center;padding:30px 20px;}
 .home-hero h1{font-size:clamp(28px,6vw,52px);font-weight:800;
-  background:linear-gradient(135deg,#FF4757,#FF8C00,#FFC312);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
+  background:linear-gradient(135deg,#FF4757,#FF8C00,#FFC312,#2ED573,#1E90FF,#FF4757);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;
+  animation:gradShift 4s ease infinite;}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .home-hero p{font-size:17px;color:#777;margin-top:8px;}
 .units-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:20px 0;}
 .unit-card{border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;
@@ -224,20 +232,109 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 @keyframes micPulse{0%,100%{box-shadow:0 5px 18px rgba(255,71,87,.35)}50%{box-shadow:0 5px 28px rgba(255,71,87,.85)}}
 @keyframes confFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-@media(max-width:600px){
-  #sidebar{width:200px;}
-  #main{margin-left:0;padding:14px;}
-  #main.full{margin-left:0;}
-  .tabs{gap:5px;}
-  .tab{font-size:12px;padding:8px 14px;}
+/* === RESPONSIVE MOBILE === */
+@media(max-width:768px){
+  #sidebar{width:240px;transform:translateX(-240px);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0 !important;padding:12px 10px;}
+  .tabs{gap:4px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{font-size:12px;padding:8px 12px;white-space:nowrap;flex-shrink:0;}
+  .quiz-opts{grid-template-columns:1fr 1fr;}
+  .vocab-grid{grid-template-columns:repeat(auto-fill,minmax(85px,1fr));}
+  .card{padding:16px 12px;}
+  .units-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+  .speak-big{font-size:28px;}
+  .home-hero h1{font-size:clamp(22px,5vw,40px);}
+  .mini-game-grid{grid-template-columns:repeat(3,1fr)!important;}
+  .write-tabs{gap:4px;}
+  .write-tab{font-size:11px;padding:7px 10px;}
+  .sentence-word{font-size:13px;padding:7px 10px;}
 }
+@media(max-width:480px){
+  .quiz-opts{grid-template-columns:1fr;}
+  .mini-game-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .vocab-grid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));}
+}
+/* Landscape mobile */
+@media(max-height:480px) and (orientation:landscape){
+  #sidebar{width:200px;}
+  .home-hero{padding:16px 20px;}
+  .card{padding:12px;}
+}
+/* Sidebar overlay */
+#sidebarOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);
+  z-index:49;display:none;}
+#sidebarOverlay.show{display:block;}
+
+/* === WRITE SECTION UPGRADE === */
+.write-tabs{display:flex;gap:8px;margin:10px 0 16px;flex-wrap:wrap;}
+.write-tab{padding:9px 18px;border:none;border-radius:50px;font-family:"Baloo 2",cursive;
+  font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;background:#F0F0F0;color:#888;}
+.write-tab.active{background:linear-gradient(135deg,#FF8C00,#FFC312);color:white;
+  box-shadow:0 4px 14px rgba(255,140,0,.35);}
+
+/* Flash Card */
+.flashcard-scene{perspective:800px;width:220px;height:150px;margin:0 auto 20px;cursor:pointer;}
+.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.4,.2,.2,1);}
+.flashcard.flipped{transform:rotateY(180deg);}
+.flashcard-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:18px;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;box-shadow:0 8px 24px rgba(0,0,0,.14);}
+.flashcard-front{background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+.flashcard-back{background:linear-gradient(135deg,#11998e,#38ef7d);color:white;
+  transform:rotateY(180deg);}
+.fc-emoji{font-size:52px;}
+.fc-word{font-size:22px;font-weight:800;margin-top:6px;}
+.fc-hint{font-size:12px;opacity:.75;margin-top:2px;}
+.fc-nav{display:flex;justify-content:center;gap:12px;margin-top:8px;}
+
+/* Sentence Builder */
+.sent-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:12px;
+  background:#F8F9FA;border-radius:12px;margin-bottom:10px;}
+.sentence-word{padding:9px 14px;background:white;border:2.5px solid #1E90FF;
+  border-radius:10px;font-family:"Baloo 2",cursive;font-size:14px;font-weight:700;
+  color:#1E90FF;cursor:pointer;transition:all .25s;user-select:none;}
+.sentence-word:hover{transform:scale(1.05);background:#E5F6FF;}
+.sentence-word.used{opacity:.35;cursor:not-allowed;border-style:dashed;}
+.sent-answer{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:12px;
+  border:3px dashed #FFC312;border-radius:12px;background:#FFFBF0;align-items:center;}
+.sent-answer .sentence-word{border-color:#FFC312;color:#cc8800;background:#FFF8E1;}
+.sent-answer .sentence-word:hover{background:#FFF0B0;}
+
+/* Memory Match Game */
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0;}
+.mem-card{aspect-ratio:1;border-radius:14px;cursor:pointer;position:relative;
+  transform-style:preserve-3d;transition:transform .4s;}
+.mem-card.flip{transform:rotateY(180deg);}
+.mem-card.matched{transform:rotateY(180deg);pointer-events:none;}
+.mem-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;}
+.mem-front{background:linear-gradient(135deg,#6C5CE7,#a29bfe);}
+.mem-back{background:white;border:3px solid #e0e0e0;transform:rotateY(180deg);
+  font-size:15px;font-weight:800;color:#333;}
+.mem-back.color-bg{border:none;}
+.mem-card.matched .mem-back{border-color:#00B894;background:#E8F9EE;}
+
+/* Mini game grid */
+.mini-game-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.mgcard{border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;
+  border:3px solid transparent;transition:all .3s;background:white;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.mgcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.15);}
+.mgcard.correct{border-color:#00B894;background:#E8F9EE;animation:correctPop .4s ease;}
+.mgcard.wrong{border-color:#FF4757;background:#FFF0F0;animation:shake .4s ease;}
+@keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <nav id="sidebar">
-  <div class="sidebar-header">🌈 Family & Friends</div>
+  <div class="sidebar-header" style="background:linear-gradient(135deg,#FF4757,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:20px;">🌈 Family & Friends</div>
+  <div style="padding:4px 16px 14px;font-size:11px;color:#aaa;font-weight:600;">Starter + 9 Units · 4 kỹ năng</div>
   <button class="unit-btn" id="sb-home" onclick="showHome()">
     <span class="unit-icon">🏠</span>
     <span class="unit-label">Trang chủ</span>
@@ -314,11 +411,12 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
     </span>
   </button>
 </nav>
+<div id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <!-- MAIN -->
 <div id="main">
   <div class="topbar">
-    <button id="menuToggle" onclick="toggleSidebar()">☰</button>
+    <button id="menuToggle" onclick="toggleSidebar()" style="width:40px;height:40px;border-radius:10px;background:#f5f5f5;font-size:22px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">☰</button>
     <div class="topbar-title" id="topTitle">🌈 Chào mừng bé học tiếng Anh!</div>
     <div class="total-score" id="totalScoreDisp">⭐ 0 điểm</div>
   </div>
@@ -353,6 +451,7 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
       <button class="tab t-speak" id="tab-speak" onclick="switchTab('speak')">🗣️ Nói</button>
       <button class="tab t-read" id="tab-read" onclick="switchTab('read')">📖 Đọc</button>
       <button class="tab t-write" id="tab-write" onclick="switchTab('write')">✏️ Viết</button>
+      <button class="tab t-game" id="tab-game" onclick="switchTab('game')">🎮 Mini Game</button>
     </div>
 
     <!-- NGHE -->
@@ -427,25 +526,83 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 
     <!-- VIẾT -->
     <div class="section" id="section-write">
-      <div class="card">
-        <div class="card-title">✏️ Điền từ vào chỗ trống</div>
-        <div class="card-sub">Nhìn hình rồi gõ từ tiếng Anh vào ô trống! 📝</div>
-        <div id="fillBlanksArea"></div>
-        <div class="score-row">
-          <button class="btn-check" onclick="checkFill()">✅ Kiểm tra</button>
-          <button class="btn-reset" onclick="resetFill()">🔄 Làm lại</button>
-          <span class="feedback-txt" id="fillFb"></span>
+      <!-- Write Sub-tabs -->
+      <div class="write-tabs" id="writeTabs">
+        <button class="write-tab active" id="wtab-fill" onclick="switchWriteTab('fill')">✏️ Điền từ</button>
+        <button class="write-tab" id="wtab-flash" onclick="switchWriteTab('flash')">🃏 Flashcard</button>
+        <button class="write-tab" id="wtab-sent" onclick="switchWriteTab('sent')">🔀 Ghép câu</button>
+        <button class="write-tab" id="wtab-wb" onclick="switchWriteTab('wb')">🧩 Xếp chữ</button>
+        <button class="write-tab" id="wtab-mem" onclick="switchWriteTab('mem')">🧠 Memory</button>
+      </div>
+
+      <!-- Fill Blanks -->
+      <div class="write-sub active" id="wsub-fill">
+        <div class="card">
+          <div class="card-title">✏️ Điền từ vào chỗ trống</div>
+          <div class="card-sub">Nhìn hình rồi gõ từ tiếng Anh vào ô trống! 📝</div>
+          <div id="fillBlanksArea"></div>
+          <div class="score-row">
+            <button class="btn-check" onclick="checkFill()">✅ Kiểm tra</button>
+            <button class="btn-reset" onclick="resetFill()">🔄 Làm lại</button>
+            <span class="feedback-txt" id="fillFb"></span>
+          </div>
         </div>
       </div>
+
+      <!-- Flashcard -->
+      <div class="write-sub" id="wsub-flash">
+        <div class="card">
+          <div class="card-title">🃏 Flashcard — Lật thẻ học từ!</div>
+          <div class="card-sub">Nhấn vào thẻ để xem nghĩa & phát âm! Học hết rồi kiểm tra nhé 💪</div>
+          <div id="flashcardArea"></div>
+        </div>
+      </div>
+
+      <!-- Sentence Builder -->
+      <div class="write-sub" id="wsub-sent">
+        <div class="card">
+          <div class="card-title">🔀 Ghép câu đúng thứ tự!</div>
+          <div class="card-sub">Nhấn các từ theo đúng thứ tự để tạo câu hoàn chỉnh! 🎯</div>
+          <div id="sentBuilderArea"></div>
+        </div>
+      </div>
+
+      <!-- Word Builder -->
+      <div class="write-sub" id="wsub-wb">
+        <div class="card">
+          <div class="card-title">🧩 Xếp chữ cái thành từ</div>
+          <div class="card-sub">Nhấn hoặc kéo chữ cái để ghép từ! 🔤</div>
+          <div id="wbArea"></div>
+        </div>
+      </div>
+
+      <!-- Memory Match -->
+      <div class="write-sub" id="wsub-mem">
+        <div class="card">
+          <div class="card-title">🧠 Trò chơi trí nhớ — Memory Match!</div>
+          <div class="card-sub">Lật 2 thẻ tìm cặp từ — hình khớp nhau! Nhớ giỏi thì thắng! 🏆</div>
+          <div id="memoryArea"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GAME -->
+    <div class="section" id="section-game">
       <div class="card">
-        <div class="card-title">🧩 Xếp chữ cái thành từ</div>
-        <div class="card-sub">Nhấn hoặc kéo chữ cái để ghép từ! 🔤</div>
-        <div id="wbArea"></div>
+        <div class="card-title">🎮 Trò chơi trắc nghiệm siêu nhanh!</div>
+        <div class="card-sub">Chọn đáp án đúng thật nhanh — tích điểm càng nhiều càng tốt! ⚡</div>
+        <div id="megaGameArea"></div>
       </div>
       <div class="card">
-        <div class="card-title">🖼️ Tô màu theo hướng dẫn</div>
-        <div class="card-sub">Đọc hướng dẫn rồi chọn đúng màu! 🎨</div>
-        <div id="colourShapeArea"></div>
+        <div class="card-title">🎯 Bắn từ vào đúng nghĩa!</div>
+        <div class="card-sub">Nhìn nghĩa tiếng Việt → chọn từ tiếng Anh đúng! 🏹</div>
+        <div id="shootGameArea"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⏱️ Thử thách tốc độ — Ai nhanh nhất?</div>
+        <div class="card-sub">Trả lời đúng 5 câu liên tiếp nhanh nhất có thể! 🚀</div>
+        <div id="speedGameArea"></div>
       </div>
     </div>
 
@@ -467,7 +624,7 @@ body{font-family:"Baloo 2",cursive;background:var(--bg);overflow-x:hidden;}
 /* ============================================================
    DATA
 ============================================================ */
-const UNITS = [{"id": "starter", "title": "Starter: Hello!", "icon": "👋", "color": "#667eea", "vocab": [{"en": "hello", "vi": "Xin chào", "emoji": "👋", "phonetic": "/həˈloʊ/"}, {"en": "goodbye", "vi": "Tạm biệt", "emoji": "🤚", "phonetic": "/ɡʊdˈbaɪ/"}, {"en": "please", "vi": "Làm ơn", "emoji": "🙏", "phonetic": "/pliːz/"}, {"en": "thank you", "vi": "Cảm ơn", "emoji": "😊", "phonetic": "/θæŋk juː/"}, {"en": "yes", "vi": "Có/Vâng", "emoji": "✅", "phonetic": "/jɛs/"}, {"en": "no", "vi": "Không", "emoji": "❌", "phonetic": "/noʊ/"}], "grammar": "What's your name? I'm Rosy.", "story": "Hello! I'm Rosy. Hello! I'm Tim. Hello! I'm Billy. Goodbye, Rosy! Goodbye, Tim!", "value": "Be polite 🤝", "listen_qs": [{"q": "👋 Chào hỏi tiếng Anh là gì?", "correct": "hello", "opts": ["hello", "goodbye", "yes", "no"]}, {"q": "🤚 Tạm biệt tiếng Anh là gì?", "correct": "goodbye", "opts": ["hello", "goodbye", "please", "thank you"]}, {"q": "🙏 Làm ơn tiếng Anh là gì?", "correct": "please", "opts": ["yes", "no", "please", "goodbye"]}, {"q": "✅ Có / Vâng tiếng Anh là gì?", "correct": "yes", "opts": ["yes", "no", "hello", "please"]}], "fill_blanks": [{"pre": "👋", "suf": "_____ ! (Xin chào)", "ans": "hello"}, {"pre": "🤚", "suf": "_____ ! (Tạm biệt)", "ans": "goodbye"}, {"pre": "🙏", "suf": "_____ ! (Làm ơn)", "ans": "please"}, {"pre": "✅", "suf": "_____ ! (Vâng)", "ans": "yes"}], "wb_words": ["hello", "yes", "no", "please"], "read_qs": [{"q": "Rosy says: '_____ ! I'm Rosy.'", "correct": "Hello", "opts": ["Hello", "Goodbye", "Please", "Yes"]}, {"q": "At the end: 'Goodbye, Tim! _____!'", "correct": "Goodbye", "opts": ["Hello", "Goodbye", "Please", "Thank you"]}], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}]}, {"id": "unit1", "title": "Unit 1: What colour is it?", "icon": "🎨", "color": "#FF4757", "vocab": [{"en": "red", "vi": "Đỏ", "emoji": "🔴", "phonetic": "/rɛd/"}, {"en": "green", "vi": "Xanh lá", "emoji": "🟢", "phonetic": "/ɡriːn/"}, {"en": "blue", "vi": "Xanh dương", "emoji": "🔵", "phonetic": "/bluː/"}, {"en": "black", "vi": "Đen", "emoji": "⚫", "phonetic": "/blæk/"}, {"en": "white", "vi": "Trắng", "emoji": "⚪", "phonetic": "/waɪt/"}, {"en": "yellow", "vi": "Vàng", "emoji": "🟡", "phonetic": "/ˈjɛloʊ/"}, {"en": "pink", "vi": "Hồng", "emoji": "🩷", "phonetic": "/pɪŋk/"}, {"en": "orange", "vi": "Cam", "emoji": "🟠", "phonetic": "/ˈɒrɪndʒ/"}], "grammar": "What colour is it? It's green.", "story": "Look at the toys! This ball is red. This crayon is blue. This pencil is green. The hat is yellow. What colour is it? It's red!", "value": "Be polite 🤝", "listen_qs": [{"q": "🔴 What colour?", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "🔵 What colour?", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "🟢 What colour?", "correct": "green", "opts": ["green", "white", "red", "pink"]}, {"q": "🟡 What colour?", "correct": "yellow", "opts": ["orange", "yellow", "blue", "black"]}, {"q": "🩷 What colour?", "correct": "pink", "opts": ["pink", "red", "white", "orange"]}, {"q": "🟠 What colour?", "correct": "orange", "opts": ["yellow", "green", "orange", "white"]}], "fill_blanks": [{"pre": "🔴", "suf": "This is _____ .", "ans": "red"}, {"pre": "🟢", "suf": "This is _____ .", "ans": "green"}, {"pre": "🔵", "suf": "This is _____ .", "ans": "blue"}, {"pre": "🟡", "suf": "This is _____ .", "ans": "yellow"}, {"pre": "🩷", "suf": "This is _____ .", "ans": "pink"}, {"pre": "🟠", "suf": "This is _____ .", "ans": "orange"}], "wb_words": ["red", "green", "blue", "yellow", "pink", "orange"], "read_qs": [{"q": "What colour is the ball? 🔴", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "What colour is the crayon? 🔵", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "What colour is the hat? 🟡", "correct": "yellow", "opts": ["green", "white", "yellow", "pink"]}], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}, {"shape": "💛", "correct": "yellow", "label": "hình thoi"}, {"shape": "🩷", "correct": "pink", "label": "trái tim"}]}, {"id": "unit2", "title": "Unit 2: What's this?", "icon": "🎒", "color": "#00B894", "vocab": [{"en": "desk", "vi": "Bàn học", "emoji": "🪑", "phonetic": "/dɛsk/"}, {"en": "chair", "vi": "Ghế", "emoji": "🪑", "phonetic": "/tʃɛr/"}, {"en": "crayon", "vi": "Bút màu", "emoji": "🖍️", "phonetic": "/ˈkreɪɒn/"}, {"en": "pencil", "vi": "Bút chì", "emoji": "✏️", "phonetic": "/ˈpɛnsəl/"}, {"en": "notebook", "vi": "Vở", "emoji": "📓", "phonetic": "/ˈnoʊtbʊk/"}, {"en": "bag", "vi": "Túi xách", "emoji": "🎒", "phonetic": "/bæɡ/"}], "grammar": "What's this? It's a notebook.", "story": "What's this? It's a notebook! What's this? It's a pencil! What's this? It's a bag! It's a train!", "value": "Be kind 💛", "listen_qs": [{"q": "📓 What's this?", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "✏️ What's this?", "correct": "pencil", "opts": ["crayon", "pencil", "chair", "notebook"]}, {"q": "🎒 What's this?", "correct": "bag", "opts": ["bag", "desk", "chair", "pencil"]}, {"q": "🖍️ What's this?", "correct": "crayon", "opts": ["pencil", "crayon", "notebook", "bag"]}], "fill_blanks": [{"pre": "📓", "suf": "It's a _____ .", "ans": "notebook"}, {"pre": "✏️", "suf": "It's a _____ .", "ans": "pencil"}, {"pre": "🎒", "suf": "It's a _____ .", "ans": "bag"}, {"pre": "🖍️", "suf": "It's a _____ .", "ans": "crayon"}, {"pre": "🪑", "suf": "It's a _____ .", "ans": "chair"}], "wb_words": ["desk", "chair", "pencil", "bag", "notebook", "crayon"], "read_qs": [{"q": "What's this? 📓", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "What's this? 🎒", "correct": "bag", "opts": ["bag", "desk", "chair", "crayon"]}, {"q": "What's this? ✏️", "correct": "pencil", "opts": ["pencil", "crayon", "desk", "notebook"]}], "colour_shapes": [{"shape": "📓", "correct": "blue", "label": "cuốn vở"}, {"shape": "✏️", "correct": "yellow", "label": "bút chì"}, {"shape": "🎒", "correct": "red", "label": "cái túi"}]}, {"id": "unit3", "title": "Unit 3: Is it a plane?", "icon": "✈️", "color": "#6C5CE7", "vocab": [{"en": "plane", "vi": "Máy bay", "emoji": "✈️", "phonetic": "/pleɪn/"}, {"en": "puppet", "vi": "Con rối", "emoji": "🪆", "phonetic": "/ˈpʌpɪt/"}, {"en": "robot", "vi": "Robot", "emoji": "🤖", "phonetic": "/ˈroʊbɒt/"}, {"en": "balloon", "vi": "Bóng bay", "emoji": "🎈", "phonetic": "/bəˈluːn/"}, {"en": "teddy", "vi": "Gấu bông", "emoji": "🧸", "phonetic": "/ˈtɛdi/"}, {"en": "car", "vi": "Ô tô", "emoji": "🚗", "phonetic": "/kɑːr/"}], "grammar": "Is it a plane? Yes, it is. / No, it isn't.", "story": "Is it a plane? Yes, it is! Is it a robot? No, it isn't. It's a teddy! Is it a robot? Yes!", "value": "Be polite 🤝", "listen_qs": [{"q": "✈️ What is it?", "correct": "plane", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🤖 What is it?", "correct": "robot", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🎈 What is it?", "correct": "balloon", "opts": ["balloon", "teddy", "car", "plane"]}, {"q": "🧸 What is it?", "correct": "teddy", "opts": ["robot", "puppet", "teddy", "plane"]}], "fill_blanks": [{"pre": "✈️", "suf": "It's a _____ .", "ans": "plane"}, {"pre": "🤖", "suf": "It's a _____ .", "ans": "robot"}, {"pre": "🎈", "suf": "It's a _____ .", "ans": "balloon"}, {"pre": "🧸", "suf": "It's a _____ .", "ans": "teddy"}, {"pre": "🚗", "suf": "It's a _____ .", "ans": "car"}], "wb_words": ["plane", "robot", "balloon", "teddy", "car", "puppet"], "read_qs": [{"q": "Is it a plane? ✈️", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a robot", "It's a balloon"]}, {"q": "Is it a robot? 🧸", "correct": "No, it isn't", "opts": ["Yes, it is", "No, it isn't", "It's a plane", "It's a car"]}, {"q": "Is it a balloon? 🎈", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a teddy", "It's a car"]}], "colour_shapes": [{"shape": "✈️", "correct": "blue", "label": "máy bay"}, {"shape": "🤖", "correct": "red", "label": "robot"}, {"shape": "🎈", "correct": "yellow", "label": "bóng bay"}]}, {"id": "unit4", "title": "Unit 4: This is my mum!", "icon": "👨‍👩‍👧", "color": "#FF8C00", "vocab": [{"en": "mum", "vi": "Mẹ", "emoji": "👩", "phonetic": "/mʌm/"}, {"en": "dad", "vi": "Bố", "emoji": "👨", "phonetic": "/dæd/"}, {"en": "brother", "vi": "Anh/Em trai", "emoji": "👦", "phonetic": "/ˈbrʌðər/"}, {"en": "sister", "vi": "Chị/Em gái", "emoji": "👧", "phonetic": "/ˈsɪstər/"}, {"en": "grandpa", "vi": "Ông", "emoji": "👴", "phonetic": "/ˈɡrænpɑː/"}, {"en": "grandma", "vi": "Bà", "emoji": "👵", "phonetic": "/ˈɡrænmɑː/"}], "grammar": "This is my mum.", "story": "This is my grandpa. This is my mum. This is my brother. Hello, brother! This is my grandma.", "value": "Love your family ❤️", "listen_qs": [{"q": "👩 Who is this?", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "👨 Who is this?", "correct": "dad", "opts": ["mum", "dad", "brother", "grandpa"]}, {"q": "👧 Who is this?", "correct": "sister", "opts": ["mum", "sister", "grandma", "brother"]}, {"q": "👴 Who is this?", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}], "fill_blanks": [{"pre": "👩", "suf": "This is my _____ .", "ans": "mum"}, {"pre": "👨", "suf": "This is my _____ .", "ans": "dad"}, {"pre": "👧", "suf": "This is my _____ .", "ans": "sister"}, {"pre": "👦", "suf": "This is my _____ .", "ans": "brother"}, {"pre": "👴", "suf": "This is my _____ .", "ans": "grandpa"}, {"pre": "👵", "suf": "This is my _____ .", "ans": "grandma"}], "wb_words": ["mum", "dad", "sister", "brother", "grandpa", "grandma"], "read_qs": [{"q": "Who is this? 👩", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "Who is this? 👴", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}, {"q": "Who is this? 👦", "correct": "brother", "opts": ["sister", "brother", "dad", "grandpa"]}], "colour_shapes": [{"shape": "👩", "correct": "red", "label": "mẹ mặc áo đỏ"}, {"shape": "👨", "correct": "blue", "label": "bố mặc áo xanh"}]}, {"id": "unit5", "title": "Unit 5: He's happy!", "icon": "😊", "color": "#FFC312", "vocab": [{"en": "happy", "vi": "Vui vẻ", "emoji": "😊", "phonetic": "/ˈhæpi/"}, {"en": "sad", "vi": "Buồn", "emoji": "😢", "phonetic": "/sæd/"}, {"en": "hungry", "vi": "Đói", "emoji": "😋", "phonetic": "/ˈhʌŋɡri/"}, {"en": "thirsty", "vi": "Khát nước", "emoji": "😰", "phonetic": "/ˈθɜːrsti/"}, {"en": "hot", "vi": "Nóng", "emoji": "🥵", "phonetic": "/hɒt/"}, {"en": "cold", "vi": "Lạnh", "emoji": "🥶", "phonetic": "/koʊld/"}], "grammar": "He's happy. She's cold.", "story": "She's happy! He's sad. She's hungry. He's thirsty. She's cold! He's hot. Are you happy? Yes, I am!", "value": "Share with friends 🤝", "listen_qs": [{"q": "😊 How is he/she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "😢 How is he/she?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "😋 How is he/she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}, {"q": "🥶 How is he/she?", "correct": "cold", "opts": ["hot", "cold", "sad", "hungry"]}], "fill_blanks": [{"pre": "😊", "suf": "She's _____ .", "ans": "happy"}, {"pre": "😢", "suf": "He's _____ .", "ans": "sad"}, {"pre": "😋", "suf": "She's _____ .", "ans": "hungry"}, {"pre": "🥶", "suf": "He's _____ .", "ans": "cold"}, {"pre": "🥵", "suf": "She's _____ .", "ans": "hot"}], "wb_words": ["happy", "sad", "hungry", "cold", "thirsty", "hot"], "read_qs": [{"q": "She's 😊. How is she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "He's 😢. How is he?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "She's 😋. How is she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}], "colour_shapes": [{"shape": "😊", "correct": "yellow", "label": "mặt vui"}, {"shape": "😢", "correct": "blue", "label": "mặt buồn"}]}, {"id": "unit6", "title": "Unit 6: They're bears!", "icon": "🐻", "color": "#2ED573", "vocab": [{"en": "bird", "vi": "Chim", "emoji": "🐦", "phonetic": "/bɜːrd/"}, {"en": "bear", "vi": "Gấu", "emoji": "🐻", "phonetic": "/bɛr/"}, {"en": "hippo", "vi": "Hà mã", "emoji": "🦛", "phonetic": "/ˈhɪpoʊ/"}, {"en": "crocodile", "vi": "Cá sấu", "emoji": "🐊", "phonetic": "/ˈkrɒkədaɪl/"}, {"en": "tiger", "vi": "Hổ", "emoji": "🐯", "phonetic": "/ˈtaɪɡər/"}, {"en": "lion", "vi": "Sư tử", "emoji": "🦁", "phonetic": "/ˈlaɪən/"}], "grammar": "What are they? They're bears.", "story": "Look! They're crocodiles! They're birds! They're tigers! What are they? They're bears! Roar!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🐻🐻 What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "🐦🐦 What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "🦛🦛 What are they?", "correct": "hippos", "opts": ["bears", "tigers", "hippos", "lions"]}, {"q": "🐯🐯 What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "fill_blanks": [{"pre": "🐻🐻", "suf": "They're _____ .", "ans": "bears"}, {"pre": "🐦🐦", "suf": "They're _____ .", "ans": "birds"}, {"pre": "🦛🦛", "suf": "They're _____ .", "ans": "hippos"}, {"pre": "🐯🐯", "suf": "They're _____ .", "ans": "tigers"}, {"pre": "🦁🦁", "suf": "They're _____ .", "ans": "lions"}], "wb_words": ["bird", "bear", "hippo", "tiger", "lion", "crocodile"], "read_qs": [{"q": "They're 🐻🐻. What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "They're 🐦🐦. What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "They're 🐯🐯. What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "colour_shapes": [{"shape": "🐻", "correct": "orange", "label": "con gấu"}, {"shape": "🐦", "correct": "red", "label": "con chim"}, {"shape": "🐊", "correct": "green", "label": "cá sấu"}]}, {"id": "unit7", "title": "Unit 7: Are they teachers?", "icon": "👩‍🏫", "color": "#E84393", "vocab": [{"en": "teacher", "vi": "Giáo viên", "emoji": "👩‍🏫", "phonetic": "/ˈtiːtʃər/"}, {"en": "pupil", "vi": "Học sinh", "emoji": "🧑‍🎓", "phonetic": "/ˈpjuːpəl/"}, {"en": "waiter", "vi": "Người phục vụ", "emoji": "🧑‍🍳", "phonetic": "/ˈweɪtər/"}, {"en": "vet", "vi": "Bác sĩ thú y", "emoji": "👨‍⚕️", "phonetic": "/vɛt/"}, {"en": "builder", "vi": "Thợ xây", "emoji": "👷", "phonetic": "/ˈbɪldər/"}, {"en": "doctor", "vi": "Bác sĩ", "emoji": "🩺", "phonetic": "/ˈdɒktər/"}], "grammar": "Are they teachers? Yes, they are. / No, they aren't.", "story": "What are they? They're builders! Are they teachers? No, they aren't! They're pupils! Hello, pupils!", "value": "Help each other 🤝", "listen_qs": [{"q": "👩‍🏫 What is she?", "correct": "teacher", "opts": ["teacher", "pupil", "waiter", "vet"]}, {"q": "👷 What is he?", "correct": "builder", "opts": ["builder", "doctor", "teacher", "waiter"]}, {"q": "🧑‍🎓 What are they?", "correct": "pupils", "opts": ["pupils", "teachers", "vets", "waiters"]}, {"q": "🩺 What is he?", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "fill_blanks": [{"pre": "👩‍🏫", "suf": "She's a _____ .", "ans": "teacher"}, {"pre": "👷", "suf": "He's a _____ .", "ans": "builder"}, {"pre": "🧑‍🎓", "suf": "He's a _____ .", "ans": "pupil"}, {"pre": "🩺", "suf": "He's a _____ .", "ans": "doctor"}, {"pre": "👨‍⚕️", "suf": "She's a _____ .", "ans": "vet"}], "wb_words": ["teacher", "pupil", "waiter", "builder", "doctor", "vet"], "read_qs": [{"q": "Are they teachers? 👩‍🏫👩‍🏫", "correct": "Yes, they are", "opts": ["Yes, they are", "No, they aren't", "They're pupils", "They're builders"]}, {"q": "Are they builders? 🧑‍🎓🧑‍🎓", "correct": "No, they aren't", "opts": ["Yes, they are", "No, they aren't", "They're teachers", "They're doctors"]}, {"q": "What is she? 🩺", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "colour_shapes": [{"shape": "👩‍🏫", "correct": "red", "label": "cô giáo"}, {"shape": "👷", "correct": "yellow", "label": "thợ xây"}]}, {"id": "unit8", "title": "Unit 8: I've got a shirt!", "icon": "👕", "color": "#1E90FF", "vocab": [{"en": "jumper", "vi": "Áo len", "emoji": "🧥", "phonetic": "/ˈdʒʌmpər/"}, {"en": "shirt", "vi": "Áo sơ mi", "emoji": "👔", "phonetic": "/ʃɜːrt/"}, {"en": "jacket", "vi": "Áo khoác", "emoji": "🥼", "phonetic": "/ˈdʒækɪt/"}, {"en": "hat", "vi": "Mũ", "emoji": "🎩", "phonetic": "/hæt/"}, {"en": "belt", "vi": "Thắt lưng", "emoji": "🪢", "phonetic": "/bɛlt/"}, {"en": "socks", "vi": "Tất/Vớ", "emoji": "🧦", "phonetic": "/sɒks/"}], "grammar": "I've got a shirt.", "story": "I've got a jumper! I've got a jacket! I've got a hat! Look, I've got a hat too! Thanks, Grandma!", "value": "Share with others 🎁", "listen_qs": [{"q": "👔 What have you got?", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "🎩 What have you got?", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "🧦 What have you got?", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}, {"q": "🥼 What have you got?", "correct": "jacket", "opts": ["jacket", "shirt", "belt", "socks"]}], "fill_blanks": [{"pre": "👔", "suf": "I've got a _____ .", "ans": "shirt"}, {"pre": "🎩", "suf": "I've got a _____ .", "ans": "hat"}, {"pre": "🧦", "suf": "I've got _____ .", "ans": "socks"}, {"pre": "🥼", "suf": "I've got a _____ .", "ans": "jacket"}, {"pre": "🧥", "suf": "I've got a _____ .", "ans": "jumper"}], "wb_words": ["shirt", "jumper", "jacket", "hat", "belt", "socks"], "read_qs": [{"q": "What have you got? 👔", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "What have you got? 🎩", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "I've got _____ . 🧦", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}], "colour_shapes": [{"shape": "👔", "correct": "blue", "label": "áo sơ mi"}, {"shape": "🎩", "correct": "black", "label": "cái mũ"}, {"shape": "🧦", "correct": "red", "label": "đôi vớ"}]}, {"id": "unit9", "title": "Unit 9: I like plums!", "icon": "🍑", "color": "#8B5CF6", "vocab": [{"en": "raisins", "vi": "Nho khô", "emoji": "🍇", "phonetic": "/ˈreɪzənz/"}, {"en": "plums", "vi": "Mận", "emoji": "🍑", "phonetic": "/plʌmz/"}, {"en": "crisps", "vi": "Bánh giòn", "emoji": "🥨", "phonetic": "/krɪsps/"}, {"en": "cakes", "vi": "Bánh ngọt", "emoji": "🎂", "phonetic": "/keɪks/"}, {"en": "milk", "vi": "Sữa", "emoji": "🥛", "phonetic": "/mɪlk/"}, {"en": "bananas", "vi": "Chuối", "emoji": "🍌", "phonetic": "/bəˈnɑːnəz/"}], "grammar": "I like plums. I don't like raisins.", "story": "I like raisins! I don't like raisins. I like plums! I don't like plums. I like cakes! Share the cakes!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🍑 What do you like?", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "🎂 What do you like?", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}, {"q": "🥛 What do you like?", "correct": "milk", "opts": ["milk", "bananas", "raisins", "crisps"]}, {"q": "🍌 What do you like?", "correct": "bananas", "opts": ["plums", "cakes", "bananas", "milk"]}], "fill_blanks": [{"pre": "🍑", "suf": "I like _____ .", "ans": "plums"}, {"pre": "🎂", "suf": "I like _____ .", "ans": "cakes"}, {"pre": "🥛", "suf": "I like _____ .", "ans": "milk"}, {"pre": "🍌", "suf": "I don't like _____ .", "ans": "bananas"}, {"pre": "🍇", "suf": "I don't like _____ .", "ans": "raisins"}], "wb_words": ["plums", "cakes", "milk", "raisins", "crisps", "bananas"], "read_qs": [{"q": "Tim says: 'I like _____!' 🍑", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "Rosy says: 'I don't like _____!' 🍇", "correct": "raisins", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "They both like: 🎂", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}], "colour_shapes": [{"shape": "🍑", "correct": "pink", "label": "quả mận"}, {"shape": "🍌", "correct": "yellow", "label": "quả chuối"}, {"shape": "🎂", "correct": "orange", "label": "cái bánh"}]}];
+const UNITS = [{"id": "starter", "title": "Starter: Hello!", "icon": "👋", "color": "#667eea", "vocab": [{"en": "hello", "vi": "Xin chào", "emoji": "👋", "phonetic": "/həˈloʊ/"}, {"en": "goodbye", "vi": "Tạm biệt", "emoji": "🤚", "phonetic": "/ɡʊdˈbaɪ/"}, {"en": "please", "vi": "Làm ơn", "emoji": "🙏", "phonetic": "/pliːz/"}, {"en": "thank you", "vi": "Cảm ơn", "emoji": "😊", "phonetic": "/θæŋk juː/"}, {"en": "yes", "vi": "Có/Vâng", "emoji": "✅", "phonetic": "/jɛs/"}, {"en": "no", "vi": "Không", "emoji": "❌", "phonetic": "/noʊ/"}], "grammar": "What's your name? I'm Rosy.", "story": "Hello! I'm Rosy. Hello! I'm Tim. Hello! I'm Billy. Goodbye, Rosy! Goodbye, Tim!", "value": "Be polite 🤝", "listen_qs": [{"q": "👋 Chào hỏi tiếng Anh là gì?", "correct": "hello", "opts": ["hello", "goodbye", "yes", "no"]}, {"q": "🤚 Tạm biệt tiếng Anh là gì?", "correct": "goodbye", "opts": ["hello", "goodbye", "please", "thank you"]}, {"q": "🙏 Làm ơn tiếng Anh là gì?", "correct": "please", "opts": ["yes", "no", "please", "goodbye"]}, {"q": "✅ Có / Vâng tiếng Anh là gì?", "correct": "yes", "opts": ["yes", "no", "hello", "please"]}], "fill_blanks": [{"pre": "👋", "suf": "_____ ! (Xin chào)", "ans": "hello"}, {"pre": "🤚", "suf": "_____ ! (Tạm biệt)", "ans": "goodbye"}, {"pre": "🙏", "suf": "_____ ! (Làm ơn)", "ans": "please"}, {"pre": "✅", "suf": "_____ ! (Vâng)", "ans": "yes"}], "wb_words": ["hello", "yes", "no", "please"], "read_qs": [{"q": "Rosy says: '_____ ! I'm Rosy.'", "correct": "Hello", "opts": ["Hello", "Goodbye", "Please", "Yes"]}, {"q": "At the end: 'Goodbye, Tim! _____!'", "correct": "Goodbye", "opts": ["Hello", "Goodbye", "Please", "Thank you"]}], "sentences": [["What", "colour", "is", "it", "?"], ["It's", "red", "!"], ["This", "ball", "is", "blue", "."], ["The", "hat", "is", "yellow", "."]], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}], "sentences": [["Hello", "!", "I'm", "Rosy"], ["Goodbye", ",", "Tim", "!"], ["Yes", ",", "please", "!"], ["Thank", "you", "very", "much"]]}, {"id": "unit1", "title": "Unit 1: What colour is it?", "icon": "🎨", "color": "#FF4757", "vocab": [{"en": "red", "vi": "Đỏ", "emoji": "🔴", "phonetic": "/rɛd/"}, {"en": "green", "vi": "Xanh lá", "emoji": "🟢", "phonetic": "/ɡriːn/"}, {"en": "blue", "vi": "Xanh dương", "emoji": "🔵", "phonetic": "/bluː/"}, {"en": "black", "vi": "Đen", "emoji": "⚫", "phonetic": "/blæk/"}, {"en": "white", "vi": "Trắng", "emoji": "⚪", "phonetic": "/waɪt/"}, {"en": "yellow", "vi": "Vàng", "emoji": "🟡", "phonetic": "/ˈjɛloʊ/"}, {"en": "pink", "vi": "Hồng", "emoji": "🩷", "phonetic": "/pɪŋk/"}, {"en": "orange", "vi": "Cam", "emoji": "🟠", "phonetic": "/ˈɒrɪndʒ/"}], "grammar": "What colour is it? It's green.", "story": "Look at the toys! This ball is red. This crayon is blue. This pencil is green. The hat is yellow. What colour is it? It's red!", "value": "Be polite 🤝", "listen_qs": [{"q": "🔴 What colour?", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "🔵 What colour?", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "🟢 What colour?", "correct": "green", "opts": ["green", "white", "red", "pink"]}, {"q": "🟡 What colour?", "correct": "yellow", "opts": ["orange", "yellow", "blue", "black"]}, {"q": "🩷 What colour?", "correct": "pink", "opts": ["pink", "red", "white", "orange"]}, {"q": "🟠 What colour?", "correct": "orange", "opts": ["yellow", "green", "orange", "white"]}], "fill_blanks": [{"pre": "🔴", "suf": "This is _____ .", "ans": "red"}, {"pre": "🟢", "suf": "This is _____ .", "ans": "green"}, {"pre": "🔵", "suf": "This is _____ .", "ans": "blue"}, {"pre": "🟡", "suf": "This is _____ .", "ans": "yellow"}, {"pre": "🩷", "suf": "This is _____ .", "ans": "pink"}, {"pre": "🟠", "suf": "This is _____ .", "ans": "orange"}], "wb_words": ["red", "green", "blue", "yellow", "pink", "orange"], "read_qs": [{"q": "What colour is the ball? 🔴", "correct": "red", "opts": ["red", "blue", "green", "yellow"]}, {"q": "What colour is the crayon? 🔵", "correct": "blue", "opts": ["pink", "blue", "black", "orange"]}, {"q": "What colour is the hat? 🟡", "correct": "yellow", "opts": ["green", "white", "yellow", "pink"]}, {"q": "What colour is the pencil? 🟢", "correct": "green", "opts": ["red", "blue", "green", "orange"]}, {"q": "What colour is ⚪ white?", "correct": "white", "opts": ["black", "white", "pink", "yellow"]}, {"q": "What colour is ⚫ black?", "correct": "black", "opts": ["black", "blue", "red", "green"]}, {"q": "🩷 Colour: hồng = ?", "correct": "pink", "opts": ["pink", "red", "white", "orange"]}, {"q": "🟠 Colour: cam = ?", "correct": "orange", "opts": ["yellow", "green", "orange", "white"]}], "sentences": [["What", "colour", "is", "it", "?"], ["It's", "red", "!"], ["This", "ball", "is", "blue", "."], ["The", "hat", "is", "yellow", "."]], "colour_shapes": [{"shape": "⭕", "correct": "red", "label": "vòng tròn"}, {"shape": "⬛", "correct": "blue", "label": "hình vuông"}, {"shape": "🔺", "correct": "green", "label": "tam giác"}, {"shape": "💛", "correct": "yellow", "label": "hình thoi"}, {"shape": "🩷", "correct": "pink", "label": "trái tim"}]}, {"id": "unit2", "title": "Unit 2: What's this?", "icon": "🎒", "color": "#00B894", "vocab": [{"en": "desk", "vi": "Bàn học", "emoji": "🪑", "phonetic": "/dɛsk/"}, {"en": "chair", "vi": "Ghế", "emoji": "🪑", "phonetic": "/tʃɛr/"}, {"en": "crayon", "vi": "Bút màu", "emoji": "🖍️", "phonetic": "/ˈkreɪɒn/"}, {"en": "pencil", "vi": "Bút chì", "emoji": "✏️", "phonetic": "/ˈpɛnsəl/"}, {"en": "notebook", "vi": "Vở", "emoji": "📓", "phonetic": "/ˈnoʊtbʊk/"}, {"en": "bag", "vi": "Túi xách", "emoji": "🎒", "phonetic": "/bæɡ/"}], "grammar": "What's this? It's a notebook.", "story": "What's this? It's a notebook! What's this? It's a pencil! What's this? It's a bag! It's a train!", "value": "Be kind 💛", "listen_qs": [{"q": "📓 What's this?", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "✏️ What's this?", "correct": "pencil", "opts": ["crayon", "pencil", "chair", "notebook"]}, {"q": "🎒 What's this?", "correct": "bag", "opts": ["bag", "desk", "chair", "pencil"]}, {"q": "🖍️ What's this?", "correct": "crayon", "opts": ["pencil", "crayon", "notebook", "bag"]}], "fill_blanks": [{"pre": "📓", "suf": "It's a _____ .", "ans": "notebook"}, {"pre": "✏️", "suf": "It's a _____ .", "ans": "pencil"}, {"pre": "🎒", "suf": "It's a _____ .", "ans": "bag"}, {"pre": "🖍️", "suf": "It's a _____ .", "ans": "crayon"}, {"pre": "🪑", "suf": "It's a _____ .", "ans": "chair"}], "wb_words": ["desk", "chair", "pencil", "bag", "notebook", "crayon"], "read_qs": [{"q": "What's this? 📓", "correct": "notebook", "opts": ["notebook", "pencil", "bag", "desk"]}, {"q": "What's this? 🎒", "correct": "bag", "opts": ["bag", "desk", "chair", "crayon"]}, {"q": "What's this? ✏️", "correct": "pencil", "opts": ["pencil", "crayon", "desk", "notebook"]}, {"q": "What's this? 🖍️", "correct": "crayon", "opts": ["pencil", "crayon", "notebook", "bag"]}, {"q": "What's this? 🪑", "correct": "chair", "opts": ["desk", "chair", "bag", "pencil"]}, {"q": "What's this? bàn học?", "correct": "desk", "opts": ["desk", "chair", "crayon", "notebook"]}], "sentences": [["What's", "this", "?"], ["It's", "a", "notebook", "!"], ["It's", "a", "pencil", "!"], ["I", "have", "a", "bag", "."]], "colour_shapes": [{"shape": "📓", "correct": "blue", "label": "cuốn vở"}, {"shape": "✏️", "correct": "yellow", "label": "bút chì"}, {"shape": "🎒", "correct": "red", "label": "cái túi"}]}, {"id": "unit3", "title": "Unit 3: Is it a plane?", "icon": "✈️", "color": "#6C5CE7", "vocab": [{"en": "plane", "vi": "Máy bay", "emoji": "✈️", "phonetic": "/pleɪn/"}, {"en": "puppet", "vi": "Con rối", "emoji": "🪆", "phonetic": "/ˈpʌpɪt/"}, {"en": "robot", "vi": "Robot", "emoji": "🤖", "phonetic": "/ˈroʊbɒt/"}, {"en": "balloon", "vi": "Bóng bay", "emoji": "🎈", "phonetic": "/bəˈluːn/"}, {"en": "teddy", "vi": "Gấu bông", "emoji": "🧸", "phonetic": "/ˈtɛdi/"}, {"en": "car", "vi": "Ô tô", "emoji": "🚗", "phonetic": "/kɑːr/"}], "grammar": "Is it a plane? Yes, it is. / No, it isn't.", "story": "Is it a plane? Yes, it is! Is it a robot? No, it isn't. It's a teddy! Is it a robot? Yes!", "value": "Be polite 🤝", "listen_qs": [{"q": "✈️ What is it?", "correct": "plane", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🤖 What is it?", "correct": "robot", "opts": ["plane", "puppet", "robot", "balloon"]}, {"q": "🎈 What is it?", "correct": "balloon", "opts": ["balloon", "teddy", "car", "plane"]}, {"q": "🧸 What is it?", "correct": "teddy", "opts": ["robot", "puppet", "teddy", "plane"]}], "fill_blanks": [{"pre": "✈️", "suf": "It's a _____ .", "ans": "plane"}, {"pre": "🤖", "suf": "It's a _____ .", "ans": "robot"}, {"pre": "🎈", "suf": "It's a _____ .", "ans": "balloon"}, {"pre": "🧸", "suf": "It's a _____ .", "ans": "teddy"}, {"pre": "🚗", "suf": "It's a _____ .", "ans": "car"}], "wb_words": ["plane", "robot", "balloon", "teddy", "car", "puppet"], "read_qs": [{"q": "Is it a plane? ✈️", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a robot", "It's a balloon"]}, {"q": "Is it a robot? 🧸", "correct": "No, it isn't", "opts": ["Yes, it is", "No, it isn't", "It's a plane", "It's a car"]}, {"q": "Is it a balloon? 🎈", "correct": "Yes, it is", "opts": ["Yes, it is", "No, it isn't", "It's a teddy", "It's a car"]}], "sentences": [["Is", "it", "a", "plane", "?"], ["Yes", ",", "it", "is", "!"], ["No", ",", "it", "isn't", "!"], ["It's", "a", "teddy", "!"]], "colour_shapes": [{"shape": "✈️", "correct": "blue", "label": "máy bay"}, {"shape": "🤖", "correct": "red", "label": "robot"}, {"shape": "🎈", "correct": "yellow", "label": "bóng bay"}]}, {"id": "unit4", "title": "Unit 4: This is my mum!", "icon": "👨‍👩‍👧", "color": "#FF8C00", "vocab": [{"en": "mum", "vi": "Mẹ", "emoji": "👩", "phonetic": "/mʌm/"}, {"en": "dad", "vi": "Bố", "emoji": "👨", "phonetic": "/dæd/"}, {"en": "brother", "vi": "Anh/Em trai", "emoji": "👦", "phonetic": "/ˈbrʌðər/"}, {"en": "sister", "vi": "Chị/Em gái", "emoji": "👧", "phonetic": "/ˈsɪstər/"}, {"en": "grandpa", "vi": "Ông", "emoji": "👴", "phonetic": "/ˈɡrænpɑː/"}, {"en": "grandma", "vi": "Bà", "emoji": "👵", "phonetic": "/ˈɡrænmɑː/"}], "grammar": "This is my mum.", "story": "This is my grandpa. This is my mum. This is my brother. Hello, brother! This is my grandma.", "value": "Love your family ❤️", "listen_qs": [{"q": "👩 Who is this?", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "👨 Who is this?", "correct": "dad", "opts": ["mum", "dad", "brother", "grandpa"]}, {"q": "👧 Who is this?", "correct": "sister", "opts": ["mum", "sister", "grandma", "brother"]}, {"q": "👴 Who is this?", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}], "fill_blanks": [{"pre": "👩", "suf": "This is my _____ .", "ans": "mum"}, {"pre": "👨", "suf": "This is my _____ .", "ans": "dad"}, {"pre": "👧", "suf": "This is my _____ .", "ans": "sister"}, {"pre": "👦", "suf": "This is my _____ .", "ans": "brother"}, {"pre": "👴", "suf": "This is my _____ .", "ans": "grandpa"}, {"pre": "👵", "suf": "This is my _____ .", "ans": "grandma"}], "wb_words": ["mum", "dad", "sister", "brother", "grandpa", "grandma"], "read_qs": [{"q": "Who is this? 👩", "correct": "mum", "opts": ["mum", "dad", "sister", "grandma"]}, {"q": "Who is this? 👴", "correct": "grandpa", "opts": ["dad", "grandpa", "brother", "grandma"]}, {"q": "Who is this? 👦", "correct": "brother", "opts": ["sister", "brother", "dad", "grandpa"]}, {"q": "Who is this? 👨", "correct": "dad", "opts": ["mum", "dad", "brother", "grandpa"]}, {"q": "Who is this? 👧", "correct": "sister", "opts": ["mum", "sister", "grandma", "brother"]}, {"q": "Who is this? 👵", "correct": "grandma", "opts": ["grandpa", "grandma", "mum", "sister"]}], "sentences": [["This", "is", "my", "mum", "."], ["This", "is", "my", "dad", "."], ["Hello", ",", "brother", "!"], ["This", "is", "my", "grandpa", "."]], "colour_shapes": [{"shape": "👩", "correct": "red", "label": "mẹ mặc áo đỏ"}, {"shape": "👨", "correct": "blue", "label": "bố mặc áo xanh"}]}, {"id": "unit5", "title": "Unit 5: He's happy!", "icon": "😊", "color": "#FFC312", "vocab": [{"en": "happy", "vi": "Vui vẻ", "emoji": "😊", "phonetic": "/ˈhæpi/"}, {"en": "sad", "vi": "Buồn", "emoji": "😢", "phonetic": "/sæd/"}, {"en": "hungry", "vi": "Đói", "emoji": "😋", "phonetic": "/ˈhʌŋɡri/"}, {"en": "thirsty", "vi": "Khát nước", "emoji": "😰", "phonetic": "/ˈθɜːrsti/"}, {"en": "hot", "vi": "Nóng", "emoji": "🥵", "phonetic": "/hɒt/"}, {"en": "cold", "vi": "Lạnh", "emoji": "🥶", "phonetic": "/koʊld/"}], "grammar": "He's happy. She's cold.", "story": "She's happy! He's sad. She's hungry. He's thirsty. She's cold! He's hot. Are you happy? Yes, I am!", "value": "Share with friends 🤝", "listen_qs": [{"q": "😊 How is he/she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "😢 How is he/she?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "😋 How is he/she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}, {"q": "🥶 How is he/she?", "correct": "cold", "opts": ["hot", "cold", "sad", "hungry"]}], "fill_blanks": [{"pre": "😊", "suf": "She's _____ .", "ans": "happy"}, {"pre": "😢", "suf": "He's _____ .", "ans": "sad"}, {"pre": "😋", "suf": "She's _____ .", "ans": "hungry"}, {"pre": "🥶", "suf": "He's _____ .", "ans": "cold"}, {"pre": "🥵", "suf": "She's _____ .", "ans": "hot"}], "wb_words": ["happy", "sad", "hungry", "cold", "thirsty", "hot"], "read_qs": [{"q": "She's 😊. How is she?", "correct": "happy", "opts": ["happy", "sad", "hungry", "cold"]}, {"q": "He's 😢. How is he?", "correct": "sad", "opts": ["happy", "sad", "thirsty", "hot"]}, {"q": "She's 😋. How is she?", "correct": "hungry", "opts": ["hungry", "thirsty", "cold", "happy"]}, {"q": "He's 🥶. How is he?", "correct": "cold", "opts": ["hot", "cold", "sad", "hungry"]}, {"q": "She's 🥵. How is she?", "correct": "hot", "opts": ["cold", "hot", "thirsty", "happy"]}, {"q": "He's 😰. How is he?", "correct": "thirsty", "opts": ["hungry", "thirsty", "cold", "sad"]}], "sentences": [["He's", "happy", "!"], ["She's", "cold", "."], ["Are", "you", "hungry", "?"], ["Yes", ",", "I", "am", "!"]], "colour_shapes": [{"shape": "😊", "correct": "yellow", "label": "mặt vui"}, {"shape": "😢", "correct": "blue", "label": "mặt buồn"}]}, {"id": "unit6", "title": "Unit 6: They're bears!", "icon": "🐻", "color": "#2ED573", "vocab": [{"en": "bird", "vi": "Chim", "emoji": "🐦", "phonetic": "/bɜːrd/"}, {"en": "bear", "vi": "Gấu", "emoji": "🐻", "phonetic": "/bɛr/"}, {"en": "hippo", "vi": "Hà mã", "emoji": "🦛", "phonetic": "/ˈhɪpoʊ/"}, {"en": "crocodile", "vi": "Cá sấu", "emoji": "🐊", "phonetic": "/ˈkrɒkədaɪl/"}, {"en": "tiger", "vi": "Hổ", "emoji": "🐯", "phonetic": "/ˈtaɪɡər/"}, {"en": "lion", "vi": "Sư tử", "emoji": "🦁", "phonetic": "/ˈlaɪən/"}], "grammar": "What are they? They're bears.", "story": "Look! They're crocodiles! They're birds! They're tigers! What are they? They're bears! Roar!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🐻🐻 What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "🐦🐦 What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "🦛🦛 What are they?", "correct": "hippos", "opts": ["bears", "tigers", "hippos", "lions"]}, {"q": "🐯🐯 What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "fill_blanks": [{"pre": "🐻🐻", "suf": "They're _____ .", "ans": "bears"}, {"pre": "🐦🐦", "suf": "They're _____ .", "ans": "birds"}, {"pre": "🦛🦛", "suf": "They're _____ .", "ans": "hippos"}, {"pre": "🐯🐯", "suf": "They're _____ .", "ans": "tigers"}, {"pre": "🦁🦁", "suf": "They're _____ .", "ans": "lions"}], "wb_words": ["bird", "bear", "hippo", "tiger", "lion", "crocodile"], "read_qs": [{"q": "They're 🐻🐻. What are they?", "correct": "bears", "opts": ["bears", "birds", "tigers", "hippos"]}, {"q": "They're 🐦🐦. What are they?", "correct": "birds", "opts": ["lions", "birds", "hippos", "crocodiles"]}, {"q": "They're 🐯🐯. What are they?", "correct": "tigers", "opts": ["tigers", "bears", "birds", "crocodiles"]}], "sentences": [["What", "are", "they", "?"], ["They're", "bears", "!"], ["They're", "crocodiles", "!"], ["Look", "at", "the", "tigers", "!"]], "colour_shapes": [{"shape": "🐻", "correct": "orange", "label": "con gấu"}, {"shape": "🐦", "correct": "red", "label": "con chim"}, {"shape": "🐊", "correct": "green", "label": "cá sấu"}]}, {"id": "unit7", "title": "Unit 7: Are they teachers?", "icon": "👩‍🏫", "color": "#E84393", "vocab": [{"en": "teacher", "vi": "Giáo viên", "emoji": "👩‍🏫", "phonetic": "/ˈtiːtʃər/"}, {"en": "pupil", "vi": "Học sinh", "emoji": "🧑‍🎓", "phonetic": "/ˈpjuːpəl/"}, {"en": "waiter", "vi": "Người phục vụ", "emoji": "🧑‍🍳", "phonetic": "/ˈweɪtər/"}, {"en": "vet", "vi": "Bác sĩ thú y", "emoji": "👨‍⚕️", "phonetic": "/vɛt/"}, {"en": "builder", "vi": "Thợ xây", "emoji": "👷", "phonetic": "/ˈbɪldər/"}, {"en": "doctor", "vi": "Bác sĩ", "emoji": "🩺", "phonetic": "/ˈdɒktər/"}], "grammar": "Are they teachers? Yes, they are. / No, they aren't.", "story": "What are they? They're builders! Are they teachers? No, they aren't! They're pupils! Hello, pupils!", "value": "Help each other 🤝", "listen_qs": [{"q": "👩‍🏫 What is she?", "correct": "teacher", "opts": ["teacher", "pupil", "waiter", "vet"]}, {"q": "👷 What is he?", "correct": "builder", "opts": ["builder", "doctor", "teacher", "waiter"]}, {"q": "🧑‍🎓 What are they?", "correct": "pupils", "opts": ["pupils", "teachers", "vets", "waiters"]}, {"q": "🩺 What is he?", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "fill_blanks": [{"pre": "👩‍🏫", "suf": "She's a _____ .", "ans": "teacher"}, {"pre": "👷", "suf": "He's a _____ .", "ans": "builder"}, {"pre": "🧑‍🎓", "suf": "He's a _____ .", "ans": "pupil"}, {"pre": "🩺", "suf": "He's a _____ .", "ans": "doctor"}, {"pre": "👨‍⚕️", "suf": "She's a _____ .", "ans": "vet"}], "wb_words": ["teacher", "pupil", "waiter", "builder", "doctor", "vet"], "read_qs": [{"q": "Are they teachers? 👩‍🏫👩‍🏫", "correct": "Yes, they are", "opts": ["Yes, they are", "No, they aren't", "They're pupils", "They're builders"]}, {"q": "Are they builders? 🧑‍🎓🧑‍🎓", "correct": "No, they aren't", "opts": ["Yes, they are", "No, they aren't", "They're teachers", "They're doctors"]}, {"q": "What is she? 🩺", "correct": "doctor", "opts": ["vet", "doctor", "teacher", "builder"]}], "sentences": [["Are", "they", "teachers", "?"], ["Yes", ",", "they", "are", "!"], ["No", ",", "they", "aren't", "!"], ["He's", "a", "doctor", "."]], "colour_shapes": [{"shape": "👩‍🏫", "correct": "red", "label": "cô giáo"}, {"shape": "👷", "correct": "yellow", "label": "thợ xây"}]}, {"id": "unit8", "title": "Unit 8: I've got a shirt!", "icon": "👕", "color": "#1E90FF", "vocab": [{"en": "jumper", "vi": "Áo len", "emoji": "🧥", "phonetic": "/ˈdʒʌmpər/"}, {"en": "shirt", "vi": "Áo sơ mi", "emoji": "👔", "phonetic": "/ʃɜːrt/"}, {"en": "jacket", "vi": "Áo khoác", "emoji": "🥼", "phonetic": "/ˈdʒækɪt/"}, {"en": "hat", "vi": "Mũ", "emoji": "🎩", "phonetic": "/hæt/"}, {"en": "belt", "vi": "Thắt lưng", "emoji": "🪢", "phonetic": "/bɛlt/"}, {"en": "socks", "vi": "Tất/Vớ", "emoji": "🧦", "phonetic": "/sɒks/"}], "grammar": "I've got a shirt.", "story": "I've got a jumper! I've got a jacket! I've got a hat! Look, I've got a hat too! Thanks, Grandma!", "value": "Share with others 🎁", "listen_qs": [{"q": "👔 What have you got?", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "🎩 What have you got?", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "🧦 What have you got?", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}, {"q": "🥼 What have you got?", "correct": "jacket", "opts": ["jacket", "shirt", "belt", "socks"]}], "fill_blanks": [{"pre": "👔", "suf": "I've got a _____ .", "ans": "shirt"}, {"pre": "🎩", "suf": "I've got a _____ .", "ans": "hat"}, {"pre": "🧦", "suf": "I've got _____ .", "ans": "socks"}, {"pre": "🥼", "suf": "I've got a _____ .", "ans": "jacket"}, {"pre": "🧥", "suf": "I've got a _____ .", "ans": "jumper"}], "wb_words": ["shirt", "jumper", "jacket", "hat", "belt", "socks"], "read_qs": [{"q": "What have you got? 👔", "correct": "shirt", "opts": ["shirt", "jacket", "hat", "socks"]}, {"q": "What have you got? 🎩", "correct": "hat", "opts": ["jumper", "hat", "belt", "shirt"]}, {"q": "I've got _____ . 🧦", "correct": "socks", "opts": ["socks", "jacket", "hat", "jumper"]}, {"q": "I've got a _____ . 🥼", "correct": "jacket", "opts": ["jacket", "shirt", "belt", "socks"]}, {"q": "I've got a _____ . 🧥", "correct": "jumper", "opts": ["shirt", "jumper", "hat", "belt"]}, {"q": "I've got a _____ . 🪢", "correct": "belt", "opts": ["socks", "jacket", "hat", "belt"]}], "sentences": [["I've", "got", "a", "shirt", "!"], ["I've", "got", "a", "hat", "!"], ["I've", "got", "a", "jacket", "."], ["Look", ",", "I've", "got", "socks", "!"]], "colour_shapes": [{"shape": "👔", "correct": "blue", "label": "áo sơ mi"}, {"shape": "🎩", "correct": "black", "label": "cái mũ"}, {"shape": "🧦", "correct": "red", "label": "đôi vớ"}]}, {"id": "unit9", "title": "Unit 9: I like plums!", "icon": "🍑", "color": "#8B5CF6", "vocab": [{"en": "raisins", "vi": "Nho khô", "emoji": "🍇", "phonetic": "/ˈreɪzənz/"}, {"en": "plums", "vi": "Mận", "emoji": "🍑", "phonetic": "/plʌmz/"}, {"en": "crisps", "vi": "Bánh giòn", "emoji": "🥨", "phonetic": "/krɪsps/"}, {"en": "cakes", "vi": "Bánh ngọt", "emoji": "🎂", "phonetic": "/keɪks/"}, {"en": "milk", "vi": "Sữa", "emoji": "🥛", "phonetic": "/mɪlk/"}, {"en": "bananas", "vi": "Chuối", "emoji": "🍌", "phonetic": "/bəˈnɑːnəz/"}], "grammar": "I like plums. I don't like raisins.", "story": "I like raisins! I don't like raisins. I like plums! I don't like plums. I like cakes! Share the cakes!", "value": "Be kind to animals 🐾", "listen_qs": [{"q": "🍑 What do you like?", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "🎂 What do you like?", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}, {"q": "🥛 What do you like?", "correct": "milk", "opts": ["milk", "bananas", "raisins", "crisps"]}, {"q": "🍌 What do you like?", "correct": "bananas", "opts": ["plums", "cakes", "bananas", "milk"]}], "fill_blanks": [{"pre": "🍑", "suf": "I like _____ .", "ans": "plums"}, {"pre": "🎂", "suf": "I like _____ .", "ans": "cakes"}, {"pre": "🥛", "suf": "I like _____ .", "ans": "milk"}, {"pre": "🍌", "suf": "I don't like _____ .", "ans": "bananas"}, {"pre": "🍇", "suf": "I don't like _____ .", "ans": "raisins"}], "wb_words": ["plums", "cakes", "milk", "raisins", "crisps", "bananas"], "read_qs": [{"q": "Tim says: 'I like _____!' 🍑", "correct": "plums", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "Rosy says: 'I don't like _____!' 🍇", "correct": "raisins", "opts": ["plums", "raisins", "crisps", "cakes"]}, {"q": "They both like: 🎂", "correct": "cakes", "opts": ["milk", "cakes", "crisps", "plums"]}, {"q": "What does Rosy like? 🥛", "correct": "milk", "opts": ["milk", "bananas", "raisins", "crisps"]}, {"q": "I like _____. 🍌", "correct": "bananas", "opts": ["plums", "cakes", "bananas", "milk"]}, {"q": "I don't like _____. 🥨", "correct": "crisps", "opts": ["plums", "cakes", "raisins", "crisps"]}], "colour_shapes": [{"shape": "🍑", "correct": "pink", "label": "quả mận"}, {"shape": "🍌", "correct": "yellow", "label": "quả chuối"}, {"shape": "🎂", "correct": "orange", "label": "cái bánh"}], "sentences": [["I", "like", "plums", "!"], ["I", "don't", "like", "raisins", "."], ["Do", "you", "like", "cakes", "?"], ["I", "like", "bananas", "!"]]}];
 
 const COLOUR_HEX = {"red": "#FF4757", "green": "#2ED573", "blue": "#1E90FF", "black": "#2F3542", "white": "#E0E0E0", "yellow": "#FFC312", "pink": "#FF6B9D", "orange": "#FF8C00", "purple": "#8B5CF6", "brown": "#8B4513"};
 
@@ -562,8 +719,16 @@ function updateUnitProgress(){
 let sidebarOpen = true;
 function toggleSidebar(){
   sidebarOpen = !sidebarOpen;
-  document.getElementById('sidebar').classList.toggle('hidden', !sidebarOpen);
-  document.getElementById('main').classList.toggle('full', !sidebarOpen);
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const isMobile = window.innerWidth <= 768;
+  if(isMobile){
+    sb.classList.toggle('open', sidebarOpen);
+    if(ov) ov.classList.toggle('show', sidebarOpen);
+  } else {
+    sb.classList.toggle('hidden', !sidebarOpen);
+    document.getElementById('main').classList.toggle('full', !sidebarOpen);
+  }
 }
 function setActiveSidebar(id){
   document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
@@ -628,7 +793,12 @@ function loadUnit(id){
   buildReadQuiz();
   buildFillBlanks();
   buildWordBuilder();
-  buildColourShapes();
+  // Reset write tab
+  fcIdx=0; sentIdx=0;
+  document.querySelectorAll('.write-sub').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.write-tab').forEach(t=>t.classList.remove('active'));
+  const wdef=document.getElementById('wsub-fill');if(wdef)wdef.classList.add('active');
+  const wtdef=document.getElementById('wtab-fill');if(wtdef)wtdef.classList.add('active');
   updateUnitProgress();
 
   // Switch to listen tab
@@ -648,6 +818,7 @@ function switchTab(tab){
   document.getElementById('section-'+tab).classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   window.speechSynthesis && window.speechSynthesis.cancel();
+  if(tab==='game'){buildMegaGame();buildShootGame();buildSpeedGame();}
 }
 
 /* ============================================================
@@ -655,6 +826,7 @@ function switchTab(tab){
 ============================================================ */
 function buildVocabGrid(){
   const g = document.getElementById('vocabGrid');
+  if(!g) return;
   g.innerHTML = currentUnit.vocab.map(v=>{
     const hex = COLOUR_HEX[v.en] || '#888';
     const isCname = Object.keys(COLOUR_HEX).includes(v.en);
@@ -726,6 +898,7 @@ function checkListenQ(chosen, correct, btn){
    LISTEN — CHANT
 ============================================================ */
 function buildChant(){
+  if(!document.getElementById('chantArea')) return;
   const u = currentUnit;
   const words3 = u.vocab.slice(0,3).map(v=>v.en);
   const chant = words3.map(w=>`What is it? It's ${w}!`).join(' ');
@@ -883,6 +1056,7 @@ function checkNaming(chosen,correct,btn){
    READ — STORY
 ============================================================ */
 function buildStory(){
+  if(!document.getElementById('storyArea')) return;
   const colMap={'red':'col-r','green':'col-g','blue':'col-b','black':'col-k',
     'white':'col-w','yellow':'col-y','pink':'col-p','orange':'col-o'};
   // Highlight vocab words in story
@@ -1077,12 +1251,13 @@ function checkWB(correct){
    WRITE — COLOUR SHAPES
 ============================================================ */
 function buildColourShapes(){
+  const el=document.getElementById('colourShapeArea'); if(!el) return;
   const shapes=currentUnit.colour_shapes||[];
   if(!shapes.length){
-    document.getElementById('colourShapeArea').innerHTML='<div style="color:#aaa;text-align:center;padding:16px;">Không có bài tô màu cho unit này.</div>';
+    el.innerHTML='<div style="color:#aaa;text-align:center;padding:16px;">Không có bài tô màu cho unit này.</div>';
     return;
   }
-  document.getElementById('colourShapeArea').innerHTML=shapes.map((s,i)=>{
+  el.innerHTML=shapes.map((s,i)=>{
     const correctHex=COLOUR_HEX[s.correct]||'#999';
     // Always include correct + 3 random distractors from COLOUR_HEX keys
     const allCols=Object.keys(COLOUR_HEX);
@@ -1107,7 +1282,7 @@ function buildColourShapes(){
 }
 function colourShape(idx,chosen,correct){
   const hex=COLOUR_HEX[chosen]||'#999', correctHex=COLOUR_HEX[correct]||'#999';
-  const fb=document.getElementById('csfb-'+idx), sp=document.getElementById('csp-'+idx);
+  const fb=document.getElementById('csfb-'+idx), sp=document.getElementById('csp-'+idx); if(!fb||!sp) return;
   sp.style.background=hex; sp.style.borderColor=hex;
   if(chosen===correct){
     sp.style.fontSize='22px'; sp.textContent='✅';
@@ -1118,9 +1293,460 @@ function colourShape(idx,chosen,correct){
   }
 }
 
+
+/* ============================================================
+   WRITE — SUB TABS
+============================================================ */
+function switchWriteTab(tab){
+  document.querySelectorAll('.write-sub').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.write-tab').forEach(t=>t.classList.remove('active'));
+  const sub = document.getElementById('wsub-'+tab);
+  const btn = document.getElementById('wtab-'+tab);
+  if(sub) sub.classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Build on demand
+  if(tab==='flash') buildFlashCard();
+  if(tab==='sent') buildSentBuilder();
+  if(tab==='mem') buildMemoryGame();
+}
+
+/* ============================================================
+   WRITE — FLASHCARD
+============================================================ */
+let fcIdx = 0;
+function buildFlashCard(){
+  const vocab = currentUnit.vocab;
+  fcIdx = fcIdx % vocab.length;
+  const v = vocab[fcIdx];
+  const hex = COLOUR_HEX[v.en] || currentUnit.color;
+  const area = document.getElementById('flashcardArea');
+  area.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:13px;color:#aaa;margin-bottom:10px;">
+        Thẻ ${fcIdx+1} / ${vocab.length} — Nhấn thẻ để lật! 🔄
+      </div>
+      <div class="flashcard-scene" onclick="flipCard()">
+        <div class="flashcard" id="theFlashcard">
+          <div class="flashcard-face flashcard-front" style="background:linear-gradient(135deg,${hex},${hex}aa);">
+            <div class="fc-emoji">${v.emoji}</div>
+            <div class="fc-hint" style="color:rgba(255,255,255,.7);">Bấm để xem nghĩa 👆</div>
+          </div>
+          <div class="flashcard-face flashcard-back" style="background:linear-gradient(135deg,${hex}dd,${hex}88);">
+            <div class="fc-word">${v.en.toUpperCase()}</div>
+            <div class="fc-hint">${v.phonetic}</div>
+            <div class="fc-hint">🇻🇳 ${v.vi}</div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn-reset" style="padding:9px 20px;" onclick="fcIdx=Math.max(0,fcIdx-1);buildFlashCard()">⬅ Trước</button>
+        <button class="btn-audio" style="padding:9px 20px;font-size:13px;" onclick="speak('${v.en}')">🔊 Nghe</button>
+        <button class="btn-check" style="padding:9px 20px;" onclick="fcIdx++;buildFlashCard()">Tiếp ➡</button>
+      </div>
+      <div style="margin-top:14px;">
+        <div style="font-size:12px;color:#bbb;margin-bottom:10px;">Kiểm tra nhanh — Nghĩa tiếng Anh của từ này là gì?</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+          ${buildFcQuiz(v)}
+        </div>
+      </div>
+    </div>`;
+}
+function buildFcQuiz(target){
+  const vocab = currentUnit.vocab;
+  const others = vocab.filter(v=>v.en!==target.en);
+  const distractors = shuffle(others).slice(0,3);
+  const opts = shuffle([target,...distractors]);
+  return opts.map(v=>{
+    const hex = COLOUR_HEX[v.en]||currentUnit.color;
+    return `<button onclick="checkFcQuiz('${v.en}','${target.en}',this)"
+      style="padding:9px 18px;border:2.5px solid ${hex}44;border-radius:50px;background:${hex}11;
+      font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;color:${hex};cursor:pointer;
+      transition:all .25s;">${v.emoji} ${v.vi}</button>`;
+  }).join('');
+}
+function checkFcQuiz(chosen,correct,btn){
+  if(chosen===correct){
+    btn.style.background='#E8F9EE';btn.style.borderColor='#00B894';btn.style.color='#00B894';
+    speak('Correct! '+correct); addScore(5);
+    setTimeout(()=>{fcIdx++;buildFlashCard();},1200);
+  } else {
+    btn.style.background='#FFF0F0';btn.style.borderColor='#FF4757';btn.style.color='#FF4757';
+    speak(correct);
+  }
+}
+function flipCard(){
+  const c=document.getElementById('theFlashcard');
+  if(c) c.classList.toggle('flipped');
+  addScore(1);
+}
+
+/* ============================================================
+   WRITE — SENTENCE BUILDER
+============================================================ */
+let sentIdx = 0;
+let sentSelected = [];
+function buildSentBuilder(){
+  const sents = currentUnit.sentences || [
+    ["Hello","!"],
+    ["What","colour","is","it","?"],
+    ["It's","a","pencil","!"]
+  ];
+  sentIdx = sentIdx % sents.length;
+  window._currentSent = sents[sentIdx];
+  const sent = window._currentSent;
+  sentSelected = [];
+  const shuffled = shuffle([...sent]);
+  const area = document.getElementById('sentBuilderArea');
+  area.innerHTML = `
+    <div style="font-size:13px;color:#aaa;margin-bottom:8px;">Câu ${sentIdx+1}/${sents.length}</div>
+    <div style="font-size:13px;font-weight:700;color:#666;margin-bottom:8px;">📝 Xây dựng câu từ các từ sau:</div>
+    <div class="sent-bank" id="sentBank">
+      ${shuffled.map((w,i)=>`<div class="sentence-word" id="sw-${i}" data-word="${w}" data-idx="${i}" onclick="selectSentWord(this)">${w}</div>`).join('')}
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#666;margin:10px 0 6px;">✍️ Câu của bạn:</div>
+    <div class="sent-answer" id="sentAnswer"><span style="color:#ddd;font-size:13px;">Nhấn từ để thêm vào đây...</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+      <button class="btn-check" onclick="checkSentCurrent()">✅ Kiểm tra</button>
+      <button class="btn-reset" onclick="buildSentBuilder()">🗑️ Làm lại</button>
+      <button class="btn-reset" onclick="sentIdx++;buildSentBuilder()">⏭ Câu tiếp</button>
+    </div>
+    <div id="sentFb" style="font-size:18px;margin-top:10px;min-height:24px;"></div>`;
+}
+function selectSentWord(el){
+  if(el.classList.contains('used')) {
+    // Remove from answer
+    const idx = parseInt(el.dataset.idx);
+    sentSelected = sentSelected.filter(x=>x.idx!==idx);
+    el.classList.remove('used');
+    renderSentAnswer();
+    return;
+  }
+  el.classList.add('used');
+  sentSelected.push({word:el.dataset.word, idx:parseInt(el.dataset.idx)});
+  renderSentAnswer();
+}
+function renderSentAnswer(){
+  const area = document.getElementById('sentAnswer');
+  if(!area) return;
+  if(sentSelected.length===0){
+    area.innerHTML='<span style="color:#ddd;font-size:13px;">Nhấn từ để thêm vào đây...</span>';
+    return;
+  }
+  area.innerHTML = sentSelected.map(s=>
+    `<div class="sentence-word" data-idx="${s.idx}" onclick="removeSentWord(this)">${s.word} ×</div>`
+  ).join('');
+}
+function removeSentWord(el){
+  const idx = parseInt(el.dataset.idx);
+  sentSelected = sentSelected.filter(x=>x.idx!==idx);
+  const orig = document.getElementById('sw-'+idx);
+  if(orig) orig.classList.remove('used');
+  renderSentAnswer();
+}
+function checkSentCurrent(){ checkSent(window._currentSent); }
+function checkSent(correctArr){
+  const attempt = sentSelected.map(s=>s.word);
+  const fb = document.getElementById('sentFb');
+  if(!correctArr){ fb.textContent='⚠️ Lỗi! Nhấn Làm lại nhé!'; return; }
+  const correct = Array.isArray(correctArr) ? correctArr : [];
+  if(JSON.stringify(attempt)===JSON.stringify(correct)){
+    fb.innerHTML='✅ Hoàn hảo! "'+correct.join(' ')+'" 🎉';
+    fb.style.color='#00B894'; addScore(12);
+    celebrate('✍️','Ghép câu đúng!',correct.join(' '),'⭐⭐⭐');
+    sentIdx++; setTimeout(buildSentBuilder,2200);
+  } else if(attempt.length===0){
+    fb.textContent='👆 Chọn từ trước nhé!'; fb.style.color='#999';
+  } else {
+    fb.innerHTML='❌ Chưa đúng! Gợi ý: bắt đầu bằng "<strong>'+correct[0]+'</strong>"';
+    fb.style.color='#FF4757'; speak('Try again!');
+  }
+}
+
+/* ============================================================
+   WRITE — MEMORY MATCH GAME
+============================================================ */
+let memFlipped = [], memMatched = 0, memLocked = false;
+function buildMemoryGame(){
+  const vocab = shuffle(currentUnit.vocab).slice(0, Math.min(4, currentUnit.vocab.length));
+  memFlipped = []; memMatched = 0; memLocked = false;
+  // Create pairs: word card + emoji card
+  const pairs = vocab.flatMap(v=>[
+    {id:v.en, type:'word', content:v.en.toUpperCase(), color: COLOUR_HEX[v.en]||currentUnit.color},
+    {id:v.en, type:'emoji', content:v.emoji, color: COLOUR_HEX[v.en]||currentUnit.color}
+  ]);
+  const cards = shuffle(pairs).map((c,i)=>({...c, cardIdx:i}));
+  const area = document.getElementById('memoryArea');
+  area.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:13px;color:#888;">Tìm <strong>${vocab.length}</strong> cặp từ — hình khớp nhau! 🃏</div>
+      <div id="memScore" style="font-size:13px;font-weight:800;color:${currentUnit.color};">0/${vocab.length} cặp</div>
+    </div>
+    <div class="memory-grid" style="grid-template-columns:repeat(${Math.min(4, cards.length)},1fr);">
+      ${cards.map((c,i)=>`
+        <div class="mem-card" id="mc-${i}" data-id="${c.id}" data-type="${c.type}" data-idx="${i}" onclick="flipMemCard(${i},'${c.id}','${c.type}','${c.content}')">
+          <div class="mem-face mem-front">❓</div>
+          <div class="mem-face mem-back ${c.type==='emoji'?'':''}">
+            ${c.type==='emoji'
+              ? `<span style="font-size:28px;">${c.content}</span>`
+              : `<span style="font-size:13px;font-weight:800;color:${c.color};text-align:center;padding:4px;">${c.content}</span>`}
+          </div>
+        </div>`).join('')}
+    </div>
+    <div id="memFb" style="text-align:center;font-size:18px;margin-top:12px;min-height:24px;"></div>
+    <button class="btn-reset" style="margin-top:8px;" onclick="buildMemoryGame()">🔄 Chơi lại</button>`;
+}
+function flipMemCard(idx, id, type, content){
+  if(memLocked) return;
+  const card = document.getElementById('mc-'+idx);
+  if(!card || card.classList.contains('matched') || card.classList.contains('flip')) return;
+  card.classList.add('flip');
+  speak(id);
+  memFlipped.push({idx, id, type});
+  if(memFlipped.length===2){
+    memLocked=true;
+    const [a,b]=memFlipped;
+    if(a.id===b.id && a.type!==b.type){
+      // Match!
+      setTimeout(()=>{
+        document.getElementById('mc-'+a.idx)?.classList.add('matched');
+        document.getElementById('mc-'+b.idx)?.classList.add('matched');
+        memMatched++;
+        const total = currentUnit.vocab.slice(0,4).length;
+        document.getElementById('memScore').textContent=memMatched+'/'+total+' cặp';
+        memFlipped=[]; memLocked=false;
+        addScore(10);
+        if(memMatched>=total){
+          document.getElementById('memFb').textContent='🎉 Tuyệt vời! Tìm hết '+total+' cặp rồi!';
+          celebrate('🧠','Trí nhớ siêu đỉnh!','Memory Master!','⭐⭐⭐');
+        }
+      },400);
+    } else {
+      // No match
+      setTimeout(()=>{
+        document.getElementById('mc-'+a.idx)?.classList.remove('flip');
+        document.getElementById('mc-'+b.idx)?.classList.remove('flip');
+        document.getElementById('memFb').textContent='❌ Chưa khớp! Thử lại nhé!';
+        setTimeout(()=>{const fb=document.getElementById('memFb');if(fb)fb.textContent='';},1000);
+        memFlipped=[]; memLocked=false;
+      },900);
+    }
+  }
+}
+
+
+/* ============================================================
+   GAME TAB — MEGA QUIZ (all vocab questions)
+============================================================ */
+let mgIdx=0, mgScore=0, mgTotal=0, mgStartTime=0;
+
+function buildMegaGame(){
+  const vocab = currentUnit.vocab;
+  const allQ = [];
+  // Generate questions from all vocab
+  vocab.forEach(v=>{
+    const others = vocab.filter(x=>x.en!==v.en);
+    const distractors = shuffle(others).slice(0,3);
+    const opts = shuffle([v,...distractors]);
+    allQ.push({q:`🇻🇳 Nghĩa là: "${v.vi}"`, correct:v.en, opts:opts.map(x=>x.en), emoji:v.emoji});
+    allQ.push({q:`${v.emoji} Từ này tiếng Anh là gì?`, correct:v.en, opts:opts.map(x=>x.en), emoji:v.emoji});
+  });
+  // Also add listen_qs
+  currentUnit.listen_qs.forEach(q=>{
+    if(!allQ.find(x=>x.q===q.q)) allQ.push({q:q.q, correct:q.correct, opts:q.opts});
+  });
+  // Store shuffled
+  window._mgQuestions = shuffle(allQ);
+  mgIdx=0; mgScore=0; mgTotal=window._mgQuestions.length;
+  renderMegaQ();
+}
+
+function renderMegaQ(){
+  const qa = document.getElementById('megaGameArea');
+  if(!qa) return;
+  if(mgIdx >= window._mgQuestions.length){
+    qa.innerHTML=`<div style="text-align:center;padding:20px;">
+      <div style="font-size:60px;">🏆</div>
+      <div style="font-size:24px;font-weight:800;color:${currentUnit.color};margin:10px 0;">${mgScore}/${mgTotal} đúng!</div>
+      <div style="font-size:16px;color:#888;">${mgScore>=mgTotal*0.8?'🌟 Xuất sắc!':mgScore>=mgTotal*0.5?'👍 Tốt lắm!':'💪 Cố lên!'}</div>
+      <button class="btn-check" style="margin-top:14px;" onclick="buildMegaGame()">🔄 Chơi lại!</button>
+    </div>`;
+    if(mgScore>=mgTotal*0.8) celebrate('🏆','Mega Quiz Champion!','Trả lời '+mgScore+'/'+mgTotal+' câu đúng!','⭐⭐⭐');
+    return;
+  }
+  const q = window._mgQuestions[mgIdx];
+  const opts = shuffle(q.opts||[]);
+  mgStartTime = Date.now();
+  qa.innerHTML=`
+    <div style="margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+      <div style="font-size:13px;color:#aaa;">Câu ${mgIdx+1}/${mgTotal}</div>
+      <div style="font-size:13px;font-weight:800;color:${currentUnit.color};">⭐ ${mgScore} điểm</div>
+    </div>
+    <div style="background:${currentUnit.color}11;border-radius:12px;padding:16px;margin-bottom:12px;">
+      <div class="quiz-q-text" style="color:${currentUnit.color};">${q.q}</div>
+    </div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<button class="qopt" onclick="checkMegaQ('${o}','${q.correct}',this)">${o}</button>`).join('')}
+    </div>
+    <div id="mgFb" style="text-align:center;font-size:16px;margin-top:8px;min-height:22px;"></div>`;
+}
+function checkMegaQ(chosen,correct,btn){
+  document.querySelectorAll('#megaGameArea .qopt').forEach(b=>b.disabled=true);
+  const elapsed = Date.now()-mgStartTime;
+  const bonus = elapsed<2000?5:elapsed<4000?3:1;
+  if(chosen===correct){
+    btn.classList.add('ok'); mgScore+=10+bonus;
+    document.getElementById('mgFb').innerHTML=`✅ +${10+bonus} điểm! ${elapsed<2000?'⚡ Siêu nhanh!':'🎉'}`;
+    speak('Correct! '+correct); addScore(10+bonus);
+  } else {
+    btn.classList.add('bad');
+    document.querySelectorAll('#megaGameArea .qopt').forEach(b=>{if(b.textContent.trim()===correct)b.classList.add('ok');});
+    document.getElementById('mgFb').textContent='❌ Đáp án: '+correct;
+    speak(correct);
+  }
+  setTimeout(()=>{mgIdx++;renderMegaQ();},1800);
+}
+
+/* ============================================================
+   GAME — SHOOT GAME (Vietnamese → English)
+============================================================ */
+let shootIdx=0, shootScore=0;
+function buildShootGame(){
+  const vocab = currentUnit.vocab;
+  shootIdx=0; shootScore=0;
+  renderShootQ();
+}
+function renderShootQ(){
+  const qa = document.getElementById('shootGameArea');
+  if(!qa) return;
+  const vocab = currentUnit.vocab;
+  if(shootIdx>=vocab.length*2){
+    qa.innerHTML=`<div style="text-align:center;padding:20px;">
+      <div style="font-size:52px;">🎯</div>
+      <div style="font-size:22px;font-weight:800;color:#00B894;">${shootScore}/${vocab.length*2} đúng!</div>
+      <button class="btn-check" style="margin-top:12px;" onclick="buildShootGame()">🔄 Bắn lại!</button></div>`;
+    return;
+  }
+  const v = vocab[shootIdx % vocab.length];
+  const others = vocab.filter(x=>x.en!==v.en);
+  const distractors = shuffle(others).slice(0,3);
+  const opts = shuffle([v,...distractors]);
+  qa.innerHTML=`
+    <div style="text-align:center;margin-bottom:14px;">
+      <div style="font-size:22px;font-weight:800;color:#333;background:#F8F9FA;border-radius:14px;padding:16px;display:inline-block;min-width:200px;">
+        🇻🇳 "${v.vi}"
+      </div>
+      <div style="font-size:13px;color:#aaa;margin-top:8px;">Câu ${shootIdx+1}/${vocab.length*2}</div>
+    </div>
+    <div class="mini-game-grid">
+      ${opts.map(o=>{
+        const hex=COLOUR_HEX[o.en]||currentUnit.color;
+        return`<div class="mgcard" onclick="checkShoot('${o.en}','${v.en}',this)"
+          style="border-color:${hex}33;background:${hex}08;">
+          <div style="font-size:32px;margin-bottom:6px;">${o.emoji}</div>
+          <div style="font-size:13px;font-weight:800;color:${hex};">${o.en}</div>
+        </div>`;}).join('')}
+    </div>
+    <div id="shootFb" style="text-align:center;font-size:18px;margin-top:10px;min-height:24px;"></div>`;
+}
+function checkShoot(chosen,correct,el){
+  document.querySelectorAll('#shootGameArea .mgcard').forEach(c=>c.onclick=null);
+  if(chosen===correct){
+    el.classList.add('correct'); shootScore++;
+    document.getElementById('shootFb').textContent='✅ Đúng! 🎯 +10'; addScore(10); speak('Correct! '+correct);
+  } else {
+    el.classList.add('wrong');
+    document.getElementById('shootFb').textContent='❌ Sai! Đáp án: '+correct; speak(correct);
+  }
+  shootIdx++; setTimeout(renderShootQ,1600);
+}
+
+/* ============================================================
+   GAME — SPEED CHALLENGE
+============================================================ */
+let speedIdx=0, speedStreak=0, speedBest=0, speedTimer=null, speedTimeLeft=8;
+function buildSpeedGame(){
+  speedIdx=0; speedStreak=0;
+  renderSpeedQ();
+}
+function renderSpeedQ(){
+  const qa = document.getElementById('speedGameArea');
+  if(!qa) return;
+  if(speedTimer) clearInterval(speedTimer);
+  const vocab = currentUnit.vocab;
+  const v = vocab[Math.floor(Math.random()*vocab.length)];
+  const others = vocab.filter(x=>x.en!==v.en);
+  const distractors = shuffle(others).slice(0,3);
+  const opts = shuffle([v,...distractors]);
+  speedTimeLeft=8;
+  qa.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">
+      <div id="speedTimer" style="font-size:24px;font-weight:800;color:${currentUnit.color};">⏱ ${speedTimeLeft}s</div>
+      <div style="font-size:13px;font-weight:700;color:#666;">🔥 Streak: <span id="speedStreak" style="color:${currentUnit.color};">${speedStreak}</span></div>
+      <div style="font-size:13px;font-weight:700;color:#888;">🏆 Best: ${speedBest}</div>
+    </div>
+    <div style="text-align:center;margin-bottom:14px;">
+      <div style="font-size:56px;">${v.emoji}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px;">${v.vi}</div>
+    </div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<button class="qopt" onclick="checkSpeed('${o.en}','${v.en}',this)">${o.en}</button>`).join('')}
+    </div>
+    <div id="speedFb" style="text-align:center;font-size:16px;margin-top:8px;min-height:20px;"></div>`;
+  speedTimer = setInterval(()=>{
+    speedTimeLeft--;
+    const tEl=document.getElementById('speedTimer');
+    if(tEl){tEl.textContent='⏱ '+speedTimeLeft+'s';
+      if(speedTimeLeft<=3) tEl.style.color='#FF4757';}
+    if(speedTimeLeft<=0){
+      clearInterval(speedTimer);
+      document.querySelectorAll('#speedGameArea .qopt').forEach(b=>{b.disabled=true;if(b.textContent.trim()===v.en)b.classList.add('ok');});
+      document.getElementById('speedFb').textContent='⏰ Hết giờ! +0 điểm';
+      speedStreak=0;
+      setTimeout(renderSpeedQ,1600);
+    }
+  },1000);
+}
+function checkSpeed(chosen,correct,btn){
+  if(speedTimer) clearInterval(speedTimer);
+  document.querySelectorAll('#speedGameArea .qopt').forEach(b=>b.disabled=true);
+  const bonus = Math.max(0,speedTimeLeft)*2;
+  if(chosen===correct){
+    btn.classList.add('ok'); speedStreak++;
+    if(speedStreak>speedBest) speedBest=speedStreak;
+    document.getElementById('speedFb').textContent='✅ +'+bonus+' điểm! 🔥 Streak '+speedStreak;
+    addScore(10+bonus); speak('Correct! '+correct);
+    if(speedStreak%5===0) celebrate('🚀','Streak '+speedStreak+'!','Tốc độ siêu đỉnh!','⭐⭐⭐');
+  } else {
+    btn.classList.add('bad');
+    document.querySelectorAll('#speedGameArea .qopt').forEach(b=>{if(b.textContent.trim()===correct)b.classList.add('ok');});
+    document.getElementById('speedFb').textContent='❌ Đáp án: '+correct+' (-streak)';
+    speak(correct); speedStreak=0;
+  }
+  setTimeout(renderSpeedQ,1700);
+}
+/* ============================================================
+   INIT — AUTO DETECT MOBILE SIDEBAR
+============================================================ */
+function initSidebar(){
+  if(window.innerWidth<=768){
+    document.getElementById('sidebar').classList.remove('hidden');
+    sidebarOpen=false;
+  }
+}
+window.addEventListener('resize',()=>{
+  if(window.innerWidth>768){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay')?.classList.remove('show');
+    if(sidebarOpen){
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('main').classList.remove('full');
+    }
+  }
+});
 /* ============================================================
    INIT
 ============================================================ */
+initSidebar();
 showHome();
 buildHomeGrid();
 </script>
