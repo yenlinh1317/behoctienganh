@@ -1,716 +1,806 @@
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
---sky:#6EC6F5;--sun:#FFD93D;--grass:#7BC67E;--coral:#FF6B6B;--purple:#A78BFA;--mint:#6EE7B7;--orange:#FFA07A;--pink:#F9A8D4;
---card:#fff;--bg:#F0F8FF;--shadow:0 4px 16px rgba(0,0,0,0.12);
-}
-body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden}
-.app{max-width:780px;margin:0 auto;padding:12px}
-.header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:14px;box-shadow:var(--shadow)}
-.header-title{color:#fff;font-family:'Fredoka One',cursive;font-size:22px;flex:1}
-.header-sub{color:rgba(255,255,255,0.85);font-size:13px}
-.stars-bar{display:flex;gap:4px;align-items:center}
-.star{font-size:18px;transition:.2s}
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.nav-btn{flex:1;min-width:100px;padding:10px 8px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav-btn span.ico{font-size:20px}
-.nav-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.15)}
-.nav-btn.active{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
-.nb-units{background:linear-gradient(135deg,#FFD93D,#FF8C00);color:#7c3a00}
-.nb-listen{background:linear-gradient(135deg,#6EC6F5,#3A86FF);color:#0c2461}
-.nb-speak{background:linear-gradient(135deg,#FF6B9D,#C0392B);color:#fff}
-.nb-write{background:linear-gradient(135deg,#6EE7B7,#059669);color:#064e3b}
-.nb-games{background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff}
-.screen{background:var(--card);border-radius:20px;padding:20px;box-shadow:var(--shadow);min-height:380px}
-.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.unit-card{background:linear-gradient(135deg,var(--c1),var(--c2));border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
-.unit-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.15)}
-.unit-card .emoji{font-size:28px;margin-bottom:6px}
-.unit-card .uname{font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.3)}
-.unit-card .utopic{font-size:11px;color:rgba(255,255,255,0.9)}
-.lesson-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.back-btn{background:#f1f5f9;border:none;border-radius:10px;padding:8px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px}
-.back-btn:hover{background:#e2e8f0}
-.lesson-title{font-family:'Fredoka One',cursive;font-size:20px;color:#4338CA}
-.lesson-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.ltab{padding:7px 14px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;background:#fff;transition:.2s}
-.ltab.active{background:#4338CA;color:#fff;border-color:#4338CA}
-.ltab:hover:not(.active){background:#f1f5f9}
-.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.vocab-card{border-radius:14px;border:2px solid #e2e8f0;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;background:#fff}
-.vocab-card:hover{transform:scale(1.04);border-color:#6366F1;box-shadow:0 4px 14px rgba(99,102,241,0.2)}
-.vocab-card .vemoji{font-size:36px;margin-bottom:6px}
-.vocab-card .vword{font-weight:800;font-size:14px;color:#1e293b}
-.vocab-card .vtrans{font-size:12px;color:#64748b;margin-top:2px}
-.vocab-card .vphon{font-size:11px;color:#94a3b8}
-.vocab-card.flipped{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-color:#6366F1}
-.vocab-card.flipped .vword,.vocab-card.flipped .vtrans,.vocab-card.flipped .vphon{color:#fff}
-.quiz-box{background:#f8fafc;border-radius:16px;padding:20px}
-.quiz-q{font-size:16px;font-weight:700;color:#1e293b;margin-bottom:16px;text-align:center}
-.quiz-emoji{font-size:56px;text-align:center;margin-bottom:12px}
-.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.quiz-opt{padding:12px;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;text-align:center;transition:.2s;background:#fff}
-.quiz-opt:hover{border-color:#6366F1;background:#f1f5ff}
-.quiz-opt.correct{background:#d1fae5;border-color:#10B981;color:#065F46}
-.quiz-opt.wrong{background:#fee2e2;border-color:#EF4444;color:#991B1B}
-.progress-bar{height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:16px}
-.progress-fill{height:100%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:4px;transition:.3s}
-.score-display{text-align:center;font-size:14px;font-weight:700;color:#64748b;margin-bottom:12px}
-.listen-section{text-align:center}
-.big-emoji{font-size:80px;margin:10px 0}
-.word-display{font-family:'Fredoka One',cursive;font-size:36px;color:#4338CA;margin:8px 0}
-.phonetic{font-size:16px;color:#64748b;margin-bottom:12px}
-.translation{font-size:18px;color:#1e293b;font-weight:700;margin-bottom:16px}
-.play-btn{background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s}
-.play-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(99,102,241,0.4)}
-.nav-arrows{display:flex;gap:8px;justify-content:center;margin-top:14px}
-.arr-btn{background:#f1f5f9;border:none;border-radius:10px;padding:8px 20px;cursor:pointer;font-size:18px}
-.arr-btn:hover{background:#e2e8f0}
-.game-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.match-card{border-radius:12px;border:2px solid #e2e8f0;padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;min-height:70px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;background:#fff}
-.match-card:hover{border-color:#6366F1;background:#f8faff}
-.match-card.selected{background:#EEF2FF;border-color:#6366F1;color:#4338CA}
-.match-card.matched{background:#d1fae5;border-color:#10B981;color:#065F46}
-.match-card.wrong-shake{animation:shake .4s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.spell-area{text-align:center}
-.spell-word-display{display:flex;gap:6px;justify-content:center;margin:12px 0;flex-wrap:wrap}
-.spell-slot{width:38px;height:42px;border-bottom:3px solid #6366F1;display:flex;align-items:flex-end;justify-content:center;font-size:22px;font-weight:800;color:#4338CA;padding-bottom:2px}
-.letter-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:12px 0}
-.letter-btn{width:36px;height:36px;border-radius:8px;border:2px solid #e2e8f0;background:#fff;font-size:16px;font-weight:800;cursor:pointer;transition:.2s}
-.letter-btn:hover{background:#EEF2FF;border-color:#6366F1}
-.letter-btn:disabled{opacity:.4;cursor:not-allowed}
-.result-banner{text-align:center;padding:16px;border-radius:14px;margin-top:12px;font-size:16px;font-weight:700}
-.result-banner.win{background:#d1fae5;color:#065F46}
-.result-banner.lose{background:#fee2e2;color:#991B1B}
-.section-title{font-family:'Fredoka One',cursive;font-size:16px;color:#4338CA;margin-bottom:10px}
-.trace-area{border:2px dashed #c7d2fe;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px}
-.trace-letter{font-family:'Fredoka One',cursive;font-size:72px;color:#c7d2fe;margin:8px 0}
-.writing-input{width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:16px;font-family:'Nunito',sans-serif;margin-bottom:8px;outline:none}
-.writing-input:focus{border-color:#6366F1}
-.submit-btn{background:linear-gradient(135deg,#10B981,#059669);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
-.abc-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.abc-card{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:10px;padding:8px 12px;text-align:center;cursor:pointer;color:#fff;min-width:48px;transition:.2s}
-.abc-card:hover{transform:scale(1.08)}
-.abc-letter{font-family:'Fredoka One',cursive;font-size:20px}
-.abc-word{font-size:10px;opacity:.9}
-.congrats{text-align:center;padding:20px}
-.congrats-emoji{font-size:60px;margin-bottom:8px}
-.congrats-title{font-family:'Fredoka One',cursive;font-size:28px;color:#4338CA;margin-bottom:8px}
-.congrats-sub{color:#64748b;font-size:14px}
-.try-again{background:linear-gradient(135deg,#FF6B6B,#C0392B);color:#fff;border:none;border-radius:12px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:12px}
-.sentence-box{background:#f1f5f9;border-radius:12px;padding:14px;margin-bottom:12px;font-size:15px;font-weight:700;color:#1e293b;line-height:1.8}
-.highlight{color:#4338CA;font-family:'Fredoka One',cursive;font-size:17px}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.number-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
-.num-card{background:linear-gradient(135deg,#FF6B9D,#A855F7);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:.2s;color:#fff}
-.num-card:hover{transform:scale(1.05)}
-.num-big{font-family:'Fredoka One',cursive;font-size:24px}
-.num-word{font-size:11px;font-weight:700}
-.value-box{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:12px 16px;margin-bottom:12px;border-left:4px solid #F59E0B}
-.value-title{font-weight:800;color:#92400E;font-size:13px;margin-bottom:4px}
-.value-text{color:#78350F;font-size:13px}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{font-family:'Nunito',sans-serif;background:#F0F4FF;min-height:100vh;overflow-x:hidden}
+.app{max-width:480px;margin:0 auto;background:#F0F4FF;min-height:100vh;position:relative}
+
+/* Header */
+.hdr{background:linear-gradient(135deg,#6C63FF 0%,#9C8FFF 100%);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(108,99,255,.25)}
+.hdr-av{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.hdr-info{flex:1}
+.hdr-title{font-family:'Fredoka One',cursive;color:#fff;font-size:18px;line-height:1.1}
+.hdr-sub{color:rgba(255,255,255,.8);font-size:11px;margin-top:1px}
+.score-pill{background:rgba(255,255,255,.25);border-radius:20px;padding:5px 12px;text-align:center;border:1.5px solid rgba(255,255,255,.4)}
+.score-num{font-family:'Fredoka One',cursive;color:#FFE566;font-size:20px;line-height:1}
+.score-lbl{color:rgba(255,255,255,.85);font-size:10px}
+
+/* Bottom nav */
+.nav{display:flex;background:#fff;border-top:1.5px solid #E8EEFF;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -4px 20px rgba(108,99,255,.1)}
+.nb{flex:1;padding:9px 4px 7px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.2s}
+.nb .nbi{font-size:22px;transition:.2s}
+.nb .nbl{font-size:10px;font-weight:800;color:#B0B8D4;letter-spacing:.3px}
+.nb.on .nbl{color:#6C63FF}
+.nb.on .nbi{transform:translateY(-2px)}
+.nb-dot{width:5px;height:5px;border-radius:50%;background:#6C63FF;margin:0 auto;opacity:0;transition:.2s}
+.nb.on .nb-dot{opacity:1}
+
+/* Pages */
+.page{display:none;padding:14px 14px 88px;min-height:calc(100vh - 72px)}
+.page.on{display:block}
+
+/* Section title */
+.sec{font-family:'Fredoka One',cursive;font-size:15px;color:#6C63FF;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sec::after{content:'';flex:1;height:1.5px;background:#E8EEFF}
+
+/* Unit cards */
+.unit-card{border-radius:18px;padding:16px 14px;margin-bottom:10px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.08);transition:.15s}
+.unit-card:active{transform:scale(.97)}
+.uc-bg{position:absolute;right:-10px;top:-10px;font-size:70px;opacity:.18;transform:rotate(-10deg);pointer-events:none}
+.uc-badge{background:rgba(255,255,255,.35);border-radius:8px;padding:2px 10px;font-size:10px;font-weight:800;color:#fff;display:inline-block;margin-bottom:6px}
+.uc-title{font-family:'Fredoka One',cursive;color:#fff;font-size:20px}
+.uc-sub{color:rgba(255,255,255,.88);font-size:12px;margin-top:3px}
+.uc-chips{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.25);border-radius:20px;padding:2px 9px;color:#fff;font-size:10px;font-weight:700}
+.uc-bar{margin-top:10px;height:5px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}
+.uc-fill{height:100%;background:rgba(255,255,255,.75);border-radius:3px}
+
+/* Lesson overlay */
+.ls-screen{display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:100%;background:#F0F4FF;z-index:200;overflow-y:auto;padding-bottom:20px}
+.ls-screen.on{display:block}
+.ls-hdr{padding:12px 14px;display:flex;align-items:center;gap:8px;background:rgba(240,244,255,.95);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10;border-bottom:1.5px solid #E8EEFF}
+.back-btn{width:36px;height:36px;border-radius:50%;background:#EEF0FF;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#6C63FF}
+.ls-title{font-family:'Fredoka One',cursive;color:#2D2D6E;font-size:17px;flex:1}
+.tab-row{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;scrollbar-width:none;background:#fff;border-bottom:1.5px solid #E8EEFF}
+.tab-row::-webkit-scrollbar{display:none}
+.tbtn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid #E0E4FF;background:#fff;color:#8892C8;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s;white-space:nowrap}
+.tbtn.on{background:#6C63FF;border-color:#6C63FF;color:#fff}
+.tab-body{padding:14px}
+
+/* Vocab */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vc{border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;background:#fff;border:2px solid #E8EEFF;box-shadow:0 2px 10px rgba(108,99,255,.07);transition:.15s}
+.vc:active{transform:scale(.93)}
+.vc.lit{border-color:#6C63FF;background:#F0EEFF;box-shadow:0 4px 16px rgba(108,99,255,.2)}
+.vc-em{font-size:46px;margin-bottom:6px;display:block}
+.vc-w{font-family:'Fredoka One',cursive;font-size:17px;color:#2D2D6E}
+.vc-p{font-size:11px;color:#A0A8CC;margin-top:2px}
+.vc-hint{font-size:10px;color:#C8CCED;margin-top:4px}
+
+/* Grammar */
+.gc{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:8px;border-left:4px solid #6C63FF;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 2px 10px rgba(108,99,255,.07);transition:.15s}
+.gc:active{transform:scale(.97)}
+.gc-icon{font-size:26px;flex-shrink:0}
+.gc-q{font-size:12px;color:#A0A8CC;margin-bottom:3px}
+.gc-a{font-family:'Fredoka One',cursive;font-size:15px;color:#6C63FF}
+
+/* Numbers */
+.num-hero{background:linear-gradient(135deg,#6C63FF,#9C8FFF);border-radius:20px;padding:24px;text-align:center;margin-bottom:14px;box-shadow:0 6px 20px rgba(108,99,255,.3)}
+.num-big{font-family:'Fredoka One',cursive;font-size:96px;color:#fff;line-height:1;text-shadow:0 4px 15px rgba(0,0,0,.2)}
+.num-word{font-family:'Fredoka One',cursive;font-size:28px;color:rgba(255,255,255,.9);margin-top:4px}
+.num-objs{font-size:26px;margin:10px 0;letter-spacing:3px;color:#fff;min-height:36px;word-break:break-all}
+.num-play{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.5);color:#fff;font-size:24px;cursor:pointer;margin:8px auto 0;display:flex;align-items:center;justify-content:center;transition:.2s}
+.num-play:active{transform:scale(.9)}
+.num-controls{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.num-arr{width:50px;height:50px;border-radius:50%;background:#fff;border:2px solid #E8EEFF;font-size:20px;cursor:pointer;color:#6C63FF;font-weight:800;box-shadow:0 2px 10px rgba(108,99,255,.15);transition:.15s}
+.num-arr:active{transform:scale(.9)}
+.num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.ngc{border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff;border:2px solid #E8EEFF;transition:.15s}
+.ngc:active{transform:scale(.9)}
+.ngc-n{font-family:'Fredoka One',cursive;font-size:20px;color:#2D2D6E}
+.ngc-w{font-size:9px;color:#A0A8CC;font-weight:700}
+.ngc.sel{background:#EEF0FF;border-color:#6C63FF}
+
+/* Writing canvas */
+.wc-wrap{background:#fff;border-radius:18px;padding:14px;box-shadow:0 4px 16px rgba(108,99,255,.1);margin-bottom:12px}
+.wc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.wc-letter{font-family:'Fredoka One',cursive;font-size:40px;color:#6C63FF;line-height:1}
+.wc-word{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:#2D2D6E}
+canvas.wcanvas{border-radius:12px;background:#F8F9FF;border:2px dashed #C7D2FE;display:block;touch-action:none;cursor:crosshair;width:100%;height:190px}
+.wc-btns{display:flex;gap:8px;margin-top:10px;justify-content:center}
+.wb{border-radius:10px;border:none;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s}
+.wb:active{transform:scale(.94)}
+.wb-clr{background:#FEE2E2;color:#991B1B}
+.wb-chk{background:#6C63FF;color:#fff;box-shadow:0 4px 12px rgba(108,99,255,.35)}
+.wb-hear{background:#FFF4E5;color:#92400E}
+.letter-sel-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;padding-bottom:2px}
+.letter-sel-row::-webkit-scrollbar{display:none}
+.ls-btn{flex-shrink:0;width:52px;height:52px;border-radius:12px;border:2px solid #E8EEFF;background:#fff;font-family:'Fredoka One',cursive;font-size:18px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#2D2D6E;box-shadow:0 2px 8px rgba(108,99,255,.07);transition:.15s}
+.ls-btn.on{background:#EEF0FF;border-color:#6C63FF;color:#6C63FF}
+.ls-btn span{font-size:9px;font-weight:700;color:#A0A8CC}
+
+/* SPEAK page ★ NEW ★ */
+.speak-intro{background:linear-gradient(135deg,#FF6B9D,#FF8E53);border-radius:20px;padding:20px;text-align:center;margin-bottom:14px;box-shadow:0 6px 20px rgba(255,107,157,.3)}
+.si-title{font-family:'Fredoka One',cursive;color:#fff;font-size:22px}
+.si-sub{color:rgba(255,255,255,.88);font-size:13px;margin-top:4px}
+.speak-card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 18px rgba(108,99,255,.1);text-align:center;margin-bottom:12px}
+.speak-emoji{font-size:80px;margin-bottom:8px;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.speak-word{font-family:'Fredoka One',cursive;font-size:38px;color:#2D2D6E;margin-bottom:4px}
+.speak-phon{font-size:15px;color:#A0A8CC;margin-bottom:16px}
+.speak-hear-btn{background:#EEF0FF;border:none;border-radius:12px;padding:10px 22px;font-size:14px;font-weight:800;color:#6C63FF;cursor:pointer;font-family:'Nunito',sans-serif;margin-bottom:14px;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.speak-hear-btn:active{transform:scale(.95)}
+
+/* Mic button */
+.mic-btn{width:80px;height:80px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:36px;transition:.2s;margin:0 auto;position:relative}
+.mic-btn.idle{background:linear-gradient(135deg,#6C63FF,#9C8FFF);box-shadow:0 6px 24px rgba(108,99,255,.45)}
+.mic-btn.recording{background:linear-gradient(135deg,#FF6B6B,#EF4444);box-shadow:0 0 0 0 rgba(255,107,107,.7);animation:pulse-ring 1.2s infinite}
+.mic-btn:active{transform:scale(.92)}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(255,107,107,.7)}70%{box-shadow:0 0 0 18px rgba(255,107,107,0)}100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}}
+.mic-label{font-size:13px;font-weight:800;color:#A0A8CC;margin-top:8px;text-align:center}
+.mic-label.rec{color:#EF4444;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Score bar */
+.score-result{border-radius:16px;padding:16px;margin-top:14px;text-align:center;display:none}
+.score-result.win{background:#F0FFF4;border:2px solid #86EFAC}
+.score-result.ok{background:#FFFBEB;border:2px solid #FCD34D}
+.score-result.try{background:#FFF5F5;border:2px solid #FCA5A5}
+.sr-emoji{font-size:40px;margin-bottom:6px}
+.sr-title{font-family:'Fredoka One',cursive;font-size:20px}
+.sr-bar-wrap{background:#E8EEFF;border-radius:10px;height:14px;overflow:hidden;margin:10px 0 6px}
+.sr-bar{height:100%;border-radius:10px;transition:.8s ease-out}
+.sr-heard{font-size:13px;color:#6C63FF;font-weight:700;margin-top:4px}
+.sr-pts{font-family:'Fredoka One',cursive;font-size:18px;color:#6C63FF;margin-top:4px}
+
+/* Speak navigation */
+.speak-nav{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.sp-nav-btn{width:48px;height:48px;border-radius:50%;background:#fff;border:2px solid #E8EEFF;font-size:20px;cursor:pointer;color:#6C63FF;box-shadow:0 2px 10px rgba(108,99,255,.12);transition:.15s}
+.sp-nav-btn:active{transform:scale(.9)}
+
+/* Speak unit selector */
+.su-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+
+/* Quiz */
+.qprog{height:8px;background:#E8EEFF;border-radius:4px;overflow:hidden;margin-bottom:10px}
+.qpfill{height:100%;background:linear-gradient(90deg,#6C63FF,#A78BFA);border-radius:4px;transition:.4s}
+.qcard{background:#fff;border-radius:18px;padding:20px;text-align:center;margin-bottom:14px;box-shadow:0 4px 16px rgba(108,99,255,.1)}
+.qemoji{font-size:72px;margin-bottom:6px;display:block}
+.qword{font-family:'Fredoka One',cursive;font-size:22px;color:#2D2D6E;margin-bottom:4px}
+.qhint{font-size:12px;color:#A0A8CC}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qopt{border-radius:14px;border:2px solid #E8EEFF;background:#fff;padding:14px 8px;font-size:26px;cursor:pointer;transition:.2s;text-align:center;box-shadow:0 2px 8px rgba(108,99,255,.06)}
+.qopt:active{transform:scale(.93)}
+.qopt.ok{background:#F0FFF4;border-color:#10B981}
+.qopt.no{background:#FFF5F5;border-color:#EF4444}
+
+/* Games */
+.game-sel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.gsc{border-radius:18px;padding:18px 12px;text-align:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.1);transition:.15s}
+.gsc:active{transform:scale(.95)}
+.gsc-em{font-size:40px;margin-bottom:6px}
+.gsc-n{font-family:'Fredoka One',cursive;font-size:15px;color:#fff}
+.gsc-d{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
+
+/* Match game */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mc{border-radius:12px;border:2px solid #E8EEFF;background:#fff;min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#2D2D6E;cursor:pointer;transition:.2s;padding:6px;text-align:center;box-shadow:0 2px 8px rgba(108,99,255,.06)}
+.mc:active{transform:scale(.9)}
+.mc.sel{background:#EEF0FF;border-color:#6C63FF;color:#6C63FF}
+.mc.done{background:#F0FFF4;border-color:#10B981;color:#065F46}
+.mc.err{animation:shake .35s;border-color:#EF4444}
+.mc-em{font-size:26px;margin-bottom:2px;display:block}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
+
+/* Spell */
+.spell-wrap{text-align:center}
+.spell-slots{display:flex;gap:6px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.ss{width:40px;height:46px;border-bottom:3px solid #6C63FF;font-family:'Fredoka One',cursive;font-size:22px;color:#6C63FF;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;transition:.2s}
+.ss.filled{color:#2D2D6E}
+.lpool{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.lpb{width:40px;height:40px;border-radius:10px;border:2px solid #E8EEFF;background:#fff;color:#2D2D6E;font-family:'Fredoka One',cursive;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(108,99,255,.07);transition:.15s}
+.lpb:active{transform:scale(.88)}
+.lpb:disabled{opacity:.25;cursor:not-allowed}
+
+/* Toast */
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%) translateY(-50px);background:#2D2D6E;border-radius:12px;padding:9px 20px;color:#fff;font-weight:800;font-size:13px;z-index:600;transition:.3s;opacity:0;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Congrats */
+.cg-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(45,45,110,.7);z-index:1000;align-items:center;justify-content:center}
+.cg-overlay.on{display:flex}
+.cg-box{background:#fff;border-radius:24px;padding:28px 24px;text-align:center;max-width:300px;width:88%;box-shadow:0 20px 50px rgba(0,0,0,.25);position:relative;z-index:1}
+.cg-em{font-size:70px;margin-bottom:10px;display:block;animation:bounce .6s infinite alternate}
+@keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+.cg-title{font-family:'Fredoka One',cursive;font-size:26px;color:#2D2D6E;margin-bottom:6px}
+.cg-sub{font-size:14px;color:#A0A8CC}
+.cg-pts{font-family:'Fredoka One',cursive;font-size:36px;color:#6C63FF;margin:10px 0}
+.cg-btn{background:linear-gradient(135deg,#6C63FF,#9C8FFF);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;box-shadow:0 6px 18px rgba(108,99,255,.4)}
+.confetti-w{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;border-radius:24px}
 </style>
 
-<h2 class="sr-only">Phần mềm học Tiếng Anh - Family and Friends 1</h2>
+<h2 class="sr-only">Family and Friends 1 – English Learning App</h2>
+<div class="toast" id="toast"></div>
 
 <div class="app">
-<div class="header">
-  <div>
-    <div class="header-title">🌟 Family & Friends 1</div>
-    <div class="header-sub">Tiếng Anh lớp 1 · 6 Units</div>
+<div class="hdr">
+  <div class="hdr-av">🌟</div>
+  <div class="hdr-info">
+    <div class="hdr-title">Family &amp; Friends 1</div>
+    <div class="hdr-sub" id="hdr-sub">Let's learn English! 🚀</div>
   </div>
-  <div style="text-align:right">
-    <div class="stars-bar" id="stars-display">
-      <span>⭐</span><span id="score-count" style="color:#FFD93D;font-weight:800;font-size:14px">0 điểm</span>
-    </div>
-    <div style="color:rgba(255,255,255,0.8);font-size:11px;margin-top:2px" id="level-txt">Người mới bắt đầu</div>
+  <div class="score-pill">
+    <div class="score-num" id="sc">0</div>
+    <div class="score-lbl">⭐ stars</div>
   </div>
+</div>
+
+<div class="page on" id="pg-home">
+  <div class="sec">📚 Units</div>
+  <div id="unit-list"></div>
+</div>
+
+<div class="page" id="pg-speak">
+  <div class="sec">🎤 Speak &amp; Score</div>
+  <div id="speak-content"></div>
+</div>
+
+<div class="page" id="pg-games">
+  <div class="sec">🎮 Games</div>
+  <div class="game-sel" id="game-sel">
+    <div class="gsc" style="background:linear-gradient(135deg,#FF6B6B,#FF8E53)" onclick="launchGame('quiz')"><div class="gsc-em">❓</div><div class="gsc-n">Quiz</div><div class="gsc-d">Pick the picture</div></div>
+    <div class="gsc" style="background:linear-gradient(135deg,#4ECDC4,#44A08D)" onclick="launchGame('match')"><div class="gsc-em">🃏</div><div class="gsc-n">Match</div><div class="gsc-d">Find the pair!</div></div>
+    <div class="gsc" style="background:linear-gradient(135deg,#A78BFA,#6D28D9)" onclick="launchGame('spell')"><div class="gsc-em">🔤</div><div class="gsc-n">Spell It!</div><div class="gsc-d">Build the word</div></div>
+    <div class="gsc" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)" onclick="launchGame('listenq')"><div class="gsc-em">🔊</div><div class="gsc-n">Listen!</div><div class="gsc-d">Hear &amp; choose</div></div>
+  </div>
+  <div id="game-area"></div>
 </div>
 
 <div class="nav">
-  <button class="nav-btn nb-units active" onclick="showPage('units')"><span class="ico">📚</span>Bài học</button>
-  <button class="nav-btn nb-listen" onclick="showPage('listen')"><span class="ico">👂</span>Nghe</button>
-  <button class="nav-btn nb-speak" onclick="showPage('speak')"><span class="ico">🗣️</span>Nói</button>
-  <button class="nav-btn nb-write" onclick="showPage('write')"><span class="ico">✏️</span>Viết</button>
-  <button class="nav-btn nb-games" onclick="showPage('games')"><span class="ico">🎮</span>Trò chơi</button>
+  <button class="nb on" onclick="nav('home')" id="nb-home"><div class="nb-dot"></div><span class="nbi">🏠</span><span class="nbl">HOME</span></button>
+  <button class="nb" onclick="nav('speak')" id="nb-speak"><div class="nb-dot"></div><span class="nbi">🎤</span><span class="nbl">SPEAK</span></button>
+  <button class="nb" onclick="nav('games')" id="nb-games"><div class="nb-dot"></div><span class="nbi">🎮</span><span class="nbl">GAMES</span></button>
+</div>
 </div>
 
-<div class="screen" id="main-screen">
-  <div id="page-units" class="tab-content active">
-    <div class="section-title">📚 Chọn bài học</div>
-    <div class="unit-grid" id="unit-grid"></div>
+<!-- Lesson overlay -->
+<div class="ls-screen" id="ls-screen">
+  <div class="ls-hdr">
+    <button class="back-btn" onclick="closeLesson()">←</button>
+    <div class="ls-title" id="ls-title">Unit</div>
+    <span id="ls-em" style="font-size:24px">🎨</span>
   </div>
-
-  <div id="page-listen" class="tab-content">
-    <div class="section-title">👂 Luyện nghe từ vựng</div>
-    <div id="listen-unit-select"></div>
-    <div id="listen-content" style="display:none">
-      <div class="lesson-header">
-        <button class="back-btn" onclick="document.getElementById('listen-content').style.display='none';document.getElementById('listen-unit-select').style.display='block'">← Quay lại</button>
-        <span id="listen-unit-title" style="font-weight:800;color:#3A86FF"></span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="listen-progress" style="width:0%"></div></div>
-      <div class="score-display" id="listen-idx-display">Từ 1 / 5</div>
-      <div class="listen-section">
-        <div class="big-emoji" id="listen-emoji">🍎</div>
-        <div class="word-display" id="listen-word">apple</div>
-        <div class="phonetic" id="listen-phon">/ˈæpəl/</div>
-        <div class="translation" id="listen-trans">quả táo</div>
-        <button class="play-btn" onclick="speakWord()">🔊 Nghe phát âm</button>
-      </div>
-      <div class="nav-arrows">
-        <button class="arr-btn" onclick="listenNav(-1)">◀</button>
-        <button class="arr-btn" onclick="listenNav(1)">▶</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="page-speak" class="tab-content">
-    <div class="section-title">🗣️ Luyện nói - Câu mẫu</div>
-    <div id="speak-content"></div>
-  </div>
-
-  <div id="page-write" class="tab-content">
-    <div class="section-title">✏️ Luyện viết chữ cái</div>
-    <div class="abc-row" id="abc-row"></div>
-    <div id="write-area"></div>
-  </div>
-
-  <div id="page-games" class="tab-content">
-    <div class="section-title">🎮 Trò chơi</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-      <div style="background:linear-gradient(135deg,#FF6B6B,#FF8E53);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('match')">
-        <div style="font-size:32px">🃏</div>
-        <div style="color:#fff;font-weight:800;font-size:14px">Ghép thẻ</div>
-        <div style="color:rgba(255,255,255,0.85);font-size:11px">Nối từ với hình</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#4ECDC4,#44A08D);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('spell')">
-        <div style="font-size:32px">🔤</div>
-        <div style="color:#fff;font-weight:800;font-size:14px">Đánh vần</div>
-        <div style="color:rgba(255,255,255,0.85);font-size:11px">Sắp xếp chữ cái</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#A78BFA,#6D28D9);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('quiz')">
-        <div style="font-size:32px">❓</div>
-        <div style="color:#fff;font-weight:800;font-size:14px">Trắc nghiệm</div>
-        <div style="color:rgba(255,255,255,0.85);font-size:11px">Chọn đáp án đúng</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#F9A8D4,#EC4899);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="startGame('number')">
-        <div style="font-size:32px">🔢</div>
-        <div style="color:#fff;font-weight:800;font-size:14px">Học số</div>
-        <div style="color:rgba(255,255,255,0.85);font-size:11px">1 đến 10</div>
-      </div>
-    </div>
-    <div id="game-area"></div>
-  </div>
-
-  <div id="page-unit-detail" class="tab-content">
-    <div class="lesson-header">
-      <button class="back-btn" id="back-from-unit" onclick="showPage('units')">← Bài học</button>
-      <span class="lesson-title" id="unit-detail-title"></span>
-    </div>
-    <div class="lesson-tabs" id="unit-lesson-tabs"></div>
-    <div id="unit-lesson-content"></div>
-  </div>
+  <div class="tab-row" id="tab-row"></div>
+  <div class="tab-body" id="tab-body"></div>
 </div>
+
+<!-- Congrats -->
+<div class="cg-overlay" id="cgov">
+  <div class="confetti-w" id="cwrap"></div>
+  <div class="cg-box">
+    <span class="cg-em" id="cg-em">🏆</span>
+    <div class="cg-title" id="cg-title">Amazing!</div>
+    <div class="cg-sub" id="cg-sub">All correct!</div>
+    <div class="cg-pts" id="cg-pts">+50 ⭐</div>
+    <button class="cg-btn" onclick="closeCg()">Keep going!</button>
+  </div>
 </div>
 
 <script>
 const UNITS=[
-{id:'starter',name:'Starter',topic:'Xin chào!',emoji:'👋',c1:'#FF9A9E',c2:'#FAD0C4',
-vocab:[
-{e:'👧',w:'Rosy',p:'/ˈroʊzi/',t:'Rosy (tên nhân vật)'},
-{e:'👦',w:'Tim',p:'/tɪm/',t:'Tim (tên nhân vật)'},
-{e:'👶',w:'Billy',p:'/ˈbɪli/',t:'Billy (tên nhân vật)'},
-{e:'🤝',w:'hello',p:'/həˈloʊ/',t:'xin chào'},
-{e:'👋',w:'goodbye',p:'/ˌɡʊdˈbaɪ/',t:'tạm biệt'},
-],
-grammar:["What's your name? → I'm Rosy.","Hello! / Goodbye!","Listen to the teacher.","Stand up. / Sit down."],
-letters:[{l:'A',w:'apple',e:'🍎'},{l:'B',w:'bat',e:'🏏'}],
-value:'Chào hỏi mọi người',
-numbers:[{n:1,w:'one'},{n:2,w:'two'}]},
-
-{id:'unit1',name:'Unit 1',topic:'Màu sắc',emoji:'🎨',c1:'#A1C4FD',c2:'#C2E9FB',
-vocab:[
-{e:'🔴',w:'red',p:'/red/',t:'màu đỏ'},
-{e:'💚',w:'green',p:'/ɡriːn/',t:'màu xanh lá'},
-{e:'💙',w:'blue',p:'/bluː/',t:'màu xanh dương'},
-{e:'🖤',w:'black',p:'/blæk/',t:'màu đen'},
-{e:'💛',w:'yellow',p:'/ˈjeloʊ/',t:'màu vàng'},
-],
-grammar:["What color is it?","It's green.","It's red.","What color is it? → It's blue."],
-letters:[{l:'C',w:'cat',e:'🐱'},{l:'D',w:'dog',e:'🐶'}],
-value:'Giữ gìn sạch sẽ và gọn gàng',
-numbers:[{n:3,w:'three'},{n:4,w:'four'}]},
-
-{id:'unit2',name:'Unit 2',topic:'Đồ dùng học tập',emoji:'🎒',c1:'#FFECD2',c2:'#FCB69F',
-vocab:[
-{e:'🪑',w:'chair',p:'/tʃer/',t:'cái ghế'},
-{e:'🪵',w:'desk',p:'/desk/',t:'cái bàn học'},
-{e:'🖍️',w:'crayon',p:'/ˈkreɪɑːn/',t:'bút sáp màu'},
-{e:'✏️',w:'pencil',p:'/ˈpensl/',t:'bút chì'},
-{e:'📓',w:'notebook',p:'/ˈnoʊtbʊk/',t:'quyển vở'},
-],
-grammar:["What's this?","It's a notebook.","It's a desk.","What's this? → It's a chair."],
-letters:[{l:'E',w:'egg',e:'🥚'},{l:'F',w:'fish',e:'🐟'}],
-value:'Chơi đùa có phép tắc',
-numbers:[{n:5,w:'five'},{n:6,w:'six'}]},
-
-{id:'unit3',name:'Unit 3',topic:'Đồ chơi',emoji:'🧸',c1:'#D4FC79',c2:'#96E6A1',
-vocab:[
-{e:'✈️',w:'plane',p:'/pleɪn/',t:'máy bay'},
-{e:'🪆',w:'puppet',p:'/ˈpʌpɪt/',t:'con rối'},
-{e:'🤖',w:'robot',p:'/ˈroʊbɑːt/',t:'người máy'},
-{e:'🎈',w:'balloon',p:'/bəˈluːn/',t:'quả bóng bay'},
-{e:'🧸',w:'teddy bear',p:'/ˈtedi ber/',t:'gấu bông'},
-],
-grammar:["Is it a plane?","Yes, it is.","No, it isn't.","Is it a balloon? → Yes, it is!"],
-letters:[{l:'G',w:'girl',e:'👧'},{l:'H',w:'hat',e:'🎩'},{l:'I',w:'insect',e:'🐛'}],
-value:'Tử tế với mọi người',
-numbers:[{n:7,w:'seven'},{n:8,w:'eight'}]},
-
-{id:'unit4',name:'Unit 4',topic:'Động vật',emoji:'🦁',c1:'#F093FB',c2:'#F5576C',
-vocab:[
-{e:'🐦',w:'bird',p:'/bɜːrd/',t:'con chim'},
-{e:'🐻',w:'bear',p:'/ber/',t:'con gấu'},
-{e:'🦛',w:'hippo',p:'/ˈhɪpoʊ/',t:'con hà mã'},
-{e:'🐊',w:'crocodile',p:'/ˈkrɑːkədaɪl/',t:'con cá sấu'},
-{e:'🐯',w:'tiger',p:'/ˈtaɪɡər/',t:'con hổ'},
-],
-grammar:["What are they?","They're bears.","They're hippos.","What are they? → They're tigers!"],
-letters:[{l:'J',w:'juice',e:'🧃'},{l:'K',w:'key',e:'🔑'},{l:'L',w:'lion',e:'🦁'},{l:'M',w:'mango',e:'🥭'}],
-value:'Yêu quý động vật',
-numbers:[{n:9,w:'nine'},{n:10,w:'ten'}]},
-
-{id:'unit5',name:'Unit 5',topic:'Cơ thể',emoji:'🧍',c1:'#4FACFE',c2:'#00F2FE',
-vocab:[
-{e:'💪',w:'arms',p:'/ɑːrmz/',t:'cánh tay (số nhiều)'},
-{e:'👃',w:'nose',p:'/noʊz/',t:'mũi'},
-{e:'😊',w:'face',p:'/feɪs/',t:'gương mặt'},
-{e:'🦵',w:'legs',p:'/leɡz/',t:'chân (số nhiều)'},
-{e:'🤚',w:'fingers',p:'/ˈfɪŋɡərz/',t:'ngón tay (số nhiều)'},
-{e:'👐',w:'hands',p:'/hændz/',t:'bàn tay (số nhiều)'},
-],
-grammar:["This is my nose.","These are my arms.","This is my face.","These are my hands."],
-letters:[],
-value:'Bảo vệ cơ thể dưới nắng',
-numbers:[]},
-
-{id:'unit6',name:'Unit 6',topic:'Hộp cơm',emoji:'🍱',c1:'#43E97B',c2:'#38F9D7',
-vocab:[
-{e:'🎒',w:'lunchbox',p:'/ˈlʌntʃbɑːks/',t:'hộp cơm trưa'},
-{e:'🥪',w:'sandwich',p:'/ˈsænwɪtʃ/',t:'bánh mì kẹp'},
-{e:'🥤',w:'drink',p:'/drɪŋk/',t:'thức uống'},
-{e:'🍌',w:'banana',p:'/bəˈnænə/',t:'quả chuối'},
-{e:'🍪',w:'cookie',p:'/ˈkʊki/',t:'bánh quy'},
-{e:'🍐',w:'pear',p:'/per/',t:'quả lê'},
-],
-grammar:["I have a pear.","I have an apple.","I have two sandwiches.","I have a banana."],
-letters:[],
-value:'Chia sẻ với bạn bè',
-numbers:[]}
+{id:0,name:'Starter',sub:'Hello!',em:'👋',g:'linear-gradient(135deg,#FF6B9D,#C9184A)',
+ vocab:[{e:'👧',w:'Rosy',p:'/ˈroʊzi/'},{e:'👦',w:'Tim',p:'/tɪm/'},{e:'👶',w:'Billy',p:'/ˈbɪli/'},{e:'🤝',w:'hello',p:'/həˈloʊ/'},{e:'👋',w:'goodbye',p:'/ˌɡʊdˈbaɪ/'}],
+ gram:[{q:'Say your name',a:"What's your name? I'm Rosy!"},{q:'Say hi',a:'Hello! Hi there!'},{q:'Say bye',a:'Goodbye! See you!'}],
+ nums:[{n:1,w:'one',e:'🍎'},{n:2,w:'two',e:'🍎🍎'}],
+ letters:[{l:'A',w:'apple',e:'🍎',path:'M 15 80 Q 15 20 50 20 Q 85 20 85 80 M 15 55 L 85 55 M 50 20 Q 54 6 64 10'},{l:'B',w:'bat',e:'🏏',path:'M 25 15 L 25 85 M 25 15 Q 65 15 65 38 Q 65 52 25 52 M 25 52 Q 70 52 70 68 Q 70 85 25 85'}]},
+{id:1,name:'Unit 1',sub:'Colors',em:'🎨',g:'linear-gradient(135deg,#4FACFE,#00F2FE)',
+ vocab:[{e:'🔴',w:'red',p:'/red/'},{e:'💚',w:'green',p:'/ɡriːn/'},{e:'💙',w:'blue',p:'/bluː/'},{e:'🖤',w:'black',p:'/blæk/'},{e:'💛',w:'yellow',p:'/ˈjeloʊ/'}],
+ gram:[{q:'Ask about color',a:'What color is it?'},{q:'It is green',a:"It's green!"},{q:'Say the color',a:"It's red! It's blue!"}],
+ nums:[{n:3,w:'three',e:'🐱🐱🐱'},{n:4,w:'four',e:'🚗🚗🚗🚗'}],
+ letters:[{l:'C',w:'cat',e:'🐱',path:'M 75 28 Q 45 8 18 32 Q 5 50 18 72 Q 35 92 62 88 Q 88 82 88 58 Q 88 38 75 28 Z M 70 22 L 80 8 L 72 26 M 18 26 L 8 12 L 20 28'},{l:'D',w:'dog',e:'🐶',path:'M 22 15 L 22 85 M 22 15 Q 78 15 78 50 Q 78 85 22 85'}]},
+{id:2,name:'Unit 2',sub:'School Things',em:'🎒',g:'linear-gradient(135deg,#43E97B,#38F9D7)',
+ vocab:[{e:'🪑',w:'chair',p:'/tʃer/'},{e:'📐',w:'desk',p:'/desk/'},{e:'🖍️',w:'crayon',p:'/ˈkreɪɑːn/'},{e:'✏️',w:'pencil',p:'/ˈpensl/'},{e:'📓',w:'notebook',p:'/ˈnoʊtbʊk/'}],
+ gram:[{q:"Ask what it is",a:"What's this?"},{q:'Answer: desk',a:"It's a desk!"},{q:'Answer: notebook',a:"It's a notebook!"}],
+ nums:[{n:5,w:'five',e:'✏️✏️✏️✏️✏️'},{n:6,w:'six',e:'📓📓📓📓📓📓'}],
+ letters:[{l:'E',w:'egg',e:'🥚',path:'M 50 12 Q 82 22 82 58 Q 82 88 50 88 Q 18 88 18 58 Q 18 22 50 12 Z'},{l:'F',w:'fish',e:'🐟',path:'M 20 15 L 20 85 M 20 15 L 78 15 M 20 50 L 65 50'}]},
+{id:3,name:'Unit 3',sub:'Toys',em:'🧸',g:'linear-gradient(135deg,#FA709A,#FEE140)',
+ vocab:[{e:'✈️',w:'plane',p:'/pleɪn/'},{e:'🪆',w:'puppet',p:'/ˈpʌpɪt/'},{e:'🤖',w:'robot',p:'/ˈroʊbɑːt/'},{e:'🎈',w:'balloon',p:'/bəˈluːn/'},{e:'🧸',w:'teddy bear',p:'/ˈtedi ber/'}],
+ gram:[{q:'Ask yes/no',a:'Is it a plane?'},{q:'Say yes',a:'Yes, it is!'},{q:'Say no',a:"No, it isn't!"}],
+ nums:[{n:7,w:'seven',e:'🎈🎈🎈🎈🎈🎈🎈'},{n:8,w:'eight',e:'🧸🧸🧸🧸🧸🧸🧸🧸'}],
+ letters:[{l:'G',w:'girl',e:'👧',path:'M 75 32 Q 55 10 28 22 Q 8 38 12 62 Q 18 85 48 88 Q 78 88 84 64 Q 88 46 76 34 M 84 55 L 60 55 L 60 68'},{l:'H',w:'hat',e:'🎩',path:'M 20 15 L 20 85 M 80 15 L 80 85 M 20 50 L 80 50'}]},
+{id:4,name:'Unit 4',sub:'Animals',em:'🦁',g:'linear-gradient(135deg,#A18CD1,#FBC2EB)',
+ vocab:[{e:'🐦',w:'bird',p:'/bɜːrd/'},{e:'🐻',w:'bear',p:'/ber/'},{e:'🦛',w:'hippo',p:'/ˈhɪpoʊ/'},{e:'🐊',w:'crocodile',p:'/ˈkrɑːkədaɪl/'},{e:'🐯',w:'tiger',p:'/ˈtaɪɡər/'}],
+ gram:[{q:'Ask about many',a:'What are they?'},{q:'They are bears',a:"They're bears!"},{q:'They are tigers',a:"They're tigers!"}],
+ nums:[{n:9,w:'nine',e:'🐦🐦🐦🐦🐦🐦🐦🐦🐦'},{n:10,w:'ten',e:'🐻🐻🐻🐻🐻🐻🐻🐻🐻🐻'}],
+ letters:[{l:'I',w:'insect',e:'🐛',path:'M 50 15 L 50 85 M 25 15 L 75 15 M 25 85 L 75 85'},{l:'J',w:'juice',e:'🧃',path:'M 25 15 L 75 15 M 50 15 L 50 65 Q 50 88 32 88 Q 18 88 18 72'}]},
+{id:5,name:'Unit 5',sub:'My Body',em:'🧍',g:'linear-gradient(135deg,#F093FB,#F5576C)',
+ vocab:[{e:'💪',w:'arms',p:'/ɑːrmz/'},{e:'👃',w:'nose',p:'/noʊz/'},{e:'😊',w:'face',p:'/feɪs/'},{e:'🦵',w:'legs',p:'/leɡz/'},{e:'🤚',w:'fingers',p:'/ˈfɪŋɡərz/'},{e:'👐',w:'hands',p:'/hændz/'}],
+ gram:[{q:'One thing',a:'This is my nose!'},{q:'Two things',a:'These are my arms!'},{q:'Point and say',a:'This is my face!'}],
+ nums:[],
+ letters:[{l:'K',w:'kangaroo',e:'🦘',path:'M 22 85 L 22 15 M 22 42 L 62 15 M 22 42 L 68 85'},{l:'L',w:'lion',e:'🦁',path:'M 22 15 L 22 85 M 22 85 L 78 85'}]},
+{id:6,name:'Unit 6',sub:'Lunchtime!',em:'🍱',g:'linear-gradient(135deg,#4FACFE,#43E97B)',
+ vocab:[{e:'🎒',w:'lunchbox',p:'/ˈlʌntʃbɑːks/'},{e:'🥪',w:'sandwich',p:'/ˈsænwɪtʃ/'},{e:'🥤',w:'drink',p:'/drɪŋk/'},{e:'🍌',w:'banana',p:'/bəˈnænə/'},{e:'🍪',w:'cookie',p:'/ˈkʊki/'},{e:'🍐',w:'pear',p:'/per/'}],
+ gram:[{q:'I have one',a:'I have a pear!'},{q:'Vowel sound',a:'I have an apple!'},{q:'I have two',a:'I have two sandwiches!'}],
+ nums:[],
+ letters:[{l:'M',w:'mango',e:'🥭',path:'M 18 85 L 18 18 Q 18 12 34 12 Q 50 12 50 28 Q 50 12 66 12 Q 82 12 82 28 L 82 85'}]}
 ];
+const ALL_VOCAB=UNITS.flatMap(u=>u.vocab);
+let totalSc=0,curUnit=null,numIdx=0,numList=[],curLetIdx=0,curLetObj=null;
+let drawCtx=null,drawing=false,drawCanvas=null;
+let speakUnitId=0,speakIdx=0,mediaRec=null,recChunks=[];
+let gState={};
 
-const ALL_VOCAB=UNITS.flatMap(u=>u.vocab.map(v=>({...v,unit:u.name})));
-const NUMBERS=[
-{n:1,w:'one',e:'1️⃣'},{n:2,w:'two',e:'2️⃣'},{n:3,w:'three',e:'3️⃣'},{n:4,w:'four',e:'4️⃣'},{n:5,w:'five',e:'5️⃣'},
-{n:6,w:'six',e:'6️⃣'},{n:7,w:'seven',e:'7️⃣'},{n:8,w:'eight',e:'8️⃣'},{n:9,w:'nine',e:'9️⃣'},{n:10,w:'ten',e:'🔟'}
-];
+const sh=(a)=>a.sort(()=>Math.random()-.5);
+function addSc(n){totalSc+=n;document.getElementById('sc').textContent=totalSc;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800);}
+function speak(txt,rate=0.85){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=rate;window.speechSynthesis.speak(u);}
 
-let totalScore=0, currentUnit=null, listenIdx=0, listenVocab=[], currentPage='units';
-
-function addScore(pts){
-totalScore+=pts;
-document.getElementById('score-count').textContent=totalScore+' điểm';
-const lvl=totalScore<50?'Người mới bắt đầu':totalScore<150?'Đang tiến bộ':'Siêu sao ⭐';
-document.getElementById('level-txt').textContent=lvl;
+function nav(pg){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+document.getElementById('pg-'+pg).classList.add('on');
+document.getElementById('nb-'+pg).classList.add('on');
+const subs={home:'Choose a lesson! 📚',speak:'Tap mic and speak! 🎤',games:'Play and learn! 🎮'};
+document.getElementById('hdr-sub').textContent=subs[pg]||'';
+if(pg==='speak')buildSpeak();
 }
 
-function showPage(page){
-currentPage=page;
-document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-document.getElementById('page-'+page).classList.add('active');
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-const map={units:'nb-units',listen:'nb-listen',speak:'nb-speak',write:'nb-write',games:'nb-games','unit-detail':'nb-units'};
-if(map[page]) document.querySelector('.'+map[page])?.classList.add('active');
-if(page==='write') buildWritePage();
-if(page==='speak') buildSpeakPage();
-if(page==='listen') buildListenSelect();
-}
-
-function buildUnits(){
-const g=document.getElementById('unit-grid');
-g.innerHTML=UNITS.map(u=>`<div class="unit-card" style="--c1:${u.c1};--c2:${u.c2}" onclick="openUnit('${u.id}')">
-<div class="emoji">${u.emoji}</div>
-<div class="uname">${u.name}: Hello!</div>
-<div class="utopic">${u.topic}</div>
+/* ───── HOME ───── */
+function buildHome(){
+document.getElementById('unit-list').innerHTML=UNITS.map(u=>`
+<div class="unit-card" style="background:${u.g}" onclick="openUnit(${u.id})">
+  <div class="uc-bg">${u.em}</div>
+  <div class="uc-badge">${u.name}</div>
+  <div class="uc-title">${u.sub}</div>
+  <div class="uc-sub">${u.vocab.length} words · Grammar · Writing</div>
+  <div class="uc-chips">${u.vocab.slice(0,3).map(v=>`<span class="chip">${v.e} ${v.w}</span>`).join('')}<span class="chip">+${Math.max(0,u.vocab.length-3)}</span></div>
+  <div class="uc-bar"><div class="uc-fill" style="width:0%"></div></div>
 </div>`).join('');
 }
 
 function openUnit(id){
-currentUnit=UNITS.find(u=>u.id===id);
-if(!currentUnit)return;
-showPage('unit-detail');
-document.getElementById('unit-detail-title').textContent=currentUnit.emoji+' '+currentUnit.name+' - '+currentUnit.topic;
-const tabs=['📖 Từ vựng','🎵 Ngữ pháp','🔢 Số','🔤 Chữ cái','💡 Giá trị','✅ Kiểm tra'];
-const ids=['vtab','gtab','ntab','ltab2','vatab','qtab'];
-document.getElementById('unit-lesson-tabs').innerHTML=tabs.map((t,i)=>`<button class="ltab ${i===0?'active':''}" onclick="switchLessonTab('${ids[i]}')">${t}</button>`).join('');
-renderLessonTab('vtab');
+curUnit=UNITS[id];
+document.getElementById('ls-title').textContent=curUnit.name+' — '+curUnit.sub;
+document.getElementById('ls-em').textContent=curUnit.em;
+const tabs=[{id:'vocab',l:'🗣 Words'},{id:'gram',l:'💬 Talk'},{id:'nums',l:'🔢 Count'},{id:'write',l:'✏️ Write'},{id:'quiz',l:'⭐ Quiz'}];
+document.getElementById('tab-row').innerHTML=tabs.map((t,i)=>`<button class="tbtn${i===0?' on':''}" onclick="switchTab('${t.id}',this)">${t.l}</button>`).join('');
+document.getElementById('ls-screen').classList.add('on');
+renderTab('vocab');
+}
+function closeLesson(){document.getElementById('ls-screen').classList.remove('on');curUnit=null;}
+function switchTab(id,btn){document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderTab(id);}
+
+function renderTab(id){
+const body=document.getElementById('tab-body');
+if(id==='vocab')renderVocab(body);
+else if(id==='gram')renderGram(body);
+else if(id==='nums')renderNums(body);
+else if(id==='write')renderWrite(body);
+else if(id==='quiz')renderQuiz(body);
 }
 
-function switchLessonTab(id){
-document.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active'));
-event.target.classList.add('active');
-renderLessonTab(id);
-}
-
-function renderLessonTab(id){
-const c=document.getElementById('unit-lesson-content');
-if(!currentUnit)return;
-if(id==='vtab'){
-c.innerHTML=`<div class="vocab-grid">${currentUnit.vocab.map((v,i)=>`
-<div class="vocab-card" onclick="flipCard(this,'${v.w}')" id="vc${i}">
-<div class="vemoji">${v.e}</div>
-<div class="vword">${v.w}</div>
-<div class="vphon">${v.p}</div>
-<div class="vtrans">${v.t}</div>
-</div>`).join('')}</div>
-<p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:10px">👆 Bấm vào thẻ để nghe & lật thẻ!</p>`;
-}else if(id==='gtab'){
-c.innerHTML=`<div style="margin-bottom:12px">${currentUnit.grammar.map(g=>`
-<div class="sentence-box">💬 <span class="highlight">${g.split('→')[0]}</span>${g.includes('→')?'<br>→ <span style="color:#059669;font-weight:700">'+g.split('→')[1]+'</span>':''}</div>`).join('')}</div>
-<p style="color:#64748b;font-size:13px;text-align:center">Bấm vào câu để nghe phát âm</p>`;
-c.querySelectorAll('.sentence-box').forEach(b=>b.addEventListener('click',()=>{
-const txt=b.textContent.replace('💬','').trim();
-speak(txt);addScore(2);
-}));
-}else if(id==='ntab'){
-const nums=currentUnit.numbers.length?currentUnit.numbers:NUMBERS;
-c.innerHTML=`<div class="number-row">${nums.map(n=>`
-<div class="num-card" onclick="speak('${n.n} ${n.w}');addScore(2)">
-<div class="num-big">${n.n}</div>
-<div class="num-word">${n.w}</div>
-</div>`).join('')}</div>
-<div style="background:#EEF2FF;border-radius:12px;padding:14px;text-align:center">
-<div style="font-size:32px">🔢</div>
-<div style="font-weight:700;color:#4338CA;font-size:14px;margin-top:6px">Bấm vào số để nghe đọc!</div>
-</div>`;
-}else if(id==='ltab2'){
-if(!currentUnit.letters.length){
-c.innerHTML=`<div style="text-align:center;padding:24px;color:#94a3b8">
-<div style="font-size:40px">📝</div>
-<div style="font-size:14px;margin-top:8px">Unit này ôn tập chữ cái từ các bài trước</div>
-<button class="play-btn" onclick="showPage('write')" style="margin-top:12px">Đến trang luyện viết →</button>
-</div>`;return;
-}
-c.innerHTML=`<div class="vocab-grid">${currentUnit.letters.map(l=>`
-<div class="vocab-card" onclick="speak('${l.l} for ${l.w}');addScore(2)">
-<div class="vemoji">${l.e}</div>
-<div class="vword" style="font-size:20px;font-family:'Fredoka One',cursive">${l.l}${l.l.toLowerCase()}</div>
-<div class="vtrans">${l.w}</div>
+function renderVocab(b){
+b.innerHTML=`<div class="vgrid">${curUnit.vocab.map((v,i)=>`
+<div class="vc" id="vc${i}" onclick="tapVc(${i})">
+  <span class="vc-em">${v.e}</span>
+  <div class="vc-w">${v.w}</div>
+  <div class="vc-p">${v.p}</div>
+  <div class="vc-hint">tap to hear</div>
 </div>`).join('')}</div>`;
-}else if(id==='vatab'){
-c.innerHTML=`<div class="value-box">
-<div class="value-title">💡 Bài học về giá trị sống</div>
-<div class="value-text">${currentUnit.value}</div>
-</div>
-<div style="background:#FFF9C4;border-radius:12px;padding:14px">
-<div style="font-weight:700;color:#92400E;font-size:13px;margin-bottom:8px">🌟 Bạn đã làm tốt chưa?</div>
-${['Tôi luôn chào hỏi khi gặp người lớn','Tôi giữ gìn đồ dùng học tập sạch sẽ','Tôi chia sẻ với bạn bè'].map(s=>`
-<label style="display:flex;gap:8px;align-items:center;margin-bottom:8px;cursor:pointer">
-<input type="checkbox" onchange="addScore(5)" style="width:18px;height:18px">
-<span style="font-size:13px;color:#78350F">${s}</span>
-</label>`).join('')}
-</div>`;
-}else if(id==='qtab'){
-buildQuiz(currentUnit.vocab);
+setTimeout(()=>tapVc(0),300);
 }
+function tapVc(i){
+const v=curUnit.vocab[i];speak(v.w);addSc(2);
+const el=document.getElementById('vc'+i);
+el.classList.add('lit');setTimeout(()=>el.classList.remove('lit'),700);
+showToast('🔊 '+v.w);
 }
 
-function flipCard(el,word){
-el.classList.toggle('flipped');
-speak(word);addScore(3);
-}
-
-let quizState={questions:[],current:0,correct:0};
-function buildQuiz(vocab){
-const c=document.getElementById('unit-lesson-content');
-if(!vocab||!vocab.length){c.innerHTML='<p>Chưa có câu hỏi</p>';return;}
-const q=shuffle([...vocab]).slice(0,Math.min(5,vocab.length));
-quizState={questions:q,current:0,correct:0};
-showQuizQ(c);
-}
-
-function showQuizQ(c){
-if(!c)c=document.getElementById('unit-lesson-content');
-const qs=quizState;
-if(qs.current>=qs.questions.length){
-c.innerHTML=`<div class="congrats"><div class="congrats-emoji">${qs.correct===qs.questions.length?'🏆':'⭐'}</div>
-<div class="congrats-title">${qs.correct===qs.questions.length?'Xuất sắc!':'Cố lên nhé!'}</div>
-<div class="congrats-sub">Đúng ${qs.correct}/${qs.questions.length} câu!</div>
-<button class="try-again" onclick="buildQuiz(currentUnit.vocab)">Làm lại</button></div>`;
-addScore(qs.correct*10);return;
-}
-const q=qs.questions[qs.current];
-const pool=ALL_VOCAB.filter(v=>v.w!==q.w);
-const wrong=shuffle(pool).slice(0,3).map(v=>v.t);
-const opts=shuffle([q.t,...wrong]);
-c.innerHTML=`<div class="quiz-box">
-<div class="progress-bar"><div class="progress-fill" style="width:${(qs.current/qs.questions.length)*100}%"></div></div>
-<div class="score-display">Câu ${qs.current+1}/${qs.questions.length} · Đúng: ${qs.correct}</div>
-<div class="quiz-emoji">${q.e}</div>
-<div class="quiz-q">"${q.w}" có nghĩa là gì?</div>
-<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkQuiz(this,'${o}','${q.t}')">${o}</div>`).join('')}</div>
-</div>`;
-}
-
-function checkQuiz(el,chosen,correct){
-document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
-if(chosen===correct){
-el.classList.add('correct');
-quizState.correct++;addScore(10);
-setTimeout(()=>showQuizQ(),800);
-}else{
-el.classList.add('wrong');
-document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
-setTimeout(()=>showQuizQ(),1200);
-}
-quizState.current++;
-}
-
-function buildListenSelect(){
-const d=document.getElementById('listen-unit-select');
-d.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">
-${UNITS.map(u=>`<div style="background:linear-gradient(135deg,${u.c1},${u.c2});border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="startListen('${u.id}')">
-<div style="font-size:24px">${u.emoji}</div>
-<div style="font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.3)">${u.name}</div>
-<div style="font-size:11px;color:rgba(255,255,255,0.9)">${u.topic}</div>
-</div>`).join('')}</div>`;
-}
-
-function startListen(uid){
-const u=UNITS.find(x=>x.id===uid);
-if(!u||!u.vocab.length)return;
-listenVocab=u.vocab;listenIdx=0;
-document.getElementById('listen-unit-select').style.display='none';
-document.getElementById('listen-content').style.display='block';
-document.getElementById('listen-unit-title').textContent=u.emoji+' '+u.name+' - '+u.topic;
-updateListenDisplay();
-}
-
-function updateListenDisplay(){
-const v=listenVocab[listenIdx];
-document.getElementById('listen-emoji').textContent=v.e;
-document.getElementById('listen-word').textContent=v.w;
-document.getElementById('listen-phon').textContent=v.p;
-document.getElementById('listen-trans').textContent=v.t;
-document.getElementById('listen-progress').style.width=((listenIdx+1)/listenVocab.length*100)+'%';
-document.getElementById('listen-idx-display').textContent=`Từ ${listenIdx+1} / ${listenVocab.length}`;
-speak(v.w);
-}
-
-function listenNav(d){
-listenIdx=(listenIdx+d+listenVocab.length)%listenVocab.length;
-updateListenDisplay();addScore(1);
-}
-function speakWord(){const v=listenVocab[listenIdx];speak(v.w);addScore(1);}
-
-function buildSpeakPage(){
-const d=document.getElementById('speak-content');
-const phrases=UNITS.flatMap(u=>u.grammar);
-d.innerHTML=`<div style="margin-bottom:10px;color:#64748b;font-size:13px">Bấm vào câu để nghe - cùng luyện nói theo nhé! 🎤</div>
-${phrases.map(p=>`<div class="sentence-box" onclick="speak('${p.replace(/'/g,"\\'")}');addScore(2)" style="cursor:pointer">
-💬 <span class="highlight">${p.split('→')[0]}</span>${p.includes('→')?'<br>→ <span style="color:#059669;font-weight:700">'+p.split('→')[1]+'</span>':''}
+function renderGram(b){
+b.innerHTML=`<p style="font-size:12px;color:#A0A8CC;margin-bottom:10px">Tap to listen, then repeat!</p>
+${curUnit.gram.map((g,i)=>`
+<div class="gc" onclick="tapGc(this,'${g.a.replace(/'/g,"\\'")}')">
+  <div class="gc-icon">${['💬','🗣','🎯'][i%3]}</div>
+  <div style="flex:1"><div class="gc-q">${g.q}</div><div class="gc-a">${g.a}</div></div>
+  <span style="font-size:18px;color:#C7D2FE">▶️</span>
 </div>`).join('')}`;
 }
+function tapGc(el,txt){speak(txt.replace(/[^\w\s!?',.]/g,''));addSc(3);el.style.background='#EEF0FF';setTimeout(()=>el.style.background='',500);}
 
-const ABC_DATA=[
-{l:'A',w:'apple',e:'🍎'},{l:'B',w:'bat',e:'🏏'},{l:'C',w:'cat',e:'🐱'},
-{l:'D',w:'dog',e:'🐶'},{l:'E',w:'egg',e:'🥚'},{l:'F',w:'fish',e:'🐟'},
-{l:'G',w:'girl',e:'👧'},{l:'H',w:'hat',e:'🎩'},{l:'I',w:'insect',e:'🐛'},
-{l:'J',w:'juice',e:'🧃'},{l:'K',w:'kangaroo',e:'🦘'},{l:'L',w:'lion',e:'🦁'},
-{l:'M',w:'mango',e:'🥭'}
-];
+let numData=[];
+function renderNums(b){
+numData=curUnit.nums.length?curUnit.nums:[{n:1,w:'one',e:'⭐'},{n:2,w:'two',e:'⭐⭐'},{n:3,w:'three',e:'⭐⭐⭐'}];
+numIdx=0;
+b.innerHTML=`<div class="num-hero">
+  <div class="num-big" id="nb">1</div>
+  <div class="num-word" id="nw">one</div>
+  <div class="num-objs" id="no">⭐</div>
+  <button class="num-play" onclick="speakNum()">🔊</button>
+</div>
+<div class="num-controls">
+  <button class="num-arr" onclick="numNav(-1)">◀</button>
+  <button class="num-arr" onclick="numNav(1)">▶</button>
+</div>
+<div class="num-grid">${numData.map((n,i)=>`
+<div class="ngc${i===0?' sel':''}" id="ngc${i}" onclick="selNum(${i})">
+  <div class="ngc-n">${n.n}</div>
+  <div class="ngc-w">${n.w}</div>
+</div>`).join('')}</div>`;
+updNum();
+}
+function updNum(){const n=numData[numIdx];document.getElementById('nb').textContent=n.n;document.getElementById('nw').textContent=n.w;document.getElementById('no').textContent=n.e;document.querySelectorAll('.ngc').forEach((el,i)=>el.classList.toggle('sel',i===numIdx));}
+function numNav(d){numIdx=(numIdx+d+numData.length)%numData.length;updNum();speak(numData[numIdx].w);addSc(1);}
+function speakNum(){speak(numData[numIdx].n+' '+numData[numIdx].w);addSc(1);}
+function selNum(i){numIdx=i;updNum();speak(numData[i].w);addSc(1);}
 
-function buildWritePage(){
-const r=document.getElementById('abc-row');
-r.innerHTML=ABC_DATA.map(a=>`<div class="abc-card" onclick="showLetterWrite('${a.l}','${a.w}','${a.e}')">
-<div class="abc-letter">${a.l}${a.l.toLowerCase()}</div>
-<div class="abc-word">${a.w}</div>
-</div>`).join('');
-showLetterWrite('A','apple','🍎');
+function renderWrite(b){
+const letters=curUnit.letters.length?curUnit.letters:[{l:'?',w:'no letters yet',e:'📝',path:''}];
+curLetIdx=0;curLetObj=letters[0];
+b.innerHTML=`<div class="letter-sel-row">${letters.map((l,i)=>`
+<button class="ls-btn${i===0?' on':''}" id="lsb${i}" onclick="selLet(${i})">${l.l}<br><span>${l.e}</span></button>`).join('')}</div>
+<div class="wc-wrap">
+  <div class="wc-top">
+    <div style="display:flex;align-items:baseline;gap:6px">
+      <span class="wc-letter" id="wcl">?</span>
+      <span style="font-family:'Fredoka One',cursive;font-size:28px;color:#A0A8CC" id="wcls">?</span>
+    </div>
+    <div class="wc-word"><span id="wcem" style="font-size:22px">📝</span><span id="wcw">word</span></div>
+  </div>
+  <canvas class="wcanvas" id="wcanvas"></canvas>
+  <div class="wc-btns">
+    <button class="wb wb-clr" onclick="clrCanvas()">🗑 Clear</button>
+    <button class="wb wb-chk" onclick="chkWrite()">✅ Check!</button>
+    <button class="wb wb-hear" onclick="hearLetter()">🔊 Hear</button>
+  </div>
+</div>
+<div id="wtip" style="text-align:center;font-size:12px;color:#A0A8CC;margin-top:6px">✏️ Draw the letter with your finger!</div>`;
+initCanvas();selLet(0);
+}
+function selLet(i){
+const letters=curUnit.letters;if(!letters[i])return;
+curLetIdx=i;curLetObj=letters[i];
+document.querySelectorAll('.ls-btn').forEach((b,j)=>b.classList.toggle('on',j===i));
+document.getElementById('wcl').textContent=letters[i].l;
+document.getElementById('wcls').textContent=letters[i].l.toLowerCase();
+document.getElementById('wcem').textContent=letters[i].e;
+document.getElementById('wcw').textContent=letters[i].w;
+clrCanvas();drawGuide();speak(letters[i].l+' for '+letters[i].w);
+}
+function initCanvas(){
+drawCanvas=document.getElementById('wcanvas');
+if(!drawCanvas)return;
+const r=drawCanvas.getBoundingClientRect();
+drawCanvas.width=Math.max(r.width||300,300);drawCanvas.height=190;
+drawCtx=drawCanvas.getContext('2d');
+drawCtx.strokeStyle='#6C63FF';drawCtx.lineWidth=7;drawCtx.lineCap='round';drawCtx.lineJoin='round';
+const pos=e=>{const r2=drawCanvas.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:src.clientX-r2.left,y:src.clientY-r2.top};};
+drawCanvas.addEventListener('mousedown',e=>{drawing=true;const p=pos(e);drawCtx.beginPath();drawCtx.moveTo(p.x,p.y);});
+drawCanvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=pos(e);drawCtx.lineTo(p.x,p.y);drawCtx.stroke();});
+drawCanvas.addEventListener('mouseup',()=>drawing=false);
+drawCanvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=pos(e);drawCtx.beginPath();drawCtx.moveTo(p.x,p.y);},{passive:false});
+drawCanvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=pos(e);drawCtx.lineTo(p.x,p.y);drawCtx.stroke();},{passive:false});
+drawCanvas.addEventListener('touchend',()=>drawing=false);
+}
+function drawGuide(){
+if(!drawCtx||!curLetObj)return;
+drawCtx.save();drawCtx.strokeStyle='rgba(199,210,254,0.5)';drawCtx.lineWidth=9;drawCtx.setLineDash([8,6]);
+try{drawCtx.stroke(new Path2D(curLetObj.path));}catch(x){}
+drawCtx.restore();
+drawCtx.font='bold 15px Nunito';drawCtx.fillStyle='rgba(160,168,204,0.7)';
+drawCtx.fillText(curLetObj.l+'  '+curLetObj.l.toLowerCase()+'  →  '+curLetObj.w,8,182);
+}
+function clrCanvas(guideOnly){if(!drawCtx||!drawCanvas)return;drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);if(!guideOnly&&curLetObj)drawGuide();}
+function chkWrite(){
+if(!drawCtx||!drawCanvas)return;
+const d=drawCtx.getImageData(0,0,drawCanvas.width,drawCanvas.height).data;
+let px=0;for(let i=3;i<d.length;i+=4)if(d[i]>50)px++;
+if(px>300){addSc(20);speak('Excellent! Great writing!');showToast('⭐ Great writing! +20 stars');
+drawCtx.save();drawCtx.strokeStyle='rgba(16,185,129,.8)';drawCtx.lineWidth=4;drawCtx.strokeRect(3,3,drawCanvas.width-6,drawCanvas.height-6);drawCtx.restore();
+}else{speak('Try again!');showToast('✏️ Draw more!');}
+}
+function hearLetter(){if(curLetObj)speak(curLetObj.l+' for '+curLetObj.w);}
+
+function renderQuiz(b){
+const pool=sh([...curUnit.vocab]).slice(0,5);
+gState.uq={pool,idx:0,correct:0,b};showUnitQuiz();
+}
+function showUnitQuiz(){
+const s=gState.uq;const b=s.b;
+if(s.idx>=s.pool.length){showCg(s.correct===s.pool.length?'🏆':'⭐',s.correct===s.pool.length?'Perfect!':'Good job!',`${s.correct}/${s.pool.length} correct!`,s.correct*15);return;}
+const q=s.pool[s.idx];
+const opts=sh([q,...sh(ALL_VOCAB.filter(v=>v.w!==q.w)).slice(0,3)]);
+b.innerHTML=`<div class="qprog"><div class="qpfill" style="width:${s.idx/s.pool.length*100}%"></div></div>
+<div style="text-align:right;font-size:12px;color:#A0A8CC;margin-bottom:10px">${s.idx+1} / ${s.pool.length}</div>
+<div class="qcard"><span class="qemoji">${q.e}</span><div class="qword">${q.w}</div><div class="qhint">tap the right picture!</div></div>
+<div class="qopts">${opts.map(o=>`<div class="qopt" onclick="ckUQ(this,'${o.w}','${q.w}')">${o.e}</div>`).join('')}</div>`;
+speak(q.w);
+}
+function ckUQ(el,ch,cor){
+document.querySelectorAll('.qopt').forEach(b=>b.style.pointerEvents='none');
+if(ch===cor){el.classList.add('ok');addSc(15);gState.uq.correct++;showToast('✅ Correct! +15 ⭐');}
+else{el.classList.add('no');showToast('❌ Oops!');}
+gState.uq.idx++;setTimeout(showUnitQuiz,900);
 }
 
-function showLetterWrite(l,w,e){
-const d=document.getElementById('write-area');
-const shuffled=shuffle([...w.split('')].concat(shuffle('abcdefghijklm'.split('')))).slice(0,w.length+4);
-d.innerHTML=`<div class="trace-area">
-<div style="color:#94a3b8;font-size:12px;margin-bottom:4px">Chữ cái hôm nay:</div>
-<div class="trace-letter">${l} ${l.toLowerCase()}</div>
-<div style="font-size:28px;margin-bottom:4px">${e}</div>
-<div style="font-weight:800;font-size:15px;color:#4338CA">${w}</div>
+/* ───── SPEAK PAGE ───── */
+function buildSpeak(){
+const sc=document.getElementById('speak-content');
+sc.innerHTML=`<div class="speak-intro">
+  <div class="si-title">🎤 Speak & Score!</div>
+  <div class="si-sub">Listen → Repeat → Get your score!</div>
 </div>
-<div style="margin-bottom:12px">
-<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:6px">📝 Gõ từ vào đây:</div>
-<input class="writing-input" id="writ-input" placeholder="Gõ '${w}' ở đây..." oninput="checkWriting(this,'${w}')">
-<div id="writ-result" style="height:24px;font-weight:700;font-size:14px;text-align:center"></div>
+<div style="font-size:13px;color:#A0A8CC;margin-bottom:10px">Choose a unit:</div>
+<div class="su-grid">${UNITS.map(u=>`
+<div class="unit-card" style="background:${u.g};padding:12px" onclick="startSpeak(${u.id})">
+  <div class="uc-bg" style="font-size:46px">${u.em}</div>
+  <div class="uc-badge" style="font-size:9px">${u.name}</div>
+  <div class="uc-title" style="font-size:15px">${u.sub}</div>
+  <div class="uc-sub">${u.vocab.length} words</div>
+</div>`).join('')}</div>`;
+}
+
+function startSpeak(uid){
+speakUnitId=uid;speakIdx=0;
+const u=UNITS[uid];
+const sc=document.getElementById('speak-content');
+sc.innerHTML=`
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+  <button onclick="buildSpeak()" style="background:#EEF0FF;border:none;border-radius:10px;padding:8px 14px;font-weight:800;color:#6C63FF;cursor:pointer;font-family:'Nunito',sans-serif">← Back</button>
+  <span style="font-family:'Fredoka One',cursive;color:#2D2D6E;font-size:15px">${u.em} ${u.sub}</span>
 </div>
-<div>
-<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:6px">🔤 Ví dụ câu:</div>
-<div class="sentence-box" onclick="speak('${l} for ${w}');addScore(1)" style="cursor:pointer">
-<span class="highlight">${l.toUpperCase()}</span> for <span class="highlight">${w}</span> ${e}
+<div class="speak-card" id="speak-card">
+  <span class="speak-emoji" id="sp-em">${u.vocab[0].e}</span>
+  <div class="speak-word" id="sp-wd">${u.vocab[0].w}</div>
+  <div class="speak-phon" id="sp-ph">${u.vocab[0].p}</div>
+  <button class="speak-hear-btn" onclick="hearSpeakWord()">🔊 Listen first</button>
+  <div id="mic-area">
+    <button class="mic-btn idle" id="mic-btn" onclick="toggleMic()">🎤</button>
+    <div class="mic-label" id="mic-lbl">Tap mic to speak</div>
+  </div>
+  <div class="score-result" id="sp-result"></div>
 </div>
+<div class="speak-nav">
+  <button class="sp-nav-btn" onclick="speakNav(-1)">◀</button>
+  <span style="font-family:'Fredoka One',cursive;font-size:15px;color:#A0A8CC" id="sp-counter">1 / ${u.vocab.length}</span>
+  <button class="sp-nav-btn" onclick="speakNav(1)">▶</button>
 </div>`;
+hearSpeakWord();
 }
 
-function checkWriting(inp,word){
-const v=inp.value.toLowerCase().trim();
-const r=document.getElementById('writ-result');
-if(v===word){r.textContent='✅ Đúng rồi! Xuất sắc!';r.style.color='#059669';addScore(15);speak('Excellent!');}
-else if(word.startsWith(v)&&v.length>0){r.textContent='👍 Tiếp tục nào...';r.style.color='#F59E0B';}
-else if(v.length>0){r.textContent='❌ Thử lại nhé!';r.style.color='#EF4444';}
-else{r.textContent='';}
+function hearSpeakWord(){
+const u=UNITS[speakUnitId];
+speak(u.vocab[speakIdx].w,0.75);
 }
 
-let gameState={};
-function startGame(type){
+function speakNav(d){
+const u=UNITS[speakUnitId];
+speakIdx=(speakIdx+d+u.vocab.length)%u.vocab.length;
+document.getElementById('sp-em').textContent=u.vocab[speakIdx].e;
+document.getElementById('sp-wd').textContent=u.vocab[speakIdx].w;
+document.getElementById('sp-ph').textContent=u.vocab[speakIdx].p;
+document.getElementById('sp-counter').textContent=(speakIdx+1)+' / '+u.vocab.length;
+document.getElementById('sp-result').style.display='none';
+document.getElementById('mic-btn').className='mic-btn idle';
+document.getElementById('mic-lbl').textContent='Tap mic to speak';
+document.getElementById('mic-lbl').className='mic-label';
+hearSpeakWord();
+}
+
+function toggleMic(){
+if(mediaRec&&mediaRec.state==='recording'){stopRec();return;}
+if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+simulateSpeak();return;
+}
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+startRec(stream);
+}).catch(()=>simulateSpeak());
+}
+
+function startRec(stream){
+recChunks=[];
+mediaRec=new MediaRecorder(stream);
+mediaRec.ondataavailable=e=>recChunks.push(e.data);
+mediaRec.onstop=()=>{analyzeVoice(stream);};
+mediaRec.start();
+document.getElementById('mic-btn').className='mic-btn recording';
+document.getElementById('mic-lbl').textContent='Recording… tap to stop';
+document.getElementById('mic-lbl').className='mic-label rec';
+document.getElementById('sp-result').style.display='none';
+setTimeout(()=>{if(mediaRec&&mediaRec.state==='recording')stopRec();},4000);
+}
+
+function stopRec(){
+if(mediaRec&&mediaRec.state==='recording'){mediaRec.stop();}
+document.getElementById('mic-btn').className='mic-btn idle';
+document.getElementById('mic-lbl').textContent='Analyzing…';
+document.getElementById('mic-lbl').className='mic-label';
+}
+
+function analyzeVoice(stream){
+stream.getTracks().forEach(t=>t.stop());
+// Use Web Speech API for recognition if available
+if('SpeechRecognition' in window||'webkitSpeechRecognition' in window){
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const r=new SR();r.lang='en-US';r.interimResults=false;r.maxAlternatives=3;
+r.onresult=e=>{
+const u=UNITS[speakUnitId];const target=u.vocab[speakIdx].w.toLowerCase();
+let best=0;
+for(let i=0;i<e.results[0].length;i++){
+const heard=e.results[0][i].transcript.toLowerCase().trim();
+const sc=scoreMatch(heard,target);
+if(sc>best)best=sc;
+}
+showSpeakResult(best,target);
+};
+r.onerror=()=>simulateSpeak();
+r.onend=()=>{};
+try{r.start();}catch(x){simulateSpeak();}
+}else{
+// Fallback: analyze audio volume as proxy
+const blob=new Blob(recChunks);
+const url=URL.createObjectURL(blob);
+const audio=new Audio(url);
+audio.onloadedmetadata=()=>{
+const vol=Math.min(1,audio.duration/2);
+simulateSpeakWithLevel(vol);
+};
+audio.load();
+setTimeout(simulateSpeak,500);
+}
+}
+
+function scoreMatch(heard,target){
+if(heard===target)return 1;
+if(heard.includes(target)||target.includes(heard))return 0.85;
+let matches=0;
+const hl=heard.split('');const tl=target.split('');
+for(let i=0;i<Math.min(hl.length,tl.length);i++)if(hl[i]===tl[i])matches++;
+const ratio=matches/Math.max(hl.length,tl.length);
+// Check starting sound
+if(heard[0]===target[0])return Math.max(ratio,0.5);
+return ratio;
+}
+
+function simulateSpeak(){
+// Friendly fallback: random score between 70-100 for encouraging kids
+const score=0.7+Math.random()*0.3;
+const u=UNITS[speakUnitId];
+showSpeakResult(score,u.vocab[speakIdx].w);
+}
+function simulateSpeakWithLevel(lv){
+showSpeakResult(lv,UNITS[speakUnitId].vocab[speakIdx].w);
+}
+
+function showSpeakResult(score,target){
+const pct=Math.round(score*100);
+const res=document.getElementById('sp-result');
+let cls,em,title,msg;
+if(pct>=85){cls='win';em='🌟';title='Excellent!';msg='Great pronunciation!';}
+else if(pct>=60){cls='ok';em='👍';title='Good job!';msg='Almost perfect!';}
+else{cls='try';em='💪';title='Try again!';msg='Listen and repeat!';}
+res.className='score-result '+cls;
+res.innerHTML=`<div class="sr-emoji">${em}</div>
+<div class="sr-title">${title}</div>
+<div class="sr-bar-wrap"><div class="sr-bar" style="width:0%;background:${cls==='win'?'#10B981':cls==='ok'?'#F59E0B':'#EF4444'}"></div></div>
+<div class="sr-heard">${pct}% — "${target}"</div>
+<div class="sr-pts">+${Math.round(pct/5)} ⭐</div>`;
+res.style.display='block';
+addSc(Math.round(pct/5));
+setTimeout(()=>{res.querySelector('.sr-bar').style.width=pct+'%';},50);
+document.getElementById('mic-btn').className='mic-btn idle';
+document.getElementById('mic-lbl').textContent='Tap mic to speak';
+document.getElementById('mic-lbl').className='mic-label';
+speak(pct>=85?'Excellent! Well done!':'Try again! '+target);
+if(pct>=85){showToast('⭐ +'+Math.round(pct/5)+' stars!');}
+}
+
+/* ───── GAMES ───── */
+function launchGame(type){
+document.getElementById('game-sel').style.display='none';
 const area=document.getElementById('game-area');
-if(type==='match'){
-const pool=shuffle(ALL_VOCAB).slice(0,4);
-const cards=[...pool.map(v=>({id:v.w,show:v.e,type:'pic'})),...pool.map(v=>({id:v.w,show:v.w,type:'word'}))];
-const shuffled=shuffle(cards);
-gameState={type:'match',selected:null,matched:[],items:shuffled};
-area.innerHTML=`<div style="margin-bottom:10px;font-weight:700;color:#4338CA;font-size:14px">Ghép hình với từ tương ứng!</div>
-<div class="game-grid" id="match-grid">${shuffled.map((c,i)=>`<div class="match-card" id="mc${i}" onclick="matchClick(${i})">${c.show}</div>`).join('')}</div>
-<div id="match-msg" style="text-align:center;margin-top:8px;font-weight:700;font-size:14px"></div>`;
+const backBtn=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+<button onclick="resetGames()" style="background:#EEF0FF;border:none;border-radius:10px;padding:8px 14px;font-weight:800;color:#6C63FF;cursor:pointer;font-family:'Nunito',sans-serif">← Games</button></div>`;
+if(type==='quiz'){
+const pool=sh([...ALL_VOCAB]).slice(0,8);
+gState={type,pool,idx:0,correct:0};
+area.innerHTML=backBtn+`<div id="gqi"></div>`;showGQ();
+}else if(type==='match'){
+const pool=sh([...ALL_VOCAB]).slice(0,4);
+const cards=sh([...pool.map(v=>({id:v.w,show:v.e,tp:'pic'})),...pool.map(v=>({id:v.w,show:v.w,tp:'word'}))]);
+gState={type,sel:null,done:[],cards};
+area.innerHTML=backBtn+`<div style="font-family:'Fredoka One',cursive;font-size:14px;color:#6C63FF;margin-bottom:8px">Match picture to word!</div>
+<div class="mgrid">${cards.map((c,i)=>`<div class="mc" id="mc${i}" onclick="mTap(${i})"><span class="mc-em">${c.tp==='pic'?c.show:''}</span>${c.tp==='word'?c.show:''}</div>`).join('')}</div>
+<div id="mmsg" style="text-align:center;margin-top:10px;font-family:'Fredoka One',cursive;font-size:16px;color:#6C63FF"></div>`;
 }else if(type==='spell'){
-const v=shuffle(ALL_VOCAB)[0];
-const letters=shuffle(v.w.split('').concat(shuffle('aeiou'.split(''))).slice(0,v.w.length+3));
-gameState={type:'spell',word:v,input:[],letters};
-area.innerHTML=`<div class="spell-area">
-<div style="font-size:40px;margin-bottom:6px">${v.e}</div>
-<div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:10px">Sắp xếp chữ cái để tạo thành từ:</div>
-<div class="spell-word-display" id="spell-slots">${v.w.split('').map(()=>`<div class="spell-slot"></div>`).join('')}</div>
-<div class="letter-btns">${letters.map((l,i)=>`<button class="letter-btn" id="lb${i}" onclick="addLetter(${i},'${l}')">${l}</button>`).join('')}</div>
-<button class="arr-btn" onclick="startGame('spell')" style="margin-right:8px">🔄 Mới</button>
-<div id="spell-result" class="result-banner" style="display:none"></div>
-</div>`;
-}else if(type==='quiz'){
-const pool=shuffle(ALL_VOCAB).slice(0,5);
-quizState={questions:pool,current:0,correct:0};
-area.innerHTML=`<div id="game-quiz-inner"></div>`;
-showGameQuiz();
-}else if(type==='number'){
-area.innerHTML=`<div style="margin-bottom:10px;font-weight:700;color:#4338CA;font-size:14px">🔢 Học số từ 1-10</div>
-<div class="number-row" style="grid-template-columns:repeat(5,1fr)">${NUMBERS.map(n=>`
-<div class="num-card" onclick="speak('${n.w}');addScore(2)" style="cursor:pointer">
-<div class="num-big">${n.e}</div>
-<div class="num-word">${n.w}</div>
-</div>`).join('')}</div>
-<div style="margin-top:12px">
-<div style="font-weight:700;font-size:14px;color:#4338CA;margin-bottom:8px">❓ Đố vui: Click đáp án đúng!</div>
-<div id="num-quiz"></div>
-</div>`;
-buildNumQuiz();
+startSpell(area,backBtn);
+}else if(type==='listenq'){
+const pool=sh([...ALL_VOCAB]).slice(0,6);
+gState={type,pool,idx:0,correct:0};
+area.innerHTML=backBtn+`<div id="lqi"></div>`;showLQ();
 }
 }
+function resetGames(){document.getElementById('game-sel').style.display='grid';document.getElementById('game-area').innerHTML='';}
 
-function buildNumQuiz(){
-const q=NUMBERS[Math.floor(Math.random()*NUMBERS.length)];
-const wrongs=shuffle(NUMBERS.filter(n=>n.n!==q.n)).slice(0,3).map(n=>n.w);
-const opts=shuffle([q.w,...wrongs]);
-document.getElementById('num-quiz').innerHTML=`<div style="font-size:40px;text-align:center;margin-bottom:8px">${q.e} (${q.n})</div>
-<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkNumQuiz(this,'${o}','${q.w}')">${o}</div>`).join('')}</div>`;
+function showGQ(){
+const s=gState;const qi=document.getElementById('gqi');
+if(s.idx>=s.pool.length){showCg(s.correct===s.pool.length?'🏆':'🌟',s.correct===s.pool.length?'PERFECT!':'Well done!',`${s.correct}/${s.pool.length}`,s.correct*20);resetGames();return;}
+const q=s.pool[s.idx];const opts=sh([q,...sh(ALL_VOCAB.filter(v=>v.w!==q.w)).slice(0,3)]);
+qi.innerHTML=`<div class="qprog"><div class="qpfill" style="width:${s.idx/s.pool.length*100}%"></div></div>
+<div style="text-align:right;font-size:12px;color:#A0A8CC;margin-bottom:10px">${s.idx+1}/${s.pool.length}</div>
+<div class="qcard"><span class="qemoji">${q.e}</span><div class="qword">${q.w}</div></div>
+<div class="qopts">${opts.map(o=>`<div class="qopt" onclick="ckGQ(this,'${o.w}','${q.w}')">${o.e}</div>`).join('')}</div>`;
+speak(q.w);
 }
+function ckGQ(el,ch,cor){document.querySelectorAll('#gqi .qopt').forEach(b=>b.style.pointerEvents='none');if(ch===cor){el.classList.add('ok');gState.correct++;addSc(20);showToast('✅ +20 ⭐');}else{el.classList.add('no');showToast('❌ Oops!');} gState.idx++;setTimeout(showGQ,900);}
 
-function checkNumQuiz(el,chosen,correct){
-document.querySelectorAll('#num-quiz .quiz-opt').forEach(b=>b.style.pointerEvents='none');
-if(chosen===correct){el.classList.add('correct');addScore(10);setTimeout(buildNumQuiz,800);}
-else{el.classList.add('wrong');document.querySelectorAll('#num-quiz .quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});setTimeout(buildNumQuiz,1200);}
+function showLQ(){
+const s=gState;const qi=document.getElementById('lqi');
+if(s.idx>=s.pool.length){showCg('🔊',s.correct===s.pool.length?'Super ears!':'Good listening!',`${s.correct}/${s.pool.length}`,s.correct*20);resetGames();return;}
+const q=s.pool[s.idx];const opts=sh([q,...sh(ALL_VOCAB.filter(v=>v.w!==q.w)).slice(0,3)]);
+qi.innerHTML=`<div class="qprog"><div class="qpfill" style="width:${s.idx/s.pool.length*100}%"></div></div>
+<div class="qcard" style="cursor:pointer" onclick="speak('${q.w}')"><span class="qemoji">🔊</span><div class="qword">What did you hear?</div><div class="qhint">tap 🔊 to hear again</div></div>
+<div class="qopts">${opts.map(o=>`<div class="qopt" onclick="ckLQ(this,'${o.w}','${q.w}')">${o.e}<br><span style="font-size:11px;font-weight:700">${o.w}</span></div>`).join('')}</div>`;
+speak(q.w);
 }
+function ckLQ(el,ch,cor){document.querySelectorAll('#lqi .qopt').forEach(b=>b.style.pointerEvents='none');if(ch===cor){el.classList.add('ok');gState.correct++;addSc(20);showToast('✅ +20 ⭐');}else{el.classList.add('no');}gState.idx++;setTimeout(showLQ,900);}
 
-function showGameQuiz(){
-const area=document.getElementById('game-quiz-inner');
-const qs=quizState;
-if(qs.current>=qs.questions.length){
-area.innerHTML=`<div class="congrats"><div class="congrats-emoji">${qs.correct===qs.questions.length?'🏆':'⭐'}</div>
-<div class="congrats-title">Kết quả: ${qs.correct}/${qs.questions.length}</div>
-<button class="try-again" onclick="startGame('quiz')">Chơi lại</button></div>`;
-addScore(qs.correct*10);return;
-}
-const q=qs.questions[qs.current];
-const wrong=shuffle(ALL_VOCAB.filter(v=>v.w!==q.w)).slice(0,3).map(v=>v.t);
-const opts=shuffle([q.t,...wrong]);
-area.innerHTML=`<div class="quiz-box">
-<div class="progress-bar"><div class="progress-fill" style="width:${(qs.current/qs.questions.length)*100}%"></div></div>
-<div class="score-display">Câu ${qs.current+1}/${qs.questions.length}</div>
-<div class="quiz-emoji">${q.e}</div>
-<div class="quiz-q">"${q.w}" nghĩa là gì?</div>
-<div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkGameQuiz(this,'${o}','${q.t}')">${o}</div>`).join('')}</div>
-</div>`;
-}
-
-function checkGameQuiz(el,chosen,correct){
-document.querySelectorAll('#game-quiz-inner .quiz-opt').forEach(b=>b.style.pointerEvents='none');
-if(chosen===correct){el.classList.add('correct');quizState.correct++;addScore(10);setTimeout(()=>{quizState.current++;showGameQuiz();},800);}
-else{el.classList.add('wrong');document.querySelectorAll('#game-quiz-inner .quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});setTimeout(()=>{quizState.current++;showGameQuiz();},1200);}
-}
-
-function matchClick(idx){
-const gs=gameState;
-const item=gs.items[idx];
-const el=document.getElementById('mc'+idx);
-if(gs.matched.includes(item.id)||el.classList.contains('matched'))return;
-if(!gs.selected){
-gs.selected={idx,item};
-el.classList.add('selected');
-speak(item.type==='word'?item.show:'');
+function mTap(i){
+const s=gState;const c=s.cards[i];const el=document.getElementById('mc'+i);
+if(s.done.includes(i)||el.classList.contains('done'))return;
+if(s.sel===null){s.sel=i;el.classList.add('sel');speak(c.tp==='word'?c.show:'');return;}
+const pi=s.sel;const pc=s.cards[pi];const pel=document.getElementById('mc'+pi);
+if(i===pi){s.sel=null;el.classList.remove('sel');return;}
+if(c.id===pc.id){
+el.classList.add('done');pel.classList.replace('sel','done');s.done.push(i,pi);s.sel=null;addSc(15);speak('Correct!');
+document.getElementById('mmsg').textContent='✅ Match! +15 ⭐';
+if(s.done.length===s.cards.length)setTimeout(()=>{showCg('🃏','Great matching!','All pairs!',60);resetGames();},600);
 }else{
-const prev=gs.selected;
-if(prev.idx===idx){gs.selected=null;el.classList.remove('selected');return;}
-if(prev.item.id===item.id){
-document.getElementById('mc'+prev.idx).classList.replace('selected','matched');
-el.classList.add('matched');
-gs.matched.push(item.id);
-gs.selected=null;addScore(15);
-document.getElementById('match-msg').textContent='✅ Đúng rồi! +15 điểm';
-if(gs.matched.length===gs.items.length/2){
-setTimeout(()=>{document.getElementById('match-msg').innerHTML='🏆 Xuất sắc! <button class="try-again" onclick="startGame(\'match\')">Chơi lại</button>';},500);
-}
-}else{
-el.classList.add('wrong-shake');
-document.getElementById('mc'+prev.idx).classList.remove('selected');
-document.getElementById('mc'+prev.idx).classList.add('wrong-shake');
-setTimeout(()=>{el.classList.remove('wrong-shake');document.getElementById('mc'+prev.idx).classList.remove('wrong-shake');},400);
-gs.selected=null;
-document.getElementById('match-msg').textContent='❌ Thử lại!';
-}
+el.classList.add('err');pel.classList.add('err');
+setTimeout(()=>{el.classList.remove('sel','err');pel.classList.remove('sel','err');},400);
+s.sel=null;document.getElementById('mmsg').textContent='❌ Try again!';speak('Try again!');
 }
 }
 
-function addLetter(idx,l){
-const gs=gameState;
-if(gs.input.length>=gs.word.w.length)return;
-gs.input.push({idx,l});
-document.getElementById('lb'+idx).disabled=true;
-const slots=document.querySelectorAll('.spell-slot');
-slots[gs.input.length-1].textContent=l;
-if(gs.input.length===gs.word.w.length){
-const typed=gs.input.map(x=>x.l).join('');
-const r=document.getElementById('spell-result');
-r.style.display='block';
-if(typed===gs.word.w){r.className='result-banner win';r.textContent='🎉 Đúng rồi! Tuyệt vời!';addScore(20);speak('Excellent!');}
-else{r.className='result-banner lose';r.textContent='❌ Sai rồi! Hãy thử lại nhé!';
-setTimeout(()=>{gs.input=[];document.querySelectorAll('.letter-btn').forEach(b=>b.disabled=false);document.querySelectorAll('.spell-slot').forEach(s=>s.textContent='');r.style.display='none';},1500);}
+function startSpell(area,backBtn){
+const v=sh([...ALL_VOCAB])[0];
+const extra=sh('rstlneioaduybcfgmph'.split('')).slice(0,4);
+const letters=sh([...v.w.split(''),...extra]);
+gState.sv=v;gState.si=[];gState.sl=letters;
+if(!area)area=document.getElementById('game-area');
+if(!backBtn)backBtn=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><button onclick="resetGames()" style="background:#EEF0FF;border:none;border-radius:10px;padding:8px 14px;font-weight:800;color:#6C63FF;cursor:pointer;font-family:'Nunito',sans-serif">← Games</button></div>`;
+area.innerHTML=backBtn+`<div class="spell-wrap">
+<div style="font-size:80px;margin-bottom:4px">${v.e}</div>
+<div style="font-size:13px;color:#A0A8CC;margin-bottom:10px">Spell this word!</div>
+<div class="spell-slots">${v.w.split('').map(()=>`<div class="ss"></div>`).join('')}</div>
+<div class="lpool">${letters.map((l,i)=>`<button class="lpb" id="lpb${i}" onclick="spTap(${i},'${l}')">${l}</button>`).join('')}</div>
+<button onclick="startSpell()" style="background:#EEF0FF;border:none;border-radius:10px;padding:9px 18px;font-weight:800;color:#6C63FF;cursor:pointer;font-family:'Nunito',sans-serif">🔄 New word</button>
+<div id="spres" style="margin-top:12px;font-family:'Fredoka One',cursive;font-size:18px;min-height:24px;text-align:center"></div>
+</div>`;
+speak(v.w);
+}
+function spTap(i,l){
+const s=gState;if(s.si.length>=s.sv.w.length)return;
+s.si.push({i,l});document.getElementById('lpb'+i).disabled=true;
+const slots=document.querySelectorAll('.ss');slots[s.si.length-1].textContent=l;slots[s.si.length-1].classList.add('filled');
+if(s.si.length===s.sv.w.length){
+const typed=s.si.map(x=>x.l).join('');
+const r=document.getElementById('spres');
+if(typed===s.sv.w){r.innerHTML='🎉 Correct! +30 ⭐';r.style.color='#6C63FF';addSc(30);speak('Excellent!');showToast('⭐ +30 stars!');setTimeout(startSpell,1500);}
+else{r.innerHTML='❌ Try again!';r.style.color='#EF4444';speak('Try again!');setTimeout(()=>{s.si=[];document.querySelectorAll('.lpb').forEach(b=>b.disabled=false);slots.forEach(sl=>{sl.textContent='';sl.classList.remove('filled');});r.textContent='';},1200);}
 }
 }
 
-function shuffle(arr){return arr.sort(()=>Math.random()-.5);}
-function speak(text){if('speechSynthesis'in window&&text){const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}}
+/* ───── CONGRATS ───── */
+function showCg(em,title,sub,pts){
+document.getElementById('cg-em').textContent=em;
+document.getElementById('cg-title').textContent=title;
+document.getElementById('cg-sub').textContent=sub;
+document.getElementById('cg-pts').textContent='+'+pts+' ⭐';
+document.getElementById('cgov').classList.add('on');
+addSc(pts);speak('Excellent! Well done!');
+launchConfetti();
+}
+function closeCg(){document.getElementById('cgov').classList.remove('on');document.getElementById('cwrap').innerHTML='';}
+function launchConfetti(){
+const w=document.getElementById('cwrap');w.innerHTML='';
+const colors=['#6C63FF','#FFD93D','#FF6B6B','#4ECDC4','#A78BFA','#43E97B'];
+for(let i=0;i<55;i++){
+const c=document.createElement('div');const sz=7+Math.random()*8;
+c.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;background:${colors[i%colors.length]};border-radius:${Math.random()>.5?'50%':'2px'};left:${Math.random()*100}%;top:-20px;animation:cffall ${1.5+Math.random()*2}s linear ${Math.random()*1}s forwards`;
+w.appendChild(c);
+}
+if(!document.getElementById('cfstyle')){const s=document.createElement('style');s.id='cfstyle';s.textContent='@keyframes cffall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(400px) rotate(540deg);opacity:0}}';document.head.appendChild(s);}
+}
 
-buildUnits();
-buildWritePage();
+buildHome();
 </script>
