@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Family & Friends 3 🌟 Learn English</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+:root {
+  --primary: #FF6B35;
+  --secondary: #4ECDC4;
+  --accent: #FFE66D;
+  --purple: #A29BFE;
+  --green: #55E6C1;
+  --pink: #FD79A8;
+  --blue: #74B9FF;
+  --dark: #2D3436;
+  --light: #F8F9FA;
+  --star: #FDCB6E;
+  --red: #FF7675;
+  --white: #FFFFFF;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; overflow-x:hidden; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* ===== FLOATING STARS ===== */
+.stars-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.star-float { position:absolute; animation: floatStar linear infinite; opacity:0.3; font-size:20px; }
+@keyframes floatStar { 0%{transform:translateY(100vh) rotate(0deg);opacity:0;} 10%{opacity:0.4;} 90%{opacity:0.4;} 100%{transform:translateY(-10vh) rotate(360deg);opacity:0;} }
+
+/* ===== HEADER ===== */
+#header {
+  position:sticky; top:0; z-index:100;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  padding: 10px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo { font-family:'Fredoka One'; font-size:clamp(18px,4vw,26px); color:white; text-shadow:2px 2px 0 rgba(0,0,0,0.2); }
+.logo span { color: var(--accent); }
+#xp-display { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.2); border-radius:20px; padding:6px 14px; }
+#xp-display .star-icon { font-size:20px; }
+#xp-val { font-weight:900; color:var(--accent); font-size:18px; }
+#streak { background:rgba(255,107,53,0.3); border-radius:20px; padding:6px 12px; color:white; font-weight:700; font-size:14px; }
+
+/* ===== MAIN CONTAINER ===== */
+#app { position:relative; z-index:1; max-width:700px; margin:0 auto; padding:16px; }
+
+/* ===== SCREENS ===== */
+.screen { display:none; animation: fadeIn 0.4s ease; }
+.screen.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== HOME SCREEN ===== */
+.home-hero { text-align:center; padding:20px 0; }
+.home-hero h1 { font-family:'Fredoka One'; font-size:clamp(28px,7vw,48px); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.2); line-height:1.2; }
+.home-hero p { color:rgba(255,255,255,0.9); font-size:clamp(14px,3vw,18px); margin-top:8px; }
+.characters { display:flex; justify-content:center; gap:20px; margin:20px 0; flex-wrap:wrap; }
+.char { text-align:center; }
+.char-avatar { width:70px; height:70px; border-radius:50%; border:4px solid white; display:flex; align-items:center; justify-content:center; font-size:36px; box-shadow:0 4px 15px rgba(0,0,0,0.2); transition:transform 0.3s; cursor:pointer; }
+.char-avatar:hover { transform:scale(1.15) rotate(-5deg); }
+.char-name { color:white; font-weight:700; font-size:13px; margin-top:4px; }
+
+.progress-overview { background:rgba(255,255,255,0.15); border-radius:20px; padding:16px; margin-bottom:20px; }
+.progress-overview h3 { color:white; font-size:16px; margin-bottom:12px; }
+.progress-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(50px,1fr)); gap:6px; }
+.unit-dot { width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; cursor:pointer; transition:all 0.3s; position:relative; }
+.unit-dot.locked { background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.4); }
+.unit-dot.done { background:linear-gradient(135deg,#55E6C1,#00b894); color:white; box-shadow:0 4px 10px rgba(0,184,148,0.4); }
+.unit-dot.current { background:linear-gradient(135deg,#FFE66D,#FDCB6E); color:#2D3436; box-shadow:0 4px 10px rgba(253,203,110,0.5); animation:pulse 1.5s infinite; }
+.unit-dot.available { background:rgba(255,255,255,0.25); color:white; }
+.unit-dot:hover:not(.locked) { transform:scale(1.1); }
+@keyframes pulse { 0%,100%{box-shadow:0 4px 10px rgba(253,203,110,0.5);} 50%{box-shadow:0 4px 20px rgba(253,203,110,0.8);} }
+.unit-star { position:absolute; top:-3px; right:-3px; font-size:12px; }
+
+/* ===== UNIT CARD LIST ===== */
+.units-list { display:flex; flex-direction:column; gap:12px; }
+.unit-card {
+  background:rgba(255,255,255,0.95);
+  border-radius:20px;
+  padding:16px 20px;
+  cursor:pointer;
+  transition:all 0.3s;
+  display:flex; align-items:center; gap:16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.unit-card:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.15); }
+.unit-card.locked { opacity:0.5; cursor:not-allowed; }
+.unit-icon { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0; }
+.unit-info { flex:1; }
+.unit-info h3 { font-weight:800; font-size:16px; color:var(--dark); }
+.unit-info p { font-size:12px; color:#636e72; margin-top:2px; }
+.unit-prog { margin-top:6px; }
+.prog-bar { height:6px; background:#f0f0f0; border-radius:4px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:4px; transition:width 0.5s; }
+.unit-badge { font-size:10px; font-weight:700; padding:3px 8px; border-radius:8px; margin-top:4px; display:inline-block; }
+
+/* ===== UNIT DETAIL ===== */
+.unit-header { background:rgba(255,255,255,0.2); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center; }
+.unit-header h2 { font-family:'Fredoka One'; font-size:28px; color:white; }
+.unit-header p { color:rgba(255,255,255,0.85); font-size:14px; margin-top:4px; }
+.lesson-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.tab-btn { padding:8px 16px; border-radius:12px; border:none; font-family:'Nunito'; font-weight:700; font-size:13px; cursor:pointer; transition:all 0.3s; background:rgba(255,255,255,0.25); color:white; }
+.tab-btn.active { background:white; color:var(--dark); box-shadow:0 4px 10px rgba(0,0,0,0.15); }
+.lesson-content { background:rgba(255,255,255,0.95); border-radius:20px; padding:20px; }
+
+/* ===== VOCAB CARDS ===== */
+.vocab-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:12px; }
+.vocab-card {
+  background:linear-gradient(135deg, #fff, #f8f9fa);
+  border-radius:16px; padding:16px 12px;
+  text-align:center; cursor:pointer;
+  border:2px solid transparent;
+  transition:all 0.3s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+.vocab-card:hover { transform:translateY(-4px); border-color:var(--secondary); box-shadow:0 8px 20px rgba(78,205,196,0.3); }
+.vocab-card .emoji { font-size:42px; margin-bottom:8px; display:block; }
+.vocab-card .word { font-weight:800; font-size:16px; color:var(--dark); }
+.vocab-card .phonetic { font-size:11px; color:#b2bec3; margin-top:2px; }
+.vocab-card.learned { border-color:var(--green); background:linear-gradient(135deg,#55E6C1,#00cec9); }
+.vocab-card.learned .word, .vocab-card.learned .phonetic { color:white; }
+.speak-btn { display:inline-flex; align-items:center; gap:4px; background:var(--secondary); color:white; border:none; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:6px; transition:all 0.2s; }
+.speak-btn:hover { transform:scale(1.05); background:#3dbdb6; }
+.speak-btn:active { transform:scale(0.95); }
+
+/* ===== SPEAKING SECTION ===== */
+.speaking-exercise { margin-top:16px; }
+.phrase-card {
+  background:linear-gradient(135deg, #667eea, #764ba2);
+  border-radius:16px; padding:20px; margin-bottom:12px; color:white;
+}
+.phrase-card .phrase-text { font-size:22px; font-weight:800; margin-bottom:6px; }
+.phrase-card .phrase-hint { font-size:13px; opacity:0.8; }
+.mic-area { background:rgba(255,255,255,0.1); border-radius:12px; padding:16px; margin-top:12px; text-align:center; }
+.mic-btn {
+  width:80px; height:80px; border-radius:50%; border:4px solid rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.2); font-size:36px; cursor:pointer;
+  transition:all 0.3s; display:inline-flex; align-items:center; justify-content:center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.mic-btn:hover { transform:scale(1.1); background:rgba(255,255,255,0.3); }
+.mic-btn.recording { background:var(--red); animation:micPulse 0.8s infinite; border-color:white; }
+@keyframes micPulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,118,117,0.7);} 50%{box-shadow:0 0 0 20px rgba(255,118,117,0);} }
+.score-display { margin-top:12px; font-size:32px; font-weight:900; }
+.score-bar { height:12px; background:rgba(255,255,255,0.2); border-radius:6px; overflow:hidden; margin-top:8px; }
+.score-fill { height:100%; border-radius:6px; transition:width 1s; }
+
+/* ===== GAMES SECTION ===== */
+.games-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.game-btn {
+  background:white; border-radius:16px; padding:16px 12px; text-align:center;
+  cursor:pointer; transition:all 0.3s; border:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+.game-btn:hover { transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+.game-btn .game-icon { font-size:36px; margin-bottom:8px; display:block; }
+.game-btn .game-name { font-weight:800; font-size:14px; color:var(--dark); }
+.game-btn .game-desc { font-size:11px; color:#636e72; margin-top:3px; }
+
+/* ===== QUIZ ===== */
+.quiz-container { }
+.quiz-progress { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+.q-dot { width:28px; height:8px; border-radius:4px; background:rgba(255,255,255,0.3); transition:all 0.3s; }
+.q-dot.done { background:var(--green); }
+.q-dot.current { background:var(--accent); }
+.question-card { background:white; border-radius:20px; padding:24px; margin-bottom:16px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.question-card .q-num { font-size:12px; color:#b2bec3; font-weight:700; margin-bottom:8px; }
+.question-card .q-text { font-size:20px; font-weight:800; color:var(--dark); line-height:1.4; }
+.question-card .q-emoji { font-size:48px; text-align:center; margin:12px 0; display:block; }
+.options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.option-btn {
+  background:white; border:3px solid #e9ecef; border-radius:14px;
+  padding:12px 10px; font-family:'Nunito'; font-weight:700; font-size:14px;
+  cursor:pointer; transition:all 0.3s; text-align:center; color:var(--dark);
+}
+.option-btn:hover:not(:disabled) { border-color:var(--secondary); background:#e3f9f8; }
+.option-btn.correct { border-color:var(--green); background:linear-gradient(135deg,#55E6C1,#00b894); color:white; transform:scale(1.03); }
+.option-btn.wrong { border-color:var(--red); background:linear-gradient(135deg,#ff7675,#d63031); color:white; animation:shake 0.4s; }
+.option-btn:disabled { cursor:not-allowed; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.feedback-msg { text-align:center; padding:12px; border-radius:12px; font-weight:800; font-size:18px; margin-top:8px; animation:popIn 0.3s; }
+@keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
+.feedback-msg.correct { background:#d4edda; color:#155724; }
+.feedback-msg.wrong { background:#f8d7da; color:#721c24; }
+
+/* ===== PHONICS ===== */
+.phonics-card { background:linear-gradient(135deg,#a29bfe,#6c5ce7); color:white; border-radius:20px; padding:24px; text-align:center; margin-bottom:16px; }
+.phonics-symbol { font-size:72px; font-weight:900; text-shadow:3px 3px 0 rgba(0,0,0,0.2); line-height:1; }
+.phonics-examples { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+.phon-word { background:rgba(255,255,255,0.2); border-radius:12px; padding:10px 18px; font-size:20px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+.phon-word:hover { background:rgba(255,255,255,0.35); transform:scale(1.05); }
+.phon-word .highlight { color:var(--accent); text-decoration:underline; }
+
+/* ===== READING ===== */
+.reading-card { background:white; border-radius:20px; padding:24px; }
+.reading-title { font-family:'Fredoka One'; font-size:24px; color:var(--purple); margin-bottom:16px; }
+.reading-text { font-size:16px; line-height:1.9; color:var(--dark); }
+.reading-text .highlight-word { cursor:pointer; background:rgba(78,205,196,0.2); border-radius:4px; padding:1px 3px; transition:background 0.2s; }
+.reading-text .highlight-word:hover { background:rgba(78,205,196,0.5); }
+.comprehension-q { margin-top:20px; padding-top:20px; border-top:2px dashed #e9ecef; }
+.comp-q { background:#f8f9fa; border-radius:12px; padding:14px; margin-bottom:12px; }
+.comp-q p { font-weight:700; color:var(--dark); margin-bottom:8px; }
+.comp-input { width:100%; padding:8px 12px; border:2px solid #e9ecef; border-radius:8px; font-family:'Nunito'; font-size:14px; font-weight:600; outline:none; transition:border-color 0.2s; }
+.comp-input:focus { border-color:var(--secondary); }
+
+/* ===== WRITING ===== */
+.writing-prompt { background:linear-gradient(135deg,#fd79a8,#e84393); color:white; border-radius:16px; padding:20px; margin-bottom:16px; text-align:center; }
+.writing-prompt .prompt-icon { font-size:48px; }
+.writing-prompt p { font-size:18px; font-weight:700; margin-top:8px; }
+.writing-area { background:white; border-radius:16px; padding:20px; }
+.writing-lines { position:relative; }
+.writing-line-input { width:100%; border:none; border-bottom:2px dashed #dee2e6; padding:8px 4px; font-family:'Nunito'; font-size:16px; font-weight:600; color:var(--dark); outline:none; background:transparent; margin-bottom:8px; }
+.writing-line-input::placeholder { color:#b2bec3; }
+.word-bank { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.bank-word { background:linear-gradient(135deg,var(--secondary),#3dbdb6); color:white; border-radius:10px; padding:6px 14px; font-weight:700; font-size:14px; cursor:pointer; transition:all 0.2s; }
+.bank-word:hover { transform:scale(1.05); opacity:0.8; }
+.bank-word.used { opacity:0.3; pointer-events:none; text-decoration:line-through; }
+
+/* ===== MINI GAMES ===== */
+/* Memory Match */
+.memory-grid { display:grid; gap:8px; }
+.mem-card {
+  aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:12px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:all 0.3s; font-size:24px; box-shadow:0 3px 8px rgba(0,0,0,0.2);
+  perspective:600px;
+}
+.mem-card.flipped { background:white; box-shadow:0 3px 8px rgba(78,205,196,0.3); border:2px solid var(--secondary); }
+.mem-card.matched { background:linear-gradient(135deg,#55E6C1,#00b894); animation:matchPop 0.4s; }
+@keyframes matchPop { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.mem-card .card-back { font-size:28px; }
+
+/* Word Scramble */
+.scramble-word { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:20px 0; }
+.letter-tile { width:44px; height:52px; background:linear-gradient(135deg,var(--primary),#e17055); color:white; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; cursor:pointer; transition:all 0.2s; box-shadow:0 3px 6px rgba(0,0,0,0.2); }
+.letter-tile:hover { transform:translateY(-4px); box-shadow:0 6px 12px rgba(0,0,0,0.2); }
+.letter-tile.selected { opacity:0.3; transform:scale(0.9); }
+.answer-slots { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0; }
+.answer-slot { width:44px; height:52px; border-radius:10px; border:3px dashed rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; color:white; cursor:pointer; transition:all 0.2s; }
+.answer-slot.filled { background:linear-gradient(135deg,#55E6C1,#00b894); border-style:solid; border-color:transparent; }
+.answer-slot:hover.filled { background:linear-gradient(135deg,#ff7675,#d63031); }
+
+/* Word Search */
+.wsearch-grid { display:inline-grid; gap:3px; }
+.ws-cell { width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; border-radius:8px; cursor:pointer; transition:all 0.2s; background:rgba(255,255,255,0.9); color:var(--dark); user-select:none; }
+.ws-cell.selecting { background:var(--accent); color:var(--dark); }
+.ws-cell.found { background:linear-gradient(135deg,#55E6C1,#00b894); color:white; }
+
+/* Drag Drop */
+.drag-container { display:flex; flex-direction:column; gap:16px; }
+.drag-items { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.drag-item { background:white; border-radius:12px; padding:10px 16px; font-weight:700; font-size:14px; cursor:grab; border:2px solid #e9ecef; transition:all 0.2s; }
+.drag-item:hover { border-color:var(--secondary); }
+.drag-item.dragging { opacity:0.5; transform:rotate(3deg); }
+.drop-zones { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.drop-zone { background:rgba(255,255,255,0.2); border:3px dashed rgba(255,255,255,0.4); border-radius:16px; padding:16px; min-height:80px; text-align:center; transition:all 0.2s; }
+.drop-zone.over { background:rgba(255,255,255,0.35); border-color:var(--accent); }
+.drop-zone h4 { color:white; font-size:14px; margin-bottom:8px; }
+.dropped-items { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+.dropped-item { background:var(--secondary); color:white; border-radius:8px; padding:4px 10px; font-size:13px; font-weight:700; }
+
+/* Sentence Builder */
+.sentence-display { background:rgba(255,255,255,0.15); border-radius:16px; padding:16px; min-height:60px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+.sent-word { background:white; color:var(--dark); border-radius:8px; padding:6px 12px; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.2s; }
+.sent-word:hover { background:var(--red); color:white; }
+.word-choices { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.choice-word { background:rgba(255,255,255,0.25); color:white; border:2px solid rgba(255,255,255,0.4); border-radius:10px; padding:8px 14px; font-weight:700; font-size:15px; cursor:pointer; transition:all 0.2s; }
+.choice-word:hover:not(.used) { background:rgba(255,255,255,0.4); transform:scale(1.05); }
+.choice-word.used { opacity:0.3; pointer-events:none; text-decoration:line-through; }
+
+/* Balloon Pop */
+.balloon-area { position:relative; height:300px; overflow:hidden; background:linear-gradient(to bottom, #74b9ff, #a29bfe); border-radius:16px; }
+.balloon {
+  position:absolute; bottom:-50px; width:60px; height:70px; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; text-align:center;
+  cursor:pointer; transition:transform 0.1s; padding:4px; line-height:1.2;
+  animation: riseUp linear infinite;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.balloon:hover { transform:scale(1.1); }
+@keyframes riseUp { 0%{bottom:-80px;opacity:1;} 80%{opacity:1;} 100%{bottom:110%;opacity:0;} }
+.balloon::after { content:''; position:absolute; bottom:-15px; left:50%; transform:translateX(-50%); width:2px; height:16px; background:rgba(0,0,0,0.3); }
+
+/* Fill in blank */
+.sentence-fill { font-size:20px; font-weight:700; color:white; text-align:center; line-height:2; margin-bottom:20px; }
+.blank-input { background:rgba(255,255,255,0.9); border:none; border-bottom:3px solid var(--accent); padding:4px 8px; width:120px; font-family:'Nunito'; font-size:20px; font-weight:800; text-align:center; outline:none; border-radius:6px; color:var(--dark); }
+
+/* ===== RESULTS ===== */
+.results-screen { text-align:center; padding:20px; }
+.results-trophy { font-size:80px; animation:trophy 1s; }
+@keyframes trophy { 0%{transform:scale(0) rotate(-20deg);} 70%{transform:scale(1.2) rotate(5deg);} 100%{transform:scale(1) rotate(0);} }
+.results-score { font-family:'Fredoka One'; font-size:64px; color:var(--accent); text-shadow:3px 3px 0 rgba(0,0,0,0.2); margin:10px 0; }
+.results-msg { color:white; font-size:20px; font-weight:700; margin-bottom:20px; }
+.stars-earned { display:flex; justify-content:center; gap:8px; margin:16px 0; font-size:40px; }
+.xp-earned { background:rgba(255,255,255,0.2); border-radius:16px; padding:12px 24px; color:white; font-size:18px; font-weight:700; display:inline-block; margin-bottom:20px; }
+
+/* ===== BUTTONS ===== */
+.btn { padding:14px 28px; border-radius:16px; border:none; font-family:'Nunito'; font-weight:800; font-size:16px; cursor:pointer; transition:all 0.3s; }
+.btn-primary { background:linear-gradient(135deg,var(--accent),#FDCB6E); color:var(--dark); box-shadow:0 4px 15px rgba(253,203,110,0.4); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(253,203,110,0.5); }
+.btn-secondary { background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.4); }
+.btn-secondary:hover { background:rgba(255,255,255,0.3); }
+.btn-green { background:linear-gradient(135deg,#55E6C1,#00b894); color:white; }
+.btn-block { width:100%; display:block; }
+.btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+.back-btn { background:rgba(255,255,255,0.2); border:none; color:white; font-size:20px; padding:8px 12px; border-radius:12px; cursor:pointer; font-family:'Nunito'; font-weight:700; display:flex; align-items:center; gap:6px; }
+.back-btn:hover { background:rgba(255,255,255,0.3); }
+
+/* ===== REWARD ANIMATION ===== */
+.confetti-piece { position:fixed; width:10px; height:10px; top:-20px; z-index:9999; animation:confettiFall 3s linear forwards; pointer-events:none; }
+@keyframes confettiFall { 100%{transform:translateY(110vh) rotate(720deg);opacity:0;} }
+
+/* ===== TOAST ===== */
+#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--dark); color:white; padding:12px 24px; border-radius:12px; font-weight:700; z-index:9999; opacity:0; transition:all 0.3s; pointer-events:none; white-space:nowrap; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .vocab-grid { grid-template-columns:repeat(2,1fr); }
+  .options-grid { grid-template-columns:1fr; }
+  .games-grid { grid-template-columns:repeat(2,1fr); }
+  .drop-zones { grid-template-columns:1fr; }
+}
+@media(max-width:360px){
+  .games-grid { grid-template-columns:1fr; }
+  .letter-tile, .answer-slot { width:38px; height:46px; font-size:18px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.3);border-radius:3px;}
+
+/* ===== BOTTOM NAV ===== */
+#bottom-nav { position:sticky; bottom:0; z-index:100; background:rgba(255,255,255,0.15); backdrop-filter:blur(20px); border-top:2px solid rgba(255,255,255,0.2); display:flex; }
+.nav-btn { flex:1; padding:10px 4px; border:none; background:transparent; color:rgba(255,255,255,0.6); font-size:20px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; transition:all 0.2s; }
+.nav-btn.active { color:var(--accent); }
+.nav-btn span { font-size:10px; font-family:'Nunito'; font-weight:700; }
+.nav-btn:hover { color:white; }
+
+/* Word Image game */
+.word-image-card { text-align:center; }
+.word-image-emoji { font-size:96px; display:block; margin:20px 0; animation:bounce 1s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.word-image-options { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.img-opt { background:rgba(255,255,255,0.2); border:3px solid rgba(255,255,255,0.3); border-radius:14px; padding:12px; color:white; font-weight:800; font-size:16px; cursor:pointer; transition:all 0.2s; }
+.img-opt:hover:not(:disabled) { background:rgba(255,255,255,0.35); transform:scale(1.03); }
+.img-opt.correct { background:linear-gradient(135deg,#55E6C1,#00b894); border-color:transparent; }
+.img-opt.wrong { background:linear-gradient(135deg,#ff7675,#d63031); border-color:transparent; animation:shake 0.3s; }
+
+/* Typing Race */
+.typing-target { font-size:24px; font-weight:800; color:white; text-align:center; letter-spacing:4px; margin:16px 0; }
+.typing-char.correct { color:var(--green); }
+.typing-char.wrong { color:var(--red); text-decoration:underline; }
+.typing-char.current { background:rgba(255,255,255,0.3); border-radius:4px; }
+.typing-input { width:100%; padding:12px 16px; border-radius:12px; border:3px solid rgba(255,255,255,0.4); background:rgba(255,255,255,0.15); color:white; font-family:'Nunito'; font-size:18px; font-weight:700; outline:none; text-align:center; }
+.typing-input::placeholder { color:rgba(255,255,255,0.5); }
+.typing-input:focus { border-color:var(--accent); background:rgba(255,255,255,0.25); }
+
+/* Speed Quiz */
+.speed-timer { font-size:48px; font-weight:900; color:var(--accent); text-align:center; text-shadow:2px 2px 0 rgba(0,0,0,0.2); }
+.timer-bar { height:10px; background:rgba(255,255,255,0.2); border-radius:5px; overflow:hidden; margin-bottom:12px; }
+.timer-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--accent),var(--red)); border-radius:5px; transition:width 0.1s linear; }
+
+/* Streak counter */
+.streak-combo { text-align:center; margin-bottom:8px; }
+.combo-text { font-size:13px; color:rgba(255,255,255,0.7); }
+.combo-num { font-size:28px; font-weight:900; color:var(--accent); }
+
+.game-score-display { background:rgba(255,255,255,0.15); border-radius:12px; padding:8px 16px; text-align:center; margin-bottom:12px; color:white; font-weight:700; font-size:16px; }
+
+/* section title */
+.sec-title { font-family:'Fredoka One'; font-size:20px; color:var(--dark); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.sec-title .icon { font-size:24px; }
+</style>
+</head>
+<body>
+
+<div class="stars-bg" id="starsBg"></div>
+
+<div id="header">
+  <div class="logo">F&F <span>3</span> ✨</div>
+  <div id="streak">🔥 <span id="streakNum">1</span></div>
+  <div id="xp-display">
+    <span class="star-icon">⭐</span>
+    <span id="xp-val">0</span>
+  </div>
+</div>
+
+<div id="app">
+
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="screen-home">
+    <div class="home-hero">
+      <h1>Family & Friends 3 🎉</h1>
+      <p>Learn English the fun way!</p>
+    </div>
+    <div class="characters">
+      <div class="char"><div class="char-avatar" style="background:#fd79a8" onclick="speak('Hi! I am Rosy!')">🧒</div><div class="char-name">Rosy</div></div>
+      <div class="char"><div class="char-avatar" style="background:#74b9ff" onclick="speak('Hello! I am Tim!')">👦</div><div class="char-name">Tim</div></div>
+      <div class="char"><div class="char-avatar" style="background:#55e6c1" onclick="speak('Hey! I am Billy!')">👶</div><div class="char-name">Billy</div></div>
+      <div class="char"><div class="char-avatar" style="background:#a29bfe" onclick="speak('Good morning! I am Miss Jones!')">👩‍🏫</div><div class="char-name">Miss Jones</div></div>
+    </div>
+    <div class="progress-overview">
+      <h3>📚 My Units</h3>
+      <div class="progress-grid" id="unitDotGrid"></div>
+    </div>
+    <div class="units-list" id="unitsList"></div>
+  </div>
+
+  <!-- UNIT SCREEN -->
+  <div class="screen" id="screen-unit">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <button class="back-btn" onclick="showScreen('home')">← Back</button>
+      <div class="unit-header" style="flex:1;margin-bottom:0;">
+        <h2 id="unitTitle"></h2>
+        <p id="unitSubtitle"></p>
+      </div>
+    </div>
+    <div class="lesson-tabs" id="lessonTabs"></div>
+    <div id="lessonContent"></div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="screen" id="screen-game">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <button class="back-btn" id="gameBackBtn">← Back</button>
+      <div style="flex:1;text-align:center;"><span style="font-family:Fredoka One;font-size:22px;color:white;" id="gameTitle"></span></div>
+    </div>
+    <div id="gameContent"></div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="screen-quiz">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <button class="back-btn" id="quizBackBtn">← Back</button>
+      <div style="flex:1;text-align:center;"><span style="font-family:Fredoka One;font-size:22px;color:white;" id="quizTitle">Quiz Time! 🎯</span></div>
+    </div>
+    <div id="quizContent"></div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="screen" id="screen-results">
+    <div class="results-screen">
+      <div class="results-trophy" id="resultsTrophy">🏆</div>
+      <div class="results-score" id="resultsScore"></div>
+      <div class="results-msg" id="resultsMsg"></div>
+      <div class="stars-earned" id="resultsStars"></div>
+      <div class="xp-earned" id="resultsXP"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="resultsRetry">🔄 Try Again</button>
+        <button class="btn btn-secondary" onclick="showScreen('home')">🏠 Home</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('home');setNav(this)" id="nav-home">
+    <span>🏠</span><span>Home</span>
+  </button>
+  <button class="nav-btn" onclick="startAllQuiz();setNav(this)" id="nav-quiz">
+    <span>🎯</span><span>Quiz</span>
+  </button>
+  <button class="nav-btn" onclick="showAllGames();setNav(this)" id="nav-play">
+    <span>🎮</span><span>Play</span>
+  </button>
+  <button class="nav-btn" onclick="showPhonicsAll();setNav(this)" id="nav-phon">
+    <span>🔤</span><span>Phonics</span>
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ===== DATA =====
+const UNITS = [
+  {
+    id: 0, title: "Starter: Hello!", icon: "👋", color: "#fd79a8",
+    vocab: [
+      {word:"Rosy",emoji:"🧒",phonetic:"/ˈroʊzi/"},
+      {word:"Tim",emoji:"👦",phonetic:"/tɪm/"},
+      {word:"Billy",emoji:"👶",phonetic:"/ˈbɪli/"},
+      {word:"Miss Jones",emoji:"👩‍🏫",phonetic:"/mɪs dʒoʊnz/"},
+      {word:"red",emoji:"🔴",phonetic:"/rɛd/"},
+      {word:"blue",emoji:"🔵",phonetic:"/bluː/"},
+      {word:"green",emoji:"🟢",phonetic:"/ɡriːn/"},
+      {word:"yellow",emoji:"🟡",phonetic:"/ˈjɛloʊ/"},
+      {word:"orange",emoji:"🟠",phonetic:"/ˈɔːrɪndʒ/"},
+      {word:"purple",emoji:"🟣",phonetic:"/ˈpɜːrpəl/"},
+      {word:"pencil",emoji:"✏️",phonetic:"/ˈpɛnsəl/"},
+      {word:"book",emoji:"📚",phonetic:"/bʊk/"},
+    ],
+    grammar: [
+      {pattern:"What's your name?", answer:"My name's ____."},
+      {pattern:"How old are you?", answer:"I'm ____ years old."},
+      {pattern:"What color is it?", answer:"It's ____."},
+    ],
+    phonics: [],
+    reading: {title:"Hello, class!", text:"My name's Rosy. And my name's Tim. Hello, class. My name's Miss Jones.", questions:["What is the teacher's name?","How many students introduced themselves?"]},
+    writing: {prompt:"✍️ Write your name and age!", lines:["My name's ____.", "I'm ____ years old.", "My favorite color is ____."], bank:["is","My","I'm","name's","years","old"]},
+    song: {title:"Hello, hello!", lines:["Hello, hello,","How are you?","I'm fine, thank you.","Hello, hello,","What's your name?","My name's ____.","That's my name."]}
+  },
+  {
+    id: 1, title: "Unit 1: This is your doll.", icon: "🪆", color: "#74b9ff",
+    vocab: [
+      {word:"doll",emoji:"🪆",phonetic:"/dɒl/"},
+      {word:"ball",emoji:"⚽",phonetic:"/bɔːl/"},
+      {word:"teddy bear",emoji:"🧸",phonetic:"/ˈtɛdi bɛr/"},
+      {word:"car",emoji:"🚗",phonetic:"/kɑːr/"},
+      {word:"kite",emoji:"🪁",phonetic:"/kaɪt/"},
+      {word:"bike",emoji:"🚲",phonetic:"/baɪk/"},
+      {word:"train",emoji:"🚂",phonetic:"/treɪn/"},
+      {word:"my",emoji:"👋",phonetic:"/maɪ/"},
+      {word:"your",emoji:"👉",phonetic:"/jɔːr/"},
+    ],
+    grammar: [
+      {pattern:"This is my doll.", answer:"This is my ____."},
+      {pattern:"That is your ball.", answer:"That is your ____."},
+    ],
+    phonics: [
+      {sound:"a /æ/", words:["apple","Annie","ant","axe"], highlight:[0,1]},
+      {sound:"b /b/", words:["ball","bat","bag","bed"], highlight:[0,1]},
+    ],
+    reading: {title:"My Favorite...", text:"What's my favorite toy? My favorite one of all? My train? My car? No – my yellow ball! What's my favorite color? Yellow, green, or blue? Is it yellow? Is it green? No – it's blue!", questions:["What is the child's favorite toy?","What is the child's favorite color?"]},
+    writing: {prompt:"🎨 Write about your favorite toy!", lines:["My favorite toy is ____.", "My favorite color is ____."], bank:["My","is","favorite","toy","color"]},
+    song: {title:"My Toy Song", lines:["This is my ball, my ball, my ball,","This is my ball, it's round!","This is your kite, your kite, your kite,","This is your kite, fly high!"]}
+  },
+  {
+    id: 2, title: "Unit 2: That is his ruler.", icon: "📏", color: "#55e6c1",
+    vocab: [
+      {word:"pen",emoji:"🖊️",phonetic:"/pɛn/"},
+      {word:"eraser",emoji:"📌",phonetic:"/ɪˈreɪzər/"},
+      {word:"pencil",emoji:"✏️",phonetic:"/ˈpɛnsəl/"},
+      {word:"pencil case",emoji:"🎒",phonetic:"/ˈpɛnsəl keɪs/"},
+      {word:"book",emoji:"📚",phonetic:"/bʊk/"},
+      {word:"bag",emoji:"👜",phonetic:"/bæɡ/"},
+      {word:"door",emoji:"🚪",phonetic:"/dɔːr/"},
+      {word:"window",emoji:"🪟",phonetic:"/ˈwɪndoʊ/"},
+      {word:"ruler",emoji:"📏",phonetic:"/ˈruːlər/"},
+    ],
+    grammar: [
+      {pattern:"That is his ruler.", answer:"That is his ____."},
+      {pattern:"That is her pen.", answer:"That is her ____."},
+    ],
+    phonics: [
+      {sound:"c /k/", words:["cat","cookie","cup","cake"], highlight:[0,1]},
+      {sound:"d /d/", words:["desk","dog","dad","doll"], highlight:[0,1]},
+    ],
+    reading: {title:"My School Bag", text:"This is my bag. It has a book, a pencil, and an eraser. That is his ruler. That is her pencil case. We share our things at school!", questions:["What is in the bag?","What value does the story teach?"]},
+    writing: {prompt:"✏️ Write about your school things!", lines:["This is my ____.", "That is his ____.", "That is her ____."], bank:["is","my","his","her","This","That","book","pen","ruler"]},
+    song: {title:"School Things Song", lines:["Pen and pencil, eraser too,","Pencil case and books brand new,","Door and window, bag and more,","School things are what I adore!"]}
+  },
+  {
+    id: 3, title: "Unit 3: Let's find Mom!", icon: "👨‍👩‍👧‍👦", color: "#a29bfe",
+    vocab: [
+      {word:"mom",emoji:"👩",phonetic:"/mɒm/"},
+      {word:"dad",emoji:"👨",phonetic:"/dæd/"},
+      {word:"sister",emoji:"👧",phonetic:"/ˈsɪstər/"},
+      {word:"brother",emoji:"👦",phonetic:"/ˈbrʌðər/"},
+      {word:"aunt",emoji:"👩",phonetic:"/ænt/"},
+      {word:"uncle",emoji:"👨",phonetic:"/ˈʌŋkəl/"},
+      {word:"cousin",emoji:"🧒",phonetic:"/ˈkʌzɪn/"},
+      {word:"in",emoji:"📦",phonetic:"/ɪn/"},
+      {word:"on",emoji:"⬆️",phonetic:"/ɒn/"},
+      {word:"under",emoji:"⬇️",phonetic:"/ˈʌndər/"},
+    ],
+    grammar: [
+      {pattern:"The cat is in the box.", answer:"The ____ is in the ____."},
+      {pattern:"The book is on the table.", answer:"The ____ is on the ____."},
+      {pattern:"The ball is under the chair.", answer:"The ____ is under the ____."},
+    ],
+    phonics: [
+      {sound:"e /e/", words:["egg","elephant","end","exit"], highlight:[0,1]},
+      {sound:"f /f/", words:["fan","fig","fish","fog"], highlight:[0,1]},
+    ],
+    reading: {title:"My Family", text:"This is my family. Mom is in the kitchen. Dad is in the garden. My sister is on the sofa. My brother is under the table! Where is my cousin? She is in her room.", questions:["Where is Dad?","Where is the brother?"]},
+    writing: {prompt:"👨‍👩‍👧‍👦 Write about your family!", lines:["My mom is in the ____.", "My dad is on the ____.", "My ____ is under the ____."], bank:["My","is","in","on","under","the","mom","dad","sister","brother"]},
+    song: {title:"Family Song", lines:["Mom and dad and sister too,","Brother, aunt, and uncle blue,","Cousins here and cousins there,","Family is everywhere!"]}
+  },
+  {
+    id: 4, title: "Unit 4: I like monkeys!", icon: "🐒", color: "#FDCB6E",
+    vocab: [
+      {word:"elephant",emoji:"🐘",phonetic:"/ˈɛlɪfənt/"},
+      {word:"giraffe",emoji:"🦒",phonetic:"/dʒɪˈrɑːf/"},
+      {word:"monkey",emoji:"🐒",phonetic:"/ˈmʌŋki/"},
+      {word:"bird",emoji:"🐦",phonetic:"/bɜːrd/"},
+      {word:"cat",emoji:"🐱",phonetic:"/kæt/"},
+      {word:"dog",emoji:"🐶",phonetic:"/dɒɡ/"},
+      {word:"fish",emoji:"🐟",phonetic:"/fɪʃ/"},
+      {word:"big",emoji:"🔺",phonetic:"/bɪɡ/"},
+      {word:"tall",emoji:"📏",phonetic:"/tɔːl/"},
+      {word:"little",emoji:"🔻",phonetic:"/ˈlɪtəl/"},
+    ],
+    grammar: [
+      {pattern:"I like monkeys.", answer:"I like ____."},
+      {pattern:"I don't like elephants.", answer:"I don't like ____."},
+    ],
+    phonics: [
+      {sound:"g /ɡ/", words:["goat","gift","game","gold"], highlight:[0,1]},
+      {sound:"h /h/", words:["hat","hamster","hand","horse"], highlight:[0,1]},
+    ],
+    reading: {title:"At the Zoo", text:"I like animals! I like monkeys. They are little and funny. I don't like elephants. They are very big! Giraffes are tall. Dogs are my favorite! Are you kind to animals?", questions:["What does the writer like?","Why doesn't the writer like elephants?"]},
+    writing: {prompt:"🐒 Write about animals!", lines:["I like ____.", "I don't like ____.", "My favorite animal is ____. It is ____."], bank:["I","like","don't","My","is","favorite","big","little","tall"]},
+    song: {title:"Animal Song", lines:["I like monkeys, yes I do!","Big elephant in the zoo,","Little fish swim in the sea,","Animals are friends to me!"]}
+  },
+  {
+    id: 5, title: "Unit 5: Do you like yogurt?", icon: "🥛", color: "#FF6B35",
+    vocab: [
+      {word:"rice",emoji:"🍚",phonetic:"/raɪs/"},
+      {word:"meat",emoji:"🥩",phonetic:"/miːt/"},
+      {word:"carrots",emoji:"🥕",phonetic:"/ˈkærəts/"},
+      {word:"yogurt",emoji:"🥛",phonetic:"/ˈjoʊɡərt/"},
+      {word:"bread",emoji:"🍞",phonetic:"/brɛd/"},
+      {word:"milk",emoji:"🥛",phonetic:"/mɪlk/"},
+      {word:"juice",emoji:"🧃",phonetic:"/dʒuːs/"},
+      {word:"water",emoji:"💧",phonetic:"/ˈwɔːtər/"},
+    ],
+    grammar: [
+      {pattern:"Do you like carrots?", answer:"Yes, I do. / No, I don't."},
+      {pattern:"Do you like milk?", answer:"Yes, I do. / No, I don't."},
+    ],
+    phonics: [
+      {sound:"i /ɪ/", words:["ink","ill","it","in"], highlight:[0,1]},
+      {sound:"j /dʒ/", words:["jacket","jelly","jam","jump"], highlight:[0,1]},
+    ],
+    reading: {title:"Healthy Food!", text:"I eat healthy food. I like rice and meat. I like carrots. Carrots are orange and good for you! I drink milk and juice. Do you like yogurt? Yes, I do! Eat healthy food every day!", questions:["What healthy foods does the writer like?","What does the writer drink?"]},
+    writing: {prompt:"🥕 Write about food!", lines:["I like ____.", "I don't like ____.", "I drink ____. It is ____!"], bank:["I","like","don't","drink","healthy","good","My","favorite","food"]},
+    song: {title:"Healthy Food Song", lines:["Do you like carrots? Yes, I do!","Do you like juice? Yes, I do!","Eat your food and drink it too,","Healthy food is good for you!"]}
+  },
+  {
+    id: 6, title: "Unit 6: I have a new friend.", icon: "👫", color: "#fd79a8",
+    vocab: [
+      {word:"long",emoji:"📏",phonetic:"/lɒŋ/"},
+      {word:"short",emoji:"📏",phonetic:"/ʃɔːrt/"},
+      {word:"black",emoji:"⚫",phonetic:"/blæk/"},
+      {word:"curly",emoji:"🌀",phonetic:"/ˈkɜːrli/"},
+      {word:"straight",emoji:"➡️",phonetic:"/streɪt/"},
+      {word:"tall",emoji:"🔺",phonetic:"/tɔːl/"},
+      {word:"thin",emoji:"✏️",phonetic:"/θɪn/"},
+      {word:"eyes",emoji:"👀",phonetic:"/aɪz/"},
+      {word:"hair",emoji:"💇",phonetic:"/hɛr/"},
+    ],
+    grammar: [
+      {pattern:"He has blue eyes.", answer:"He has ____ eyes."},
+      {pattern:"She has curly hair.", answer:"She has ____ hair."},
+      {pattern:"I have long hair.", answer:"I have ____ hair."},
+    ],
+    phonics: [
+      {sound:"k /k/", words:["kite","king","key","kind"], highlight:[0,1]},
+      {sound:"l /l/", words:["lion","lamp","leg","leaf"], highlight:[0,1]},
+      {sound:"m /m/", words:["mom","map","milk","moon"], highlight:[0,1]},
+    ],
+    reading: {title:"My New Friend", text:"This is my new friend. Her name is Anna. She has long hair and blue eyes. She is tall. My friend Tom has short hair and brown eyes. He has a big smile! We are good friends.", questions:["What does Anna look like?","What does Tom look like?"]},
+    writing: {prompt:"👫 Describe a friend!", lines:["My friend has ____ hair.", "My friend has ____ eyes.", "My friend is ____. We are good friends!"], bank:["My","friend","has","is","long","short","curly","straight","tall","thin","blue","brown","black"]},
+    song: {title:"Friends Song", lines:["Long hair, short hair,","Blue eyes, brown eyes too,","Tall and thin or short and round,","Good friends me and you!"]}
+  },
+  {
+    id: 7, title: "Unit 7: I'm wearing a blue skirt.", icon: "👗", color: "#74b9ff",
+    vocab: [
+      {word:"skirt",emoji:"👗",phonetic:"/skɜːrt/"},
+      {word:"scarf",emoji:"🧣",phonetic:"/skɑːrf/"},
+      {word:"jeans",emoji:"👖",phonetic:"/dʒiːnz/"},
+      {word:"boots",emoji:"👢",phonetic:"/buːts/"},
+      {word:"shirt",emoji:"👔",phonetic:"/ʃɜːrt/"},
+      {word:"T-shirt",emoji:"👕",phonetic:"/ˈtiːʃɜːrt/"},
+      {word:"dress",emoji:"👘",phonetic:"/drɛs/"},
+      {word:"hat",emoji:"🎩",phonetic:"/hæt/"},
+    ],
+    grammar: [
+      {pattern:"I'm wearing a blue skirt.", answer:"I'm wearing a ____ ____."},
+      {pattern:"He's wearing a red shirt.", answer:"He's wearing a ____ ____."},
+      {pattern:"She's wearing a green dress.", answer:"She's wearing a ____ ____."},
+    ],
+    phonics: [
+      {sound:"sh /ʃ/", words:["shoes","shirt","shop","shark"], highlight:[0,1]},
+      {sound:"ch /tʃ/", words:["chair","chicken","child","cheese"], highlight:[0,1]},
+      {sound:"th /θ/", words:["three","thumb","think","thin"], highlight:[0,1]},
+    ],
+    reading: {title:"Family Photo Day!", text:"Today is family photo day! Mom is wearing a red dress. Dad is wearing a blue shirt and brown boots. My sister is wearing a green skirt and a yellow T-shirt. I'm wearing my new jeans and a scarf. We look great!", questions:["What is Mom wearing?","What is the writer wearing?"]},
+    writing: {prompt:"👗 What are you wearing?", lines:["I'm wearing a ____ ____.", "My ____ is wearing a ____ ____."], bank:["I'm","wearing","a","My","is","red","blue","green","shirt","dress","skirt","jeans","hat","boots"]},
+    song: {title:"Getting Dressed Song", lines:["I'm wearing a blue skirt today,","He's wearing a red shirt to play,","She's wearing a green dress, hooray!","We're dressed up for family day!"]}
+  },
+  {
+    id: 8, title: "Unit 8: I'm dancing with Dad.", icon: "💃", color: "#55e6c1",
+    vocab: [
+      {word:"dance",emoji:"💃",phonetic:"/dæns/"},
+      {word:"sing",emoji:"🎤",phonetic:"/sɪŋ/"},
+      {word:"eat",emoji:"🍽️",phonetic:"/iːt/"},
+      {word:"talk",emoji:"💬",phonetic:"/tɔːk/"},
+      {word:"watch",emoji:"👁️",phonetic:"/wɒtʃ/"},
+      {word:"play",emoji:"🎮",phonetic:"/pleɪ/"},
+      {word:"brush my hair",emoji:"💇",phonetic:"/brʌʃ/"},
+      {word:"take photos",emoji:"📷",phonetic:"/teɪk/"},
+    ],
+    grammar: [
+      {pattern:"What are you doing?", answer:"I'm ____."},
+      {pattern:"What is he doing?", answer:"He's ____."},
+      {pattern:"What is she doing?", answer:"She's ____."},
+    ],
+    phonics: [
+      {sound:"dr /dr/", words:["drum","dress","dragon","drink"], highlight:[0,1]},
+      {sound:"tr /tr/", words:["truck","tree","train","trip"], highlight:[0,1]},
+      {sound:"cr /kr/", words:["crayon","crab","crown","cross"], highlight:[0,1]},
+    ],
+    reading: {title:"Party Time!", text:"It's party time! Dad is dancing. Mom is singing. Billy is eating cake. Tim is talking with his friends. Rosy is taking photos. Miss Jones is watching everyone. We are having a great time!", questions:["What is Dad doing?","What is Rosy doing?"]},
+    writing: {prompt:"🎉 What are people doing?", lines:["____ is ____ing.", "____ is ____ing.", "I am ____ing."], bank:["is","am","I","dancing","singing","eating","playing","talking","watching"]},
+    song: {title:"Dancing Song", lines:["I'm dancing with Dad, tra la la!","She's singing a song, ha ha ha!","He's eating some cake, nom nom nom!","We're having fun, come come come!"]}
+  },
+  {
+    id: 9, title: "Unit 9: He can run!", icon: "🏃", color: "#FDCB6E",
+    vocab: [
+      {word:"run",emoji:"🏃",phonetic:"/rʌn/"},
+      {word:"jump",emoji:"🦘",phonetic:"/dʒʌmp/"},
+      {word:"fly",emoji:"✈️",phonetic:"/flaɪ/"},
+      {word:"catch",emoji:"🤲",phonetic:"/kætʃ/"},
+      {word:"read",emoji:"📖",phonetic:"/riːd/"},
+      {word:"write",emoji:"✍️",phonetic:"/raɪt/"},
+      {word:"ride a bike",emoji:"🚲",phonetic:"/raɪd/"},
+      {word:"play soccer",emoji:"⚽",phonetic:"/pleɪ/"},
+    ],
+    grammar: [
+      {pattern:"I can run.", answer:"I can ____."},
+      {pattern:"He can't fly.", answer:"He can't ____."},
+      {pattern:"Can she jump?", answer:"Yes, she can. / No, she can't."},
+    ],
+    phonics: [
+      {sound:"ai /eɪ/", words:["rain","train","snail","tail"], highlight:[0,1]},
+      {sound:"y /aɪ/", words:["fly","sky","try","my"], highlight:[0,1]},
+    ],
+    reading: {title:"Sports Day!", text:"It's Sports Day! Billy can run fast. He can jump high too! Tim can ride a bike. He can't fly, but birds can! Rosy can read and write. She can catch a ball. We can all do different things! Celebrate your abilities!", questions:["What can Billy do?","What can Rosy do?"]},
+    writing: {prompt:"🏃 Write about what you can do!", lines:["I can ____.", "I can't ____, but I can ____.", "My friend can ____."], bank:["I","can","can't","My","friend","run","jump","fly","catch","read","write"]},
+    song: {title:"Can You? Song", lines:["Can you run? Yes, I can!","Can you jump? Yes, I can!","Can you fly? No, I can't!","But I can catch, yes I can!"]}
+  },
+  {
+    id: 10, title: "Unit 10: May I take a photo?", icon: "📷", color: "#a29bfe",
+    vocab: [
+      {word:"take a photo",emoji:"📷",phonetic:"/teɪk/"},
+      {word:"draw a picture",emoji:"🎨",phonetic:"/drɔː/"},
+      {word:"visit",emoji:"🗺️",phonetic:"/ˈvɪzɪt/"},
+      {word:"listen",emoji:"🎧",phonetic:"/ˈlɪsən/"},
+      {word:"old",emoji:"🏛️",phonetic:"/oʊld/"},
+      {word:"new",emoji:"✨",phonetic:"/njuː/"},
+      {word:"great",emoji:"⭐",phonetic:"/ɡreɪt/"},
+      {word:"gift shop",emoji:"🛍️",phonetic:"/ɡɪft ʃɒp/"},
+    ],
+    grammar: [
+      {pattern:"May I take a photo?", answer:"Yes, you may. / No, you may not."},
+      {pattern:"May I visit the gift shop?", answer:"Yes, you may. / No, you may not."},
+    ],
+    phonics: [
+      {sound:"oa /oʊ/", words:["boat","goat","coat","road"], highlight:[0,1]},
+      {sound:"oy /ɔɪ/", words:["toy","boy","joy","coin"], highlight:[0,1]},
+    ],
+    reading: {title:"At the Museum", text:"We are at the museum today! It is old and great. May I take a photo? Yes, you may! May I draw a picture? Yes, you may! May I run? No, you may not. Follow the rules at the museum. It is a great place to visit!", questions:["Where are they?","What rules are mentioned?"]},
+    writing: {prompt:"🏛️ Write about the museum!", lines:["May I ____?", "Yes, you may. / No, you may not.", "I can see ____ at the museum."], bank:["May","I","you","Yes","No","may","not","take","visit","draw","listen"]},
+    song: {title:"May I? Song", lines:["May I take a photo here?","Yes, you may, my dear!","May I draw a picture too?","Yes, of course, it's up to you!"]}
+  },
+  {
+    id: 11, title: "Unit 11: There is a doll on the rug.", icon: "🛏️", color: "#FF6B35",
+    vocab: [
+      {word:"rug",emoji:"🟫",phonetic:"/rʌɡ/"},
+      {word:"cabinet",emoji:"🗄️",phonetic:"/ˈkæbɪnɪt/"},
+      {word:"shelf",emoji:"📚",phonetic:"/ʃɛlf/"},
+      {word:"pillow",emoji:"🛏️",phonetic:"/ˈpɪloʊ/"},
+      {word:"blanket",emoji:"🛌",phonetic:"/ˈblæŋkɪt/"},
+      {word:"eleven",emoji:"1️⃣1️⃣",phonetic:"/ɪˈlɛvən/"},
+      {word:"twelve",emoji:"1️⃣2️⃣",phonetic:"/twɛlv/"},
+      {word:"thirteen",emoji:"1️⃣3️⃣",phonetic:"/ˌθɜːrˈtiːn/"},
+      {word:"fifteen",emoji:"1️⃣5️⃣",phonetic:"/ˌfɪfˈtiːn/"},
+      {word:"twenty",emoji:"2️⃣0️⃣",phonetic:"/ˈtwɛnti/"},
+    ],
+    grammar: [
+      {pattern:"There is a doll on the rug.", answer:"There is ____ on the ____."},
+      {pattern:"There are three books under the bed.", answer:"There are ____ under the ____."},
+    ],
+    phonics: [
+      {sound:"ear /ɪr/", words:["ear","near","hear","fear"], highlight:[0,1]},
+      {sound:"are /eɪ/", words:["scared","share","square","bare"], highlight:[0,1]},
+    ],
+    reading: {title:"My Tidy Bedroom", text:"My bedroom is neat and clean! There is a pillow on the bed. There is a blanket on the rug. There are twelve books on the shelf. There are twenty toys in the cabinet. Is your bedroom tidy?", questions:["What is on the bed?","How many books are on the shelf?"]},
+    writing: {prompt:"🛏️ Describe your bedroom!", lines:["There is a ____ on the ____.", "There are ____ ____ in the ____.", "My bedroom is ____."], bank:["There","is","are","a","on","in","under","the","my"]},
+    song: {title:"Bedroom Song", lines:["There's a pillow on my bed,","There's a blanket, blue and red,","There are books upon the shelf,","Keep your room clean by yourself!"]}
+  },
+  {
+    id: 12, title: "Unit 12: Those are our computers.", icon: "💻", color: "#55e6c1",
+    vocab: [
+      {word:"table",emoji:"🪑",phonetic:"/ˈteɪbəl/"},
+      {word:"computer",emoji:"💻",phonetic:"/kəmˈpjuːtər/"},
+      {word:"chair",emoji:"🪑",phonetic:"/tʃɛr/"},
+      {word:"board",emoji:"📋",phonetic:"/bɔːrd/"},
+      {word:"poster",emoji:"🖼️",phonetic:"/ˈpoʊstər/"},
+      {word:"picture",emoji:"🖼️",phonetic:"/ˈpɪktʃər/"},
+      {word:"drawers",emoji:"🗄️",phonetic:"/drɔːrz/"},
+    ],
+    grammar: [
+      {pattern:"These are tables.", answer:"These are ____."},
+      {pattern:"Those are pencil cases.", answer:"Those are ____."},
+      {pattern:"This is my computer.", answer:"This is my ____."},
+    ],
+    phonics: [
+      {sound:"oor /ʊr/", words:["poor","door","floor","more"], highlight:[0,1]},
+      {sound:"ou /aʊ/", words:["mouse","house","out","shout"], highlight:[0,1]},
+    ],
+    reading: {title:"Our New Classroom", text:"Welcome to our new classroom! These are our tables. Those are our chairs. There is a big board on the wall. These are our computers – they are new! There are posters and pictures on the walls. We are happy to have a new classmate today!", questions:["What is new in the classroom?","What is on the walls?"]},
+    writing: {prompt:"💻 Write about your classroom!", lines:["These are ____.", "Those are ____.", "There is a ____ in my classroom. It is ____."], bank:["These","Those","There","are","is","a","my","our","new","big","great"]},
+    song: {title:"Classroom Song", lines:["These are our tables, one by one,","Those are our chairs – school is fun!","These computers, shiny and new,","Welcome to our class, we welcome you!"]}
+  },
+];
+
+// ===== STATE =====
+let xp = parseInt(localStorage.getItem('ff3_xp')||'0');
+let streak = parseInt(localStorage.getItem('ff3_streak')||'1');
+let progress = JSON.parse(localStorage.getItem('ff3_progress')||'{}');
+let currentUnit = 0;
+let currentTab = 'vocab';
+let currentGame = '';
+let gameState = {};
+let quizState = {};
+let synth = window.speechSynthesis;
+
+// ===== INIT =====
+function init() {
+  createStars();
+  updateXP(0);
+  document.getElementById('streakNum').textContent = streak;
+  renderUnitDots();
+  renderUnitList();
+}
+
+function createStars() {
+  const bg = document.getElementById('starsBg');
+  const emojis = ['⭐','🌟','✨','💫','🎈','🎉'];
+  for(let i=0;i<15;i++) {
+    const s = document.createElement('div');
+    s.className='star-float';
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left = Math.random()*100+'%';
+    s.style.animationDuration = (8+Math.random()*12)+'s';
+    s.style.animationDelay = (-Math.random()*20)+'s';
+    bg.appendChild(s);
+  }
+}
+
+function updateXP(add) {
+  xp += add;
+  localStorage.setItem('ff3_xp', xp);
+  document.getElementById('xp-val').textContent = xp;
+  if(add>0) showToast(`+${add} XP! ⭐`);
+}
+
+function saveProgress(unitId, type, score) {
+  if(!progress[unitId]) progress[unitId]={};
+  progress[unitId][type] = Math.max(progress[unitId][type]||0, score);
+  localStorage.setItem('ff3_progress', JSON.stringify(progress));
+  renderUnitDots();
+}
+
+function getUnitProgress(uid) {
+  const p = progress[uid]||{};
+  const types = ['vocab','quiz','game1','game2'];
+  const done = types.filter(t=>p[t]>0).length;
+  return Math.round((done/types.length)*100);
+}
+
+// ===== RENDER HOME =====
+function renderUnitDots() {
+  const grid = document.getElementById('unitDotGrid');
+  const icons = ['👋','🪆','📏','👨‍👩‍👧‍👦','🐒','🥛','👫','👗','💃','🏃','📷','🛏️','💻'];
+  grid.innerHTML = UNITS.map((u,i)=>{
+    const prog = getUnitProgress(i);
+    const cls = prog===100?'done':prog>0?'current':'available';
+    const star = prog===100?'<div class="unit-star">⭐</div>':'';
+    return `<div class="unit-dot ${cls}" onclick="openUnit(${i})" title="${u.title}">${icons[i]}${star}</div>`;
+  }).join('');
+}
+
+function renderUnitList() {
+  const list = document.getElementById('unitsList');
+  const colors = ['#fd79a8','#74b9ff','#55e6c1','#a29bfe','#FDCB6E','#FF6B35','#fd79a8','#74b9ff','#55e6c1','#FDCB6E','#a29bfe','#FF6B35','#55e6c1'];
+  list.innerHTML = UNITS.map((u,i)=>{
+    const prog = getUnitProgress(i);
+    const badge = prog===100?'<span class="unit-badge" style="background:#d4edda;color:#155724">✅ Complete</span>':prog>0?`<span class="unit-badge" style="background:#fff3cd;color:#856404">📚 ${prog}% Done</span>`:
+      '<span class="unit-badge" style="background:#e9ecef;color:#495057">🔓 Ready</span>';
+    return `<div class="unit-card" onclick="openUnit(${i})">
+      <div class="unit-icon" style="background:${colors[i]}20; font-size:32px;">${u.icon}</div>
+      <div class="unit-info">
+        <h3>${u.title}</h3>
+        <p>${u.vocab.slice(0,4).map(v=>v.word).join(', ')}...</p>
+        <div class="unit-prog">
+          <div class="prog-bar"><div class="prog-fill" style="width:${prog}%;background:${colors[i]}"></div></div>
+        </div>
+        ${badge}
+      </div>
+      <div style="font-size:24px;">${prog===100?'🏆':'▶️'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== NAVIGATION =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(name==='home'){renderUnitDots();renderUnitList();}
+}
+
+function setNav(btn) {
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ===== OPEN UNIT =====
+function openUnit(idx) {
+  currentUnit = idx;
+  const unit = UNITS[idx];
+  document.getElementById('unitTitle').textContent = unit.title;
+  document.getElementById('unitSubtitle').textContent = `${unit.vocab.length} words • Grammar • Phonics • 4 Skills`;
+  const tabs = [
+    {id:'vocab',label:'📚 Words'},
+    {id:'grammar',label:'📝 Grammar'},
+    {id:'phonics',label:'🔤 Phonics'},
+    {id:'reading',label:'📖 Reading'},
+    {id:'writing',label:'✏️ Writing'},
+    {id:'speaking',label:'🎤 Speaking'},
+    {id:'games',label:'🎮 Games'},
+    {id:'quiz',label:'🎯 Quiz'},
+  ];
+  document.getElementById('lessonTabs').innerHTML = tabs.map(t=>
+    `<button class="tab-btn ${t.id===currentTab?'active':''}" onclick="switchTab('${t.id}',this)">${t.label}</button>`
+  ).join('');
+  switchTab('vocab');
+  showScreen('unit');
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else {
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(b=>{if(b.textContent.toLowerCase().includes(tab.substring(0,3)))b.classList.add('active');});
+  }
+  renderTabContent(tab);
+}
+
+// ===== TAB CONTENT =====
+function renderTabContent(tab) {
+  const unit = UNITS[currentUnit];
+  const el = document.getElementById('lessonContent');
+  switch(tab) {
+    case 'vocab': el.innerHTML = renderVocab(unit); break;
+    case 'grammar': el.innerHTML = renderGrammar(unit); break;
+    case 'phonics': el.innerHTML = renderPhonics(unit); break;
+    case 'reading': el.innerHTML = renderReading(unit); break;
+    case 'writing': el.innerHTML = renderWriting(unit); break;
+    case 'speaking': el.innerHTML = renderSpeaking(unit); break;
+    case 'games': el.innerHTML = renderGamesMenu(); break;
+    case 'quiz': startQuiz(currentUnit); return;
+  }
+}
+
+// ===== VOCAB =====
+function renderVocab(unit) {
+  const learned = (progress[unit.id]||{}).vocabLearned||[];
+  return `<div class="lesson-content">
+    <div class="sec-title"><span class="icon">📚</span>Vocabulary - ${unit.title.split(':')[1]||''}</div>
+    <p style="font-size:13px;color:#636e72;margin-bottom:12px;">Tap a word to hear it! Tap "Mark Learned" to track progress.</p>
+    <div class="vocab-grid">
+      ${unit.vocab.map((v,i)=>`
+        <div class="vocab-card ${learned.includes(i)?'learned':''}" id="vc${unit.id}_${i}" onclick="learnWord(${unit.id},${i},'${v.word}')">
+          <span class="emoji">${v.emoji}</span>
+          <div class="word">${v.word}</div>
+          <div class="phonetic">${v.phonetic}</div>
+          <button class="speak-btn" onclick="event.stopPropagation();speak('${v.word}')">🔊 Say it</button>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <span style="color:#636e72;font-size:13px;">${learned.length}/${unit.vocab.length} words learned</span>
+    </div>
+  </div>`;
+}
+
+function learnWord(uid, idx, word) {
+  speak(word);
+  if(!progress[uid]) progress[uid]={};
+  if(!progress[uid].vocabLearned) progress[uid].vocabLearned=[];
+  if(!progress[uid].vocabLearned.includes(idx)) {
+    progress[uid].vocabLearned.push(idx);
+    localStorage.setItem('ff3_progress', JSON.stringify(progress));
+    updateXP(2);
+    showToast('Word learned! 🌟');
+  }
+  const card = document.getElementById(`vc${uid}_${idx}`);
+  if(card) card.classList.toggle('learned');
+}
+
+// ===== GRAMMAR =====
+function renderGrammar(unit) {
+  return `<div class="lesson-content">
+    <div class="sec-title"><span class="icon">📝</span>Grammar Patterns</div>
+    ${unit.grammar.map((g,i)=>`
+      <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;padding:20px;margin-bottom:12px;color:white;">
+        <div style="font-size:11px;opacity:0.7;font-weight:700;margin-bottom:6px;">PATTERN ${i+1}</div>
+        <div style="font-size:22px;font-weight:800;">${g.pattern}</div>
+        <div style="font-size:16px;opacity:0.85;margin-top:8px;">→ ${g.answer}</div>
+        <button class="speak-btn" style="margin-top:10px;background:rgba(255,255,255,0.25)" onclick="speak('${g.pattern}')">🔊 Listen</button>
+      </div>`).join('')}
+    <div style="background:rgba(255,255,255,0.15);border-radius:16px;padding:16px;color:white;margin-top:8px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px;">💡 Key Value: ${unit.id<UNITS.length?getUnitValue(unit.id):''}</div>
+    </div>
+  </div>`;
+}
+
+function getUnitValue(uid) {
+  const values = ["Be kind to people!","Be kind to people!","Share your things!","Help your family!","Be kind to animals!","Eat healthy food!","Be good friends!","Get together with your family!","Have a good time with your family!","Celebrate different abilities!","Follow the rules!","Be neat and clean!","Welcome a new classmate!"];
+  return values[uid]||"";
+}
+
+// ===== PHONICS =====
+function renderPhonics(unit) {
+  if(!unit.phonics||unit.phonics.length===0) {
+    return `<div class="lesson-content"><div style="text-align:center;padding:40px;color:#636e72">No phonics for this unit. Check Unit 1 onwards! 🔤</div></div>`;
+  }
+  return `<div class="lesson-content">
+    <div class="sec-title"><span class="icon">🔤</span>Phonics Time!</div>
+    ${unit.phonics.map((ph,pi)=>`
+      <div class="phonics-card" style="margin-bottom:16px;">
+        <div class="phonics-symbol">${ph.sound}</div>
+        <p style="opacity:0.8;font-size:14px;margin-top:4px;">Listen and repeat!</p>
+        <div class="phonics-examples">
+          ${ph.words.map((w,wi)=>`
+            <div class="phon-word" onclick="speak('${w}')">
+              ${ph.highlight&&ph.highlight.includes(wi)?`<span class="highlight">${ph.sound.split(' ')[0].replace(/\/.*/,'').replace(/[^a-zA-Z]/g,'')}</span>${w.slice(ph.sound.split(' ')[0].replace(/\/.*/,'').replace(/[^a-zA-Z]/g,'').length)}`:w}
+            </div>`).join('')}
+        </div>
+        <div style="margin-top:12px;">
+          <button class="speak-btn" style="background:rgba(255,255,255,0.25)" onclick="speakPhonics('${ph.words.join(', ')}')">🔊 Hear all words</button>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function speakPhonics(text) { speak(text); }
+
+// ===== READING =====
+function renderReading(unit) {
+  const r = unit.reading;
+  return `<div class="lesson-content">
+    <div class="reading-card">
+      <div class="reading-title">📖 ${r.title}</div>
+      <button class="speak-btn" style="margin-bottom:12px" onclick="speak('${r.text.replace(/'/g,"\\'")}')">🔊 Read aloud</button>
+      <div class="reading-text">${r.text.split(' ').map(w=>`<span class="highlight-word" onclick="speak('${w.replace(/[^a-zA-Z]/g,'')}')">${w}</span>`).join(' ')}</div>
+      <div class="comprehension-q">
+        <div class="sec-title" style="font-size:16px"><span class="icon">❓</span>Comprehension Questions</div>
+        ${r.questions.map((q,qi)=>`
+          <div class="comp-q">
+            <p>${qi+1}. ${q}</p>
+            <input class="comp-input" placeholder="Write your answer here..." oninput="checkReadingAns(this,${qi})">
+          </div>`).join('')}
+        <button class="btn btn-green btn-block" style="margin-top:12px" onclick="submitReading()">✅ Submit Answers</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function checkReadingAns(input, qi) {
+  if(input.value.length > 3) {
+    input.style.borderColor = '#55E6C1';
+  } else {
+    input.style.borderColor = '#e9ecef';
+  }
+}
+
+function submitReading() {
+  const inputs = document.querySelectorAll('.comp-input');
+  let answered = 0;
+  inputs.forEach(i=>{ if(i.value.trim().length>2) answered++; });
+  if(answered>0) {
+    updateXP(answered*5);
+    saveProgress(currentUnit,'reading',100);
+    showToast('Great reading! 📖 +XP!');
+  } else {
+    showToast('Try to answer the questions first! 📝');
+  }
+}
+
+// ===== WRITING =====
+function renderWriting(unit) {
+  const w = unit.writing;
+  return `<div class="lesson-content">
+    <div class="writing-prompt">
+      <div class="prompt-icon">${w.prompt.split(' ')[0]}</div>
+      <p>${w.prompt.slice(2)}</p>
+    </div>
+    <div class="writing-area">
+      <div class="sec-title" style="font-size:16px"><span class="icon">✍️</span>Write it!</div>
+      <div class="writing-lines">
+        ${w.lines.map((l,li)=>`
+          <input class="writing-line-input" id="wl${li}" placeholder="${l}" value="">
+          `).join('')}
+      </div>
+      <div style="margin-top:16px;">
+        <div class="sec-title" style="font-size:14px"><span class="icon">💡</span>Word Bank (tap to use)</div>
+        <div class="word-bank">
+          ${w.bank.map(word=>`<div class="bank-word" onclick="useWord('${word}',this)">${word}</div>`).join('')}
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:16px" onclick="submitWriting()">📤 Submit Writing</button>
+      <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="readAloudWriting()">🔊 Read my writing</button>
+    </div>
+  </div>`;
+}
+
+function useWord(word, el) {
+  const inputs = document.querySelectorAll('.writing-line-input');
+  for(let inp of inputs) {
+    if(!inp.value||inp.value.endsWith(' ')||inp.value==='') {
+      inp.value += (inp.value?'':'')+word+' ';
+      el.classList.add('used');
+      return;
+    }
+  }
+}
+
+function submitWriting() {
+  const inputs = document.querySelectorAll('.writing-line-input');
+  let filled = 0;
+  inputs.forEach(i=>{ if(i.value.trim().length>1) filled++; });
+  if(filled>0) {
+    updateXP(filled*5);
+    saveProgress(currentUnit,'writing',100);
+    showToast(`Writing saved! ✍️ +${filled*5} XP!`);
+    launchConfetti();
+  } else {
+    showToast('Write something first! ✏️');
+  }
+}
+
+function readAloudWriting() {
+  const inputs = document.querySelectorAll('.writing-line-input');
+  let text = Array.from(inputs).map(i=>i.value).filter(t=>t.trim()).join('. ');
+  if(text) speak(text);
+  else showToast('Write something first! ✏️');
+}
+
+// ===== SPEAKING =====
+let isRecording = false;
+let recognition = null;
+let speakingPhraseIdx = 0;
+let speakingScore = 0;
+
+function renderSpeaking(unit) {
+  const phrases = [
+    ...unit.grammar.map(g=>g.pattern),
+    ...unit.vocab.slice(0,4).map(v=>`${v.word}`)
+  ];
+  const p = phrases[speakingPhraseIdx % phrases.length];
+  return `<div class="lesson-content">
+    <div class="sec-title"><span class="icon">🎤</span>Speaking Practice</div>
+    <div class="speaking-exercise">
+      <div class="phrase-card">
+        <div class="phrase-text">"${p}"</div>
+        <div class="phrase-hint">Listen first, then repeat!</div>
+        <button class="speak-btn" style="margin-top:10px;background:rgba(255,255,255,0.25)" onclick="speak('${p.replace(/'/g,"\\'")}')" id="listenBtn">🔊 Listen</button>
+      </div>
+      <div class="mic-area">
+        <p style="color:white;font-weight:700;margin-bottom:12px;">Now you say it! 🎤</p>
+        <button class="mic-btn" id="micBtn" onclick="toggleRecording('${p.replace(/'/g,"\\'")}')">🎤</button>
+        <p style="color:rgba(255,255,255,0.7);font-size:13px;margin-top:8px;" id="micStatus">Tap the mic to speak!</p>
+        <div id="scoreArea" style="display:none;">
+          <div class="score-display" id="scoreNum" style="color:white;"></div>
+          <div class="score-bar"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+          <div style="color:rgba(255,255,255,0.8);font-size:14px;margin-top:8px;" id="scoreMsg"></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevPhrase()">⬅️ Previous</button>
+        <button class="btn btn-primary" onclick="nextPhrase()">Next ➡️</button>
+      </div>
+      <div style="text-align:center;color:rgba(255,255,255,0.7);font-size:13px;margin-top:8px;">
+        Phrase ${(speakingPhraseIdx%phrases.length)+1} of ${phrases.length}
+      </div>
+    </div>
+  </div>`;
+}
+
+function prevPhrase() { speakingPhraseIdx = Math.max(0,speakingPhraseIdx-1); switchTab('speaking'); }
+function nextPhrase() { speakingPhraseIdx++; switchTab('speaking'); }
+
+function toggleRecording(targetPhrase) {
+  if(!isRecording) startRecording(targetPhrase);
+  else stopRecording();
+}
+
+function startRecording(targetPhrase) {
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)) {
+    // Simulate scoring for devices without speech recognition
+    simulateScore(targetPhrase);
+    return;
+  }
+  const SpeechRecognition = window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang='en-US';
+  recognition.continuous=false;
+  recognition.interimResults=false;
+  isRecording=true;
+  const btn=document.getElementById('micBtn');
+  if(btn){btn.classList.add('recording');btn.textContent='⏹️';}
+  const status=document.getElementById('micStatus');
+  if(status)status.textContent='Listening... speak now! 🎙️';
+  recognition.onresult=(e)=>{
+    const said=e.results[0][0].transcript.toLowerCase();
+    const confidence=e.results[0][0].confidence;
+    scoreSpeaking(said,targetPhrase,confidence);
+  };
+  recognition.onerror=()=>simulateScore(targetPhrase);
+  recognition.onend=()=>{isRecording=false; if(btn){btn.classList.remove('recording');btn.textContent='🎤';}};
+  recognition.start();
+}
+
+function stopRecording() {
+  if(recognition){recognition.stop();}
+  isRecording=false;
+}
+
+function simulateScore(target) {
+  // Simulate score for unsupported browsers
+  const score = 65+Math.floor(Math.random()*30);
+  displayScore(score, "Nice try! Keep practicing!");
+  const btn=document.getElementById('micBtn');
+  if(btn){btn.classList.remove('recording');btn.textContent='🎤';}
+  const status=document.getElementById('micStatus');
+  if(status)status.textContent='Tap the mic to speak!';
+  isRecording=false;
+}
+
+function scoreSpeaking(said, target, confidence) {
+  const targetWords = target.toLowerCase().replace(/[^a-z\s]/g,'').split(' ').filter(w=>w);
+  const saidWords = said.replace(/[^a-z\s]/g,'').split(' ').filter(w=>w);
+  let matches = 0;
+  targetWords.forEach(tw=>{
+    if(saidWords.some(sw=>sw===tw||sw.includes(tw)||tw.includes(sw))) matches++;
+  });
+  const accuracy = Math.round((matches/Math.max(targetWords.length,1))*100);
+  const confScore = Math.round((confidence||0.5)*30);
+  const total = Math.min(100, accuracy + confScore);
+  let msg = total>=85?'🌟 Excellent!':total>=65?'😊 Good job!':total>=45?'💪 Keep practicing!':'🔄 Try again!';
+  displayScore(total, msg);
+  if(total>=50){updateXP(Math.round(total/10));saveProgress(currentUnit,'speaking',total);}
+}
+
+function displayScore(score, msg) {
+  const area=document.getElementById('scoreArea');
+  const num=document.getElementById('scoreNum');
+  const fill=document.getElementById('scoreFill');
+  const msgEl=document.getElementById('scoreMsg');
+  if(!area) return;
+  area.style.display='block';
+  if(num) num.textContent=score+'/100';
+  if(fill){
+    setTimeout(()=>fill.style.width=score+'%',100);
+    fill.style.background=score>=70?'linear-gradient(90deg,#55E6C1,#00b894)':score>=50?'linear-gradient(90deg,#FFE66D,#FDCB6E)':'linear-gradient(90deg,#ff7675,#d63031)';
+  }
+  if(msgEl) msgEl.textContent=msg;
+}
+
+// ===== GAMES MENU =====
+function renderGamesMenu() {
+  const games = [
+    {id:'memory',icon:'🃏',name:'Memory Match',desc:'Find the pairs!'},
+    {id:'scramble',icon:'🔀',name:'Word Scramble',desc:'Unscramble words!'},
+    {id:'balloon',icon:'🎈',name:'Balloon Pop',desc:'Pop the right word!'},
+    {id:'typing',icon:'⌨️',name:'Type it Fast!',desc:'Type the word!'},
+    {id:'fillblank',icon:'✏️',name:'Fill in Blank',desc:'Complete sentences!'},
+    {id:'sentence',icon:'📝',name:'Sentence Builder',desc:'Make sentences!'},
+    {id:'wordimage',icon:'🖼️',name:'Word & Image',desc:'Match word to picture!'},
+    {id:'speedquiz',icon:'⚡',name:'Speed Quiz',desc:'Answer fast!'},
+    {id:'drag',icon:'🎯',name:'Sort & Match',desc:'Drag to correct group!'},
+    {id:'wordsearch',icon:'🔍',name:'Word Search',desc:'Find hidden words!'},
+  ];
+  return `<div class="lesson-content">
+    <div class="sec-title"><span class="icon">🎮</span>Practice Games</div>
+    <p style="font-size:13px;color:#636e72;margin-bottom:12px;">Play games to practice and remember words! Each game earns XP ⭐</p>
+    <div class="games-grid">
+      ${games.map(g=>`
+        <button class="game-btn" onclick="launchGame('${g.id}')">
+          <span class="game-icon">${g.icon}</span>
+          <div class="game-name">${g.name}</div>
+          <div class="game-desc">${g.desc}</div>
+        </button>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ===== LAUNCH GAME =====
+function launchGame(gameId) {
+  currentGame = gameId;
+  const unit = UNITS[currentUnit];
+  const titles = {memory:'Memory Match 🃏',scramble:'Word Scramble 🔀',balloon:'Balloon Pop 🎈',typing:'Type it Fast! ⌨️',fillblank:'Fill in Blank ✏️',sentence:'Sentence Builder 📝',wordimage:'Word & Image 🖼️',speedquiz:'Speed Quiz ⚡',drag:'Sort & Match 🎯',wordsearch:'Word Search 🔍'};
+  document.getElementById('gameTitle').textContent = titles[gameId]||gameId;
+  document.getElementById('gameBackBtn').onclick = ()=>{ openUnit(currentUnit); switchTab('games'); showScreen('unit'); };
+  const content = document.getElementById('gameContent');
+  switch(gameId) {
+    case 'memory': content.innerHTML = renderMemoryGame(unit); initMemoryGame(); break;
+    case 'scramble': content.innerHTML = renderScrambleGame(unit); initScramble(); break;
+    case 'balloon': content.innerHTML = renderBalloonGame(unit); initBalloon(); break;
+    case 'typing': content.innerHTML = renderTypingGame(unit); break;
+    case 'fillblank': content.innerHTML = renderFillBlankGame(unit); break;
+    case 'sentence': content.innerHTML = renderSentenceGame(unit); break;
+    case 'wordimage': content.innerHTML = renderWordImageGame(unit); break;
+    case 'speedquiz': content.innerHTML = renderSpeedQuizGame(unit); initSpeedQuiz(); break;
+    case 'drag': content.innerHTML = renderDragGame(unit); initDrag(); break;
+    case 'wordsearch': content.innerHTML = renderWordSearchGame(unit); initWordSearch(); break;
+  }
+  showScreen('game');
+}
+
+// ===== MEMORY GAME =====
+let memCards=[], memFlipped=[], memMatched=[], memMoves=0, memScore=0;
+function renderMemoryGame(unit) {
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">🃏 Moves: <span id="memMoves">0</span> | Matches: <span id="memMatches">0</span>/<span id="memTotal">0</span></div>
+    <div class="memory-grid" id="memGrid" style="grid-template-columns:repeat(4,1fr);"></div>
+    <div class="btn-row"><button class="btn btn-secondary" onclick="initMemoryGame()">🔄 New Game</button></div>
+  </div>`;
+}
+
+function initMemoryGame() {
+  const unit = UNITS[currentUnit];
+  const words = unit.vocab.slice(0,6);
+  const pairs = [...words.map((v,i)=>({id:i,type:'emoji',val:v.emoji,word:v.word})),
+                  ...words.map((v,i)=>({id:i,type:'word',val:v.word,word:v.word}))];
+  memCards = pairs.sort(()=>Math.random()-0.5);
+  memFlipped=[]; memMatched=[]; memMoves=0; memScore=0;
+  const tot=document.getElementById('memTotal');
+  if(tot)tot.textContent=words.length;
+  renderMemCards();
+}
+
+function renderMemCards() {
+  const grid=document.getElementById('memGrid');
+  if(!grid)return;
+  grid.innerHTML=memCards.map((c,i)=>`
+    <div class="mem-card ${memMatched.includes(c.id+c.type)?'matched':''}" id="mc${i}" onclick="flipCard(${i})">
+      <div class="card-back">${memMatched.includes(c.id+c.type)?c.val:'❓'}</div>
+    </div>`).join('');
+}
+
+function flipCard(i) {
+  if(memFlipped.length>=2||memFlipped.includes(i)||memMatched.includes(memCards[i].id+memCards[i].type))return;
+  memFlipped.push(i);
+  const card=document.getElementById('mc'+i);
+  if(card){card.classList.add('flipped');card.querySelector('.card-back').textContent=memCards[i].val;}
+  speak(memCards[i].word);
+  if(memFlipped.length===2) {
+    memMoves++;
+    const mm=document.getElementById('memMoves');
+    if(mm)mm.textContent=memMoves;
+    const [a,b]=memFlipped;
+    if(memCards[a].id===memCards[b].id&&memCards[a].type!==memCards[b].type) {
+      memMatched.push(memCards[a].id+'emoji',memCards[a].id+'word');
+      memFlipped=[];
+      const ma=document.getElementById('memMatches');
+      if(ma)ma.textContent=memMatched.length/2;
+      updateXP(3);
+      showToast('Match! 🎉');
+      renderMemCards();
+      if(memMatched.length===memCards.length){setTimeout(()=>{showResults(100,memMoves,'memory');},500);}
+    } else {
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{const c=document.getElementById('mc'+idx);if(c){c.classList.remove('flipped');c.querySelector('.card-back').textContent='❓';}});
+        memFlipped=[];
+      },800);
+    }
+  }
+}
+
+// ===== SCRAMBLE GAME =====
+let scramWord='', scramAnswer=[], scramSelected=[];
+function renderScrambleGame(unit) {
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">Score: <span id="scrScore">0</span></div>
+    <div style="text-align:center;color:white;font-size:14px;margin-bottom:8px;" id="scrHint"></div>
+    <div class="scramble-word" id="scramTiles"></div>
+    <div style="text-align:center;color:rgba(255,255,255,0.7);font-size:13px;margin:8px 0;">Your answer:</div>
+    <div class="answer-slots" id="answerSlots"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="clearScramble()">🔄 Clear</button>
+      <button class="btn btn-primary" onclick="checkScramble()">✅ Check</button>
+      <button class="btn btn-secondary" onclick="nextScramble()">⏭️ Next</button>
+    </div>
+  </div>`;
+}
+
+let scrScore=0, scrWordIdx=0;
+function initScramble() {
+  scrScore=0; scrWordIdx=0; scramSelected=[];
+  nextScramble();
+}
+
+function nextScramble() {
+  const unit=UNITS[currentUnit];
+  const word=unit.vocab[scrWordIdx%unit.vocab.length];
+  scrWordIdx++;
+  scramWord=word.word.toUpperCase().replace(/\s+/g,'');
+  scramAnswer=[];
+  scramSelected=new Array(scramWord.length).fill(false);
+  const hint=document.getElementById('scrHint');
+  if(hint)hint.textContent=`${word.emoji} What is this? (${word.phonetic})`;
+  speak(word.word);
+  const letters=scramWord.split('').sort(()=>Math.random()-0.5);
+  const tilesEl=document.getElementById('scramTiles');
+  if(tilesEl)tilesEl.innerHTML=letters.map((l,i)=>`<div class="letter-tile" id="lt${i}" onclick="selectLetter('${l}',${i})">${l}</div>`).join('');
+  const slots=document.getElementById('answerSlots');
+  if(slots)slots.innerHTML=Array(scramWord.length).fill(`<div class="answer-slot" onclick="removeFromAnswer(this)"></div>`).join('');
+}
+
+function selectLetter(letter, tileIdx) {
+  if(scramSelected[tileIdx])return;
+  scramSelected[tileIdx]=true;
+  const tile=document.getElementById('lt'+tileIdx);
+  if(tile)tile.classList.add('selected');
+  scramAnswer.push({letter,tileIdx});
+  const slots=document.querySelectorAll('.answer-slot');
+  const emptySlot=Array.from(slots).find(s=>!s.classList.contains('filled')&&!s.textContent);
+  if(emptySlot){emptySlot.textContent=letter;emptySlot.classList.add('filled');emptySlot.dataset.tileIdx=tileIdx;}
+}
+
+function removeFromAnswer(slot) {
+  if(!slot.classList.contains('filled'))return;
+  const tIdx=parseInt(slot.dataset.tileIdx);
+  scramSelected[tIdx]=false;
+  const tile=document.getElementById('lt'+tIdx);
+  if(tile)tile.classList.remove('selected');
+  slot.textContent='';slot.classList.remove('filled');delete slot.dataset.tileIdx;
+  scramAnswer=scramAnswer.filter(a=>a.tileIdx!==tIdx);
+}
+
+function clearScramble() {
+  scramAnswer=[]; scramSelected=new Array(scramWord.length).fill(false);
+  document.querySelectorAll('.letter-tile').forEach(t=>t.classList.remove('selected'));
+  document.querySelectorAll('.answer-slot').forEach(s=>{s.textContent='';s.classList.remove('filled');delete s.dataset.tileIdx;});
+}
+
+function checkScramble() {
+  const answer=Array.from(document.querySelectorAll('.answer-slot')).map(s=>s.textContent).join('');
+  if(answer===scramWord){
+    showToast('🎉 Correct!');scrScore+=10;
+    const sc=document.getElementById('scrScore');if(sc)sc.textContent=scrScore;
+    updateXP(5);
+    setTimeout(nextScramble,800);
+  } else {
+    showToast('❌ Try again!');
+    clearScramble();
+  }
+}
+
+// ===== BALLOON GAME =====
+let balloonInterval=null, balloonScore=0, balloonTarget='';
+function renderBalloonGame(unit) {
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">🎈 Score: <span id="ballScore">0</span> | Pop: <span id="ballTarget" style="color:var(--accent);font-size:18px;"></span></div>
+    <div class="balloon-area" id="balloonArea"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="startBalloon()">▶️ Start</button><button class="btn btn-secondary" onclick="stopBalloon()">⏹️ Stop</button></div>
+  </div>`;
+}
+
+function initBalloon() { balloonScore=0; stopBalloon(); }
+function stopBalloon() { if(balloonInterval)clearInterval(balloonInterval); balloonInterval=null; }
+
+function startBalloon() {
+  stopBalloon();
+  balloonScore=0;
+  const sc=document.getElementById('ballScore');if(sc)sc.textContent=0;
+  const unit=UNITS[currentUnit];
+  setNewBalloonTarget(unit);
+  balloonInterval=setInterval(()=>spawnBalloon(unit),1200);
+}
+
+function setNewBalloonTarget(unit) {
+  balloonTarget=unit.vocab[Math.floor(Math.random()*unit.vocab.length)].word;
+  const el=document.getElementById('ballTarget');if(el)el.textContent=balloonTarget;
+  speak('Pop: '+balloonTarget);
+}
+
+const BALLOON_COLORS=['#ff7675','#74b9ff','#55e6c1','#a29bfe','#FDCB6E','#fd79a8','#00cec9'];
+function spawnBalloon(unit) {
+  const area=document.getElementById('balloonArea');if(!area)return;
+  const isTarget=Math.random()<0.4;
+  const word=isTarget?balloonTarget:unit.vocab[Math.floor(Math.random()*unit.vocab.length)].word;
+  const b=document.createElement('div');
+  b.className='balloon';
+  b.textContent=word;
+  b.style.left=10+Math.random()*80+'%';
+  b.style.background=BALLOON_COLORS[Math.floor(Math.random()*BALLOON_COLORS.length)];
+  b.style.color='white';
+  b.style.animationDuration=(4+Math.random()*3)+'s';
+  b.onclick=()=>{
+    if(word===balloonTarget){
+      b.remove();balloonScore+=10;
+      const sc=document.getElementById('ballScore');if(sc)sc.textContent=balloonScore;
+      updateXP(2);showToast('🎈 Pop! +10');
+      setNewBalloonTarget(unit);
+    } else {
+      b.style.background='#d63031';
+      showToast('❌ Wrong balloon!');
+      setTimeout(()=>b.style.background=BALLOON_COLORS[0],300);
+    }
+  };
+  area.appendChild(b);
+  setTimeout(()=>b.remove&&b.parentNode&&b.remove(),8000);
+}
+
+// ===== TYPING GAME =====
+let typingWords=[], typingIdx=0, typingScore=0;
+function renderTypingGame(unit) {
+  typingWords=unit.vocab.map(v=>v.word);typingIdx=0;typingScore=0;
+  const w=typingWords[0]||'';
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">⌨️ Score: <span id="typScore">0</span> | Word: <span id="typIdx">1</span>/${typingWords.length}</div>
+    <div style="text-align:center;font-size:48px;margin:12px 0;" id="typEmoji">${unit.vocab[0]?.emoji||'📝'}</div>
+    <div class="typing-target" id="typTarget">${w}</div>
+    <input class="typing-input" id="typInput" placeholder="Type the word here..." oninput="checkTyping()" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="btn-row"><button class="btn btn-secondary" onclick="skipTyping()">⏭️ Skip</button></div>
+  </div>`;
+}
+
+function checkTyping() {
+  const input=document.getElementById('typInput');
+  const target=document.getElementById('typTarget');
+  if(!input||!target)return;
+  const typed=input.value.toLowerCase().trim();
+  const word=typingWords[typingIdx]?.toLowerCase().replace(/\s+/g,'');
+  if(!word)return;
+  if(typed===word||(typed.length>=word.length&&typed.includes(word))) {
+    typingScore+=10;updateXP(3);
+    const sc=document.getElementById('typScore');if(sc)sc.textContent=typingScore;
+    showToast('✅ Correct! +10');
+    speak(typingWords[typingIdx]);
+    input.value='';
+    typingIdx++;
+    if(typingIdx>=typingWords.length){showResults(typingScore,typingWords.length,'typing');return;}
+    const unit=UNITS[currentUnit];
+    target.textContent=typingWords[typingIdx];
+    const em=document.getElementById('typEmoji');if(em)em.textContent=unit.vocab[typingIdx]?.emoji||'📝';
+    const idxEl=document.getElementById('typIdx');if(idxEl)idxEl.textContent=typingIdx+1;
+  } else if(typed.length>0) {
+    const correct=word.startsWith(typed);
+    input.style.borderColor=correct?'var(--green)':'var(--red)';
+  }
+}
+
+function skipTyping() {
+  const unit=UNITS[currentUnit];
+  speak(typingWords[typingIdx]);
+  typingIdx++;
+  if(typingIdx>=typingWords.length){showResults(typingScore,typingWords.length,'typing');return;}
+  const target=document.getElementById('typTarget');if(target)target.textContent=typingWords[typingIdx];
+  const em=document.getElementById('typEmoji');if(em)em.textContent=unit.vocab[typingIdx]?.emoji||'📝';
+  const idxEl=document.getElementById('typIdx');if(idxEl)idxEl.textContent=typingIdx+1;
+  const input=document.getElementById('typInput');if(input){input.value='';input.style.borderColor='rgba(255,255,255,0.4)';}
+}
+
+// ===== FILL IN BLANK =====
+let fillBlanks=[], fillIdx=0, fillScore=0;
+function renderFillBlankGame(unit) {
+  fillBlanks=unit.grammar.map(g=>({sentence:g.pattern,options:[...unit.vocab.slice(0,3).map(v=>v.word)]}));
+  fillIdx=0;fillScore=0;
+  return renderFillBlankQ(unit);
+}
+
+function renderFillBlankQ(unit) {
+  if(fillIdx>=unit.grammar.length){return `<div style="text-align:center;padding:40px;color:white"><div style="font-size:64px">🎉</div><div style="font-size:24px;font-weight:800">Complete! Score: ${fillScore}</div><div class="btn-row"><button class="btn btn-primary" onclick="launchGame('fillblank')">🔄 Play Again</button></div></div>`;}
+  const g=unit.grammar[fillIdx];
+  const sentence=g.pattern;
+  const words=[...unit.vocab.slice(0,4).map(v=>v.word)];
+  const shuffled=words.sort(()=>Math.random()-0.5);
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:20px;">
+    <div class="game-score-display">✏️ Score: ${fillScore} | Q: ${fillIdx+1}/${unit.grammar.length}</div>
+    <div style="text-align:center;font-size:48px;margin:16px 0;">📝</div>
+    <div style="background:rgba(255,255,255,0.2);border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;">
+      <div style="color:rgba(255,255,255,0.7);font-size:13px;margin-bottom:8px;">Complete the pattern:</div>
+      <div class="sentence-fill">${sentence}</div>
+    </div>
+    <div style="color:rgba(255,255,255,0.8);font-size:14px;font-weight:700;margin-bottom:8px;text-align:center;">Fill in: ${g.answer}</div>
+    <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+      <input class="typing-input" id="fillInput" placeholder="Write your answer..." style="margin-bottom:10px">
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFillBlank('${g.answer.replace(/'/g,"\\'").replace(/[_]+/g,'').trim()}')">✅ Check</button>
+        <button class="btn btn-secondary" onclick="fillIdx++;renderFillBlankUpdate()">⏭️ Skip</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderFillBlankUpdate() {
+  const gc=document.getElementById('gameContent');
+  if(gc) gc.innerHTML=renderFillBlankQ(UNITS[currentUnit]);
+}
+
+function checkFillBlank(correct) {
+  const input=document.getElementById('fillInput');
+  if(!input)return;
+  const val=input.value.trim().toLowerCase();
+  const words=correct.toLowerCase().split(/\s+/);
+  const hasAny=words.some(w=>val.includes(w)&&w.length>2);
+  if(hasAny||val.length>2){
+    fillScore+=10;updateXP(4);showToast('✅ Great! +10');
+  } else {
+    showToast('Try again! 💪');
+  }
+  fillIdx++;
+  setTimeout(renderFillBlankUpdate,500);
+}
+
+// ===== SENTENCE BUILDER =====
+let sentWords=[], sentBuilt=[], sentTarget='';
+function renderSentenceGame(unit) {
+  const g=unit.grammar[Math.floor(Math.random()*unit.grammar.length)];
+  sentTarget=g.pattern;
+  sentBuilt=[];
+  const targetWords=sentTarget.replace(/[?!.]/g,'').split(' ');
+  const extras=['and','the','my','her','his','a','in','on'].filter(w=>!targetWords.includes(w.toLowerCase()));
+  sentWords=[...targetWords,...extras.slice(0,3)].sort(()=>Math.random()-0.5);
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">📝 Build this sentence:</div>
+    <div style="text-align:center;color:var(--accent);font-size:16px;font-weight:700;margin-bottom:12px;">"${sentTarget}"</div>
+    <div class="sentence-display" id="sentDisplay"><span style="color:rgba(255,255,255,0.4);font-style:italic">Tap words below to build...</span></div>
+    <div class="word-choices" id="sentChoices">
+      ${sentWords.map((w,i)=>`<div class="choice-word" id="sw${i}" onclick="addSentWord('${w}',${i})">${w}</div>`).join('')}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="clearSentence()">🔄 Clear</button>
+      <button class="btn btn-primary" onclick="checkSentence()">✅ Check</button>
+    </div>
+  </div>`;
+}
+
+function addSentWord(word, idx) {
+  const el=document.getElementById('sw'+idx);
+  if(el&&!el.classList.contains('used')){
+    el.classList.add('used');
+    sentBuilt.push({word,idx});
+    const disp=document.getElementById('sentDisplay');
+    if(disp){
+      if(disp.querySelector('span')&&disp.querySelector('span').style.fontStyle==='italic')disp.innerHTML='';
+      const w=document.createElement('div');w.className='sent-word';w.textContent=word;w.onclick=()=>removeFromSent(word,idx,w);
+      disp.appendChild(w);
+    }
+  }
+}
+
+function removeFromSent(word,idx,el){
+  sentBuilt=sentBuilt.filter(s=>!(s.word===word&&s.idx===idx));
+  el.remove();
+  const sw=document.getElementById('sw'+idx);if(sw)sw.classList.remove('used');
+  const disp=document.getElementById('sentDisplay');
+  if(disp&&disp.children.length===0)disp.innerHTML='<span style="color:rgba(255,255,255,0.4);font-style:italic">Tap words below to build...</span>';
+}
+
+function clearSentence() {
+  sentBuilt=[];
+  document.querySelectorAll('.choice-word').forEach(w=>w.classList.remove('used'));
+  const disp=document.getElementById('sentDisplay');
+  if(disp)disp.innerHTML='<span style="color:rgba(255,255,255,0.4);font-style:italic">Tap words below to build...</span>';
+}
+
+function checkSentence() {
+  const built=sentBuilt.map(s=>s.word).join(' ').replace(/[?!.]/g,'').toLowerCase();
+  const target=sentTarget.replace(/[?!.]/g,'').toLowerCase();
+  const builtWords=built.split(' ');
+  const targetWords=target.split(' ');
+  let correct=0;
+  targetWords.forEach(tw=>{if(builtWords.includes(tw))correct++;});
+  const pct=Math.round((correct/targetWords.length)*100);
+  if(pct>=70){
+    showToast('🎉 Excellent! Sentence built!');updateXP(8);saveProgress(currentUnit,'game1',100);
+    speak(sentTarget);
+    setTimeout(()=>{document.getElementById('gameContent').innerHTML=renderSentenceGame(UNITS[currentUnit]);},1500);
+  } else {
+    showToast('📝 Not quite... try again!');
+  }
+}
+
+// ===== WORD & IMAGE =====
+let wiIdx=0, wiScore=0;
+function renderWordImageGame(unit) {
+  wiIdx=0;wiScore=0;
+  return renderWIQuestion(unit);
+}
+
+function renderWIQuestion(unit) {
+  if(wiIdx>=Math.min(8,unit.vocab.length)){
+    return `<div style="text-align:center;padding:40px;color:white"><div style="font-size:64px">🏆</div><div style="font-size:28px;font-weight:800">Score: ${wiScore}/${Math.min(8,unit.vocab.length)*10}</div><div class="btn-row"><button class="btn btn-primary" onclick="launchGame('wordimage')">🔄 Play Again</button></div></div>`;
+  }
+  const correct=unit.vocab[wiIdx%unit.vocab.length];
+  const others=unit.vocab.filter((_,i)=>i!==wiIdx%unit.vocab.length).sort(()=>Math.random()-0.5).slice(0,3);
+  const opts=[correct,...others].sort(()=>Math.random()-0.5);
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:20px;">
+    <div class="game-score-display">🖼️ Score: ${wiScore} | ${wiIdx+1}/${Math.min(8,unit.vocab.length)}</div>
+    <div class="word-image-card">
+      <span class="word-image-emoji">${correct.emoji}</span>
+      <div style="color:rgba(255,255,255,0.8);font-size:13px;margin-bottom:16px;">${correct.phonetic}</div>
+    </div>
+    <div class="word-image-options">
+      ${opts.map(o=>`<button class="img-opt" onclick="checkWI(this,'${o.word}','${correct.word}')">${o.word}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function checkWI(btn, chosen, correct) {
+  document.querySelectorAll('.img-opt').forEach(b=>b.disabled=true);
+  if(chosen===correct){
+    btn.classList.add('correct');wiScore+=10;updateXP(3);showToast('✅ Correct! +10');speak(correct);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.img-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
+    speak(correct);
+  }
+  wiIdx++;
+  setTimeout(()=>{document.getElementById('gameContent').innerHTML=renderWIQuestion(UNITS[currentUnit]);},1000);
+}
+
+// ===== SPEED QUIZ =====
+let sqTimer=null, sqTime=10, sqScore=0, sqCorrect=0, sqQ=0;
+function renderSpeedQuizGame(unit) {
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="timer-bar"><div class="timer-fill" id="sqTimerFill" style="width:100%"></div></div>
+    <div class="speed-timer" id="sqTime">10</div>
+    <div class="game-score-display">⚡ Score: <span id="sqScore">0</span> | Q: <span id="sqQNum">1</span>/10</div>
+    <div id="sqQuestion"></div>
+  </div>`;
+}
+
+function initSpeedQuiz() {
+  sqScore=0;sqCorrect=0;sqQ=0;
+  nextSQ();
+}
+
+function nextSQ() {
+  if(sqQ>=10){clearInterval(sqTimer);showResults(sqScore,10,'speedquiz');return;}
+  sqQ++;sqTime=10;
+  const qn=document.getElementById('sqQNum');if(qn)qn.textContent=sqQ;
+  const unit=UNITS[currentUnit];
+  const correct=unit.vocab[Math.floor(Math.random()*unit.vocab.length)];
+  const others=unit.vocab.filter(v=>v.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+  const opts=[correct,...others].sort(()=>Math.random()-0.5);
+  const isEmojiQ=Math.random()>0.5;
+  const qEl=document.getElementById('sqQuestion');
+  if(qEl)qEl.innerHTML=`
+    <div style="text-align:center;margin:12px 0;">
+      ${isEmojiQ?`<div style="font-size:64px">${correct.emoji}</div><div style="color:rgba(255,255,255,0.8);font-size:14px;">What word is this?</div>`
+      :`<div style="color:white;font-size:24px;font-weight:800">${correct.word}</div><div style="color:rgba(255,255,255,0.8);font-size:14px;">Which picture?</div>`}
+    </div>
+    <div class="word-image-options" style="grid-template-columns:repeat(2,1fr);">
+      ${opts.map(o=>`<button class="img-opt" onclick="checkSQ(this,'${o.word}','${correct.word}')">${isEmojiQ?o.word:o.emoji}</button>`).join('')}
+    </div>`;
+  if(sqTimer)clearInterval(sqTimer);
+  sqTimer=setInterval(()=>{
+    sqTime--;
+    const t=document.getElementById('sqTime');if(t)t.textContent=sqTime;
+    const tf=document.getElementById('sqTimerFill');if(tf)tf.style.width=(sqTime*10)+'%';
+    if(sqTime<=0){clearInterval(sqTimer);showToast('⏱️ Time up!');setTimeout(nextSQ,500);}
+  },1000);
+}
+
+function checkSQ(btn, chosen, correct) {
+  clearInterval(sqTimer);
+  document.querySelectorAll('.img-opt').forEach(b=>b.disabled=true);
+  if(chosen===correct){
+    btn.classList.add('correct');sqScore+=sqTime*2;updateXP(2);
+    const sc=document.getElementById('sqScore');if(sc)sc.textContent=sqScore;
+    showToast(`✅ +${sqTime*2} pts!`);
+    speak(correct);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.img-opt').forEach(b=>{if(b.textContent===correct||b.textContent===UNITS[currentUnit].vocab.find(v=>v.word===correct)?.emoji)b.classList.add('correct');});
+  }
+  setTimeout(nextSQ,800);
+}
+
+// ===== DRAG & DROP =====
+let dragItem=null;
+function renderDragGame(unit) {
+  const vocab=unit.vocab.slice(0,8);
+  const animals=vocab.filter((_,i)=>i%2===0);
+  const things=vocab.filter((_,i)=>i%2!==0);
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">🎯 Drag words to the correct group!</div>
+    <div class="drag-items" id="dragItems">
+      ${vocab.map((v,i)=>`<div class="drag-item" draggable="true" id="di${i}" ondragstart="onDragStart(event,'${v.word}')" onclick="selectDragItem(${i},'${v.word}')">${v.emoji} ${v.word}</div>`).join('')}
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" id="dz1" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="onDrop(event,this,'Group A')">
+        <h4>Group A 🅰️</h4>
+        <div class="dropped-items" id="dzItems1"></div>
+      </div>
+      <div class="drop-zone" id="dz2" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="onDrop(event,this,'Group B')">
+        <h4>Group B 🅱️</h4>
+        <div class="dropped-items" id="dzItems2"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="checkDrag()">✅ Check Groups</button>
+      <button class="btn btn-secondary" onclick="launchGame('drag')">🔄 Reset</button>
+    </div>
+  </div>`;
+}
+
+let selectedDragIdx=null;
+function selectDragItem(idx, word) {
+  if(selectedDragIdx===null){selectedDragIdx=idx;document.getElementById('di'+idx).style.border='3px solid gold';}
+  else{
+    // Move to zone when tap on zone
+    selectedDragIdx=null;
+    document.querySelectorAll('.drag-item').forEach(el=>el.style.border='');
+  }
+  speak(word);
+}
+
+function initDrag() { dragItem=null; }
+function onDragStart(e, word) { dragItem=word; e.dataTransfer.setData('text',word); }
+function onDrop(e, zone, group) {
+  e.preventDefault();zone.classList.remove('over');
+  const word=e.dataTransfer.getData('text')||dragItem;
+  if(!word)return;
+  const srcEl=Array.from(document.querySelectorAll('.drag-item')).find(el=>el.textContent.includes(word));
+  if(srcEl)srcEl.style.opacity='0.3';
+  const items=zone.querySelector('.dropped-items');
+  if(items){const span=document.createElement('div');span.className='dropped-item';span.textContent=word;items.appendChild(span);}
+  updateXP(1);
+}
+
+function checkDrag() {
+  const dz1Items=Array.from(document.querySelectorAll('#dzItems1 .dropped-item')).length;
+  const dz2Items=Array.from(document.querySelectorAll('#dzItems2 .dropped-item')).length;
+  if(dz1Items+dz2Items>0){
+    updateXP(dz1Items+dz2Items);saveProgress(currentUnit,'game2',100);
+    showToast(`🎯 Great sorting! +${dz1Items+dz2Items} XP!`);
+    launchConfetti();
+  } else showToast('Drag words to the groups first! 🎯');
+}
+
+// ===== WORD SEARCH =====
+let wsGrid=[], wsWords=[], wsCells=[], wsSelecting=false, wsStart=null, wsFound=[];
+function renderWordSearchGame(unit) {
+  return `<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;">
+    <div class="game-score-display">🔍 Find: <span id="wsFound">0</span>/<span id="wsTotal">0</span></div>
+    <div style="overflow-x:auto;text-align:center;margin:12px 0;" id="wsGridEl"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px;" id="wsWordList"></div>
+  </div>`;
+}
+
+function initWordSearch() {
+  const unit=UNITS[currentUnit];
+  wsWords=unit.vocab.slice(0,6).map(v=>v.word.toUpperCase().replace(/\s+/g,''));
+  wsFound=[];
+  const size=10;
+  wsGrid=Array(size).fill(null).map(()=>Array(size).fill(''));
+  // Place words
+  wsWords.forEach(word=>{
+    let placed=false,tries=0;
+    while(!placed&&tries<50){
+      tries++;
+      const dir=Math.random()>0.5?'H':'V';
+      const r=Math.floor(Math.random()*(dir==='H'?size:size-word.length));
+      const c=Math.floor(Math.random()*(dir==='V'?size:size-word.length));
+      let ok=true;
+      for(let i=0;i<word.length;i++){
+        const rr=dir==='H'?r:r+i;const cc=dir==='H'?c+i:c;
+        if(wsGrid[rr][cc]&&wsGrid[rr][cc]!==word[i]){ok=false;break;}
+      }
+      if(ok){
+        for(let i=0;i<word.length;i++){const rr=dir==='H'?r:r+i;const cc=dir==='H'?c+i:c;wsGrid[rr][cc]=word[i];}
+        placed=true;
+      }
+    }
+  });
+  const ALPHA='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!wsGrid[r][c])wsGrid[r][c]=ALPHA[Math.floor(Math.random()*26)];
+  const tot=document.getElementById('wsTotal');if(tot)tot.textContent=wsWords.length;
+  const wl=document.getElementById('wsWordList');
+  if(wl)wl.innerHTML=wsWords.map(w=>`<span id="wsw_${w}" style="background:rgba(255,255,255,0.2);color:white;padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;">${w.toLowerCase()}</span>`).join('');
+  renderWSGrid(size);
+}
+
+let wsSelStart=null,wsSelCells=[];
+function renderWSGrid(size) {
+  const el=document.getElementById('wsGridEl');if(!el)return;
+  const cellSize=Math.min(36,Math.floor((Math.min(window.innerWidth,700)-60)/size));
+  el.innerHTML=`<div class="wsearch-grid" style="grid-template-columns:repeat(${size},${cellSize}px);">
+    ${wsGrid.map((row,r)=>row.map((cell,c)=>`<div class="ws-cell" id="wsc${r}_${c}" style="width:${cellSize}px;height:${cellSize}px;font-size:${Math.max(11,cellSize-20)}px"
+      onmousedown="wsStartSel(${r},${c})" onmouseover="wsMoveSel(${r},${c})" onmouseup="wsEndSel()"
+      ontouchstart="wsStartSel(${r},${c})" ontouchend="wsEndSel()">${cell}</div>`).join('')).flat().join('')}
+  </div>`;
+}
+
+function wsStartSel(r,c){wsSelStart={r,c};wsSelCells=[{r,c}];highlightWS();}
+function wsMoveSel(r,c){if(!wsSelStart)return;wsSelCells.push({r,c});highlightWS();}
+function wsEndSel(){
+  if(!wsSelStart){return;}
+  checkWSSelection();
+  wsSelStart=null;wsSelCells=[];highlightWS();
+}
+function highlightWS(){
+  document.querySelectorAll('.ws-cell').forEach(el=>{if(!el.classList.contains('found'))el.classList.remove('selecting');});
+  wsSelCells.forEach(({r,c})=>{const el=document.getElementById(`wsc${r}_${c}`);if(el&&!el.classList.contains('found'))el.classList.add('selecting');});
+}
+function checkWSSelection(){
+  const selected=wsSelCells.map(({r,c})=>wsGrid[r]?wsGrid[r][c]:'').join('');
+  const rev=selected.split('').reverse().join('');
+  wsWords.forEach(word=>{
+    if((selected===word||rev===word)&&!wsFound.includes(word)){
+      wsFound.push(word);
+      wsSelCells.forEach(({r,c})=>{const el=document.getElementById(`wsc${r}_${c}`);if(el){el.classList.add('found');el.classList.remove('selecting');}});
+      const wordEl=document.getElementById('wsw_'+word);
+      if(wordEl){wordEl.style.background='var(--green)';wordEl.style.textDecoration='line-through';}
+      const f=document.getElementById('wsFound');if(f)f.textContent=wsFound.length;
+      updateXP(5);showToast(`Found "${word.toLowerCase()}"! 🔍 +5`);
+      speak(word.toLowerCase());
+      if(wsFound.length===wsWords.length){setTimeout(()=>showResults(wsFound.length*10,wsWords.length,'wordsearch'),500);}
+    }
+  });
+}
+
+// ===== QUIZ =====
+function startQuiz(unitId) {
+  const unit=UNITS[unitId];
+  document.getElementById('quizTitle').textContent=`${unit.title} Quiz! 🎯`;
+  document.getElementById('quizBackBtn').onclick=()=>{openUnit(unitId);switchTab('quiz');showScreen('unit');};
+  const questions=generateQuestions(unit);
+  quizState={questions,idx:0,score:0,unitId};
+  renderQuiz();
+  showScreen('quiz');
+}
+
+function generateQuestions(unit) {
+  const qs=[];
+  // Vocab questions - emoji to word
+  unit.vocab.slice(0,6).forEach(v=>{
+    const wrong=unit.vocab.filter(o=>o.word!==v.word).sort(()=>Math.random()-0.5).slice(0,3);
+    qs.push({type:'vocab_emoji',question:`What is this? ${v.emoji}`,correct:v.word,options:[v,...wrong].sort(()=>Math.random()-0.5).map(o=>o.word),emoji:v.emoji});
+  });
+  // Grammar questions
+  unit.grammar.forEach(g=>{
+    qs.push({type:'grammar',question:g.pattern+'?',correct:g.answer,options:[g.answer,...unit.grammar.filter(o=>o.answer!==g.answer).slice(0,3).map(o=>o.answer)].slice(0,4).sort(()=>Math.random()-0.5),emoji:'📝'});
+  });
+  // Phonics questions
+  if(unit.phonics&&unit.phonics.length>0){
+    unit.phonics.forEach(ph=>{
+      const w=ph.words[0];
+      qs.push({type:'phonics',question:`Which sound is in "${w}"?`,correct:ph.sound,options:[ph.sound,...(unit.phonics.filter(p=>p.sound!==ph.sound).map(p=>p.sound)||['a /æ/','b /b/','c /k/']).slice(0,3)].sort(()=>Math.random()-0.5),emoji:'🔤'});
+    });
+  }
+  // Word to emoji
+  unit.vocab.slice(0,5).forEach(v=>{
+    const wrong=unit.vocab.filter(o=>o.word!==v.word).sort(()=>Math.random()-0.5).slice(0,3);
+    qs.push({type:'vocab_word',question:`Which picture is "${v.word}"?`,correct:v.emoji,options:[v,...wrong].sort(()=>Math.random()-0.5).map(o=>o.emoji),emoji:'🖼️'});
+  });
+  return qs.sort(()=>Math.random()-0.5).slice(0,10);
+}
+
+function renderQuiz() {
+  const {questions,idx,score}=quizState;
+  if(idx>=questions.length){
+    showResults(score,questions.length,'quiz');
+    return;
+  }
+  const q=questions[idx];
+  const content=document.getElementById('quizContent');
+  content.innerHTML=`
+    <div class="quiz-progress">
+      ${questions.map((_,i)=>`<div class="q-dot ${i<idx?'done':i===idx?'current':''}"></div>`).join('')}
+    </div>
+    <div class="streak-combo"><div class="combo-text">Score</div><div class="combo-num">${score}/${questions.length*10}</div></div>
+    <div class="question-card">
+      <div class="q-num">Question ${idx+1} of ${questions.length}</div>
+      <div class="q-text">${q.question}</div>
+    </div>
+    <div class="options-grid">
+      ${q.options.map(o=>`<button class="option-btn" onclick="answerQuiz('${o.replace(/'/g,"\\'")}','${q.correct.replace(/'/g,"\\'")}')">${o}</button>`).join('')}
+    </div>
+    <div id="quizFeedback"></div>
+  `;
+}
+
+function answerQuiz(chosen, correct) {
+  document.querySelectorAll('.option-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===correct){b.classList.add('correct');}
+    else if(b.textContent.trim()===chosen&&chosen!==correct){b.classList.add('wrong');}
+  });
+  const isCorrect=chosen===correct;
+  if(isCorrect){quizState.score+=10;updateXP(5);speak(correct);}
+  const fb=document.getElementById('quizFeedback');
+  if(fb){
+    fb.className=`feedback-msg ${isCorrect?'correct':'wrong'}`;
+    fb.textContent=isCorrect?['🌟 Amazing!','⭐ Excellent!','🎉 Correct!','✅ Well done!'][Math.floor(Math.random()*4)]:['💪 Try again!','❌ Oops!','🔄 Almost!'][Math.floor(Math.random()*3)]+` Answer: ${correct}`;
+  }
+  quizState.idx++;
+  setTimeout(renderQuiz,1200);
+}
+
+// ===== ALL QUIZ =====
+function startAllQuiz() {
+  showScreen('quiz');
+  document.getElementById('quizTitle').textContent='Mixed Quiz! 🎯';
+  document.getElementById('quizBackBtn').onclick=()=>showScreen('home');
+  const allQ=[];
+  UNITS.forEach(unit=>{
+    const qs=generateQuestions(unit).slice(0,2);
+    allQ.push(...qs);
+  });
+  quizState={questions:allQ.sort(()=>Math.random()-0.5).slice(0,15),idx:0,score:0,unitId:-1};
+  renderQuiz();
+}
+
+// ===== ALL GAMES =====
+function showAllGames() {
+  currentUnit=Math.floor(Math.random()*UNITS.length);
+  openUnit(currentUnit);
+  switchTab('games');
+}
+
+// ===== PHONICS ALL =====
+function showPhonicsAll() {
+  currentUnit=1;
+  openUnit(currentUnit);
+  switchTab('phonics');
+}
+
+// ===== RESULTS =====
+function showResults(score, total, type) {
+  stopBalloon();
+  const pct=Math.round((score/(total*10))*100)||Math.round(score);
+  const stars=pct>=90?3:pct>=60?2:1;
+  const msgs={quiz:['Keep trying!','Good job!','Amazing!'],memory:['Nice!','Great memory!','Perfect!'],typing:['Practice more!','Good typing!','Speed Typist!'],wordsearch:['Explorer!','Word Hunter!','Word Master!'],speedquiz:['Slow but learning!','Quick Thinker!','Speed Champion!']};
+  const msgArr=msgs[type]||['Well done!','Great!','Perfect!'];
+  document.getElementById('resultsTrophy').textContent=stars===3?'🏆':stars===2?'🥈':'🥉';
+  document.getElementById('resultsScore').textContent=`${score} pts`;
+  document.getElementById('resultsMsg').textContent=msgArr[stars-1]||'Well done!';
+  document.getElementById('resultsStars').textContent='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  const xpEarned=score*2;
+  updateXP(xpEarned);
+  document.getElementById('resultsXP').textContent=`+${xpEarned} XP earned! 🌟`;
+  saveProgress(currentUnit||0,type,score);
+  if(stars>=2)launchConfetti();
+  document.getElementById('resultsRetry').onclick=()=>{
+    if(type==='quiz'&&quizState.unitId>=0)startQuiz(quizState.unitId);
+    else if(type==='quiz')startAllQuiz();
+    else launchGame(currentGame);
+  };
+  showScreen('results');
+}
+
+// ===== SPEECH =====
+function speak(text) {
+  if(!synth)return;
+  synth.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  utt.lang='en-US'; utt.rate=0.85; utt.pitch=1.1;
+  const voices=synth.getVoices();
+  const en=voices.find(v=>v.lang==='en-US'&&v.name.includes('Female'))||voices.find(v=>v.lang==='en-US')||voices[0];
+  if(en)utt.voice=en;
+  synth.speak(utt);
+}
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors=['#FF6B35','#4ECDC4','#FFE66D','#A29BFE','#55E6C1','#FD79A8'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay=Math.random()*2+'s';
+    p.style.animationDuration=(2+Math.random()*2)+'s';
+    p.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),4000);
+  }
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ===== INIT =====
+window.addEventListener('load',()=>{
+  init();
+  // Load voices
+  if(synth)synth.getVoices();
+  setTimeout(()=>synth&&synth.getVoices(),500);
+});
+</script>
+</body>
+</html>
