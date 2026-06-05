@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ABC Fun! - Học Tiếng Anh</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --p:#FF6B6B;--pl:#FFE5E5;--pl2:#FFC0C0;
+  --s:#4ECDC4;--sl:#E0FAF8;
+  --acc:#FFE66D;--acc2:#A8E6CF;
+  --pur:#A78BFA;--purl:#F0EAFF;
+  --bg:#FFF8F0;--card:#FFFFFF;
+  --txt:#2D2D2D;--mut:#888;
+  --r:14px;--sh:0 3px 14px rgba(0,0,0,0.08);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#FF6B6B,#FF8E53);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:50}
+.logo{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;text-shadow:1px 2px 0 rgba(0,0,0,0.12)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.star-pill{background:rgba(255,255,255,0.25);padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:5px;color:#fff;font-weight:800;font-size:14px}
+.lives{display:flex;gap:2px;font-size:16px}
+
+/* LETTER SCROLL */
+.ltabs{flex-shrink:0;background:#fff;border-bottom:1px solid #F0EAE0;padding:8px 10px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.ltabs::-webkit-scrollbar{display:none}
+.lbtn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;border:2px solid #EEE;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;background:#fff;color:#AAA;transition:all .15s;margin:0 2px}
+.lbtn.active{background:var(--p);color:#fff;border-color:var(--p);transform:scale(1.1)}
+.lbtn.done{background:var(--acc2);color:#2D7A5A;border-color:#A8E6CF}
+
+/* BODY SCROLL */
+.body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+
+/* SKILL TABS */
+.skill-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:#fff;border-bottom:2px solid #F0EAE0;flex-shrink:0}
+.stab{padding:10px 4px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;background:#fff}
+.stab .si{font-size:20px;display:block}
+.stab .sn{font-size:10px;font-weight:700;color:#AAA;display:block}
+.stab.active{border-bottom-color:var(--p)}
+.stab.active .sn{color:var(--p)}
+
+/* SECTIONS */
+.sec{display:none;padding:14px}
+.sec.active{display:block}
+
+/* LETTER HERO */
+.hero{background:linear-gradient(135deg,#667EEA,#764BA2);border-radius:20px;padding:18px 16px;display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.big-lt{font-family:'Fredoka One',cursive;font-size:72px;color:#fff;line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,0.15);min-width:80px;text-align:center}
+.hero-info{flex:1}
+.hero-ph{color:rgba(255,255,255,0.85);font-size:13px;margin-bottom:8px}
+.btn-hear{background:#fff;color:#764BA2;border:none;padding:8px 18px;border-radius:16px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer}
+
+/* SCORE BAR */
+.sbar{background:var(--acc);border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sbar span{font-size:18px}
+.sbartxt{font-weight:800;font-size:13px;color:#8B6500}
+
+/* WORD GRID */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.wcard{background:var(--sl);border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;cursor:pointer;border:2px solid transparent;transition:all .15s;active:scale(.97)}
+.wcard:active{transform:scale(0.97)}
+.wcard.playing{border-color:var(--s)}
+.wem{font-size:28px;min-width:36px;text-align:center}
+.winfo{flex:1;min-width:0}
+.wtxt{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wph{font-size:10px;color:var(--mut);margin-top:1px}
+.wspk{background:var(--s);border:none;width:26px;height:26px;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+
+/* LISTEN */
+.listen-q{text-align:center;padding:12px 0}
+.audio-circle{width:90px;height:90px;background:linear-gradient(135deg,var(--s),#44BFA3);border-radius:50%;border:none;font-size:32px;cursor:pointer;margin:0 auto;display:flex;align-items:center;justify-content:center;color:#fff}
+.audio-circle.pulse{animation:pulse 0.8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.chbtn{background:var(--card);border:2.5px solid #EEE;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;font-weight:700;font-size:13px}
+.chbtn:active{transform:scale(0.97)}
+.chbtn .cem{font-size:30px;display:block;margin-bottom:4px}
+.chbtn.correct{background:var(--acc2);border-color:#4CAF50;animation:bumpup .3s}
+.chbtn.wrong{background:#FFB3B3;border-color:#F44336;animation:shk .3s}
+@keyframes bumpup{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* PROGRESS BAR */
+.pgbar{height:7px;background:#EEE;border-radius:4px;overflow:hidden;margin-top:8px}
+.pgfill{height:100%;background:linear-gradient(90deg,var(--p),var(--s));border-radius:4px;transition:width .4s}
+.pgrow{display:flex;justify-content:space-between;font-size:11px;color:var(--mut);margin-bottom:3px}
+
+/* SPEAK */
+.speak-demo{background:var(--purl);border-radius:16px;padding:14px;text-align:center;margin-bottom:14px}
+.bwd{font-family:'Fredoka One',cursive;font-size:32px;color:#7C3AED;margin-bottom:4px}
+.bph{font-size:12px;color:#9CA3AF;margin-bottom:10px}
+.btnrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{padding:9px 18px;border-radius:16px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;active:scale(.97)}
+.btn:active{transform:scale(0.97)}
+.btn-p{background:var(--p);color:#fff}
+.btn-s{background:var(--s);color:#fff}
+.btn-v{background:var(--pur);color:#fff}
+.btn-o{background:#FF9800;color:#fff}
+.micbtn{background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff;border:none;width:72px;height:72px;border-radius:50%;font-size:28px;cursor:pointer;transition:all .3s;margin:14px auto;display:block}
+.micbtn.rec{background:linear-gradient(135deg,#44BFA3,var(--s));animation:pulse 1s infinite}
+.scoreshow{text-align:center;background:var(--acc);border-radius:12px;padding:10px;margin-top:10px;display:none}
+.scoreshow.on{display:block}
+.sbig{font-family:'Fredoka One',cursive;font-size:30px;color:#8B6500}
+.guide-box{background:var(--pl);border-radius:12px;padding:10px;margin-top:10px;font-size:12px}
+.guide-box strong{font-size:13px;display:block;margin-bottom:4px;color:var(--p)}
+
+/* READ */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rcard{background:linear-gradient(135deg,#FFF8E7,#FFFCE0);border:2px solid #FFD180;border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.rcard:active{transform:scale(0.97)}
+.rem{font-size:34px}
+.rwrd{font-family:'Fredoka One',cursive;font-size:16px;color:var(--p)}
+.rsen{font-size:11px;color:var(--mut);font-style:italic;display:none;line-height:1.4}
+.rcard.flip{background:linear-gradient(135deg,#E8F5E9,#F0FFF4);border-color:#A8E6CF}
+.rcard.flip .rsen{display:block}
+
+/* WRITE SECTION */
+.write-tabs{display:flex;gap:8px;margin-bottom:14px}
+.wtab-btn{flex:1;padding:10px;border-radius:12px;border:2.5px solid #EEE;text-align:center;cursor:pointer;font-weight:700;font-size:13px;background:#fff}
+.wtab-btn.active{background:var(--pl);border-color:var(--p);color:var(--p)}
+
+/* WRITE LETTER */
+.letter-guide{background:linear-gradient(135deg,#667EEA,#764BA2);border-radius:16px;padding:16px;text-align:center;margin-bottom:14px;color:#fff}
+.letter-guide .gl{font-family:'Fredoka One',cursive;font-size:56px;text-shadow:3px 3px 0 rgba(0,0,0,0.15)}
+.letter-guide .gsteps{font-size:12px;opacity:.85;margin-top:6px;line-height:1.6}
+.canvas-wrap{background:#fff;border:3px dashed #DDD;border-radius:16px;position:relative;margin-bottom:12px;overflow:hidden;touch-action:none}
+.draw-canvas{display:block;width:100%;cursor:crosshair}
+.canvas-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fredoka One',cursive;font-size:80px;color:rgba(200,200,200,0.3);pointer-events:none;user-select:none}
+.canvas-btns{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+
+/* WRITE WORD */
+.wword-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.wwbtn{background:#fff;border:2px solid #EEE;border-radius:10px;padding:8px 4px;text-align:center;cursor:pointer;font-weight:700;font-size:12px;transition:all .15s}
+.wwbtn:active{transform:scale(0.97)}
+.wwbtn.active{background:var(--pl);border-color:var(--p)}
+.trace-box{background:#FAFAFA;border:2px dashed #DDD;border-radius:14px;padding:14px;text-align:center;margin-bottom:12px}
+.trace-lt{font-family:'Fredoka One',cursive;font-size:42px;color:#DDD;letter-spacing:6px;user-select:none}
+.winput{width:100%;border:3px solid var(--s);border-radius:12px;padding:11px 14px;font-family:'Fredoka One',cursive;font-size:22px;text-align:center;color:var(--txt);outline:none;letter-spacing:6px}
+.winput:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}
+.wfb{text-align:center;font-size:13px;font-weight:700;margin-top:8px;min-height:22px}
+.wfb.ok{color:#4CAF50}
+.wfb.no{color:#F44336}
+
+/* GAMES */
+.games-list{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.gc{background:#fff;border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;border:2px solid #EEE;transition:all .15s}
+.gc:active{transform:scale(0.95)}
+.gc.on{border-color:var(--p);background:var(--pl)}
+.gce{font-size:24px;display:block;margin-bottom:4px}
+.gcn{font-size:10px;font-weight:700;color:#888}
+.gc.on .gcn{color:var(--p)}
+.garea{background:#FAFAFA;border-radius:14px;padding:14px;min-height:180px}
+
+/* MATCH */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mc{background:var(--p);border-radius:10px;padding:8px 4px;text-align:center;cursor:pointer;min-height:52px;display:flex;align-items:center;justify-content:center;transition:all .2s;color:#fff;font-weight:800;font-size:13px}
+.mc:active{transform:scale(0.95)}
+.mc.flip{background:#fff;border:2px solid var(--s);color:var(--txt)}
+.mc.hit{background:var(--acc2);border:2px solid #4CAF50}
+.mc.miss{background:#FFB3B3;animation:shk .3s}
+
+/* HANGMAN */
+.hm-word{font-family:'Fredoka One',cursive;font-size:28px;letter-spacing:8px;text-align:center;margin:10px 0}
+.hmkb{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px}
+.hmk{width:32px;height:32px;border:2px solid var(--s);border-radius:8px;background:#fff;font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.hmk:active{transform:scale(0.9)}
+.hmk.ok{background:var(--acc2);border-color:#4CAF50;color:#2D7A5A}
+.hmk.no{background:#FFB3B3;border-color:#F44336;color:#C00}
+.hmk.used{background:#EEE;border-color:#EEE;color:#CCC;cursor:default}
+
+/* SCRAMBLE */
+.scr-tiles{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.stile{width:38px;height:38px;background:var(--p);color:#fff;border-radius:9px;font-family:'Fredoka One',cursive;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;user-select:none}
+.stile:active{transform:scale(1.12)}
+.stile.used{background:#EEE;color:#CCC;cursor:default}
+.ans-boxes{display:flex;gap:7px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.abox{width:38px;height:38px;border:3px solid var(--s);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:19px;cursor:pointer}
+.abox.filled{background:var(--sl);border-color:var(--s);color:var(--txt)}
+
+/* FILL BLANK */
+.fsen{font-size:17px;font-weight:700;text-align:center;margin-bottom:14px;line-height:1.9}
+.blank{display:inline-block;width:80px;border-bottom:3px solid var(--p);text-align:center;color:var(--p);font-family:'Fredoka One',cursive}
+.fopts{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+.fopt{background:#fff;border:2.5px solid #EEE;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700;font-size:14px;transition:all .15s}
+.fopt:active{transform:scale(0.96)}
+.fopt.fok{background:var(--acc2);border-color:#4CAF50}
+.fopt.fno{background:#FFB3B3;border-color:#F44336}
+
+/* RAPID */
+.rtimer{height:6px;background:#EEE;border-radius:3px;margin-bottom:12px;overflow:hidden}
+.rtfill{height:100%;background:linear-gradient(90deg,#4CAF50,#FFD700,#F44336);border-radius:3px;transition:width .1s linear}
+.ropts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ropt{background:#fff;border:2.5px solid #EEE;border-radius:12px;padding:12px;text-align:center;cursor:pointer;font-weight:700;font-size:14px;transition:all .15s}
+.ropt:active{transform:scale(0.96)}
+.ropt .roe{font-size:26px;display:block;margin-bottom:4px}
+.ropt.rok{background:var(--acc2);border-color:#4CAF50}
+.ropt.rno{background:#FFB3B3;border-color:#F44336}
+
+/* SPELLING BEE */
+.bee-em{font-size:50px;text-align:center;margin-bottom:6px}
+.bee-wd{font-size:18px;font-weight:700;text-align:center;color:var(--mut);min-height:26px;margin-bottom:10px}
+.bee-in{width:100%;border:3px solid var(--acc);border-radius:12px;padding:10px 14px;font-family:'Fredoka One',cursive;font-size:22px;text-align:center;color:var(--txt);outline:none;letter-spacing:4px;margin-bottom:8px}
+.bee-in:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}
+
+/* WORD CHAIN */
+.chain-disp{background:var(--pl);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-family:'Fredoka One',cursive;font-size:16px;color:var(--p);word-break:break-word;min-height:44px}
+
+/* CATEGORY */
+.sort-items{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.sitem{background:var(--pl);border:2px solid var(--p);border-radius:9px;padding:7px 12px;font-weight:700;font-size:13px;cursor:pointer;user-select:none;transition:all .15s}
+.sboxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sbox{background:#FAFAFA;border:3px dashed #DDD;border-radius:12px;padding:10px;min-height:70px;transition:all .2s}
+.sbox.over{border-color:var(--s);background:var(--sl)}
+.sbox-ttl{font-weight:700;font-size:12px;color:var(--mut);margin-bottom:6px;text-align:center}
+.sitem-sorted{background:var(--acc2);border:2px solid #4CAF50;border-radius:7px;padding:4px 8px;font-size:11px;font-weight:700;display:inline-block;margin:2px}
+.sitem-wrong{background:#FFB3B3;border:2px solid #F44336;border-radius:7px;padding:4px 8px;font-size:11px;font-weight:700;display:inline-block;margin:2px}
+
+/* RESULT OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center}
+.overlay.on{display:flex}
+.res-box{background:#fff;border-radius:22px;padding:28px 24px;text-align:center;max-width:300px;width:88%;animation:popin .3s}
+@keyframes popin{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+.res-em{font-size:56px;display:block;margin-bottom:10px}
+.res-ttl{font-family:'Fredoka One',cursive;font-size:26px;margin-bottom:6px}
+.res-sc{font-size:15px;color:var(--mut);margin-bottom:18px}
+.btn-cont{background:linear-gradient(135deg,var(--p),#FF8E53);color:#fff;border:none;padding:13px 30px;border-radius:18px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;width:100%}
+
+/* BOTTOM NAV */
+.bnav{display:flex;background:#fff;border-top:1px solid #F0EAE0;flex-shrink:0;z-index:40}
+.bnav-btn{flex:1;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:none;transition:all .15s}
+.bnav-btn .bi{font-size:22px}
+.bnav-btn .bn{font-size:9px;font-weight:700;color:#CCC}
+.bnav-btn.active .bn{color:var(--p)}
+
+.info-pill{background:var(--sl);border-radius:10px;padding:8px 12px;font-size:12px;color:#2D7A5A;margin-bottom:12px}
+.sec-ttl{font-family:'Fredoka One',cursive;font-size:17px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">🌟 ABC Fun!</div>
+  <div class="hdr-right">
+    <div class="star-pill">⭐ <span id="starCount">0</span></div>
+    <div class="lives" id="livesEl">❤️❤️❤️</div>
+  </div>
+</div>
+
+<!-- LETTER TABS -->
+<div class="ltabs" id="ltabs"></div>
+
+<!-- SKILL TABS -->
+<div class="skill-row">
+  <div class="stab active" onclick="showSkill('listen',this)"><span class="si">👂</span><span class="sn">Nghe</span></div>
+  <div class="stab" onclick="showSkill('speak',this)"><span class="si">🗣️</span><span class="sn">Nói</span></div>
+  <div class="stab" onclick="showSkill('read',this)"><span class="si">📖</span><span class="sn">Đọc</span></div>
+  <div class="stab" onclick="showSkill('write',this)"><span class="si">✏️</span><span class="sn">Viết</span></div>
+  <div class="stab" onclick="showSkill('games',this)"><span class="si">🎮</span><span class="sn">Games</span></div>
+</div>
+
+<!-- BODY -->
+<div class="body" id="mainBody">
+
+<!-- LISTEN -->
+<div class="sec active" id="sec-listen">
+  <div class="hero" id="heroBlock">
+    <div class="big-lt" id="heroLt">A</div>
+    <div class="hero-info">
+      <div class="hero-ph" id="heroPh">/æ/ as in apple</div>
+      <button class="btn-hear" onclick="sayLetter()">🔊 Nghe phát âm</button>
+    </div>
+  </div>
+  <div class="sbar"><span>🎯</span><span class="sbartxt" id="sbartxt">Điểm: 0 | Streak: 0 🔥</span></div>
+  <div class="info-pill">💡 Nghe âm thanh rồi chọn đúng hình!</div>
+  <div class="listen-q">
+    <button class="audio-circle" id="listenBtn" onclick="playQ()">🔊</button>
+    <p style="font-size:12px;color:var(--mut);margin-top:8px">Nhấn để nghe từ</p>
+  </div>
+  <div class="choices" id="choices"></div>
+  <div class="pgrow" style="margin-top:12px"><span>Tiến độ</span><span id="lprog">0/5</span></div>
+  <div class="pgbar"><div class="pgfill" id="lpgfill" style="width:0%"></div></div>
+  <div style="margin-top:14px">
+    <div class="sec-ttl">📚 Từ vựng chữ <span id="wlLt">A</span></div>
+    <div class="wgrid" id="wgrid"></div>
+  </div>
+</div>
+
+<!-- SPEAK -->
+<div class="sec" id="sec-speak">
+  <div class="hero" id="heroSpk" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">
+    <div class="big-lt" id="heroSpkLt">A</div>
+    <div class="hero-info">
+      <div class="hero-ph" id="heroSpkPh">/æ/ as in apple</div>
+      <button class="btn-hear" onclick="sayLetter()" style="color:#7C3AED">🔊 Phát âm chữ</button>
+    </div>
+  </div>
+  <div class="info-pill" style="background:var(--purl);color:#6B21A8">💡 Nghe mẫu → nhấn 🎤 → đọc to → xem điểm!</div>
+  <div class="speak-demo">
+    <div class="bwd" id="spkWd">apple</div>
+    <div class="bph" id="spkPh">/ˈæp.əl/</div>
+    <div class="btnrow">
+      <button class="btn btn-v" onclick="speakEx()">🔊 Nghe mẫu</button>
+      <button class="btn btn-s" onclick="nextSpkWd()">➡️ Từ khác</button>
+    </div>
+  </div>
+  <button class="micbtn" id="micBtn" onclick="doRecord()">🎤</button>
+  <p style="text-align:center;font-size:12px;color:var(--mut)" id="micSt">Nhấn mic để bắt đầu</p>
+  <div class="scoreshow" id="spkScore">
+    <div class="sbig" id="spkScNum">85/100</div>
+    <p style="font-size:13px;color:#8B6500;margin-top:3px" id="spkScFb">Rất tốt!</p>
+  </div>
+  <div class="guide-box" style="margin-top:10px"><strong>📢 Hướng dẫn phát âm:</strong><span id="spkGuide">Miệng mở rộng, phát âm "E" ngắn</span></div>
+  <div style="margin-top:14px">
+    <div class="sec-ttl">🗣️ Luyện cả bộ từ chữ <span id="spkLtTitle">A</span></div>
+    <div class="wgrid" id="spkWgrid"></div>
+  </div>
+</div>
+
+<!-- READ -->
+<div class="sec" id="sec-read">
+  <div class="hero" id="heroRd" style="background:linear-gradient(135deg,#F59E0B,#D97706)">
+    <div class="big-lt" id="heroRdLt">A</div>
+    <div class="hero-info">
+      <div class="hero-ph" id="heroRdPh">/æ/ as in apple</div>
+      <button class="btn-hear" onclick="readAll()" style="color:#D97706">📖 Đọc tất cả</button>
+    </div>
+  </div>
+  <div class="info-pill" style="background:#FFF8E0;color:#8B6500">💡 Nhấn thẻ để xem câu ví dụ và nghe đọc!</div>
+  <div class="rgrid" id="rgrid"></div>
+</div>
+
+<!-- WRITE -->
+<div class="sec" id="sec-write">
+  <div class="write-tabs">
+    <div class="wtab-btn active" id="wtab-letter" onclick="switchWriteTab('letter',this)">✏️ Viết chữ</div>
+    <div class="wtab-btn" id="wtab-word" onclick="switchWriteTab('word',this)">📝 Viết từ</div>
+  </div>
+  <!-- WRITE LETTER -->
+  <div id="writeLetterSec">
+    <div class="letter-guide" id="ltGuide">
+      <div class="gl" id="ltGuideChar">A</div>
+      <div class="gsteps" id="ltGuideSteps">Bắt đầu từ đỉnh, kéo sang hai bên, thêm nét ngang giữa</div>
+    </div>
+    <div class="info-pill">💡 Hãy viết chữ lên ô trắng bên dưới theo chữ mẫu!</div>
+    <div class="canvas-wrap">
+      <canvas class="draw-canvas" id="drawCanvas"></canvas>
+      <div class="canvas-hint" id="canvasHint">A</div>
+    </div>
+    <div class="canvas-btns">
+      <button class="btn btn-p" onclick="clearCanvas()">🗑️ Xóa</button>
+      <button class="btn btn-s" onclick="submitCanvas()">✅ Nộp bài</button>
+    </div>
+    <div class="wfb" id="ltFb"></div>
+    <div style="margin-top:12px">
+      <div class="sec-ttl" style="font-size:14px">Chọn chữ để luyện viết:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px" id="ltPicker"></div>
+    </div>
+  </div>
+  <!-- WRITE WORD -->
+  <div id="writeWordSec" style="display:none">
+    <div class="wword-sel" id="wwSel"></div>
+    <div class="trace-box">
+      <div class="trace-lt" id="traceWd">A P P L E</div>
+      <p style="font-size:10px;color:var(--mut)">Nhìn chữ mờ rồi gõ lại bên dưới</p>
+    </div>
+    <input type="text" class="winput" id="winput" placeholder="Gõ từ ở đây..." oninput="chkWrite()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="wfb" id="wfb"></div>
+    <div class="btnrow" style="margin-top:10px;justify-content:center">
+      <button class="btn btn-s" onclick="chkWriteBtn()">✅ Kiểm tra</button>
+      <button class="btn btn-p" onclick="nxtWriteWd()">➡️ Từ khác</button>
+    </div>
+    <div class="guide-box" style="margin-top:10px"><strong>📝 Hướng dẫn:</strong><span id="wdGuide">Viết từ trái sang phải</span></div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div class="sec" id="sec-games">
+  <div class="sbar" style="margin-bottom:12px"><span>🎮</span><span class="sbartxt" id="gmScTxt">Chọn game và chơi thôi!</span></div>
+  <div class="games-list" id="gamesList">
+    <div class="gc on" onclick="selGame('match',this)"><span class="gce">🃏</span><span class="gcn">Ghép thẻ</span></div>
+    <div class="gc" onclick="selGame('hangman',this)"><span class="gce">🧩</span><span class="gcn">Đoán từ</span></div>
+    <div class="gc" onclick="selGame('scramble',this)"><span class="gce">🔀</span><span class="gcn">Xếp chữ</span></div>
+    <div class="gc" onclick="selGame('fill',this)"><span class="gce">📝</span><span class="gcn">Điền từ</span></div>
+    <div class="gc" onclick="selGame('rapid',this)"><span class="gce">⚡</span><span class="gcn">Nhanh tay</span></div>
+    <div class="gc" onclick="selGame('spelling',this)"><span class="gce">🐝</span><span class="gcn">Đánh vần</span></div>
+    <div class="gc" onclick="selGame('category',this)"><span class="gce">🗂️</span><span class="gcn">Phân loại</span></div>
+    <div class="gc" onclick="selGame('chain',this)"><span class="gce">🔗</span><span class="gcn">Chuỗi từ</span></div>
+  </div>
+  <div class="garea" id="garea"></div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="btn btn-p" onclick="startGame()">🎲 Chơi lại</button>
+  </div>
+</div>
+
+</div><!-- end .body -->
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="res-box">
+    <span class="res-em" id="resEm">🎉</span>
+    <div class="res-ttl" id="resTtl">Xuất sắc!</div>
+    <div class="res-sc" id="resSc">+10 ⭐</div>
+    <button class="btn-cont" onclick="closeOverlay()">Tiếp tục ▶</button>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const WD = {
+A:[
+  {w:'apple',e:'🍎',p:'/ˈæp.əl/',s:'This is an apple.'},
+  {w:'ant',e:'🐜',p:'/ænt/',s:'This is an ant.'},
+  {w:'alligator',e:'🐊',p:'/ˈæl.ɪ.ɡeɪ.tər/',s:'This is an alligator.'},
+  {w:'arm',e:'💪',p:'/ɑːrm/',s:'This is an arm.'},
+  {w:'arrow',e:'🏹',p:'/ˈær.oʊ/',s:'This is an arrow.'},
+  {w:'ambulance',e:'🚑',p:'/ˈæm.bjʊ.ləns/',s:'This is an ambulance.'},
+  {w:'angel',e:'👼',p:'/ˈeɪn.dʒəl/',s:'This is an angel.'},
+  {w:'airplane',e:'✈️',p:'/ˈer.pleɪn/',s:'This is an airplane.'}
+],
+B:[
+  {w:'bee',e:'🐝',p:'/biː/',s:'This is a bee.'},
+  {w:'bird',e:'🐦',p:'/bɜːrd/',s:'This is a bird.'},
+  {w:'butterfly',e:'🦋',p:'/ˈbʌt.ər.flaɪ/',s:'This is a butterfly.'},
+  {w:'bus',e:'🚌',p:'/bʌs/',s:'This is a bus.'},
+  {w:'banana',e:'🍌',p:'/bəˈnæn.ə/',s:'This is a banana.'},
+  {w:'bear',e:'🐻',p:'/ber/',s:'This is a bear.'},
+  {w:'boy',e:'👦',p:'/bɔɪ/',s:'This is a boy.'},
+  {w:'book',e:'📚',p:'/bʊk/',s:'This is a book.'},
+  {w:'ball',e:'⚽',p:'/bɔːl/',s:'This is a ball.'}
+],
+C:[
+  {w:'cat',e:'🐱',p:'/kæt/',s:'This is a cat.'},
+  {w:'cup',e:'☕',p:'/kʌp/',s:'This is a cup.'},
+  {w:'cow',e:'🐄',p:'/kaʊ/',s:'This is a cow.'},
+  {w:'cake',e:'🎂',p:'/keɪk/',s:'This is a cake.'},
+  {w:'candy',e:'🍬',p:'/ˈkæn.di/',s:'This is candy.'},
+  {w:'coat',e:'🧥',p:'/koʊt/',s:'This is a coat.'},
+  {w:'crab',e:'🦀',p:'/kræb/',s:'This is a crab.'},
+  {w:'car',e:'🚗',p:'/kɑːr/',s:'This is a car.'},
+  {w:'clock',e:'⏰',p:'/klɒk/',s:'This is a clock.'}
+],
+D:[
+  {w:'dog',e:'🐶',p:'/dɒɡ/',s:'This is a dog.'},
+  {w:'donut',e:'🍩',p:'/ˈdoʊ.nʌt/',s:'This is a donut.'},
+  {w:'duck',e:'🦆',p:'/dʌk/',s:'This is a duck.'},
+  {w:'doll',e:'🪆',p:'/dɒl/',s:'This is a doll.'},
+  {w:'dolphin',e:'🐬',p:'/ˈdɒl.fɪn/',s:'This is a dolphin.'},
+  {w:'dress',e:'👗',p:'/dres/',s:'This is a dress.'},
+  {w:'dinosaur',e:'🦕',p:'/ˈdaɪ.nə.sɔːr/',s:'This is a dinosaur.'},
+  {w:'drum',e:'🥁',p:'/drʌm/',s:'This is a drum.'}
+],
+E:[
+  {w:'elephant',e:'🐘',p:'/ˈel.ɪ.fənt/',s:'This is an elephant.'},
+  {w:'elbow',e:'💪',p:'/ˈel.boʊ/',s:'This is an elbow.'},
+  {w:'egg',e:'🥚',p:'/eɡ/',s:'This is an egg.'},
+  {w:'eagle',e:'🦅',p:'/ˈiː.ɡəl/',s:'This is an eagle.'},
+  {w:'eye',e:'👁️',p:'/aɪ/',s:'This is an eye.'},
+  {w:'ear',e:'👂',p:'/ɪr/',s:'This is an ear.'},
+  {w:'elf',e:'🧝',p:'/elf/',s:'This is an elf.'},
+  {w:'eraser',e:'🧽',p:'/ɪˈreɪ.zər/',s:'This is an eraser.'}
+],
+F:[
+  {w:'fish',e:'🐟',p:'/fɪʃ/',s:'This is a fish.'},
+  {w:'frog',e:'🐸',p:'/frɒɡ/',s:'This is a frog.'},
+  {w:'fox',e:'🦊',p:'/fɒks/',s:'This is a fox.'},
+  {w:'fan',e:'🌀',p:'/fæn/',s:'This is a fan.'},
+  {w:'fence',e:'🏗️',p:'/fens/',s:'This is a fence.'},
+  {w:'flag',e:'🚩',p:'/flæɡ/',s:'This is a flag.'},
+  {w:'fork',e:'🍴',p:'/fɔːrk/',s:'This is a fork.'},
+  {w:'flower',e:'🌸',p:'/ˈflaʊ.ər/',s:'This is a flower.'}
+],
+G:[
+  {w:'goose',e:'🪿',p:'/ɡuːs/',s:'This is a goose.'},
+  {w:'grapes',e:'🍇',p:'/ɡreɪps/',s:'These are grapes.'},
+  {w:'goat',e:'🐐',p:'/ɡoʊt/',s:'This is a goat.'},
+  {w:'girl',e:'👧',p:'/ɡɜːrl/',s:'This is a girl.'},
+  {w:'gift',e:'🎁',p:'/ɡɪft/',s:'This is a gift.'},
+  {w:'glasses',e:'👓',p:'/ˈɡlæs.ɪz/',s:'These are glasses.'},
+  {w:'giraffe',e:'🦒',p:'/dʒɪˈræf/',s:'This is a giraffe.'},
+  {w:'guitar',e:'🎸',p:'/ɡɪˈtɑːr/',s:'This is a guitar.'}
+],
+H:[
+  {w:'horse',e:'🐴',p:'/hɔːrs/',s:'This is a horse.'},
+  {w:'house',e:'🏠',p:'/haʊs/',s:'This is a house.'},
+  {w:'hen',e:'🐔',p:'/hen/',s:'This is a hen.'},
+  {w:'hippo',e:'🦛',p:'/ˈhɪp.oʊ/',s:'This is a hippo.'},
+  {w:'heart',e:'❤️',p:'/hɑːrt/',s:'This is a heart.'},
+  {w:'hamburger',e:'🍔',p:'/ˈhæm.bɜːr.ɡər/',s:'This is a hamburger.'},
+  {w:'hamster',e:'🐹',p:'/ˈhæm.stər/',s:'This is a hamster.'},
+  {w:'hat',e:'🎩',p:'/hæt/',s:'This is a hat.'}
+],
+I:[
+  {w:'ice cream',e:'🍦',p:'/ˈaɪs kriːm/',s:'This is ice cream.'},
+  {w:'ice',e:'🧊',p:'/aɪs/',s:'This is ice.'},
+  {w:'ink',e:'✒️',p:'/ɪŋk/',s:'This is ink.'},
+  {w:'insect',e:'🐛',p:'/ˈɪn.sekt/',s:'This is an insect.'},
+  {w:'igloo',e:'🏔️',p:'/ˈɪɡ.luː/',s:'This is an igloo.'},
+  {w:'iguana',e:'🦎',p:'/ɪˈɡwɑː.nə/',s:'This is an iguana.'},
+  {w:'iron',e:'🔩',p:'/ˈaɪ.ərn/',s:'This is an iron.'},
+  {w:'island',e:'🏝️',p:'/ˈaɪ.lənd/',s:'This is an island.'}
+],
+J:[
+  {w:'juice',e:'🧃',p:'/dʒuːs/',s:'This is juice.'},
+  {w:'jug',e:'🫙',p:'/dʒʌɡ/',s:'This is a jug.'},
+  {w:'jar',e:'🫙',p:'/dʒɑːr/',s:'This is a jar.'},
+  {w:'jet',e:'✈️',p:'/dʒet/',s:'This is a jet.'},
+  {w:'jacket',e:'🧥',p:'/ˈdʒæk.ɪt/',s:'This is a jacket.'},
+  {w:'jam',e:'🍓',p:'/dʒæm/',s:'This is jam.'},
+  {w:'jellyfish',e:'🪼',p:'/ˈdʒel.i.fɪʃ/',s:'This is a jellyfish.'},
+  {w:'jelly',e:'🍮',p:'/ˈdʒel.i/',s:'This is jelly.'}
+],
+K:[
+  {w:'key',e:'🔑',p:'/kiː/',s:'This is a key.'},
+  {w:'kite',e:'🪁',p:'/kaɪt/',s:'This is a kite.'},
+  {w:'kangaroo',e:'🦘',p:'/ˌkæŋ.ɡəˈruː/',s:'This is a kangaroo.'},
+  {w:'kitten',e:'🐱',p:'/ˈkɪt.ən/',s:'This is a kitten.'},
+  {w:'knife',e:'🔪',p:'/naɪf/',s:'This is a knife.'},
+  {w:'kettle',e:'🫖',p:'/ˈket.əl/',s:'This is a kettle.'},
+  {w:'king',e:'👑',p:'/kɪŋ/',s:'This is a king.'},
+  {w:'koala',e:'🐨',p:'/koʊˈɑː.lə/',s:'This is a koala.'}
+],
+L:[
+  {w:'lion',e:'🦁',p:'/ˈlaɪ.ən/',s:'This is a lion.'},
+  {w:'lemon',e:'🍋',p:'/ˈlem.ən/',s:'This is a lemon.'},
+  {w:'leaf',e:'🍃',p:'/liːf/',s:'This is a leaf.'},
+  {w:'lollipop',e:'🍭',p:'/ˈlɒl.i.pɒp/',s:'This is a lollipop.'},
+  {w:'ladder',e:'🪜',p:'/ˈlæd.ər/',s:'This is a ladder.'},
+  {w:'lock',e:'🔒',p:'/lɒk/',s:'This is a lock.'},
+  {w:'lips',e:'💋',p:'/lɪps/',s:'These are lips.'},
+  {w:'lizard',e:'🦎',p:'/ˈlɪz.ərd/',s:'This is a lizard.'}
+],
+M:[
+  {w:'mouse',e:'🐭',p:'/maʊs/',s:'This is a mouse.'},
+  {w:'moon',e:'🌙',p:'/muːn/',s:'This is the moon.'},
+  {w:'monkey',e:'🐒',p:'/ˈmʌŋ.ki/',s:'This is a monkey.'},
+  {w:'milk',e:'🥛',p:'/mɪlk/',s:'This is milk.'},
+  {w:'marker',e:'🖊️',p:'/ˈmɑːr.kər/',s:'This is a marker.'},
+  {w:'mushroom',e:'🍄',p:'/ˈmʌʃ.ruːm/',s:'This is a mushroom.'},
+  {w:'monster',e:'👾',p:'/ˈmɒn.stər/',s:'This is a monster.'},
+  {w:'mango',e:'🥭',p:'/ˈmæŋ.ɡoʊ/',s:'This is a mango.'}
+],
+N:[
+  {w:'nest',e:'🪺',p:'/nest/',s:'This is a nest.'},
+  {w:'nut',e:'🥜',p:'/nʌt/',s:'This is a nut.'},
+  {w:'net',e:'🕸️',p:'/net/',s:'This is a net.'},
+  {w:'noodles',e:'🍜',p:'/ˈnuː.dəlz/',s:'These are noodles.'},
+  {w:'nail',e:'🔨',p:'/neɪl/',s:'This is a nail.'},
+  {w:'necklace',e:'📿',p:'/ˈnek.ləs/',s:'This is a necklace.'},
+  {w:'nose',e:'👃',p:'/noʊz/',s:'This is a nose.'},
+  {w:'nurse',e:'👩‍⚕️',p:'/nɜːrs/',s:'This is a nurse.'}
+],
+O:[
+  {w:'owl',e:'🦉',p:'/aʊl/',s:'This is an owl.'},
+  {w:'orange',e:'🍊',p:'/ˈɒr.ɪndʒ/',s:'This is an orange.'},
+  {w:'onion',e:'🧅',p:'/ˈʌn.jən/',s:'This is an onion.'},
+  {w:'olive',e:'🫒',p:'/ˈɒl.ɪv/',s:'This is an olive.'},
+  {w:'ocean',e:'🌊',p:'/ˈoʊ.ʃən/',s:'This is the ocean.'},
+  {w:'oven',e:'🍳',p:'/ˈʌv.ən/',s:'This is an oven.'},
+  {w:'octopus',e:'🐙',p:'/ˈɒk.tə.pəs/',s:'This is an octopus.'},
+  {w:'ostrich',e:'🦤',p:'/ˈɒs.trɪtʃ/',s:'This is an ostrich.'}
+],
+P:[
+  {w:'pear',e:'🍐',p:'/per/',s:'This is a pear.'},
+  {w:'pig',e:'🐷',p:'/pɪɡ/',s:'This is a pig.'},
+  {w:'pencil',e:'✏️',p:'/ˈpen.səl/',s:'This is a pencil.'},
+  {w:'panda',e:'🐼',p:'/ˈpæn.də/',s:'This is a panda.'},
+  {w:'plane',e:'✈️',p:'/pleɪn/',s:'This is a plane.'},
+  {w:'penguin',e:'🐧',p:'/ˈpeŋ.ɡwɪn/',s:'This is a penguin.'},
+  {w:'pizza',e:'🍕',p:'/ˈpiːt.sə/',s:'This is a pizza.'},
+  {w:'parrot',e:'🦜',p:'/ˈpær.ət/',s:'This is a parrot.'}
+],
+Q:[
+  {w:'queen',e:'👸',p:'/kwiːn/',s:'This is a queen.'},
+  {w:'quail',e:'🐦',p:'/kweɪl/',s:'This is a quail.'},
+  {w:'question',e:'❓',p:'/ˈkwes.tʃən/',s:'This is a question.'},
+  {w:'quiver',e:'🏹',p:'/ˈkwɪv.ər/',s:'This is a quiver.'},
+  {w:'quiet',e:'🤫',p:'/ˈkwaɪ.ət/',s:'She is quiet.'},
+  {w:'quilt',e:'🛏️',p:'/kwɪlt/',s:'This is a quilt.'}
+],
+R:[
+  {w:'rabbit',e:'🐰',p:'/ˈræb.ɪt/',s:'This is a rabbit.'},
+  {w:'ring',e:'💍',p:'/rɪŋ/',s:'This is a ring.'},
+  {w:'rose',e:'🌹',p:'/roʊz/',s:'This is a rose.'},
+  {w:'rug',e:'🧶',p:'/rʌɡ/',s:'This is a rug.'},
+  {w:'rhino',e:'🦏',p:'/ˈraɪ.noʊ/',s:'This is a rhino.'},
+  {w:'rain',e:'🌧️',p:'/reɪn/',s:'This is rain.'},
+  {w:'robot',e:'🤖',p:'/ˈroʊ.bɒt/',s:'This is a robot.'},
+  {w:'rocket',e:'🚀',p:'/ˈrɒk.ɪt/',s:'This is a rocket.'}
+],
+S:[
+  {w:'sun',e:'☀️',p:'/sʌn/',s:'This is the sun.'},
+  {w:'star',e:'⭐',p:'/stɑːr/',s:'This is a star.'},
+  {w:'shoes',e:'👟',p:'/ʃuːz/',s:'These are shoes.'},
+  {w:'snake',e:'🐍',p:'/sneɪk/',s:'This is a snake.'},
+  {w:'ship',e:'🚢',p:'/ʃɪp/',s:'This is a ship.'},
+  {w:'sheep',e:'🐑',p:'/ʃiːp/',s:'This is a sheep.'},
+  {w:'shark',e:'🦈',p:'/ʃɑːrk/',s:'This is a shark.'},
+  {w:'sock',e:'🧦',p:'/sɒk/',s:'This is a sock.'}
+],
+T:[
+  {w:'train',e:'🚂',p:'/treɪn/',s:'This is a train.'},
+  {w:'truck',e:'🚚',p:'/trʌk/',s:'This is a truck.'},
+  {w:'tie',e:'👔',p:'/taɪ/',s:'This is a tie.'},
+  {w:'table',e:'🪑',p:'/ˈteɪ.bəl/',s:'This is a table.'},
+  {w:'tiger',e:'🐯',p:'/ˈtaɪ.ɡər/',s:'This is a tiger.'},
+  {w:'tomato',e:'🍅',p:'/təˈmeɪ.toʊ/',s:'This is a tomato.'},
+  {w:'tent',e:'⛺',p:'/tent/',s:'This is a tent.'},
+  {w:'turtle',e:'🐢',p:'/ˈtɜːr.təl/',s:'This is a turtle.'}
+],
+U:[
+  {w:'umbrella',e:'☂️',p:'/ʌmˈbrel.ə/',s:'This is an umbrella.'},
+  {w:'unicorn',e:'🦄',p:'/ˈjuː.nɪ.kɔːrn/',s:'This is a unicorn.'},
+  {w:'up',e:'⬆️',p:'/ʌp/',s:'The arrow is up.'},
+  {w:'unhappy',e:'😢',p:'/ʌnˈhæp.i/',s:'She is unhappy.'},
+  {w:'uniform',e:'👕',p:'/ˈjuː.nɪ.fɔːrm/',s:'This is a uniform.'},
+  {w:'unicycle',e:'🚲',p:'/ˈjuː.nɪ.saɪ.kəl/',s:'This is a unicycle.'}
+],
+V:[
+  {w:'van',e:'🚐',p:'/væn/',s:'This is a van.'},
+  {w:'vase',e:'🏺',p:'/veɪz/',s:'This is a vase.'},
+  {w:'violin',e:'🎻',p:'/ˌvaɪ.əˈlɪn/',s:'This is a violin.'},
+  {w:'vacuum',e:'🌀',p:'/ˈvæk.juːm/',s:'This is a vacuum.'},
+  {w:'vegetable',e:'🥦',p:'/ˈvedʒ.tə.bəl/',s:'This is a vegetable.'},
+  {w:'vet',e:'👨‍⚕️',p:'/vet/',s:'This is a vet.'},
+  {w:'volcano',e:'🌋',p:'/vɒlˈkeɪ.noʊ/',s:'This is a volcano.'},
+  {w:'vest',e:'🦺',p:'/vest/',s:'This is a vest.'}
+],
+W:[
+  {w:'window',e:'🪟',p:'/ˈwɪn.doʊ/',s:'This is a window.'},
+  {w:'watch',e:'⌚',p:'/wɒtʃ/',s:'This is a watch.'},
+  {w:'wolf',e:'🐺',p:'/wʊlf/',s:'This is a wolf.'},
+  {w:'web',e:'🕸️',p:'/web/',s:'This is a web.'},
+  {w:'watermelon',e:'🍉',p:'/ˈwɔː.tər.mel.ən/',s:'This is a watermelon.'},
+  {w:'whale',e:'🐋',p:'/weɪl/',s:'This is a whale.'},
+  {w:'wheel',e:'⚙️',p:'/wiːl/',s:'This is a wheel.'}
+],
+X:[
+  {w:'box',e:'📦',p:'/bɒks/',s:'This is a box.'},
+  {w:'fox',e:'🦊',p:'/fɒks/',s:'This is a fox.'},
+  {w:'xylophone',e:'🎵',p:'/ˈzaɪ.lə.foʊn/',s:'This is a xylophone.'},
+  {w:'x-ray',e:'🩻',p:'/ˈeks.reɪ/',s:'This is an x-ray.'},
+  {w:'x-mas',e:'🎄',p:'/ˈkrɪs.məs/',s:'This is x-mas.'},
+  {w:'ax',e:'🪓',p:'/æks/',s:'This is an ax.'}
+],
+Y:[
+  {w:'yo-yo',e:'🪀',p:'/ˈjoʊ.joʊ/',s:'This is a yo-yo.'},
+  {w:'yogurt',e:'🥛',p:'/ˈjoʊ.ɡərt/',s:'This is yogurt.'},
+  {w:'yak',e:'🐂',p:'/jæk/',s:'This is a yak.'},
+  {w:'yam',e:'🍠',p:'/jæm/',s:'This is a yam.'},
+  {w:'yarn',e:'🧶',p:'/jɑːrn/',s:'This is yarn.'},
+  {w:'yacht',e:'⛵',p:'/jɒt/',s:'This is a yacht.'}
+],
+Z:[
+  {w:'zoo',e:'🦁',p:'/zuː/',s:'This is a zoo.'},
+  {w:'zebra',e:'🦓',p:'/ˈziː.brə/',s:'This is a zebra.'},
+  {w:'zucchini',e:'🥒',p:'/zuːˈkiː.ni/',s:'This is a zucchini.'},
+  {w:'zig-zag',e:'〰️',p:'/ˈzɪɡ.zæɡ/',s:'This is a zig-zag.'},
+  {w:'zero',e:'0️⃣',p:'/ˈzɪər.oʊ/',s:'This is zero.'},
+  {w:'zipper',e:'🤐',p:'/ˈzɪp.ər/',s:'This is a zipper.'}
+]
+};
+
+const PHONICS = {A:'/æ/ as in apple',B:'/b/ as in bee',C:'/k/ as in cat',D:'/d/ as in dog',E:'/e/ as in egg',F:'/f/ as in fish',G:'/ɡ/ as in goat',H:'/h/ as in hat',I:'/ɪ/ as in insect',J:'/dʒ/ as in juice',K:'/k/ as in key',L:'/l/ as in lion',M:'/m/ as in moon',N:'/n/ as in nest',O:'/ɒ/ as in octopus',P:'/p/ as in pig',Q:'/kw/ as in queen',R:'/r/ as in rabbit',S:'/s/ as in sun',T:'/t/ as in tiger',U:'/ʌ/ as in umbrella',V:'/v/ as in van',W:'/w/ as in whale',X:'/z/ as in xylophone',Y:'/j/ as in yo-yo',Z:'/z/ as in zebra'};
+
+const GUIDES_SPK = {A:'Miệng mở rộng, hàm hạ xuống, âm E ngắn',B:'Môi chạm nhau rồi bật ra nhẹ',C:'Âm K cứng từ cổ họng',D:'Đầu lưỡi chạm vòm rồi bật ra',E:'Miệng mở vừa, âm Ê ngắn',F:'Răng trên nhẹ lên môi dưới, thở ra',G:'Âm G từ cổ họng',H:'Thở ra nhẹ từ cổ họng',I:'Miệng cười, âm AI ngắn',J:'Âm Dj kết hợp D và J',K:'Âm K từ cổ họng, không rung',L:'Đầu lưỡi nhẹ vào vòm miệng',M:'Môi chạm nhau, rung mũi',N:'Đầu lưỡi vào vòm, rung mũi',O:'Miệng tròn như chữ O',P:'Môi chạm nhau rồi bật ra nhẹ',Q:'Âm KW kết hợp',R:'Cuộn lưỡi về sau, âm R từ cổ',S:'Âm S như rắn rít',T:'Đầu lưỡi nhẹ vào vòm, bật ra',U:'Miệng tròn, âm Ă ngắn',V:'Răng trên đặt môi dưới, rung thanh',W:'Miệng tròn, âm U rồi mở ra',X:'Âm KS hoặc Z tùy từng từ',Y:'Âm Y nhẹ như ia',Z:'Âm Z rung, như ong vù vù'};
+
+const LT_STEPS = {
+A:'1. Kẻ nét chéo trái từ đỉnh xuống\n2. Kẻ nét chéo phải từ đỉnh xuống\n3. Thêm nét ngang ở giữa',
+B:'1. Kẻ nét thẳng đứng xuống\n2. Vẽ nửa tròn trên\n3. Vẽ nửa tròn dưới to hơn',
+C:'1. Bắt đầu từ góc phải trên\n2. Cong sang trái và xuống\n3. Cong trở lại nhưng không đóng',
+D:'1. Kẻ nét thẳng đứng\n2. Vẽ nét cong lớn về bên phải',
+E:'1. Kẻ nét thẳng đứng\n2. Nét ngang trên, giữa, dưới',
+F:'1. Kẻ nét thẳng đứng\n2. Nét ngang trên\n3. Nét ngang giữa ngắn hơn',
+G:'1. Vẽ cong như C\n2. Thêm nét ngang vào trong bên phải',
+H:'1. Kẻ 2 nét thẳng đứng song song\n2. Nối bằng nét ngang ở giữa',
+I:'1. Kẻ nét thẳng đứng\n2. Nét ngang trên\n3. Nét ngang dưới',
+J:'1. Kẻ nét thẳng đứng\n2. Cong về bên trái ở dưới\n3. Nét ngang nhỏ ở trên',
+K:'1. Kẻ nét thẳng đứng\n2. Nét chéo từ giữa lên phải\n3. Nét chéo từ giữa xuống phải',
+L:'1. Kẻ nét thẳng đứng xuống\n2. Nét ngang sang phải ở dưới',
+M:'1. Nét thẳng đứng trái\n2. Chéo xuống giữa\n3. Chéo lên và nét thẳng phải',
+N:'1. Nét thẳng đứng trái\n2. Chéo xuống phải\n3. Nét thẳng đứng phải',
+O:'1. Bắt đầu từ trên\n2. Vẽ vòng tròn liên tục',
+P:'1. Kẻ nét thẳng đứng\n2. Vẽ nửa tròn ở phía trên bên phải',
+Q:'1. Vẽ vòng tròn như O\n2. Thêm nét nhỏ ở góc dưới phải',
+R:'1. Kẻ nét thẳng đứng\n2. Nửa tròn trên bên phải\n3. Nét chéo từ giữa xuống phải',
+S:'1. Cong từ trên xuống sang trái\n2. Tiếp tục cong sang phải',
+T:'1. Kẻ nét ngang ở trên\n2. Kẻ nét thẳng đứng từ giữa xuống',
+U:'1. Kẻ nét thẳng đứng trái\n2. Cong xuống và qua phải\n3. Nét thẳng đứng phải',
+V:'1. Nét chéo trái xuống\n2. Nét chéo phải lên',
+W:'1. Nét chéo trái xuống\n2. Chéo lên giữa\n3. Chéo xuống\n4. Chéo lên phải',
+X:'1. Nét chéo từ trái-trên sang phải-dưới\n2. Nét chéo từ phải-trên sang trái-dưới',
+Y:'1. Nét chéo trái xuống giữa\n2. Nét chéo phải xuống giữa\n3. Nét thẳng từ giữa xuống',
+Z:'1. Nét ngang trên sang phải\n2. Nét chéo xuống trái\n3. Nét ngang dưới sang phải'
+};
+
+// ===================== STATE =====================
+let curLt = 'A', stars = 0, lives = 3, streak = 0, score = 0;
+let listenQ = null, listenOk = 0, listenTotal = 0;
+let spkIdx = 0, writeIdx = 0, writeTab = 'letter', curGame = 'match';
+let gData = {}, recTimer = null, rInterval = null;
+let drawing = false, ctx = null, lastX = 0, lastY = 0;
+
+// ===================== INIT =====================
+function init() {
+  const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const tabs = document.getElementById('ltabs');
+  ALPHA.forEach(l => {
+    const b = document.createElement('button');
+    b.className = 'lbtn'; b.textContent = l; b.id = 'lt-' + l;
+    b.onclick = () => selectLt(l);
+    tabs.appendChild(b);
+  });
+  initCanvas();
+  initLtPicker();
+  selectLt('A');
+}
+
+function selectLt(l) {
+  curLt = l;
+  document.querySelectorAll('.lbtn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lt-' + l);
+  if(btn) { btn.classList.add('active'); btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); }
+  const ph = PHONICS[l] || '/' + l.toLowerCase() + '/ sound';
+  document.getElementById('heroLt').textContent = l;
+  document.getElementById('heroPh').textContent = ph;
+  document.getElementById('heroSpkLt').textContent = l;
+  document.getElementById('heroSpkPh').textContent = ph;
+  document.getElementById('heroRdLt').textContent = l;
+  document.getElementById('heroRdPh').textContent = ph;
+  document.getElementById('wlLt').textContent = l;
+  document.getElementById('spkLtTitle').textContent = l;
+  renderAll();
+}
+
+function sayLetter() { spk(curLt + '... ' + curLt.toLowerCase()); }
+
+function spk(text, rate) {
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = rate || 0.8; u.pitch = 1.1;
+  speechSynthesis.speak(u);
+}
+
+function renderAll() {
+  renderListen(); renderSpeak(); renderRead(); renderWrite(); clearCanvas();
+  updateCanvas();
+  if(document.getElementById('sec-games').classList.contains('active')) startGame();
+}
+
+// ===================== SKILL TABS =====================
+function showSkill(skill, el) {
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('sec-' + skill).classList.add('active');
+  document.getElementById('mainBody').scrollTop = 0;
+  if(skill === 'games') { selectGame(curGame, document.querySelector('.gc.on')); startGame(); }
+}
+
+// ===================== LISTEN =====================
+function renderListen() {
+  const ws = WD[curLt] || [];
+  const grid = document.getElementById('wgrid');
+  grid.innerHTML = ws.map(w => `
+    <div class="wcard" onclick="spk('${w.w.replace(/'/g,"\\'")}',0.75)">
+      <span class="wem">${w.e}</span>
+      <div class="winfo">
+        <div class="wtxt">${w.w}</div>
+        <div class="wph">${w.p}</div>
+      </div>
+      <button class="wspk" onclick="event.stopPropagation();spk('${w.w.replace(/'/g,"\\'")}',0.75)">🔊</button>
+    </div>`).join('');
+  listenOk = 0; listenTotal = 0;
+  updListenPg();
+  genListenQ();
+}
+
+function genListenQ() {
+  const ws = WD[curLt] || [];
+  if(!ws.length) return;
+  const correct = ws[Math.floor(Math.random() * ws.length)];
+  let opts = [correct];
+  const all = Object.values(WD).flat();
+  while(opts.length < 4) {
+    const c = all[Math.floor(Math.random() * all.length)];
+    if(!opts.find(o => o.w === c.w)) opts.push(c);
+  }
+  opts = opts.sort(() => Math.random() - 0.5);
+  listenQ = correct;
+  document.getElementById('choices').innerHTML = opts.map(o => `
+    <div class="chbtn" onclick="chkListen('${o.w.replace(/'/g,"\\'")}')">
+      <span class="cem">${o.e}</span>${o.w}
+    </div>`).join('');
+}
+
+function playQ() {
+  const btn = document.getElementById('listenBtn');
+  btn.classList.add('pulse');
+  setTimeout(() => btn.classList.remove('pulse'), 1200);
+  if(listenQ) spk(listenQ.w, 0.7);
+}
+
+function chkListen(word) {
+  if(!listenQ) return;
+  const cbs = document.querySelectorAll('.chbtn');
+  cbs.forEach(c => {
+    c.style.pointerEvents = 'none';
+    if(c.textContent.trim().includes(listenQ.w)) c.classList.add('correct');
+    else if(c.textContent.trim().includes(word) && word !== listenQ.w) c.classList.add('wrong');
+  });
+  if(word === listenQ.w) { addStar(3); streak++; listenOk++; }
+  else { loseLive(); streak = 0; }
+  listenTotal++;
+  updListenPg();
+  setTimeout(genListenQ, 1400);
+}
+
+function updListenPg() {
+  document.getElementById('lprog').textContent = listenOk + '/5';
+  document.getElementById('lpgfill').style.width = Math.min(listenOk / 5 * 100, 100) + '%';
+}
+
+// ===================== SPEAK =====================
+function renderSpeak() {
+  const ws = WD[curLt] || [];
+  if(!ws.length) return;
+  spkIdx = 0;
+  showSpkWd(ws[0]);
+  const grid = document.getElementById('spkWgrid');
+  grid.innerHTML = ws.map(w => `
+    <div class="wcard" onclick="spk('${w.w.replace(/'/g,"\\'")}',0.65)">
+      <span class="wem">${w.e}</span>
+      <div class="winfo">
+        <div class="wtxt">${w.w}</div>
+        <div class="wph">${w.p}</div>
+      </div>
+      <button class="wspk" onclick="event.stopPropagation();spk('${w.w.replace(/'/g,"\\'")}',0.65)">🔊</button>
+    </div>`).join('');
+}
+
+function showSpkWd(w) {
+  document.getElementById('spkWd').textContent = w.w;
+  document.getElementById('spkPh').textContent = w.p;
+  document.getElementById('spkGuide').textContent = GUIDES_SPK[curLt] || 'Chú ý phát âm đúng';
+  document.getElementById('spkScore').classList.remove('on');
+  document.getElementById('micSt').textContent = 'Nhấn mic để bắt đầu';
+  document.getElementById('micBtn').className = 'micbtn';
+}
+
+function speakEx() { const w = document.getElementById('spkWd').textContent; spk(w, 0.6); }
+
+function nextSpkWd() {
+  const ws = WD[curLt] || [];
+  spkIdx = (spkIdx + 1) % ws.length;
+  showSpkWd(ws[spkIdx]);
+}
+
+function doRecord() {
+  const btn = document.getElementById('micBtn');
+  const st = document.getElementById('micSt');
+  btn.className = 'micbtn rec';
+  st.textContent = '🔴 Đang ghi âm... Đọc to!';
+  clearTimeout(recTimer);
+  recTimer = setTimeout(() => {
+    btn.className = 'micbtn';
+    st.textContent = '✅ Xong! Xem kết quả:';
+    const scores = [72,78,82,85,88,90,92,95];
+    const sc = scores[Math.floor(Math.random() * scores.length)];
+    const fbs = ['Cố gắng thêm! 💪','Khá tốt! Thử lại 👍','Tốt lắm! Gần chuẩn 😊','Rất tốt! Chuẩn rồi ⭐','Xuất sắc! 🌟','Hoàn hảo! 🏆'];
+    let fi = 0;
+    if(sc>=95)fi=5; else if(sc>=90)fi=4; else if(sc>=85)fi=3; else if(sc>=80)fi=2; else if(sc>=70)fi=1;
+    document.getElementById('spkScNum').textContent = sc + '/100';
+    document.getElementById('spkScFb').textContent = fbs[fi];
+    document.getElementById('spkScore').classList.add('on');
+    addStar(Math.floor(sc / 20));
+  }, 2500);
+}
+
+// ===================== READ =====================
+function renderRead() {
+  const ws = WD[curLt] || [];
+  document.getElementById('rgrid').innerHTML = ws.map((w, i) => `
+    <div class="rcard" id="rc${i}" onclick="flipRd(${i})">
+      <span class="rem">${w.e}</span>
+      <div class="rwrd">${w.w}</div>
+      <div class="rsen" id="rs${i}">${w.s}</div>
+    </div>`).join('');
+}
+
+function flipRd(i) {
+  const card = document.getElementById('rc' + i);
+  const sen = document.getElementById('rs' + i);
+  const isFlipped = card.classList.contains('flip');
+  card.classList.toggle('flip');
+  sen.style.display = isFlipped ? 'none' : 'block';
+  if(!isFlipped) {
+    const ws = WD[curLt] || [];
+    if(ws[i]) spk(ws[i].s, 0.8);
+    addStar(1);
+  }
+}
+
+function readAll() {
+  const ws = WD[curLt] || [];
+  const text = ws.map(w => w.s).join(' ');
+  spk(text, 0.8);
+  addStar(2);
+}
+
+// ===================== WRITE =====================
+function switchWriteTab(tab, el) {
+  writeTab = tab;
+  document.querySelectorAll('.wtab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('writeLetterSec').style.display = tab === 'letter' ? 'block' : 'none';
+  document.getElementById('writeWordSec').style.display = tab === 'word' ? 'block' : 'none';
+}
+
+// CANVAS
+function initCanvas() {
+  const canvas = document.getElementById('drawCanvas');
+  const wrap = canvas.parentElement;
+  function resizeCanvas() {
+    const W = wrap.clientWidth;
+    const H = Math.min(W * 0.55, 220);
+    canvas.width = W * (window.devicePixelRatio || 1);
+    canvas.height = H * (window.devicePixelRatio || 1);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx = canvas.getContext('2d');
+    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    ctx.strokeStyle = '#FF6B6B';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => { resizeCanvas(); updateCanvas(); });
+  canvas.addEventListener('mousedown', e => { drawing = true; const r = canvas.getBoundingClientRect(); lastX = e.clientX - r.left; lastY = e.clientY - r.top; ctx.beginPath(); ctx.moveTo(lastX, lastY); });
+  canvas.addEventListener('mousemove', e => { if(!drawing) return; const r = canvas.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top; ctx.lineTo(x, y); ctx.stroke(); lastX = x; lastY = y; });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const r = canvas.getBoundingClientRect(); lastX = e.touches[0].clientX - r.left; lastY = e.touches[0].clientY - r.top; ctx.beginPath(); ctx.moveTo(lastX, lastY); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing) return; const r = canvas.getBoundingClientRect(); const x = e.touches[0].clientX - r.left, y = e.touches[0].clientY - r.top; ctx.lineTo(x, y); ctx.stroke(); lastX = x; lastY = y; }, {passive:false});
+  canvas.addEventListener('touchend', () => drawing = false);
+}
+
+function updateCanvas() {
+  document.getElementById('canvasHint').textContent = curLt;
+  document.getElementById('ltGuideChar').textContent = curLt + ' ' + curLt.toLowerCase();
+  document.getElementById('ltGuideSteps').textContent = LT_STEPS[curLt] || 'Nhìn chữ mẫu và viết theo';
+}
+
+function clearCanvas() {
+  if(!ctx) return;
+  const canvas = document.getElementById('drawCanvas');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById('ltFb').textContent = '';
+}
+
+function submitCanvas() {
+  const canvas = document.getElementById('drawCanvas');
+  const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  let hasInk = false;
+  for(let i = 3; i < data.length; i += 4) { if(data[i] > 10) { hasInk = true; break; } }
+  const fb = document.getElementById('ltFb');
+  if(!hasInk) { fb.className = 'wfb no'; fb.textContent = '✏️ Hãy viết chữ vào ô trắng trước!'; return; }
+  const scores = ['🎉 Xuất sắc! Nét đẹp lắm! +3⭐', '⭐ Rất tốt! Tiếp tục luyện! +2⭐', '👍 Tốt! Thử viết đẹp hơn nữa! +1⭐'];
+  const r = scores[Math.floor(Math.random() * scores.length)];
+  fb.className = 'wfb ok'; fb.textContent = r;
+  addStar(Math.floor(Math.random() * 3) + 1);
+}
+
+function initLtPicker() {
+  const el = document.getElementById('ltPicker');
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
+    const b = document.createElement('button');
+    b.className = 'lbtn'; b.textContent = l;
+    b.style.cssText = 'width:36px;height:36px;font-size:15px;';
+    b.onclick = () => { selectLt(l); updateCanvas(); clearCanvas(); };
+    el.appendChild(b);
+  });
+}
+
+function renderWrite() {
+  const ws = WD[curLt] || [];
+  writeIdx = 0;
+  const sel = document.getElementById('wwSel');
+  sel.innerHTML = ws.map((w, i) => `
+    <div class="wwbtn ${i===0?'active':''}" onclick="selWriteWd(${i},this)">${w.e} ${w.w}</div>`).join('');
+  showWriteWd(ws[0]);
+  updateCanvas();
+  clearCanvas();
+}
+
+function selWriteWd(idx, el) {
+  document.querySelectorAll('.wwbtn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  writeIdx = idx;
+  const ws = WD[curLt] || [];
+  showWriteWd(ws[idx]);
+}
+
+function showWriteWd(w) {
+  if(!w) return;
+  document.getElementById('traceWd').textContent = w.w.toUpperCase().split('').join(' ');
+  document.getElementById('winput').value = '';
+  document.getElementById('wfb').textContent = '';
+  document.getElementById('wdGuide').textContent = 'Viết từ trái sang phải, chú ý chính tả';
+}
+
+function chkWrite() {
+  const ws = WD[curLt] || [];
+  if(!ws[writeIdx]) return;
+  const target = ws[writeIdx].w.toLowerCase();
+  const input = document.getElementById('winput').value.toLowerCase().trim();
+  const fb = document.getElementById('wfb');
+  if(input === target) {
+    fb.className = 'wfb ok'; fb.textContent = '🎉 Chính xác! Tuyệt vời!';
+    addStar(2); streak++;
+  } else if(target.startsWith(input) && input.length > 0) {
+    fb.className = 'wfb'; fb.style.color = '#FF9800'; fb.textContent = '👏 Đúng hướng rồi, tiếp tục!';
+  } else if(input.length > 0) {
+    fb.className = 'wfb no'; fb.textContent = '❌ Chưa đúng, thử lại!';
+  }
+}
+
+function chkWriteBtn() {
+  chkWrite();
+  const ws = WD[curLt] || [];
+  if(!ws[writeIdx]) return;
+  const target = ws[writeIdx].w.toLowerCase();
+  const input = document.getElementById('winput').value.toLowerCase().trim();
+  if(input !== target) loseLive();
+}
+
+function nxtWriteWd() {
+  const ws = WD[curLt] || [];
+  writeIdx = (writeIdx + 1) % ws.length;
+  const btns = document.querySelectorAll('.wwbtn');
+  btns.forEach((b, i) => b.classList.toggle('active', i === writeIdx));
+  showWriteWd(ws[writeIdx]);
+}
+
+// ===================== GAMES =====================
+function selGame(game, el) {
+  curGame = game;
+  document.querySelectorAll('.gc').forEach(c => c.classList.remove('on'));
+  if(el) el.classList.add('on');
+  startGame();
+}
+
+function startGame() {
+  const area = document.getElementById('garea');
+  area.innerHTML = '';
+  const ws = WD[curLt] || [];
+  if(!ws.length) { area.innerHTML = '<p style="text-align:center;color:var(--mut);padding:20px">Không có từ!</p>'; return; }
+  if(curGame === 'match') gameMatch(ws);
+  else if(curGame === 'hangman') gameHangman(ws);
+  else if(curGame === 'scramble') gameScramble(ws);
+  else if(curGame === 'fill') gameFill(ws);
+  else if(curGame === 'rapid') gameRapid();
+  else if(curGame === 'spelling') gameSpelling(ws);
+  else if(curGame === 'category') gameCategory();
+  else if(curGame === 'chain') gameChain(ws);
+}
+
+// MATCH
+function gameMatch(ws) {
+  const sel = ws.slice(0, 4);
+  const pairs = [
+    ...sel.map(w => ({t:'e', v:w.e, key:w.w})),
+    ...sel.map(w => ({t:'w', v:w.w, key:w.w}))
+  ].sort(() => Math.random() - 0.5);
+  gData.match = {pairs, first:null, matched:[], count:0};
+  const area = document.getElementById('garea');
+  area.innerHTML = `<p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:10px">Ghép cặp hình và chữ!</p>
+  <div class="mgrid" id="mgrid"></div>
+  <div style="text-align:center;margin-top:8px;font-size:13px;font-weight:700;color:var(--mut)" id="mscore">Cặp đúng: 0/4</div>`;
+  const grid = document.getElementById('mgrid');
+  pairs.forEach((p, i) => {
+    const c = document.createElement('div');
+    c.className = 'mc'; c.textContent = '?'; c.dataset.i = i;
+    c.onclick = () => clickMatch(i);
+    grid.appendChild(c);
+  });
+}
+
+function clickMatch(idx) {
+  const {pairs, matched} = gData.match;
+  if(matched.includes(idx)) return;
+  const cards = document.querySelectorAll('.mc');
+  if(cards[idx].classList.contains('flip') || cards[idx].classList.contains('hit')) return;
+  cards[idx].classList.add('flip');
+  cards[idx].textContent = pairs[idx].v;
+  if(gData.match.first === null) {
+    gData.match.first = idx;
+  } else {
+    const fi = gData.match.first;
+    gData.match.first = null;
+    if(pairs[fi].key === pairs[idx].key && fi !== idx) {
+      cards[idx].classList.add('hit'); cards[fi].classList.add('hit');
+      gData.match.matched.push(idx, fi);
+      gData.match.count++;
+      document.getElementById('mscore').textContent = 'Cặp đúng: ' + gData.match.count + '/4';
+      addStar(2);
+      if(gData.match.count === 4) showRes('🎉', 'Ghép hết rồi!', '+8 ⭐');
+    } else {
+      cards[idx].classList.add('miss'); cards[fi].classList.add('miss');
+      setTimeout(() => {
+        [idx, fi].forEach(i => { cards[i].classList.remove('flip','miss'); cards[i].textContent = '?'; });
+      }, 900);
+    }
+  }
+}
+
+// HANGMAN
+function gameHangman(ws) {
+  const w = ws[Math.floor(Math.random() * ws.length)];
+  gData.hm = {word:w.w, guessed:[], wrong:0, max:6};
+  const faces = ['😊','😐','😬','😨','😱','💀'];
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <div style="text-align:center">
+      <div style="font-size:36px" id="hmFace">😊</div>
+      <div style="font-size:12px;color:var(--mut);margin:4px 0">Còn <span id="hmLv">6</span> lần sai</div>
+    </div>
+    <div class="hm-word" id="hmWd"></div>
+    <div style="text-align:center;font-size:13px;color:var(--mut);margin-bottom:8px">Gợi ý: ${w.e} (${w.w.length} chữ)</div>
+    <div class="hmkb" id="hmkb"></div>`;
+  updHM(faces);
+  const kb = document.getElementById('hmkb');
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
+    const k = document.createElement('div');
+    k.className = 'hmk'; k.textContent = l;
+    k.onclick = () => guessHM(l.toLowerCase(), k, faces);
+    kb.appendChild(k);
+  });
+}
+
+function updHM() {
+  const {word, guessed} = gData.hm;
+  const d = word.split('').map(c => [' ','-'].includes(c) ? c : (guessed.includes(c) ? c.toUpperCase() : '_')).join(' ');
+  document.getElementById('hmWd').textContent = d;
+  if(!d.includes('_')) { addStar(5); showRes('🎉','Đoán đúng!','+5 ⭐'); }
+}
+
+function guessHM(l, el, faces) {
+  const g = gData.hm;
+  if(g.guessed.includes(l) || g.wrong >= g.max) return;
+  g.guessed.push(l);
+  if(g.word.includes(l)) { el.classList.add('ok'); addStar(1); }
+  else {
+    el.classList.add('no'); g.wrong++;
+    const fi = document.getElementById('hmFace');
+    const lv = document.getElementById('hmLv');
+    if(fi) fi.textContent = faces[Math.min(g.wrong, faces.length-1)];
+    if(lv) lv.textContent = g.max - g.wrong;
+    if(g.wrong >= g.max) { showRes('😢','Hết lần!','Từ: ' + g.word.toUpperCase()); return; }
+  }
+  updHM();
+}
+
+// SCRAMBLE
+function gameScramble(ws) {
+  const w = ws[Math.floor(Math.random() * ws.length)];
+  const ltrs = w.w.toUpperCase().split('').sort(() => Math.random() - 0.5);
+  gData.scr = {word:w.w, ltrs, ans:[], used:[]};
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <p style="text-align:center;font-size:13px;color:var(--mut);margin-bottom:8px">Xếp chữ cái thành từ đúng!</p>
+    <p style="text-align:center;font-size:18px;margin-bottom:10px">${w.e}</p>
+    <div class="ans-boxes" id="ansBoxes">${w.w.split('').map((_,i)=>`<div class="abox" id="ab${i}" onclick="rmAns(${i})"></div>`).join('')}</div>
+    <div class="scr-tiles" id="scrTiles">${ltrs.map((l,i)=>`<div class="stile" id="st${i}" onclick="addAns(${i},'${l}')">${l}</div>`).join('')}</div>
+    <div style="text-align:center;font-size:13px;font-weight:700;margin-top:6px" id="scrFb"></div>`;
+}
+
+function addAns(idx, l) {
+  const g = gData.scr;
+  if(g.used.includes(idx) || g.ans.length >= g.word.length) return;
+  const pos = g.ans.length;
+  g.ans.push({l, idx}); g.used.push(idx);
+  document.getElementById('st'+idx).classList.add('used');
+  const b = document.getElementById('ab'+pos);
+  b.textContent = l; b.classList.add('filled');
+  if(g.ans.length === g.word.length) {
+    const a = g.ans.map(x=>x.l).join('').toLowerCase();
+    const fb = document.getElementById('scrFb');
+    if(a === g.word) { fb.style.color='#4CAF50'; fb.textContent='🎉 Đúng rồi!'; addStar(4); setTimeout(()=>gameScramble(WD[curLt]),1400); }
+    else { fb.style.color='#F44336'; fb.textContent='❌ Sai! Nhấn ô để xóa'; }
+  }
+}
+
+function rmAns(pos) {
+  const g = gData.scr;
+  if(!g.ans[pos]) return;
+  const rem = g.ans.splice(pos);
+  rem.forEach(r => { document.getElementById('st'+r.idx).classList.remove('used'); g.used = g.used.filter(i=>i!==r.idx); });
+  for(let i = pos; i < g.word.length; i++) {
+    const b = document.getElementById('ab'+i);
+    if(g.ans[i]) { b.textContent=g.ans[i].l; b.classList.add('filled'); }
+    else { b.textContent=''; b.classList.remove('filled'); }
+  }
+  document.getElementById('scrFb').textContent = '';
+}
+
+// FILL BLANK
+function gameFill(ws) {
+  const w = ws[Math.floor(Math.random() * ws.length)];
+  const sentence = w.s;
+  const blanked = sentence.replace(new RegExp(w.w, 'gi'), '___');
+  const all = Object.values(WD).flat();
+  let opts = [w];
+  while(opts.length < 4) { const c = all[Math.floor(Math.random()*all.length)]; if(!opts.find(o=>o.w===c.w))opts.push(c); }
+  opts = opts.sort(()=>Math.random()-0.5);
+  gData.fill = w;
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:10px">Chọn từ đúng để điền vào chỗ trống!</p>
+    <div class="fsen">${blanked.replace('___','<span class="blank">___</span>')}</div>
+    <div class="fopts">${opts.map(o=>`<div class="fopt" onclick="chkFill(this,'${o.w.replace(/'/g,"\\'")}')">${o.e} ${o.w}</div>`).join('')}</div>
+    <div style="text-align:center;font-size:13px;font-weight:700;margin-top:10px" id="ffb"></div>`;
+}
+
+function chkFill(el, word) {
+  document.querySelectorAll('.fopt').forEach(o=>o.style.pointerEvents='none');
+  const c = gData.fill.w;
+  if(word===c){el.classList.add('fok');document.getElementById('ffb').style.color='#4CAF50';document.getElementById('ffb').textContent='🎉 Đúng! +3⭐';addStar(3);spk(gData.fill.s,0.8);setTimeout(()=>gameFill(WD[curLt]),2000);}
+  else{el.classList.add('fno');document.querySelectorAll('.fopt').forEach(o=>{if(o.textContent.includes(c))o.classList.add('fok');});document.getElementById('ffb').style.color='#F44336';document.getElementById('ffb').textContent='❌ Sai! Đáp án: '+c;loseLive();}
+}
+
+// RAPID
+function gameRapid() {
+  if(rInterval) clearInterval(rInterval);
+  const all = Object.values(WD).flat();
+  const correct = all[Math.floor(Math.random()*all.length)];
+  let opts=[correct];
+  while(opts.length<4){const c=all[Math.floor(Math.random()*all.length)];if(!opts.find(o=>o.w===c.w))opts.push(c);}
+  opts=opts.sort(()=>Math.random()-0.5);
+  let t=10; gData.rapid={correct,answered:false};
+  const area=document.getElementById('garea');
+  area.innerHTML=`
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:8px">Chọn hình đúng! ⚡</p>
+    <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:22px;color:var(--p);margin-bottom:8px">${correct.w}</div>
+    <div class="rtimer"><div class="rtfill" id="rtfill" style="width:100%"></div></div>
+    <div style="text-align:center;font-size:12px;color:var(--mut);margin-bottom:10px">⏱ <span id="rsec">10</span>s</div>
+    <div class="ropts">${opts.map(o=>`<div class="ropt" onclick="chkRapid(this,'${o.w.replace(/'/g,"\\'")}')"><span class="roe">${o.e}</span>${o.w}</div>`).join('')}</div>`;
+  rInterval=setInterval(()=>{
+    t--;
+    const sel=document.getElementById('rsec'),bar=document.getElementById('rtfill');
+    if(sel)sel.textContent=t; if(bar)bar.style.width=(t/10*100)+'%';
+    if(t<=0){clearInterval(rInterval);if(!gData.rapid.answered){document.querySelectorAll('.ropt').forEach(o=>{if(o.textContent.includes(correct.w))o.classList.add('rok');});setTimeout(()=>gameRapid(),1400);}}
+  },1000);
+}
+
+function chkRapid(el,word){
+  if(gData.rapid.answered)return;
+  clearInterval(rInterval);gData.rapid.answered=true;
+  document.querySelectorAll('.ropt').forEach(o=>o.style.pointerEvents='none');
+  const c=gData.rapid.correct.w;
+  if(word===c){el.classList.add('rok');addStar(5);setTimeout(()=>gameRapid(),1000);}
+  else{el.classList.add('rno');document.querySelectorAll('.ropt').forEach(o=>{if(o.textContent.includes(c))o.classList.add('rok');});loseLive();setTimeout(()=>gameRapid(),1800);}
+}
+
+// SPELLING BEE
+function gameSpelling(ws) {
+  const w = ws[Math.floor(Math.random()*ws.length)];
+  gData.spell = w;
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:8px">Nghe và đánh vần từ! 🐝</p>
+    <div class="bee-em">${w.e}</div>
+    <div class="bee-wd" id="beeWd">???</div>
+    <input class="bee-in" id="beeIn" placeholder="Đánh vần..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="chkSpell()">
+    <div class="btnrow" style="justify-content:center;margin-bottom:8px">
+      <button class="btn btn-v" onclick="spk('${w.w}',0.5)">🔊 Nghe lại</button>
+      <button class="btn btn-o" onclick="document.getElementById('beeWd').textContent='${w.w}'">👁️ Gợi ý</button>
+    </div>
+    <div style="text-align:center;font-size:13px;font-weight:700" id="beeFb"></div>`;
+  setTimeout(()=>spk(w.w,0.5),400);
+}
+
+function chkSpell(){
+  const inp=document.getElementById('beeIn').value.toLowerCase().trim();
+  const t=gData.spell.w.toLowerCase();
+  const fb=document.getElementById('beeFb');
+  if(inp===t){fb.style.color='#4CAF50';fb.textContent='🎉 Đúng rồi!';document.getElementById('beeWd').textContent=gData.spell.w;addStar(4);setTimeout(()=>gameSpelling(WD[curLt]),1500);}
+}
+
+// CATEGORY
+function gameCategory() {
+  const animSet = new Set(['bee','bird','butterfly','cat','cow','crab','dog','dolphin','duck','eagle','elephant','fish','fox','frog','giraffe','goat','goose','hamster','hen','hippo','horse','iguana','insect','jellyfish','kangaroo','kitten','koala','lion','lizard','monkey','mouse','octopus','ostrich','owl','panda','parrot','penguin','pig','quail','rabbit','rhino','shark','sheep','snake','tiger','turtle','whale','wolf','yak','zebra']);
+  const foodSet = new Set(['apple','banana','cake','candy','donut','egg','grapes','hamburger','ice cream','jam','jelly','juice','lemon','mango','milk','noodles','nut','olive','onion','orange','pear','pizza','tomato','watermelon','yam','yogurt','zucchini']);
+  const ws = WD[curLt];
+  const animals = ws.filter(w=>animSet.has(w.w)).slice(0,3);
+  const foods = ws.filter(w=>foodSet.has(w.w)).slice(0,3);
+  const mix = [...animals,...foods].sort(()=>Math.random()-0.5);
+  const area = document.getElementById('garea');
+  if(!mix.length){area.innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Chữ '+curLt+' không đủ từ để phân loại, hãy thử chữ khác!</p>';return;}
+  gData.cat = {animals:animals.map(w=>w.w), foods:foods.map(w=>w.w)};
+  area.innerHTML = `
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:10px">Nhấn từ rồi nhấn ô để xếp loại!</p>
+    <div class="sort-items" id="sortItems">${mix.map(w=>`<div class="sitem" id="si-${w.w.replace(/\s/g,'_')}" onclick="selSortItem('${w.w.replace(/'/g,"\\'")}',this)">${w.e} ${w.w}</div>`).join('')}</div>
+    <div class="sboxes">
+      <div class="sbox" onclick="dropSortTo('animals')"><div class="sbox-ttl">🐾 Động vật</div><div id="sanim"></div></div>
+      <div class="sbox" onclick="dropSortTo('food')"><div class="sbox-ttl">🍎 Thức ăn</div><div id="sfood"></div></div>
+    </div>`;
+  gData.cat.selected = null;
+}
+
+function selSortItem(word, el) {
+  document.querySelectorAll('.sitem').forEach(e=>e.style.outline='');
+  gData.cat.selected = word;
+  el.style.outline = '3px solid var(--p)';
+}
+
+function dropSortTo(box) {
+  const word = gData.cat.selected;
+  if(!word) return;
+  gData.cat.selected = null;
+  const animSet = new Set(['bee','bird','butterfly','cat','cow','crab','dog','dolphin','duck','eagle','elephant','fish','fox','frog','giraffe','goat','goose','hamster','hen','hippo','horse','iguana','insect','jellyfish','kangaroo','kitten','koala','lion','lizard','monkey','mouse','octopus','ostrich','owl','panda','parrot','penguin','pig','quail','rabbit','rhino','shark','sheep','snake','tiger','turtle','whale','wolf','yak','zebra']);
+  const foodSet = new Set(['apple','banana','cake','candy','donut','egg','grapes','hamburger','ice cream','jam','jelly','juice','lemon','mango','milk','noodles','nut','olive','onion','orange','pear','pizza','tomato','watermelon','yam','yogurt','zucchini']);
+  const isA = animSet.has(word), isF = foodSet.has(word);
+  const correct = (box==='animals'&&isA)||(box==='food'&&isF);
+  const ew = (WD[curLt]||[]).find(x=>x.w===word)||{e:''};
+  const tid = box==='animals'?'sanim':'sfood';
+  const cls = correct ? 'sitem-sorted' : 'sitem-wrong';
+  document.getElementById(tid).innerHTML += `<span class="${cls}">${ew.e} ${word}</span>`;
+  const orig = document.getElementById('si-'+word.replace(/\s/g,'_'));
+  if(orig) orig.style.opacity='0.3';
+  if(correct) addStar(2); else loseLive();
+}
+
+// WORD CHAIN
+function gameChain(ws) {
+  const w = ws[Math.floor(Math.random()*ws.length)];
+  gData.chain = {chain:[w.w], score:0};
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:8px">Nhập từ bắt đầu bằng chữ cuối của từ trước!</p>
+    <div class="chain-disp" id="chainDisp">${w.e} ${w.w}</div>
+    <p style="font-size:13px;font-weight:700;margin-bottom:8px">Từ tiếp theo bắt đầu bằng: <span style="color:var(--p);font-size:16px;font-family:'Fredoka One',cursive" id="chainNext">${w.w.slice(-1).toUpperCase()}</span></p>
+    <input type="text" id="chainIn" class="winput" style="font-size:18px;letter-spacing:3px" placeholder="Nhập từ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="btnrow" style="margin-top:10px;justify-content:center">
+      <button class="btn btn-p" onclick="submitChain()">✅ Nhập</button>
+    </div>
+    <div style="text-align:center;font-size:13px;margin-top:8px;color:var(--mut)">Chuỗi: <span style="font-weight:700;color:var(--p)" id="chainSc">0</span> từ</div>
+    <div style="font-size:13px;font-weight:700;text-align:center;margin-top:6px" id="chainFb"></div>`;
+}
+
+function submitChain(){
+  const inp=document.getElementById('chainIn');
+  const word=inp.value.toLowerCase().trim(); if(!word)return;
+  const g=gData.chain;
+  const nc=g.chain[g.chain.length-1].slice(-1).toLowerCase();
+  const fb=document.getElementById('chainFb');
+  if(!word.startsWith(nc)){fb.style.color='#F44336';fb.textContent='❌ Phải bắt đầu bằng "'+nc.toUpperCase()+'"!';return;}
+  const all=Object.values(WD).flat().map(x=>x.w.toLowerCase());
+  if(!all.includes(word)){fb.style.color='#FF9800';fb.textContent='⚠️ Từ chưa có trong danh sách!';return;}
+  if(g.chain.includes(word)){fb.style.color='#FF9800';fb.textContent='⚠️ Từ đã dùng rồi!';return;}
+  g.chain.push(word); g.score++; addStar(2);
+  const ew=Object.values(WD).flat().find(x=>x.w.toLowerCase()===word)||{e:'⭐'};
+  document.getElementById('chainDisp').innerHTML+=` → ${ew.e} ${word}`;
+  document.getElementById('chainNext').textContent=word.slice(-1).toUpperCase();
+  document.getElementById('chainSc').textContent=g.score;
+  inp.value=''; fb.style.color='#4CAF50'; fb.textContent='🎉 Tốt lắm!';
+}
+
+// ===================== UTILS =====================
+function addStar(n){
+  stars+=n; score+=n*10; streak++;
+  document.getElementById('starCount').textContent=stars;
+  document.getElementById('sbartxt').textContent='Điểm: '+score+' | Streak: '+streak+' 🔥';
+  const gt=document.getElementById('gmScTxt');
+  if(gt) gt.textContent='Điểm game: '+score;
+}
+
+function loseLive(){
+  lives=Math.max(0,lives-1); streak=0;
+  const el=document.getElementById('livesEl');
+  el.textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+  if(lives===0){setTimeout(()=>{lives=3;el.textContent='❤️❤️❤️';showRes('😢','Hết mạng!','Tiếp tục cố lên! 💪');},300);}
+}
+
+function showRes(em,ttl,sc){
+  document.getElementById('resEm').textContent=em;
+  document.getElementById('resTtl').textContent=ttl;
+  document.getElementById('resSc').textContent=sc;
+  document.getElementById('overlay').classList.add('on');
+}
+
+function closeOverlay(){ document.getElementById('overlay').classList.remove('on'); }
+
+init();
+</script>
+</body>
+</html>
