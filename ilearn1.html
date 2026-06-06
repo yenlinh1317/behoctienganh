@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>i-Learn Smart Start 1 - Học Tiếng Anh</title>
+<style>
+  :root {
+    --primary: #FF6B35;
+    --secondary: #4ECDC4;
+    --accent: #FFE66D;
+    --purple: #A78BFA;
+    --green: #6EE7B7;
+    --blue: #60A5FA;
+    --pink: #F9A8D4;
+    --dark: #1E1B4B;
+    --light: #F8F9FF;
+    --card-bg: #ffffff;
+    --text: #1E1B4B;
+    --muted: #6B7280;
+    --success: #10B981;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --radius: 20px;
+    --shadow: 0 8px 32px rgba(78,205,196,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f64f59 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== STARS BG ===== */
+  .stars { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+  .star { position:absolute; border-radius:50%; background:#fff; opacity:0; animation: twinkle 3s infinite; }
+  @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:0.6} }
+
+  /* ===== APP CONTAINER ===== */
+  #app { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:12px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .header-logo { font-size: 2.5rem; }
+  .header-title { color: #fff; }
+  .header-title h1 { font-size: clamp(1rem, 3vw, 1.5rem); font-weight:800; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .header-title p { font-size: 0.75rem; opacity:0.85; }
+  .header-stars { margin-left:auto; display:flex; gap:4px; align-items:center; }
+  .star-count { color:#FFE66D; font-weight:800; font-size:1.1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+  /* ===== NAV TABS ===== */
+  .nav-tabs {
+    display: flex;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    border-radius: 50px;
+    padding: 6px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.3);
+    overflow-x: auto;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display:none; }
+  .nav-tab {
+    flex: 1;
+    min-width: 60px;
+    padding: 8px 12px;
+    border:none;
+    border-radius: 40px;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-tab.active {
+    background: #fff;
+    color: var(--dark);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .nav-tab .tab-icon { font-size: 1.2rem; }
+
+  /* ===== SCREEN ===== */
+  .screen { display:none; }
+  .screen.active { display:block; }
+
+  /* ===== SECTION CARD ===== */
+  .card {
+    background: rgba(255,255,255,0.95);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 2px solid rgba(255,255,255,0.8);
+  }
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== UNIT GRID ===== */
+  .unit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .unit-card {
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .unit-card:hover { transform: translateY(-4px) scale(1.03); }
+  .unit-card.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 6px; right: 8px;
+    color: var(--success);
+    font-weight: 900;
+    font-size: 1rem;
+  }
+  .unit-emoji { font-size: 2.2rem; margin-bottom: 8px; display:block; }
+  .unit-name { font-weight: 800; font-size: 0.85rem; color: #fff; }
+  .unit-sub { font-size: 0.7rem; color: rgba(255,255,255,0.85); margin-top:2px; }
+  .unit-prog { height:4px; background:rgba(255,255,255,0.3); border-radius:2px; margin-top:8px; }
+  .unit-prog-bar { height:100%; background:#fff; border-radius:2px; transition:width 0.5s; }
+
+  /* ===== LESSON DETAIL ===== */
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .btn-back {
+    background: var(--dark);
+    color: #fff;
+    border:none;
+    border-radius: 50%;
+    width:36px; height:36px;
+    font-size:1.2rem;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { transform: scale(1.1); }
+
+  /* ===== SKILL TABS ===== */
+  .skill-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .skill-tab {
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .skill-tab.active { background: var(--primary); color: #fff; }
+  .skill-tab:hover { transform: scale(1.05); }
+
+  /* ===== VOCAB CARDS ===== */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .vocab-card {
+    background: var(--light);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .vocab-card:hover { border-color: var(--secondary); transform: scale(1.03); }
+  .vocab-card.playing { border-color: var(--primary); background: #FFF5F0; animation: pulse 0.5s; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+  .vocab-emoji { font-size: 2.5rem; margin-bottom:8px; display:block; }
+  .vocab-word { font-weight: 800; font-size: 1rem; color: var(--dark); }
+  .vocab-vi { font-size: 0.75rem; color: var(--muted); margin-top:4px; }
+  .vocab-pron { font-size: 0.7rem; color: var(--primary); font-style:italic; }
+  .vocab-play { position:absolute; top:8px; right:8px; font-size:1rem; }
+
+  /* ===== PATTERN SECTION ===== */
+  .pattern-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .pattern-text { font-size: 1.3rem; font-weight: 800; letter-spacing:1px; }
+  .pattern-ex { font-size: 0.9rem; opacity:0.85; margin-top:8px; }
+  .btn-listen {
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 50px;
+    padding: 8px 20px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 12px;
+    transition: all 0.3s;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-listen:hover { background: rgba(255,255,255,0.4); }
+
+  /* ===== SPEAKING SECTION ===== */
+  .speak-area {
+    text-align: center;
+    padding: 20px;
+  }
+  .speak-phrase {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--light);
+    border-radius: 16px;
+  }
+  .btn-mic {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), #FF8C42);
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 8px 24px rgba(255,107,53,0.4);
+    display:flex; align-items:center; justify-content:center;
+    margin: 0 auto;
+  }
+  .btn-mic:hover { transform: scale(1.1); }
+  .btn-mic.recording {
+    animation: recording 1s infinite;
+    background: linear-gradient(135deg, var(--danger), #FF6B6B);
+  }
+  @keyframes recording {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+    50%{ box-shadow: 0 0 0 20px rgba(239,68,68,0); }
+  }
+  .speak-feedback {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    display:none;
+  }
+  .speak-feedback.good { background:#D1FAE5; color:#065F46; display:block; }
+  .speak-feedback.bad { background:#FEE2E2; color:#991B1B; display:block; }
+
+  /* ===== SCORE DISPLAY ===== */
+  .score-display {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .star-item { font-size: 2rem; transition: transform 0.3s; }
+  .star-item.earned { animation: starPop 0.5s ease; }
+  @keyframes starPop { 0%{transform:scale(0)} 70%{transform:scale(1.3)} 100%{transform:scale(1)} }
+
+  /* ===== PHONICS ===== */
+  .phonics-letter {
+    font-size: 6rem;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .phonics-words {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .phonics-word-card {
+    background: var(--light);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+  }
+  .phonics-word-card:hover { border-color: var(--primary); }
+  .phonics-word-emoji { font-size: 2rem; }
+  .phonics-word-text { font-size: 1.1rem; font-weight: 800; color: var(--dark); }
+  .phonics-word-text span { color: var(--primary); }
+
+  /* ===== GAMES ===== */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .game-card {
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card::before {
+    content:'';
+    position:absolute; top:-50%; left:-50%;
+    width:200%; height:200%;
+    background: rgba(255,255,255,0.1);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+  }
+  .game-card:hover { transform: translateY(-6px) scale(1.03); border-color: rgba(255,255,255,0.5); }
+  .game-card:hover::before { top:-30%; }
+  .game-icon { font-size: 2.5rem; margin-bottom: 10px; display:block; }
+  .game-name { font-weight: 800; font-size: 0.9rem; }
+  .game-desc { font-size: 0.7rem; opacity:0.85; margin-top:4px; }
+  .game-difficulty { 
+    display:inline-block; 
+    background:rgba(255,255,255,0.25); 
+    border-radius:50px; 
+    padding:2px 10px; 
+    font-size:0.65rem; 
+    margin-top:8px; 
+    font-weight:700; 
+  }
+
+  /* ===== GAME SCREENS ===== */
+  .game-screen {
+    display:none;
+    background: rgba(255,255,255,0.95);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .game-screen.active { display:block; }
+  .game-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .game-progress-bar {
+    flex:1;
+    height:8px;
+    background:#E5E7EB;
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .game-progress-fill {
+    height:100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius:4px;
+    transition: width 0.5s;
+  }
+  .game-score { font-weight:800; color:var(--primary); font-size:1.1rem; }
+  .game-question {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .game-question .q-image { font-size:4rem; margin-bottom:12px; display:block; }
+  .game-question .q-text { font-size:1.1rem; font-weight:800; color:var(--dark); }
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .option-btn {
+    padding: 14px;
+    border-radius: 14px;
+    border: 3px solid #E5E7EB;
+    background: #fff;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.3s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .option-btn:hover { border-color: var(--secondary); transform:scale(1.02); }
+  .option-btn.correct { border-color:var(--success); background:#D1FAE5; color:#065F46; animation:correctAnim 0.5s; }
+  .option-btn.wrong { border-color:var(--danger); background:#FEE2E2; color:#991B1B; animation:wrongAnim 0.5s; }
+  @keyframes correctAnim { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+  @keyframes wrongAnim { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  
+  /* ===== MATCHING GAME ===== */
+  .match-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  @media(max-width:500px) { .match-grid { grid-template-columns: repeat(3,1fr); } }
+  .match-card {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    border: 3px solid #E5E7EB;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    cursor:pointer;
+    transition:all 0.3s;
+    position:relative;
+    perspective:1000px;
+  }
+  .match-card-inner {
+    position:absolute; inset:0;
+    transition:transform 0.6s;
+    transform-style:preserve-3d;
+  }
+  .match-card.flipped .match-card-inner { transform: rotateY(180deg); }
+  .match-card-front, .match-card-back {
+    position:absolute; inset:0;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    backface-visibility:hidden;
+    font-size:1.5rem;
+  }
+  .match-card-front { background: linear-gradient(135deg, #667eea, #764ba2); color:#fff; font-size:1.5rem; }
+  .match-card-back { background: #fff; transform:rotateY(180deg); font-size:1.5rem; }
+  .match-card.matched { border-color: var(--success); background: #D1FAE5; }
+
+  /* ===== WORD BUILDER ===== */
+  .word-display {
+    display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .word-slot {
+    width:44px; height:52px;
+    border-radius:10px;
+    border:3px dashed #E5E7EB;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem; font-weight:900;
+    color:var(--dark);
+    background:#fff;
+    transition:all 0.3s;
+  }
+  .word-slot.filled { border-color:var(--primary); background:#FFF5F0; }
+  .letter-pool {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+    margin-bottom:16px;
+  }
+  .letter-btn {
+    width:44px; height:44px;
+    border-radius:10px;
+    border:none;
+    background: linear-gradient(135deg, var(--primary), #FF8C42);
+    color:#fff;
+    font-size:1.2rem;
+    font-weight:900;
+    cursor:pointer;
+    transition:all 0.3s;
+    box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+  }
+  .letter-btn:hover { transform: scale(1.1) translateY(-2px); }
+  .letter-btn.used { opacity:0.3; pointer-events:none; }
+
+  /* ===== SENTENCE BUILDER ===== */
+  .sentence-words {
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+    padding:16px; background:var(--light); border-radius:16px; min-height:60px;
+    margin-bottom:16px;
+  }
+  .sentence-slot {
+    padding:8px 16px;
+    border-radius:8px;
+    background:var(--dark);
+    color:#fff;
+    font-weight:700;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:all 0.3s;
+  }
+  .word-option {
+    padding:8px 14px;
+    border-radius:8px;
+    background:#fff;
+    color:var(--dark);
+    font-weight:700;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:2px solid var(--secondary);
+    transition:all 0.3s;
+  }
+  .word-option:hover { background:var(--secondary); color:#fff; transform:scale(1.05); }
+  .word-option.used { opacity:0.3; pointer-events:none; }
+
+  /* ===== COLOR GAME ===== */
+  .color-target {
+    width:120px; height:120px; border-radius:50%;
+    margin:0 auto 20px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    border:4px solid #fff;
+  }
+  .color-options {
+    display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+  }
+  .color-option {
+    width:60px; height:60px; border-radius:50%;
+    border:4px solid transparent;
+    cursor:pointer;
+    transition:all 0.3s;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  }
+  .color-option:hover { transform:scale(1.15); border-color:#fff; }
+
+  /* ===== NUMBER GAME ===== */
+  .number-display {
+    font-size:5rem; font-weight:900; text-align:center;
+    background:linear-gradient(135deg,var(--primary),var(--purple));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    margin-bottom:16px;
+  }
+  .number-dots {
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    margin-bottom:20px;
+  }
+  .number-dot {
+    width:28px; height:28px; border-radius:50%;
+    background:linear-gradient(135deg,var(--primary),#FF8C42);
+    box-shadow:0 3px 8px rgba(255,107,53,0.4);
+    animation:dotPop 0.3s ease both;
+  }
+  @keyframes dotPop { from{transform:scale(0)} to{transform:scale(1)} }
+
+  /* ===== LISTEN GAME ===== */
+  .listen-visual {
+    text-align:center;
+    padding:20px;
+  }
+  .listen-wave {
+    display:flex; align-items:center; justify-content:center;
+    gap:4px; margin-bottom:20px; height:60px;
+  }
+  .wave-bar {
+    width:6px; border-radius:3px;
+    background:linear-gradient(180deg,var(--primary),var(--secondary));
+    animation:wave 1s ease-in-out infinite;
+  }
+  @keyframes wave {
+    0%,100%{height:10px} 50%{height:50px}
+  }
+
+  /* ===== QUIZ RESULTS ===== */
+  .result-screen {
+    text-align:center; padding:30px 20px;
+  }
+  .result-emoji { font-size:5rem; margin-bottom:16px; display:block; }
+  .result-title { font-size:1.8rem; font-weight:900; color:var(--dark); margin-bottom:8px; }
+  .result-score { font-size:3rem; font-weight:900; color:var(--primary); }
+  .result-stars { font-size:2rem; margin:12px 0; letter-spacing:4px; }
+  .btn-primary {
+    background:linear-gradient(135deg,var(--primary),#FF8C42);
+    color:#fff; border:none; border-radius:50px;
+    padding:14px 32px; font-size:1rem; font-weight:800;
+    cursor:pointer; transition:all 0.3s;
+    box-shadow:0 6px 20px rgba(255,107,53,0.4);
+    margin:6px;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(255,107,53,0.5); }
+  .btn-secondary {
+    background:#fff; color:var(--dark);
+    border:2px solid var(--dark);
+    border-radius:50px; padding:12px 28px;
+    font-size:1rem; font-weight:800;
+    cursor:pointer; transition:all 0.3s; margin:6px;
+  }
+  .btn-secondary:hover { background:var(--dark); color:#fff; }
+
+  /* ===== WRITING ===== */
+  .writing-canvas {
+    border:3px solid #E5E7EB;
+    border-radius:16px;
+    touch-action:none;
+    cursor:crosshair;
+    background:#fff;
+    width:100%;
+    max-height:250px;
+  }
+  .writing-tools {
+    display:flex; gap:8px; margin-bottom:12px; align-items:center;
+  }
+  .color-swatch {
+    width:28px; height:28px; border-radius:50%;
+    border:3px solid transparent; cursor:pointer; transition:all 0.2s;
+  }
+  .color-swatch.active { border-color:var(--dark); transform:scale(1.2); }
+  .size-btn {
+    padding:4px 12px; border-radius:50px; border:2px solid var(--muted);
+    background:#fff; cursor:pointer; font-size:0.75rem; font-weight:700;
+    transition:all 0.2s;
+  }
+  .size-btn.active { background:var(--dark); color:#fff; border-color:var(--dark); }
+  .trace-word {
+    text-align:center;
+    font-size:3rem;
+    font-weight:900;
+    color:#E5E7EB;
+    pointer-events:none;
+    user-select:none;
+    line-height:1;
+    margin-bottom:8px;
+  }
+
+  /* ===== PROGRESS SCREEN ===== */
+  .progress-chart {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
+    gap:10px;
+  }
+  .progress-unit {
+    background:var(--light);
+    border-radius:14px;
+    padding:12px 8px;
+    text-align:center;
+    border:2px solid transparent;
+    transition:all 0.3s;
+  }
+  .progress-unit.done { border-color:var(--success); background:#D1FAE5; }
+  .progress-unit-name { font-size:0.75rem; font-weight:800; color:var(--dark); }
+  .progress-bar-v {
+    height:8px; background:#E5E7EB; border-radius:4px; margin-top:6px;
+  }
+  .progress-bar-v-fill {
+    height:100%; border-radius:4px;
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+    transition:width 0.8s;
+  }
+  .progress-pct { font-size:0.7rem; color:var(--muted); margin-top:4px; }
+
+  /* ===== ANIMATIONS ===== */
+  .slide-in { animation: slideIn 0.4s ease; }
+  @keyframes slideIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+  .bounce { animation: bounce 0.6s; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+  /* ===== FEEDBACK OVERLAY ===== */
+  .feedback-overlay {
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    z-index:999; pointer-events:none;
+    opacity:0; transition:opacity 0.3s;
+  }
+  .feedback-overlay.show { opacity:1; }
+  .feedback-big {
+    font-size:5rem;
+    animation: feedbackPop 1.5s ease forwards;
+  }
+  @keyframes feedbackPop {
+    0%{transform:scale(0) rotate(-10deg); opacity:1}
+    50%{transform:scale(1.3) rotate(5deg); opacity:1}
+    80%{opacity:1}
+    100%{transform:scale(1) rotate(0); opacity:0}
+  }
+
+  /* ===== CONFETTI ===== */
+  .confetti-container {
+    position:fixed; inset:0; pointer-events:none; z-index:998; overflow:hidden;
+  }
+  .confetti-piece {
+    position:absolute; width:10px; height:10px;
+    border-radius:2px;
+    animation: confettiFall 2s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    0%{transform:translateY(-20px) rotate(0); opacity:1}
+    100%{transform:translateY(100vh) rotate(720deg); opacity:0}
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:480px) {
+    .vocab-grid { grid-template-columns:repeat(2,1fr); }
+    .options-grid { grid-template-columns:1fr; }
+    .phonics-words { grid-template-columns:1fr; }
+    .games-grid { grid-template-columns:repeat(2,1fr); }
+  }
+  
+  /* ===== TOOLTIP ===== */
+  .tip {
+    background:var(--dark); color:#fff;
+    border-radius:8px; padding:4px 10px;
+    font-size:0.7rem; display:inline-block; margin-top:6px;
+  }
+
+  /* ===== STREAK ===== */
+  .streak-badge {
+    background:linear-gradient(135deg,#FF6B35,#FFE66D);
+    color:#fff; border-radius:50px;
+    padding:4px 12px; font-size:0.75rem; font-weight:800;
+    display:inline-flex; align-items:center; gap:4px;
+  }
+
+  /* Scrollable area */
+  .scroll-area { overflow-y:auto; max-height:calc(100vh - 200px); }
+
+  .listen-btn-large {
+    width:100px; height:100px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(135deg,var(--secondary),#38B2AC);
+    color:#fff; font-size:3rem;
+    cursor:pointer;
+    transition:all 0.3s;
+    box-shadow:0 8px 24px rgba(78,205,196,0.4);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto;
+  }
+  .listen-btn-large:hover { transform:scale(1.1); }
+  .listen-btn-large.playing { animation:speakerPulse 0.8s infinite; }
+  @keyframes speakerPulse {
+    0%,100%{box-shadow:0 0 0 0 rgba(78,205,196,0.5)}
+    50%{box-shadow:0 0 0 20px rgba(78,205,196,0)}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="feedback-overlay" id="feedbackOverlay"><span class="feedback-big" id="feedbackBig"></span></div>
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">🦊</div>
+    <div class="header-title">
+      <h1>i-Learn Smart Start 1</h1>
+      <p>Học Tiếng Anh Lớp 1 🎉</p>
+    </div>
+    <div class="header-stars">
+      <span style="font-size:1.3rem">⭐</span>
+      <span class="star-count" id="totalStars">0</span>
+      <div class="streak-badge" id="streakBadge">🔥 1</div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('home')" data-screen="home">
+      <span class="tab-icon">🏠</span> Trang chủ
+    </button>
+    <button class="nav-tab" onclick="showScreen('lessons')" data-screen="lessons">
+      <span class="tab-icon">📚</span> Bài học
+    </button>
+    <button class="nav-tab" onclick="showScreen('phonics')" data-screen="phonics">
+      <span class="tab-icon">🔤</span> Phonics
+    </button>
+    <button class="nav-tab" onclick="showScreen('games')" data-screen="games">
+      <span class="tab-icon">🎮</span> Trò chơi
+    </button>
+    <button class="nav-tab" onclick="showScreen('progress')" data-screen="progress">
+      <span class="tab-icon">📊</span> Tiến độ
+    </button>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div id="screen-home" class="screen active slide-in">
+    <div class="card">
+      <div style="text-align:center; padding:10px 0 20px">
+        <div style="font-size:4rem; margin-bottom:12px">👋🌟</div>
+        <h2 style="font-size:1.5rem; font-weight:900; color:var(--dark)">Xin chào bạn nhỏ!</h2>
+        <p style="color:var(--muted); margin-top:6px">Hôm nay mình học tiếng Anh nào? 🎈</p>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px">
+        <div style="background:linear-gradient(135deg,#FF6B35,#FF8C42); border-radius:16px; padding:16px; color:#fff; cursor:pointer" onclick="showScreen('lessons')">
+          <div style="font-size:2rem">📚</div>
+          <div style="font-weight:800; margin-top:6px">Bài học</div>
+          <div style="font-size:0.75rem; opacity:0.85">10 Units</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#4ECDC4,#44A6A0); border-radius:16px; padding:16px; color:#fff; cursor:pointer" onclick="showScreen('games')">
+          <div style="font-size:2rem">🎮</div>
+          <div style="font-weight:800; margin-top:6px">Trò chơi</div>
+          <div style="font-size:0.75rem; opacity:0.85">8 Games</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#A78BFA,#8B5CF6); border-radius:16px; padding:16px; color:#fff; cursor:pointer" onclick="showScreen('phonics')">
+          <div style="font-size:2rem">🔤</div>
+          <div style="font-weight:800; margin-top:6px">Phonics A-M</div>
+          <div style="font-size:0.75rem; opacity:0.85">13 chữ cái</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#F59E0B,#D97706); border-radius:16px; padding:16px; color:#fff; cursor:pointer" onclick="showScreen('progress')">
+          <div style="font-size:2rem">🏆</div>
+          <div style="font-weight:800; margin-top:6px">Thành tích</div>
+          <div style="font-size:0.75rem; opacity:0.85; font-weight:600" id="homeProgressText">0% hoàn thành</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#FEF3C7,#FDE68A); border-radius:16px; padding:14px; display:flex; align-items:center; gap:12px">
+        <span style="font-size:2rem">💡</span>
+        <div>
+          <div style="font-weight:800; color:#92400E; font-size:0.9rem">Mẹo học tốt</div>
+          <div style="color:#B45309; font-size:0.8rem" id="dailyTip">Luyện nói to và rõ ràng mỗi ngày nhé!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick lesson -->
+    <div class="card">
+      <div class="card-title">⚡ Ôn tập nhanh</div>
+      <div id="quickReview" style="text-align:center">
+        <div style="font-size:3rem" id="qrWord">mother</div>
+        <div style="font-size:1.2rem; color:var(--muted); margin:8px 0" id="qrVi">mẹ</div>
+        <button class="btn-listen" onclick="speakWord(document.getElementById('qrWord').innerText)" style="background:var(--primary); border-color:var(--primary)">
+          🔊 Nghe
+        </button>
+        <button class="btn-primary" onclick="nextQuickReview()" style="margin-left:8px">Từ tiếp ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSONS SCREEN -->
+  <div id="screen-lessons" class="screen slide-in">
+    <div id="lessons-list-view">
+      <div class="card">
+        <div class="card-title">📚 Chọn bài học</div>
+        <div class="unit-grid" id="unitGrid"></div>
+      </div>
+    </div>
+
+    <!-- LESSON DETAIL -->
+    <div id="lesson-detail" style="display:none">
+      <div class="card">
+        <div class="lesson-header">
+          <button class="btn-back" onclick="showLessonList()">←</button>
+          <div>
+            <div class="card-title" style="margin-bottom:0" id="lessonTitle">Unit 1 - Family</div>
+            <div style="color:var(--muted); font-size:0.8rem" id="lessonSub"></div>
+          </div>
+        </div>
+        <div class="skill-tabs">
+          <button class="skill-tab active" onclick="showSkill('vocab',this)">📖 Từ vựng</button>
+          <button class="skill-tab" onclick="showSkill('pattern',this)">💬 Mẫu câu</button>
+          <button class="skill-tab" onclick="showSkill('listen',this)">👂 Nghe</button>
+          <button class="skill-tab" onclick="showSkill('speak',this)">🗣 Nói</button>
+          <button class="skill-tab" onclick="showSkill('write',this)">✍ Viết</button>
+          <button class="skill-tab" onclick="showSkill('quiz',this)">📝 Kiểm tra</button>
+        </div>
+
+        <!-- VOCAB -->
+        <div id="skill-vocab">
+          <div class="vocab-grid" id="vocabGrid"></div>
+        </div>
+
+        <!-- PATTERN -->
+        <div id="skill-pattern" style="display:none">
+          <div id="patternContent"></div>
+        </div>
+
+        <!-- LISTEN -->
+        <div id="skill-listen" style="display:none">
+          <div id="listenContent" style="text-align:center; padding:20px">
+            <p style="color:var(--muted); margin-bottom:20px">Nhấn nút để nghe câu tiếng Anh rồi chọn đáp án đúng</p>
+            <div id="listenExercise"></div>
+          </div>
+        </div>
+
+        <!-- SPEAK -->
+        <div id="skill-speak" style="display:none">
+          <div class="speak-area">
+            <div class="speak-phrase" id="speakPhrase">mother</div>
+            <p style="color:var(--muted); margin-bottom:16px; font-size:0.85rem">Nghe xong, bấm 🎤 và đọc theo!</p>
+            <button class="listen-btn-large" id="listenFirst" onclick="listenAndPrepare()">🔊</button>
+            <p style="margin-top:12px; color:var(--muted); font-size:0.8rem" id="listenStatus">Nhấn để nghe mẫu</p>
+            <div style="margin-top:20px">
+              <button class="btn-mic" id="micBtn" onclick="startSpeaking()">🎤</button>
+              <p style="margin-top:8px; color:var(--muted); font-size:0.8rem" id="micStatus">Sẵn sàng nói</p>
+            </div>
+            <div class="speak-feedback" id="speakFeedback"></div>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div style="margin-top:16px">
+              <button class="btn-secondary" onclick="nextSpeakPhrase()">Câu tiếp theo ▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WRITE -->
+        <div id="skill-write" style="display:none">
+          <div style="text-align:center">
+            <div id="writeTarget" class="trace-word"></div>
+            <div class="writing-tools">
+              <span style="font-size:0.8rem; color:var(--muted)">Màu:</span>
+              <div class="color-swatch active" style="background:#1E1B4B" onclick="setColor('#1E1B4B',this)"></div>
+              <div class="color-swatch" style="background:#FF6B35" onclick="setColor('#FF6B35',this)"></div>
+              <div class="color-swatch" style="background:#4ECDC4" onclick="setColor('#4ECDC4',this)"></div>
+              <div class="color-swatch" style="background:#A78BFA" onclick="setColor('#A78BFA',this)"></div>
+              <span style="font-size:0.8rem; color:var(--muted)">Size:</span>
+              <button class="size-btn active" onclick="setSize(4,this)">S</button>
+              <button class="size-btn" onclick="setSize(8,this)">M</button>
+              <button class="size-btn" onclick="setSize(14,this)">L</button>
+              <button class="btn-secondary" onclick="clearCanvas()" style="padding:4px 12px; font-size:0.75rem; margin-left:auto">🗑 Xóa</button>
+            </div>
+            <canvas id="writeCanvas" class="writing-canvas" height="220"></canvas>
+            <div style="margin-top:12px">
+              <button class="btn-primary" onclick="checkWriting()">✅ Kiểm tra</button>
+              <button class="btn-secondary" onclick="nextWriteWord()">Từ tiếp ▶</button>
+            </div>
+            <div id="writeFeedback" style="margin-top:12px; font-weight:700; font-size:1rem"></div>
+          </div>
+        </div>
+
+        <!-- QUIZ -->
+        <div id="skill-quiz" style="display:none">
+          <div id="quizContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONICS SCREEN -->
+  <div id="screen-phonics" class="screen slide-in">
+    <div class="card">
+      <div class="card-title">🔤 Phonics A - M</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(70px,1fr)); gap:10px; margin-bottom:20px" id="phonicsLetterGrid"></div>
+    </div>
+    <div class="card" id="phonicsDetail" style="display:none">
+      <div id="phonicsDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- GAMES SCREEN -->
+  <div id="screen-games" class="screen slide-in">
+    <div id="games-list">
+      <div class="card">
+        <div class="card-title">🎮 Chọn trò chơi</div>
+        <div class="games-grid" id="gamesGrid"></div>
+      </div>
+    </div>
+    <div id="game-area" style="display:none"></div>
+  </div>
+
+  <!-- PROGRESS SCREEN -->
+  <div id="screen-progress" class="screen slide-in">
+    <div class="card">
+      <div class="card-title">🏆 Thành tích của bạn</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px">
+        <div style="background:linear-gradient(135deg,#FEF3C7,#FDE68A); border-radius:14px; padding:14px; text-align:center">
+          <div style="font-size:1.8rem; font-weight:900; color:#92400E" id="progStars">0</div>
+          <div style="font-size:0.75rem; color:#B45309; font-weight:700">⭐ Sao</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0); border-radius:14px; padding:14px; text-align:center">
+          <div style="font-size:1.8rem; font-weight:900; color:#065F46" id="progUnits">0</div>
+          <div style="font-size:0.75rem; color:#047857; font-weight:700">📚 Units</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE); border-radius:14px; padding:14px; text-align:center">
+          <div style="font-size:1.8rem; font-weight:900; color:#4C1D95" id="progGames">0</div>
+          <div style="font-size:0.75rem; color:#6D28D9; font-weight:700">🎮 Games</div>
+        </div>
+      </div>
+      <div class="card-title">📈 Tiến độ từng Unit</div>
+      <div class="progress-chart" id="progressChart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎖 Huy hiệu</div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px" id="badgeArea"></div>
+    </div>
+  </div>
+
+</div><!-- end app -->
+
+<script>
+// ===== DATA =====
+const UNITS = [
+  {
+    id:1, name:"Family", emoji:"👨‍👩‍👧", color:"linear-gradient(135deg,#FF6B35,#FF8C42)",
+    vocab:[
+      {word:"mother",vi:"mẹ",emoji:"👩",pron:"/ˈmʌðər/"},
+      {word:"father",vi:"bố, ba",emoji:"👨",pron:"/ˈfɑːðər/"},
+      {word:"brother",vi:"anh, em trai",emoji:"👦",pron:"/ˈbrʌðər/"},
+      {word:"sister",vi:"chị, em gái",emoji:"👧",pron:"/ˈsɪstər/"},
+    ],
+    patterns:["This is my (mother).", "Nice to meet you.", "Nice to meet you, too."],
+    phrases:["This is my mother.", "This is my father.", "Nice to meet you."]
+  },
+  {
+    id:2, name:"School", emoji:"🎒", color:"linear-gradient(135deg,#4ECDC4,#44A6A0)",
+    vocab:[
+      {word:"pencil",vi:"bút chì",emoji:"✏️",pron:"/ˈpensl/"},
+      {word:"book",vi:"quyển sách",emoji:"📚",pron:"/bʊk/"},
+      {word:"bag",vi:"cặp sách, túi",emoji:"🎒",pron:"/bæɡ/"},
+    ],
+    patterns:["It's a (pencil).", "It's a (book)."],
+    phrases:["It's a pencil.", "It's a book.", "It's a bag."]
+  },
+  {
+    id:3, name:"Colors", emoji:"🎨", color:"linear-gradient(135deg,#A78BFA,#8B5CF6)",
+    vocab:[
+      {word:"red",vi:"màu đỏ",emoji:"🔴",pron:"/red/"},
+      {word:"yellow",vi:"màu vàng",emoji:"🟡",pron:"/ˈjeloʊ/"},
+      {word:"blue",vi:"màu xanh dương",emoji:"🔵",pron:"/bluː/"},
+      {word:"pink",vi:"màu hồng",emoji:"🩷",pron:"/pɪŋk/"},
+      {word:"white",vi:"màu trắng",emoji:"⚪",pron:"/waɪt/"},
+      {word:"flower",vi:"hoa",emoji:"🌸",pron:"/ˈflaʊər/"},
+    ],
+    patterns:["It's (red).", "It's a (pink) flower.", "Thank you.", "You're welcome."],
+    phrases:["It's red.", "It's a pink flower.", "Thank you.", "You're welcome."]
+  },
+  {
+    id:4, name:"My Body", emoji:"🙋", color:"linear-gradient(135deg,#F59E0B,#D97706)",
+    vocab:[
+      {word:"head",vi:"đầu",emoji:"🗣️",pron:"/hed/"},
+      {word:"leg",vi:"chân",emoji:"🦵",pron:"/leɡ/"},
+      {word:"arm",vi:"cánh tay",emoji:"💪",pron:"/ɑːrm/"},
+    ],
+    patterns:["Touch your (head).", "Touch your (leg)."],
+    phrases:["Touch your head.", "Touch your leg.", "Touch your arm."]
+  },
+  {
+    id:5, name:"Animals", emoji:"🐾", color:"linear-gradient(135deg,#10B981,#059669)",
+    vocab:[
+      {word:"cat",vi:"con mèo",emoji:"🐱",pron:"/kæt/"},
+      {word:"dog",vi:"con chó",emoji:"🐶",pron:"/dɔːɡ/"},
+      {word:"bird",vi:"con chim",emoji:"🐦",pron:"/bɜːrd/"},
+      {word:"monkey",vi:"con khỉ",emoji:"🐒",pron:"/ˈmʌŋki/"},
+      {word:"snake",vi:"con rắn",emoji:"🐍",pron:"/sneɪk/"},
+      {word:"bear",vi:"con gấu",emoji:"🐻",pron:"/beər/"},
+    ],
+    patterns:["I like (cats).", "This is a (monkey).", "I'm sorry.", "That's OK."],
+    phrases:["I like cats.", "I like dogs.", "This is a monkey.", "I'm sorry."]
+  },
+  {
+    id:6, name:"Activities", emoji:"⚽", color:"linear-gradient(135deg,#EF4444,#DC2626)",
+    vocab:[
+      {word:"swim",vi:"bơi",emoji:"🏊",pron:"/swɪm/"},
+      {word:"sing",vi:"hát",emoji:"🎤",pron:"/sɪŋ/"},
+      {word:"run",vi:"chạy",emoji:"🏃",pron:"/rʌn/"},
+    ],
+    patterns:["I can (run).", "I can swim."],
+    phrases:["I can swim.", "I can sing.", "I can run."]
+  },
+  {
+    id:7, name:"Numbers", emoji:"🔢", color:"linear-gradient(135deg,#8B5CF6,#7C3AED)",
+    vocab:[
+      {word:"one",vi:"số một",emoji:"1️⃣",pron:"/wʌn/"},
+      {word:"two",vi:"số hai",emoji:"2️⃣",pron:"/tuː/"},
+      {word:"three",vi:"số ba",emoji:"3️⃣",pron:"/θriː/"},
+      {word:"four",vi:"số bốn",emoji:"4️⃣",pron:"/fɔːr/"},
+      {word:"five",vi:"số năm",emoji:"5️⃣",pron:"/faɪv/"},
+      {word:"six",vi:"số sáu",emoji:"6️⃣",pron:"/sɪks/"},
+    ],
+    patterns:["(Vinh)'s (six).", "How old are you?", "I'm (six)."],
+    phrases:["How old are you?", "I'm six.", "Vinh's six."]
+  },
+  {
+    id:8, name:"Food", emoji:"🍌", color:"linear-gradient(135deg,#F59E0B,#B45309)",
+    vocab:[
+      {word:"banana",vi:"quả chuối",emoji:"🍌",pron:"/bəˈnænə/"},
+      {word:"cookie",vi:"bánh quy",emoji:"🍪",pron:"/ˈkʊki/"},
+      {word:"sandwich",vi:"bánh mì kẹp",emoji:"🥪",pron:"/ˈsænwɪtʃ/"},
+    ],
+    patterns:["I want a (banana)."],
+    phrases:["I want a banana.", "I want a cookie.", "I want a sandwich."]
+  },
+  {
+    id:9, name:"Toys", emoji:"🧸", color:"linear-gradient(135deg,#EC4899,#BE185D)",
+    vocab:[
+      {word:"car",vi:"xe hơi",emoji:"🚗",pron:"/kɑːr/"},
+      {word:"teddy bear",vi:"gấu bông",emoji:"🧸",pron:"/ˈtedi beər/"},
+      {word:"ball",vi:"quả bóng",emoji:"⚽",pron:"/bɔːl/"},
+      {word:"seven",vi:"số bảy",emoji:"7️⃣",pron:"/ˈsevn/"},
+      {word:"eight",vi:"số tám",emoji:"8️⃣",pron:"/eɪt/"},
+      {word:"nine",vi:"số chín",emoji:"9️⃣",pron:"/naɪn/"},
+      {word:"ten",vi:"số mười",emoji:"🔟",pron:"/ten/"},
+    ],
+    patterns:["I have a (car).", "How many (cars)?", "(Seven) (cars)."],
+    phrases:["I have a car.", "How many cars?", "Seven cars."]
+  },
+  {
+    id:10, name:"My House", emoji:"🏠", color:"linear-gradient(135deg,#0EA5E9,#0284C7)",
+    vocab:[
+      {word:"living room",vi:"phòng khách",emoji:"🛋️",pron:"/ˈlɪvɪŋ ruːm/"},
+      {word:"kitchen",vi:"nhà bếp",emoji:"🍳",pron:"/ˈkɪtʃɪn/"},
+      {word:"bedroom",vi:"phòng ngủ",emoji:"🛏️",pron:"/ˈbedruːm/"},
+    ],
+    patterns:["This is my (living room)."],
+    phrases:["This is my living room.", "This is my kitchen.", "This is my bedroom."]
+  }
+];
+
+const PHONICS_DATA = [
+  {letter:"A", words:[{word:"ant",vi:"con kiến",emoji:"🐜"},{word:"apple",vi:"quả táo",emoji:"🍎"}]},
+  {letter:"B", words:[{word:"boy",vi:"cậu bé",emoji:"👦"},{word:"ball",vi:"quả bóng",emoji:"⚽"}]},
+  {letter:"C", words:[{word:"cap",vi:"mũ lưỡi trai",emoji:"🧢"},{word:"cat",vi:"con mèo",emoji:"🐱"}]},
+  {letter:"D", words:[{word:"door",vi:"cánh cửa",emoji:"🚪"},{word:"dog",vi:"con chó",emoji:"🐶"}]},
+  {letter:"E", words:[{word:"elephant",vi:"con voi",emoji:"🐘"},{word:"egg",vi:"quả trứng",emoji:"🥚"}]},
+  {letter:"F", words:[{word:"food",vi:"thức ăn",emoji:"🍽️"},{word:"fish",vi:"con cá",emoji:"🐟"}]},
+  {letter:"G", words:[{word:"girl",vi:"cô bé",emoji:"👧"},{word:"grape",vi:"nho",emoji:"🍇"}]},
+  {letter:"H", words:[{word:"hop",vi:"nhảy lò cò",emoji:"🏃"},{word:"hat",vi:"mũ",emoji:"🎩"}]},
+  {letter:"I", words:[{word:"insect",vi:"côn trùng",emoji:"🐛"},{word:"ink",vi:"mực",emoji:"✒️"}]},
+  {letter:"J", words:[{word:"jump",vi:"nhảy",emoji:"🤸"},{word:"juice",vi:"nước ép",emoji:"🥤"}]},
+  {letter:"K", words:[{word:"kick",vi:"đá",emoji:"⚽"},{word:"kite",vi:"con diều",emoji:"🪁"}]},
+  {letter:"L", words:[{word:"love",vi:"yêu, thương",emoji:"❤️"},{word:"leaf",vi:"chiếc lá",emoji:"🍃"}]},
+  {letter:"M", words:[{word:"mouse",vi:"con chuột",emoji:"🐭"},{word:"mouth",vi:"miệng",emoji:"👄"}]},
+];
+
+const GAMES_LIST = [
+  {id:"mcq", name:"Hỏi & Đáp", emoji:"❓", desc:"Chọn đáp án đúng", color:"linear-gradient(135deg,#FF6B35,#FF8C42)", diff:"Dễ"},
+  {id:"match", name:"Ghép Thẻ", emoji:"🃏", desc:"Lật thẻ ghép cặp", color:"linear-gradient(135deg,#4ECDC4,#44A6A0)", diff:"Trung bình"},
+  {id:"spell", name:"Đánh Vần", emoji:"🔤", desc:"Sắp xếp chữ cái", color:"linear-gradient(135deg,#A78BFA,#8B5CF6)", diff:"Khó"},
+  {id:"listen", name:"Nghe - Chọn", emoji:"👂", desc:"Nghe rồi chọn ảnh", color:"linear-gradient(135deg,#10B981,#059669)", diff:"Dễ"},
+  {id:"color", name:"Đố Màu Sắc", emoji:"🎨", desc:"Chọn màu đúng", color:"linear-gradient(135deg,#F59E0B,#D97706)", diff:"Dễ"},
+  {id:"number", name:"Đếm Số", emoji:"🔢", desc:"Đếm và chọn số", color:"linear-gradient(135deg,#EC4899,#BE185D)", diff:"Dễ"},
+  {id:"sentence", name:"Ghép Câu", emoji:"📝", desc:"Xếp từ thành câu", color:"linear-gradient(135deg,#0EA5E9,#0284C7)", diff:"Khó"},
+  {id:"flash", name:"Flashcard", emoji:"⚡", desc:"Học từ vựng nhanh", color:"linear-gradient(135deg,#EF4444,#DC2626)", diff:"Dễ"},
+];
+
+const TIPS = [
+  "Luyện nói to và rõ ràng mỗi ngày nhé!",
+  "Hát bài hát tiếng Anh giúp nhớ từ rất nhanh! 🎵",
+  "Nhìn vào đồ vật và nói tên tiếng Anh của nó!",
+  "Học 5 từ mới mỗi ngày là đủ rồi bạn ơi!",
+  "Đừng sợ sai - cứ nói thử thôi! 💪",
+];
+
+// ===== STATE =====
+let state = {
+  stars: parseInt(localStorage.getItem('stars')||0),
+  streak: parseInt(localStorage.getItem('streak')||1),
+  completedUnits: JSON.parse(localStorage.getItem('completedUnits')||'[]'),
+  unitProgress: JSON.parse(localStorage.getItem('unitProgress')||'{}'),
+  gamesPlayed: parseInt(localStorage.getItem('gamesPlayed')||0),
+  currentUnit: null,
+  currentSkill: 'vocab',
+  speakIndex: 0,
+  writeIndex: 0,
+  quizQ: 0,
+  quizScore: 0,
+  quizAnswers: [],
+  drawColor: '#1E1B4B',
+  drawSize: 4,
+  isDrawing: false,
+  lastX: 0, lastY: 0,
+  qrIndex: 0,
+};
+
+function saveState() {
+  localStorage.setItem('stars', state.stars);
+  localStorage.setItem('streak', state.streak);
+  localStorage.setItem('completedUnits', JSON.stringify(state.completedUnits));
+  localStorage.setItem('unitProgress', JSON.stringify(state.unitProgress));
+  localStorage.setItem('gamesPlayed', state.gamesPlayed);
+}
+
+// ===== STARS BG =====
+function initStars() {
+  const container = document.getElementById('stars');
+  for(let i=0;i<30;i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      width:${Math.random()*4+2}px; height:${Math.random()*4+2}px;
+      left:${Math.random()*100}%; top:${Math.random()*100}%;
+      animation-delay:${Math.random()*3}s; animation-duration:${2+Math.random()*3}s;
+    `;
+    container.appendChild(s);
+  }
+}
+
+// ===== SCREEN NAVIGATION =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const screen = document.getElementById('screen-'+name);
+  if(screen) { screen.classList.add('active'); screen.classList.add('slide-in'); }
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    if(t.dataset.screen === name) t.classList.add('active');
+  });
+  if(name==='progress') updateProgress();
+  if(name==='games') document.getElementById('games-list').style.display='block', document.getElementById('game-area').style.display='none';
+}
+
+// ===== INIT UNIT GRID =====
+function initUnitGrid() {
+  const grid = document.getElementById('unitGrid');
+  grid.innerHTML = UNITS.map(u => `
+    <div class="unit-card ${state.completedUnits.includes(u.id)?'completed':''}" 
+         style="background:${u.color}" onclick="openUnit(${u.id})">
+      <span class="unit-emoji">${u.emoji}</span>
+      <div class="unit-name">${u.name}</div>
+      <div class="unit-sub">Unit ${u.id}</div>
+      <div class="unit-prog"><div class="unit-prog-bar" style="width:${state.unitProgress[u.id]||0}%"></div></div>
+    </div>
+  `).join('');
+}
+
+function openUnit(id) {
+  state.currentUnit = UNITS.find(u=>u.id===id);
+  document.getElementById('lessons-list-view').style.display='none';
+  document.getElementById('lesson-detail').style.display='block';
+  document.getElementById('lessonTitle').textContent = `Unit ${id} - ${state.currentUnit.name}`;
+  document.getElementById('lessonSub').textContent = state.currentUnit.patterns[0];
+  showSkill('vocab', document.querySelector('.skill-tab'));
+}
+
+function showLessonList() {
+  document.getElementById('lessons-list-view').style.display='block';
+  document.getElementById('lesson-detail').style.display='none';
+  initUnitGrid();
+}
+
+// ===== SKILL TABS =====
+function showSkill(skill, btn) {
+  state.currentSkill = skill;
+  document.querySelectorAll('[id^="skill-"]').forEach(el => el.style.display='none');
+  document.getElementById('skill-'+skill).style.display='block';
+  document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  
+  const u = state.currentUnit;
+  if(skill==='vocab') renderVocab();
+  else if(skill==='pattern') renderPattern();
+  else if(skill==='listen') renderListen();
+  else if(skill==='speak') renderSpeak();
+  else if(skill==='write') renderWrite();
+  else if(skill==='quiz') renderQuiz();
+}
+
+// ===== VOCAB =====
+function renderVocab() {
+  const u = state.currentUnit;
+  document.getElementById('vocabGrid').innerHTML = u.vocab.map((v,i) => `
+    <div class="vocab-card" onclick="playVocab('${v.word}',${i})" id="vc${i}">
+      <span class="vocab-play">🔊</span>
+      <span class="vocab-emoji">${v.emoji}</span>
+      <div class="vocab-word">${v.word}</div>
+      <div class="vocab-pron">${v.pron}</div>
+      <div class="vocab-vi">${v.vi}</div>
+    </div>
+  `).join('');
+}
+
+function playVocab(word, idx) {
+  const card = document.getElementById('vc'+idx);
+  card.classList.add('playing');
+  setTimeout(()=>card.classList.remove('playing'),600);
+  speakWord(word);
+}
+
+// ===== PATTERN =====
+function renderPattern() {
+  const u = state.currentUnit;
+  document.getElementById('patternContent').innerHTML = u.patterns.map((p,i) => `
+    <div class="pattern-box">
+      <div class="pattern-text">${p}</div>
+      <div class="pattern-ex">${getPatternExample(u,i)}</div>
+      <button class="btn-listen" onclick="speakWord('${p.replace(/[()]/g,'')}')" >🔊 Nghe mẫu</button>
+    </div>
+  `).join('');
+}
+
+function getPatternExample(u, i) {
+  const ex = {
+    0: `A: "${u.patterns[i].replace(/\(|\)/g,'')}" `,
+    1: u.vocab[0] ? `Ví dụ: "${u.patterns[i].replace('('+Object.keys(u.vocab[0]||{})[0]+')', u.vocab[0]?.word)}"` : '',
+  };
+  return ex[i] || 'Hãy luyện tập với bạn bè!';
+}
+
+// ===== LISTEN EXERCISE =====
+function renderListen() {
+  const u = state.currentUnit;
+  const allWords = UNITS.flatMap(un=>un.vocab);
+  let idx = 0;
+  
+  function nextListenQ() {
+    const correct = u.vocab[idx % u.vocab.length];
+    const wrong = allWords.filter(w=>w.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+    const options = [...wrong, correct].sort(()=>Math.random()-0.5);
+    
+    document.getElementById('listenExercise').innerHTML = `
+      <button class="listen-btn-large" id="listenPlayBtn" onclick="speakWord('${correct.word}'); this.classList.add('playing'); setTimeout(()=>this.classList.remove('playing'),1500)">🔊</button>
+      <p style="margin:16px 0; color:var(--muted)">Nghe xong, chọn hình đúng:</p>
+      <div class="options-grid">
+        ${options.map(o=>`
+          <button class="option-btn" onclick="checkListenAnswer(this,'${o.word}','${correct.word}')">
+            <span style="font-size:2rem">${o.emoji}</span>
+            <span>${o.word}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    speakWord(correct.word);
+  }
+  
+  window.checkListenAnswer = function(btn, chosen, correct) {
+    document.querySelectorAll('.option-btn').forEach(b=>b.onclick=null);
+    if(chosen===correct) {
+      btn.classList.add('correct');
+      showFeedback('🌟');
+      addStars(1);
+      confetti();
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.option-btn').forEach(b=>{
+        if(b.textContent.includes(correct)) b.classList.add('correct');
+      });
+      showFeedback('💪');
+    }
+    idx++;
+    setTimeout(nextListenQ, 1800);
+  };
+  
+  nextListenQ();
+}
+
+// ===== SPEAK =====
+function renderSpeak() {
+  const u = state.currentUnit;
+  state.speakIndex = 0;
+  updateSpeakPhrase();
+}
+
+function updateSpeakPhrase() {
+  const u = state.currentUnit;
+  const phrases = u.phrases;
+  document.getElementById('speakPhrase').textContent = phrases[state.speakIndex % phrases.length];
+  document.getElementById('speakFeedback').style.display='none';
+  document.getElementById('speakFeedback').className='speak-feedback';
+  document.getElementById('scoreDisplay').innerHTML='';
+  document.getElementById('micStatus').textContent='Sẵn sàng nói';
+  document.getElementById('listenStatus').textContent='Nhấn để nghe mẫu';
+}
+
+function listenAndPrepare() {
+  const phrase = document.getElementById('speakPhrase').textContent;
+  speakWord(phrase);
+  document.getElementById('listenStatus').textContent='Đang phát âm... 🔊';
+  setTimeout(()=>document.getElementById('listenStatus').textContent='Giờ đến lượt bạn nói!',2000);
+}
+
+function startSpeaking() {
+  const micBtn = document.getElementById('micBtn');
+  const feedback = document.getElementById('speakFeedback');
+  
+  if(!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    // Simulate for devices without speech API
+    micBtn.classList.add('recording');
+    document.getElementById('micStatus').textContent='Đang ghi âm...';
+    setTimeout(()=>{
+      micBtn.classList.remove('recording');
+      const good = Math.random() > 0.3;
+      if(good) {
+        feedback.className='speak-feedback good';
+        feedback.textContent='🌟 Tuyệt vời! Phát âm rất chuẩn!';
+        addStars(2);
+        showFeedback('⭐');
+        confetti();
+      } else {
+        feedback.className='speak-feedback bad';
+        feedback.textContent='💪 Thử lại nhé! Nghe mẫu rồi nói lại!';
+      }
+      feedback.style.display='block';
+      showStarScore(good?3:1);
+      document.getElementById('micStatus').textContent='Hoàn thành!';
+    }, 2000);
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  
+  micBtn.classList.add('recording');
+  document.getElementById('micStatus').textContent='Đang nghe... 🎤';
+  rec.start();
+  
+  rec.onresult = (e) => {
+    const said = e.results[0][0].transcript.toLowerCase().trim();
+    const target = document.getElementById('speakPhrase').textContent.toLowerCase().replace(/[.!?,]/g,'').trim();
+    const similarity = calcSimilarity(said, target);
+    
+    micBtn.classList.remove('recording');
+    document.getElementById('micStatus').textContent='Xong! Bạn nói: "'+said+'"';
+    
+    if(similarity >= 0.6) {
+      feedback.className='speak-feedback good';
+      feedback.textContent='🌟 Tuyệt vời! Rất chuẩn!';
+      addStars(3); showFeedback('🎉'); confetti();
+      showStarScore(3);
+    } else if(similarity >= 0.3) {
+      feedback.className='speak-feedback good';
+      feedback.textContent='👍 Khá tốt! Thử thêm lần nữa nhé!';
+      addStars(1); showFeedback('👍');
+      showStarScore(2);
+    } else {
+      feedback.className='speak-feedback bad';
+      feedback.textContent='💪 Hãy nghe mẫu và thử lại!';
+      showStarScore(1);
+    }
+    feedback.style.display='block';
+  };
+  
+  rec.onerror = () => {
+    micBtn.classList.remove('recording');
+    document.getElementById('micStatus').textContent='Thử lại nhé';
+  };
+}
+
+function calcSimilarity(a, b) {
+  const aWords = a.split(' ');
+  const bWords = b.split(' ');
+  const matches = aWords.filter(w => bWords.includes(w)).length;
+  return matches / Math.max(aWords.length, bWords.length);
+}
+
+function showStarScore(n) {
+  const d = document.getElementById('scoreDisplay');
+  d.innerHTML = [1,2,3].map(i=>`<span class="star-item ${i<=n?'earned':''}">
+    ${i<=n?'⭐':'☆'}</span>`).join('');
+  d.querySelectorAll('.earned').forEach((s,i)=>{
+    s.style.animationDelay = (i*0.2)+'s';
+  });
+}
+
+function nextSpeakPhrase() {
+  state.speakIndex++;
+  updateSpeakPhrase();
+}
+
+// ===== WRITE =====
+let ctx, canvas;
+function renderWrite() {
+  const u = state.currentUnit;
+  state.writeIndex = 0;
+  document.getElementById('writeTarget').textContent = u.vocab[0]?.word || '';
+  initCanvas();
+}
+
+function initCanvas() {
+  canvas = document.getElementById('writeCanvas');
+  canvas.width = canvas.offsetWidth || 300;
+  ctx = canvas.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  clearCanvas();
+
+  ['mousedown','touchstart'].forEach(e => canvas.addEventListener(e, startDraw, {passive:false}));
+  ['mousemove','touchmove'].forEach(e => canvas.addEventListener(e, draw, {passive:false}));
+  ['mouseup','touchend'].forEach(e => canvas.addEventListener(e, ()=>state.isDrawing=false));
+}
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  if(e.touches) return {x:e.touches[0].clientX-r.left, y:e.touches[0].clientY-r.top};
+  return {x:e.clientX-r.left, y:e.clientY-r.top};
+}
+
+function startDraw(e) {
+  e.preventDefault();
+  state.isDrawing = true;
+  const {x,y} = getPos(e);
+  state.lastX = x; state.lastY = y;
+}
+
+function draw(e) {
+  if(!state.isDrawing) return;
+  e.preventDefault();
+  const {x,y} = getPos(e);
+  ctx.strokeStyle = state.drawColor;
+  ctx.lineWidth = state.drawSize;
+  ctx.beginPath();
+  ctx.moveTo(state.lastX, state.lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  state.lastX = x; state.lastY = y;
+}
+
+function clearCanvas() {
+  if(!ctx) return;
+  ctx.fillStyle = '#FAFAFA';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  // Draw guide lines
+  ctx.strokeStyle = '#E5E7EB';
+  ctx.lineWidth = 1;
+  for(let y=40;y<canvas.height;y+=40) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+  }
+}
+
+function setColor(c, el) {
+  state.drawColor = c;
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setSize(s, el) {
+  state.drawSize = s;
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function checkWriting() {
+  const feedback = document.getElementById('writeFeedback');
+  const good = Math.random() > 0.3;
+  if(good) {
+    feedback.innerHTML='<span style="color:var(--success)">✅ Rất tốt! Chữ viết đẹp!</span>';
+    addStars(1); showFeedback('✏️'); confetti();
+  } else {
+    feedback.innerHTML='<span style="color:var(--warning)">📝 Hãy nhìn chữ mẫu và thử lại!</span>';
+  }
+}
+
+function nextWriteWord() {
+  const u = state.currentUnit;
+  state.writeIndex = (state.writeIndex+1) % u.vocab.length;
+  document.getElementById('writeTarget').textContent = u.vocab[state.writeIndex]?.word || '';
+  document.getElementById('writeFeedback').innerHTML='';
+  clearCanvas();
+}
+
+// ===== QUIZ =====
+function renderQuiz() {
+  state.quizQ = 0;
+  state.quizScore = 0;
+  runQuiz();
+}
+
+function runQuiz() {
+  const u = state.currentUnit;
+  const allWords = UNITS.flatMap(un=>un.vocab);
+  const questions = u.vocab.slice(0,Math.min(5,u.vocab.length));
+  
+  if(state.quizQ >= questions.length) {
+    showQuizResult();
+    return;
+  }
+  
+  const q = questions[state.quizQ];
+  const wrong = allWords.filter(w=>w.word!==q.word).sort(()=>Math.random()-0.5).slice(0,3);
+  const opts = [...wrong, q].sort(()=>Math.random()-0.5);
+  
+  document.getElementById('quizContent').innerHTML = `
+    <div class="game-progress">
+      <div class="game-progress-bar">
+        <div class="game-progress-fill" style="width:${(state.quizQ/questions.length)*100}%"></div>
+      </div>
+      <span class="game-score">⭐ ${state.quizScore}</span>
+    </div>
+    <div class="game-question">
+      <span class="q-image">${q.emoji}</span>
+      <div class="q-text">Từ "${q.word}" có nghĩa là gì?</div>
+    </div>
+    <div class="options-grid">
+      ${opts.map(o=>`
+        <button class="option-btn" onclick="answerQuiz(this,'${o.vi}','${q.vi}')">
+          ${o.emoji} ${o.vi}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function answerQuiz(btn, chosen, correct) {
+  document.querySelectorAll('.option-btn').forEach(b=>b.onclick=null);
+  if(chosen===correct) {
+    btn.classList.add('correct');
+    state.quizScore++;
+    showFeedback('⭐');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.option-btn').forEach(b=>{
+      if(b.textContent.includes(correct)) b.classList.add('correct');
+    });
+    showFeedback('💪');
+  }
+  state.quizQ++;
+  setTimeout(runQuiz, 1500);
+}
+
+function showQuizResult() {
+  const total = Math.min(5, state.currentUnit.vocab.length);
+  const pct = Math.round((state.quizScore/total)*100);
+  const stars = pct>=80?3:pct>=60?2:1;
+  addStars(state.quizScore * 2);
+  if(pct>=60) {
+    state.completedUnits.push(state.currentUnit.id);
+    state.unitProgress[state.currentUnit.id] = Math.max(state.unitProgress[state.currentUnit.id]||0, pct);
+  }
+  saveState();
+  if(pct>=80) confetti();
+  
+  document.getElementById('quizContent').innerHTML = `
+    <div class="result-screen">
+      <span class="result-emoji">${pct>=80?'🏆':pct>=60?'🎉':'💪'}</span>
+      <div class="result-title">${pct>=80?'Xuất sắc!':pct>=60?'Tốt lắm!':'Cố lên nhé!'}</div>
+      <div class="result-score">${state.quizScore}/${total}</div>
+      <div class="result-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+      <p style="color:var(--muted); margin:12px 0">${pct}% đúng</p>
+      <button class="btn-primary" onclick="renderQuiz()">🔄 Làm lại</button>
+      <button class="btn-secondary" onclick="showLessonList()">📚 Bài khác</button>
+    </div>
+  `;
+}
+
+// ===== PHONICS =====
+function initPhonics() {
+  const COLORS = ['#FF6B35','#4ECDC4','#A78BFA','#10B981','#F59E0B','#EC4899','#0EA5E9','#EF4444','#8B5CF6','#14B8A6','#F97316','#84CC16','#6366F1'];
+  const grid = document.getElementById('phonicsLetterGrid');
+  grid.innerHTML = PHONICS_DATA.map((p,i) => `
+    <div onclick="showPhonicsDetail(${i})" style="
+      background:${COLORS[i]};
+      border-radius:14px; padding:12px; text-align:center;
+      cursor:pointer; transition:all 0.3s; color:#fff;
+      box-shadow:0 4px 12px ${COLORS[i]}66;
+    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+      <div style="font-size:2rem; font-weight:900">${p.letter}${p.letter.toLowerCase()}</div>
+      <div style="font-size:0.65rem; opacity:0.85">${p.words[0].word}</div>
+    </div>
+  `).join('');
+}
+
+function showPhonicsDetail(idx) {
+  const p = PHONICS_DATA[idx];
+  const detail = document.getElementById('phonicsDetail');
+  detail.style.display='block';
+  detail.scrollIntoView({behavior:'smooth'});
+  
+  document.getElementById('phonicsDetailContent').innerHTML = `
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+      <div class="phonics-letter">${p.letter}</div>
+      <div>
+        <div style="font-size:1.5rem; font-weight:800; color:var(--dark)">${p.letter} / ${p.letter.toLowerCase()}</div>
+        <button class="btn-listen" onclick="speakWord('${p.letter}')" style="background:var(--primary); border-color:var(--primary)">
+          🔊 Nghe âm /${p.letter.toLowerCase()}/
+        </button>
+      </div>
+    </div>
+    <div class="phonics-words">
+      ${p.words.map(w=>`
+        <div class="phonics-word-card" onclick="speakWord('${w.word}')">
+          <span class="phonics-word-emoji">${w.emoji}</span>
+          <div>
+            <div class="phonics-word-text"><span>${p.letter.toLowerCase()}</span>${w.word.slice(1)}</div>
+            <div style="font-size:0.75rem; color:var(--muted)">${w.vi}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:20px; padding:16px; background:var(--light); border-radius:14px">
+      <div style="font-weight:800; color:var(--dark); margin-bottom:8px">🎵 Bài hát âm ${p.letter}:</div>
+      <div style="color:var(--muted); font-style:italic; line-height:1.8">
+        "I can see a ${p.words[0].emoji},<br>
+        ${p.letter.toLowerCase()}, ${p.letter.toLowerCase()}, ${p.words[0].emoji}.<br>
+        I can see a ${p.words[0].emoji},<br>
+        ${p.letter.toLowerCase()}, ${p.letter.toLowerCase()}, ${p.letter.toLowerCase()}."
+      </div>
+      <button class="btn-primary" onclick="speakWord('I can see a ${p.words[0].word}, ${p.letter.toLowerCase()}, ${p.letter.toLowerCase()}, ${p.words[0].word}')" style="margin-top:12px">
+        🔊 Hát nào!
+      </button>
+    </div>
+  `;
+}
+
+// ===== GAMES =====
+function initGames() {
+  document.getElementById('gamesGrid').innerHTML = GAMES_LIST.map(g=>`
+    <div class="game-card" style="background:${g.color}" onclick="startGame('${g.id}')">
+      <span class="game-icon">${g.emoji}</span>
+      <div class="game-name">${g.name}</div>
+      <div class="game-desc">${g.desc}</div>
+      <span class="game-difficulty">${g.diff}</span>
+    </div>
+  `).join('');
+}
+
+function startGame(id) {
+  document.getElementById('games-list').style.display='none';
+  const area = document.getElementById('game-area');
+  area.style.display='block';
+  state.gamesPlayed++;
+  saveState();
+  
+  const games = {
+    'mcq': gameMCQ,
+    'match': gameMatch,
+    'spell': gameSpell,
+    'listen': gameListenPick,
+    'color': gameColor,
+    'number': gameNumber,
+    'sentence': gameSentence,
+    'flash': gameFlash,
+  };
+  if(games[id]) games[id]();
+}
+
+function gameHeader(title, onBack) {
+  return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <button class="btn-back" onclick="${onBack||'backToGames()'}">←</button>
+    <div style="font-weight:800;font-size:1.1rem;color:var(--dark)">${title}</div>
+  </div>`;
+}
+
+function backToGames() {
+  document.getElementById('games-list').style.display='block';
+  document.getElementById('game-area').style.display='none';
+}
+
+// MCQ GAME
+function gameMCQ() {
+  const allWords = UNITS.flatMap(u=>u.vocab);
+  let score=0, q=0, total=10;
+  
+  function nextQ() {
+    if(q>=total){ showGameResult(score,total,'❓ Hỏi & Đáp'); return; }
+    const correct = allWords[Math.floor(Math.random()*allWords.length)];
+    const wrong = allWords.filter(w=>w.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts = [...wrong, correct].sort(()=>Math.random()-0.5);
+    
+    document.getElementById('game-area').innerHTML = `
+      <div class="card">
+        ${gameHeader('❓ Hỏi & Đáp')}
+        <div class="game-progress">
+          <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+          <span class="game-score">⭐${score}</span>
+          <span style="color:var(--muted);font-size:0.8rem">${q+1}/${total}</span>
+        </div>
+        <div class="game-question">
+          <span class="q-image">${correct.emoji}</span>
+          <div class="q-text">Đây là gì?</div>
+        </div>
+        <div class="options-grid">
+          ${opts.map(o=>`<button class="option-btn" onclick="mcqAnswer(this,'${o.word}','${correct.word}')">${o.emoji} ${o.word}</button>`).join('')}
+        </div>
+      </div>
+    `;
+    speakWord(correct.word);
+  }
+  
+  window.mcqAnswer = function(btn, chosen, correct) {
+    document.querySelectorAll('.option-btn').forEach(b=>b.onclick=null);
+    if(chosen===correct){ btn.classList.add('correct'); score++; showFeedback('⭐'); confetti(); }
+    else { btn.classList.add('wrong'); document.querySelectorAll('.option-btn').forEach(b=>{ if(b.textContent.includes(correct)) b.classList.add('correct'); }); showFeedback('💪'); }
+    q++; setTimeout(nextQ,1500);
+  };
+  nextQ();
+}
+
+// MATCH GAME
+function gameMatch() {
+  const words = UNITS.flatMap(u=>u.vocab).sort(()=>Math.random()-0.5).slice(0,6);
+  const cards = [...words.map(w=>({type:'word',val:w.word,id:w.word})), ...words.map(w=>({type:'emoji',val:w.emoji,id:w.word}))].sort(()=>Math.random()-0.5);
+  let flipped=[], matched=[], moves=0;
+  
+  function render() {
+    document.getElementById('game-area').innerHTML = `
+      <div class="card">
+        ${gameHeader('🃏 Ghép Thẻ')}
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px;text-align:center">Lật thẻ và ghép cặp từ - hình! Bước: ${moves}</p>
+        <div class="match-grid">
+          ${cards.map((c,i)=>`
+            <div class="match-card ${matched.includes(c.id)?'matched':''} ${flipped.includes(i)?'flipped':''}" 
+                 id="mc${i}" onclick="flipCard(${i})">
+              <div class="match-card-inner">
+                <div class="match-card-front">❓</div>
+                <div class="match-card-back">${c.val}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        ${matched.length===words.length?`<div class="result-screen"><span class="result-emoji">🎉</span><div class="result-title">Hoàn thành trong ${moves} bước!</div><button class="btn-primary" onclick="gameMatch()">Chơi lại</button><button class="btn-secondary" onclick="backToGames()">Menu</button></div>`:''}
+      </div>
+    `;
+  }
+  
+  window.flipCard = function(i) {
+    if(matched.includes(cards[i].id)||flipped.includes(i)||flipped.length>=2) return;
+    flipped.push(i);
+    render();
+    if(flipped.length===2) {
+      moves++;
+      const [a,b] = flipped;
+      if(cards[a].id===cards[b].id && cards[a].type!==cards[b].type) {
+        matched.push(cards[a].id);
+        flipped=[];
+        addStars(1);
+        if(matched.length===words.length){ confetti(); showFeedback('🎉'); }
+        render();
+      } else {
+        setTimeout(()=>{ flipped=[]; render(); },1000);
+      }
+    }
+  };
+  render();
+}
+
+// SPELL GAME
+function gameSpell() {
+  const allWords = UNITS.flatMap(u=>u.vocab).filter(w=>w.word.length<=8);
+  let score=0, q=0, total=8;
+  
+  function nextSpell() {
+    if(q>=total){ showGameResult(score,total,'🔤 Đánh Vần'); return; }
+    const w = allWords[Math.floor(Math.random()*allWords.length)];
+    const letters = w.word.split('').sort(()=>Math.random()-0.5);
+    let filled = Array(w.word.length).fill('');
+    let usedIdx = [];
+    
+    function renderSpell() {
+      document.getElementById('game-area').innerHTML = `
+        <div class="card">
+          ${gameHeader('🔤 Đánh Vần')}
+          <div class="game-progress">
+            <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+            <span class="game-score">⭐${score}</span>
+          </div>
+          <div class="game-question"><span class="q-image">${w.emoji}</span><div class="q-text">Đây là gì? Hãy đánh vần!</div></div>
+          <div class="word-display">
+            ${filled.map((f,i)=>`<div class="word-slot ${f?'filled':''}">${f||''}</div>`).join('')}
+          </div>
+          <div class="letter-pool">
+            ${letters.map((l,i)=>`<button class="letter-btn ${usedIdx.includes(i)?'used':''}" onclick="addLetter('${l}',${i})">${l.toUpperCase()}</button>`).join('')}
+          </div>
+          <button class="btn-secondary" onclick="clearSpell()" style="margin:0 auto;display:block">🗑 Xóa</button>
+          <div id="spellFeedback" style="text-align:center;margin-top:12px"></div>
+        </div>
+      `;
+    }
+    
+    window.addLetter = function(l, idx) {
+      const emptyIdx = filled.findIndex(f=>!f);
+      if(emptyIdx===-1) return;
+      filled[emptyIdx] = l; usedIdx.push(idx);
+      renderSpell();
+      if(!filled.includes('')) {
+        const spelled = filled.join('');
+        if(spelled===w.word) {
+          document.getElementById('spellFeedback').innerHTML='<span style="color:var(--success);font-size:1.5rem;font-weight:900">🌟 Đúng rồi!</span>';
+          score++; addStars(3); confetti(); showFeedback('🔤');
+          q++; setTimeout(nextSpell,1500);
+        } else {
+          document.getElementById('spellFeedback').innerHTML='<span style="color:var(--danger)">❌ Thử lại!</span>';
+          setTimeout(()=>{ filled=Array(w.word.length).fill(''); usedIdx=[]; renderSpell(); },1000);
+        }
+      }
+    };
+    
+    window.clearSpell = function() { filled=Array(w.word.length).fill(''); usedIdx=[]; renderSpell(); };
+    renderSpell();
+    speakWord(w.word);
+  }
+  nextSpell();
+}
+
+// LISTEN PICK
+function gameListenPick() {
+  const allWords = UNITS.flatMap(u=>u.vocab);
+  let score=0, q=0, total=10;
+  
+  function nextQ() {
+    if(q>=total){ showGameResult(score,total,'👂 Nghe - Chọn'); return; }
+    const correct = allWords[Math.floor(Math.random()*allWords.length)];
+    const wrong = allWords.filter(w=>w.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts = [...wrong,correct].sort(()=>Math.random()-0.5);
+    
+    document.getElementById('game-area').innerHTML = `
+      <div class="card">
+        ${gameHeader('👂 Nghe - Chọn')}
+        <div class="game-progress">
+          <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+          <span class="game-score">⭐${score}</span>
+        </div>
+        <div class="listen-visual">
+          <div class="listen-wave">
+            ${Array(7).fill(0).map((_,i)=>`<div class="wave-bar" style="animation-delay:${i*0.15}s"></div>`).join('')}
+          </div>
+          <button class="listen-btn-large" onclick="speakWord('${correct.word}'); this.classList.toggle('playing',true); setTimeout(()=>this.classList.remove('playing'),2000)">🔊</button>
+          <p style="margin-top:12px;color:var(--muted)">Nghe xong chọn hình đúng:</p>
+        </div>
+        <div class="options-grid" style="grid-template-columns:repeat(2,1fr)">
+          ${opts.map(o=>`<button class="option-btn" onclick="listenAns(this,'${o.word}','${correct.word}')" style="flex-direction:column;padding:16px">
+            <span style="font-size:2.5rem">${o.emoji}</span>
+          </button>`).join('')}
+        </div>
+      </div>
+    `;
+    setTimeout(()=>speakWord(correct.word),300);
+  }
+  
+  window.listenAns = function(btn,chosen,correct){
+    document.querySelectorAll('.option-btn').forEach(b=>b.onclick=null);
+    if(chosen===correct){btn.classList.add('correct');score++;showFeedback('👂');confetti();}
+    else{btn.classList.add('wrong');document.querySelectorAll('.option-btn').forEach(b=>{if(b.innerHTML.includes(correct+'\'s')||b.onclick?.toString().includes(correct))b.classList.add('correct');});showFeedback('💪');}
+    q++;setTimeout(nextQ,1500);
+  };
+  nextQ();
+}
+
+// COLOR GAME
+function gameColor() {
+  const colors=[
+    {name:'red',vi:'Đỏ',hex:'#EF4444'},
+    {name:'yellow',vi:'Vàng',hex:'#F59E0B'},
+    {name:'blue',vi:'Xanh dương',hex:'#3B82F6'},
+    {name:'pink',vi:'Hồng',hex:'#EC4899'},
+    {name:'white',vi:'Trắng',hex:'#F3F4F6'},
+    {name:'green',vi:'Xanh lá',hex:'#10B981'},
+  ];
+  let score=0,q=0,total=8;
+  
+  function nextColor() {
+    if(q>=total){showGameResult(score,total,'🎨 Đố Màu Sắc');return;}
+    const correct = colors[Math.floor(Math.random()*colors.length)];
+    const opts = colors.sort(()=>Math.random()-0.5).slice(0,4);
+    if(!opts.find(o=>o.name===correct.name)) opts[0]=correct;
+    opts.sort(()=>Math.random()-0.5);
+    
+    document.getElementById('game-area').innerHTML=`
+      <div class="card">
+        ${gameHeader('🎨 Đố Màu Sắc')}
+        <div class="game-progress">
+          <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+          <span class="game-score">⭐${score}</span>
+        </div>
+        <p style="text-align:center;font-size:1.1rem;font-weight:800;color:var(--dark);margin-bottom:16px">
+          Chọn màu: <span style="color:var(--primary)">"${correct.name}"</span>
+        </p>
+        <div class="color-target" style="background:${correct.hex}"></div>
+        <div class="color-options">
+          ${opts.map(o=>`<div class="color-option" style="background:${o.hex};${o.hex==='#F3F4F6'?'border:2px solid #E5E7EB':''}" onclick="colorAns(this,'${o.name}','${correct.name}')"></div>`).join('')}
+        </div>
+        <div style="text-align:center;margin-top:16px;color:var(--muted);font-size:0.8rem">Nghe tên màu:</div>
+        <button class="btn-listen" onclick="speakWord('${correct.name}')" style="background:var(--primary);border-color:var(--primary);display:flex;margin:8px auto">🔊 ${correct.name}</button>
+      </div>
+    `;
+    speakWord(correct.name);
+  }
+  
+  window.colorAns=function(el,chosen,correct){
+    document.querySelectorAll('.color-option').forEach(o=>o.onclick=null);
+    if(chosen===correct){el.style.outline='4px solid var(--success)';el.style.transform='scale(1.2)';score++;showFeedback('🎨');confetti();}
+    else{el.style.outline='4px solid var(--danger)';el.style.transform='scale(0.9)';showFeedback('💪');}
+    q++;setTimeout(nextColor,1500);
+  };
+  nextColor();
+}
+
+// NUMBER GAME
+function gameNumber() {
+  let score=0,q=0,total=8;
+  const nums=['one','two','three','four','five','six','seven','eight','nine','ten'];
+  
+  function nextNum() {
+    if(q>=total){showGameResult(score,total,'🔢 Đếm Số');return;}
+    const n = Math.floor(Math.random()*10)+1;
+    const correctWord = nums[n-1];
+    const opts = nums.filter(w=>w!==correctWord).sort(()=>Math.random()-0.5).slice(0,3);
+    const options = [...opts,correctWord].sort(()=>Math.random()-0.5);
+    
+    document.getElementById('game-area').innerHTML=`
+      <div class="card">
+        ${gameHeader('🔢 Đếm Số')}
+        <div class="game-progress">
+          <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+          <span class="game-score">⭐${score}</span>
+        </div>
+        <div class="number-display">${n}</div>
+        <div class="number-dots">
+          ${Array(n).fill(0).map((_,i)=>`<div class="number-dot" style="animation-delay:${i*0.08}s"></div>`).join('')}
+        </div>
+        <div class="options-grid">
+          ${options.map(o=>`<button class="option-btn" onclick="numAns(this,'${o}','${correctWord}')">${o}</button>`).join('')}
+        </div>
+        <button class="btn-listen" onclick="speakWord('${correctWord}')" style="background:var(--primary);border-color:var(--primary);display:flex;margin:12px auto">🔊 Nghe</button>
+      </div>
+    `;
+  }
+  
+  window.numAns=function(btn,chosen,correct){
+    document.querySelectorAll('.option-btn').forEach(b=>b.onclick=null);
+    if(chosen===correct){btn.classList.add('correct');score++;showFeedback('🔢');confetti();}
+    else{btn.classList.add('wrong');document.querySelectorAll('.option-btn').forEach(b=>{if(b.textContent.trim()===correct)b.classList.add('correct');});showFeedback('💪');}
+    q++;setTimeout(nextNum,1500);
+  };
+  nextNum();
+}
+
+// SENTENCE GAME
+function gameSentence() {
+  const allPhrases = UNITS.flatMap(u=>u.phrases).filter(p=>p.split(' ').length>=3);
+  let score=0,q=0,total=6;
+  
+  function nextSentence() {
+    if(q>=total){showGameResult(score,total,'📝 Ghép Câu');return;}
+    const phrase = allPhrases[Math.floor(Math.random()*allPhrases.length)];
+    const words = phrase.replace(/[.!?]/g,'').split(' ');
+    const shuffled = [...words].sort(()=>Math.random()-0.5);
+    let built=[];
+    
+    function renderSent() {
+      document.getElementById('game-area').innerHTML=`
+        <div class="card">
+          ${gameHeader('📝 Ghép Câu')}
+          <div class="game-progress">
+            <div class="game-progress-bar"><div class="game-progress-fill" style="width:${(q/total)*100}%"></div></div>
+            <span class="game-score">⭐${score}</span>
+          </div>
+          <p style="text-align:center;color:var(--muted);margin-bottom:12px;font-size:0.85rem">Sắp xếp từ thành câu đúng:</p>
+          <div class="sentence-words">
+            ${built.map(w=>`<span class="sentence-slot" onclick="removeWord('${w}')">${w}</span>`).join('')}
+            ${built.length===0?'<span style="color:var(--muted);font-size:0.85rem">Chọn từ bên dưới...</span>':''}
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+            ${shuffled.map((w,i)=>`<button class="word-option ${built.includes(w)&&built.indexOf(w)===built.lastIndexOf(w)?'used':''}" onclick="addWord('${w}')">${w}</button>`).join('')}
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button class="btn-primary" onclick="checkSentence('${words.join(' ')}')">✅ Kiểm tra</button>
+            <button class="btn-secondary" onclick="built=[];renderSent()">🗑 Xóa</button>
+          </div>
+          <div id="sentFeedback" style="text-align:center;margin-top:12px"></div>
+        </div>
+      `;
+    }
+    
+    window.addWord=function(w){built.push(w);renderSent();}
+    window.removeWord=function(w){const i=built.lastIndexOf(w);if(i>-1)built.splice(i,1);renderSent();}
+    window.checkSentence=function(correct){
+      const answer=built.join(' ');
+      if(answer===correct){
+        document.getElementById('sentFeedback').innerHTML='<span style="color:var(--success);font-size:1.2rem;font-weight:800">✅ Chính xác! 🌟</span>';
+        score++;addStars(3);confetti();showFeedback('📝');q++;setTimeout(nextSentence,1500);
+      }else{
+        document.getElementById('sentFeedback').innerHTML=`<span style="color:var(--danger)">❌ Thử lại! Gợi ý: <strong>${correct.split(' ')[0]}...</strong></span>`;
+      }
+    };
+    renderSent();
+    speakWord(phrase);
+  }
+  nextSentence();
+}
+
+// FLASHCARD
+function gameFlash() {
+  const allWords = UNITS.flatMap(u=>u.vocab).sort(()=>Math.random()-0.5);
+  let idx=0, showed=0, correct=0;
+  
+  function renderFlash() {
+    const w = allWords[idx%allWords.length];
+    document.getElementById('game-area').innerHTML=`
+      <div class="card">
+        ${gameHeader('⚡ Flashcard')}
+        <div style="text-align:center">
+          <div style="font-size:5rem;margin-bottom:12px">${w.emoji}</div>
+          <div style="font-size:2rem;font-weight:900;color:var(--dark);margin-bottom:8px">${w.word}</div>
+          <div style="font-size:1rem;color:var(--primary);margin-bottom:4px">${w.pron}</div>
+          <button class="btn-listen" onclick="speakWord('${w.word}')" style="background:var(--primary);border-color:var(--primary);display:flex;margin:0 auto 16px">🔊 Nghe</button>
+          <div style="background:var(--light);border-radius:14px;padding:14px;margin-bottom:20px">
+            <div style="color:var(--muted);font-size:0.85rem;margin-bottom:4px">Nghĩa tiếng Việt:</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--dark)">${w.vi}</div>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <button style="flex:1;padding:14px;border-radius:14px;border:none;background:#FEE2E2;color:#991B1B;font-weight:800;cursor:pointer;font-size:1rem" onclick="flashAns(false)">❌ Chưa nhớ</button>
+            <button style="flex:1;padding:14px;border-radius:14px;border:none;background:#D1FAE5;color:#065F46;font-weight:800;cursor:pointer;font-size:1rem" onclick="flashAns(true)">✅ Đã nhớ</button>
+          </div>
+          <div style="margin-top:12px;color:var(--muted);font-size:0.8rem">${showed+1}/${allWords.length} từ | ✅ ${correct}</div>
+        </div>
+      </div>
+    `;
+    speakWord(w.word);
+  }
+  
+  window.flashAns=function(ok){
+    showed++;
+    if(ok){correct++;addStars(1);showFeedback('⭐');}
+    idx++;
+    if(showed>=15){showGameResult(correct,15,'⚡ Flashcard');return;}
+    renderFlash();
+  };
+  renderFlash();
+}
+
+// SHOW RESULT
+function showGameResult(score, total, name) {
+  const pct = Math.round((score/total)*100);
+  const stars = pct>=80?3:pct>=60?2:1;
+  addStars(score);
+  saveState();
+  if(pct>=80) confetti();
+  
+  document.getElementById('game-area').innerHTML=`
+    <div class="card">
+      <div class="result-screen">
+        <span class="result-emoji">${pct>=80?'🏆':pct>=60?'🎉':'💪'}</span>
+        <div class="result-title">${name}</div>
+        <div class="result-score">${score}/${total}</div>
+        <div class="result-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+        <p style="color:var(--muted);margin:12px 0">${pct}% chính xác</p>
+        <button class="btn-primary" onclick="startGame('${name.toLowerCase().includes('hỏi')?'mcq':name.toLowerCase().includes('thẻ')?'match':name.toLowerCase().includes('vần')?'spell':name.toLowerCase().includes('nghe')?'listen':name.toLowerCase().includes('màu')?'color':name.toLowerCase().includes('số')?'number':name.toLowerCase().includes('câu')?'sentence':'flash'}')">🔄 Chơi lại</button>
+        <button class="btn-secondary" onclick="backToGames()">🎮 Trò chơi khác</button>
+      </div>
+    </div>
+  `;
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  document.getElementById('progStars').textContent = state.stars;
+  document.getElementById('progUnits').textContent = state.completedUnits.length;
+  document.getElementById('progGames').textContent = state.gamesPlayed;
+  document.getElementById('totalStars').textContent = state.stars;
+  
+  const pct = Math.round((state.completedUnits.length/UNITS.length)*100);
+  document.getElementById('homeProgressText').textContent = pct+'% hoàn thành';
+  
+  document.getElementById('progressChart').innerHTML = UNITS.map(u=>`
+    <div class="progress-unit ${state.completedUnits.includes(u.id)?'done':''}">
+      <div style="font-size:1.5rem">${u.emoji}</div>
+      <div class="progress-unit-name">Unit ${u.id}</div>
+      <div class="progress-bar-v"><div class="progress-bar-v-fill" style="width:${state.unitProgress[u.id]||0}%"></div></div>
+      <div class="progress-pct">${state.unitProgress[u.id]||0}%</div>
+    </div>
+  `).join('');
+  
+  const BADGES = [
+    {id:'first',name:'Bắt đầu!',emoji:'🌱',cond:state.stars>=1},
+    {id:'words',name:'Học từ',emoji:'📖',cond:state.stars>=10},
+    {id:'unit1',name:'Unit 1',emoji:'👨‍👩‍👧',cond:state.completedUnits.includes(1)},
+    {id:'gamer',name:'Gamer',emoji:'🎮',cond:state.gamesPlayed>=3},
+    {id:'star10',name:'10 Sao',emoji:'⭐',cond:state.stars>=10},
+    {id:'star50',name:'50 Sao',emoji:'🌟',cond:state.stars>=50},
+    {id:'half',name:'Nửa đường',emoji:'🚀',cond:state.completedUnits.length>=5},
+    {id:'finish',name:'Hoàn thành!',emoji:'🏆',cond:state.completedUnits.length>=10},
+  ];
+  
+  document.getElementById('badgeArea').innerHTML = BADGES.map(b=>`
+    <div style="text-align:center;opacity:${b.cond?1:0.3};transition:all 0.3s;${b.cond?'':'filter:grayscale(1)'}">
+      <div style="font-size:2rem">${b.emoji}</div>
+      <div style="font-size:0.7rem;font-weight:700;color:var(--dark)">${b.name}</div>
+    </div>
+  `).join('');
+}
+
+// ===== HELPERS =====
+function speakWord(text) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US';
+  utt.rate = 0.8;
+  utt.pitch = 1.1;
+  const voices = speechSynthesis.getVoices();
+  const enVoice = voices.find(v=>v.lang.startsWith('en'));
+  if(enVoice) utt.voice = enVoice;
+  window.speechSynthesis.speak(utt);
+}
+
+function addStars(n) {
+  state.stars += n;
+  document.getElementById('totalStars').textContent = state.stars;
+  saveState();
+}
+
+function showFeedback(emoji) {
+  const overlay = document.getElementById('feedbackOverlay');
+  const big = document.getElementById('feedbackBig');
+  big.textContent = emoji;
+  overlay.classList.add('show');
+  setTimeout(()=>overlay.classList.remove('show'),1500);
+}
+
+function confetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#FF6B35','#4ECDC4','#FFE66D','#A78BFA','#10B981','#EC4899','#0EA5E9'];
+  for(let i=0;i<30;i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      width:${6+Math.random()*8}px; height:${6+Math.random()*8}px;
+      animation-delay:${Math.random()*0.5}s;
+      animation-duration:${1.5+Math.random()}s;
+    `;
+    container.appendChild(piece);
+    setTimeout(()=>piece.remove(),2500);
+  }
+}
+
+// Quick Review
+const QR_WORDS = UNITS.flatMap(u=>u.vocab);
+function nextQuickReview() {
+  state.qrIndex = (state.qrIndex+1) % QR_WORDS.length;
+  const w = QR_WORDS[state.qrIndex];
+  document.getElementById('qrWord').textContent = w.word;
+  document.getElementById('qrVi').textContent = w.vi;
+}
+
+// ===== INIT =====
+window.addEventListener('load', ()=>{
+  initStars();
+  initUnitGrid();
+  initPhonics();
+  initGames();
+  updateProgress();
+  
+  document.getElementById('totalStars').textContent = state.stars;
+  document.getElementById('streakBadge').textContent = '🔥 '+state.streak;
+  document.getElementById('dailyTip').textContent = TIPS[Math.floor(Math.random()*TIPS.length)];
+  
+  // Load voices
+  if(window.speechSynthesis) {
+    speechSynthesis.onvoiceschanged = ()=>speechSynthesis.getVoices();
+    speechSynthesis.getVoices();
+  }
+});
+</script>
+</body>
+</html>
