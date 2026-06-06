@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🎓 Toán 1 - Tập Hai | Học Vui Mỗi Ngày</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+:root {
+  --blue:#2196F3;--blue-dark:#1565C0;--orange:#FF6B35;--green:#4CAF50;--green-dark:#2E7D32;
+  --purple:#9C27B0;--red:#F44336;--yellow:#FFC107;--pink:#E91E63;
+  --bg:#FFF8F0;--card:#FFFFFF;--text:#2D3748;--text-light:#718096;
+  --shadow:0 4px 20px rgba(0,0,0,0.12);--radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.header{background:linear-gradient(135deg,#1565C0 0%,#2196F3 50%,#64B5F6 100%);padding:12px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 15px rgba(21,101,192,0.4);}
+.header h1{font-family:'Baloo 2',cursive;color:white;font-size:clamp(18px,4vw,26px);font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.header p{color:rgba(255,255,255,0.9);font-size:clamp(11px,2.5vw,14px);margin-top:2px;}
+.stars-bar{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;}
+.star-count{background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;color:white;font-weight:700;font-size:13px;backdrop-filter:blur(5px);}
+.nav-tabs{display:flex;gap:6px;padding:10px 12px;overflow-x:auto;background:white;border-bottom:3px solid #E3F2FD;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.tab-btn{flex-shrink:0;padding:8px 14px;border:none;border-radius:25px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:clamp(11px,2.5vw,13px);transition:all 0.25s;background:#F0F4FF;color:#5C6BC0;}
+.tab-btn.active{background:linear-gradient(135deg,#2196F3,#1565C0);color:white;transform:translateY(-2px);box-shadow:0 4px 12px rgba(33,150,243,0.4);}
+.tab-btn:hover:not(.active){background:#E3F2FD;transform:translateY(-1px);}
+.main{padding:12px;max-width:900px;margin:0 auto;}
+.section{display:none;animation:fadeIn 0.4s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes popIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.chapter-title{font-family:'Baloo 2',cursive;font-size:clamp(15px,4vw,22px);font-weight:800;margin:16px 0 10px;padding:10px 18px;border-radius:15px;color:white;display:flex;align-items:center;gap:10px;}
+.ch6{background:linear-gradient(135deg,#2196F3,#1565C0);}
+.ch7{background:linear-gradient(135deg,#4CAF50,#2E7D32);}
+.ch8{background:linear-gradient(135deg,#FF6B35,#E64A19);}
+.ch9{background:linear-gradient(135deg,#9C27B0,#6A1B9A);}
+.ch10{background:linear-gradient(135deg,#E91E63,#880E4F);}
+.lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.lesson-card{background:white;border-radius:var(--radius);padding:16px;cursor:pointer;border:3px solid transparent;transition:all 0.25s;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;}
+.lesson-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;}
+.lesson-card.b21::before,.lesson-card.b22::before,.lesson-card.b23::before,.lesson-card.b24::before{background:linear-gradient(90deg,#2196F3,#64B5F6);}
+.lesson-card.b25::before,.lesson-card.b26::before,.lesson-card.b27::before,.lesson-card.b28::before{background:linear-gradient(90deg,#4CAF50,#81C784);}
+.lesson-card.b29::before,.lesson-card.b30::before,.lesson-card.b31::before,.lesson-card.b32::before,.lesson-card.b33::before{background:linear-gradient(90deg,#FF6B35,#FFB347);}
+.lesson-card.b34::before,.lesson-card.b35::before,.lesson-card.b36::before,.lesson-card.b37::before{background:linear-gradient(90deg,#9C27B0,#CE93D8);}
+.lesson-card.b38::before,.lesson-card.b39::before,.lesson-card.b40::before,.lesson-card.b41::before{background:linear-gradient(90deg,#E91E63,#F06292);}
+.lesson-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.18);}
+.lesson-card.done{border-color:#4CAF50;background:#F1F8E9;}
+.lesson-emoji{font-size:36px;margin-bottom:8px;}
+.lesson-num{font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.lesson-title{font-family:'Baloo 2',cursive;font-size:clamp(12px,3vw,14px);font-weight:700;color:var(--text);margin-top:4px;line-height:1.3;}
+.done-badge{position:absolute;top:10px;right:10px;background:#4CAF50;color:white;border-radius:50%;width:24px;height:24px;display:none;align-items:center;justify-content:center;font-size:12px;}
+.lesson-detail{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;overflow-y:auto;padding:20px 12px;}
+.lesson-detail.open{display:flex;align-items:flex-start;justify-content:center;}
+.lesson-box{background:white;border-radius:24px;width:100%;max-width:680px;overflow:hidden;position:relative;animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);margin:auto;}
+.lesson-header{padding:20px;color:white;text-align:center;}
+.lesson-header h2{font-family:'Baloo 2',cursive;font-size:clamp(16px,4vw,22px);font-weight:800;}
+.lesson-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.3);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lesson-content{padding:20px;}
+.section-tab{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;}
+.section-tab::-webkit-scrollbar{display:none;}
+.stab{flex-shrink:0;padding:7px 16px;border-radius:20px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;background:#F0F4FF;color:#5C6BC0;transition:all 0.2s;}
+.stab.on{background:linear-gradient(135deg,#FF6B35,#FFB347);color:white;box-shadow:0 3px 10px rgba(255,107,53,0.4);}
+.lesson-panel{display:none;}
+.lesson-panel.on{display:block;animation:fadeIn 0.3s;}
+.know-box{background:linear-gradient(135deg,#E3F2FD,#F3E5F5);border-radius:16px;padding:18px;margin-bottom:14px;border-left:5px solid #2196F3;}
+.know-box h3{font-family:'Baloo 2',cursive;color:#1565C0;font-size:16px;margin-bottom:10px;}
+.num-box{background:white;border:3px solid #2196F3;border-radius:12px;width:60px;height:60px;display:inline-flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#1565C0;box-shadow:0 3px 10px rgba(33,150,243,0.3);}
+.num-table{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.num-cell{background:white;border:2px solid #E3F2FD;border-radius:10px;padding:6px 3px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.num-cell:hover{background:#E3F2FD;transform:scale(1.05);}
+.num-cell .n{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#1565C0;}
+.num-cell .w{font-size:9px;color:#666;font-weight:600;}
+.ex-title{font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;margin-bottom:12px;color:#E64A19;display:flex;align-items:center;gap:8px;}
+.ex-box{background:#FFF8F0;border-radius:16px;padding:16px;margin-bottom:14px;border:2px solid #FFD180;}
+.ex-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0;}
+.input-box{width:60px;height:46px;border:3px solid #FFB347;border-radius:12px;font-size:22px;font-family:'Baloo 2',cursive;font-weight:700;text-align:center;color:#E64A19;background:white;outline:none;transition:border-color 0.2s;}
+.input-box:focus{border-color:#FF6B35;box-shadow:0 0 0 3px rgba(255,107,53,0.2);}
+.input-box.correct{border-color:#4CAF50;color:#2E7D32;background:#F1F8E9;}
+.input-box.wrong{border-color:#F44336;color:#C62828;background:#FFEBEE;animation:shake 0.4s;}
+.op-sign{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#1565C0;}
+.eq-box{background:#E3F2FD;border-radius:12px;padding:8px 14px;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#1565C0;display:inline-block;}
+.btn{padding:10px 22px;border:none;border-radius:25px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;transition:all 0.25s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:linear-gradient(135deg,#2196F3,#1565C0);color:white;box-shadow:0 4px 12px rgba(33,150,243,0.4);}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-success{background:linear-gradient(135deg,#4CAF50,#2E7D32);color:white;box-shadow:0 4px 12px rgba(76,175,80,0.4);}
+.btn-orange{background:linear-gradient(135deg,#FF6B35,#E64A19);color:white;box-shadow:0 4px 12px rgba(255,107,53,0.4);}
+.btn-orange:hover{transform:translateY(-2px);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.feedback{text-align:center;padding:14px;border-radius:16px;margin-top:14px;font-weight:700;font-size:15px;animation:fadeIn 0.4s;}
+.feedback.ok{background:#F1F8E9;color:#2E7D32;border:2px solid #4CAF50;}
+.feedback.err{background:#FFEBEE;color:#C62828;border:2px solid #F44336;}
+.progress-wrap{background:#E3F2FD;border-radius:10px;height:10px;margin:6px 0;overflow:hidden;}
+.progress-bar{height:100%;background:linear-gradient(90deg,#4CAF50,#66BB6A);border-radius:10px;transition:width 0.5s ease;}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.game-card{background:white;border-radius:20px;padding:18px 12px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:all 0.25s;border:3px solid transparent;}
+.game-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,0.15);}
+.game-icon{font-size:40px;margin-bottom:8px;}
+.game-name{font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;color:var(--text);}
+.game-desc{font-size:11px;color:var(--text-light);margin-top:3px;}
+.game-area{display:none;background:white;border-radius:24px;padding:18px;margin-top:14px;box-shadow:var(--shadow);}
+.game-area.on{display:block;animation:fadeIn 0.4s;}
+.game-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.game-score-box{background:linear-gradient(135deg,#FFD700,#FFA000);color:white;padding:6px 12px;border-radius:20px;font-weight:700;font-size:13px;}
+.game-timer-box{background:linear-gradient(135deg,#F44336,#C62828);color:white;padding:6px 12px;border-radius:20px;font-weight:700;font-size:13px;}
+.game-close-btn{background:#EEE;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;transition:all 0.2s;}
+.game-close-btn:hover{background:#FFE0E0;}
+.game-question{text-align:center;font-family:'Baloo 2',cursive;font-size:clamp(22px,6vw,44px);font-weight:800;color:#1565C0;margin:16px 0;line-height:1.3;min-height:70px;display:flex;align-items:center;justify-content:center;}
+.game-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:400px;margin:0 auto;}
+.opt-btn{padding:12px;border:3px solid #E3F2FD;border-radius:16px;background:white;font-family:'Baloo 2',cursive;font-size:clamp(18px,5vw,28px);font-weight:800;cursor:pointer;transition:all 0.2s;color:#1565C0;}
+.opt-btn:hover:not(:disabled){border-color:#2196F3;background:#E3F2FD;transform:scale(1.04);}
+.opt-btn.correct-ans{background:#F1F8E9;border-color:#4CAF50;color:#2E7D32;}
+.opt-btn.wrong-ans{background:#FFEBEE;border-color:#F44336;color:#C62828;}
+.memory-grid{display:grid;gap:8px;margin:0 auto;max-width:380px;}
+.mem-card{background:linear-gradient(135deg,#2196F3,#1565C0);border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.3s;position:relative;transform-style:preserve-3d;}
+.mem-card.flipped{transform:rotateY(180deg);}
+.mem-front,.mem-back{position:absolute;inset:0;border-radius:12px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;font-family:'Baloo 2',cursive;font-weight:800;}
+.mem-front{background:linear-gradient(135deg,#2196F3,#1565C0);color:white;font-size:22px;}
+.mem-back{background:white;border:3px solid #2196F3;color:#1565C0;font-size:clamp(18px,4vw,26px);transform:rotateY(180deg);}
+.mem-card.matched .mem-back{background:#F1F8E9;border-color:#4CAF50;color:#2E7D32;}
+.cmp-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:12px 0;}
+.cmp-num{font-family:'Baloo 2',cursive;font-size:40px;font-weight:800;color:#1565C0;background:#E3F2FD;border-radius:14px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;}
+.cmp-sign-btns{display:flex;gap:6px;}
+.cmp-sign-btn{width:48px;height:48px;border:3px solid #E3F2FD;border-radius:50%;background:white;font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;cursor:pointer;transition:all 0.2s;color:#1565C0;display:flex;align-items:center;justify-content:center;}
+.cmp-sign-btn:hover{background:#2196F3;color:white;border-color:#2196F3;}
+.cmp-sign-btn.picked{background:#FF6B35;color:white;border-color:#E64A19;}
+.connect-game{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;}
+.connect-col{display:flex;flex-direction:column;gap:10px;}
+.connect-item{padding:9px 18px;border-radius:25px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;border:3px solid transparent;transition:all 0.2s;}
+.connect-item.left{background:#E3F2FD;color:#1565C0;border-color:#90CAF9;}
+.connect-item.right{background:#FFF3E0;color:#E64A19;border-color:#FFCC80;}
+.connect-item.left.selected{background:#2196F3;color:white;border-color:#1565C0;}
+.connect-item.right.selected{background:#FF6B35;color:white;border-color:#E64A19;}
+.connect-item.matched{background:#F1F8E9;border-color:#4CAF50;color:#2E7D32;cursor:default;}
+.draggable{padding:8px 16px;background:linear-gradient(135deg,#2196F3,#1565C0);color:white;border-radius:25px;font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.2s;user-select:none;box-shadow:0 3px 10px rgba(33,150,243,0.3);}
+.draggable:hover{transform:translateY(-2px) scale(1.05);}
+.drag-zone{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;padding:10px;border:3px dashed #E3F2FD;border-radius:16px;margin:10px 0;background:#FAFBFF;justify-content:center;}
+.drop-target{min-width:56px;height:42px;border:3px dashed #FFB347;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#FFB347;background:white;}
+.drop-target.filled{border-color:#4CAF50;}
+.wheel-container{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.wheel-wrap{position:relative;}
+.wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:26px;z-index:5;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));}
+.spin-btn{background:linear-gradient(135deg,#FF6B35,#E64A19);color:white;border:none;border-radius:30px;padding:12px 28px;font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(255,107,53,0.4);transition:all 0.2s;}
+.spin-btn:hover{transform:translateY(-2px);}
+.spin-result{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#1565C0;text-align:center;min-height:36px;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:16px;}
+.stat-card{background:white;border-radius:16px;padding:14px;text-align:center;box-shadow:var(--shadow);}
+.stat-num{font-family:'Baloo 2',cursive;font-size:36px;font-weight:800;}
+.stat-label{font-size:11px;color:var(--text-light);font-weight:600;}
+.stat-card.s1 .stat-num{color:#2196F3;}
+.stat-card.s2 .stat-num{color:#4CAF50;}
+.stat-card.s3 .stat-num{color:#FF6B35;}
+.stat-card.s4 .stat-num{color:#9C27B0;}
+.achiev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
+.achiev-card{background:white;border-radius:16px;padding:12px 8px;text-align:center;box-shadow:var(--shadow);border:3px solid transparent;}
+.achiev-card.earned{border-color:#FFD700;background:linear-gradient(135deg,#FFFDE7,#FFF9C4);}
+.achiev-icon{font-size:32px;margin-bottom:5px;filter:grayscale(1);opacity:0.35;transition:all 0.4s;}
+.achiev-card.earned .achiev-icon{filter:none;opacity:1;}
+.achiev-name{font-size:11px;font-weight:700;color:var(--text);}
+.achiev-desc{font-size:10px;color:var(--text-light);margin-top:2px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:white;padding:12px 22px;border-radius:30px;font-weight:700;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;max-width:90vw;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
+.confetto{position:absolute;width:10px;height:10px;top:-20px;border-radius:2px;animation:fall linear forwards;}
+.wp-box{background:linear-gradient(135deg,#FFF3E0,#FFE0B2);border-radius:16px;padding:16px;border-left:5px solid #FF6B35;margin-bottom:12px;}
+.wp-text{font-size:14px;line-height:1.8;color:var(--text);}
+.wp-img{font-size:48px;text-align:center;margin:8px 0;}
+.ruler-wrap{overflow-x:auto;padding:8px 0;}
+.ruler{display:flex;align-items:flex-end;gap:0;min-width:350px;}
+.ruler-tick{display:flex;flex-direction:column;align-items:center;}
+.ruler-mark.big{height:20px;background:#1565C0;width:2px;}
+.ruler-mark.small{height:12px;background:#1565C0;width:2px;}
+.ruler-label{font-size:10px;font-weight:700;color:#1565C0;margin-top:2px;}
+@media(max-width:480px){.lessons-grid{grid-template-columns:repeat(2,1fr);}.game-grid{grid-template-columns:repeat(2,1fr);}.achiev-grid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:600px){.lessons-grid{grid-template-columns:repeat(3,1fr);}.game-grid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:800px){.lessons-grid{grid-template-columns:repeat(4,1fr);}.game-grid{grid-template-columns:repeat(4,1fr);}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🎓 Toán 1 - Tập Hai</h1>
+  <p>Kết nối tri thức với cuộc sống · Lớp 1</p>
+  <div class="stars-bar">
+    <span class="star-count">⭐ <span id="totalStars">0</span> sao</span>
+    <span class="star-count">🏆 <span id="doneCount">0</span>/21 bài</span>
+    <span class="star-count">🎮 <span id="gamesPlayed">0</span> lượt</span>
+  </div>
+</div>
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('home')">🏠 Trang chủ</button>
+  <button class="tab-btn" onclick="showTab('lessons')">📚 Bài học</button>
+  <button class="tab-btn" onclick="showTab('exercises')">✏️ Luyện tập</button>
+  <button class="tab-btn" onclick="showTab('games')">🎮 Trò chơi</button>
+  <button class="tab-btn" onclick="showTab('progress')">📊 Tiến độ</button>
+</div>
+<div class="main">
+
+<style>
+/* === TRANG CHỦ === */
+.hero{background:linear-gradient(135deg,#E3F2FD,#F3E5F5);border-radius:24px;padding:24px;text-align:center;margin-bottom:20px;}
+.hero h2{font-family:'Baloo 2',cursive;font-size:clamp(20px,5vw,32px);color:#1565C0;font-weight:800;margin-bottom:8px;}
+.hero p{color:#5C6BC0;font-size:15px;margin-bottom:16px;}
+.chapter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.chapter-card{border-radius:20px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;box-shadow:var(--shadow);}
+.chapter-card:hover{transform:translateY(-4px) scale(1.03);}
+.chapter-card .icon{font-size:36px;display:block;margin-bottom:8px;}
+.chapter-card h3{font-weight:800;font-size:14px;margin-bottom:4px;}
+.chapter-card p{font-size:11px;opacity:0.8;}
+.chapter-card .progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.4);margin-top:10px;overflow:hidden;}
+.chapter-card .progress-fill{height:100%;border-radius:3px;background:white;transition:width 0.5s;}
+.c1{background:linear-gradient(135deg,#42A5F5,#1565C0);color:white;}
+.c2{background:linear-gradient(135deg,#66BB6A,#2E7D32);color:white;}
+.c3{background:linear-gradient(135deg,#FFA726,#E65100);color:white;}
+.c4{background:linear-gradient(135deg,#EC407A,#880E4F);color:white;}
+.c5{background:linear-gradient(135deg,#AB47BC,#4A148C);color:white;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.stat-box{background:white;border-radius:16px;padding:14px;text-align:center;box-shadow:var(--shadow);}
+.stat-box .num{font-size:28px;font-weight:800;color:#1565C0;}
+.stat-box .lbl{font-size:11px;color:#888;margin-top:2px;}
+/* === BÀI HỌC === */
+.lesson-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.filter-btn{padding:6px 14px;border:2px solid #E0E0E0;border-radius:20px;cursor:pointer;font-size:12px;font-weight:700;background:white;transition:all 0.2s;}
+.filter-btn.active{border-color:#2196F3;background:#E3F2FD;color:#1565C0;}
+.lesson-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.lesson-card{background:white;border-radius:16px;padding:14px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.08);transition:all 0.25s;border-left:5px solid #E0E0E0;position:relative;}
+.lesson-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.lesson-card.done{background:#F1F8E9;}
+.lesson-card .badge{position:absolute;top:10px;right:10px;font-size:16px;}
+.lesson-card h4{font-size:13px;font-weight:800;margin-bottom:4px;}
+.lesson-card p{font-size:11px;color:#888;}
+.lesson-card .ch-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:6px;}
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:12px;}
+.modal-overlay.show{display:flex;animation:fadeIn 0.3s;}
+.modal-box{background:white;border-radius:24px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;position:relative;}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#888;}
+.modal-tabs{display:flex;gap:6px;margin:12px 0;}
+.modal-tab{padding:6px 14px;border:none;border-radius:20px;cursor:pointer;font-size:12px;font-weight:700;background:#F0F4FF;color:#5C6BC0;}
+.modal-tab.active{background:#2196F3;color:white;}
+.modal-content{line-height:1.8;font-size:15px;}
+.modal-content h4{color:#1565C0;margin:12px 0 6px;font-size:16px;}
+.modal-content .example-box{background:#E3F2FD;border-radius:12px;padding:12px;margin:8px 0;font-size:18px;text-align:center;font-weight:800;}
+.modal-content .note{background:#FFF9C4;border-radius:10px;padding:10px;font-size:13px;margin:8px 0;}
+/* === LUYỆN TẬP === */
+.ex-categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+.ex-cat{background:white;border-radius:16px;padding:14px;text-align:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.08);transition:all 0.25s;}
+.ex-cat:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.ex-cat .icon{font-size:30px;display:block;margin-bottom:6px;}
+.ex-cat h4{font-size:12px;font-weight:800;}
+.exercise-area{background:white;border-radius:20px;padding:20px;box-shadow:var(--shadow);}
+.ex-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.ex-header h3{font-size:18px;font-weight:800;color:#1565C0;}
+.ex-back{background:#F0F4FF;border:none;border-radius:12px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:700;color:#5C6BC0;}
+.question-box{background:#F8F9FF;border-radius:16px;padding:20px;margin-bottom:16px;text-align:center;}
+.question-text{font-size:clamp(20px,5vw,36px);font-weight:800;color:#1A237E;margin-bottom:16px;}
+.answer-input{width:80px;height:50px;border:3px solid #2196F3;border-radius:12px;text-align:center;font-size:24px;font-weight:800;color:#1565C0;outline:none;}
+.answer-input:focus{border-color:#F44336;box-shadow:0 0 0 3px rgba(244,67,54,0.2);}
+.choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px;}
+.choice-btn{width:70px;height:56px;border:3px solid #E0E0E0;border-radius:14px;font-size:22px;font-weight:800;cursor:pointer;background:white;transition:all 0.2s;}
+.choice-btn:hover{border-color:#2196F3;background:#E3F2FD;transform:scale(1.1);}
+.choice-btn.correct{background:#4CAF50;border-color:#4CAF50;color:white;}
+.choice-btn.wrong{background:#F44336;border-color:#F44336;color:white;}
+.ex-result{text-align:center;padding:12px;border-radius:12px;font-weight:700;font-size:16px;margin-top:10px;display:none;}
+.ex-result.show{display:block;}
+.ex-result.ok{background:#E8F5E9;color:#2E7D32;}
+.ex-result.fail{background:#FFEBEE;color:#C62828;}
+.ex-footer{display:flex;justify-content:space-between;align-items:center;}
+.ex-score{font-weight:700;color:#888;}
+.btn-check{background:linear-gradient(135deg,#2196F3,#1565C0);color:white;border:none;padding:10px 24px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-check:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(33,150,243,0.4);}
+.btn-next{background:linear-gradient(135deg,#4CAF50,#2E7D32);color:white;border:none;padding:10px 24px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;display:none;}
+/* Clock SVG */
+.clock-wrapper{display:flex;justify-content:center;margin:10px 0;}
+/* === TRÒ CHƠI === */
+.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+.game-card{background:white;border-radius:20px;padding:16px;text-align:center;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.08);transition:all 0.3s;border-top:5px solid #2196F3;}
+.game-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);}
+.game-card .gicon{font-size:36px;display:block;margin-bottom:8px;}
+.game-card h4{font-size:13px;font-weight:800;margin-bottom:4px;}
+.game-card p{font-size:11px;color:#888;}
+.game-card .best{font-size:11px;color:#FF6B35;font-weight:700;margin-top:6px;}
+.game-area{background:white;border-radius:20px;padding:20px;box-shadow:var(--shadow);min-height:300px;}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.timer-bar{height:8px;border-radius:4px;background:#FFCDD2;margin-bottom:16px;overflow:hidden;}
+.timer-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#4CAF50,#F44336);transition:width 0.1s linear;}
+.game-score{display:flex;gap:10px;}
+.gscore-box{background:#F0F4FF;border-radius:12px;padding:6px 14px;font-weight:700;font-size:14px;color:#1565C0;}
+/* Memory */
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:0 auto;}
+.mem-card{aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,#5C6BC0,#3949AB);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:transparent;transition:all 0.4s;box-shadow:0 3px 8px rgba(0,0,0,0.2);}
+.mem-card.flipped{background:white;border:3px solid #2196F3;color:#1565C0;}
+.mem-card.matched{background:#E8F5E9;border:3px solid #4CAF50;color:#4CAF50;pointer-events:none;}
+/* Balloon */
+.balloon-area{position:relative;height:320px;background:linear-gradient(180deg,#87CEEB,#E0F7FA);border-radius:16px;overflow:hidden;margin-bottom:10px;}
+.balloon{position:absolute;bottom:-80px;cursor:pointer;text-align:center;animation:rise linear;user-select:none;}
+.balloon span:first-child{display:block;font-size:46px;}
+.balloon span.num{display:block;font-size:20px;font-weight:800;color:#1565C0;background:rgba(255,255,255,0.8);border-radius:10px;padding:2px 8px;}
+@keyframes rise{from{bottom:-80px}to{bottom:110%}}
+/* Spin wheel */
+#spinCanvas{border-radius:50%;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:block;margin:0 auto;}
+/* Sort game */
+.sort-nums{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:60px;margin:10px 0;}
+.sort-num{width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,#42A5F5,#1565C0);color:white;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;}
+.sort-num.selected{transform:scale(1.15);box-shadow:0 0 0 4px #FF6B35;}
+/* Connect */
+.connect-area{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:400px;margin:0 auto;}
+.connect-col{display:flex;flex-direction:column;gap:8px;}
+.connect-item{padding:12px;border-radius:12px;border:3px solid #E0E0E0;text-align:center;font-size:18px;font-weight:800;cursor:pointer;background:white;transition:all 0.2s;}
+.connect-item:hover{border-color:#2196F3;}
+.connect-item.selected{border-color:#FF6B35;background:#FFF3E0;}
+.connect-item.matched{border-color:#4CAF50;background:#E8F5E9;pointer-events:none;}
+/* === TIẾN ĐỘ === */
+.progress-header{background:linear-gradient(135deg,#E3F2FD,#F3E5F5);border-radius:20px;padding:20px;text-align:center;margin-bottom:20px;}
+.big-star{font-size:48px;}
+.total-stars{font-size:36px;font-weight:800;color:#1565C0;}
+.achieve-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px;}
+.achieve-card{background:white;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.achieve-card.locked{opacity:0.4;filter:grayscale(1);}
+.achieve-card .aicon{font-size:28px;display:block;margin-bottom:4px;}
+.achieve-card h5{font-size:12px;font-weight:800;margin-bottom:2px;}
+.achieve-card p{font-size:10px;color:#888;}
+.chapter-progress-list{display:flex;flex-direction:column;gap:10px;}
+.chp-item{background:white;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.chp-item h4{font-size:13px;font-weight:800;margin-bottom:8px;}
+.chp-bar{height:12px;border-radius:6px;background:#F0F4FF;overflow:hidden;}
+.chp-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#42A5F5,#1565C0);transition:width 0.6s;}
+.chp-pct{font-size:12px;color:#888;margin-top:4px;}
+/* TOAST */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:#1A237E;color:white;padding:10px 20px;border-radius:20px;font-weight:700;font-size:14px;z-index:9999;opacity:0;pointer-events:none;transition:all 0.4s;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* CONFETTI */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;pointer-events:none;z-index:9999;animation:confettiFall 1.5s ease-in forwards;}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(-20px) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}
+/* Responsive */
+@media(max-width:480px){
+  .memory-grid{grid-template-columns:repeat(4,1fr);gap:6px;}
+  .mem-card{font-size:20px;}
+  .choice-btn{width:60px;height:48px;font-size:18px;}
+}
+</style>
+
+<div class="section active" id="home">
+  <div class="hero">
+    <h2>🎓 Toán 1 – Tập Hai</h2>
+    <p>Học toán thật vui, thật dễ! Chọn chủ đề để bắt đầu nhé! 🌟</p>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="home-stars">0</div><div class="lbl">⭐ Sao đạt được</div></div>
+    <div class="stat-box"><div class="num" id="home-done">0</div><div class="lbl">📚 Bài đã học</div></div>
+    <div class="stat-box"><div class="num" id="home-games">0</div><div class="lbl">🎮 Lượt chơi</div></div>
+  </div>
+  <div class="chapter-grid">
+    <div class="chapter-card c1" onclick="filterLessons(1)">
+      <span class="icon">🔢</span>
+      <h3>Các số đến 100</h3>
+      <p>Bài 21–24</p>
+      <div class="progress-bar"><div class="progress-fill" id="cp1"></div></div>
+    </div>
+    <div class="chapter-card c2" onclick="filterLessons(2)">
+      <span class="icon">📏</span>
+      <h3>Đo độ dài</h3>
+      <p>Bài 25–28</p>
+      <div class="progress-bar"><div class="progress-fill" id="cp2"></div></div>
+    </div>
+    <div class="chapter-card c3" onclick="filterLessons(3)">
+      <span class="icon">➕</span>
+      <h3>Phép tính trong 100</h3>
+      <p>Bài 29–33</p>
+      <div class="progress-bar"><div class="progress-fill" id="cp3"></div></div>
+    </div>
+    <div class="chapter-card c4" onclick="filterLessons(4)">
+      <span class="icon">🕐</span>
+      <h3>Thời gian</h3>
+      <p>Bài 34–37</p>
+      <div class="progress-bar"><div class="progress-fill" id="cp4"></div></div>
+    </div>
+    <div class="chapter-card c5" onclick="filterLessons(5)">
+      <span class="icon">🏆</span>
+      <h3>Ôn tập cuối năm</h3>
+      <p>Bài 38–41</p>
+      <div class="progress-bar"><div class="progress-fill" id="cp5"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="lessons">
+  <div class="lesson-filter">
+    <button class="filter-btn active" onclick="filterLessons(0)">Tất cả</button>
+    <button class="filter-btn" onclick="filterLessons(1)">🔢 Số đến 100</button>
+    <button class="filter-btn" onclick="filterLessons(2)">📏 Đo dài</button>
+    <button class="filter-btn" onclick="filterLessons(3)">➕ Phép tính</button>
+    <button class="filter-btn" onclick="filterLessons(4)">🕐 Thời gian</button>
+    <button class="filter-btn" onclick="filterLessons(5)">🏆 Ôn tập</button>
+  </div>
+  <div class="lesson-list" id="lessonList"></div>
+</div>
+<div class="modal-overlay" id="lessonModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modalTitle" style="font-size:18px;font-weight:800;color:#1565C0;margin-bottom:8px;"></h3>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchModalTab('learn',this)">📖 Khám phá</button>
+      <button class="modal-tab" onclick="switchModalTab('practice',this)">✏️ Bài tập</button>
+      <button class="modal-tab" onclick="switchModalTab('done',this)">🏅 Hoàn thành</button>
+    </div>
+    <div id="modalLearn" class="modal-content"></div>
+    <div id="modalPractice" class="modal-content" style="display:none"></div>
+    <div id="modalDone" class="modal-content" style="display:none;text-align:center;padding:20px;">
+      <div style="font-size:60px;">🎉</div>
+      <h3 style="color:#1565C0;margin:12px 0;">Xuất sắc!</h3>
+      <p style="color:#888;margin-bottom:16px;">Bạn đã hoàn thành bài học này!</p>
+      <button onclick="markDone()" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);color:white;border:none;padding:12px 28px;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;">✅ Đánh dấu hoàn thành (+3 ⭐)</button>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="exercises">
+  <div id="exCats">
+    <h3 style="font-weight:800;color:#1565C0;margin-bottom:12px;">✏️ Chọn dạng bài luyện tập</h3>
+    <div class="ex-categories">
+      <div class="ex-cat" onclick="startExercise('count')"><span class="icon">🔢</span><h4>Đếm & Số</h4></div>
+      <div class="ex-cat" onclick="startExercise('compare')"><span class="icon">⚖️</span><h4>So sánh</h4></div>
+      <div class="ex-cat" onclick="startExercise('add')"><span class="icon">➕</span><h4>Phép cộng</h4></div>
+      <div class="ex-cat" onclick="startExercise('sub')"><span class="icon">➖</span><h4>Phép trừ</h4></div>
+      <div class="ex-cat" onclick="startExercise('measure')"><span class="icon">📏</span><h4>Đo độ dài</h4></div>
+      <div class="ex-cat" onclick="startExercise('clock')"><span class="icon">🕐</span><h4>Xem đồng hồ</h4></div>
+      <div class="ex-cat" onclick="startExercise('word')"><span class="icon">📖</span><h4>Toán có lời văn</h4></div>
+    </div>
+  </div>
+  <div class="exercise-area" id="exArea" style="display:none">
+    <div class="ex-header">
+      <h3 id="exTitle">Bài tập</h3>
+      <button class="ex-back" onclick="backToExCats()">← Quay lại</button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="qText"></div>
+      <div id="qInput"></div>
+    </div>
+    <div class="ex-result" id="exResult"></div>
+    <div class="ex-footer">
+      <span class="ex-score" id="exScore">Câu 0/10 | Đúng: 0</span>
+      <button class="btn-check" id="btnCheck" onclick="checkAnswer()">Kiểm tra</button>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Tiếp theo →</button>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="games">
+  <div id="gameMenu">
+    <h3 style="font-weight:800;color:#1565C0;margin-bottom:12px;">🎮 Chọn trò chơi</h3>
+    <div class="game-grid">
+      <div class="game-card" onclick="startGame('quiz')" style="border-color:#FF6B35">
+        <span class="gicon">⚡</span><h4>Tính nhanh</h4><p>30 giây thần tốc</p>
+        <div class="best" id="best-quiz">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('memory')" style="border-color:#9C27B0">
+        <span class="gicon">🧠</span><h4>Thẻ ghi nhớ</h4><p>Lật thẻ tìm cặp</p>
+        <div class="best" id="best-memory">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('clock')" style="border-color:#2196F3">
+        <span class="gicon">🕐</span><h4>Đọc đồng hồ</h4><p>10 câu nhanh nhất</p>
+        <div class="best" id="best-clock">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('balloon')" style="border-color:#4CAF50">
+        <span class="gicon">🎈</span><h4>Bắn bóng bay</h4><p>Chọn số lớn hơn</p>
+        <div class="best" id="best-balloon">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('connect')" style="border-color:#E91E63">
+        <span class="gicon">🔗</span><h4>Nối cặp số</h4><p>Nối số với chữ</p>
+        <div class="best" id="best-connect">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('spin')" style="border-color:#FF9800">
+        <span class="gicon">🎡</span><h4>Vòng quay số</h4><p>Quay & tính kết quả</p>
+        <div class="best" id="best-spin">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('sort')" style="border-color:#009688">
+        <span class="gicon">🔀</span><h4>Sắp xếp số</h4><p>Tăng dần hay giảm dần</p>
+        <div class="best" id="best-sort">Kỷ lục: –</div>
+      </div>
+      <div class="game-card" onclick="startGame('fill')" style="border-color:#795548">
+        <span class="gicon">✏️</span><h4>Điền số vào chỗ trống</h4><p>Hoàn thành phép tính</p>
+        <div class="best" id="best-fill">Kỷ lục: –</div>
+      </div>
+    </div>
+  </div>
+  <div class="game-area" id="gameArea" style="display:none">
+    <div class="game-header">
+      <h3 id="gameTitle" style="font-weight:800;color:#1565C0;font-size:18px;"></h3>
+      <button class="ex-back" onclick="backToGameMenu()">← Thoát</button>
+    </div>
+    <div id="gameContent"></div>
+  </div>
+</div>
+
+<div class="section" id="progress">
+  <div class="progress-header">
+    <div class="big-star">⭐</div>
+    <div class="total-stars" id="totalStarsDisp">0</div>
+    <p style="color:#888;font-size:14px;margin-top:4px;">sao đạt được</p>
+  </div>
+  <h3 style="font-weight:800;margin-bottom:10px;">🏅 Huy hiệu</h3>
+  <div class="achieve-grid" id="achieveGrid"></div>
+  <h3 style="font-weight:800;margin:16px 0 10px;">📊 Tiến độ từng chủ đề</h3>
+  <div class="chapter-progress-list" id="chapterProgressList"></div>
+  <button onclick="if(confirm('Xóa toàn bộ tiến độ?')){resetProgress()}" style="margin-top:20px;background:#FFEBEE;border:2px solid #F44336;color:#C62828;padding:10px 20px;border-radius:12px;cursor:pointer;font-weight:700;font-size:13px;">🗑️ Xóa tiến độ</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ STATE ============
+const STATE_KEY = 'toan1t2_v2';
+let state = {
+  stars: 0, doneLessons: new Set(), gamesPlayed: 0, correctTotal: 0,
+  bestScores: {}, achievements: new Set()
+};
+function saveState() {
+  const s = {...state, doneLessons: [...state.doneLessons], achievements: [...state.achievements]};
+  localStorage.setItem(STATE_KEY, JSON.stringify(s));
+}
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STATE_KEY) || '{}');
+    if(s.stars) state.stars = s.stars;
+    if(s.doneLessons) state.doneLessons = new Set(s.doneLessons);
+    if(s.gamesPlayed) state.gamesPlayed = s.gamesPlayed;
+    if(s.correctTotal) state.correctTotal = s.correctTotal;
+    if(s.bestScores) state.bestScores = s.bestScores;
+    if(s.achievements) state.achievements = new Set(s.achievements);
+  } catch(e){}
+}
+function resetProgress() {
+  localStorage.removeItem(STATE_KEY);
+  location.reload();
+}
+
+// ============ LESSONS DATA ============
+const lessons = [
+  // Chapter 1: Các số đến 100
+  {id:'l21a',ch:1,title:'Bài 21: Số có hai chữ số',sub:'Chục và đơn vị',
+   learn:`<h4>📌 Khám phá: Số có hai chữ số</h4>
+<p>Mỗi số có hai chữ số gồm <strong>chữ số hàng chục</strong> và <strong>chữ số hàng đơn vị</strong>.</p>
+<div class="example-box">42 = 4 chục + 2 đơn vị</div>
+<h4>🔢 Cách đọc số</h4>
+<p>Đọc số chục trước, rồi đọc số đơn vị sau.</p>
+<div class="example-box">35 → Ba mươi lăm<br>50 → Năm mươi<br>11 → Mười một</div>
+<div class="note">💡 Lưu ý: "Mười" đọc là "mười", "20" đọc là "hai mươi"...</div>
+<h4>📊 Bảng số 1-100</h4>
+<p>Các số từ 10–19 đọc là: <strong>mười, mười một, mười hai...</strong></p>
+<p>Các số từ 20–99 đọc là: <strong>hai mươi, ba mươi...</strong></p>`,
+   practice:`<p>Viết số theo hàng chục và đơn vị:<br><strong>45</strong> = ___ chục ___ đơn vị</p>`},
+  {id:'l21b',ch:1,title:'Bài 22: So sánh các số',sub:'Lớn hơn, nhỏ hơn, bằng nhau',
+   learn:`<h4>📌 So sánh số</h4>
+<p>So sánh <strong>hàng chục trước</strong>, nếu bằng nhau thì so sánh hàng đơn vị.</p>
+<div class="example-box">35 > 29 (3 chục > 2 chục)<br>47 < 52 (4 chục < 5 chục)<br>34 = 34</div>
+<h4>🔤 Dấu so sánh</h4>
+<p><strong>&gt;</strong> : lớn hơn &nbsp;|&nbsp; <strong>&lt;</strong> : nhỏ hơn &nbsp;|&nbsp; <strong>=</strong> : bằng nhau</p>
+<div class="example-box">68 ○ 72 → 68 &lt; 72</div>
+<div class="note">💡 Mũi nhọn luôn chỉ về phía số nhỏ hơn!</div>`,
+   practice:`<p>Điền dấu &gt;, &lt;, = vào ô trống: <strong>56 ○ 65</strong></p>`},
+  {id:'l22',ch:1,title:'Bài 23: Bảng số 1 đến 100',sub:'Tìm quy luật trong bảng',
+   learn:`<h4>📊 Bảng số 1 đến 100</h4>
+<p>Bảng số được xếp thành <strong>10 hàng, mỗi hàng 10 số</strong>.</p>
+<div class="example-box">Quy luật: Số ở dưới = Số ở trên + 10<br>Số bên phải = Số bên trái + 1</div>
+<h4>🔍 Nhận xét</h4>
+<p>• Hàng ngang: các số hơn nhau 1 đơn vị<br>• Cột dọc: các số hơn nhau 10 đơn vị</p>
+<div class="example-box">Số trước 45 là 44, số sau 45 là 46<br>Số lớn hơn 45 mười đơn vị là 55</div>`,
+   practice:`<p>Điền số còn thiếu: 31, 32, ___, ___, 35</p>`},
+  {id:'l23',ch:1,title:'Bài 24: Luyện tập chung (Số 1–100)',sub:'Đọc, viết, so sánh số',
+   learn:`<h4>🔄 Ôn luyện tổng hợp</h4>
+<p>Ôn lại các kiến thức về số từ 1 đến 100:</p>
+<div class="example-box">Đọc: 87 → Tám mươi bảy<br>Viết: Sáu mươi mốt → 61<br>So sánh: 74 > 47</div>
+<h4>📝 Dạng bài hay gặp</h4>
+<p>• Điền số vào dãy số<br>• Sắp xếp các số theo thứ tự<br>• Tìm số liền trước/liền sau</p>`,
+   practice:`<p>Sắp xếp các số sau theo thứ tự tăng dần: 45, 23, 67, 12, 89</p>`},
+  // Chapter 2: Đo độ dài
+  {id:'l25',ch:2,title:'Bài 25: Dài hơn – Ngắn hơn',sub:'So sánh độ dài trực tiếp',
+   learn:`<h4>📌 So sánh độ dài</h4>
+<p>So sánh độ dài bằng cách <strong>đặt thẳng hàng một đầu</strong> rồi nhìn đầu kia.</p>
+<div class="example-box">Cây bút dài hơn cục tẩy<br>Sợi dây ngắn hơn cái thước</div>
+<h4>🔑 Từ ngữ cần nhớ</h4>
+<p><strong>Dài hơn</strong> – <strong>Ngắn hơn</strong> – <strong>Dài bằng nhau</strong></p>
+<div class="note">💡 Khi so sánh phải đặt thẳng hàng một đầu mới chính xác!</div>`,
+   practice:`<p>Quan sát: Cây bút dài 15 cm, cục tẩy dài 5 cm. Cái nào dài hơn?</p>`},
+  {id:'l26',ch:2,title:'Bài 26: Xăng-ti-mét',sub:'Đơn vị đo độ dài cm',
+   learn:`<h4>📏 Đơn vị đo: Xăng-ti-mét (cm)</h4>
+<p><strong>Xăng-ti-mét</strong> là đơn vị đo độ dài, viết tắt là <strong>cm</strong>.</p>
+<div class="example-box">1 cm = một xăng-ti-mét<br>Thước kẻ thường dài 30 cm</div>
+<h4>📐 Cách đọc thước</h4>
+<p>Đặt vật thẳng theo thước, đầu vật tại vạch 0, đọc số ở đầu kia.</p>
+<div class="example-box">Cây bút từ vạch 0 đến vạch 12 → dài 12 cm</div>
+<div class="note">💡 Viết: 12 cm (số rồi mới viết cm)</div>`,
+   practice:`<p>Cây bút đặt từ vạch 0 đến vạch 15 trên thước. Cây bút dài bao nhiêu cm?</p>`},
+  {id:'l27',ch:2,title:'Bài 27: Thực hành đo độ dài',sub:'Đo bằng thước cm',
+   learn:`<h4>✋ Thực hành đo</h4>
+<p>Để đo độ dài một vật:</p>
+<p>1. Đặt một đầu vật tại vạch <strong>0</strong> của thước<br>2. Giữ thước thẳng<br>3. Đọc số cm ở đầu kia</p>
+<div class="example-box">Đo chiều dài quyển sách:<br>Từ 0 đến 21 → dài 21 cm</div>
+<h4>📊 Các vật thường gặp</h4>
+<p>• Bút chì: khoảng 17–19 cm<br>• Trang sách: khoảng 20–21 cm<br>• Bàn học: khoảng 60–70 cm</p>`,
+   practice:`<p>Đo và ghi: Con sâu dài ___ cm (từ vạch 0 đến vạch 8)</p>`},
+  {id:'l28',ch:2,title:'Bài 28: Luyện tập (Đo độ dài)',sub:'Ôn tập đo và so sánh cm',
+   learn:`<h4>🔄 Ôn luyện đo độ dài</h4>
+<p>Tổng hợp kiến thức về đo độ dài bằng cm:</p>
+<div class="example-box">Đoạn thẳng AB dài 6 cm<br>Đoạn thẳng CD dài 4 cm<br>AB dài hơn CD 2 cm</div>
+<h4>📝 Bài tập thường gặp</h4>
+<p>• Đo độ dài theo hình vẽ<br>• So sánh các đoạn thẳng<br>• Vẽ đoạn thẳng theo yêu cầu</p>`,
+   practice:`<p>Đoạn AB = 9 cm, CD = 6 cm. AB dài hơn CD mấy cm?</p>`},
+  // Chapter 3: Phép tính
+  {id:'l29',ch:3,title:'Bài 29: Phép cộng (không nhớ) trong 100',sub:'Cộng số hàng chục',
+   learn:`<h4>➕ Phép cộng không nhớ</h4>
+<p>Khi cộng hai số: <strong>cộng đơn vị với đơn vị, chục với chục</strong>.</p>
+<div class="example-box">  34<br>+ 25<br>────<br>  59<br><br>(4+5=9, 3+2=5)</div>
+<h4>🔑 Cách đặt tính</h4>
+<p>Viết thẳng cột: hàng đơn vị thẳng cột, hàng chục thẳng cột.</p>
+<div class="note">💡 Không nhớ: tổng mỗi hàng &lt; 10</div>`,
+   practice:`<p>Tính: 32 + 45 = ?</p>`},
+  {id:'l30',ch:3,title:'Bài 30: Phép trừ (không nhớ) trong 100',sub:'Trừ số hàng chục',
+   learn:`<h4>➖ Phép trừ không nhớ</h4>
+<p>Khi trừ: <strong>trừ đơn vị với đơn vị, chục với chục</strong>.</p>
+<div class="example-box">  78<br>– 35<br>────<br>  43<br><br>(8–5=3, 7–3=4)</div>
+<h4>✅ Điều kiện</h4>
+<p>Không nhớ: số bị trừ &ge; số trừ ở từng hàng.</p>
+<div class="example-box">97 – 23 = 74<br>86 – 40 = 46</div>`,
+   practice:`<p>Tính: 89 – 36 = ?</p>`},
+  {id:'l31',ch:3,title:'Bài 31: Cộng số 2 chữ số với 1 chữ số',sub:'Cộng khi tổng đơn vị < 10',
+   learn:`<h4>➕ Cộng 2 chữ số với 1 chữ số</h4>
+<div class="example-box">  43<br>+  5<br>────<br>  48<br><br>(3+5=8, hàng chục giữ nguyên: 4)</div>
+<h4>💡 Quy tắc</h4>
+<p>Chỉ cộng <strong>hàng đơn vị</strong>, hàng chục không thay đổi.</p>
+<div class="example-box">62 + 7 = 69<br>24 + 5 = 29</div>`,
+   practice:`<p>Tính: 73 + 6 = ?</p>`},
+  {id:'l32',ch:3,title:'Bài 32: Trừ số 2 chữ số với 1 chữ số',sub:'Trừ khi hiệu đơn vị ≥ 0',
+   learn:`<h4>➖ Trừ 2 chữ số với 1 chữ số</h4>
+<div class="example-box">  57<br>–  4<br>────<br>  53<br><br>(7–4=3, hàng chục giữ nguyên: 5)</div>
+<h4>💡 Quy tắc</h4>
+<p>Chỉ trừ <strong>hàng đơn vị</strong>, hàng chục không thay đổi.</p>
+<div class="example-box">85 – 3 = 82<br>96 – 6 = 90</div>`,
+   practice:`<p>Tính: 48 – 5 = ?</p>`},
+  {id:'l33',ch:3,title:'Bài 33: Luyện tập chung (Phép tính 100)',sub:'Ôn cộng trừ trong 100',
+   learn:`<h4>🔄 Ôn luyện cộng trừ trong 100</h4>
+<div class="example-box">45 + 32 = 77<br>88 – 25 = 63<br>50 + 40 = 90<br>76 – 6 = 70</div>
+<h4>📝 Dạng bài hay gặp</h4>
+<p>• Tính nhẩm<br>• Đặt tính và tính<br>• Toán có lời văn</p>
+<div class="note">💡 Toán lời văn: đọc kỹ đề, tìm từ "thêm" (cộng) hay "bớt" (trừ)</div>`,
+   practice:`<p>Lớp 1A có 34 bạn, lớp 1B có 32 bạn. Cả hai lớp có bao nhiêu bạn?</p>`},
+  // Chapter 4: Thời gian
+  {id:'l34',ch:4,title:'Bài 34: Xem đồng hồ',sub:'Đọc giờ đúng và giờ rưỡi',
+   learn:`<h4>🕐 Xem đồng hồ</h4>
+<p>Đồng hồ có <strong>kim giờ</strong> (ngắn hơn) và <strong>kim phút</strong> (dài hơn).</p>
+<div class="example-box">Kim phút ở số 12 → giờ đúng<br>Kim phút ở số 6 → giờ rưỡi (30 phút)</div>
+<h4>🔑 Cách đọc</h4>
+<p>• Kim giờ chỉ số 3, kim phút chỉ số 12 → <strong>3 giờ</strong><br>• Kim giờ chỉ 7, kim phút chỉ 6 → <strong>7 giờ 30 phút</strong></p>
+<div class="note">💡 Kim phút quay nhanh hơn kim giờ!</div>`,
+   practice:`<p>Kim giờ chỉ số 9, kim phút chỉ số 12. Đồng hồ chỉ mấy giờ?</p>`},
+  {id:'l35',ch:4,title:'Bài 35: Ngày trong tuần',sub:'Thứ Hai đến Chủ Nhật',
+   learn:`<h4>📅 Ngày trong tuần</h4>
+<div class="example-box">Thứ Hai – Thứ Ba – Thứ Tư<br>Thứ Năm – Thứ Sáu – Thứ Bảy<br>Chủ Nhật</div>
+<p>Một tuần có <strong>7 ngày</strong>. Tuần bắt đầu từ <strong>Thứ Hai</strong>.</p>
+<h4>🔑 Nhớ thứ tự</h4>
+<p>Sau Thứ Bảy là Chủ Nhật, sau Chủ Nhật lại đến Thứ Hai.</p>
+<div class="note">💡 Thứ Bảy và Chủ Nhật là ngày nghỉ!</div>`,
+   practice:`<p>Hôm nay là Thứ Tư. Ngày mai là thứ mấy?</p>`},
+  {id:'l36',ch:4,title:'Bài 36: Xem lịch',sub:'Đọc lịch tháng',
+   learn:`<h4>📅 Xem lịch tháng</h4>
+<p>Lịch tháng gồm các hàng theo tuần, cột theo thứ.</p>
+<div class="example-box">Tháng có 28, 29, 30 hoặc 31 ngày<br>Tháng 2 có ít ngày nhất</div>
+<h4>🔍 Cách đọc lịch</h4>
+<p>• Xem cột để biết thứ<br>• Xem hàng để biết tuần<br>• Tìm ngày → biết thứ mấy</p>`,
+   practice:`<p>Ngày 15 tháng này là Thứ Hai. Ngày 22 tháng này là thứ mấy?</p>`},
+  {id:'l37',ch:4,title:'Bài 37: Luyện tập (Thời gian)',sub:'Ôn xem đồng hồ và lịch',
+   learn:`<h4>🔄 Ôn luyện thời gian</h4>
+<div class="example-box">3 giờ: kim giờ → 3, kim phút → 12<br>8 giờ 30: kim giờ → 8-9, kim phút → 6</div>
+<h4>📝 Các dạng bài</h4>
+<p>• Xem đồng hồ và đọc giờ<br>• Vẽ kim đồng hồ<br>• Tính ngày trong tuần<br>• Đọc lịch trả lời câu hỏi</p>`,
+   practice:`<p>Vẽ kim đồng hồ chỉ 5 giờ 30 phút.</p>`},
+  // Chapter 5: Ôn tập
+  {id:'l38',ch:5,title:'Bài 38: Ôn tập các số đến 100',sub:'Đọc, viết, so sánh, sắp xếp',
+   learn:`<h4>🏆 Ôn tập: Các số đến 100</h4>
+<div class="example-box">Đọc: 96 → Chín mươi sáu<br>So sánh: 75 &lt; 85<br>Sắp xếp tăng dần: 12, 34, 56, 78</div>
+<h4>📝 Ôn lại</h4>
+<p>• Số có một chữ số: 1–9<br>• Số có hai chữ số: 10–99<br>• Số 100: một trăm</p>`,
+   practice:`<p>Sắp xếp giảm dần: 42, 24, 64, 46</p>`},
+  {id:'l39',ch:5,title:'Bài 39: Ôn tập phép cộng, trừ',sub:'Ôn cộng trừ trong 100',
+   learn:`<h4>🏆 Ôn tập phép cộng và trừ</h4>
+<div class="example-box">36 + 52 = 88<br>75 – 42 = 33<br>28 + 61 = 89<br>90 – 50 = 40</div>
+<h4>📝 Toán có lời văn</h4>
+<p>Trong vườn có 45 cây cam và 32 cây bưởi. Hỏi tất cả có bao nhiêu cây?</p>
+<div class="example-box">45 + 32 = 77 (cây)</div>`,
+   practice:`<p>An có 56 viên bi, cho bạn 23 viên. An còn lại bao nhiêu viên bi?</p>`},
+  {id:'l40',ch:5,title:'Bài 40: Ôn tập đo độ dài và thời gian',sub:'Ôn cm, đồng hồ, lịch',
+   learn:`<h4>🏆 Ôn tập đo độ dài và thời gian</h4>
+<div class="example-box">Đoạn AB dài 7 cm<br>Đoạn CD dài 5 cm<br>AB dài hơn CD: 7 – 5 = 2 cm</div>
+<div class="example-box">7 giờ sáng: thức dậy<br>9 giờ sáng: đến trường<br>11 giờ: ra chơi</div>`,
+   practice:`<p>Lớp học bắt đầu lúc 7 giờ, kết thúc lúc 11 giờ. Lớp học bao nhiêu tiếng?</p>`},
+  {id:'l41',ch:5,title:'Bài 41: Ôn tập cuối năm',sub:'Tổng ôn toàn bộ chương trình',
+   learn:`<h4>🎓 Ôn tập cuối năm</h4>
+<p>Ôn lại toàn bộ kiến thức Toán 1 – Tập Hai:</p>
+<div class="example-box">🔢 Số đến 100 | 📏 Đo cm<br>➕ Cộng trừ | 🕐 Đồng hồ & Lịch</div>
+<h4>🌟 Em đã học được</h4>
+<p>• Đọc, viết, so sánh số đến 100<br>• Cộng, trừ không nhớ trong 100<br>• Đo độ dài bằng cm<br>• Xem giờ, xem lịch</p>
+<div class="note">🎉 Chúc mừng! Bạn đã hoàn thành Toán 1 – Tập Hai!</div>`,
+   practice:`<p>Tính: 36 + 43 = ? &nbsp;&nbsp; 79 – 25 = ? &nbsp;&nbsp; So sánh: 68 __ 86</p>`},
+];
+
+const chColors = {1:'#1565C0',2:'#2E7D32',3:'#E65100',4:'#880E4F',5:'#4A148C'};
+const chNames = {1:'Số đến 100',2:'Đo độ dài',3:'Phép tính',4:'Thời gian',5:'Ôn tập'};
+
+// ============ TABS ============
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = {home:0,lessons:1,exercises:2,games:3,progress:4};
+  document.querySelectorAll('.tab-btn')[map[id]].classList.add('active');
+  if(id==='progress') renderProgress();
+  if(id==='home') updateHomeStats();
+}
+
+// ============ HOME ============
+function updateHomeStats() {
+  document.getElementById('home-stars').textContent = state.stars;
+  document.getElementById('home-done').textContent = state.doneLessons.size;
+  document.getElementById('home-games').textContent = state.gamesPlayed;
+  // Chapter progress bars
+  [1,2,3,4,5].forEach(ch => {
+    const total = lessons.filter(l=>l.ch===ch).length;
+    const done = lessons.filter(l=>l.ch===ch && state.doneLessons.has(l.id)).length;
+    const el = document.getElementById('cp'+ch);
+    if(el) el.style.width = (total > 0 ? (done/total*100) : 0)+'%';
+  });
+}
+
+// ============ LESSONS ============
+function renderLessons(chFilter) {
+  const list = document.getElementById('lessonList');
+  const filtered = chFilter ? lessons.filter(l=>l.ch===chFilter) : lessons;
+  list.innerHTML = filtered.map(l => {
+    const done = state.doneLessons.has(l.id);
+    return `<div class="lesson-card ${done?'done':''}" onclick="openLesson('${l.id}')" style="border-color:${chColors[l.ch]}">
+      <div class="badge">${done?'✅':''}</div>
+      <h4>${l.title}</h4>
+      <p>${l.sub}</p>
+      <span class="ch-tag" style="background:${chColors[l.ch]}22;color:${chColors[l.ch]}">${chNames[l.ch]}</span>
+    </div>`;
+  }).join('');
+}
+
+function filterLessons(ch) {
+  showTab('lessons');
+  document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===ch));
+  renderLessons(ch);
+}
+
+let currentLesson = null;
+function openLesson(id) {
+  currentLesson = lessons.find(l=>l.id===id);
+  document.getElementById('modalTitle').textContent = currentLesson.title;
+  document.getElementById('modalLearn').innerHTML = currentLesson.learn;
+  document.getElementById('modalPractice').innerHTML = `<div style="padding:10px">${currentLesson.practice}</div><p style="color:#888;font-size:13px;margin-top:8px;">Hãy làm bài tập vào vở của em nhé! 📝</p>`;
+  switchModalTab('learn', document.querySelector('.modal-tab'));
+  document.getElementById('lessonModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('lessonModal').classList.remove('show');
+}
+
+function switchModalTab(tab, btn) {
+  ['modalLearn','modalPractice','modalDone'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('modal'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='block';
+  if(btn) btn.classList.add('active');
+}
+
+function markDone() {
+  if(!currentLesson) return;
+  if(!state.doneLessons.has(currentLesson.id)) {
+    state.doneLessons.add(currentLesson.id);
+    state.stars += 3;
+    saveState();
+    confetti();
+    showToast('🎉 Tuyệt vời! +3 ⭐');
+    updateStarsDisplay();
+    checkAchievements();
+    renderLessons(0);
+    updateHomeStats();
+  }
+  closeModal();
+}
+
+// ============ EXERCISES ============
+let exType='', exQ=[], exIdx=0, exCorrect=0, exAnswer=null;
+
+const exTitles = {count:'🔢 Đếm & Số',compare:'⚖️ So sánh số',add:'➕ Phép cộng',
+  sub:'➖ Phép trừ',measure:'📏 Đo độ dài',clock:'🕐 Xem đồng hồ',word:'📖 Toán có lời văn'};
+
+function genQuestions(type) {
+  const qs = [];
+  if(type==='count') {
+    for(let i=0;i<10;i++){
+      const n=Math.floor(Math.random()*91)+10;
+      const choices=genChoices(n,1,100,4);
+      qs.push({q:`Đọc số: <span style="font-size:48px;color:#1565C0">${n}</span>`,
+        choices, ans: choices.indexOf(n), type:'choice', label: numWords[n]});
+    }
+  } else if(type==='compare') {
+    for(let i=0;i<10;i++){
+      const a=Math.floor(Math.random()*90)+1, b=Math.floor(Math.random()*90)+1;
+      const op = a>b?'>':a<b?'<':'=';
+      const choices=['>','<','='];
+      qs.push({q:`${a} ○ ${b}`, choices:['<','>','='], ans:['<','>','='].indexOf(op), type:'choice'});
+    }
+  } else if(type==='add') {
+    for(let i=0;i<10;i++){
+      const a=Math.floor(Math.random()*50)+10, b=Math.floor(Math.random()*50)+1;
+      if(a+b>100){i--;continue;}
+      const ans=a+b;
+      qs.push({q:`${a} + ${b} = ?`, ans, choices:genChoices(ans,1,100,4), type:'choice'});
+    }
+  } else if(type==='sub') {
+    for(let i=0;i<10;i++){
+      const a=Math.floor(Math.random()*80)+20, b=Math.floor(Math.random()*Math.min(a,50))+1;
+      const ans=a-b;
+      qs.push({q:`${a} – ${b} = ?`, ans, choices:genChoices(ans,0,99,4), type:'choice'});
+    }
+  } else if(type==='measure') {
+    const items=[{n:'cây bút',l:15},{n:'thước kẻ',l:30},{n:'cục tẩy',l:5},{n:'sách',l:21},
+      {n:'bàn học',l:60},{n:'hộp bút',l:20}];
+    for(let i=0;i<10;i++){
+      const a=items[Math.floor(Math.random()*items.length)];
+      const b=items[Math.floor(Math.random()*items.length)];
+      if(a===b){i--;continue;}
+      const longer=a.l>b.l?a.n:b.n;
+      qs.push({q:`${a.n} (${a.l} cm) và ${b.n} (${b.l} cm).\nCái nào dài hơn?`,
+        choices:[a.n,b.n], ans:a.l>b.l?0:1, type:'choice'});
+    }
+  } else if(type==='clock') {
+    for(let i=0;i<10;i++){
+      const h=Math.floor(Math.random()*12)+1, m=Math.random()<0.5?0:30;
+      const label=m===0?`${h} giờ`:`${h} giờ 30 phút`;
+      const choices=[];
+      const opts=[];
+      while(opts.length<4){
+        const rh=Math.floor(Math.random()*12)+1, rm=Math.random()<0.5?0:30;
+        const lbl=rm===0?`${rh} giờ`:`${rh} giờ 30 phút`;
+        if(!opts.includes(lbl))opts.push(lbl);
+      }
+      if(!opts.includes(label))opts[0]=label;
+      opts.sort(()=>Math.random()-0.5);
+      qs.push({h,m,label,q:`Đồng hồ chỉ mấy giờ?`,choices:opts,ans:opts.indexOf(label),type:'clock'});
+    }
+  } else if(type==='word') {
+    const wqs=[
+      {q:'Lớp học có 24 bạn gái và 18 bạn trai. Lớp có tất cả bao nhiêu bạn?',ans:42,choices:genChoices(42,20,60,4)},
+      {q:'Vườn nhà An có 56 cây, chặt đi 24 cây. Còn lại bao nhiêu cây?',ans:32,choices:genChoices(32,10,55,4)},
+      {q:'Hộp có 35 bút chì, bỏ thêm vào 14 bút. Có tất cả bao nhiêu bút?',ans:49,choices:genChoices(49,30,65,4)},
+      {q:'An có 67 viên bi, cho bạn 25 viên. An còn lại bao nhiêu viên?',ans:42,choices:genChoices(42,20,65,4)},
+      {q:'Cửa hàng có 48 cái bánh, bán được 23 cái. Còn lại bao nhiêu cái bánh?',ans:25,choices:genChoices(25,10,45,4)},
+      {q:'Mai hái được 32 quả cam và 41 quả bưởi. Tổng cộng hái được bao nhiêu quả?',ans:73,choices:genChoices(73,50,90,4)},
+      {q:'Trên cây có 75 con chim, bay đi 33 con. Còn lại bao nhiêu con chim?',ans:42,choices:genChoices(42,30,70,4)},
+      {q:'Buổi sáng cô bán 41 cốc sữa, buổi chiều bán 35 cốc. Cô bán được tất cả bao nhiêu cốc?',ans:76,choices:genChoices(76,50,95,4)},
+    ];
+    for(let i=0;i<10;i++) qs.push({...wqs[i%wqs.length], type:'choice'});
+  }
+  return qs;
+}
+
+function genChoices(ans, min, max, count) {
+  const set = new Set([ans]);
+  while(set.size < count) {
+    let v = ans + (Math.random()<0.5?1:-1) * (Math.floor(Math.random()*20)+1);
+    v = Math.max(min, Math.min(max, v));
+    if(v!==ans) set.add(v);
+  }
+  return [...set].sort(()=>Math.random()-0.5);
+}
+
+function startExercise(type) {
+  exType=type; exIdx=0; exCorrect=0;
+  exQ=genQuestions(type);
+  document.getElementById('exCats').style.display='none';
+  document.getElementById('exArea').style.display='block';
+  document.getElementById('exTitle').textContent = exTitles[type];
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q=exQ[exIdx];
+  document.getElementById('exScore').textContent=`Câu ${exIdx+1}/10 | Đúng: ${exCorrect}`;
+  document.getElementById('exResult').className='ex-result';
+  document.getElementById('btnCheck').style.display='inline-flex';
+  document.getElementById('btnNext').style.display='none';
+  exAnswer=null;
+
+  if(q.type==='clock') {
+    document.getElementById('qText').innerHTML=`<div style="margin-bottom:8px">${q.q}</div>${drawClock(q.h,q.m)}`;
+  } else {
+    document.getElementById('qText').innerHTML=q.q;
+  }
+
+  const inp=document.getElementById('qInput');
+  inp.innerHTML='';
+  if(q.choices) {
+    const div=document.createElement('div');
+    div.className='choices';
+    q.choices.forEach((c,i)=>{
+      const btn=document.createElement('button');
+      btn.className='choice-btn';
+      btn.textContent=c;
+      btn.onclick=()=>{
+        document.querySelectorAll('.choice-btn').forEach(b=>b.style.background='');
+        btn.style.background='#E3F2FD'; exAnswer=i;
+      };
+      div.appendChild(btn);
+    });
+    inp.appendChild(div);
+  }
+}
+
+function drawClock(h,m) {
+  const hw=((h%12)+m/60)/12*360-90;
+  const mw=m/60*360-90;
+  return `<svg width="120" height="120" viewBox="0 0 120 120" class="clock-svg" style="display:block;margin:0 auto">
+    <circle cx="60" cy="60" r="55" fill="white" stroke="#1565C0" stroke-width="4"/>
+    ${[12,1,2,3,4,5,6,7,8,9,10,11].map((n,i)=>{
+      const a=(i/12)*2*Math.PI-Math.PI/2;
+      return `<text x="${60+42*Math.cos(a)}" y="${64+42*Math.sin(a)}" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">${n}</text>`;
+    }).join('')}
+    <line x1="60" y1="60" x2="${60+28*Math.cos(hw*Math.PI/180)}" y2="${60+28*Math.sin(hw*Math.PI/180)}" stroke="#1A237E" stroke-width="4" stroke-linecap="round"/>
+    <line x1="60" y1="60" x2="${60+40*Math.cos(mw*Math.PI/180)}" y2="${60+40*Math.sin(mw*Math.PI/180)}" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="4" fill="#E91E63"/>
+  </svg>`;
+}
+
+function checkAnswer() {
+  if(exAnswer===null){showToast('Hãy chọn đáp án!');return;}
+  const q=exQ[exIdx];
+  const correct=exAnswer===q.ans;
+  const res=document.getElementById('exResult');
+  res.className='ex-result show '+(correct?'ok':'fail');
+  res.textContent=correct?'✅ Đúng rồi! Giỏi lắm!':'❌ Sai rồi! Đáp án: '+(q.choices?q.choices[q.ans]:q.ans);
+  if(correct){exCorrect++;state.correctTotal++;confetti();}
+  document.querySelectorAll('.choice-btn').forEach((b,i)=>{
+    b.className='choice-btn'+(i===q.ans?' correct':exAnswer===i?' wrong':'');
+  });
+  document.getElementById('btnCheck').style.display='none';
+  document.getElementById('btnNext').style.display='inline-flex';
+}
+
+function nextQuestion() {
+  exIdx++;
+  if(exIdx>=10){
+    const res=document.getElementById('exResult');
+    res.className='ex-result show ok';
+    res.innerHTML=`🏁 Xong! Đúng ${exCorrect}/10 | +${exCorrect} ⭐`;
+    state.stars+=exCorrect; saveState(); updateStarsDisplay();
+    checkAchievements();
+    document.getElementById('btnNext').style.display='none';
+    document.getElementById('qText').textContent='';
+    document.getElementById('qInput').innerHTML='';
+    setTimeout(()=>backToExCats(),2000);
+  } else {renderQuestion();}
+}
+
+function backToExCats() {
+  document.getElementById('exCats').style.display='block';
+  document.getElementById('exArea').style.display='none';
+}
+
+// ============ GAMES ============
+let gameTimer=null, gameRunning=false;
+
+function startGame(type) {
+  document.getElementById('gameMenu').style.display='none';
+  document.getElementById('gameArea').style.display='block';
+  state.gamesPlayed++;
+  saveState();
+  if(type==='quiz') startQuiz();
+  else if(type==='memory') startMemory();
+  else if(type==='clock') startClockGame();
+  else if(type==='balloon') startBalloon();
+  else if(type==='connect') startConnect();
+  else if(type==='spin') startSpin();
+  else if(type==='sort') startSort();
+  else if(type==='fill') startFill();
+}
+
+function backToGameMenu() {
+  clearInterval(gameTimer); gameRunning=false;
+  document.getElementById('gameMenu').style.display='block';
+  document.getElementById('gameArea').style.display='none';
+  updateBestScores();
+}
+
+function updateBestScores() {
+  Object.keys(state.bestScores).forEach(k=>{
+    const el=document.getElementById('best-'+k);
+    if(el) el.textContent='Kỷ lục: '+state.bestScores[k];
+  });
+}
+
+// --- QUIZ GAME ---
+let quizScore=0,quizTime=30;
+function startQuiz() {
+  document.getElementById('gameTitle').textContent='⚡ Tính nhanh';
+  quizScore=0;quizTime=30;
+  renderQuiz();
+  clearInterval(gameTimer);
+  gameRunning=true;
+  gameTimer=setInterval(()=>{
+    quizTime--;
+    const fill=document.getElementById('timerFill');
+    if(fill)fill.style.width=(quizTime/30*100)+'%';
+    const td=document.getElementById('timeDisp');
+    if(td)td.textContent=quizTime;
+    if(quizTime<=0){clearInterval(gameTimer);gameRunning=false;endQuiz();}
+  },1000);
+}
+
+function renderQuiz() {
+  const types=['add','sub','compare'];
+  const t=types[Math.floor(Math.random()*types.length)];
+  let q,ans,choices;
+  if(t==='add'){const a=rnd(10,50),b=rnd(1,50-a+10);if(a+b>100){renderQuiz();return;}
+    q=`${a} + ${b} = ?`;ans=a+b;choices=genChoices(ans,1,100,4);}
+  else if(t==='sub'){const a=rnd(20,99),b=rnd(1,a);q=`${a} – ${b} = ?`;ans=a-b;choices=genChoices(ans,0,98,4);}
+  else{const a=rnd(10,99),b=rnd(10,99);const op=a>b?'>':a<b?'<':'=';
+    q=`${a} ○ ${b}`;ans=op;choices=['<','>','='];}
+  
+  const gc=document.getElementById('gameContent');
+  gc.innerHTML=`
+    <div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+    <div class="game-score">
+      <div class="gscore-box">⏱ <span id="timeDisp">${quizTime}</span>s</div>
+      <div class="gscore-box">⭐ <span id="quizScoreDisp">${quizScore}</span></div>
+    </div>
+    <div class="question-box" style="margin-top:12px">
+      <div class="question-text">${q}</div>
+      <div class="choices">${choices.map(c=>`<button class="choice-btn" onclick="checkQuiz(this,'${c}','${ans}')">${c}</button>`).join('')}</div>
+    </div>`;
+}
+
+function checkQuiz(btn,selected,correct) {
+  if(!gameRunning)return;
+  const isCorrect=String(selected)===String(correct);
+  btn.className='choice-btn '+(isCorrect?'correct':'wrong');
+  if(isCorrect){quizScore++;state.stars++;state.correctTotal++;}
+  document.getElementById('quizScoreDisp').textContent=quizScore;
+  document.querySelectorAll('.choice-btn').forEach(b=>b.onclick=null);
+  setTimeout(renderQuiz,600);
+}
+
+function endQuiz() {
+  if(!state.bestScores.quiz||quizScore>state.bestScores.quiz)state.bestScores.quiz=quizScore;
+  saveState();checkAchievements();
+  document.getElementById('gameContent').innerHTML=`
+    <div style="text-align:center;padding:24px">
+      <div style="font-size:56px">🏆</div>
+      <h3 style="font-size:24px;color:#1565C0;margin:12px 0">Kết quả: ${quizScore} điểm!</h3>
+      <p>Kỷ lục: ${state.bestScores.quiz}</p>
+      <button onclick="startGame('quiz')" style="margin-top:16px;background:#FF6B35;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+      <button onclick="backToGameMenu()" style="margin-top:16px;margin-left:10px;background:#F0F4FF;color:#1565C0;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🏠 Menu</button>
+    </div>`;
+}
+
+// --- MEMORY GAME ---
+let memCards=[], memFlipped=[], memMatched=0, memMoves=0, memStart=0;
+function startMemory() {
+  document.getElementById('gameTitle').textContent='🧠 Thẻ ghi nhớ';
+  memMatched=0;memMoves=0;memStart=Date.now();
+  const nums=[11,22,33,44,55,66,77,88];
+  const pairs=[...nums,...nums].sort(()=>Math.random()-0.5);
+  memCards=pairs.map((n,i)=>({n,id:i,flipped:false,matched:false}));
+  memFlipped=[];
+  renderMemory();
+}
+
+function renderMemory() {
+  const gc=document.getElementById('gameContent');
+  gc.innerHTML=`
+    <div class="game-score" style="margin-bottom:10px">
+      <div class="gscore-box">🔄 ${memMoves} lần lật</div>
+      <div class="gscore-box">✅ ${memMatched}/8 cặp</div>
+    </div>
+    <div class="memory-grid" id="memGrid"></div>`;
+  const grid=document.getElementById('memGrid');
+  memCards.forEach((c,i)=>{
+    const div=document.createElement('div');
+    div.className='mem-card'+(c.flipped?' flipped':'')+(c.matched?' matched':'');
+    div.textContent=c.matched||c.flipped?c.n:'';
+    div.onclick=()=>flipMem(i);
+    grid.appendChild(div);
+  });
+}
+
+function flipMem(i) {
+  const c=memCards[i];
+  if(c.matched||c.flipped||memFlipped.length>=2)return;
+  c.flipped=true;memFlipped.push(i);
+  if(memFlipped.length===2){
+    memMoves++;
+    const [a,b]=memFlipped;
+    if(memCards[a].n===memCards[b].n){
+      memCards[a].matched=memCards[b].matched=true;
+      memMatched++;memFlipped=[];
+      if(memMatched===8){
+        const t=Math.floor((Date.now()-memStart)/1000);
+        if(!state.bestScores.memory||t<state.bestScores.memory)state.bestScores.memory=t;
+        saveState();confetti();
+        setTimeout(()=>{
+          document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+            <div style="font-size:56px">🎉</div>
+            <h3 style="font-size:22px;color:#1565C0;margin:12px 0">${memMoves} lần lật | ${t} giây</h3>
+            <button onclick="startGame('memory')" style="background:#9C27B0;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+          </div>`;
+        },500);
+      }
+    } else {
+      setTimeout(()=>{memCards[a].flipped=memCards[b].flipped=false;memFlipped=[];renderMemory();},800);
+    }
+  }
+  renderMemory();
+}
+
+// --- CLOCK GAME ---
+let clockScore=0,clockQ=[];
+function startClockGame() {
+  document.getElementById('gameTitle').textContent='🕐 Đọc đồng hồ';
+  clockScore=0;
+  clockQ=[];
+  for(let i=0;i<10;i++){const h=rnd(1,12),m=Math.random()<0.5?0:30;clockQ.push({h,m});}
+  renderClockGame(0);
+}
+function renderClockGame(idx) {
+  if(idx>=10){
+    if(!state.bestScores.clock||clockScore>state.bestScores.clock)state.bestScores.clock=clockScore;
+    saveState();checkAchievements();
+    document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+      <div style="font-size:56px">🏆</div>
+      <h3 style="font-size:22px;color:#1565C0;margin:12px 0">Đúng ${clockScore}/10!</h3>
+      <button onclick="startGame('clock')" style="background:#2196F3;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+    </div>`;return;
+  }
+  const {h,m}=clockQ[idx];
+  const label=m===0?`${h} giờ`:`${h} giờ 30 phút`;
+  const choices=new Set([label]);
+  while(choices.size<4){const rh=rnd(1,12),rm=Math.random()<0.5?0:30;choices.add(rm===0?`${rh} giờ`:`${rh} giờ 30 phút`);}
+  const opts=[...choices].sort(()=>Math.random()-0.5);
+  document.getElementById('gameContent').innerHTML=`
+    <div class="game-score" style="margin-bottom:10px">
+      <div class="gscore-box">Câu ${idx+1}/10</div>
+      <div class="gscore-box">⭐ ${clockScore}</div>
+    </div>
+    <div class="question-box">
+      <p style="font-weight:700;margin-bottom:8px">Đồng hồ chỉ mấy giờ?</p>
+      ${drawClock(h,m)}
+      <div class="choices" style="margin-top:12px">
+        ${opts.map(o=>`<button class="choice-btn" style="width:auto;padding:8px 14px;font-size:14px" onclick="checkClockQ(this,'${o}','${label}',${idx})">${o}</button>`).join('')}
+      </div>
+    </div>`;
+}
+function checkClockQ(btn,sel,correct,idx) {
+  const ok=sel===correct;
+  btn.className='choice-btn '+(ok?'correct':'wrong');
+  if(ok){clockScore++;}
+  document.querySelectorAll('.choice-btn').forEach(b=>b.onclick=null);
+  setTimeout(()=>renderClockGame(idx+1),700);
+}
+
+// --- BALLOON GAME ---
+let balloonScore=0,balloonTime=45,balloonInterval;
+function startBalloon() {
+  document.getElementById('gameTitle').textContent='🎈 Bắn bóng bay';
+  balloonScore=0;balloonTime=45;
+  document.getElementById('gameContent').innerHTML=`
+    <div class="timer-bar"><div class="timer-fill" id="bTimerFill" style="width:100%"></div></div>
+    <div class="game-score">
+      <div class="gscore-box">⏱ <span id="bTime">${balloonTime}</span>s</div>
+      <div class="gscore-box">⭐ <span id="bScore">0</span></div>
+    </div>
+    <div style="font-size:13px;text-align:center;color:#888;margin:6px 0">Bấm vào bóng có số <strong id="bTask">lớn hơn</strong>!</div>
+    <div class="balloon-area" id="balloonArea"></div>`;
+  clearInterval(balloonInterval);gameRunning=true;
+  balloonInterval=setInterval(()=>{
+    balloonTime--;
+    const f=document.getElementById('bTimerFill');if(f)f.style.width=(balloonTime/45*100)+'%';
+    const td=document.getElementById('bTime');if(td)td.textContent=balloonTime;
+    if(balloonTime<=0){clearInterval(balloonInterval);gameRunning=false;endBalloon();}
+  },1000);
+  spawnBalloons();
+}
+
+function spawnBalloons() {
+  if(!gameRunning)return;
+  const area=document.getElementById('balloonArea');
+  if(!area)return;
+  const nums=[rnd(10,99),rnd(10,99)];
+  const target=Math.random()<0.5?Math.max(...nums):Math.min(...nums);
+  const isMax=target===Math.max(...nums);
+  const t=document.getElementById('bTask');
+  if(t)t.textContent=isMax?'lớn hơn':'nhỏ hơn';
+  
+  nums.forEach((n,i)=>{
+    const b=document.createElement('div');
+    b.className='balloon';
+    b.style.left=(20+i*50)+'%';
+    b.style.animationDuration=(3+Math.random()*2)+'s';
+    b.innerHTML=`<span>${['🎈','🎊','🎁'][rnd(0,2)]}</span><span class="num">${n}</span>`;
+    b.onclick=()=>{
+      if(!gameRunning)return;
+      if(n===target){balloonScore++;state.stars++;confetti();}
+      else balloonScore=Math.max(0,balloonScore-1);
+      document.getElementById('bScore').textContent=balloonScore;
+      area.removeChild(b);
+      setTimeout(spawnBalloons,300);
+    };
+    b.addEventListener('animationend',()=>{if(b.parentNode)area.removeChild(b);setTimeout(spawnBalloons,200);});
+    area.appendChild(b);
+  });
+}
+
+function endBalloon() {
+  if(!state.bestScores.balloon||balloonScore>state.bestScores.balloon)state.bestScores.balloon=balloonScore;
+  saveState();checkAchievements();
+  document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+    <div style="font-size:56px">🎈</div>
+    <h3 style="font-size:22px;color:#1565C0;margin:12px 0">Điểm: ${balloonScore}!</h3>
+    <button onclick="startGame('balloon')" style="background:#4CAF50;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+  </div>`;
+}
+
+// --- CONNECT GAME ---
+let connectSelected=null,connectScore=0,connectDone=0;
+function startConnect() {
+  document.getElementById('gameTitle').textContent='🔗 Nối cặp số';
+  connectScore=0;connectDone=0;connectSelected=null;
+  const pairs=[];
+  const nums=[11,22,33,44,55,66,77,88].sort(()=>Math.random()-0.5).slice(0,5);
+  nums.forEach(n=>pairs.push({num:n,word:numWords[n]}));
+  renderConnect(pairs);
+}
+function renderConnect(pairs) {
+  const leftNums=[...pairs].sort(()=>Math.random()-0.5);
+  const rightWords=[...pairs].sort(()=>Math.random()-0.5);
+  document.getElementById('gameContent').innerHTML=`
+    <div class="game-score" style="margin-bottom:10px"><div class="gscore-box">✅ ${connectDone}/5 cặp</div></div>
+    <p style="text-align:center;font-size:13px;color:#888;margin-bottom:10px">Bấm số rồi bấm chữ để nối cặp</p>
+    <div class="connect-area">
+      <div class="connect-col" id="leftCol">
+        ${leftNums.map(p=>`<div class="connect-item" id="cn${p.num}" onclick="selectConnect('num',${p.num},'cn${p.num}')">${p.num}</div>`).join('')}
+      </div>
+      <div class="connect-col" id="rightCol">
+        ${rightWords.map(p=>`<div class="connect-item" id="cw${p.num}" onclick="selectConnect('word',${p.num},'cw${p.num}')">${p.word}</div>`).join('')}
+      </div>
+    </div>`;
+}
+function selectConnect(type,num,eid) {
+  const el=document.getElementById(eid);
+  if(el.classList.contains('matched'))return;
+  if(!connectSelected){connectSelected={type,num,eid};el.classList.add('selected');}
+  else{
+    if(connectSelected.type===type){
+      document.getElementById(connectSelected.eid).classList.remove('selected');
+      connectSelected={type,num,eid};el.classList.add('selected');return;
+    }
+    if(connectSelected.num===num){
+      document.getElementById(connectSelected.eid).classList.replace('selected','matched');
+      el.classList.add('matched');connectDone++;connectScore++;
+      if(connectDone===5){
+        if(!state.bestScores.connect||connectScore>state.bestScores.connect)state.bestScores.connect=connectScore;
+        state.stars+=5;saveState();confetti();
+        setTimeout(()=>{document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+          <div style="font-size:56px">🎉</div><h3 style="font-size:22px;color:#1565C0;margin:12px 0">Nối đúng tất cả! +5⭐</h3>
+          <button onclick="startGame('connect')" style="background:#E91E63;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+        </div>`;},400);
+      }
+    } else {
+      document.getElementById(connectSelected.eid).classList.remove('selected');
+      el.classList.add('wrong');setTimeout(()=>el.classList.remove('wrong'),500);
+    }
+    connectSelected=null;
+  }
+}
+
+// --- SPIN GAME ---
+let spinNums=[],spinResult=null,spinCount=0,spinScore=0;
+function startSpin() {
+  document.getElementById('gameTitle').textContent='🎡 Vòng quay số';
+  spinScore=0;spinCount=0;spinResult=null;
+  document.getElementById('gameContent').innerHTML=`
+    <div class="game-score" style="margin-bottom:10px">
+      <div class="gscore-box">Vòng <span id="spinRound">0</span>/5</div>
+      <div class="gscore-box">⭐ <span id="spinScore">0</span></div>
+    </div>
+    <canvas id="spinCanvas" width="200" height="200"></canvas>
+    <div id="spinQuestion" style="text-align:center;margin-top:12px;font-size:22px;font-weight:800;min-height:40px"></div>
+    <div id="spinChoices" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px"></div>
+    <button id="btnSpin" onclick="doSpin()" style="display:block;margin:12px auto;background:linear-gradient(135deg,#FF9800,#E65100);color:white;border:none;padding:12px 32px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🎡 Quay!</button>`;
+  drawWheel(0);
+}
+function drawWheel(angle) {
+  const canvas=document.getElementById('spinCanvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const nums=[10,20,30,40,50,60,70,80];
+  const colors=['#FF6B35','#2196F3','#4CAF50','#9C27B0','#F44336','#FF9800','#00BCD4','#E91E63'];
+  const cx=100,cy=100,r=90;
+  ctx.clearRect(0,0,200,200);
+  nums.forEach((n,i)=>{
+    const a=angle+(i/8)*2*Math.PI, a2=angle+((i+1)/8)*2*Math.PI;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a2);
+    ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(a+(a2-a)/2);
+    ctx.textAlign='right';ctx.fillStyle='white';ctx.font='bold 16px Nunito';
+    ctx.fillText(n,r-8,5);ctx.restore();
+  });
+  ctx.beginPath();ctx.moveTo(cx,cy-r-5);ctx.lineTo(cx-8,cy-r+10);ctx.lineTo(cx+8,cy-r+10);
+  ctx.fillStyle='#F44336';ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,12,0,2*Math.PI);ctx.fillStyle='white';ctx.fill();
+}
+let spinAngle=0;
+function doSpin() {
+  if(spinCount>=5)return;
+  const btn=document.getElementById('btnSpin');if(btn)btn.disabled=true;
+  const nums=[10,20,30,40,50,60,70,80];
+  const totalSpin=2*Math.PI*(3+Math.random()*3);
+  let elapsed=0;const dur=2000;
+  const start=performance.now();
+  function frame(now){
+    elapsed=now-start;
+    const t=Math.min(elapsed/dur,1);
+    const ease=1-Math.pow(1-t,3);
+    spinAngle=ease*totalSpin;
+    drawWheel(spinAngle);
+    if(t<1){requestAnimationFrame(frame);}
+    else{
+      const finalAngle=spinAngle%(2*Math.PI);
+      const idx=Math.floor(((2*Math.PI-finalAngle)%(2*Math.PI))/(2*Math.PI/8))%8;
+      const n=nums[idx];spinNums.push(n);
+      if(spinNums.length%2===0){
+        const a=spinNums[spinNums.length-2],b=spinNums[spinNums.length-1];
+        const ans=a+b,choices=genChoices(ans,1,100,4);
+        spinCount++;
+        document.getElementById('spinRound').textContent=spinCount;
+        document.getElementById('spinQuestion').textContent=`${a} + ${b} = ?`;
+        document.getElementById('spinChoices').innerHTML=choices.map(c=>`<button class="choice-btn" onclick="checkSpin(this,${c},${ans})">${c}</button>`).join('');
+        if(btn)btn.style.display='none';
+      } else {
+        if(btn){btn.disabled=false;document.getElementById('spinQuestion').textContent=`Quay lần ${Math.ceil(spinNums.length/2+0.5)}: được ${n}! Quay tiếp...`;}
+      }
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function checkSpin(btn,sel,ans) {
+  const ok=sel===ans;
+  btn.className='choice-btn '+(ok?'correct':'wrong');
+  if(ok){spinScore++;state.stars++;}
+  document.getElementById('spinScore').textContent=spinScore;
+  document.querySelectorAll('.choice-btn').forEach(b=>b.onclick=null);
+  setTimeout(()=>{
+    document.getElementById('spinChoices').innerHTML='';
+    document.getElementById('spinQuestion').textContent='';
+    if(spinCount>=5){
+      if(!state.bestScores.spin||spinScore>state.bestScores.spin)state.bestScores.spin=spinScore;
+      saveState();checkAchievements();confetti();
+      document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+        <div style="font-size:56px">🎡</div>
+        <h3 style="font-size:22px;color:#1565C0;margin:12px 0">Đúng ${spinScore}/5!</h3>
+        <button onclick="startGame('spin')" style="background:#FF9800;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+      </div>`;
+    } else {
+      const btn2=document.getElementById('btnSpin');
+      if(btn2){btn2.style.display='block';btn2.disabled=false;}
+    }
+  },700);
+}
+
+// --- SORT GAME ---
+let sortSelected=null,sortArr=[],sortTarget=[],sortMode='asc',sortScore=0,sortRound=0;
+function startSort() {
+  document.getElementById('gameTitle').textContent='🔀 Sắp xếp số';
+  sortScore=0;sortRound=0;nextSortRound();
+}
+function nextSortRound() {
+  if(sortRound>=5){
+    if(!state.bestScores.sort||sortScore>state.bestScores.sort)state.bestScores.sort=sortScore;
+    saveState();checkAchievements();confetti();
+    document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+      <div style="font-size:56px">🏆</div>
+      <h3 style="font-size:22px;color:#1565C0;margin:12px 0">Đúng ${sortScore}/5!</h3>
+      <button onclick="startGame('sort')" style="background:#009688;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+    </div>`;return;
+  }
+  sortMode=Math.random()<0.5?'asc':'desc';
+  sortArr=[];const tmp=new Set();
+  while(tmp.size<5)tmp.add(rnd(10,99));
+  sortArr=[...tmp].sort(()=>Math.random()-0.5);
+  sortTarget=[...sortArr].sort((a,b)=>sortMode==='asc'?a-b:b-a);
+  sortSelected=[];sortRound++;
+  renderSort();
+}
+function renderSort() {
+  document.getElementById('gameContent').innerHTML=`
+    <div class="game-score" style="margin-bottom:10px">
+      <div class="gscore-box">Vòng ${sortRound}/5</div>
+      <div class="gscore-box">⭐ ${sortScore}</div>
+    </div>
+    <p style="text-align:center;font-weight:700;margin-bottom:8px">Sắp xếp các số theo thứ tự <strong style="color:${sortMode==='asc'?'#4CAF50':'#F44336'}">${sortMode==='asc'?'TĂNG DẦN ↑':'GIẢM DẦN ↓'}</strong></p>
+    <div style="text-align:center;margin-bottom:8px;min-height:40px;font-size:22px;font-weight:800;color:#888">Thứ tự đã chọn: <span id="sortOrder">${sortSelected.join(' → ') || '?'}</span></div>
+    <div class="sort-nums" id="sortNums">
+      ${sortArr.map(n=>`<div class="sort-num ${sortSelected.includes(n)?'matched':''}" onclick="pickSort(${n})">${n}</div>`).join('')}
+    </div>
+    <button onclick="checkSort()" style="display:block;margin:10px auto;background:linear-gradient(135deg,#009688,#00695C);color:white;border:none;padding:10px 24px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">✅ Kiểm tra</button>`;
+}
+function pickSort(n) {
+  if(sortSelected.includes(n))return;
+  sortSelected.push(n);
+  renderSort();
+}
+function checkSort() {
+  if(sortSelected.length<sortArr.length){showToast('Hãy chọn đủ '+sortArr.length+' số!');return;}
+  const ok=sortSelected.join()===sortTarget.join();
+  if(ok){sortScore++;state.stars++;confetti();showToast('✅ Đúng! +1⭐');}
+  else showToast('❌ Sai! Đúng là: '+sortTarget.join(' → '));
+  setTimeout(nextSortRound,1200);
+}
+
+// --- FILL GAME ---
+let fillQs=[],fillIdx=0,fillScore=0;
+function startFill() {
+  document.getElementById('gameTitle').textContent='✏️ Điền số vào chỗ trống';
+  fillScore=0;fillIdx=0;
+  fillQs=[];
+  for(let i=0;i<10;i++){
+    const a=rnd(10,80),b=rnd(1,20);
+    const t=Math.random()<0.5;
+    if(t){fillQs.push({q:`___ + ${b} = ${a+b}`,ans:a,hint:`${a+b} – ${b}`});}
+    else{fillQs.push({q:`${a+b} – ___ = ${a}`,ans:b,hint:`${a+b} – ${a}`});}
+  }
+  renderFill();
+}
+function renderFill() {
+  if(fillIdx>=10){
+    if(!state.bestScores.fill||fillScore>state.bestScores.fill)state.bestScores.fill=fillScore;
+    state.stars+=fillScore;saveState();checkAchievements();
+    document.getElementById('gameContent').innerHTML=`<div style="text-align:center;padding:24px">
+      <div style="font-size:56px">✏️</div>
+      <h3 style="font-size:22px;color:#1565C0;margin:12px 0">Đúng ${fillScore}/10! +${fillScore}⭐</h3>
+      <button onclick="startGame('fill')" style="background:#795548;color:white;border:none;padding:12px 24px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer">🔄 Chơi lại</button>
+    </div>`;return;
+  }
+  const q=fillQs[fillIdx];
+  document.getElementById('gameContent').innerHTML=`
+    <div class="game-score" style="margin-bottom:10px">
+      <div class="gscore-box">Câu ${fillIdx+1}/10</div>
+      <div class="gscore-box">⭐ ${fillScore}</div>
+    </div>
+    <div class="question-box">
+      <div class="question-text">${q.q}</div>
+      <div style="margin-top:12px">
+        <input type="number" id="fillAns" class="answer-input" min="0" max="100" style="width:100px;height:60px;font-size:28px" placeholder="?">
+      </div>
+      <p style="font-size:12px;color:#888;margin-top:8px">Gợi ý: ${q.hint} = ?</p>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button onclick="checkFill()" style="background:linear-gradient(135deg,#795548,#4E342E);color:white;border:none;padding:10px 28px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">✅ Kiểm tra</button>
+    </div>`;
+  setTimeout(()=>{const el=document.getElementById('fillAns');if(el){el.focus();el.onkeyup=e=>{if(e.key==='Enter')checkFill();};}},100);
+}
+function checkFill() {
+  const val=parseInt(document.getElementById('fillAns').value);
+  const q=fillQs[fillIdx];
+  const ok=val===q.ans;
+  showToast(ok?'✅ Đúng rồi!':'❌ Sai! Đáp án: '+q.ans);
+  if(ok){fillScore++;confetti();}
+  fillIdx++;
+  setTimeout(renderFill,800);
+}
+
+// ============ PROGRESS ============
+const achievements=[
+  {id:'first',icon:'🌱',name:'Bắt đầu!',desc:'Hoàn thành bài học đầu tiên',check:()=>state.doneLessons.size>=1},
+  {id:'half',icon:'🌟',name:'Nửa chặng',desc:'Hoàn thành 10 bài học',check:()=>state.doneLessons.size>=10},
+  {id:'all',icon:'🎓',name:'Toàn năng',desc:'Hoàn thành tất cả 21 bài',check:()=>state.doneLessons.size>=21},
+  {id:'star50',icon:'⭐',name:'50 Sao',desc:'Thu thập 50 sao',check:()=>state.stars>=50},
+  {id:'star100',icon:'💫',name:'100 Sao',desc:'Thu thập 100 sao',check:()=>state.stars>=100},
+  {id:'quiz10',icon:'⚡',name:'Tính nhanh',desc:'Đạt 10+ điểm Tính nhanh',check:()=>(state.bestScores.quiz||0)>=10},
+  {id:'memory1',icon:'🧠',name:'Ghi nhớ',desc:'Ghép xong thẻ ghi nhớ',check:()=>state.bestScores.memory>0},
+  {id:'game5',icon:'🎮',name:'Mê chơi',desc:'Chơi 5 lượt trò chơi',check:()=>state.gamesPlayed>=5},
+  {id:'correct50',icon:'🎯',name:'Thiện xạ',desc:'Trả lời đúng 50 câu',check:()=>state.correctTotal>=50},
+  {id:'allgames',icon:'🏆',name:'Vô địch',desc:'Chơi tất cả 8 trò chơi',check:()=>Object.keys(state.bestScores).length>=8},
+];
+
+function checkAchievements() {
+  achievements.forEach(a=>{
+    if(!state.achievements.has(a.id) && a.check()){
+      state.achievements.add(a.id);
+      saveState();
+      showToast(`🏅 Huy hiệu mới: ${a.name}!`);
+    }
+  });
+}
+
+function renderProgress() {
+  document.getElementById('totalStarsDisp').textContent = state.stars;
+  const ag=document.getElementById('achieveGrid');
+  ag.innerHTML=achievements.map(a=>{
+    const unlocked=state.achievements.has(a.id);
+    return `<div class="achieve-card ${unlocked?'':'locked'}">
+      <span class="aicon">${a.icon}</span>
+      <h5>${a.name}</h5>
+      <p>${a.desc}</p>
+    </div>`;
+  }).join('');
+  
+  const cpl=document.getElementById('chapterProgressList');
+  cpl.innerHTML=[1,2,3,4,5].map(ch=>{
+    const total=lessons.filter(l=>l.ch===ch).length;
+    const done=lessons.filter(l=>l.ch===ch&&state.doneLessons.has(l.id)).length;
+    const pct=total>0?Math.round(done/total*100):0;
+    return `<div class="chp-item">
+      <h4>${['🔢 Các số đến 100','📏 Đo độ dài','➕ Phép tính trong 100','🕐 Thời gian','🏆 Ôn tập cuối năm'][ch-1]} (${done}/${total} bài)</h4>
+      <div class="chp-bar"><div class="chp-fill" style="width:${pct}%"></div></div>
+      <div class="chp-pct">${pct}% hoàn thành</div>
+    </div>`;
+  }).join('');
+}
+
+// ============ UTILS ============
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
+function updateStarsDisplay() {
+  document.querySelectorAll('.star-count').forEach(el=>el.textContent='⭐ '+state.stars+' sao');
+}
+
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function confetti() {
+  const colors=['#FF6B35','#2196F3','#4CAF50','#9C27B0','#FFC107','#E91E63'];
+  for(let i=0;i<24;i++){
+    const d=document.createElement('div');
+    d.className='confetti-piece';
+    d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*30}%;background:${colors[~~(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+      animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s;`;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2000);
+  }
+}
+
+// ============ NUM WORDS ============
+const numWords = {
+  0:'không',1:'một',2:'hai',3:'ba',4:'bốn',5:'năm',6:'sáu',7:'bảy',8:'tám',9:'chín',10:'mười',
+  11:'mười một',12:'mười hai',13:'mười ba',14:'mười bốn',15:'mười lăm',16:'mười sáu',17:'mười bảy',18:'mười tám',19:'mười chín',
+  20:'hai mươi',21:'hai mươi mốt',22:'hai mươi hai',23:'hai mươi ba',24:'hai mươi bốn',25:'hai mươi lăm',26:'hai mươi sáu',27:'hai mươi bảy',28:'hai mươi tám',29:'hai mươi chín',
+  30:'ba mươi',31:'ba mươi mốt',32:'ba mươi hai',33:'ba mươi ba',34:'ba mươi bốn',35:'ba mươi lăm',36:'ba mươi sáu',37:'ba mươi bảy',38:'ba mươi tám',39:'ba mươi chín',
+  40:'bốn mươi',41:'bốn mươi mốt',42:'bốn mươi hai',43:'bốn mươi ba',44:'bốn mươi bốn',45:'bốn mươi lăm',46:'bốn mươi sáu',47:'bốn mươi bảy',48:'bốn mươi tám',49:'bốn mươi chín',
+  50:'năm mươi',51:'năm mươi mốt',52:'năm mươi hai',53:'năm mươi ba',54:'năm mươi bốn',55:'năm mươi lăm',56:'năm mươi sáu',57:'năm mươi bảy',58:'năm mươi tám',59:'năm mươi chín',
+  60:'sáu mươi',61:'sáu mươi mốt',62:'sáu mươi hai',63:'sáu mươi ba',64:'sáu mươi bốn',65:'sáu mươi lăm',66:'sáu mươi sáu',67:'sáu mươi bảy',68:'sáu mươi tám',69:'sáu mươi chín',
+  70:'bảy mươi',71:'bảy mươi mốt',72:'bảy mươi hai',73:'bảy mươi ba',74:'bảy mươi bốn',75:'bảy mươi lăm',76:'bảy mươi sáu',77:'bảy mươi bảy',78:'bảy mươi tám',79:'bảy mươi chín',
+  80:'tám mươi',81:'tám mươi mốt',82:'tám mươi hai',83:'tám mươi ba',84:'tám mươi bốn',85:'tám mươi lăm',86:'tám mươi sáu',87:'tám mươi bảy',88:'tám mươi tám',89:'tám mươi chín',
+  90:'chín mươi',91:'chín mươi mốt',92:'chín mươi hai',93:'chín mươi ba',94:'chín mươi bốn',95:'chín mươi lăm',96:'chín mươi sáu',97:'chín mươi bảy',98:'chín mươi tám',99:'chín mươi chín',100:'một trăm'
+};
+
+// ============ INIT ============
+loadState();
+updateStarsDisplay();
+renderLessons(0);
+updateHomeStats();
+updateBestScores();
+</script>
+</div></body></html>
