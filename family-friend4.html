@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Family &amp; Friends 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F4FF;--surface:#FFF;--primary:#5B6CF2;--accent:#FF6B6B;--gold:#FFD700;--green:#4CAF50;--text:#1a1a2e;--muted:#6B7280;--radius:18px;--shadow:0 4px 20px rgba(91,108,242,.15);--shadow-lg:0 8px 40px rgba(91,108,242,.2);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;}
+.header{background:linear-gradient(135deg,#5B6CF2,#8B5CF6);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(91,108,242,.4);}
+.header-title{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;letter-spacing:1px;}
+.header-stars{background:rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;color:#FFD700;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:6px;}
+.nav{display:flex;background:#fff;border-top:1px solid rgba(91,108,242,.1);position:sticky;bottom:0;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.08);}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px;font-size:.65rem;font-weight:700;color:var(--muted);border:none;background:none;cursor:pointer;transition:all .2s;letter-spacing:.3px;}
+.nav-btn .ni{font-size:1.4rem;margin-bottom:2px;transition:transform .2s;}
+.nav-btn.active{color:var(--primary);}
+.nav-btn.active .ni{transform:scale(1.2);}
+.screen{display:none;min-height:calc(100vh - 120px);padding:16px;}
+.screen.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* HOME */
+.hero{background:linear-gradient(135deg,#5B6CF2,#8B5CF6,#EC4899);border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:20px;color:#fff;position:relative;overflow:hidden;}
+.hero::before{content:'🎓';position:absolute;font-size:8rem;right:-20px;top:-20px;opacity:.15;}
+.hero h1{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:6px;}
+.hero p{opacity:.9;font-size:.95rem;}
+.prog-banner{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);}
+.prog-label{font-size:.8rem;color:var(--muted);margin-bottom:8px;font-weight:700;}
+.prog-wrap{background:#E8ECFF;border-radius:10px;height:10px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--primary),#8B5CF6);border-radius:10px;transition:width .5s;}
+.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.uc{background:#fff;border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s,box-shadow .2s;border:3px solid transparent;position:relative;overflow:hidden;}
+.uc:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.uc-icon{font-size:2rem;margin-bottom:8px;}
+.uc-title{font-size:.8rem;font-weight:800;margin-bottom:4px;line-height:1.2;}
+.uc-num{font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.uc-prog{margin-top:8px;background:#E8ECFF;border-radius:6px;height:5px;}
+.uc-prog-fill{height:100%;border-radius:6px;transition:width .4s;}
+.stars-badge{position:absolute;top:8px;right:8px;font-size:.7rem;background:#FFF3CD;border-radius:10px;padding:2px 8px;color:#856404;font-weight:800;}
+/* LESSON */
+.back-btn{display:flex;align-items:center;gap:8px;background:none;border:none;font-size:.9rem;font-weight:700;color:var(--primary);cursor:pointer;padding:4px 0;margin-bottom:16px;}
+.lesson-hdr{border-radius:var(--radius);padding:20px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:16px;}
+.lesson-hdr .big-icon{font-size:3rem;}
+.lesson-hdr h2{font-family:'Fredoka One',cursive;font-size:1.4rem;}
+.lesson-hdr .unit-sub{opacity:.85;font-size:.85rem;margin-top:2px;}
+.skill-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
+.skill-tabs::-webkit-scrollbar{display:none;}
+.stab{flex:none;padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:none;color:var(--primary);font-weight:800;font-size:.8rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.stab.active{background:var(--primary);color:#fff;}
+.skill-content{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+/* WORDS */
+.words-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;}
+.wcard{background:var(--bg);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent;}
+.wcard:hover,.wcard.speaking{border-color:var(--primary);background:#EEF0FF;}
+.wcard.speaking{animation:pulse .6s infinite alternate;}
+@keyframes pulse{from{border-color:transparent}to{border-color:#5B6CF2;background:#EEF0FF;}}
+.w-emoji{font-size:2rem;display:block;margin-bottom:6px;}
+.w-text{font-weight:800;font-size:.85rem;display:block;}
+.w-vi{font-size:.7rem;color:var(--muted);display:block;margin-top:2px;}
+.listen-all-btn{background:linear-gradient(135deg,var(--primary),#8B5CF6);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-weight:800;font-size:.9rem;cursor:pointer;margin-top:16px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
+/* GRAMMAR */
+.gram-box{background:linear-gradient(135deg,#EEF0FF,#F5F3FF);border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid var(--primary);}
+.gram-box h3{font-weight:800;color:var(--primary);margin-bottom:8px;font-size:.9rem;}
+.gram-pattern{font-size:1rem;font-style:italic;color:var(--text);line-height:1.5;}
+.qa-list{display:flex;flex-direction:column;gap:12px;}
+.qa-item{background:var(--bg);border-radius:12px;padding:14px;}
+.qa-q{font-weight:800;color:var(--primary);margin-bottom:6px;display:flex;align-items:center;gap:6px;font-size:.9rem;}
+.qa-a{color:var(--text);font-size:.9rem;padding-left:24px;}
+.sp-btn{background:linear-gradient(135deg,var(--green),#66BB6A);color:#fff;border:none;border-radius:10px;padding:6px 14px;font-size:.75rem;font-weight:700;cursor:pointer;margin-left:auto;flex:none;}
+/* PHONICS */
+.phonics-title{font-weight:800;color:var(--primary);margin-bottom:16px;font-size:1rem;}
+.phonics-chips{display:flex;flex-wrap:wrap;gap:10px;}
+.pchip{background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff;border-radius:12px;padding:10px 18px;font-weight:800;font-size:.95rem;cursor:pointer;transition:transform .2s;box-shadow:0 3px 10px rgba(255,107,107,.3);}
+.pchip:hover{transform:scale(1.08);}
+.pchip.speaking{animation:pulse .6s infinite alternate;}
+/* READING */
+.read-pass{background:#FFF9F0;border-radius:12px;padding:18px;font-size:.95rem;line-height:1.7;margin-bottom:16px;border:1px solid #FFE4B5;position:relative;}
+.tts-btn{position:absolute;top:12px;right:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;}
+.qopt{background:var(--bg);border:2px solid #E5E7EB;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;font-size:.85rem;transition:all .2s;}
+.qopt.correct{background:#DCFCE7;border-color:#22C55E;color:#15803D;}
+.qopt.wrong{background:#FEE2E2;border-color:#EF4444;color:#DC2626;}
+/* WRITING */
+.write-exs{display:flex;flex-direction:column;gap:16px;}
+.write-ex{background:var(--bg);border-radius:12px;padding:16px;}
+.write-ex p{font-size:.9rem;margin-bottom:10px;line-height:1.5;font-weight:700;}
+.write-inp{width:100%;border:2px solid #E5E7EB;border-radius:10px;padding:10px 14px;font-size:.9rem;font-family:'Nunito',sans-serif;font-weight:700;outline:none;transition:border-color .2s;}
+.write-inp:focus{border-color:var(--primary);}
+.write-inp.correct{border-color:var(--green);background:#DCFCE7;}
+.write-inp.wrong{border-color:#EF4444;background:#FEE2E2;}
+.check-btn{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-weight:800;cursor:pointer;margin-top:8px;font-size:.85rem;}
+.score-row{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);margin-bottom:16px;}
+.score-label{font-size:.8rem;color:var(--muted);font-weight:700;}
+.score-val{font-size:1.2rem;font-weight:900;color:var(--primary);}
+/* SPEAKING */
+.spk-unit-sel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.spk-unit-btn{background:#fff;border:2px solid var(--primary);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;font-weight:800;font-size:.78rem;}
+.spk-unit-btn:hover,.spk-unit-btn.active{background:var(--primary);color:#fff;}
+.spk-card{background:#fff;border-radius:var(--radius);padding:24px;text-align:center;box-shadow:var(--shadow-lg);}
+.spk-phrase{font-size:1.5rem;font-weight:800;color:var(--primary);margin:20px 0;line-height:1.3;}
+.spk-sub{font-size:.9rem;color:var(--muted);margin-bottom:24px;}
+.spk-controls{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.mic-btn{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#FF8E53);border:none;font-size:2rem;cursor:pointer;box-shadow:0 8px 24px rgba(255,107,107,.4);transition:all .2s;}
+.mic-btn.recording{animation:rec-pulse 1s infinite;background:linear-gradient(135deg,#EF4444,#DC2626);}
+@keyframes rec-pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}70%{box-shadow:0 0 0 20px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+.listen-phrase-btn{background:linear-gradient(135deg,var(--primary),#8B5CF6);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-weight:800;cursor:pointer;font-size:.9rem;display:flex;align-items:center;gap:8px;}
+.score-ring{width:100px;height:100px;position:relative;margin:16px auto;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring .snum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:var(--primary);}
+.phrase-nav{display:flex;gap:12px;margin-top:16px;}
+.phrase-nav-btn{flex:1;background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:10px;font-weight:800;color:var(--primary);cursor:pointer;font-size:.85rem;}
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.gcard{background:#fff;border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:all .2s;border:3px solid transparent;}
+.gcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.g-icon{font-size:2.5rem;margin-bottom:10px;}
+.g-name{font-weight:800;font-size:.85rem;margin-bottom:4px;}
+.g-desc{font-size:.7rem;color:var(--muted);}
+.g-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.65rem;font-weight:800;margin-top:6px;}
+.badge-fun{background:#FFF3CD;color:#856404;}
+.badge-hot{background:#FEE2E2;color:#DC2626;}
+.badge-new{background:#DCFCE7;color:#15803D;}
+/* GAME AREA */
+.game-area{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.game-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.game-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--primary);}
+.game-score{background:var(--bg);border-radius:10px;padding:6px 14px;font-weight:900;color:var(--primary);}
+.game-exit{background:none;border:2px solid var(--accent);border-radius:10px;padding:6px 12px;color:var(--accent);font-weight:800;cursor:pointer;font-size:.8rem;}
+/* FLASHCARD */
+.fc-wrap{perspective:1000px;margin:0 auto;max-width:320px;}
+.fc-inner{width:100%;padding-top:65%;position:relative;transition:transform .5s;transform-style:preserve-3d;}
+.fc-inner.flipped{transform:rotateY(180deg);}
+.fc-front,.fc-back{position:absolute;inset:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;cursor:pointer;}
+.fc-front{background:linear-gradient(135deg,#EEF0FF,#F5F3FF);border:3px solid var(--primary);}
+.fc-back{background:linear-gradient(135deg,var(--primary),#8B5CF6);color:#fff;transform:rotateY(180deg);}
+.fc-emoji{font-size:4rem;margin-bottom:12px;}
+.fc-hint{font-size:.75rem;color:var(--muted);margin-top:8px;}
+.fc-word{font-size:1.8rem;font-weight:900;}
+.fc-meaning{font-size:1rem;opacity:.85;margin-top:6px;}
+.fc-controls{display:flex;justify-content:center;gap:16px;margin-top:16px;}
+.fc-btn{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:10px 24px;font-weight:800;color:var(--primary);cursor:pointer;}
+/* MATCH */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.mitem{background:var(--bg);border:2px solid #E5E7EB;border-radius:12px;padding:12px 10px;text-align:center;cursor:pointer;font-weight:800;font-size:.82rem;transition:all .2s;}
+.mitem.selected{border-color:var(--primary);background:#EEF0FF;}
+.mitem.matched{border-color:var(--green);background:#DCFCE7;color:#15803D;animation:mPop .4s ease;}
+.mitem.wrongAnim{animation:shake .4s ease;}
+@keyframes mPop{0%{transform:scale(.9)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* QUIZ */
+.quiz-big{font-size:5rem;text-align:center;margin:16px 0;}
+.quiz-q{font-size:1rem;font-weight:800;text-align:center;margin-bottom:20px;}
+.quiz-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.qog{background:var(--bg);border:2px solid #E5E7EB;border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;font-weight:800;font-size:.85rem;transition:all .2s;}
+.qog.correct{background:#DCFCE7;border-color:#22C55E;color:#15803D;animation:mPop .3s ease;}
+.qog.wrong{background:#FEE2E2;border-color:#EF4444;color:#DC2626;}
+/* SPELL */
+.spell-emoji{font-size:4rem;text-align:center;display:block;}
+.spell-hint{text-align:center;font-size:.85rem;color:var(--muted);margin:8px 0 16px;}
+.spell-slots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+.s-slot{width:38px;height:44px;border-bottom:3px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:var(--primary);}
+.letter-bank{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.ltile{width:38px;height:38px;background:var(--primary);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;cursor:pointer;transition:all .2s;user-select:none;}
+.ltile.used{opacity:.3;cursor:default;}
+.ltile:hover:not(.used){transform:translateY(-3px);}
+.spell-actions{display:flex;gap:10px;justify-content:center;margin-top:12px;}
+.spell-btn{padding:10px 20px;border-radius:10px;font-weight:800;cursor:pointer;border:none;font-size:.85rem;font-family:'Nunito',sans-serif;}
+/* SENTENCE */
+.sent-display{background:var(--bg);border-radius:12px;padding:16px;min-height:60px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:16px;border:2px dashed var(--primary);}
+.wchip{background:var(--primary);color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;}
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.wpool-chip{background:#fff;border:2px solid var(--primary);color:var(--primary);border-radius:8px;padding:6px 12px;font-weight:700;font-size:.85rem;cursor:pointer;}
+.wpool-chip.used{opacity:.3;cursor:default;}
+/* LISTEN */
+.listen-play-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,var(--primary),#8B5CF6);color:#fff;border:none;border-radius:16px;padding:20px 32px;font-size:1.1rem;font-weight:900;cursor:pointer;margin:20px auto;width:80%;box-shadow:var(--shadow-lg);}
+.listen-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lopt{background:var(--bg);border:2px solid #E5E7EB;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;font-weight:700;font-size:.85rem;}
+.lopt .oe{font-size:2rem;display:block;margin-bottom:6px;}
+/* SCRAMBLE */
+.scram-letters{font-size:2rem;font-weight:900;text-align:center;letter-spacing:8px;color:var(--accent);margin:20px 0;background:#FFF0F0;border-radius:12px;padding:16px;}
+.scram-inp{width:100%;border:3px solid var(--primary);border-radius:12px;padding:12px;font-size:1.2rem;font-weight:900;text-align:center;outline:none;font-family:'Nunito',sans-serif;margin-bottom:12px;}
+/* TF */
+.tf-stmt{font-size:1.1rem;font-weight:800;text-align:center;margin:24px 0;padding:0 8px;line-height:1.5;}
+.tf-btns{display:flex;gap:16px;justify-content:center;}
+.tf-btn{flex:1;max-width:140px;padding:20px;border-radius:16px;border:none;font-size:1.1rem;font-weight:900;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.15);}
+.tf-t{background:#22C55E;color:#fff;}
+.tf-f{background:#EF4444;color:#fff;}
+.tf-btn:hover{transform:scale(1.05);}
+/* PROGRESS */
+.prog-hero{background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:20px;color:#fff;}
+.prog-hero .big-star{font-size:4rem;}
+.prog-hero h2{font-family:'Fredoka One',cursive;font-size:1.6rem;margin:8px 0 4px;}
+.puc{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.pu-title{font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.pu-skills{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pu-skill{background:var(--bg);border-radius:10px;padding:10px;}
+.pu-sname{font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+.pu-sbar{background:#E5E7EB;border-radius:4px;height:6px;overflow:hidden;}
+.pu-sfill{height:100%;border-radius:4px;transition:width .5s;}
+.pu-spct{font-size:.75rem;font-weight:800;color:var(--primary);margin-top:4px;}
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a2e;color:#fff;border-radius:12px;padding:12px 24px;font-weight:700;z-index:999;transition:transform .4s;pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{background:#15803D;}
+.toast.error{background:#DC2626;}
+.toast.star{background:#856404;}
+@media(min-width:600px){.unit-grid,.games-grid{grid-template-columns:repeat(3,1fr);}.words-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}.screen{padding:20px;max-width:800px;margin:0 auto;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-title">🎓 Family &amp; Friends 4</div>
+  <div class="header-stars">⭐ <span id="totalStars">0</span></div>
+</div>
+<div id="homeScreen" class="screen active">
+  <div class="hero"><h1>Family &amp; Friends 4</h1><p>Oxford Special Edition · 12 Units + Starter</p></div>
+  <div class="prog-banner"><div class="prog-label">Overall Progress</div><div class="prog-wrap"><div class="prog-fill" id="overallProg" style="width:0%"></div></div></div>
+  <div class="unit-grid" id="unitGrid"></div>
+</div>
+<div id="lessonScreen" class="screen">
+  <button class="back-btn" onclick="showHome()">← Back</button>
+  <div class="lesson-hdr" id="lessonHdr">
+    <div class="big-icon" id="lessonIcon">📚</div>
+    <div><h2 id="lessonTitle">Unit</h2><div class="unit-sub" id="lessonSub"></div></div>
+  </div>
+  <div class="skill-tabs" id="skillTabs"></div>
+  <div class="skill-content" id="skillContent"></div>
+</div>
+<div id="speakingScreen" class="screen">
+  <h2 style="font-family:'Fredoka One',cursive;color:var(--primary);margin-bottom:16px;">🎤 Speaking Practice</h2>
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px;">Choose a unit, listen, then record yourself!</p>
+  <div class="spk-unit-sel" id="spkUnitSel"></div>
+  <div id="spkArea"></div>
+</div>
+<div id="gamesScreen" class="screen">
+  <h2 style="font-family:'Fredoka One',cursive;color:var(--primary);margin-bottom:8px;">🎮 Learning Games</h2>
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px;">Select a unit then pick your game!</p>
+  <select id="gameUnitSel" style="width:100%;padding:10px 14px;border-radius:12px;border:2px solid var(--primary);font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;background:#fff;color:var(--primary);outline:none;margin-bottom:16px;">
+    <option value="">Select a unit...</option>
+  </select>
+  <div class="games-grid" id="gamesGrid"></div>
+  <div id="gamePlayArea" style="display:none;margin-top:20px;"></div>
+</div>
+<div id="progressScreen" class="screen">
+  <div class="prog-hero"><div class="big-star">⭐</div><h2 id="progTitle">Your Progress</h2><p id="progMsg">Keep learning every day!</p></div>
+  <div id="progUnits"></div>
+</div>
+<div class="nav">
+  <button class="nav-btn active" onclick="switchNav('home')" id="nav-home"><span class="ni">🏠</span>HOME</button>
+  <button class="nav-btn" onclick="switchNav('lesson')" id="nav-lesson"><span class="ni">📖</span>LESSONS</button>
+  <button class="nav-btn" onclick="switchNav('speaking')" id="nav-speaking"><span class="ni">🎤</span>SPEAK</button>
+  <button class="nav-btn" onclick="switchNav('games')" id="nav-games"><span class="ni">🎮</span>GAMES</button>
+  <button class="nav-btn" onclick="switchNav('progress')" id="nav-progress"><span class="ni">📊</span>PROGRESS</button>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+
+const CUR = {
+  starter:{id:"starter",title:"My Family",color:"#FF6B9D",icon:"👨‍👩‍👧‍👦",
+    words:[{word:"grandma",emoji:"👵",vi:"grandmother"},{word:"grandpa",emoji:"👴",vi:"grandfather"},{word:"mom",emoji:"👩",vi:"mother"},{word:"dad",emoji:"👨",vi:"father"},{word:"aunt",emoji:"👩‍🦳",vi:"aunt"},{word:"uncle",emoji:"🧔",vi:"uncle"},{word:"brother",emoji:"👦",vi:"brother"},{word:"sister",emoji:"👧",vi:"sister"},{word:"cousin",emoji:"🧒",vi:"cousin"},{word:"bigger",emoji:"🐘",vi:"larger"},{word:"smaller",emoji:"🐭",vi:"smaller"},{word:"faster",emoji:"🐆",vi:"quicker"}],
+    grammar:{title:"Comparatives",pattern:"The elephant is bigger than the monkey.",examples:[{q:"Is the elephant big?",a:"Yes! It is bigger than the monkey."},{q:"Is the car fast?",a:"Yes! It is faster than the bus."},{q:"Is the kitten small?",a:"Yes! It is smaller than the dog."}]},
+    phonics:{title:"Numbers 1–100 & Months",words:["January","February","March","April","May","June","July","August","September","October","November","December"]},
+    reading:"Hello! I am Leo and I am eleven years old. Amy is my sister. She is seven. We have two cousins. Hi, I am Holly. I am Leo's sister. I have an aunt and an uncle and two cousins. Our family is big and happy!",
+    writing:[{prompt:"The elephant is ___ (big) than the monkey.",answer:"bigger"},{prompt:"The giraffe is ___ (tall) than the zebra.",answer:"taller"},{prompt:"The donkey is ___ (fast) than the cow.",answer:"faster"},{prompt:"The goat is ___ (small) than the horse.",answer:"smaller"}],
+    speaking:["Hello! I am Leo.","I am eleven years old.","Amy is my sister.","She is seven.","We have a big family.","I have two cousins."]},
+  unit1:{id:"unit1",title:"They're from Australia!",color:"#4CAF50",icon:"🌏",
+    words:[{word:"Korea",emoji:"🇰🇷",vi:"South Korea"},{word:"Viet Nam",emoji:"🇻🇳",vi:"Vietnam"},{word:"Mexico",emoji:"🇲🇽",vi:"Mexico"},{word:"Thailand",emoji:"🇹🇭",vi:"Thailand"},{word:"Australia",emoji:"🇦🇺",vi:"Australia"},{word:"the U.S.A.",emoji:"🇺🇸",vi:"United States"},{word:"Brazil",emoji:"🇧🇷",vi:"Brazil"},{word:"spring",emoji:"🌸",vi:"1st season"},{word:"summer",emoji:"☀️",vi:"hottest season"},{word:"fall",emoji:"🍂",vi:"autumn"},{word:"winter",emoji:"❄️",vi:"coldest season"},{word:"seasons",emoji:"🌍",vi:"4 periods of year"}],
+    grammar:{title:"Where are you from?",pattern:"I'm from Viet Nam. He's from Brazil. They're from Korea.",examples:[{q:"Where are you from?",a:"I'm from Viet Nam."},{q:"Where is he from?",a:"He's from Brazil."},{q:"Where are they from?",a:"They're from Korea."}]},
+    phonics:{title:"Consonant blends: cr, br, sp, sn, dr, pl",words:["crayon","brush","spoon","snake","drink","play","cream","bridge","spell","dragon"]},
+    reading:"Hi! My name's Giang. I'm from Ho Chi Minh City. We have two seasons: dry and rainy. In the dry season, it doesn't rain and the trees turn brown. In the rainy season, it rains a lot. The weather in Ho Chi Minh City is warm all year round!",
+    writing:[{prompt:"Tom is nine. ___ from the U.S.A.",answer:"He's"},{prompt:"Jaidee and Tai are brothers. ___ from Thailand.",answer:"They're"},{prompt:"___ are you from? (Where/What)",answer:"Where"},{prompt:"My favorite season is ___ .",answer:"summer"}],
+    speaking:["Where are you from?","I'm from Viet Nam.","Where is he from?","He's from Brazil.","What's your favorite season?","My favorite season is summer.","How old are you?","I'm nine."]},
+  unit2:{id:"unit2",title:"My Weekend",color:"#2196F3",icon:"🎸",
+    words:[{word:"read",emoji:"📚",vi:"read books"},{word:"play chess",emoji:"♟️",vi:"chess"},{word:"play soccer",emoji:"⚽",vi:"football"},{word:"play tennis",emoji:"🎾",vi:"tennis"},{word:"play basketball",emoji:"🏀",vi:"basketball"},{word:"cook",emoji:"🍳",vi:"prepare food"},{word:"shop",emoji:"🛍️",vi:"buy things"},{word:"do gymnastics",emoji:"🤸",vi:"gymnastics"},{word:"play the guitar",emoji:"🎸",vi:"guitar"},{word:"play the piano",emoji:"🎹",vi:"piano"},{word:"watch TV",emoji:"📺",vi:"television"},{word:"take photos",emoji:"📷",vi:"photography"}],
+    grammar:{title:"Like + verb + ing",pattern:"I like reading. I don't like fishing. Does he like playing chess?",examples:[{q:"Do you like playing soccer?",a:"Yes, I do. / No, I don't."},{q:"Does she like cooking?",a:"Yes, she does. / No, she doesn't."},{q:"What do you like doing?",a:"I like taking photos."}]},
+    phonics:{title:"Magic e: a_e, i_e, o_e, u_e",words:["face","space","kite","bike","stone","rope","June","cube","game","pine"]},
+    reading:"Hi! My name's Hoang. I'm nine. I'm from Viet Nam. I like playing the guitar. I don't like playing chess, and I really hate shopping. It's boring! What do you like doing? Email me at hoang@mailme.com",
+    writing:[{prompt:"I like ___ (play) the guitar.",answer:"playing"},{prompt:"She doesn't like ___ (shop).",answer:"shopping"},{prompt:"___ he like playing chess?",answer:"Does"},{prompt:"They like ___ (cook) on weekends.",answer:"cooking"}],
+    speaking:["I like playing soccer.","I don't like shopping.","Do you like playing chess?","Yes, I do.","What do you like doing?","I like taking photos."]},
+  unit3:{id:"unit3",title:"My Things",color:"#9C27B0",icon:"🎮",
+    words:[{word:"CD player",emoji:"💿",vi:"music player"},{word:"kite",emoji:"🪁",vi:"flying toy"},{word:"comic book",emoji:"📖",vi:"picture story"},{word:"yo-yo",emoji:"🪀",vi:"spinning toy"},{word:"skateboard",emoji:"🛹",vi:"rolling board"},{word:"scarf",emoji:"🧣",vi:"neck warmer"},{word:"toy car",emoji:"🚗",vi:"model car"},{word:"stamp",emoji:"📮",vi:"postal stamp"},{word:"shell",emoji:"🐚",vi:"sea shell"},{word:"shark",emoji:"🦈",vi:"ocean fish"},{word:"star",emoji:"⭐",vi:"star shape"},{word:"jar",emoji:"🫙",vi:"glass jar"}],
+    grammar:{title:"your/our/their + Can for permission",pattern:"That's their CD player. Can I use your DVD player? Yes, you can. / No, you can't.",examples:[{q:"Can I use your CD player?",a:"Yes, you can. / No, you can't."},{q:"Is that their kite?",a:"Yes, it's their kite."},{q:"Can he borrow our skateboard?",a:"Yes, he can."}]},
+    phonics:{title:"Words with ar: car, park, shark, star, scarf",words:["car","park","shark","star","scarf","jar","arm","hard","dark","barn"]},
+    reading:"Hi! My name's Sam and I have a great collection! I have twenty comic books, ten yo-yos, and five kites. My favorite thing is my red kite. It's really cool! I fly it in the park with my dad on weekends.",
+    writing:[{prompt:"___ is their CD player.",answer:"That's"},{prompt:"Can I use ___ skateboard?",answer:"your"},{prompt:"Yes, you ___!",answer:"can"},{prompt:"She has a collection of ___ .",answer:"stamps"}],
+    speaking:["Can I use your CD player?","Yes, you can.","No, you can't.","That's their kite.","Is this your skateboard?","It's our comic book."]},
+  unit4:{id:"unit4",title:"Fun at the Beach!",color:"#FF9800",icon:"🏖️",
+    words:[{word:"swim",emoji:"🏊",vi:"move in water"},{word:"snorkel",emoji:"🤿",vi:"underwater breathing"},{word:"sail",emoji:"⛵",vi:"boat riding"},{word:"windsurf",emoji:"🏄",vi:"wind surfing"},{word:"water-ski",emoji:"🎿",vi:"water skiing"},{word:"dive",emoji:"🤽",vi:"jump in water"},{word:"sunbathe",emoji:"☀️",vi:"relax in sun"},{word:"build sandcastles",emoji:"🏰",vi:"sand building"},{word:"tall",emoji:"🦒",vi:"high height"},{word:"small",emoji:"🐭",vi:"little size"},{word:"beautiful",emoji:"🌺",vi:"lovely, pretty"},{word:"sunny",emoji:"🌞",vi:"bright sunshine"}],
+    grammar:{title:"Present Progressive",pattern:"I'm swimming. He isn't snorkeling. Are they building sandcastles?",examples:[{q:"What are you doing?",a:"I'm swimming in the sea."},{q:"Is she snorkeling?",a:"No, she isn't. She's sunbathing."},{q:"Are they building sandcastles?",a:"Yes, they are!"}]},
+    phonics:{title:"all endings: ball, wall, tall, small",words:["ball","wall","tall","small","fall","hall","call","stall","mall","install"]},
+    reading:"Welcome to our beach vacation! The beach is beautiful and the water is warm and blue. I'm swimming in the sea. My brother isn't snorkeling — he's building sandcastles. Mom is sunbathing and dad is water-skiing. It's so much fun!",
+    writing:[{prompt:"I'm ___ (swim) in the sea.",answer:"swimming"},{prompt:"He ___ (not snorkel) right now.",answer:"isn't snorkeling"},{prompt:"She's ___ (sunbathe) on the beach.",answer:"sunbathing"},{prompt:"They ___ (build) sandcastles.",answer:"are building"}],
+    speaking:["I'm swimming!","He isn't snorkeling.","What are you doing?","She's sunbathing.","Are they building sandcastles?","Yes, they are!"]},
+  unit5:{id:"unit5",title:"A Funny Monkey!",color:"#F44336",icon:"🐒",
+    words:[{word:"monkey",emoji:"🐒",vi:"jungle animal"},{word:"penguin",emoji:"🐧",vi:"Antarctic bird"},{word:"elephant",emoji:"🐘",vi:"large grey animal"},{word:"parrot",emoji:"🦜",vi:"talking bird"},{word:"hippo",emoji:"🦛",vi:"river animal"},{word:"crocodile",emoji:"🐊",vi:"reptile"},{word:"happy",emoji:"😊",vi:"feeling joy"},{word:"sad",emoji:"😢",vi:"feeling unhappy"},{word:"angry",emoji:"😠",vi:"feeling mad"},{word:"scared",emoji:"😨",vi:"feeling fear"},{word:"hungry",emoji:"😋",vi:"needing food"},{word:"tired",emoji:"😴",vi:"needing rest"}],
+    grammar:{title:"Present Progressive: Questions & Answers",pattern:"Is the monkey eating? Yes, it is. / No, it isn't.",examples:[{q:"Is the monkey eating?",a:"Yes, it is."},{q:"Are the penguins swimming?",a:"No, they aren't."},{q:"What is the elephant doing?",a:"It's drinking water."}]},
+    phonics:{title:"ay and oi: bay, toy, oyster, coin, oil, soil",words:["bay","toy","oyster","coin","oil","soil","day","boy","play","royal"]},
+    reading:"The Lion and the Mouse: Once a lion was sleeping in the forest. A little mouse ran across his paw. The lion woke up and was very angry! 'Please don't eat me!' said the mouse. 'One day I can help you!' The lion laughed and let the mouse go.",
+    writing:[{prompt:"Is the monkey ___ ? (eat/eating)",answer:"eating"},{prompt:"___ the penguins swimming?",answer:"Are"},{prompt:"No, they ___ .",answer:"aren't"},{prompt:"The parrot is ___ .",answer:"talking"}],
+    speaking:["Is the monkey eating the sandwich?","Yes, it is.","No, it isn't.","Are the penguins swimming?","No, they aren't.","What is the elephant doing?"]},
+  unit6:{id:"unit6",title:"Jim's Day",color:"#009688",icon:"⏰",
+    words:[{word:"get up",emoji:"🌅",vi:"wake up"},{word:"have breakfast",emoji:"🍳",vi:"morning meal"},{word:"go to school",emoji:"🏫",vi:"travel to school"},{word:"have lunch",emoji:"🍱",vi:"midday meal"},{word:"do homework",emoji:"📝",vi:"study at home"},{word:"have dinner",emoji:"🍽️",vi:"evening meal"},{word:"go to bed",emoji:"🛏️",vi:"sleep time"},{word:"always",emoji:"✅",vi:"100% of time"},{word:"usually",emoji:"👍",vi:"most of time"},{word:"sometimes",emoji:"🤷",vi:"some of time"},{word:"never",emoji:"❌",vi:"0% of time"},{word:"early",emoji:"🌄",vi:"before usual time"}],
+    grammar:{title:"Simple Present: affirmative, negative, questions",pattern:"He gets up early. He doesn't get up late. Do you walk to school?",examples:[{q:"Does he get up early?",a:"Yes, he does."},{q:"Do you walk to school?",a:"Yes, I do. / No, I don't."},{q:"Does she have breakfast?",a:"Yes, she does. / No, she doesn't."}]},
+    phonics:{title:"ow and ou: cow, clown, flower, house, round, mouse",words:["cow","clown","flower","house","round","mouse","town","crown","cloud","shout"]},
+    reading:"Jim is a student at Mountain School in Canada. He always gets up early at six o'clock. He usually has breakfast at seven. He sometimes walks to school with his friends. He never gets up late! After school, he does his homework and has dinner with his family.",
+    writing:[{prompt:"He ___ (get) up at six every day.",answer:"gets"},{prompt:"She ___ (not walk) to school.",answer:"doesn't walk"},{prompt:"___ you have breakfast?",answer:"Do"},{prompt:"He ___ gets up early.",answer:"always"}],
+    speaking:["He gets up early.","He doesn't get up late.","Do you walk to school?","Yes, I do.","Does she have breakfast?","I always get up at seven."]},
+  unit7:{id:"unit7",title:"Places to Go!",color:"#795548",icon:"🏙️",
+    words:[{word:"library",emoji:"📚",vi:"place with books"},{word:"movie theater",emoji:"🎬",vi:"cinema"},{word:"sports center",emoji:"🏟️",vi:"gym & sports"},{word:"shopping mall",emoji:"🛍️",vi:"big shops"},{word:"café",emoji:"☕",vi:"coffee shop"},{word:"park",emoji:"🌳",vi:"outdoor green area"},{word:"museum",emoji:"🏛️",vi:"history building"},{word:"hospital",emoji:"🏥",vi:"medical center"},{word:"always",emoji:"✅",vi:"every time"},{word:"usually",emoji:"🕐",vi:"most times"},{word:"sometimes",emoji:"🔄",vi:"some times"},{word:"never",emoji:"🚫",vi:"not ever"}],
+    grammar:{title:"Adverbs of frequency + Prepositions of time",pattern:"I sometimes go to the library. My birthday is in May.",examples:[{q:"Do you always go to the park?",a:"Yes, I always go there on weekends."},{q:"When is your birthday?",a:"It's on the 15th of March."},{q:"Do you sometimes go to the movies?",a:"Yes, I sometimes go."}]},
+    phonics:{title:"ld and lt endings: child, shield, field, belt, quilt",words:["child","shield","field","belt","quilt","adult","wild","build","felt","salt"]},
+    reading:"Movie review: Super Heroes 3 is a fantastic movie! The story is about three children who save the world. I always go to the movie theater on weekends. My favorite part is when the heroes fly through the sky! Everyone should watch it.",
+    writing:[{prompt:"I ___ go to the library.",answer:"sometimes"},{prompt:"My birthday is ___ May.",answer:"in"},{prompt:"She ___ goes to the sports center.",answer:"always"},{prompt:"The café is ___ the park.",answer:"near"}],
+    speaking:["I sometimes go to the library.","My birthday is in May.","I always go to the park on weekends.","Do you usually go to the movies?","Yes, I usually go.","I never go to the museum."]},
+  unit8:{id:"unit8",title:"I'd Like a Melon",color:"#E91E63",icon:"🍎",
+    words:[{word:"melon",emoji:"🍈",vi:"sweet fruit"},{word:"cereal",emoji:"🥣",vi:"breakfast grain"},{word:"orange juice",emoji:"🍊",vi:"orange drink"},{word:"rice",emoji:"🍚",vi:"grain staple"},{word:"bread",emoji:"🍞",vi:"baked wheat"},{word:"butter",emoji:"🧈",vi:"dairy spread"},{word:"milk",emoji:"🥛",vi:"white dairy drink"},{word:"water",emoji:"💧",vi:"clear liquid"},{word:"apple",emoji:"🍎",vi:"red/green fruit"},{word:"banana",emoji:"🍌",vi:"yellow fruit"},{word:"fish",emoji:"🐟",vi:"seafood"},{word:"chicken",emoji:"🍗",vi:"poultry"}],
+    grammar:{title:"Countable & Uncountable: a/an/some",pattern:"I'd like a melon. Would you like some cereal? Yes, please. / No, thanks.",examples:[{q:"Would you like a banana?",a:"Yes, please!"},{q:"Would you like some rice?",a:"No, thanks."},{q:"I'd like an apple, please.",a:"Here you are!"}]},
+    phonics:{title:"nd, nt, mp endings: hand, pond, plant, tent, lamp",words:["hand","pond","plant","tent","lamp","camp","band","mint","stamp","jump"]},
+    reading:"How to make a fruit salad: First, get an apple, a melon, some grapes, and a banana. Wash all the fruit carefully. Cut the apple and melon into small pieces. Put all the fruit in a big bowl. Add some orange juice. Mix everything together. Your delicious fruit salad is ready!",
+    writing:[{prompt:"I'd like ___ orange.",answer:"an"},{prompt:"Would you like ___ rice?",answer:"some"},{prompt:"Yes, please! / No, ___ .",answer:"thanks"},{prompt:"She likes ___ every day.",answer:"bread"}],
+    speaking:["I'd like a melon, please.","Would you like some cereal?","Yes, please.","No, thanks.","Here you are!","Can I have an apple?"]},
+  unit9:{id:"unit9",title:"Fastest Animal?",color:"#607D8B",icon:"🏆",
+    words:[{word:"mountain",emoji:"⛰️",vi:"high land"},{word:"river",emoji:"🏞️",vi:"flowing water"},{word:"lake",emoji:"🏔️",vi:"still water"},{word:"ocean",emoji:"🌊",vi:"vast sea"},{word:"waterfall",emoji:"💦",vi:"water falling"},{word:"desert",emoji:"🏜️",vi:"dry sandy land"},{word:"forest",emoji:"🌲",vi:"many trees"},{word:"island",emoji:"🏝️",vi:"land in water"},{word:"big",emoji:"🐘",vi:"large"},{word:"wide",emoji:"↔️",vi:"broad"},{word:"long",emoji:"📏",vi:"extended"},{word:"high",emoji:"⬆️",vi:"tall altitude"}],
+    grammar:{title:"Comparative & Superlative Adjectives",pattern:"An ocean is wider than a lake. The fastest animal is the cheetah.",examples:[{q:"Which is bigger — ocean or lake?",a:"The ocean is bigger than the lake."},{q:"What's the longest river?",a:"The Nile is the longest river."},{q:"What's the fastest animal?",a:"The cheetah is the fastest animal in the world."}]},
+    phonics:{title:"Long vowel a: rain, train, Monday, tray, case, race",words:["rain","train","Monday","tray","case","race","wait","plain","day","gate"]},
+    reading:"Viet Nam's Records! Ha Long Bay has 1,969 beautiful islands. The Mekong River is one of the longest rivers in Southeast Asia. Son Doong Cave is the biggest cave in the world! Fansipan Mountain is the highest mountain in Viet Nam at 3,147 meters.",
+    writing:[{prompt:"The Nile is the ___ (long) river.",answer:"longest"},{prompt:"An ocean is ___ (wide) than a lake.",answer:"wider"},{prompt:"The cheetah is the ___ (fast) animal.",answer:"fastest"},{prompt:"Fansipan is ___ (high) than other mountains.",answer:"higher"}],
+    speaking:["What's the fastest animal?","The cheetah is the fastest.","An ocean is wider than a lake.","What's the longest river?","The Nile is the longest river.","Son Doong is the biggest cave."]},
+  unit10:{id:"unit10",title:"In the Park",color:"#4CAF50",icon:"🌳",
+    words:[{word:"walk",emoji:"🚶",vi:"move slowly"},{word:"run",emoji:"🏃",vi:"move fast"},{word:"jump",emoji:"🦘",vi:"leap up"},{word:"climb",emoji:"🧗",vi:"go up"},{word:"pick up",emoji:"🤲",vi:"lift from ground"},{word:"drop",emoji:"⬇️",vi:"let fall"},{word:"feed",emoji:"🦆",vi:"give food to"},{word:"sit",emoji:"🪑",vi:"rest on seat"},{word:"dream",emoji:"💭",vi:"sleep thoughts"},{word:"ice cream",emoji:"🍦",vi:"frozen sweet"},{word:"queen",emoji:"👑",vi:"female ruler"},{word:"jelly",emoji:"🫙",vi:"sweet spread"}],
+    grammar:{title:"must / mustn't for rules",pattern:"You must walk on the path. You mustn't walk on the grass.",examples:[{q:"Must we walk on the path?",a:"Yes, you must."},{q:"Can we feed the animals?",a:"No! You mustn't feed the animals."},{q:"What must we do in the park?",a:"You must pick up your trash."}]},
+    phonics:{title:"Long vowel e: dream, ice cream, queen, green, jelly",words:["dream","ice cream","queen","green","jelly","happy","clean","sleep","tree","beach"]},
+    reading:"The Gingerbread Man: Run, run, as fast as you can! You can't catch me, I'm the Gingerbread Man! He runs away from the old woman, the old man, and many more. Everyone is running after him! But the clever fox catches him in the end.",
+    writing:[{prompt:"You ___ walk on the path.",answer:"must"},{prompt:"You ___ feed the animals.",answer:"mustn't"},{prompt:"___ we sit on the grass?",answer:"Must"},{prompt:"She ___ pick up her trash.",answer:"must"}],
+    speaking:["You must walk on the path.","You mustn't walk on the grass.","Must we pick up our trash?","Yes, you must.","You mustn't feed the animals.","We must be quiet in the library."]},
+  unit11:{id:"unit11",title:"In the Museum",color:"#FF5722",icon:"🏛️",
+    words:[{word:"train",emoji:"🚂",vi:"railway vehicle"},{word:"airplane",emoji:"✈️",vi:"flying vehicle"},{word:"bus",emoji:"🚌",vi:"big road vehicle"},{word:"boat",emoji:"⛵",vi:"water vehicle"},{word:"bicycle",emoji:"🚲",vi:"two-wheel pedal"},{word:"car",emoji:"🚗",vi:"four-wheel vehicle"},{word:"taxi",emoji:"🚕",vi:"hired car"},{word:"motorcycle",emoji:"🏍️",vi:"two-wheel motor"},{word:"night",emoji:"🌙",vi:"dark time"},{word:"light",emoji:"💡",vi:"brightness"},{word:"sky",emoji:"🌤️",vi:"above clouds"},{word:"smile",emoji:"😊",vi:"happy face"}],
+    grammar:{title:"Simple Past: was / were",pattern:"There was a park here fifty years ago. There weren't any planes 200 years ago.",examples:[{q:"Was there a train station here?",a:"Yes, there was."},{q:"Were there any cars 200 years ago?",a:"No, there weren't."},{q:"How did people travel?",a:"They traveled by boat and horse."}]},
+    phonics:{title:"Long vowel i: night, light, sky, dry, smile, shine",words:["night","light","sky","dry","smile","shine","right","fly","high","bike"]},
+    reading:"My Tet Holiday: I went to my grandparents' house for Tet. There were many people and lots of delicious food. There was a beautiful tree with colorful lights. We weren't at home — we were at grandma's house. There weren't any cars, so we went by motorbike.",
+    writing:[{prompt:"There ___ a park here long ago.",answer:"was"},{prompt:"There ___ any planes 200 years ago.",answer:"weren't"},{prompt:"___ there a train station?",answer:"Was"},{prompt:"They traveled by ___ .",answer:"boat"}],
+    speaking:["There was a park here fifty years ago.","There weren't any planes.","Was there a train station?","Yes, there was.","Were there any cars?","No, there weren't."]},
+  unit12:{id:"unit12",title:"A Clever Baby!",color:"#673AB7",icon:"👶",
+    words:[{word:"clever",emoji:"🧠",vi:"intelligent"},{word:"funny",emoji:"😄",vi:"makes you laugh"},{word:"brave",emoji:"🦁",vi:"not afraid"},{word:"kind",emoji:"💝",vi:"caring"},{word:"quiet",emoji:"🤫",vi:"not noisy"},{word:"noisy",emoji:"📢",vi:"very loud"},{word:"snow",emoji:"❄️",vi:"frozen white flakes"},{word:"elbow",emoji:"💪",vi:"arm joint"},{word:"coat",emoji:"🧥",vi:"warm jacket"},{word:"soap",emoji:"🧼",vi:"cleaning bar"},{word:"nose",emoji:"👃",vi:"smell organ"},{word:"stone",emoji:"🪨",vi:"rock"}],
+    grammar:{title:"Simple Past: was/were and had",pattern:"I wasn't tall when I was five. We were happy. He had a book when he was a baby.",examples:[{q:"Were you tall when you were five?",a:"No, I wasn't tall."},{q:"Did she have a bike?",a:"Yes, she had a bike."},{q:"Was he clever as a baby?",a:"Yes, he was very clever!"}]},
+    phonics:{title:"Long vowel o: snow, elbow, coat, soap, nose, stone",words:["snow","elbow","coat","soap","nose","stone","grow","road","home","bone"]},
+    reading:"My Grandma: My grandma was a very clever woman. She wasn't tall, but she was very kind and funny. She had a small house in the village. When my mom was young, grandma had a beautiful garden with flowers. They were always happy together.",
+    writing:[{prompt:"I ___ tall when I was five.",answer:"wasn't"},{prompt:"She ___ a bike last year.",answer:"had"},{prompt:"___ he clever as a baby?",answer:"Was"},{prompt:"They ___ at home yesterday.",answer:"weren't"}],
+    speaking:["I wasn't tall when I was five.","We were happy together.","Was he clever as a baby?","Yes, he was very clever.","She had a small house.","They weren't noisy children."]}
+};
+const UNITS = Object.values(CUR);
+
+// STATE
+let totalStars=0, currentUnit=null, currentSkill='words', spkUnit=null, spkPhraseIdx=0;
+let curGameUnit=null, gameState={}, recognition=null, isRecording=false;
+let progress={};
+UNITS.forEach(u=>{progress[u.id]={words:0,grammar:0,phonics:0,reading:0,writing:0,speaking:0,stars:0};});
+
+// SPEECH
+const synth=window.speechSynthesis;
+let voices=[];
+synth.onvoiceschanged=()=>{voices=synth.getVoices();};
+function speak(text,rate=0.85,pitch=1.1){
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=rate;u.pitch=pitch;
+  const ev=voices.find(v=>v.lang.startsWith('en')&&(v.name.includes('Female')||v.name.includes('Samantha')||v.name.includes('Google')));
+  if(ev)u.voice=ev;
+  synth.speak(u);return u;
+}
+
+// TOAST
+function toast(msg,type='',dur=2200){
+  const t=document.getElementById('toast');
+  t.className='toast '+type+' show';t.textContent=msg;
+  setTimeout(()=>t.className='toast',dur);
+}
+
+// NAV
+function switchNav(tab){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={home:'homeScreen',lesson:'lessonScreen',speaking:'speakingScreen',games:'gamesScreen',progress:'progressScreen'};
+  document.getElementById(map[tab]).classList.add('active');
+  document.getElementById('nav-'+tab)?.classList.add('active');
+  if(tab==='home')renderHome();
+  if(tab==='speaking')renderSpkScreen();
+  if(tab==='games')renderGamesScreen();
+  if(tab==='progress')renderProgress();
+}
+function showHome(){switchNav('home');}
+
+// HOME
+function renderHome(){
+  const tot=UNITS.length*5;
+  const done=UNITS.reduce((a,u)=>{const p=progress[u.id];return a+(p.words>0?1:0)+(p.grammar>0?1:0)+(p.reading>0?1:0)+(p.writing>0?1:0)+(p.speaking>0?1:0);},0);
+  document.getElementById('overallProg').style.width=Math.round(done/tot*100)+'%';
+  document.getElementById('totalStars').textContent=totalStars;
+  document.getElementById('unitGrid').innerHTML=UNITS.map((u,i)=>{
+    const p=progress[u.id];
+    const d=[p.words,p.grammar,p.reading,p.writing,p.speaking].filter(x=>x>0).length;
+    const pct=Math.round(d/5*100);
+    return `<div class="uc" style="border-color:${u.color}20" onclick="openUnit('${u.id}')">
+      <span class="stars-badge">⭐${p.stars||0}</span>
+      <div class="uc-icon">${u.icon}</div>
+      <div class="uc-num">${i===0?'Starter':'Unit '+i}</div>
+      <div class="uc-title">${u.title}</div>
+      <div class="uc-prog"><div class="uc-prog-fill" style="width:${pct}%;background:${u.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// LESSON
+function openUnit(uid){
+  currentUnit=CUR[uid];
+  document.getElementById('lessonHdr').style.background=`linear-gradient(135deg,${currentUnit.color},${currentUnit.color}cc)`;
+  document.getElementById('lessonIcon').textContent=currentUnit.icon;
+  document.getElementById('lessonTitle').textContent=currentUnit.title;
+  const idx=Object.keys(CUR).indexOf(uid);
+  document.getElementById('lessonSub').textContent=(idx===0?'Starter':'Unit '+idx)+' · '+currentUnit.words.length+' words';
+  const tabDefs=[['words','📝 Words'],['grammar','📖 Grammar'],['phonics','🔤 Phonics'],['reading','📚 Reading'],['writing','✏️ Writing']];
+  document.getElementById('skillTabs').innerHTML=tabDefs.map(([id,label])=>
+    `<button class="stab ${id===currentSkill?'active':''}" onclick="switchSkill('${id}')">${label}</button>`).join('');
+  switchSkill('words');
+  switchNav('lesson');
+  document.getElementById('nav-lesson').classList.add('active');
+}
+
+function switchSkill(skill){
+  currentSkill=skill;
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',['words','grammar','phonics','reading','writing'][i]===skill));
+  const c=document.getElementById('skillContent');
+  if(skill==='words')c.innerHTML=renderWords();
+  if(skill==='grammar')c.innerHTML=renderGrammar();
+  if(skill==='phonics')c.innerHTML=renderPhonics();
+  if(skill==='reading')c.innerHTML=renderReading();
+  if(skill==='writing'){c.innerHTML=renderWriting();attachWriting();}
+}
+
+function renderWords(){
+  const u=currentUnit;
+  return `<div class="score-row"><span class="score-label">👂 Click words to hear them!</span><span class="score-val" style="font-size:.9rem">Tap each word ↓</span></div>
+  <div class="words-grid">${u.words.map((w,i)=>`<div class="wcard" id="wc${i}" onclick="spkWord(${i},'${w.word.replace(/'/g,"\\'")}')"><span class="w-emoji">${w.emoji}</span><span class="w-text">${w.word}</span><span class="w-vi">${w.vi}</span></div>`).join('')}</div>
+  <button class="listen-all-btn" onclick="listenAll()">🔊 Listen to All Words</button>`;
+}
+function spkWord(i,w){
+  document.querySelectorAll('.wcard').forEach(c=>c.classList.remove('speaking'));
+  document.getElementById('wc'+i)?.classList.add('speaking');
+  const ut=speak(w);ut.onend=()=>document.getElementById('wc'+i)?.classList.remove('speaking');
+  awardPts('words',10);
+}
+function listenAll(){
+  let i=0;const ws=currentUnit.words;
+  function next(){
+    if(i>=ws.length){awardPts('words',50);toast('🎉 All words! +50 stars','star');return;}
+    document.querySelectorAll('.wcard').forEach(c=>c.classList.remove('speaking'));
+    document.getElementById('wc'+i)?.classList.add('speaking');
+    const ut=speak(ws[i].word,.8);
+    ut.onend=()=>{document.getElementById('wc'+i)?.classList.remove('speaking');i++;setTimeout(next,400);};
+  }next();
+}
+
+function renderGrammar(){
+  const g=currentUnit.grammar;awardPts('grammar',30);
+  return `<div class="gram-box"><h3>📖 ${g.title}</h3><p class="gram-pattern">${g.pattern}</p></div>
+  <div class="qa-list">${g.examples.map(ex=>`<div class="qa-item">
+    <div class="qa-q">🙋 ${ex.q} <button class="sp-btn" onclick="speak('${ex.q.replace(/'/g,"\\'")}')">🔊</button></div>
+    <div class="qa-a">💬 ${ex.a} <button class="sp-btn" onclick="speak('${ex.a.replace(/'/g,"\\'")}')">🔊</button></div>
+  </div>`).join('')}</div>`;
+}
+
+function renderPhonics(){
+  const p=currentUnit.phonics;awardPts('phonics',20);
+  return `<p class="phonics-title">🔤 ${p.title}</p>
+  <div class="phonics-chips">${p.words.map((w,i)=>`<div class="pchip" id="pc${i}" onclick="spkPhonic('${w}',${i})">${w}</div>`).join('')}</div>
+  <div style="margin-top:20px;padding:16px;background:#FFF0F5;border-radius:12px;font-size:.85rem;color:var(--muted);">💡 <strong>Tip:</strong> Click each word to hear the highlighted sound pattern!</div>`;
+}
+function spkPhonic(w,i){
+  document.querySelectorAll('.pchip').forEach(c=>c.classList.remove('speaking'));
+  document.getElementById('pc'+i)?.classList.add('speaking');
+  const ut=speak(w,.7);ut.onend=()=>document.getElementById('pc'+i)?.classList.remove('speaking');
+}
+
+let rqAnswered=false;
+function renderReading(){
+  const u=currentUnit;
+  const qs=[
+    {q:'What skill are you practicing now?',opts:['Speaking','Writing','Reading','Listening'],c:2},
+    {q:'Reading helps you:',opts:['Run faster','Understand English better','Learn numbers','Draw pictures'],c:1},
+    {q:'Which unit is this from?',opts:[u.title,UNITS[1].title,UNITS[5].title,UNITS[9].title],c:0}
+  ];
+  const q=qs[Math.floor(Math.random()*qs.length)];
+  return `<div class="read-pass" id="readPass"><button class="tts-btn" onclick="readAloud()">🔊 Read Aloud</button>${u.reading}</div>
+  <div><h3 style="font-weight:800;margin-bottom:12px;">✅ Quick Check</h3>
+  <p style="font-size:.85rem;margin-bottom:12px;font-weight:700;">${q.q}</p>
+  <div class="quiz-opts">${q.opts.map((o,i)=>`<div class="qopt" onclick="chkReading(this,${i},${q.c})">${o}</div>`).join('')}</div></div>`;
+}
+function readAloud(){speak(currentUnit.reading,.8);awardPts('reading',40);toast('📚 Reading aloud...');}
+function chkReading(el,i,c){
+  if(rqAnswered)return;rqAnswered=true;
+  el.parentElement.querySelectorAll('.qopt').forEach((o,j)=>{if(j===c)o.classList.add('correct');else if(j===i&&i!==c)o.classList.add('wrong');});
+  if(i===c){toast('⭐ Correct!','star');awardPts('reading',30);}else toast('Try again!','error');
+  setTimeout(()=>rqAnswered=false,3000);
+}
+
+function renderWriting(){
+  const u=currentUnit;
+  return `<div class="score-row"><span class="score-label">Score</span><span class="score-val" id="wScore">0/${u.writing.length}</span></div>
+  <div class="write-exs">${u.writing.map((ex,i)=>`<div class="write-ex">
+    <p>${i+1}. ${ex.prompt.replace('___','<span style="color:var(--primary)">___</span>')}</p>
+    <input class="write-inp" id="wi${i}" type="text" placeholder="Type your answer..." autocomplete="off" autocorrect="off" autocapitalize="off">
+    <div style="display:flex;gap:8px;">
+      <button class="check-btn" onclick="chkWrite(${i},'${ex.answer.replace(/'/g,"\\'")}')">Check ✓</button>
+      <button class="check-btn" style="background:#6B7280;" onclick="revealAns(${i},'${ex.answer.replace(/'/g,"\\'")}')">Hint</button>
+    </div>
+  </div>`).join('')}</div>`;
+}
+function attachWriting(){
+  document.querySelectorAll('.write-inp').forEach(inp=>{
+    inp.addEventListener('keypress',e=>{if(e.key==='Enter')inp.nextElementSibling?.querySelector('.check-btn')?.click();});
+  });
+}
+let wScore=0;
+function chkWrite(i,ans){
+  const inp=document.getElementById('wi'+i);
+  const val=inp.value.trim().toLowerCase(),a=ans.toLowerCase();
+  inp.classList.remove('correct','wrong');
+  if(val===a||val.replace(/\s+/g,' ')===a.replace(/\s+/g,' ')){
+    inp.classList.add('correct');speak('Correct! Well done!',1,1.2);
+    awardPts('writing',25);wScore++;
+    document.getElementById('wScore').textContent=wScore+'/'+currentUnit.writing.length;
+    toast('⭐ Correct! +25 stars','star');
+  }else{inp.classList.add('wrong');toast('Answer: '+ans,'error',3000);}
+}
+function revealAns(i,ans){const inp=document.getElementById('wi'+i);inp.value=ans;inp.classList.add('correct');toast('💡 Hint revealed!');}
+
+function awardPts(skill,pts){
+  if(!currentUnit)return;
+  const p=progress[currentUnit.id];
+  if((p[skill]||0)<100){
+    p[skill]=Math.min(100,(p[skill]||0)+pts);
+    const gain=Math.floor(pts/10);
+    p.stars=(p.stars||0)+gain;totalStars+=gain;
+    document.getElementById('totalStars').textContent=totalStars;
+  }
+}
+
+// SPEAKING SCREEN
+function renderSpkScreen(){
+  document.getElementById('spkUnitSel').innerHTML=UNITS.map(u=>
+    `<div class="spk-unit-btn ${spkUnit?.id===u.id?'active':''}" onclick="selSpkUnit('${u.id}')">${u.icon} ${u.title.substring(0,14)}...</div>`).join('');
+  if(!spkUnit){document.getElementById('spkArea').innerHTML='<p style="text-align:center;color:var(--muted);padding:20px;">Select a unit above! 👆</p>';}
+  else renderSpkCard();
+}
+function selSpkUnit(uid){spkUnit=CUR[uid];currentUnit=spkUnit;spkPhraseIdx=0;renderSpkScreen();}
+function renderSpkCard(){
+  const phrases=spkUnit.speaking,phrase=phrases[spkPhraseIdx];
+  document.getElementById('spkArea').innerHTML=`<div class="spk-card">
+    <div style="font-size:.75rem;color:var(--muted);font-weight:700;">PHRASE ${spkPhraseIdx+1}/${phrases.length}</div>
+    <div class="spk-phrase">"${phrase}"</div>
+    <div class="spk-sub">${spkUnit.icon} ${spkUnit.title}</div>
+    <div class="spk-controls">
+      <button class="listen-phrase-btn" onclick="listenPhrase()">🔊 Listen First</button>
+      <div style="font-size:.85rem;color:var(--muted);font-weight:700;margin:8px 0;">Then record yourself:</div>
+      <button class="mic-btn" id="micBtn" onclick="startRec()">🎤</button>
+      <div id="recStat" style="font-size:.8rem;color:var(--muted);font-weight:700;">Tap mic to speak</div>
+    </div>
+    <div id="scoreRingArea" style="margin-top:16px;display:none;">
+      <div class="score-ring"><svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#E5E7EB" stroke-width="8"/><circle id="sCircle" cx="50" cy="50" r="40" fill="none" stroke="#5B6CF2" stroke-width="8" stroke-dasharray="251" stroke-dashoffset="251"/></svg><div class="snum" id="sNum">0%</div></div>
+      <div id="sFeedback" style="text-align:center;font-weight:800;font-size:.9rem;color:var(--primary);margin-top:8px;"></div>
+    </div>
+    <div class="phrase-nav">
+      <button class="phrase-nav-btn" onclick="prevPhrase()">← Prev</button>
+      <button class="phrase-nav-btn" onclick="nextPhrase()">Next →</button>
+    </div>
+  </div>`;
+}
+function listenPhrase(){speak(spkUnit.speaking[spkPhraseIdx],.8);toast('🔊 Listen carefully!');}
+function startRec(){
+  const phrase=spkUnit.speaking[spkPhraseIdx];
+  if(isRecording){if(recognition)recognition.stop();return;}
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){simScore(phrase);return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();recognition.lang='en-US';recognition.continuous=false;recognition.interimResults=false;
+  isRecording=true;
+  const btn=document.getElementById('micBtn');btn.classList.add('recording');btn.textContent='⏹';
+  document.getElementById('recStat').textContent='🔴 Recording... speak now!';
+  recognition.onresult=e=>{
+    const said=e.results[0][0].transcript.toLowerCase();
+    showScore(calcScore(said,phrase.toLowerCase()),said,phrase);
+    isRecording=false;btn.classList.remove('recording');btn.textContent='🎤';
+    document.getElementById('recStat').textContent='Tap mic to try again';
+  };
+  recognition.onerror=()=>{isRecording=false;btn.classList.remove('recording');btn.textContent='🎤';simScore(phrase);};
+  recognition.onend=()=>{if(isRecording){isRecording=false;btn.classList.remove('recording');btn.textContent='🎤';}};
+  recognition.start();setTimeout(()=>{if(isRecording&&recognition)recognition.stop();},8000);
+}
+function calcScore(said,target){
+  const sw=said.split(/\s+/).filter(w=>w),tw=target.replace(/[.,!?]/g,'').split(/\s+/).filter(w=>w);
+  if(!tw.length)return 50;
+  let m=0;tw.forEach(t=>{if(sw.some(s=>s.replace(/[.,!?]/g,'')===t.replace(/[.,!?]/g,'')))m++;});
+  return Math.round(m/tw.length*100);
+}
+function simScore(phrase){showScore(70+Math.floor(Math.random()*25),'(simulated)',phrase);}
+function showScore(score,said,phrase){
+  const ra=document.getElementById('scoreRingArea');ra.style.display='block';
+  const offset=251-(251*score/100);
+  document.getElementById('sCircle').style.strokeDashoffset=offset;
+  document.getElementById('sCircle').style.stroke=score>=80?'#22C55E':score>=60?'#F59E0B':'#EF4444';
+  document.getElementById('sNum').textContent=score+'%';
+  const msg=score>=90?'🌟 Excellent! Perfect!':score>=80?'⭐ Great job!':score>=60?'👍 Good try!':'💪 Keep practicing!';
+  document.getElementById('sFeedback').textContent=msg+(said!=='(simulated)'?'\nYou said: "'+said+'"':'');
+  awardPts('speaking',Math.floor(score/10)*5);
+  if(score>=80)toast('⭐ Score: '+score+'%! +'+(Math.floor(score/10)*5)+' stars','star');
+  else toast('Score: '+score+'%. Try again!','',3000);
+}
+function prevPhrase(){if(spkPhraseIdx>0){spkPhraseIdx--;renderSpkCard();}}
+function nextPhrase(){
+  if(spkPhraseIdx<spkUnit.speaking.length-1){spkPhraseIdx++;renderSpkCard();}
+  else{toast('🎉 All phrases done!','star');spkPhraseIdx=0;renderSpkCard();}
+}
+
+// GAMES
+const GAMES=[
+  {id:'flashcard',icon:'🃏',name:'Flash Cards',desc:'Flip to learn words',badge:'fun'},
+  {id:'match',icon:'🔗',name:'Word Match',desc:'Match words & meanings',badge:'fun'},
+  {id:'quiz',icon:'❓',name:'Picture Quiz',desc:'Choose the right word',badge:'hot'},
+  {id:'spell',icon:'🔤',name:'Spell It!',desc:'Build words letter by letter',badge:'hot'},
+  {id:'sentence',icon:'🧩',name:'Sentence Builder',desc:'Put words in right order',badge:'new'},
+  {id:'listen',icon:'👂',name:'Listen & Choose',desc:'Hear and pick the word',badge:'new'},
+  {id:'scramble',icon:'🌀',name:'Word Scramble',desc:'Unscramble letters',badge:'fun'},
+  {id:'truefalse',icon:'✅',name:'True or False',desc:'Judge the sentences',badge:'hot'},
+];
+function renderGamesScreen(){
+  const sel=document.getElementById('gameUnitSel');
+  if(sel.children.length===1){
+    UNITS.forEach((u,i)=>{const o=document.createElement('option');o.value=u.id;o.textContent=(i===0?'Starter':'Unit '+i)+': '+u.title;sel.appendChild(o);});
+    sel.onchange=()=>{curGameUnit=sel.value?CUR[sel.value]:null;currentUnit=curGameUnit;document.getElementById('gamePlayArea').style.display='none';};
+  }
+  document.getElementById('gamesGrid').innerHTML=GAMES.map(g=>
+    `<div class="gcard" onclick="startGame('${g.id}')">
+      <div class="g-icon">${g.icon}</div><div class="g-name">${g.name}</div>
+      <div class="g-desc">${g.desc}</div>
+      <span class="g-badge badge-${g.badge}">${g.badge==='fun'?'⭐ Fun':g.badge==='hot'?'🔥 Hot':'✨ New'}</span>
+    </div>`).join('');
+}
+function startGame(gid){
+  if(!curGameUnit){toast('Please select a unit first! ☝️','error');return;}
+  gameState={score:0};
+  const g=GAMES.find(x=>x.id===gid);
+  const area=document.getElementById('gamePlayArea');
+  area.style.display='block';area.scrollIntoView({behavior:'smooth'});
+  area.innerHTML=`<div class="game-area">
+    <div class="game-hdr">
+      <div class="game-title">${g.icon} ${g.name}</div>
+      <div class="game-score" id="gScore">⭐ 0</div>
+      <button class="game-exit" onclick="exitGame()">Exit ✕</button>
+    </div>
+    <div id="gContent"></div>
+  </div>`;
+  if(gid==='flashcard')initFC();if(gid==='match')initMatch();if(gid==='quiz')initQuiz();
+  if(gid==='spell')initSpell();if(gid==='sentence')initSent();if(gid==='listen')initListen();
+  if(gid==='scramble')initScram();if(gid==='truefalse')initTF();
+}
+function exitGame(){document.getElementById('gamePlayArea').style.display='none';synth.cancel();}
+function addScore(pts){
+  gameState.score=(gameState.score||0)+pts;
+  document.getElementById('gScore').textContent='⭐ '+gameState.score;
+  totalStars+=pts;document.getElementById('totalStars').textContent=totalStars;
+  if(curGameUnit)progress[curGameUnit.id].stars=(progress[curGameUnit.id].stars||0)+pts;
+}
+
+// FLASHCARD
+function initFC(){gameState.cards=[...curGameUnit.words];gameState.ci=0;gameState.flipped=false;renderFC();}
+function renderFC(){
+  const c=gameState.cards[gameState.ci];
+  document.getElementById('gContent').innerHTML=`
+  <div style="text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:12px;font-weight:700;">Card ${gameState.ci+1}/${gameState.cards.length}</div>
+  <div class="fc-wrap" onclick="flipFC()">
+    <div class="fc-inner ${gameState.flipped?'flipped':''}" id="fcI">
+      <div class="fc-front"><div class="fc-emoji">${c.emoji}</div><div class="fc-hint">Tap to reveal word</div></div>
+      <div class="fc-back"><div class="fc-word">${c.word}</div><div class="fc-meaning">${c.vi}</div></div>
+    </div>
+  </div>
+  <div class="fc-controls">
+    <button class="fc-btn" onclick="fcN(-1)">← Prev</button>
+    <button class="fc-btn" onclick="speak('${c.word.replace(/'/g,"\\'")}')">🔊</button>
+    <button class="fc-btn" onclick="fcN(1)">Next →</button>
+  </div>`;
+}
+function flipFC(){gameState.flipped=!gameState.flipped;document.getElementById('fcI')?.classList.toggle('flipped',gameState.flipped);if(gameState.flipped){speak(gameState.cards[gameState.ci].word);addScore(2);}}
+function fcN(d){gameState.ci=(gameState.ci+d+gameState.cards.length)%gameState.cards.length;gameState.flipped=false;renderFC();if(gameState.ci===0)toast('🎉 All cards reviewed!','star');}
+
+// MATCH
+function initMatch(){
+  const ws=curGameUnit.words.slice(0,6);
+  gameState.left=ws.map((w,i)=>({id:i,text:w.emoji+' '+w.word,matched:false}));
+  gameState.right=[...ws.map((w,i)=>({id:i,text:w.vi,matched:false}))].sort(()=>Math.random()-.5);
+  gameState.sel={left:null,right:null};renderMatch();
+}
+function renderMatch(){
+  document.getElementById('gContent').innerHTML=`<div class="match-grid">
+    <div class="match-col">${gameState.left.map((it,i)=>`<div class="mitem ${it.matched?'matched':''} ${gameState.sel.left===i?'selected':''}" id="ml${i}" onclick="selM('left',${i})">${it.text}</div>`).join('')}</div>
+    <div class="match-col">${gameState.right.map((it,i)=>`<div class="mitem ${it.matched?'matched':''} ${gameState.sel.right===i?'selected':''}" id="mr${i}" onclick="selM('right',${i})">${it.text}</div>`).join('')}</div>
+  </div>`;
+}
+function selM(side,idx){
+  const it=gameState[side==='left'?'left':'right'][idx];if(it.matched)return;
+  gameState.sel[side]=idx;renderMatch();
+  if(gameState.sel.left!==null&&gameState.sel.right!==null){
+    const lId=gameState.left[gameState.sel.left].id,rId=gameState.right[gameState.sel.right].id;
+    if(lId===rId){gameState.left[gameState.sel.left].matched=true;gameState.right[gameState.sel.right].matched=true;addScore(10);toast('✅ Matched! +10','star');}
+    else{document.getElementById('ml'+gameState.sel.left)?.classList.add('wrongAnim');document.getElementById('mr'+gameState.sel.right)?.classList.add('wrongAnim');setTimeout(()=>document.querySelectorAll('.wrongAnim').forEach(el=>el.classList.remove('wrongAnim')),400);}
+    gameState.sel={left:null,right:null};setTimeout(renderMatch,450);
+    if(gameState.left.every(i=>i.matched)){toast('🎉 All matched!','star',3000);addScore(20);}
+  }
+}
+
+// QUIZ
+function initQuiz(){gameState.ws=[...curGameUnit.words].sort(()=>Math.random()-.5);gameState.qi=0;renderQuiz();}
+function renderQuiz(){
+  const ws=gameState.ws,c=ws[gameState.qi];
+  const opts=[...ws.filter((_,i)=>i!==gameState.qi).sort(()=>Math.random()-.5).slice(0,3),c].sort(()=>Math.random()-.5);
+  const ci=opts.findIndex(o=>o.word===c.word);
+  document.getElementById('gContent').innerHTML=`
+  <div style="text-align:center;font-size:.8rem;color:var(--muted);font-weight:700;">Q${gameState.qi+1}/${ws.length}</div>
+  <div class="quiz-big">${c.emoji}</div>
+  <div class="quiz-q">What is this word?</div>
+  <div class="quiz-opts-grid">${opts.map((o,i)=>`<div class="qog" onclick="ansQ(this,${i},${ci})">${o.word}</div>`).join('')}</div>`;
+}
+function ansQ(el,i,ci){
+  if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
+  el.parentElement.querySelectorAll('.qog').forEach((o,j)=>{if(j===ci)o.classList.add('correct');else if(j===i&&i!==ci)o.classList.add('wrong');});
+  if(i===ci){addScore(10);speak('Correct!');}
+  speak(gameState.ws[gameState.qi].word);
+  setTimeout(()=>{gameState.qi++;if(gameState.qi>=gameState.ws.length){toast('🎉 Quiz complete!','star');gameState.qi=0;}renderQuiz();},1500);
+}
+
+// SPELL
+function initSpell(){
+  const ws=curGameUnit.words.filter(w=>w.word.length>=3&&!w.word.includes(' '));
+  gameState.wl=ws.sort(()=>Math.random()-.5);gameState.si=0;gameState.typed=[];renderSpell();
+}
+function renderSpell(){
+  const wo=gameState.wl[gameState.si%gameState.wl.length],w=wo.word.toLowerCase();
+  const sh=w.split('').sort(()=>Math.random()-.5);
+  gameState.cw=w;gameState.sh=sh;gameState.typed=[];
+  document.getElementById('gContent').innerHTML=`
+  <div style="text-align:center;margin-bottom:8px;font-size:.8rem;color:var(--muted);font-weight:700;">Word ${(gameState.si%gameState.wl.length)+1}/${gameState.wl.length}</div>
+  <span class="spell-emoji">${wo.emoji}</span>
+  <div class="spell-hint">${wo.vi}</div>
+  <div class="spell-slots" id="spSlots">${w.split('').map(()=>'<div class="s-slot">_</div>').join('')}</div>
+  <div class="letter-bank" id="ltBank">${sh.map((l,i)=>`<div class="ltile" id="lt${i}" onclick="addL('${l}',${i})">${l.toUpperCase()}</div>`).join('')}</div>
+  <div class="spell-actions">
+    <button class="spell-btn" style="background:#6B7280;color:#fff;" onclick="clrSpell()">Clear</button>
+    <button class="spell-btn" style="background:var(--primary);color:#fff;" onclick="chkSpell()">Check ✓</button>
+    <button class="spell-btn" style="background:var(--accent);color:#fff;" onclick="skipSpell()">Skip →</button>
+  </div>`;
+}
+function addL(l,i){const t=document.getElementById('lt'+i);if(t.classList.contains('used'))return;t.classList.add('used');gameState.typed.push({l,i});const slots=document.getElementById('spSlots').querySelectorAll('.s-slot');const pos=gameState.typed.length-1;if(slots[pos])slots[pos].textContent=l.toUpperCase();}
+function clrSpell(){renderSpell();}
+function chkSpell(){const typed=gameState.typed.map(t=>t.l).join('');if(typed===gameState.cw){toast('⭐ Correct! +15','star');addScore(15);speak('Excellent!',1,1.3);gameState.si++;setTimeout(renderSpell,1000);}else toast('Try again! It is "'+gameState.cw+'"','error',2500);}
+function skipSpell(){gameState.si++;renderSpell();}
+
+// SENTENCE BUILDER
+function initSent(){
+  const exs=curGameUnit.grammar.examples;gameState.sents=exs.map(e=>e.a);gameState.si=0;gameState.ans=[];renderSent();
+}
+function renderSent(){
+  const s=gameState.sents[gameState.si%gameState.sents.length];
+  const ws=s.replace(/[.,!?]/g,'').split(' ').filter(w=>w);
+  const sh=[...ws].sort(()=>Math.random()-.5);
+  gameState.tw=ws;gameState.sw=sh;gameState.ans=[];
+  document.getElementById('gContent').innerHTML=`
+  <div style="font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:8px;">Put the words in the right order:</div>
+  <div class="sent-display" id="sentD"><span style="color:#ccc;font-size:.85rem;">Tap words below to build the sentence</span></div>
+  <div class="word-pool" id="wPool">${sh.map((w,i)=>`<div class="wpool-chip" id="wp${i}" onclick="addW('${w.replace(/'/g,"\\'")}',${i})">${w}</div>`).join('')}</div>
+  <div style="display:flex;gap:10px;">
+    <button class="check-btn" onclick="chkSent()">Check ✓</button>
+    <button class="check-btn" style="background:#6B7280;" onclick="clrSent()">Clear</button>
+    <button class="check-btn" style="background:var(--accent);" onclick="nextSent()">Next →</button>
+  </div>`;
+}
+function addW(w,i){const c=document.getElementById('wp'+i);if(c.classList.contains('used'))return;c.classList.add('used');gameState.ans.push({w,i});const d=document.getElementById('sentD');if(d.querySelector('span'))d.innerHTML='';d.innerHTML+=`<div class="wchip" onclick="rmW(${gameState.ans.length-1})">${w}</div>`;}
+function rmW(i){const it=gameState.ans[i];document.getElementById('wp'+it.i)?.classList.remove('used');gameState.ans.splice(i,1);const d=document.getElementById('sentD');d.innerHTML=gameState.ans.length?gameState.ans.map((a,j)=>`<div class="wchip" onclick="rmW(${j})">${a.w}</div>`).join(''):'<span style="color:#ccc;font-size:.85rem;">Tap words below</span>';}
+function chkSent(){const typed=gameState.ans.map(a=>a.w).join(' ');if(typed.toLowerCase()===gameState.tw.join(' ').toLowerCase()){toast('🎉 Perfect! +20','star');addScore(20);speak('Well done!');nextSent();}else toast('Check the order!','error',2500);}
+function clrSent(){gameState.ans=[];renderSent();}
+function nextSent(){gameState.si++;renderSent();}
+
+// LISTEN & CHOOSE
+function initListen(){gameState.ws=[...curGameUnit.words].sort(()=>Math.random()-.5);gameState.li=0;renderListen();}
+function renderListen(){
+  const c=gameState.ws[gameState.li%gameState.ws.length];
+  const opts=[...gameState.ws.filter((_,i)=>i!==(gameState.li%gameState.ws.length)).sort(()=>Math.random()-.5).slice(0,3),c].sort(()=>Math.random()-.5);
+  const ci=opts.findIndex(o=>o.word===c.word);
+  gameState.clw=c;
+  document.getElementById('gContent').innerHTML=`
+  <div style="text-align:center;font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:8px;">Listen to the word, then tap the right picture!</div>
+  <button class="listen-play-btn" onclick="speak('${c.word.replace(/'/g,"\\'")}')">🔊 Play Word</button>
+  <div class="listen-opts">${opts.map((o,i)=>`<div class="lopt" onclick="ansL(this,${i},${ci})"><span class="oe">${o.emoji}</span>${o.word}</div>`).join('')}</div>`;
+  setTimeout(()=>speak(c.word,.85),300);
+}
+function ansL(el,i,ci){
+  if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
+  el.parentElement.querySelectorAll('.lopt').forEach((o,j)=>{if(j===ci)o.classList.add('correct');else if(j===i&&i!==ci)o.classList.add('wrong');});
+  if(i===ci)addScore(10);
+  setTimeout(()=>{gameState.li++;renderListen();},1500);
+}
+
+// SCRAMBLE
+function initScram(){const ws=curGameUnit.words.filter(w=>!w.word.includes(' '));gameState.sw=ws.sort(()=>Math.random()-.5);gameState.sci=0;renderScram();}
+function renderScram(){
+  const wo=gameState.sw[gameState.sci%gameState.sw.length];
+  const sc=wo.word.split('').sort(()=>Math.random()-.5).join('');
+  gameState.scrW=wo.word;
+  document.getElementById('gContent').innerHTML=`
+  <div style="text-align:center;margin-bottom:8px;"><span style="font-size:2.5rem;">${wo.emoji}</span><div style="font-size:.8rem;color:var(--muted);font-weight:700;margin-top:4px;">${wo.vi}</div></div>
+  <div class="scram-letters">${sc.toUpperCase()}</div>
+  <input class="scram-inp" id="scrInp" type="text" placeholder="Type the correct word..." autocomplete="off" autocorrect="off" autocapitalize="off">
+  <div style="display:flex;gap:10px;">
+    <button class="spell-btn" style="background:var(--primary);color:#fff;flex:1;" onclick="chkScram()">Check ✓</button>
+    <button class="spell-btn" style="background:var(--accent);color:#fff;flex:1;" onclick="skipScram()">Skip →</button>
+    <button class="spell-btn" style="background:#6B7280;color:#fff;flex:1;" onclick="speak('${wo.word.replace(/'/g,"\\'")}')">🔊</button>
+  </div>`;
+  document.getElementById('scrInp').addEventListener('keypress',e=>{if(e.key==='Enter')chkScram();});
+}
+function chkScram(){const v=document.getElementById('scrInp').value.trim().toLowerCase();if(v===gameState.scrW.toLowerCase()){toast('⭐ Correct! +15','star');addScore(15);speak('Excellent!');gameState.sci++;setTimeout(renderScram,1000);}else toast('Hint: '+gameState.scrW.length+' letters','error');}
+function skipScram(){gameState.sci++;renderScram();}
+
+// TRUE OR FALSE
+function initTF(){
+  const u=curGameUnit;
+  const ts=u.grammar.examples.map(ex=>({text:ex.a,c:true}));
+  const fs=u.grammar.examples.map(ex=>({text:ex.q,c:false}));
+  gameState.tfl=[...ts,...fs].sort(()=>Math.random()-.5);gameState.tfi=0;renderTF();
+}
+function renderTF(){
+  const it=gameState.tfl[gameState.tfi%gameState.tfl.length];
+  const pct=Math.round(gameState.tfi/gameState.tfl.length*100);
+  document.getElementById('gContent').innerHTML=`
+  <div style="margin-bottom:12px;background:#E8ECFF;border-radius:8px;height:8px;"><div style="background:var(--primary);height:100%;border-radius:8px;width:${pct}%;transition:width .3s;"></div></div>
+  <div style="text-align:center;font-size:.8rem;color:var(--muted);font-weight:700;">Q${(gameState.tfi%gameState.tfl.length)+1}/${gameState.tfl.length}</div>
+  <div class="tf-stmt">"${it.text}"</div>
+  <div class="tf-btns">
+    <button class="tf-btn tf-t" onclick="ansTF(true,${it.c})">✅ TRUE</button>
+    <button class="tf-btn tf-f" onclick="ansTF(false,${it.c})">❌ FALSE</button>
+  </div>`;
+}
+function ansTF(ans,c){
+  if(ans===c){toast('⭐ Correct! +10','star');addScore(10);speak('Correct!');}
+  else toast('The answer was '+(c?'TRUE':'FALSE')+'!','error');
+  gameState.tfi++;setTimeout(renderTF,1200);
+}
+
+// PROGRESS
+function renderProgress(){
+  const levels=[{min:0,msg:'Just getting started! 🌱'},{min:10,msg:'Good progress! 📚'},{min:50,msg:'Well done! Keep it up! 🌟'},{min:100,msg:'Excellent learner! 🏆'},{min:200,msg:'Super star! Amazing! 🌠'}];
+  const lv=levels.filter(l=>totalStars>=l.min).pop();
+  document.getElementById('progTitle').textContent='⭐ '+totalStars+' Stars!';
+  document.getElementById('progMsg').textContent=lv.msg;
+  const sc={words:'#5B6CF2',grammar:'#8B5CF6',phonics:'#FF6B6B',reading:'#FF9800',writing:'#22C55E',speaking:'#EC4899'};
+  document.getElementById('progUnits').innerHTML=UNITS.map((u,i)=>{
+    const p=progress[u.id];
+    return `<div class="puc">
+      <div class="pu-title">${u.icon} ${i===0?'Starter':'Unit '+i}: ${u.title} <span style="margin-left:auto;font-size:.8rem;color:#856404;background:#FFF3CD;padding:2px 10px;border-radius:10px;">⭐${p.stars||0}</span></div>
+      <div class="pu-skills">${['words','grammar','phonics','reading','writing'].map(s=>`<div class="pu-skill"><div class="pu-sname">${s}</div><div class="pu-sbar"><div class="pu-sfill" style="width:${Math.min(100,p[s]||0)}%;background:${sc[s]}"></div></div><div class="pu-spct">${Math.min(100,p[s]||0)}%</div></div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+window.onload=()=>{renderHome();setTimeout(()=>{voices=synth.getVoices();},200);};
+
+</script>
+</body>
+</html>
