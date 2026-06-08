@@ -1,4 +1,5 @@
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -107,6 +108,84 @@
 @keyframes sw{0%,100%{transform:translateX(0) rotate(0)}50%{transform:translateX(4px) rotate(4deg)}}
 @keyframes pop{0%{transform:scale(.85)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes shk{0%,100%{transform:translateX(0)}30%{transform:translateX(-5px)}70%{transform:translateX(5px)}}
+
+/* ===== RESPONSIVE MOBILE ===== */
+html, body {
+  margin: 0; padding: 0;
+  background: #f4f6ff;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Điện thoại nhỏ (< 480px) */
+@media (max-width: 480px) {
+  #ap { padding: 6px; border-radius: 12px; }
+  .hd { padding: 10px 12px; gap: 8px; }
+  .hd-ico { font-size: 26px; }
+  .hd-t { font-size: 14px; }
+  .hd-s { font-size: 10px; }
+  .sc-n { font-size: 16px; }
+
+  /* Tabs chủ đề: cuộn ngang thay vì xuống dòng */
+  .ch-tabs {
+    display: flex; flex-wrap: nowrap;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    gap: 5px; padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .ch-tabs::-webkit-scrollbar { display: none; }
+  .ch-tab { white-space: nowrap; flex-shrink: 0; font-size: 11px; padding: 5px 10px; }
+
+  /* Grid bài học: 1 cột thay 2 cột */
+  .lgrid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .lcard-ico { font-size: 20px; }
+  .lcard-t { font-size: 11px; }
+  .lcard-d { font-size: 9px; }
+
+  /* Bài học panel */
+  .pn { padding: 10px; }
+  .pt { font-size: 13px; }
+
+  /* Số to */
+  .big-n { font-size: 52px; }
+  .cmn { font-size: 36px; }
+  .cmpbox { min-width: 60px; padding: 8px 10px; }
+
+  /* Toán: ô nhập và phép tính */
+  .mathrow { gap: 5px; }
+  .mbox { font-size: 26px; padding: 6px 10px; min-width: 44px; }
+  .msym { font-size: 22px; }
+  .minput { width: 54px; height: 44px; font-size: 24px; }
+
+  /* Lưới đáp án 4 cột → 2 cột trên mobile nhỏ */
+  .agrid { grid-template-columns: repeat(2, 1fr); }
+  .ab { font-size: 18px; padding: 8px 4px; }
+
+  /* Fish/tank */
+  .fish { font-size: 22px; }
+  .tank { padding: 10px; min-height: 70px; }
+
+  /* Dấu so sánh */
+  .sbtn { font-size: 18px; padding: 7px 14px; }
+  .sbtns { gap: 6px; }
+
+  /* Popup */
+  .popup { width: 88vw; padding: 18px 16px; }
+  .pop-t { font-size: 15px; }
+}
+
+/* Điện thoại vừa (480px – 700px) */
+@media (min-width: 480px) and (max-width: 700px) {
+  #ap { padding: 8px; }
+  .hd-t { font-size: 15px; }
+  .agrid { grid-template-columns: repeat(4, 1fr); }
+  .big-n { font-size: 58px; }
+}
+
+/* Máy tính: giữ max-width như cũ */
+@media (min-width: 700px) {
+  #ap { max-width: 700px; margin: 16px auto; padding: 14px; }
+  .agrid { grid-template-columns: repeat(4, 1fr); }
+}
 </style>
 
 <div id="ap">
