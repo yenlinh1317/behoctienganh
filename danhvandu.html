@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>🌈 Bé Học Đánh Vần</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap');
+:root{--red:#FF4757;--orange:#FF7F11;--yellow:#FFD32A;--green:#26de81;--teal:#20bf6b;--blue:#0984e3;--dpurp:#6c5ce7;--pink:#fd79a8;--navy:#2d3436;--bg:#FFF8F0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Baloo 2',sans-serif;background:var(--bg);overflow-x:hidden}
+#hdr{background:linear-gradient(135deg,#FF6B6B,#FF8E53,#FFC200);padding:10px 14px 8px;text-align:center;box-shadow:0 3px 12px rgba(255,100,0,.3)}
+#hdr h1{font-size:clamp(18px,5vw,28px);font-weight:800;color:#fff;text-shadow:1px 2px 0 rgba(0,0,0,.15)}
+.star-row{display:flex;justify-content:center;gap:4px;margin-top:4px;min-height:22px}
+.star-row span{font-size:18px;animation:popIn .3s ease both}
+@keyframes popIn{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+#modetabs{display:flex;background:#fff;border-bottom:2px solid #f0f0f0;overflow-x:auto;justify-content:center;flex-wrap:wrap}
+.mtab{padding:10px 16px;border:none;background:transparent;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:#888;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .15s}
+.mtab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.mpnl{display:none;padding:12px;animation:fadeUp .2s ease}
+.mpnl.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pa-sel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.pa-btn{padding:5px 11px;border:2px solid #e0e0e0;border-radius:11px;background:#fff;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .14s;color:var(--navy)}
+.pa-btn.on{color:#fff}
+.pa-board{background:#fff;border-radius:16px;padding:12px;box-shadow:0 3px 14px rgba(0,0,0,.09)}
+.pa-big{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;cursor:pointer;flex-shrink:0}
+.tbl-wrap{overflow-x:auto;margin-top:10px}
+table.ptbl{border-collapse:collapse;width:100%}
+table.ptbl th{background:#f8f9fa;padding:6px 8px;font-size:14px;font-weight:800;text-align:center;border:1px solid #eee;min-width:44px}
+table.ptbl td{padding:5px 3px;border:1px solid #eee;text-align:center;vertical-align:middle}
+table.ptbl td.na-hd{font-size:14px;font-weight:800;color:var(--dpurp);background:#f0edff;cursor:pointer;min-width:30px}
+table.ptbl td.syl-cell{cursor:pointer;min-width:50px}
+table.ptbl td.syl-cell:hover{background:#f5f0ff}
+table.ptbl td.syl-na{min-width:50px}
+.syl-ok{font-size:15px;font-weight:800}
+.syl-no{font-size:13px;color:#ddd}
+.syl-x{font-size:13px;color:#eee}
+table.ptbl td.ex-cell{min-width:80px;cursor:pointer;padding:4px 6px}
+table.ptbl td.ex-cell:hover{background:#fff9e6}
+.ex-em{font-size:18px}.ex-w{font-size:14px;font-weight:800}.ex-m{font-size:10px;color:#aaa}
+.vg-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.vg-tab{padding:5px 11px;border:2px solid #ddd;border-radius:11px;background:#fff;font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .14s}
+.vg-tab.on{color:#fff}
+.vg-board{background:#fff;border-radius:16px;padding:12px;box-shadow:0 3px 14px rgba(0,0,0,.09);margin-bottom:12px}
+.vg-van-hdr{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.vg-van-title{font-size:36px;font-weight:800;cursor:pointer;line-height:1}
+table.vtbl{border-collapse:collapse;width:100%}
+table.vtbl th{background:#f8f9fa;padding:6px 8px;font-size:14px;font-weight:800;text-align:center;border:1px solid #eee;min-width:44px}
+table.vtbl td{padding:5px 3px;border:1px solid #eee;text-align:center;vertical-align:middle;min-width:50px}
+table.vtbl td.pa-hd{font-size:14px;font-weight:800;color:var(--dpurp);background:#f0edff;cursor:pointer;min-width:36px}
+.speak-btn{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#00b894,#20bf6b);color:#fff;border:none;padding:7px 14px;border-radius:9px;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.sample-row{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}
+.sw{background:#fff3e0;border:2px solid #ffcc80;border-radius:9px;padding:4px 10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .12s}
+.sw:hover{background:#ff9800;color:#fff;border-color:#ff9800}
+.sents-box{background:#f8f9fa;border-radius:10px;padding:8px 10px;margin-top:5px}
+.sent-line{font-size:13px;font-weight:700;color:var(--navy);padding:3px 5px;border-radius:5px;cursor:pointer;transition:all .12s}
+.sent-line:hover{background:#e8f5e9;color:var(--teal)}
+.sent-line::before{content:'• '}
+.tone-note{font-size:11px;background:#fff3e0;border:1px solid #ffcc80;border-radius:7px;padding:3px 8px;color:#e67e22;display:inline-block;margin-bottom:6px}
+.game-hdr{border-radius:14px;padding:10px;text-align:center;margin-bottom:10px;color:#fff}
+.game-hdr h2{font-size:17px;font-weight:800}
+.game-hdr p{font-size:11px;opacity:.9;margin-top:1px}
+.score-row{display:flex;gap:7px;justify-content:center;margin-bottom:8px}
+.sc{padding:4px 12px;border-radius:9px;font-size:12px;font-weight:800}
+.sc-ok{background:#d4f8e0;color:#00b894}.sc-no{background:#ffe0e3;color:#e17055}.sc-st{background:#fff3cd;color:#e67e22}
+.g-type-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.play-btn{display:block;margin:0 auto 10px;width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);border:none;font-size:34px;cursor:pointer;box-shadow:0 5px 16px rgba(102,126,234,.4);transition:all .16s}
+.play-btn:hover{transform:scale(1.07)}
+.play-btn.pulse{animation:pa .45s ease}
+@keyframes pa{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+.g-instruct{text-align:center;font-size:12px;color:#636e72;font-weight:700;margin-bottom:9px}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.gopt{background:#fff;border:3px solid #e8e8e8;border-radius:13px;padding:11px 6px;cursor:pointer;text-align:center;transition:all .16s;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'Baloo 2',sans-serif}
+.gopt:hover{border-color:var(--dpurp);background:#f5f0ff;transform:translateY(-2px)}
+.gopt .ge{font-size:26px}.gopt .gt{font-size:18px;font-weight:800;color:var(--navy)}.gopt .gs{font-size:11px;color:#aaa}
+.gopt.ok{border-color:#00b894;background:#d4f8e0;animation:boun .4s}
+.gopt.no{border-color:#e17055;background:#ffe0e3;animation:shk .3s}
+@keyframes boun{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes shk{0%,100%{transform:translateX(0)}33%{transform:translateX(-6px)}66%{transform:translateX(6px)}}
+.g-msg{text-align:center;font-size:13px;font-weight:800;min-height:20px;margin:7px 0 2px}
+.next-btn{display:block;margin:7px auto 0;padding:9px 24px;border:none;border-radius:11px;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.fb-card{background:#fff;border-radius:13px;padding:13px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:9px}
+.fb-emoji{font-size:58px;display:block;margin-bottom:3px}
+.fb-word{display:flex;align-items:flex-end;justify-content:center;gap:4px;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:2px;flex-wrap:wrap}
+.fb-blank{min-width:46px;height:42px;border-bottom:4px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--blue)}
+.fb-choices{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.fbc{background:#fff;border:3px solid #e0e0e0;border-radius:9px;padding:7px 12px;font-size:18px;font-weight:800;font-family:'Baloo 2',sans-serif;color:var(--navy);cursor:pointer;transition:all .13s;min-width:46px}
+.fbc:hover{border-color:var(--pink);background:#fff0f5}
+.fbc.ok{border-color:#00b894;background:#d4f8e0;color:#00b894;animation:boun .4s}
+.fbc.no{border-color:#e17055;background:#ffe0e3;animation:shk .3s}
+.arr-card{background:#fff;border-radius:13px;padding:13px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:9px}
+.arr-ans{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;min-height:48px;background:#f7f7f7;border-radius:9px;padding:6px 9px;margin-bottom:7px;align-items:center}
+.arr-placed{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:6px 12px;border-radius:8px;font-size:18px;font-weight:800;cursor:pointer}
+.arr-placeholder{color:#ccc;font-size:11px}
+.arr-tiles{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:7px}
+.arr-tile{background:#fff;border:3px solid #ddd;border-radius:9px;padding:7px 12px;font-size:18px;font-weight:800;cursor:pointer;font-family:'Baloo 2',sans-serif;color:var(--navy);transition:all .12s}
+.arr-tile:hover{border-color:var(--dpurp);background:#f0edff}
+.arr-tile.used{opacity:.3;pointer-events:none}
+.arr-btns{display:flex;gap:6px;justify-content:center}
+.arr-check{padding:8px 16px;border:none;border-radius:9px;font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00b894,#20bf6b);color:#fff}
+.arr-reset{padding:8px 13px;border:none;border-radius:9px;font-family:'Baloo 2',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:#f0f0f0;color:#666}
+.cnf{position:fixed;pointer-events:none;z-index:1000;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh)rotate(720deg);opacity:0}}
+#reward{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
+#reward.on{display:flex}
+.rw{background:#fff;border-radius:20px;padding:24px 18px;text-align:center;max-width:270px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.25)}
+.rw-em{font-size:58px;animation:spin .6s ease both}
+@keyframes spin{from{transform:scale(0)rotate(-180deg)}to{transform:scale(1)rotate(0)}}
+.rw-t{font-size:20px;font-weight:800;margin:7px 0 2px;color:var(--navy)}
+.rw-btn{margin-top:12px;padding:9px 26px;border:none;border-radius:11px;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff}
+.sec-lbl{font-size:11px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin:8px 0 5px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="hdr"><h1>🌈 Bé Học Đánh Vần</h1><div class="star-row" id="starRow"></div></div>
+<div id="modetabs">
+  <button class="mtab on" data-m="pa">📋 Phụ âm × Nguyên âm</button>
+  <button class="mtab" data-m="vg">📖 Nhóm vần SGK</button>
+  <button class="mtab" data-m="g1">🎵 Nghe &amp; Chọn</button>
+  <button class="mtab" data-m="g2">✏️ Điền vần</button>
+  <button class="mtab" data-m="g3">🧩 Ghép từ</button>
+</div>
+<div class="mpnl on" id="mpnl-pa"><div class="sec-lbl">Chọn phụ âm:</div><div class="pa-sel" id="paSel"></div><div id="paBoard"></div></div>
+<div class="mpnl" id="mpnl-vg"><div class="sec-lbl">Chọn nhóm vần:</div><div class="vg-tabs" id="vgTabs"></div><div id="vgBoard"></div></div>
+<div class="mpnl" id="mpnl-g1">
+  <div class="game-hdr" style="background:linear-gradient(135deg,#667eea,#764ba2)"><h2>🎵 Nghe &amp; Chọn Đúng</h2><p>Bấm 🔊 nghe rồi chọn từ đúng!</p></div>
+  <div class="score-row"><span class="sc sc-ok" id="g1ok">✓ 0</span><span class="sc sc-no" id="g1no">✗ 0</span><span class="sc sc-st" id="g1st">🔥 0</span></div>
+  <div class="g-type-row" id="g1TypeRow"><button class="pa-btn on" data-t="van">Theo vần</button><button class="pa-btn" data-t="tu">Từ có hình</button></div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:8px" id="g1VGSel"></div>
+  <button class="play-btn" id="g1Btn">🔊</button>
+  <div class="g-instruct">👆 Bấm loa để nghe rồi chọn đúng</div>
+  <div class="opts-grid" id="g1Opts"></div>
+  <div class="g-msg" id="g1Msg"></div>
+  <button class="next-btn hidden" id="g1Next">Câu tiếp ➡️</button>
+</div>
+<div class="mpnl" id="mpnl-g2">
+  <div class="game-hdr" style="background:linear-gradient(135deg,#f7971e,#ffd200);color:#333"><h2>✏️ Điền Vần Còn Thiếu</h2><p style="color:#555">Tự chuyển câu khi đúng!</p></div>
+  <div class="score-row"><span class="sc sc-ok" id="g2ok">✓ 0</span><span class="sc sc-no" id="g2no">✗ 0</span><span class="sc sc-st" id="g2st">🔥 0</span></div>
+  <div class="g-type-row" id="g2VGRow"></div>
+  <div id="g2Board"></div><div class="g-msg" id="g2Msg"></div>
+  <button class="next-btn hidden" id="g2Next">Câu tiếp ➡️</button>
+</div>
+<div class="mpnl" id="mpnl-g3">
+  <div class="game-hdr" style="background:linear-gradient(135deg,#00b894,#20bf6b)"><h2>🧩 Ghép Âm Thành Từ</h2><p>Tự chuyển câu khi đúng!</p></div>
+  <div class="score-row"><span class="sc sc-ok" id="g3ok">✓ 0</span><span class="sc sc-no" id="g3no">✗ 0</span></div>
+  <div class="g-type-row" id="g3VGRow"></div>
+  <div id="g3Board"></div><div class="g-msg" id="g3Msg"></div>
+  <button class="next-btn hidden" id="g3Next">Câu tiếp ➡️</button>
+</div>
+<div id="reward"><div class="rw"><div class="rw-em" id="rwEm">🏆</div><div class="rw-t">Tuyệt vời!</div><div style="font-size:12px;color:#888">Bé học giỏi lắm!</div><button class="rw-btn" id="rwClose">Tiếp tục ▶</button></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const speak=(t,r=0.8)=>{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';u.rate=r;speechSynthesis.speak(u);};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+
+// ===== THANH ĐIỆU =====
+const TK=['','`','´','?','~','·'];
+const TC=['#555','#0984e3','#e17055','#00b894','#6c5ce7','#c0392b'];
+// KIỂU vần quyết định thanh nào dùng được:
+// 'open'  = vần mở (a,e,o...): cả 6 thanh
+// 'sonorant' = kết thúc m/n/ng/nh: cả 6 thanh  
+// 'stop'  = kết thúc p/t/c/ch: chỉ thanh SẮC(2) và NẶNG(5)
+const TONE_MASK={
+  open:[0,1,2,3,4,5],
+  sonorant:[0,1,2,3,4,5],
+  stop:[2,5],      // chỉ ´ và ·
+};
+
+// Nguyên âm đơn — KHÔNG có ă, â (chỉ trong vần ghép)
+const NA_BASE=['a','e','ê','i','o','ô','ơ','u','ư'];
+const NA_T={
+  a:['a','à','á','ả','ã','ạ'],e:['e','è','é','ẻ','ẽ','ẹ'],ê:['ê','ề','ế','ể','ễ','ệ'],
+  i:['i','ì','í','ỉ','ĩ','ị'],o:['o','ò','ó','ỏ','õ','ọ'],ô:['ô','ồ','ố','ổ','ỗ','ộ'],
+  ơ:['ơ','ờ','ớ','ở','ỡ','ợ'],u:['u','ù','ú','ủ','ũ','ụ'],ư:['ư','ừ','ứ','ử','ữ','ự'],
+};
+
+// ===== PHỤ ÂM DATA =====
+// words: {na: [{t,w,e,m}]} — chỉ từ thực có nghĩa
+const PHU_AM=[
+  {pa:'b',col:'#0984e3',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ba',e:'👨',m:'ba'},{t:1,w:'bà',e:'👵',m:'bà'},{t:2,w:'bá',e:'👑',m:'bá'},{t:5,w:'bạ',e:'📝',m:'bạ'},{t:3,w:'bả',e:'🧪',m:'bả'},{t:4,w:'bã',e:'🌿',m:'bã'}],
+    e:[{t:2,w:'bé',e:'👶',m:'bé'},{t:1,w:'bè',e:'🛶',m:'bè'},{t:0,w:'be',e:'🍼',m:'be'},{t:5,w:'bẹ',e:'🐟',m:'bẹ'}],
+    ê:[{t:0,w:'bê',e:'🐄',m:'bê'},{t:2,w:'bế',e:'🤱',m:'bế'},{t:1,w:'bề',e:'📐',m:'bề'},{t:3,w:'bể',e:'🐠',m:'bể'}],
+    i:[{t:0,w:'bi',e:'🔮',m:'bi'},{t:2,w:'bí',e:'🥒',m:'bí'},{t:1,w:'bì',e:'📦',m:'bì'},{t:5,w:'bị',e:'😣',m:'bị'},{t:3,w:'bỉ',e:'😤',m:'bỉ'}],
+    o:[{t:1,w:'bò',e:'🐄',m:'bò'},{t:2,w:'bó',e:'💐',m:'bó'},{t:3,w:'bỏ',e:'🚮',m:'bỏ'},{t:5,w:'bọ',e:'🐛',m:'bọ'}],
+    ô:[{t:0,w:'bô',e:'🪣',m:'bô'},{t:2,w:'bố',e:'👨',m:'bố'},{t:1,w:'bồ',e:'🐦',m:'bồ'},{t:3,w:'bổ',e:'💊',m:'bổ'},{t:5,w:'bộ',e:'📚',m:'bộ'}],
+    ơ:[{t:0,w:'bơ',e:'🧈',m:'bơ'},{t:1,w:'bờ',e:'🏖️',m:'bờ'},{t:2,w:'bớ',e:'😮',m:'bớ'},{t:3,w:'bở',e:'🤏',m:'bở'}],
+    u:[{t:0,w:'bu',e:'🐝',m:'bu'},{t:2,w:'bú',e:'🍼',m:'bú'},{t:1,w:'bù',e:'💇',m:'bù'},{t:5,w:'bụ',e:'👶',m:'bụ'},{t:3,w:'bủ',e:'🌿',m:'bủ'}],
+    ư:[{t:4,w:'bữa',e:'🍽️',m:'bữa'},{t:1,w:'bừa',e:'🌿',m:'bừa'},{t:2,w:'bứa',e:'🌳',m:'bứa'}],
+  }},
+  {pa:'c',col:'#00b894',na_ok:['a','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ca',e:'🎵',m:'ca'},{t:2,w:'cá',e:'🐟',m:'cá'},{t:1,w:'cà',e:'🍆',m:'cà'},{t:3,w:'cả',e:'🐟',m:'cả'},{t:5,w:'cạ',e:'🔧',m:'cạ'}],
+    o:[{t:0,w:'co',e:'🦵',m:'co'},{t:2,w:'có',e:'✅',m:'có'},{t:1,w:'cò',e:'🦢',m:'cò'},{t:5,w:'cọ',e:'🌴',m:'cọ'},{t:3,w:'cỏ',e:'🌿',m:'cỏ'}],
+    ô:[{t:0,w:'cô',e:'👩',m:'cô'},{t:2,w:'cố',e:'🙏',m:'cố'},{t:1,w:'cồ',e:'🦅',m:'cồ'},{t:3,w:'cổ',e:'🦒',m:'cổ'},{t:5,w:'cộ',e:'🌿',m:'cộ'}],
+    ơ:[{t:0,w:'cơ',e:'💪',m:'cơ'},{t:1,w:'cờ',e:'♟️',m:'cờ'},{t:2,w:'cớ',e:'🤔',m:'cớ'},{t:3,w:'cởi',e:'👕',m:'cởi'},{t:5,w:'cợ',e:'🌿',m:'cợ'}],
+    u:[{t:0,w:'cu',e:'👦',m:'cu'},{t:2,w:'cú',e:'🦉',m:'cú'},{t:1,w:'cù',e:'😄',m:'cù'},{t:3,w:'củ',e:'🥕',m:'củ'},{t:5,w:'cụ',e:'👴',m:'cụ'}],
+    ư:[{t:0,w:'cư',e:'🏘️',m:'cư'},{t:1,w:'cừu',e:'🐑',m:'cừu'},{t:2,w:'cứu',e:'🚑',m:'cứu'},{t:3,w:'cửu',e:'9️⃣',m:'cửu'}],
+  }},
+  {pa:'k',col:'#20bf6b',na_ok:['e','ê','i'],words:{
+    e:[{t:2,w:'kẻ',e:'😈',m:'kẻ'},{t:1,w:'kè',e:'🐟',m:'kè'},{t:0,w:'ke',e:'🌿',m:'ke'}],
+    ê:[{t:0,w:'kê',e:'🌾',m:'kê'},{t:2,w:'kế',e:'📋',m:'kế'},{t:1,w:'kề',e:'↔️',m:'kề'},{t:3,w:'kể',e:'📖',m:'kể'},{t:5,w:'kệ',e:'📚',m:'kệ'}],
+    i:[{t:0,w:'ki',e:'🎏',m:'ki'},{t:2,w:'kí',e:'✍️',m:'kí'},{t:3,w:'kỉ',e:'🏆',m:'kỉ'},{t:1,w:'kì',e:'🎌',m:'kì'},{t:5,w:'kị',e:'🐴',m:'kị'}],
+  }},
+  {pa:'d',col:'#e17055',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'da',e:'🫀',m:'da'},{t:1,w:'dà',e:'🌊',m:'dà'},{t:2,w:'dá',e:'🥊',m:'dá'},{t:5,w:'dạ',e:'🙏',m:'dạ'}],
+    e:[{t:0,w:'de',e:'🌿',m:'de'},{t:1,w:'dè',e:'😬',m:'dè'},{t:5,w:'dẹp',e:'✨',m:'dẹp'}],
+    ê:[{t:0,w:'dê',e:'🐐',m:'dê'},{t:2,w:'dế',e:'🦗',m:'dế'},{t:1,w:'dề',e:'🌿',m:'dề'}],
+    i:[{t:0,w:'di',e:'🚶',m:'di'},{t:1,w:'dì',e:'👩',m:'dì'},{t:2,w:'dí',e:'👉',m:'dí'},{t:5,w:'dị',e:'👽',m:'dị'}],
+    o:[{t:0,w:'do',e:'🎀',m:'do'},{t:2,w:'dó',e:'🪤',m:'dó'},{t:5,w:'dọ',e:'🔍',m:'dọ'},{t:3,w:'dỏ',e:'🌿',m:'dỏ'}],
+    ô:[{t:1,w:'dồ',e:'🌿',m:'dồ'},{t:3,w:'dổ',e:'🫗',m:'dổ'},{t:5,w:'dột',e:'💧',m:'dột'}],
+    ơ:[{t:1,w:'dờ',e:'🌿',m:'dờ'},{t:3,w:'dở',e:'😕',m:'dở'},{t:5,w:'dợ',e:'🌿',m:'dợ'}],
+    u:[{t:0,w:'du',e:'🌊',m:'du'},{t:1,w:'dù',e:'☂️',m:'dù'},{t:2,w:'dú',e:'🐘',m:'dú'},{t:3,w:'dủ',e:'🌿',m:'dủ'},{t:5,w:'dụ',e:'🎯',m:'dụ'}],
+    ư:[{t:0,w:'dư',e:'➕',m:'dư'},{t:1,w:'dừa',e:'🥥',m:'dừa'},{t:2,w:'dứa',e:'🍍',m:'dứa'},{t:3,w:'dửa',e:'🌿',m:'dửa'}],
+  }},
+  {pa:'đ',col:'#6c5ce7',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'đa',e:'🔢',m:'đa'},{t:2,w:'đá',e:'🪨',m:'đá'},{t:1,w:'đà',e:'🚂',m:'đà'},{t:3,w:'đả',e:'🥊',m:'đả'},{t:5,w:'đạ',e:'🌿',m:'đạ'}],
+    e:[{t:0,w:'đe',e:'😬',m:'đe'},{t:1,w:'đè',e:'⬇️',m:'đè'},{t:5,w:'đẹp',e:'✨',m:'đẹp'}],
+    ê:[{t:0,w:'đê',e:'🌊',m:'đê'},{t:3,w:'để',e:'📍',m:'để'},{t:2,w:'đế',e:'🏛️',m:'đế'},{t:1,w:'đề',e:'📝',m:'đề'}],
+    i:[{t:0,w:'đi',e:'🚶',m:'đi'},{t:1,w:'đì',e:'😌',m:'đì'},{t:5,w:'địa',e:'🌍',m:'địa'}],
+    o:[{t:0,w:'đo',e:'📏',m:'đo'},{t:2,w:'đó',e:'👆',m:'đó'},{t:1,w:'đò',e:'⛵',m:'đò'},{t:5,w:'đọ',e:'🆚',m:'đọ'},{t:3,w:'đỏ',e:'🔴',m:'đỏ'}],
+    ô:[{t:0,w:'đô',e:'🏙️',m:'đô'},{t:2,w:'đố',e:'❓',m:'đố'},{t:1,w:'đồ',e:'🧸',m:'đồ'},{t:3,w:'đổ',e:'🫗',m:'đổ'},{t:5,w:'độ',e:'📐',m:'độ'}],
+    ơ:[{t:0,w:'đơ',e:'😶',m:'đơ'},{t:3,w:'đởm',e:'💪',m:'đởm'},{t:1,w:'đờ',e:'😶',m:'đờ'}],
+    u:[{t:3,w:'đủ',e:'✅',m:'đủ'},{t:1,w:'đùa',e:'😄',m:'đùa'},{t:2,w:'đứa',e:'👧',m:'đứa'},{t:5,w:'đụ',e:'🌿',m:'đụ'}],
+    ư:[{t:0,w:'đưa',e:'🤲',m:'đưa'},{t:2,w:'đứa',e:'👧',m:'đứa'},{t:3,w:'đửa',e:'🌿',m:'đửa'},{t:1,w:'đừa',e:'🌿',m:'đừng'}],
+  }},
+  {pa:'g',col:'#fd79a8',na_ok:['a','o','ô','ơ','u','ư'],note:'Trước e,ê,i dùng GH',words:{
+    a:[{t:1,w:'gà',e:'🐓',m:'gà'},{t:0,w:'gan',e:'🫀',m:'gan'},{t:2,w:'gáo',e:'🥄',m:'gáo'},{t:5,w:'gạo',e:'🍚',m:'gạo'},{t:3,w:'gả',e:'💍',m:'gả'}],
+    o:[{t:5,w:'gõ',e:'🚪',m:'gõ'},{t:2,w:'gó',e:'🌿',m:'gó'},{t:1,w:'gò',e:'⛰️',m:'gò'}],
+    ô:[{t:3,w:'gỗ',e:'🪵',m:'gỗ'},{t:1,w:'gồ',e:'⛰️',m:'gồ'},{t:5,w:'gộ',e:'🌿',m:'gộ'}],
+    ơ:[{t:2,w:'gớm',e:'🤢',m:'gớm'},{t:3,w:'gởi',e:'📦',m:'gởi'},{t:1,w:'gờ',e:'🌿',m:'gờ'}],
+    u:[{t:1,w:'gù',e:'🐢',m:'gù'},{t:5,w:'gụ',e:'🌿',m:'gụ'}],
+    ư:[{t:0,w:'gừng',e:'🫚',m:'gừng'},{t:1,w:'gừ',e:'😾',m:'gừ'},{t:2,w:'gứ',e:'🌿',m:'gứ'}],
+  }},
+  {pa:'gh',col:'#FF6B6B',na_ok:['e','ê','i'],note:'Chỉ trước e, ê, i',words:{
+    e:[{t:0,w:'ghe',e:'🛶',m:'ghe'},{t:1,w:'ghè',e:'🏺',m:'ghè'},{t:5,w:'ghẹ',e:'🦀',m:'ghẹ'}],
+    ê:[{t:2,w:'ghế',e:'🪑',m:'ghế'},{t:1,w:'ghề',e:'🌿',m:'ghề'},{t:3,w:'ghể',e:'🌿',m:'ghể'}],
+    i:[{t:0,w:'ghi',e:'📝',m:'ghi'},{t:2,w:'ghí',e:'📌',m:'ghí'},{t:5,w:'ghị',e:'🌿',m:'ghị'}],
+  }},
+  {pa:'h',col:'#FF7F11',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ha',e:'😄',m:'ha'},{t:1,w:'hà',e:'🦐',m:'hà'},{t:2,w:'há',e:'😮',m:'há'},{t:5,w:'hạ',e:'⬇️',m:'hạ'},{t:3,w:'hả',e:'😅',m:'hả'},{t:4,w:'hã',e:'🌿',m:'hã'}],
+    e:[{t:0,w:'he',e:'🌿',m:'he'},{t:1,w:'hè',e:'☀️',m:'hè'},{t:3,w:'hẻ',e:'🗺️',m:'hẻ'},{t:5,w:'hẹn',e:'📅',m:'hẹn'}],
+    ê:[{t:1,w:'hẹ',e:'🌿',m:'hẹ'},{t:2,w:'hế',e:'🌿',m:'hế'},{t:3,w:'hể',e:'😄',m:'hể'}],
+    i:[{t:0,w:'hi',e:'😁',m:'hi'},{t:1,w:'hì',e:'😊',m:'hì'},{t:5,w:'hị',e:'🌿',m:'hị'}],
+    o:[{t:0,w:'ho',e:'😷',m:'ho'},{t:1,w:'hò',e:'🎵',m:'hò'},{t:2,w:'hó',e:'😄',m:'hó'},{t:5,w:'họ',e:'👨‍👩‍👧',m:'họ'}],
+    ô:[{t:0,w:'hô',e:'📣',m:'hô'},{t:1,w:'hồ',e:'🏞️',m:'hồ'},{t:2,w:'hố',e:'🕳️',m:'hố'},{t:3,w:'hổ',e:'🐯',m:'hổ'},{t:5,w:'hộ',e:'🏠',m:'hộ'}],
+    ơ:[{t:1,w:'hờ',e:'💬',m:'hờ'},{t:2,w:'hớn',e:'😄',m:'hớn'},{t:3,w:'hởi',e:'😊',m:'hởi'}],
+    u:[{t:0,w:'hu',e:'😢',m:'hu'},{t:1,w:'hù',e:'👻',m:'hù'},{t:3,w:'hủ',e:'🏺',m:'hủ'},{t:5,w:'hụt',e:'😔',m:'hụt'}],
+    ư:[{t:0,w:'hư',e:'😞',m:'hư'},{t:2,w:'hứa',e:'🤞',m:'hứa'},{t:1,w:'hừ',e:'😤',m:'hừ'},{t:3,w:'hửi',e:'👃',m:'hửi'}],
+  }},
+  {pa:'l',col:'#00cec9',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'la',e:'📣',m:'la'},{t:2,w:'lá',e:'🍃',m:'lá'},{t:1,w:'là',e:'✅',m:'là'},{t:5,w:'lạ',e:'😮',m:'lạ'},{t:3,w:'lả',e:'😵',m:'lả'},{t:4,w:'lã',e:'😴',m:'lã'}],
+    e:[{t:0,w:'le',e:'👀',m:'le'},{t:1,w:'lè',e:'👅',m:'lè'},{t:3,w:'lẻ',e:'🔢',m:'lẻ'},{t:5,w:'lẹ',e:'⚡',m:'lẹ'}],
+    ê:[{t:0,w:'lê',e:'🍐',m:'lê'},{t:1,w:'lề',e:'📏',m:'lề'},{t:2,w:'lế',e:'🎵',m:'lế'},{t:5,w:'lệ',e:'😢',m:'lệ'}],
+    i:[{t:0,w:'li',e:'🎀',m:'li'},{t:1,w:'lì',e:'😑',m:'lì'},{t:2,w:'lí',e:'🧪',m:'lí'},{t:5,w:'lị',e:'😵',m:'lị'}],
+    o:[{t:0,w:'lo',e:'😟',m:'lo'},{t:2,w:'ló',e:'👀',m:'ló'},{t:1,w:'lò',e:'🔥',m:'lò'},{t:5,w:'lọ',e:'🏺',m:'lọ'},{t:3,w:'lỏ',e:'🌿',m:'lỏ'}],
+    ô:[{t:0,w:'lô',e:'🎰',m:'lô'},{t:1,w:'lồ',e:'🏺',m:'lồ'},{t:2,w:'lố',e:'😝',m:'lố'},{t:5,w:'lộ',e:'🛣️',m:'lộ'}],
+    ơ:[{t:1,w:'lờ',e:'😶',m:'lờ'},{t:2,w:'lớn',e:'📈',m:'lớn'},{t:3,w:'lởm',e:'😕',m:'lởm'}],
+    u:[{t:0,w:'lu',e:'🌀',m:'lu'},{t:2,w:'lúa',e:'🌾',m:'lúa'},{t:1,w:'lùa',e:'🐑',m:'lùa'},{t:3,w:'lủa',e:'🌿',m:'lủa'}],
+    ư:[{t:1,w:'lừa',e:'🫏',m:'lừa'},{t:2,w:'lứa',e:'🐣',m:'lứa'},{t:3,w:'lửa',e:'🔥',m:'lửa'},{t:5,w:'lựa',e:'🤔',m:'lựa'}],
+  }},
+  {pa:'m',col:'#a29bfe',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ma',e:'👻',m:'ma'},{t:2,w:'má',e:'👩',m:'má'},{t:1,w:'mà',e:'🌿',m:'mà'},{t:5,w:'mạ',e:'🌱',m:'mạ'},{t:3,w:'mả',e:'⚰️',m:'mả'},{t:4,w:'mã',e:'🐴',m:'mã'}],
+    e:[{t:0,w:'me',e:'🌿',m:'me'},{t:1,w:'mè',e:'🌱',m:'mè'},{t:5,w:'mẹ',e:'👩',m:'mẹ'}],
+    ê:[{t:0,w:'mê',e:'😍',m:'mê'},{t:1,w:'mề',e:'🪙',m:'mề'},{t:5,w:'mệt',e:'😮‍💨',m:'mệt'},{t:2,w:'mế',e:'🌿',m:'mế'}],
+    i:[{t:0,w:'mi',e:'👁️',m:'mi'},{t:2,w:'mí',e:'👁️',m:'mí'},{t:1,w:'mì',e:'🍜',m:'mì'},{t:5,w:'mị',e:'😶',m:'mị'}],
+    o:[{t:0,w:'mo',e:'🌿',m:'mo'},{t:1,w:'mò',e:'🔍',m:'mò'},{t:2,w:'mó',e:'🤚',m:'mó'},{t:5,w:'mọ',e:'🌿',m:'mọ'}],
+    ô:[{t:0,w:'mô',e:'⛰️',m:'mô'},{t:1,w:'mồ',e:'⚰️',m:'mồ'},{t:3,w:'mổ',e:'🔪',m:'mổ'},{t:5,w:'mộ',e:'⚰️',m:'mộ'}],
+    ơ:[{t:0,w:'mơ',e:'💭',m:'mơ'},{t:1,w:'mờ',e:'🌫️',m:'mờ'},{t:2,w:'mớ',e:'🧶',m:'mớ'},{t:3,w:'mở',e:'🚪',m:'mở'}],
+    u:[{t:0,w:'mu',e:'🪖',m:'mu'},{t:1,w:'mù',e:'🕶️',m:'mù'},{t:3,w:'mủ',e:'🌿',m:'mủ'},{t:5,w:'mụ',e:'👵',m:'mụ'}],
+    ư:[{t:0,w:'mưa',e:'🌧️',m:'mưa'},{t:1,w:'mừng',e:'🎉',m:'mừng'},{t:2,w:'mứt',e:'🍬',m:'mứt'},{t:4,w:'mữa',e:'🌿',m:'mữa'}],
+  }},
+  {pa:'n',col:'#FF6B6B',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'na',e:'🍑',m:'na'},{t:1,w:'nào',e:'❓',m:'nào'},{t:2,w:'nán',e:'🌿',m:'nán'},{t:5,w:'nạ',e:'🌿',m:'nạ'}],
+    e:[{t:0,w:'ne',e:'🌿',m:'ne'},{t:1,w:'nè',e:'👋',m:'nè'},{t:3,w:'nẻ',e:'🗺️',m:'nẻ'}],
+    ê:[{t:0,w:'nê',e:'🎋',m:'nê'},{t:2,w:'nếp',e:'🍚',m:'nếp'},{t:1,w:'nề',e:'🧱',m:'nề'}],
+    i:[{t:0,w:'ni',e:'🎀',m:'ni'},{t:1,w:'nì',e:'😌',m:'nì'},{t:2,w:'ní',e:'🌿',m:'ní'}],
+    o:[{t:0,w:'no',e:'😌',m:'no'},{t:2,w:'nó',e:'👆',m:'nó'},{t:5,w:'nọ',e:'👈',m:'nọ'},{t:3,w:'nỏ',e:'🌿',m:'nỏ'}],
+    ô:[{t:0,w:'nô',e:'🎪',m:'nô'},{t:2,w:'nốt',e:'🎵',m:'nốt'},{t:3,w:'nổi',e:'🌊',m:'nổi'},{t:5,w:'nội',e:'🏠',m:'nội'}],
+    ơ:[{t:3,w:'nở',e:'🌸',m:'nở'},{t:1,w:'nờ',e:'😶',m:'nờ'},{t:2,w:'nớ',e:'🌿',m:'nớ'}],
+    u:[{t:0,w:'nu',e:'🔘',m:'nu'},{t:2,w:'nứt',e:'💥',m:'nứt'},{t:1,w:'nùng',e:'🌿',m:'nùng'}],
+    ư:[{t:2,w:'nước',e:'💧',m:'nước'},{t:1,w:'nừng',e:'🌿',m:'nừng'},{t:3,w:'nửa',e:'⅟',m:'nửa'}],
+  }},
+  {pa:'ng',col:'#20bf6b',na_ok:['a','o','ô','ơ','u','ư'],note:'Trước e,ê,i dùng NGH',words:{
+    a:[{t:1,w:'ngà',e:'🦷',m:'ngà'},{t:0,w:'ngay',e:'⚡',m:'ngay'},{t:5,w:'ngạo',e:'😤',m:'ngạo'},{t:3,w:'ngả',e:'↗️',m:'ngả'}],
+    o:[{t:0,w:'ngon',e:'😋',m:'ngon'},{t:5,w:'ngọ',e:'🕛',m:'ngọ'},{t:1,w:'ngò',e:'🌿',m:'ngò'}],
+    ô:[{t:0,w:'ngô',e:'🌽',m:'ngô'},{t:2,w:'ngố',e:'🤪',m:'ngố'},{t:1,w:'ngồi',e:'🪑',m:'ngồi'}],
+    ơ:[{t:1,w:'ngờ',e:'😶',m:'ngờ'},{t:2,w:'ngớ',e:'😲',m:'ngớ'},{t:3,w:'ngở',e:'🌿',m:'ngở'}],
+    u:[{t:0,w:'ngủ',e:'😴',m:'ngủ'},{t:5,w:'ngụ',e:'🏠',m:'ngụ'}],
+    ư:[{t:0,w:'ngư',e:'🎣',m:'ngư'},{t:2,w:'ngứa',e:'😣',m:'ngứa'},{t:1,w:'ngừng',e:'⏹️',m:'ngừng'}],
+  }},
+  {pa:'ngh',col:'#00b894',na_ok:['e','ê','i'],note:'Chỉ trước e, ê, i',words:{
+    e:[{t:0,w:'nghe',e:'👂',m:'nghe'},{t:1,w:'nghè',e:'🌿',m:'nghè'}],
+    ê:[{t:0,w:'nghề',e:'🔨',m:'nghề'},{t:3,w:'nghỉ',e:'🛌',m:'nghỉ'},{t:5,w:'nghệ',e:'🌿',m:'nghệ'}],
+    i:[{t:0,w:'nghi',e:'🤔',m:'nghi'},{t:3,w:'nghỉ',e:'🛌',m:'nghỉ'},{t:5,w:'nghị',e:'🏛️',m:'nghị'}],
+  }},
+  {pa:'r',col:'#20bf6b',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ra',e:'➡️',m:'ra'},{t:0,w:'rau',e:'🥬',m:'rau'},{t:1,w:'rà',e:'🔍',m:'rà'},{t:5,w:'rạ',e:'🌾',m:'rạ'}],
+    e:[{t:2,w:'rẻ',e:'💲',m:'rẻ'},{t:1,w:'rè',e:'🌿',m:'rè'},{t:5,w:'rẹ',e:'🌿',m:'rẹ'}],
+    ê:[{t:0,w:'rê',e:'🎵',m:'rê'},{t:1,w:'rề',e:'🐢',m:'rề'},{t:5,w:'rệ',e:'🌿',m:'rệ'}],
+    i:[{t:0,w:'ri',e:'🌿',m:'ri'},{t:1,w:'rì',e:'🌿',m:'rì'},{t:2,w:'rí',e:'🐾',m:'rí'}],
+    o:[{t:0,w:'ro',e:'🤖',m:'ro'},{t:1,w:'ròng',e:'💧',m:'ròng'},{t:5,w:'rọ',e:'🧺',m:'rọ'}],
+    ô:[{t:3,w:'rổ',e:'🧺',m:'rổ'},{t:2,w:'rốn',e:'👶',m:'rốn'},{t:5,w:'rộng',e:'🏟️',m:'rộng'}],
+    ơ:[{t:0,w:'rơm',e:'🌾',m:'rơm'},{t:1,w:'rờ',e:'🤚',m:'rờ'},{t:3,w:'rởm',e:'😕',m:'rởm'}],
+    u:[{t:0,w:'ru',e:'🎵',m:'ru'},{t:1,w:'rùa',e:'🐢',m:'rùa'},{t:5,w:'rụng',e:'🍂',m:'rụng'}],
+    ư:[{t:1,w:'rừng',e:'🌲',m:'rừng'},{t:2,w:'rứa',e:'🤔',m:'rứa'},{t:3,w:'rửa',e:'🧼',m:'rửa'}],
+  }},
+  {pa:'s',col:'#e17055',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'sa',e:'🏜️',m:'sa'},{t:0,w:'sao',e:'⭐',m:'sao'},{t:1,w:'sầu',e:'😔',m:'sầu'},{t:5,w:'sạch',e:'✨',m:'sạch'}],
+    e:[{t:1,w:'sè',e:'🥶',m:'sè'},{t:0,w:'se',e:'🥶',m:'se'},{t:3,w:'sẻ',e:'🐦',m:'sẻ'}],
+    ê:[{t:0,w:'sê',e:'🎵',m:'sê'},{t:2,w:'sếu',e:'🦢',m:'sếu'},{t:1,w:'sề',e:'🌿',m:'sề'}],
+    i:[{t:0,w:'si',e:'💘',m:'si'},{t:1,w:'sì',e:'😶',m:'sì'},{t:2,w:'sí',e:'🌿',m:'sí'}],
+    o:[{t:0,w:'so',e:'🆚',m:'so'},{t:0,w:'son',e:'💄',m:'son'},{t:1,w:'sò',e:'🦪',m:'sò'}],
+    ô:[{t:0,w:'sô',e:'🎷',m:'sô'},{t:0,w:'sông',e:'🏞️',m:'sông'},{t:1,w:'sồ',e:'🌿',m:'sồ'}],
+    ơ:[{t:1,w:'sờ',e:'🤚',m:'sờ'},{t:3,w:'sợ',e:'😱',m:'sợ'},{t:0,w:'sơ',e:'🌿',m:'sơ'}],
+    u:[{t:0,w:'su',e:'🦺',m:'su'},{t:2,w:'súc',e:'💦',m:'súc'},{t:1,w:'sù',e:'😮',m:'sù'}],
+    ư:[{t:0,w:'sư',e:'🦁',m:'sư'},{t:1,w:'sừng',e:'🦏',m:'sừng'},{t:2,w:'sứ',e:'🏺',m:'sứ'}],
+  }},
+  {pa:'t',col:'#6c5ce7',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'ta',e:'👆',m:'ta'},{t:0,w:'tay',e:'✋',m:'tay'},{t:0,w:'tai',e:'👂',m:'tai'},{t:1,w:'tà',e:'🌿',m:'tà'},{t:5,w:'tạ',e:'🏋️',m:'tạ'}],
+    e:[{t:0,w:'te',e:'💦',m:'te'},{t:1,w:'tè',e:'💦',m:'tè'},{t:3,w:'tẻ',e:'😐',m:'tẻ'}],
+    ê:[{t:0,w:'tê',e:'😶',m:'tê'},{t:2,w:'tế',e:'🏛️',m:'tế'},{t:1,w:'tề',e:'🌿',m:'tề'}],
+    i:[{t:0,w:'ti',e:'⏩',m:'ti'},{t:2,w:'tí',e:'🤏',m:'tí'},{t:1,w:'tì',e:'😤',m:'tì'},{t:5,w:'tị',e:'😒',m:'tị'}],
+    o:[{t:0,w:'to',e:'🦣',m:'to'},{t:1,w:'tò',e:'🔍',m:'tò'},{t:5,w:'tọ',e:'🌿',m:'tọ'}],
+    ô:[{t:0,w:'tô',e:'🥣',m:'tô'},{t:2,w:'tố',e:'🎯',m:'tố'},{t:1,w:'tồ',e:'🌿',m:'tồ'},{t:5,w:'tột',e:'🔝',m:'tột'}],
+    ơ:[{t:0,w:'tơ',e:'🧵',m:'tơ'},{t:1,w:'tờ',e:'📄',m:'tờ'},{t:2,w:'tớ',e:'👦',m:'tớ'}],
+    u:[{t:0,w:'tu',e:'🛁',m:'tu'},{t:2,w:'túi',e:'👜',m:'túi'},{t:1,w:'tù',e:'🔒',m:'tù'},{t:5,w:'tụ',e:'🔋',m:'tụ'}],
+    ư:[{t:0,w:'tư',e:'💭',m:'tư'},{t:2,w:'tứ',e:'4️⃣',m:'tứ'},{t:1,w:'từ',e:'📝',m:'từ'},{t:3,w:'tử',e:'☠️',m:'tử'}],
+  }},
+  {pa:'v',col:'#fd79a8',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'va',e:'💥',m:'va'},{t:0,w:'vàng',e:'🌟',m:'vàng'},{t:0,w:'văn',e:'📝',m:'văn'},{t:1,w:'và',e:'&',m:'và'}],
+    e:[{t:0,w:'ve',e:'🔔',m:'ve'},{t:2,w:'vẻ',e:'😊',m:'vẻ'},{t:1,w:'vè',e:'📜',m:'vè'}],
+    ê:[{t:0,w:'vê',e:'🎵',m:'vê'},{t:1,w:'về',e:'🏠',m:'về'},{t:5,w:'vệ',e:'🛡️',m:'vệ'}],
+    i:[{t:0,w:'vi',e:'🔬',m:'vi'},{t:1,w:'vì',e:'💬',m:'vì'},{t:5,w:'vị',e:'😋',m:'vị'}],
+    o:[{t:0,w:'vo',e:'🌀',m:'vo'},{t:1,w:'vò',e:'🍶',m:'vò'},{t:3,w:'vỏ',e:'🥚',m:'vỏ'}],
+    ô:[{t:0,w:'vô',e:'🚫',m:'vô'},{t:2,w:'vốn',e:'💰',m:'vốn'},{t:1,w:'vồ',e:'🐾',m:'vồ'}],
+    ơ:[{t:1,w:'vờ',e:'🎭',m:'vờ'},{t:3,w:'vợ',e:'💍',m:'vợ'},{t:0,w:'vơ',e:'🤚',m:'vơ'}],
+    u:[{t:2,w:'vú',e:'🤱',m:'vú'},{t:1,w:'vùng',e:'🗺️',m:'vùng'},{t:3,w:'vủ',e:'🌿',m:'vủ'}],
+    ư:[{t:0,w:'vừa',e:'⚖️',m:'vừa'},{t:1,w:'vừng',e:'🌱',m:'vừng'},{t:2,w:'vứt',e:'🗑️',m:'vứt'}],
+  }},
+  {pa:'x',col:'#0984e3',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'xa',e:'📍',m:'xa'},{t:0,w:'xanh',e:'💚',m:'xanh'},{t:1,w:'xà',e:'🐍',m:'xà'},{t:5,w:'xạ',e:'🌿',m:'xạ'}],
+    e:[{t:0,w:'xe',e:'🚗',m:'xe'},{t:1,w:'xè',e:'😬',m:'xè'},{t:2,w:'xé',e:'✂️',m:'xé'}],
+    ê:[{t:0,w:'xê',e:'🎵',m:'xê'},{t:2,w:'xếp',e:'📚',m:'xếp'},{t:1,w:'xề',e:'🌿',m:'xề'}],
+    i:[{t:0,w:'xi',e:'🪣',m:'xi'},{t:1,w:'xì',e:'😏',m:'xì'},{t:2,w:'xí',e:'🚽',m:'xí'}],
+    o:[{t:0,w:'xo',e:'🌀',m:'xo'},{t:0,w:'xoài',e:'🥭',m:'xoài'},{t:1,w:'xò',e:'🌿',m:'xò'}],
+    ô:[{t:3,w:'xổ',e:'📋',m:'xổ'},{t:0,w:'xông',e:'🌿',m:'xông'},{t:1,w:'xồ',e:'🌿',m:'xồ'}],
+    ơ:[{t:0,w:'xơ',e:'🌿',m:'xơ'},{t:1,w:'xờ',e:'😶',m:'xờ'},{t:2,w:'xớ',e:'🌿',m:'xớ'}],
+    u:[{t:0,w:'xu',e:'🪙',m:'xu'},{t:0,w:'xuân',e:'🌸',m:'xuân'},{t:1,w:'xù',e:'🦔',m:'xù'}],
+    ư:[{t:0,w:'xưa',e:'📜',m:'xưa'},{t:2,w:'xứ',e:'🗺️',m:'xứ'},{t:1,w:'xừ',e:'🌿',m:'xừ'}],
+  }},
+  {pa:'ch',col:'#00b894',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'cha',e:'👨',m:'cha'},{t:1,w:'chà',e:'😮‍💨',m:'chà'},{t:0,w:'chào',e:'👋',m:'chào'},{t:5,w:'chạ',e:'🌿',m:'chạ'}],
+    e:[{t:0,w:'che',e:'☂️',m:'che'},{t:1,w:'chè',e:'🍵',m:'chè'},{t:3,w:'chẻ',e:'🪵',m:'chẻ'}],
+    ê:[{t:1,w:'chê',e:'😏',m:'chê'},{t:2,w:'chế',e:'🏭',m:'chế'},{t:5,w:'chệ',e:'🌿',m:'chệ'}],
+    i:[{t:0,w:'chi',e:'💲',m:'chi'},{t:2,w:'chí',e:'💡',m:'chí'},{t:1,w:'chì',e:'✏️',m:'chì'},{t:5,w:'chị',e:'👧',m:'chị'}],
+    o:[{t:2,w:'chó',e:'🐶',m:'chó'},{t:1,w:'chò',e:'🌿',m:'chò'},{t:5,w:'chọ',e:'🌿',m:'chọ'}],
+    ô:[{t:1,w:'chồ',e:'🦁',m:'chồ'},{t:0,w:'chôn',e:'⚰️',m:'chôn'},{t:5,w:'chộ',e:'🌿',m:'chộ'}],
+    ơ:[{t:0,w:'chơi',e:'🎮',m:'chơi'},{t:1,w:'chờ',e:'⏳',m:'chờ'},{t:2,w:'chớ',e:'⚠️',m:'chớ'}],
+    u:[{t:2,w:'chú',e:'👨',m:'chú'},{t:0,w:'chum',e:'🏺',m:'chum'},{t:1,w:'chùa',e:'⛩️',m:'chùa'}],
+    ư:[{t:0,w:'chưa',e:'⏳',m:'chưa'},{t:2,w:'chứa',e:'📦',m:'chứa'},{t:1,w:'chừa',e:'🌿',m:'chừa'}],
+  }},
+  {pa:'nh',col:'#FF7F11',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'nha',e:'🦷',m:'nha'},{t:1,w:'nhà',e:'🏠',m:'nhà'},{t:0,w:'nhau',e:'🤝',m:'nhau'},{t:5,w:'nhạc',e:'🎵',m:'nhạc'}],
+    e:[{t:1,w:'nhẹ',e:'🪶',m:'nhẹ'},{t:2,w:'nhé',e:'🤝',m:'nhé'},{t:3,w:'nhẻ',e:'🌿',m:'nhẻ'}],
+    ê:[{t:2,w:'nhếch',e:'😏',m:'nhếch'},{t:1,w:'nhề',e:'🌿',m:'nhề'}],
+    i:[{t:0,w:'nhi',e:'👧',m:'nhi'},{t:1,w:'nhì',e:'2️⃣',m:'nhì'},{t:5,w:'nhị',e:'🔢',m:'nhị'}],
+    o:[{t:3,w:'nhỏ',e:'🐜',m:'nhỏ'},{t:1,w:'nhò',e:'🌿',m:'nhò'},{t:5,w:'nhọ',e:'🌿',m:'nhọ'}],
+    ô:[{t:1,w:'nhồi',e:'🍡',m:'nhồi'},{t:3,w:'nhổ',e:'🌿',m:'nhổ'}],
+    ơ:[{t:1,w:'nhờ',e:'🙏',m:'nhờ'},{t:2,w:'nhớ',e:'💭',m:'nhớ'},{t:3,w:'nhở',e:'🌿',m:'nhở'}],
+    u:[{t:0,w:'như',e:'🟰',m:'như'},{t:1,w:'nhù',e:'🌿',m:'nhù'},{t:5,w:'nhụ',e:'🌿',m:'nhụ'}],
+    ư:[{t:0,w:'nhưng',e:'↔️',m:'nhưng'},{t:1,w:'nhừ',e:'🥵',m:'nhừ'},{t:3,w:'nhửi',e:'👃',m:'nhửi'}],
+  }},
+  {pa:'th',col:'#e17055',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'tha',e:'🕊️',m:'tha'},{t:1,w:'thầy',e:'👨‍🏫',m:'thầy'},{t:2,w:'thắng',e:'🏆',m:'thắng'},{t:5,w:'thạch',e:'🌿',m:'thạch'}],
+    e:[{t:1,w:'thẹn',e:'😳',m:'thẹn'},{t:3,w:'thẻ',e:'🪪',m:'thẻ'}],
+    ê:[{t:0,w:'thế',e:'🌍',m:'thế'},{t:1,w:'thề',e:'🤞',m:'thề'}],
+    i:[{t:0,w:'thi',e:'📝',m:'thi'},{t:1,w:'thì',e:'⏰',m:'thì'},{t:5,w:'thị',e:'🏙️',m:'thị'}],
+    o:[{t:3,w:'thỏ',e:'🐰',m:'thỏ'},{t:1,w:'thờ',e:'😶',m:'thờ'},{t:5,w:'thọ',e:'🎂',m:'thọ'}],
+    ô:[{t:0,w:'thôi',e:'🛑',m:'thôi'},{t:2,w:'thố',e:'🐇',m:'thố'}],
+    ơ:[{t:0,w:'thơ',e:'📜',m:'thơ'},{t:1,w:'thờ',e:'😶',m:'thờ'},{t:3,w:'thở',e:'😮‍💨',m:'thở'}],
+    u:[{t:2,w:'thú',e:'🐾',m:'thú'},{t:1,w:'thù',e:'😡',m:'thù'},{t:5,w:'thụ',e:'🌳',m:'thụ'}],
+    ư:[{t:0,w:'thư',e:'📧',m:'thư'},{t:2,w:'thứ',e:'🔢',m:'thứ'},{t:1,w:'thừa',e:'➕',m:'thừa'}],
+  }},
+  {pa:'tr',col:'#6c5ce7',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'tra',e:'🔍',m:'tra'},{t:0,w:'trăng',e:'🌙',m:'trăng'},{t:1,w:'trầm',e:'🕯️',m:'trầm'},{t:5,w:'trạm',e:'🚉',m:'trạm'}],
+    e:[{t:2,w:'trẻ',e:'👧',m:'trẻ'},{t:0,w:'tre',e:'🎋',m:'tre'},{t:5,w:'trẹo',e:'😣',m:'trẹo'}],
+    ê:[{t:0,w:'trê',e:'🐟',m:'trê'},{t:1,w:'trề',e:'😏',m:'trề'}],
+    i:[{t:2,w:'trí',e:'🧠',m:'trí'},{t:1,w:'trì',e:'🐢',m:'trì'},{t:5,w:'trị',e:'💊',m:'trị'}],
+    o:[{t:1,w:'trò',e:'🎭',m:'trò'},{t:0,w:'trong',e:'🔍',m:'trong'},{t:5,w:'trọng',e:'⚖️',m:'trọng'}],
+    ô:[{t:0,w:'trôi',e:'🌊',m:'trôi'},{t:1,w:'trồi',e:'🌿',m:'trồi'}],
+    ơ:[{t:0,w:'trơn',e:'🫧',m:'trơn'},{t:0,w:'trời',e:'🌤️',m:'trời'},{t:3,w:'trở',e:'↩️',m:'trở'}],
+    u:[{t:2,w:'trụ',e:'🏛️',m:'trụ'},{t:0,w:'trung',e:'⚖️',m:'trung'},{t:1,w:'trùng',e:'🐛',m:'trùng'}],
+    ư:[{t:0,w:'trường',e:'🏫',m:'trường'},{t:2,w:'trứng',e:'🥚',m:'trứng'},{t:1,w:'trừng',e:'👁️',m:'trừng'}],
+  }},
+  {pa:'ph',col:'#a29bfe',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'pha',e:'🧪',m:'pha'},{t:0,w:'pháo',e:'🧨',m:'pháo'},{t:1,w:'phà',e:'⛴️',m:'phà'}],
+    e:[{t:0,w:'phe',e:'🌿',m:'phe'},{t:3,w:'phẻ',e:'🌿',m:'phẻ'}],
+    ê:[{t:2,w:'phế',e:'🏚️',m:'phế'},{t:1,w:'phề',e:'🌿',m:'phề'}],
+    i:[{t:0,w:'phim',e:'🎬',m:'phim'},{t:2,w:'phí',e:'💸',m:'phí'},{t:5,w:'phịa',e:'🤥',m:'phịa'}],
+    o:[{t:0,w:'phong',e:'📦',m:'phong'},{t:2,w:'phóng',e:'🚀',m:'phóng'},{t:1,w:'phòng',e:'🏠',m:'phòng'}],
+    ô:[{t:2,w:'phố',e:'🏙️',m:'phố'},{t:1,w:'phồng',e:'🎈',m:'phồng'},{t:5,w:'phộng',e:'🥜',m:'phộng'}],
+    ơ:[{t:3,w:'phở',e:'🍜',m:'phở'},{t:1,w:'phờ',e:'😴',m:'phờ'}],
+    u:[{t:2,w:'phụ',e:'🤲',m:'phụ'},{t:2,w:'phút',e:'⏱️',m:'phút'},{t:1,w:'phù',e:'🪄',m:'phù'}],
+    ư:[{t:0,w:'phương',e:'🧭',m:'phương'},{t:2,w:'phức',e:'😵',m:'phức'},{t:1,w:'phừng',e:'🌿',m:'phừng'}],
+  }},
+  {pa:'kh',col:'#fd79a8',na_ok:['a','e','ê','i','o','ô','ơ','u','ư'],words:{
+    a:[{t:0,w:'kha',e:'🗺️',m:'kha'},{t:0,w:'khăn',e:'🧣',m:'khăn'},{t:1,w:'khà',e:'😤',m:'khà'}],
+    e:[{t:0,w:'khen',e:'👏',m:'khen'},{t:2,w:'khé',e:'🌿',m:'khé'}],
+    ê:[{t:0,w:'khêu',e:'🕯️',m:'khêu'},{t:1,w:'khề',e:'🌿',m:'khề'}],
+    i:[{t:3,w:'khỉ',e:'🐒',m:'khỉ'},{t:0,w:'khi',e:'⏰',m:'khi'},{t:5,w:'khị',e:'🌿',m:'khị'}],
+    o:[{t:0,w:'khoe',e:'😎',m:'khoe'},{t:1,w:'khò',e:'😴',m:'khò'}],
+    ô:[{t:0,w:'khô',e:'🏜️',m:'khô'},{t:1,w:'khồ',e:'🌿',m:'khổ'}],
+    ơ:[{t:0,w:'khơi',e:'🌊',m:'khơi'},{t:2,w:'khớp',e:'🦴',m:'khớp'},{t:1,w:'khờ',e:'😶',m:'khờ'}],
+    u:[{t:0,w:'khu',e:'🏘️',m:'khu'},{t:2,w:'khúc',e:'🎵',m:'khúc'},{t:1,w:'khù',e:'😤',m:'khù'}],
+    ư:[{t:0,w:'khư',e:'🌿',m:'khư'},{t:1,w:'khừ',e:'😤',m:'khừ'}],
+  }},
+];
+
+// ===== VẦN — đầy đủ với kiểu thanh điệu =====
+// type: 'open'|'sonorant'|'stop'
+// Vần kết thúc -p,-t,-c,-ch → STOP (chỉ ´ và ·)
+// Vần kết thúc -m,-n,-ng,-nh → SONORANT (cả 6)
+// Vần kết thúc nguyên âm → OPEN (cả 6)
+
+function vanType(v){
+  if(/[ptckh]$/.test(v)||v.endsWith('ch')) return 'stop';
+  if(/[mn]$/.test(v)||v.endsWith('ng')||v.endsWith('nh')) return 'sonorant';
+  return 'open';
+}
+
+// applyTone: đặt dấu đúng vào vần
+function applyTone(van,tone){
+  // Dựa vào bảng nguyên âm có dấu, thay nguyên âm chính
+  const maps=[
+    ['ươ',['ươ','ườ','ướ','ưở','ưỡ','ượ']],
+    ['iê',['iê','iề','iế','iể','iễ','iệ']],
+    ['uô',['uô','uồ','uố','uổ','uỗ','uộ']],
+    ['oa',['oa','oà','oá','oả','oã','oạ']],
+    ['oe',['oe','oè','oé','oẻ','oẽ','oẹ']],
+    ['uê',['uê','uề','uế','uể','uễ','uệ']],
+    ['ua',['ua','uà','uá','uả','uã','uạ']],
+    ['ia',['ia','ià','iá','iả','iã','iạ']],
+    ['ưa',['ưa','ừa','ứa','ửa','ữa','ựa']],
+    ['uy',['uy','uỳ','uý','uỷ','uỹ','uỵ']],
+    ['ây',['ây','ầy','ấy','ẩy','ẫy','ậy']],
+    ['ay',['ay','ày','áy','ảy','ãy','ạy']],
+    ['ao',['ao','ào','áo','ảo','ão','ạo']],
+    ['au',['au','àu','áu','ảu','ãu','ạu']],
+    ['âu',['âu','ầu','ấu','ẩu','ẫu','ậu']],
+    ['ôi',['ôi','ồi','ối','ổi','ỗi','ội']],
+    ['ơi',['ơi','ời','ới','ởi','ỡi','ợi']],
+    ['ui',['ui','ùi','úi','ủi','ũi','ụi']],
+    ['ưi',['ưi','ừi','ứi','ửi','ữi','ựi']],
+    ['oi',['oi','òi','ói','ỏi','õi','ọi']],
+    ['ai',['ai','ài','ái','ải','ãi','ại']],
+    ['â',['â','ầ','ấ','ẩ','ẫ','ậ']],
+    ['ă',['ă','ằ','ắ','ẳ','ẵ','ặ']],
+    ['ê',['ê','ề','ế','ể','ễ','ệ']],
+    ['ô',['ô','ồ','ố','ổ','ỗ','ộ']],
+    ['ơ',['ơ','ờ','ớ','ở','ỡ','ợ']],
+    ['ư',['ư','ừ','ứ','ử','ữ','ự']],
+    ['a',['a','à','á','ả','ã','ạ']],
+    ['e',['e','è','é','ẻ','ẽ','ẹ']],
+    ['i',['i','ì','í','ỉ','ĩ','ị']],
+    ['o',['o','ò','ó','ỏ','õ','ọ']],
+    ['u',['u','ù','ú','ủ','ũ','ụ']],
+    ['y',['y','ỳ','ý','ỷ','ỹ','ỵ']],
+  ];
+  // Tìm nguyên âm cuối (quan trọng nhất) để gắn dấu
+  for(const[base,forms]of maps){
+    // Tìm từ phải sang để lấy nguyên âm chính
+    const idx=van.search(new RegExp(base+'(?=[^aăâeêioôơuưy]|$)'));
+    if(idx>=0) return van.slice(0,idx)+forms[tone]+van.slice(idx+base.length);
+  }
+  return van;
+}
+
+// Dữ liệu vần — có type, exW (từ ví dụ), sents
+const VAN_DATA=[
+  // Nhóm 1: Vần mở (nguyên âm đơn — type=open)
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'a',   type:'open',    e:'🍎',exW:['ba','cá','la','ta','mà'],sents:['Ba bé đi học.','Cá vàng bơi.']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'e',   type:'open',    e:'🦆',exW:['be','mè','xe','ve'],sents:['Me chua lắm.','Xe bé đi nhanh.']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'ê',   type:'open',    e:'🐘',exW:['bê','kê','lê','tê'],sents:['Con bê ăn cỏ.','Quả lê ngon.']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'i',   type:'open',    e:'🌂',exW:['bi','hi','li','ti'],sents:['Viên bi tròn.','']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'o',   type:'open',    e:'🍊',exW:['bò','có','mò','to'],sents:['Con bò ăn cỏ.','']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'ô',   type:'open',    e:'🐸',exW:['bô','cô','lô','tô'],sents:['Cô giáo dạy bé.','']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'ơ',   type:'open',    e:'🌸',exW:['bơ','cơm','mơ','tơ'],sents:['Bơ mềm thơm.','']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'u',   type:'open',    e:'🐛',exW:['bu','cu','mu','tu'],sents:['Bé cu ngủ ngon.','']},
+  {g:'g01',gn:'Vần mở',col:'#0984e3',v:'ư',   type:'open',    e:'🦋',exW:['từ','cư','mưa','tư'],sents:['Mưa rơi lộp độp.','']},
+
+  // Nhóm 2: -an -ăn -ân -en -ên -in -on -ôn -ơn (type=sonorant)
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'an',  type:'sonorant',e:'📖',exW:['bàn','can','lan','tan','man'],sents:['Bàn bé có bút.','Lan đan len.']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ăn',  type:'sonorant',e:'🍽️',exW:['ăn','bắn','cắn','gắn','nắm'],sents:['Bé ăn cơm ngon.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ân',  type:'sonorant',e:'🙏',exW:['sân','cân','lân','chân','thân'],sents:['Sân nhà có cây.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'en',  type:'sonorant',e:'🧶',exW:['ben','đen','len','sen','then'],sents:['Cô khen bé.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ên',  type:'sonorant',e:'🏡',exW:['bên','đến','lên','nên','trên'],sents:['Bé lên bàn.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'in',  type:'sonorant',e:'📌',exW:['tin','pin','xin','nhìn','sinh'],sents:['Bé xin mẹ ra sân.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'on',  type:'sonorant',e:'🍑',exW:['bon','con','lon','son'],sents:['Con cá bơi.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ôn',  type:'sonorant',e:'🎻',exW:['ôn','tôn','cồn','sôn'],sents:['Ôn bài chăm.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ơn',  type:'sonorant',e:'🌿',exW:['bơn','cơn','sơn','tơn'],sents:['Cơn gió mát.','']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'un',  type:'sonorant',e:'🌀',exW:['bun','cun','lun','sun'],sents:['']},
+  {g:'g02',gn:'-an -ăn -ân',col:'#00b894',v:'ưn',  type:'sonorant',e:'🌿',exW:['bưn','cưn'],sents:['']},
+
+  // Nhóm 3: -am -ăm -âm -em -êm -im -om -ôm -ơm (sonorant)
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'am',  type:'sonorant',e:'🎵',exW:['nam','tam','lam','cám','bám'],sents:['Nam học giỏi.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'ăm',  type:'sonorant',e:'📅',exW:['năm','tăm','băm','căm','lăm'],sents:['Năm nay vui.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'âm',  type:'sonorant',e:'🎵',exW:['tâm','lâm','âm'],sents:['Tâm hồn trong sáng.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'em',  type:'sonorant',e:'🌟',exW:['bem','kem','lem','nem','tem'],sents:['Kem lạnh ngon.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'êm',  type:'sonorant',e:'🌙',exW:['êm','bêm','lêm'],sents:['Êm ả như mơ.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'im',  type:'sonorant',e:'🔇',exW:['tim','chim','kim','lim'],sents:['Tim đập mạnh.','Con chim hót.']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'om',  type:'sonorant',e:'🫂',exW:['com','lom','bóm','tom'],sents:['']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'ôm',  type:'sonorant',e:'🤗',exW:['ôm','bôm','tôm'],sents:['Tôm ngon.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'ơm',  type:'sonorant',e:'🌾',exW:['rơm','cơm','bơm'],sents:['Cơm nóng ngon.','']},
+  {g:'g03',gn:'-am -ăm -âm',col:'#6c5ce7',v:'um',  type:'sonorant',e:'🌿',exW:['chum','bum','lum'],sents:['']},
+
+  // Nhóm 4: -ang -ong -ông -ơng -ung -ưng (sonorant)
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ang', type:'sonorant',e:'🌅',exW:['bàng','mang','sang','vàng','trang'],sents:['Vàng sáng.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ăng', type:'sonorant',e:'☀️',exW:['nắng','tăng','trắng','răng','gắng'],sents:['Nắng vàng.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'âng', type:'sonorant',e:'🙏',exW:['vâng','lâng','bâng'],sents:['Vâng lời mẹ.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ong', type:'sonorant',e:'🎵',exW:['bóng','công','lồng','sóng','trong'],sents:['Bóng bay lên.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ông', type:'sonorant',e:'🥁',exW:['bông','sông','rồng','thông','không'],sents:['Sông dài.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ơng', type:'sonorant',e:'🌙',exW:['sương','lương','trường','đường','mương'],sents:['Trường bé đẹp.','']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ung', type:'sonorant',e:'🌿',exW:['bùng','cung','lung','sung'],sents:['']},
+  {g:'g04',gn:'-ang -ong -ông',col:'#e17055',v:'ưng', type:'sonorant',e:'🦅',exW:['bưng','cưng','lưng','sưng'],sents:['Bé cưng của mẹ.','']},
+
+  // Nhóm 5: -anh -ênh -inh (sonorant — nh cuối)
+  {g:'g05',gn:'-anh -inh',col:'#fd79a8',v:'anh', type:'sonorant',e:'👦',exW:['bánh','cánh','tranh','xanh','nhanh'],sents:['Anh bé đi học.','']},
+  {g:'g05',gn:'-anh -inh',col:'#fd79a8',v:'ênh', type:'sonorant',e:'⛵',exW:['bênh','kênh','lênh','mênh'],sents:['Kênh nước xanh.','']},
+  {g:'g05',gn:'-anh -inh',col:'#fd79a8',v:'inh', type:'sonorant',e:'🔔',exW:['minh','xinh','tình','bình','kính'],sents:['Bé Minh xinh.','']},
+
+  // Nhóm 6: -ac -ăc -âc -oc -ôc -uc -ưc (STOP → chỉ ´·)
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'ac',  type:'stop',e:'🎯',exW:['bác','các','lac','mác'],sents:['Bác sĩ chữa bệnh.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'ăc',  type:'stop',e:'🔊',exW:['bắc','cắc','lắc','mắc','sắc'],sents:['Màu sắc đẹp.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'âc',  type:'stop',e:'🌿',exW:['bậc','cậc','mậc'],sents:['Bậc thang cao.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'oc',  type:'stop',e:'🥤',exW:['bọc','chọc','lọc','mọc','sọc'],sents:['Mọc lên xanh.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'ôc',  type:'stop',e:'🪵',exW:['bộc','cộc','hộc','lộc','mộc'],sents:['Lộc xuân về.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'uc',  type:'stop',e:'💧',exW:['bục','cục','lục','mục','súc'],sents:['Cục đá to.','']},
+  {g:'g06',gn:'-ac -ăc -uc',col:'#FF7F11',v:'ưc',  type:'stop',e:'🦅',exW:['bực','cực','lực','mực','sức'],sents:['Sức khỏe tốt.','']},
+
+  // Nhóm 7: -at -ăt -ât -et -êt -it -ot -ôt -ơt -ut -ưt (STOP → chỉ ´·)
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'at',  type:'stop',e:'🎯',exW:['bát','cát','mát','tát','lát'],sents:['Bát cơm đầy.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ăt',  type:'stop',e:'👁️',exW:['mắt','bắt','cắt','gặt','tắt'],sents:['Mắt bé to.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ât',  type:'stop',e:'🌿',exW:['bật','cật','lật','mật','tật'],sents:['Mật ong ngọt.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'et',  type:'stop',e:'🌿',exW:['bét','két','lét','met'],sents:['']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'êt',  type:'stop',e:'🎊',exW:['bết','cết','lết','tết'],sents:['Tết vui lắm.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'it',  type:'stop',e:'🍊',exW:['bít','cít','lít','mít','tít'],sents:['Mít ngọt thơm.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ot',  type:'stop',e:'🌿',exW:['bót','cót','lót','mót'],sents:['']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ôt',  type:'stop',e:'🌿',exW:['tốt','bột','cột','lột','mốt'],sents:['Tốt bụng như mẹ.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ơt',  type:'stop',e:'🌿',exW:['bớt','cớt','lớt'],sents:['']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ut',  type:'stop',e:'✏️',exW:['bút','cút','lút','mút'],sents:['Bút chì viết.','']},
+  {g:'g07',gn:'-at -ăt -ôt',col:'#20bf6b',v:'ưt',  type:'stop',e:'🍬',exW:['bứt','cứt','lứt','mứt'],sents:['Mứt tết ngọt.','']},
+
+  // Nhóm 8: -ap -ăp -âp -ep -êp -ip -op -ôp -ơp -up -ưp (STOP → chỉ ´·)
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ap',  type:'stop',e:'🔒',exW:['báp','cáp','láp','náp'],sents:['']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ăp',  type:'stop',e:'🌿',exW:['bắp','cắp','lắp','mắp'],sents:['Bắp ngô vàng.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'âp',  type:'stop',e:'🌿',exW:['bập','cập','lập','mập','tập'],sents:['Tập thể dục.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ep',  type:'stop',e:'🌿',exW:['bép','kép','lép','nép','tép'],sents:['']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'êp',  type:'stop',e:'💡',exW:['bếp','nếp','xếp','sếp','thiếp'],sents:['Bếp ga nhà bé.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ip',  type:'stop',e:'🌿',exW:['bíp','típ','líp'],sents:['']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'op',  type:'stop',e:'🎩',exW:['bóp','cọp','họp','góp','lốp'],sents:['Họp lớp vui.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ôp',  type:'stop',e:'📦',exW:['hộp','lốp','bốp','cốp'],sents:['Hộp quà to.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ơp',  type:'stop',e:'🏫',exW:['lớp','hớp','chớp','khớp'],sents:['Lớp học vui.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'up',  type:'stop',e:'🌿',exW:['búp','cúp','lúp','múp'],sents:['Búp bê đẹp.','']},
+  {g:'g08',gn:'-ap -ăp -êp',col:'#a29bfe',v:'ưp',  type:'stop',e:'🌿',exW:['bứp','cứp'],sents:['']},
+
+  // Nhóm 9: -ach -êch -ich (STOP)
+  {g:'g09',gn:'-ach -ich',col:'#FF4757',v:'ach', type:'stop',e:'🏔️',exW:['sách','bạch','cách','mách','rách'],sents:['Sách bé đẹp.','']},
+  {g:'g09',gn:'-ach -ich',col:'#FF4757',v:'êch', type:'stop',e:'🐸',exW:['bếch','kếch','ếch'],sents:['Con ếch kêu.','']},
+  {g:'g09',gn:'-ach -ich',col:'#FF4757',v:'ich', type:'stop',e:'📏',exW:['bích','dích','lịch','mích','tích'],sents:['Lịch treo tường.','']},
+
+  // Nhóm 10: -ai -ay -ây (open — kết thúc bán âm)
+  {g:'g10',gn:'-ai -ay -ây',col:'#6c5ce7',v:'ai',  type:'open',e:'❓',exW:['bài','cái','mai','tài','lái'],sents:['Bài thơ hay.','']},
+  {g:'g10',gn:'-ai -ay -ây',col:'#6c5ce7',v:'ay',  type:'open',e:'✋',exW:['tay','bay','cây','may','lay'],sents:['Cây cao bóng mát.','']},
+  {g:'g10',gn:'-ai -ay -ây',col:'#6c5ce7',v:'ây',  type:'open',e:'☁️',exW:['mây','đây','lây','bây','tây'],sents:['Mây trắng bay.','']},
+
+  // Nhóm 11: -ao -au -âu (open)
+  {g:'g11',gn:'-ao -au -âu',col:'#e17055',v:'ao',  type:'open',e:'🐉',exW:['bào','cào','lao','tao','mào'],sents:['Lao động chăm.','']},
+  {g:'g11',gn:'-ao -au -âu',col:'#e17055',v:'au',  type:'open',e:'🌿',exW:['bau','cau','lau','sau','tau'],sents:['Cau xanh.','']},
+  {g:'g11',gn:'-ao -au -âu',col:'#e17055',v:'âu',  type:'open',e:'🍵',exW:['bầu','cầu','lầu','mầu','sầu'],sents:['Bầu trời xanh.','']},
+
+  // Nhóm 12: -oi -ôi -ơi -ui -ưi (open — bán âm cuối)
+  {g:'g12',gn:'-ôi -ơi -ui',col:'#00cec9',v:'oi',  type:'open',e:'🌿',exW:['bói','cói','lói'],sents:['']},
+  {g:'g12',gn:'-ôi -ơi -ui',col:'#00cec9',v:'ôi',  type:'open',e:'👋',exW:['tôi','bôi','côi','lôi','mồi'],sents:['Tôi là bé An.','']},
+  {g:'g12',gn:'-ôi -ơi -ui',col:'#00cec9',v:'ơi',  type:'open',e:'🌊',exW:['bơi','chơi','mời','rơi','tươi'],sents:['Bé bơi giỏi.','']},
+  {g:'g12',gn:'-ôi -ơi -ui',col:'#00cec9',v:'ui',  type:'open',e:'😄',exW:['túi','bùi','cúi','múi','vui'],sents:['Vui lắm!','']},
+  {g:'g12',gn:'-ôi -ơi -ui',col:'#00cec9',v:'ưi',  type:'open',e:'🌿',exW:['bứi','cứi'],sents:['']},
+
+  // Nhóm 13: -ia -ua -ưa (open)
+  {g:'g13',gn:'-ia -ua -ưa',col:'#20bf6b',v:'ia',  type:'open',e:'🌿',exW:['mía','tia','bia','kia','chia'],sents:['Mía ngọt.','']},
+  {g:'g13',gn:'-ia -ua -ưa',col:'#20bf6b',v:'ua',  type:'open',e:'🦀',exW:['mua','cua','lúa','rùa','chua'],sents:['Rùa bơi chậm.','']},
+  {g:'g13',gn:'-ia -ua -ưa',col:'#20bf6b',v:'ưa',  type:'open',e:'🌧️',exW:['mưa','cưa','vừa','dừa','chưa'],sents:['Mưa rơi.','']},
+
+  // Nhóm 14: Vần đôi iê/uô/ươ — các dạng
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iên', type:'sonorant',e:'✨',exW:['tiên','điền','liên','biển','kiên'],sents:['Biển rộng.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iêm', type:'sonorant',e:'🌿',exW:['điềm','kiêm','liêm','thiêm'],sents:['Điềm tĩnh.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iêng',type:'sonorant',e:'🔔',exW:['tiếng','giếng','miếng','chiếng'],sents:['Tiếng Việt hay.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iêt', type:'stop',    e:'🌿',exW:['biết','hiệt','kiệt','liệt'],sents:['Biết nhiều thứ.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iêp', type:'stop',    e:'🌿',exW:['kiếp','tiệp','diếp'],sents:['']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'iêc', type:'stop',    e:'🌿',exW:['biếc','hiếc','tiếc'],sents:['Tiếc quá.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'uôn', type:'sonorant',e:'🌿',exW:['buôn','luôn','muôn','tuôn','chuồn'],sents:['Luôn cố gắng.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'uôt', type:'stop',    e:'🐭',exW:['buột','chuột','muốt','suốt'],sents:['Con chuột nhỏ.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'uôc', type:'stop',    e:'💊',exW:['buộc','cuộc','thuốc'],sents:['Thuốc bệnh đắng.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ương',type:'sonorant',e:'🌙',exW:['dương','hương','phương','thương','đường'],sents:['Đường về nhà.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươn', type:'sonorant',e:'🌊',exW:['bướn','cường','lường','sườn'],sents:['']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươt', type:'stop',    e:'🌿',exW:['lướt','trượt','vượt'],sents:['Lướt sóng.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươc', type:'stop',    e:'🌿',exW:['bước','được','rược'],sents:['Được rồi!','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươi', type:'open',    e:'😄',exW:['cười','lười','mười','người','tươi'],sents:['Cười vui vẻ.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươu', type:'open',    e:'🦌',exW:['bướu','rượu','hươu'],sents:['Con hươu cao.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'uôi', type:'open',    e:'🌿',exW:['buổi','cuối','nuôi','tuổi'],sents:['Buổi sáng vui.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươm', type:'sonorant',e:'🦋',exW:['bướm','dượm','ướm'],sents:['Bướm bay đẹp.','']},
+  {g:'g14',gn:'-iên -uôn -ươn',col:'#FF7F11',v:'ươp', type:'stop',    e:'🌿',exW:['bướp','cướp'],sents:['']},
+
+  // Nhóm 15: -oa -oe -uy và các vần phức
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oa',  type:'open',    e:'🌟',exW:['hoa','khoa','loa','toa','xoa'],sents:['Hoa thơm đẹp.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oan', type:'sonorant',e:'🌿',exW:['loan','toàn','đoàn','hoàn','choán'],sents:['Đoàn kết vui.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oat', type:'stop',    e:'🌿',exW:['hoat','loát','toát'],sents:['']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oai', type:'open',    e:'🌿',exW:['ngoại','loại','toại','thoại'],sents:['Ngoại tôi hiền.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oay', type:'open',    e:'🌿',exW:['xoay','ngoay','choay'],sents:['Xoay vòng.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oac', type:'stop',    e:'🌿',exW:['ngoạc','hoặc','choạc'],sents:['']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oe',  type:'open',    e:'🐸',exW:['boe','doe','hoe','loe','toe'],sents:['']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'oeo', type:'open',    e:'🌿',exW:['ngoèo','loeo','khoèo'],sents:['']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uê',  type:'open',    e:'🌿',exW:['huệ','luệ','tuệ','xuê'],sents:['Hoa huệ trắng.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uy',  type:'open',    e:'💧',exW:['tuy','huy','luy','ruy'],sents:['Huy hiệu đẹp.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uya', type:'open',    e:'🌿',exW:['khuya','thuya'],sents:['Đêm khuya yên.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uân', type:'sonorant',e:'🌸',exW:['xuân','thuần','tuần','chuẩn'],sents:['Xuân về rồi.','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uât', type:'stop',    e:'🌿',exW:['xuất','thuật','suất'],sents:['Xuất sắc!','']},
+  {g:'g15',gn:'-oa -oe -uy',col:'#fd79a8',v:'uân', type:'sonorant',e:'🌿',exW:['quân','thuần','tuần'],sents:['']},
+];
+
+// Nhóm VAN_GROUPS từ VAN_DATA
+const VG_MAP={};
+VAN_DATA.forEach(v=>{if(!VG_MAP[v.g]){VG_MAP[v.g]={id:v.g,name:v.gn,col:v.col,vans:[]};} VG_MAP[v.g].vans.push(v);});
+const VG_GROUPS=Object.values(VG_MAP);
+
+// ===== BUILD PA BOARD =====
+function buildPASel(){
+  const sel=$('paSel');sel.innerHTML='';
+  PHU_AM.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='pa-btn'+(i===0?' on':'');
+    b.style.borderColor=p.col+'55';b.textContent=p.pa;
+    b.onclick=()=>{sel.querySelectorAll('.pa-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderPABoard(p);};
+    sel.appendChild(b);
+  });
+  renderPABoard(PHU_AM[0]);
+}
+
+function renderPABoard(pa){
+  const bd=$('paBoard');bd.innerHTML='';
+  const box=document.createElement('div');box.className='pa-board';
+  let noteHtml='';
+  if(pa.note) noteHtml=`<div class="tone-note">⚠️ ${pa.note}</div>`;
+  box.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+    <div class="pa-big" style="background:linear-gradient(135deg,${pa.col}cc,${pa.col})" onclick="speak('${pa.pa}')">${pa.pa}</div>
+    <div><div style="font-size:16px;font-weight:800;color:${pa.col}">${pa.pa}</div>
+    <div style="font-size:11px;color:#888">NA ghép: ${pa.na_ok.join(' · ')} · Bấm ô để nghe</div>
+    ${noteHtml}</div>
+  </div>`;
+  const wrap=document.createElement('div');wrap.className='tbl-wrap';
+  const tbl=document.createElement('table');tbl.className='ptbl';
+  tbl.innerHTML=`<thead><tr><th style="min-width:28px">NA</th>${TK.map((k,i)=>`<th style="color:${TC[i]};font-size:15px">${k||'◻'}</th>`).join('')}<th>Ví dụ</th></tr></thead>`;
+  const tb=document.createElement('tbody');
+
+  pa.na_ok.forEach(na=>{
+    const tones=NA_T[na];if(!tones)return;
+    const wordList=pa.words[na]||[];if(!wordList.length)return;
+    const byTone={};wordList.forEach(w=>byTone[w.t]=w);
+    const tr=document.createElement('tr');
+    const natd=document.createElement('td');natd.className='na-hd';natd.textContent=na;natd.onclick=()=>speak(na);
+    tr.appendChild(natd);
+    // Vần nguyên âm đơn = open → cả 6 thanh
+    tones.forEach((tn,ti)=>{
+      const syl=pa.pa+tn;
+      const pair=byTone[ti];
+      const td=document.createElement('td');
+      if(pair){td.className='syl-cell';td.innerHTML=`<span class="syl-ok" style="color:${TC[ti]}">${syl}</span>`;td.title=pair.m;td.onclick=()=>speak(syl);}
+      else{td.className='syl-na';td.innerHTML=`<span class="syl-no">${syl}</span>`;}
+      tr.appendChild(td);
+    });
+    const best=wordList[0];
+    const extd=document.createElement('td');extd.className='ex-cell';
+    extd.innerHTML=`<span class="ex-em">${best.e}</span> <span class="ex-w" style="color:${pa.col}">${best.w}</span><div class="ex-m">${best.m}</div>`;
+    extd.onclick=()=>speak(best.w);tr.appendChild(extd);tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);wrap.appendChild(tbl);box.appendChild(wrap);bd.appendChild(box);
+}
+
+// ===== BUILD VẦN NHÓM =====
+// Bảng vần: hàng=PA, cột=6 dấu thanh (theo đúng type của vần)
+// type=stop → chỉ cột ´(2) và ·(5) có màu, còn lại x
+// type=sonorant/open → cả 6
+
+function buildVGTabs(){
+  const tabs=$('vgTabs');tabs.innerHTML='';
+  VG_GROUPS.forEach((g,i)=>{
+    const b=document.createElement('button');b.className='vg-tab'+(i===0?' on':'');
+    b.textContent=g.name;b.style.borderColor=g.col;
+    if(i===0){b.style.background=g.col;b.style.color='#fff';}else{b.style.color=g.col;}
+    b.onclick=()=>{
+      tabs.querySelectorAll('.vg-tab').forEach((x,j)=>{x.classList.remove('on');x.style.background='#fff';x.style.color=VG_GROUPS[j].col;});
+      b.classList.add('on');b.style.background=g.col;b.style.color='#fff';renderVGBoard(g);
+    };
+    tabs.appendChild(b);
+  });
+  renderVGBoard(VG_GROUPS[0]);
+}
+
+const ALL_PAS=['b','c','d','đ','g','gh','h','k','l','m','n','ng','ngh','r','s','t','v','x','ch','nh','th','tr','ph','kh'];
+
+function paCanJoinVan(pa,van){
+  const v=van.v;
+  const firstV=v[0];
+  const eVowels=['e','ê','i'];
+  const nonEVowels=['a','ă','â','o','ô','ơ','u','ư'];
+  if(pa==='c'&&eVowels.some(e=>v.startsWith(e)))return false;
+  if(pa==='k'&&!eVowels.some(e=>v.startsWith(e))||pa==='k'&&!v.startsWith('y'))if(pa==='k'&&nonEVowels.some(e=>v.startsWith(e)))return false;
+  if(pa==='k'){if(!['e','ê','i','y','iê'].some(e=>v.startsWith(e)))return false;}
+  if(pa==='g'&&eVowels.some(e=>v.startsWith(e)))return false;
+  if(pa==='gh'&&!eVowels.some(e=>v.startsWith(e)))return false;
+  if(pa==='ng'&&eVowels.some(e=>v.startsWith(e)))return false;
+  if(pa==='ngh'&&!eVowels.some(e=>v.startsWith(e)))return false;
+  return true;
+}
+
+function renderVGBoard(g){
+  const bd=$('vgBoard');bd.innerHTML='';
+  g.vans.forEach(van=>{
+    const box=document.createElement('div');box.className='vg-board';
+    const allowedTones=TONE_MASK[van.type];
+    const isStop=van.type==='stop';
+    const toneNote=isStop
+      ?'<span class="tone-note">⚠️ Vần này chỉ dùng thanh ´ (sắc) và · (nặng)</span>'
+      :'';
+
+    const hdr=document.createElement('div');hdr.className='vg-van-hdr';
+    hdr.innerHTML=`<div class="vg-van-title" style="color:${van.col}" onclick="speak('${van.v}')">-${van.v} ${van.e}</div>
+      <button class="speak-btn" onclick="speak('${van.v}')">🔊 Nghe</button>${toneNote}`;
+    box.appendChild(hdr);
+
+    const validPAs=ALL_PAS.filter(pa=>paCanJoinVan(pa,van));
+    const wrap=document.createElement('div');wrap.className='tbl-wrap';
+    const tbl=document.createElement('table');tbl.className='vtbl';
+
+    // Header: show only allowed tones
+    const thCells=TK.map((k,i)=>{
+      const allowed=allowedTones.includes(i);
+      return `<th style="color:${allowed?TC[i]:'#ddd'};font-size:15px">${k||'◻'}</th>`;
+    }).join('');
+    tbl.innerHTML=`<thead><tr><th style="min-width:36px">PA</th>${thCells}<th>Ví dụ</th></tr></thead>`;
+
+    const tb=document.createElement('tbody');
+    validPAs.slice(0,16).forEach(pa=>{
+      const base=pa+van.v;
+      const tr=document.createElement('tr');
+      const patd=document.createElement('td');patd.className='pa-hd';patd.textContent=pa;patd.onclick=()=>speak(pa);
+      tr.appendChild(patd);
+
+      TK.forEach((_,ti)=>{
+        const td=document.createElement('td');
+        if(allowedTones.includes(ti)){
+          const form=applyTone(base,ti);
+          td.innerHTML=`<span class="syl-ok" style="color:${TC[ti]};cursor:pointer" onclick="speak('${form}')">${form}</span>`;
+        } else {
+          // Không dùng được thanh này
+          td.innerHTML=`<span class="syl-x">✗</span>`;
+        }
+        tr.appendChild(td);
+      });
+
+      // Ví dụ: tìm từ từ exW bắt đầu bằng pa này
+      const exWord=van.exW.find(w=>w.startsWith(pa))||'';
+      const extd=document.createElement('td');extd.style.cssText='min-width:70px;cursor:pointer;padding:4px';
+      if(exWord){extd.innerHTML=`<span class="ex-w" style="color:${van.col}">${exWord}</span>`;extd.onclick=()=>speak(exWord);}
+      tr.appendChild(extd);tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);wrap.appendChild(tbl);box.appendChild(wrap);
+
+    if(van.exW&&van.exW.length){
+      const rl=document.createElement('div');rl.className='sec-lbl';rl.style.marginTop='7px';rl.textContent='📖 Đọc từ:';
+      box.appendChild(rl);
+      const sr=document.createElement('div');sr.className='sample-row';
+      van.exW.forEach(w=>{const c=document.createElement('span');c.className='sw';c.textContent=w;c.onclick=()=>speak(w);sr.appendChild(c);});
+      box.appendChild(sr);
+    }
+    const goodSents=van.sents.filter(s=>s.length>3);
+    if(goodSents.length){
+      const sb=document.createElement('div');sb.className='sents-box';
+      goodSents.forEach(s=>{const d=document.createElement('div');d.className='sent-line';d.textContent=s;d.onclick=()=>speak(s,0.75);sb.appendChild(d);});
+      box.appendChild(sb);
+    }
+    bd.appendChild(box);
+  });
+}
+
+// ===== GAME 1 =====
+let g1={ok:0,no:0,streak:0,done:false,type:'van',vgId:'g01'};
+
+function buildG1VGSel(){
+  const row=$('g1VGSel');row.innerHTML='';
+  VG_GROUPS.forEach((g,i)=>{
+    const b=document.createElement('button');b.className='pa-btn'+(i===0?' on':'');
+    b.style.cssText=`border-color:${g.col}44;font-size:11px`;b.textContent=g.name;
+    b.onclick=()=>{row.querySelectorAll('.pa-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');g1.vgId=g.id;newG1();};
+    row.appendChild(b);
+  });
+}
+
+$('g1TypeRow').querySelectorAll('.pa-btn').forEach(b=>{
+  b.onclick=()=>{
+    $('g1TypeRow').querySelectorAll('.pa-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    g1.type=b.dataset.t;$('g1VGSel').style.display=g1.type==='van'?'flex':'none';newG1();
+  };
+});
+
+function g1Pool(){
+  if(g1.type==='van'){
+    const g=VG_GROUPS.find(x=>x.id===g1.vgId);if(!g)return[];
+    return g.vans.flatMap(van=>
+      van.exW.filter(w=>w.length>0).map(w=>({am:w,van:van.v,show:{e:van.e,tx:w,sub:'-'+van.v}}))
+    );
+  }
+  return PHU_AM.flatMap(p=>Object.values(p.words).flat().filter(x=>x.e&&x.m).map(x=>({am:x.w,show:{e:x.e,tx:x.w,sub:x.m}})));
+}
+
+function newG1(){
+  g1.done=false;$('g1Next').classList.add('hidden');$('g1Msg').textContent='';
+  const pool=g1Pool();if(!pool.length)return;
+  const item=rnd(pool);
+  const wrongs=shuffle(pool.filter(x=>x.am!==item.am)).slice(0,3);
+  const opts=shuffle([item,...wrongs]);
+  const od=$('g1Opts');od.innerHTML='';
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='gopt';
+    btn.innerHTML=`<span class="ge">${o.show.e}</span><span class="gt">${o.show.tx}</span><span class="gs">${o.show.sub}</span>`;
+    btn.onclick=()=>{
+      if(g1.done)return;g1.done=true;
+      od.querySelectorAll('.gopt').forEach(x=>x.disabled=true);
+      if(o.am===item.am){btn.classList.add('ok');g1.ok++;g1.streak++;$('g1Msg').innerHTML='<span style="color:#00b894">🎉 Đúng rồi!</span>';speak('Đúng rồi!');confetti();if(g1.streak%5===0)showReward();}
+      else{btn.classList.add('no');g1.no++;g1.streak=0;Array.from(od.children).forEach((x,i)=>{if(opts[i].am===item.am)x.classList.add('ok');});$('g1Msg').innerHTML=`<span style="color:#e17055">❌ Đúng: ${item.show.tx} (-${item.van||''})</span>`;speak('Sai rồi!');}
+      $('g1ok').textContent='✓ '+g1.ok;$('g1no').textContent='✗ '+g1.no;$('g1st').textContent='🔥 '+g1.streak;
+      $('g1Next').classList.remove('hidden');
+    };
+    od.appendChild(btn);
+  });
+  $('g1Btn').onclick=()=>{$('g1Btn').classList.add('pulse');setTimeout(()=>$('g1Btn').classList.remove('pulse'),450);speak(item.am);};
+  $('g1Btn').classList.add('pulse');setTimeout(()=>$('g1Btn').classList.remove('pulse'),450);speak(item.am);
+}
+$('g1Next').onclick=newG1;
+
+// ===== GAME 2 =====
+let g2={ok:0,no:0,streak:0,done:false,vgId:'g01'};
+function buildG2VGRow(){
+  const row=$('g2VGRow');row.innerHTML='';
+  VG_GROUPS.forEach((g,i)=>{
+    const b=document.createElement('button');b.className='pa-btn'+(i===0?' on':'');
+    b.style.cssText=`border-color:${g.col}44;font-size:11px`;b.textContent=g.name;
+    b.onclick=()=>{row.querySelectorAll('.pa-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');g2.vgId=g.id;newG2();};
+    row.appendChild(b);
+  });
+}
+function newG2(){
+  g2.done=false;$('g2Next').classList.add('hidden');$('g2Msg').textContent='';
+  const g=VG_GROUPS.find(x=>x.id===g2.vgId);
+  const van=rnd(g.vans);
+  const words=van.exW.filter(w=>w.length>=2);if(!words.length){newG2();return;}
+  const word=rnd(words);
+  // Tách PA và vần
+  let pa='',vn=van.v;
+  const twoPA=['ch','nh','th','tr','ph','kh','ng','gh'];
+  if(word.length>2&&twoPA.some(p=>word.startsWith(p))){pa=word.slice(0,2);vn=word.slice(2)||van.v;}
+  else{pa=word[0];vn=word.slice(1)||van.v;}
+  if(!pa||!vn){newG2();return;}
+  const blankPa=Math.random()>0.5;
+  const ans=blankPa?pa:vn;
+  const wrongPool=blankPa
+    ?[...new Set(g.vans.flatMap(v=>v.exW.filter(w=>w.length>1).map(w=>{const tp=twoPA.find(p=>w.startsWith(p));return tp||w[0];})).filter(x=>x&&x!==pa))].slice(0,4)
+    :[...new Set(g.vans.map(v=>v.v).filter(v=>v!==vn))].slice(0,4);
+  const choices=shuffle([ans,...shuffle(wrongPool).slice(0,4)]).slice(0,5);
+
+  const allWords=PHU_AM.flatMap(p=>Object.values(p.words).flat());
+  const matched=allWords.find(w=>w.w===word);
+  const emoji=matched?matched.e:(van.e||'📝');
+
+  const bd=$('g2Board');bd.innerHTML='';
+  const wDisp=blankPa
+    ?`<div class="fb-blank" id="g2bl">?</div><span>+</span><span style="color:${g.col}">${vn}</span>`
+    :`<span>${pa}</span><span>+</span><div class="fb-blank" id="g2bl">?</div>`;
+
+  bd.innerHTML=`<div class="fb-card">
+    <span class="fb-emoji">${emoji}</span>
+    <div class="fb-word">${wDisp}<span style="margin:0 5px">=</span><span style="color:${g.col}">${word}</span></div>
+    <div style="font-size:11px;color:#aaa">Điền ${blankPa?'phụ âm':'vần'} còn thiếu</div>
+    <button class="speak-btn" style="margin:5px auto;display:inline-flex" onclick="speak('${word}')">🔊 ${word}</button>
+    <div class="fb-choices" id="g2c">${choices.map(c=>`<button class="fbc" data-v="${c}">${c}</button>`).join('')}</div>
+    <div id="g2m" style="min-height:18px;font-size:13px;font-weight:800;text-align:center;margin-top:5px"></div>
+  </div>`;
+
+  document.getElementById('g2c').querySelectorAll('.fbc').forEach(btn=>{
+    btn.onclick=()=>{
+      if(g2.done)return;
+      const v=btn.dataset.v;
+      document.getElementById('g2c').querySelectorAll('.fbc').forEach(x=>x.disabled=true);
+      if(v===ans){
+        btn.classList.add('ok');$('g2bl').textContent=ans;$('g2bl').style.color=g.col;$('g2bl').style.borderColor=g.col;
+        document.getElementById('g2m').innerHTML=`<span style="color:#00b894">🎉 ${pa}+${vn}=${word}</span>`;
+        g2.ok++;g2.streak++;speak('Đúng rồi! '+word);confetti();if(g2.streak%5===0)showReward();
+        g2.done=true;$('g2ok').textContent='✓ '+g2.ok;$('g2no').textContent='✗ '+g2.no;$('g2st').textContent='🔥 '+g2.streak;
+        setTimeout(newG2,1300);
+      } else {
+        btn.classList.add('no');document.getElementById('g2c').querySelectorAll('.fbc').forEach(x=>{if(x.dataset.v===ans)x.classList.add('ok');});
+        document.getElementById('g2m').innerHTML=`<span style="color:#e17055">❌ Đáp án: ${ans}</span>`;
+        g2.no++;g2.streak=0;g2.done=true;speak('Sai rồi. Đáp án là '+ans);
+        $('g2ok').textContent='✓ '+g2.ok;$('g2no').textContent='✗ '+g2.no;$('g2st').textContent='🔥 '+g2.streak;
+        $('g2Next').classList.remove('hidden');
+      }
+    };
+  });
+  speak(word);
+}
+$('g2Next').onclick=newG2;
+
+// ===== GAME 3 =====
+let g3={ok:0,no:0,placed:[],done:false,vgId:'g01',_cur:null};
+function buildG3VGRow(){
+  const row=$('g3VGRow');row.innerHTML='';
+  VG_GROUPS.forEach((g,i)=>{
+    const b=document.createElement('button');b.className='pa-btn'+(i===0?' on':'');
+    b.style.cssText=`font-size:11px;border-color:${g.col}44`;b.textContent=g.name;
+    b.onclick=()=>{row.querySelectorAll('.pa-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');g3.vgId=g.id;newG3();};
+    row.appendChild(b);
+  });
+}
+function newG3(){
+  g3.done=false;g3.placed=[];$('g3Next').classList.add('hidden');$('g3Msg').textContent='';
+  const g=VG_GROUPS.find(x=>x.id===g3.vgId);
+  const van=rnd(g.vans);
+  const words=van.exW.filter(w=>w.length>=2);if(!words.length){newG3();return;}
+  const word=rnd(words);
+  const twoPA=['ch','nh','th','tr','ph','kh','ng','gh'];
+  let pa=word[0],vn=word.slice(1)||van.v;
+  if(word.length>2){const tp=twoPA.find(p=>word.startsWith(p));if(tp){pa=tp;vn=word.slice(tp.length)||van.v;}}
+  if(!vn||!pa){newG3();return;}
+  g3._cur={word,pa,vn,g,van};
+  const allPAList=['b','c','d','đ','g','h','l','m','n','r','s','t','v','x'];
+  const distPAs=shuffle(allPAList.filter(p=>p!==pa)).slice(0,1);
+  const distVs=shuffle(g.vans.map(v=>v.v).filter(v=>v!==vn)).slice(0,1);
+  const tiles=shuffle([pa,vn,...distPAs,...distVs]);
+
+  const allWords=PHU_AM.flatMap(p=>Object.values(p.words).flat());
+  const matched=allWords.find(w=>w.w===word);
+  const emoji=matched?matched.e:(van.e||'📝');
+
+  const bd=$('g3Board');bd.innerHTML='';
+  bd.innerHTML=`<div class="arr-card">
+    <div style="font-size:54px">${emoji}</div>
+    <div style="font-size:12px;color:#636e72;margin:3px 0 7px">${word}</div>
+    <button class="speak-btn" style="margin:0 auto 8px;display:inline-flex" onclick="speak('${word}')">🔊 Nghe</button>
+  </div>
+  <div class="arr-ans" id="g3ar"><span class="arr-placeholder">Chọn âm xếp thành từ</span></div>
+  <div class="arr-tiles" id="g3tl">${tiles.map((t,i)=>`<button class="arr-tile" data-v="${t}" data-i="${i}">${t}</button>`).join('')}</div>
+  <div id="g3m" style="min-height:18px;font-size:13px;font-weight:800;text-align:center;margin:4px 0"></div>
+  <div class="arr-btns"><button class="arr-check" id="g3chk">✅ Kiểm tra</button><button class="arr-reset" id="g3rst">🔄 Xóa</button></div>`;
+
+  document.getElementById('g3tl').querySelectorAll('.arr-tile').forEach(btn=>{
+    btn.onclick=()=>{
+      if(btn.classList.contains('used')||g3.done)return;
+      btn.classList.add('used');g3.placed.push({v:btn.dataset.v,i:btn.dataset.i});
+      renderG3Ans();
+      if(g3.placed.length>=2)doCheckG3();
+    };
+  });
+  document.getElementById('g3chk').onclick=doCheckG3;
+  document.getElementById('g3rst').onclick=()=>{
+    if(g3.done)return;
+    g3.placed=[];document.getElementById('g3tl').querySelectorAll('.arr-tile').forEach(b=>b.classList.remove('used'));
+    document.getElementById('g3m').textContent='';renderG3Ans();
+  };
+  speak(word);
+}
+function doCheckG3(){
+  if(!g3._cur||g3.done)return;
+  const{word,pa,vn,g,van}=g3._cur;
+  const ans=g3.placed.map(x=>x.v).join('');
+  if(ans===word){
+    document.getElementById('g3m').innerHTML=`<span style="color:#00b894">🎉 ${pa}+${vn}=${word}</span>`;
+    g3.ok++;speak('Đúng rồi! '+word);confetti();g3.done=true;
+    $('g3ok').textContent='✓ '+g3.ok;$('g3no').textContent='✗ '+g3.no;
+    setTimeout(newG3,1300);
+  } else if(g3.placed.length>=2&&!g3.done){
+    // Chỉ báo sai khi bấm nút kiểm tra, không auto
+    const isManual=window._g3manual;
+    if(isManual){
+      document.getElementById('g3m').innerHTML=`<span style="color:#e17055">❌ Cần: ${pa}+${vn}=${word}</span>`;
+      g3.no++;g3.done=true;speak('Sai rồi. Phải là '+pa+' '+vn+' '+word);
+      $('g3ok').textContent='✓ '+g3.ok;$('g3no').textContent='✗ '+g3.no;
+      $('g3Next').classList.remove('hidden');
+    }
+  }
+}
+// Override check button
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='g3chk'){window._g3manual=true;doCheckG3();window._g3manual=false;}});
+function renderG3Ans(){
+  const row=document.getElementById('g3ar');if(!row)return;
+  if(!g3.placed.length){row.innerHTML='<span class="arr-placeholder">Chọn âm xếp thành từ</span>';return;}
+  row.innerHTML=g3.placed.map(x=>`<div class="arr-placed" onclick="g3Remove('${x.i}')">${x.v}</div>`).join('');
+}
+window.g3Remove=(idx)=>{
+  if(g3.done)return;
+  g3.placed=g3.placed.filter(x=>x.i!==idx);
+  document.querySelectorAll('.arr-tile').forEach(b=>{if(b.dataset.i===idx)b.classList.remove('used');});
+  renderG3Ans();
+};
+$('g3Next').onclick=newG3;
+
+// ===== CONFETTI & REWARD =====
+let stars=0;
+function confetti(){
+  stars++;const sr=$('starRow');const s=document.createElement('span');s.textContent='⭐';sr.appendChild(s);
+  if(sr.children.length>12)sr.removeChild(sr.firstChild);
+  const cols=['#FF4757','#FF7F11','#FFD32A','#26de81','#0984e3','#a29bfe','#fd79a8'];
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');p.className='cnf';const sz=5+Math.random()*6;
+    p.style.cssText=`left:${10+Math.random()*80}vw;top:-10px;width:${sz}px;height:${sz}px;background:${rnd(cols)};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.2+Math.random()*1.3}s;animation-delay:${Math.random()*.2}s`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),2800);
+  }
+}
+function showReward(){
+  $('rwEm').textContent=rnd(['🏆','🌟','🎉','🥇','🌈','🎁','👑']);
+  $('reward').classList.add('on');speak('Ôi tuyệt vời! Bé học giỏi quá!',0.88);
+}
+$('rwClose').onclick=()=>$('reward').classList.remove('on');
+
+// ===== TABS =====
+document.querySelectorAll('.mtab').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.mpnl').forEach(p=>p.classList.remove('on'));
+    btn.classList.add('on');$('mpnl-'+btn.dataset.m).classList.add('on');
+    if(btn.dataset.m==='g1'&&!$('g1Opts').children.length)newG1();
+    if(btn.dataset.m==='g2'&&!$('g2Board').children.length)newG2();
+    if(btn.dataset.m==='g3'&&!$('g3Board').children.length)newG3();
+  };
+});
+
+buildPASel();buildVGTabs();buildG2VGRow();buildG3VGRow();buildG1VGSel();
+$('g1VGSel').style.display='flex';
+</script>
+</body>
+</html>
