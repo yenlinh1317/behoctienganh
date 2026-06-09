@@ -1,0 +1,554 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0B0E1A;--card:#161B2E;--card2:#1E2540;--accent:#7C3AED;
+  --yellow:#F59E0B;--green:#10B981;--red:#EF4444;--blue:#3B82F6;
+  --pink:#EC4899;--teal:#14B8A6;--orange:#F97316;
+  --text:#F1F5F9;--muted:#94A3B8;--border:#2D3A5A;
+}
+#app{background:var(--bg);min-height:640px;border-radius:16px;overflow:hidden;position:relative;font-family:'Segoe UI',system-ui,sans-serif;color:var(--text)}
+
+/* Stars bg */
+#starfield{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.star-dot{position:absolute;background:white;border-radius:50%;animation:twinkle 3s infinite ease-in-out}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+/* Header */
+#hdr{position:relative;z-index:2;background:rgba(22,27,46,.95);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:10px}
+#hdr-title{font-size:15px;font-weight:700;color:var(--yellow);flex:1;letter-spacing:.3px}
+#xp-wrap{display:flex;align-items:center;gap:6px}
+#xp-bar-bg{width:80px;height:7px;background:#2D3A5A;border-radius:7px;overflow:hidden}
+#xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--pink));border-radius:7px;transition:width .5s}
+#xp-lv{font-size:11px;font-weight:700;color:var(--yellow)}
+#coin-box{display:flex;align-items:center;gap:4px;background:rgba(245,158,11,.15);border-radius:20px;padding:3px 9px}
+#coin-num{font-size:13px;font-weight:700;color:var(--yellow)}
+
+/* HOME */
+#home{position:relative;z-index:2;padding:10px 12px 14px}
+#home-hero{text-align:center;padding:8px 0 12px}
+#rocket-anim{font-size:42px;animation:float 2.5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#home-hero h2{font-size:18px;font-weight:700;color:var(--yellow);margin-top:4px}
+#home-hero p{font-size:11px;color:var(--muted);margin-top:2px}
+#planets-list{display:flex;flex-direction:column;gap:8px}
+.planet-row{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.planet-row:hover:not(.locked){border-color:var(--accent);background:var(--card2);transform:translateX(3px)}
+.planet-row.locked{opacity:.5;cursor:not-allowed}
+.planet-ico{font-size:32px;flex-shrink:0}
+.planet-info{flex:1}
+.planet-name{font-size:13px;font-weight:700;color:var(--text)}
+.planet-desc{font-size:10px;color:var(--muted);margin-top:2px}
+.planet-levels{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.lv-dot{width:22px;height:22px;border-radius:6px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;border:1px solid transparent}
+.lv-dot.done{background:#10B981;color:white;border-color:#059669}
+.lv-dot.active{background:var(--accent);color:white;border-color:#6D28D9}
+.lv-dot.locked-dot{background:#1E2540;color:#4B5563;border-color:#2D3A5A}
+.planet-lock{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px}
+
+/* LEVEL SELECT */
+#lvl-select{display:none;position:relative;z-index:2;padding:10px 12px}
+#ls-back{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 5px;border-radius:7px;margin-bottom:8px}
+#ls-back:hover{background:var(--card2)}
+#ls-title{font-size:16px;font-weight:700;margin-bottom:10px}
+#ls-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.lv-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.lv-card:hover:not(.lv-locked){border-color:var(--accent);transform:scale(1.05)}
+.lv-card.lv-locked{opacity:.4;cursor:not-allowed}
+.lv-card.lv-done{border-color:var(--green)}
+.lv-card.lv-active-card{border-color:var(--accent);background:rgba(124,58,237,.15)}
+.lv-num{font-size:18px;font-weight:700}
+.lv-stars{font-size:11px;margin-top:3px}
+.lv-diff{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* GAME */
+#game{display:none;position:relative;z-index:2;padding:8px 12px 12px}
+#g-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#g-back{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 5px;border-radius:7px}
+#g-back:hover{background:var(--card2)}
+#g-info{flex:1}
+#g-title{font-size:13px;font-weight:700;color:var(--text)}
+#g-sub{font-size:10px;color:var(--muted)}
+#g-hearts{font-size:15px;letter-spacing:1px}
+#q-prog{height:4px;background:var(--border);border-radius:4px;margin-bottom:8px;overflow:hidden}
+#q-prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+#q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:center;margin-bottom:8px;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#q-vis{font-size:28px;margin-bottom:6px;line-height:1.3;word-break:break-all;max-width:100%;color:var(--text)}
+#q-txt{font-size:14px;color:var(--text);font-weight:600;line-height:1.4}
+#q-idx{font-size:10px;color:var(--muted);margin-top:4px}
+#hint-panel{display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#FCD34D;line-height:1.6}
+#hint-panel .hs{display:block;padding:2px 0;border-bottom:1px dashed rgba(245,158,11,.2)}
+#hint-panel .hs:last-child{border:none}
+#ans-grid{display:grid;gap:7px}
+.a-btn{background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;font-size:20px;font-weight:700;cursor:pointer;color:var(--text);transition:all .15s;text-align:center}
+.a-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(124,58,237,.2);transform:scale(1.03)}
+.a-btn.correct{background:rgba(16,185,129,.2);border-color:var(--green);color:#6EE7B7}
+.a-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--red);color:#FCA5A5}
+
+/* RESULT OVERLAY */
+#rov{display:none;position:absolute;inset:0;z-index:20;align-items:center;justify-content:center;background:rgba(0,0,0,.55);border-radius:16px}
+#rbox{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:22px 24px;text-align:center;max-width:260px;width:90%}
+#r-emo{font-size:48px;margin-bottom:6px}
+#r-tit{font-size:20px;font-weight:700;margin-bottom:4px}
+#r-sub{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+#r-coins{font-size:16px;margin-bottom:12px;color:var(--yellow)}
+#r-btn{background:var(--accent);color:white;border:none;border-radius:11px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+#r-btn:hover{background:#6D28D9}
+
+/* FIREWORK */
+.fw{position:absolute;pointer-events:none;font-size:16px;animation:fwfall 1.2s ease-out forwards}
+@keyframes fwfall{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(120px) scale(.3)}}
+</style>
+
+<div id="app">
+  <div id="starfield"></div>
+  <div id="hdr">
+    <span style="font-size:20px">🚀</span>
+    <span id="hdr-title">Toán Vũ Trụ – Tiểu Học</span>
+    <div id="xp-wrap">
+      <div id="xp-bar-bg"><div id="xp-bar" style="width:0%"></div></div>
+      <span id="xp-lv">Lv1</span>
+    </div>
+    <div id="coin-box"><span>🪙</span><span id="coin-num">0</span></div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home">
+    <div id="home-hero">
+      <div id="rocket-anim">🚀</div>
+      <h2>Khám Phá Vũ Trụ Toán Học!</h2>
+      <p>Chinh phục 5 hành tinh • 20 cấp độ • Từ lớp 1 → lớp 3</p>
+    </div>
+    <div id="planets-list"></div>
+  </div>
+
+  <!-- LEVEL SELECT -->
+  <div id="lvl-select">
+    <button id="ls-back" onclick="showHome()">⬅ Quay lại</button>
+    <div id="ls-title"></div>
+    <div id="ls-grid"></div>
+  </div>
+
+  <!-- GAME -->
+  <div id="game">
+    <div id="g-hdr">
+      <button id="g-back" onclick="backToLvl()">⬅</button>
+      <div id="g-info">
+        <div id="g-title"></div>
+        <div id="g-sub"></div>
+      </div>
+      <span id="g-hearts"></span>
+    </div>
+    <div id="q-prog"><div id="q-prog-fill" style="width:0%"></div></div>
+    <div id="hint-panel"></div>
+    <div id="q-card">
+      <div id="q-vis"></div>
+      <div id="q-txt"></div>
+      <div id="q-idx"></div>
+    </div>
+    <div id="ans-grid"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="rov">
+    <div id="rbox">
+      <div id="r-emo"></div>
+      <div id="r-tit"></div>
+      <div id="r-sub"></div>
+      <div id="r-coins"></div>
+      <button id="r-btn"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const R=()=>Math.random();
+const rnd=(a,b)=>Math.floor(R()*(b-a+1))+a;
+const pick=a=>a[rnd(0,a.length-1)];
+const shuf=a=>[...a].sort(()=>R()-.5);
+const rep=(e,n)=>e.repeat(Math.min(n,12));
+const ITEMS=['🍎','🍊','🍋','🍇','🍓','🐱','🐶','⭐','🌸','🚂','🎈','🦋'];
+
+// ── PLANET DATA ──────────────────────────────────────────────
+const PLANETS=[
+{id:'mercury',name:'Sao Thủy',ico:'🟠',desc:'Cộng trừ cơ bản · Lớp 1',color:'#F97316',req:0,
+ levels:[
+  // Lv1: cộng trong 10 bằng hình
+  {name:'Cộng hình',diff:1,coins:3,
+   gen:()=>{const a=rnd(1,5),b=rnd(1,4);const e=pick(ITEMS);const ans=a+b;
+    const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
+    return{vis:rep(e,a)+' + '+rep(e,b),txt:`${a} + ${b} = ?`,ans,opts,
+    hint:`💡 Đếm tất cả: ${rep(e,a+b)}\n${a} + ${b} = ${ans}`}}},
+  // Lv2: cộng số trong 10
+  {name:'Cộng trong 10',diff:1,coins:3,
+   gen:()=>{const a=rnd(2,6),b=rnd(2,10-a);const ans=a+b;
+    const opts=shuf([ans,ans+1,ans-1,ans+2].slice(0,4));
+    return{vis:`${a} ➕ ${b}`,txt:`${a} + ${b} = ?`,ans,opts,hint:`💡 Đếm thêm từ ${a}: ${Array.from({length:b},(_,i)=>a+i+1).join(', ')}\n= ${ans}`}}},
+  // Lv3: trừ trong 10
+  {name:'Trừ trong 10',diff:1,coins:3,
+   gen:()=>{const b=rnd(1,4),ans=rnd(1,5),a=ans+b;const e=pick(ITEMS);
+    const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
+    return{vis:rep(e,a)+' ➖ ❌❌❌'.slice(0,b*2),txt:`${a} - ${b} = ?`,ans,opts,
+    hint:`💡 Có ${a}, bỏ ${b}: ${a} - ${b} = ${ans}`}}},
+  // Lv4: cộng trừ hỗn hợp trong 10
+  {name:'Hỗn hợp ≤10',diff:2,coins:4,
+   gen:()=>{const t=rnd(0,1);const a=rnd(2,7);const b=rnd(1,t?Math.min(a-1,4):10-a);
+    const ans=t?a-b:a+b;
+    const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
+    return{vis:t?`${a} ➖ ${b}`:`${a} ➕ ${b}`,txt:t?`${a} - ${b} = ?`:`${a} + ${b} = ?`,ans,opts,
+    hint:`💡 ${t?`Trừ: ${a} - ${b}`:`Cộng: ${a} + ${b}`} = ${ans}`}}},
+  // Lv5: cộng trừ trong 20
+  {name:'Trong 20',diff:2,coins:5,
+   gen:()=>{const t=rnd(0,1);const a=rnd(5,15);const b=t?rnd(1,a-1):rnd(1,20-a);
+    const ans=t?a-b:a+b;
+    const opts=shuf([ans,ans+2,Math.max(0,ans-2),ans+3].slice(0,4));
+    return{vis:t?`${a} ➖ ${b}`:`${a} ➕ ${b}`,txt:t?`${a} - ${b} = ?`:`${a} + ${b} = ?`,ans,opts,
+    hint:`💡 ${a} ${t?'-':'+'} ${b} = ${ans}`}}},
+ ]},
+
+{id:'venus',name:'Sao Kim',ico:'🌕',desc:'Nhân chia nhập môn · Lớp 2',color:'#EAB308',req:8,
+ levels:[
+  // Lv1: nhân bảng 2
+  {name:'Nhân bảng 2',diff:2,coins:5,
+   gen:()=>{const b=rnd(1,10);const ans=2*b;
+    const opts=shuf([ans,ans+2,Math.max(0,ans-2),ans+4].slice(0,4));
+    return{vis:'2️⃣ × '+b,txt:`2 × ${b} = ?`,ans,opts,
+    hint:`💡 2 × ${b} = cộng ${b} lần 2: ${Array.from({length:b},(_,i)=>2*(i+1)).join(', ')}\n= ${ans}`}}},
+  // Lv2: nhân bảng 5
+  {name:'Nhân bảng 5',diff:2,coins:5,
+   gen:()=>{const b=rnd(1,10);const ans=5*b;
+    const opts=shuf([ans,ans+5,Math.max(0,ans-5),ans+10].slice(0,4));
+    return{vis:'5️⃣ × '+b,txt:`5 × ${b} = ?`,ans,opts,
+    hint:`💡 5 × ${b}: đếm 5, 10, 15… đến lần thứ ${b} = ${ans}`}}},
+  // Lv3: nhân bảng 10
+  {name:'Nhân bảng 10',diff:2,coins:5,
+   gen:()=>{const b=rnd(1,10);const ans=10*b;
+    const opts=shuf([ans,ans+10,ans-10,ans+20].slice(0,4));
+    return{vis:'🔟 × '+b,txt:`10 × ${b} = ?`,ans,opts,
+    hint:`💡 10 × ${b} = thêm số 0 vào sau ${b} → ${ans}`}}},
+  // Lv4: chia cho 2
+  {name:'Chia cho 2',diff:3,coins:6,
+   gen:()=>{const q=rnd(1,10);const a=2*q;
+    const opts=shuf([q,q+1,q-1,q+2].filter(x=>x>0).slice(0,4));
+    return{vis:`${a} ➗ 2`,txt:`${a} ÷ 2 = ?`,ans:q,opts,
+    hint:`💡 ${a} ÷ 2: chia đôi thành 2 phần bằng nhau = ${q}`}}},
+  // Lv5: nhân bảng 3 & 4
+  {name:'Nhân bảng 3 & 4',diff:3,coins:7,
+   gen:()=>{const t=pick([3,4]);const b=rnd(1,10);const ans=t*b;
+    const opts=shuf([ans,ans+t,Math.max(0,ans-t),ans+t*2].slice(0,4));
+    return{vis:`${t} × ${b}`,txt:`${t} × ${b} = ?`,ans,opts,
+    hint:`💡 ${t} × ${b}: đếm từng bước ${t} → ${Array.from({length:b},(_,i)=>t*(i+1)).join(', ')}\n= ${ans}`}}},
+ ]},
+
+{id:'earth',name:'Trái Đất',ico:'🌍',desc:'Số học nâng cao · Lớp 2',color:'#22C55E',req:20,
+ levels:[
+  // Lv1: số có 2 chữ số
+  {name:'Số hàng chục',diff:2,coins:5,
+   gen:()=>{const c=rnd(1,9),d=rnd(0,9);const n=c*10+d;
+    const opts=shuf([n,n+10,n-10,n+1].filter(x=>x>=0&&x<100).slice(0,4));
+    return{vis:`${c} chục + ${d} đơn vị`,txt:`= bao nhiêu?`,ans:n,opts,
+    hint:`💡 ${c} chục = ${c*10}, cộng ${d} đơn vị = ${n}`}}},
+  // Lv2: cộng có nhớ
+  {name:'Cộng có nhớ',diff:3,coins:6,
+   gen:()=>{const a=rnd(15,49),b=rnd(6,15);const ans=a+b;
+    const opts=shuf([ans,ans+1,ans-1,ans+10].slice(0,4));
+    return{vis:`${a} + ${b}`,txt:`${a} + ${b} = ?`,ans,opts,
+    hint:`💡 Tách: ${a} + ${b} = (${a}+${Math.floor(b/10)*10}) + ${b%10} = ${a+Math.floor(b/10)*10} + ${b%10} = ${ans}`}}},
+  // Lv3: trừ có mượn
+  {name:'Trừ có mượn',diff:3,coins:6,
+   gen:()=>{const a=rnd(20,50),b=rnd(6,15);const ans=a-b;
+    const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+10].slice(0,4));
+    return{vis:`${a} - ${b}`,txt:`${a} - ${b} = ?`,ans,opts,
+    hint:`💡 ${a} - ${b} = ${a} - ${Math.floor(b/10)*10} - ${b%10} = ${a-Math.floor(b/10)*10} - ${b%10} = ${ans}`}}},
+  // Lv4: bảng nhân 6 7 8
+  {name:'Nhân 6 7 8',diff:4,coins:8,
+   gen:()=>{const t=pick([6,7,8]);const b=rnd(2,9);const ans=t*b;
+    const opts=shuf([ans,ans+t,ans-t,ans+t*2].slice(0,4));
+    return{vis:`${t} × ${b}`,txt:`${t} × ${b} = ?`,ans,opts,
+    hint:`💡 ${t} × ${b}:\n${t} × ${b-1} = ${t*(b-1)}\nThêm ${t}: ${t*(b-1)} + ${t} = ${ans}`}}},
+  // Lv5: chia hết
+  {name:'Chia có dư',diff:4,coins:8,
+   gen:()=>{const d=rnd(2,5);const q=rnd(2,9);const r=rnd(0,d-1);const a=d*q+r;
+    const opts=shuf([`${q} dư ${r}`,`${q+1} dư ${r}`,`${q} dư ${r+1}`,`${q-1} dư ${r}`].slice(0,4));
+    const ans=`${q} dư ${r}`;
+    return{vis:`${a} ÷ ${d}`,txt:`${a} ÷ ${d} = ?`,ans,opts,
+    hint:`💡 ${d} × ${q} = ${d*q}\n${a} - ${d*q} = ${r} (phần dư)\n→ ${q} dư ${r}`}}},
+ ]},
+
+{id:'mars',name:'Sao Hỏa',ico:'🔴',desc:'Toán đố & Hình học · Lớp 2-3',color:'#EF4444',req:40,
+ levels:[
+  // Lv1: đo độ dài
+  {name:'Đo độ dài',diff:2,coins:5,
+   gen:()=>{const a=rnd(2,20);const u=pick(['cm','dm','m']);
+    const eq=u==='cm'?a+' cm':u==='dm'?a+' dm':a+' m';
+    const conv=u==='cm'?`${a} cm = __ mm`:`${a} dm = __ cm`;
+    const mul=u==='cm'?10:10;const ans=a*mul;
+    const opts=shuf([ans,ans+mul,ans-mul,ans+mul*2].filter(x=>x>0).slice(0,4));
+    return{vis:'📏 '+eq,txt:u==='m'?`${a} m = __ dm`:conv,ans,opts,
+    hint:`💡 1 ${u==='cm'?'cm = 10mm':u==='dm'?'dm = 10cm':'m = 10dm'}\n× ${a} = ${ans}`}}},
+  // Lv2: chu vi hình vuông
+  {name:'Chu vi □',diff:3,coins:6,
+   gen:()=>{const a=rnd(2,15);const ans=4*a;
+    const opts=shuf([ans,ans+4,ans-4,ans+8].filter(x=>x>0).slice(0,4));
+    return{vis:`⬛ Cạnh = ${a} cm`,txt:`Chu vi hình vuông = ?`,ans,opts,
+    hint:`💡 Hình vuông 4 cạnh bằng nhau\n${a} × 4 = ${ans} cm`}}},
+  // Lv3: chu vi hình chữ nhật
+  {name:'Chu vi CN',diff:3,coins:6,
+   gen:()=>{const a=rnd(3,12),b=rnd(2,10);const ans=2*(a+b);
+    const opts=shuf([ans,ans+2,ans-2,ans+4].filter(x=>x>0).slice(0,4));
+    return{vis:`📐 Dài ${a}cm · Rộng ${b}cm`,txt:`Chu vi = ?`,ans,opts,
+    hint:`💡 CV = (dài + rộng) × 2\n= (${a} + ${b}) × 2 = ${a+b} × 2 = ${ans} cm`}}},
+  // Lv4: toán đố cộng trừ
+  {name:'Toán đố',diff:3,coins:7,
+   gen:()=>{
+    const stories=[
+      ()=>{const a=rnd(10,30),b=rnd(5,15);const ans=a+b;return{vis:'🏫',txt:`Lớp có ${a} bạn, thêm ${b} bạn nữa vào.\nTất cả có mấy bạn?`,ans,hint:`💡 Thêm vào → cộng: ${a} + ${b} = ${ans}`}},
+      ()=>{const a=rnd(15,30),b=rnd(3,10);const ans=a-b;return{vis:'🍎',txt:`Có ${a} quả táo, ăn ${b} quả.\nCòn lại mấy quả?`,ans,hint:`💡 Bớt đi → trừ: ${a} - ${b} = ${ans}`}},
+      ()=>{const a=rnd(5,15),b=rnd(5,15);const ans=a+b;return{vis:'🚗',txt:`Bãi xe có ${a} ô tô và ${b} xe máy.\nTổng cộng mấy xe?`,ans,hint:`💡 Cộng tất cả: ${a} + ${b} = ${ans}`}},
+    ];
+    const s=pick(stories)();
+    const ans=s.ans;
+    const opts=shuf([ans,ans+1,ans-1,ans+5].filter(x=>x>0).slice(0,4));
+    return{vis:s.vis,txt:s.txt,ans,opts,hint:s.hint}}},
+  // Lv5: diện tích hình chữ nhật
+  {name:'Diện tích CN',diff:4,coins:9,
+   gen:()=>{const a=rnd(2,10),b=rnd(2,8);const ans=a*b;
+    const opts=shuf([ans,ans+a,ans+b,ans-b].filter(x=>x>0).slice(0,4));
+    return{vis:`📐 Dài ${a}cm · Rộng ${b}cm`,txt:`Diện tích = ?`,ans,opts,
+    hint:`💡 Diện tích = dài × rộng\n= ${a} × ${b} = ${ans} cm²`}}},
+ ]},
+
+{id:'jupiter',name:'Sao Mộc',ico:'🟡',desc:'Toán nâng cao · Lớp 3',color:'#A855F7',req:70,
+ levels:[
+  // Lv1: phân số đơn giản
+  {name:'Phân số',diff:3,coins:7,
+   gen:()=>{const d=pick([2,4,8]);const n=rnd(1,d-1);
+    const eq=`${n}/${d}`;const pct=Math.round(n/d*100);
+    const others=[`${n+1}/${d}`,`${Math.max(1,n-1)}/${d}`,`${n}/${d+2}`];
+    const opts=shuf([eq,...others].slice(0,4));
+    return{vis:`${'🟦'.repeat(n)}${'⬜'.repeat(d-n)}\n(${d} ô, tô ${n} ô)`,txt:`Phân số biểu diễn phần tô màu?`,ans:eq,opts,
+    hint:`💡 ${n} ô được tô / tổng ${d} ô = ${eq}`}}},
+  // Lv2: nhân bảng 9
+  {name:'Nhân bảng 9',diff:3,coins:7,
+   gen:()=>{const b=rnd(2,9);const ans=9*b;
+    const opts=shuf([ans,ans+9,ans-9,ans+18].filter(x=>x>0).slice(0,4));
+    return{vis:`9️⃣ × ${b}`,txt:`9 × ${b} = ?`,ans,opts,
+    hint:`💡 Mẹo: 9 × ${b} = 10 × ${b} - ${b} = ${10*b} - ${b} = ${ans}`}}},
+  // Lv3: số tròn chục trăm
+  {name:'Hàng trăm',diff:3,coins:7,
+   gen:()=>{const h=rnd(1,9),t=rnd(0,9),d=rnd(0,9);const n=h*100+t*10+d;
+    const opts=shuf([n,n+100,n-100,n+10].filter(x=>x>0).slice(0,4));
+    return{vis:`${h} trăm + ${t} chục + ${d}`,txt:`= bao nhiêu?`,ans:n,opts,
+    hint:`💡 ${h}×100 + ${t}×10 + ${d} = ${h*100} + ${t*10} + ${d} = ${n}`}}},
+  // Lv4: toán đố nhân chia
+  {name:'Đố nhân chia',diff:4,coins:9,
+   gen:()=>{
+    const stories=[
+      ()=>{const g=rnd(3,6),e=rnd(2,5);const ans=g*e;return{vis:'🏪',txt:`${g} hộp, mỗi hộp có ${e} quả.\nTất cả có mấy quả?`,ans,hint:`💡 Nhân: ${g} × ${e} = ${ans}`}},
+      ()=>{const t=rnd(12,30),g=rnd(2,5);const ans=Math.floor(t/g);return{vis:'🎁',txt:`Có ${t} kẹo chia đều cho ${g} bạn.\nMỗi bạn được mấy cái?`,ans,hint:`💡 Chia đều: ${t} ÷ ${g} = ${ans}`}},
+    ];
+    const s=pick(stories)();
+    const ans=s.ans;
+    const opts=shuf([ans,ans+1,ans-1,ans+2].filter(x=>x>0).slice(0,4));
+    return{vis:s.vis,txt:s.txt,ans,opts,hint:s.hint}}},
+  // Lv5: toán tư duy tổng hợp
+  {name:'Tổng hợp ⚡',diff:5,coins:12,
+   gen:()=>{
+    const types=[
+      ()=>{const a=rnd(10,50),b=rnd(10,50);const ans=a+b;return{vis:'🧮',txt:`${a} + ${b} = ?`,ans,hint:`= ${ans}`}},
+      ()=>{const a=rnd(20,80),b=rnd(5,30);const ans=a-b;return{vis:'🧮',txt:`${a} - ${b} = ?`,ans,hint:`= ${ans}`}},
+      ()=>{const t=rnd(2,9),b=rnd(2,9);const ans=t*b;return{vis:'🧮',txt:`${t} × ${b} = ?`,ans,hint:`= ${ans}`}},
+      ()=>{const d=rnd(2,5);const q=rnd(2,9);const ans=d*q;return{vis:'🧮',txt:`${ans} ÷ ${d} = ?`,ans:q,hint:`${ans}÷${d}=${q}`}},
+    ];
+    const s=pick(types)();const ans=s.ans;
+    const opts=shuf([ans,ans+pick([1,2,3]),Math.max(0,ans-pick([1,2,3])),ans+pick([5,10])].slice(0,4));
+    return{vis:s.vis,txt:s.txt,ans,opts,hint:'💡 Kết quả: '+s.hint}}},
+ ]},
+];
+
+// ── STATE ────────────────────────────────────────────────────
+const SAVE_KEY='vutru_save';
+let state={coins:0,xp:0,done:{}};
+try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');if(s.coins!==undefined)state=s;}catch(e){}
+let curPlanet=null,curLvIdx=0,curQs=[],qIdx=0,lives=3,score=0,answered=false;
+
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+function doneKey(pid,li){return pid+'_'+li}
+function isDone(pid,li){return!!state.done[doneKey(pid,li)]}
+function totalDone(){return Object.keys(state.done).length}
+function totalCoins(){return state.coins}
+
+function renderHdr(){
+  document.getElementById('coin-num').textContent=state.coins;
+  const maxXP=PLANETS.reduce((s,p)=>s+p.levels.reduce((s2,l)=>s2+l.coins,0),0);
+  const pct=Math.min(100,Math.round((state.xp/maxXP)*100));
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-lv').textContent='Lv'+(Math.floor(state.xp/30)+1);
+}
+
+function showHome(){
+  document.getElementById('home').style.display='block';
+  document.getElementById('lvl-select').style.display='none';
+  document.getElementById('game').style.display='none';
+  document.getElementById('rov').style.display='none';
+  const list=document.getElementById('planets-list');list.innerHTML='';
+  PLANETS.forEach((p,pi)=>{
+    const locked=totalCoins()<p.req;
+    const doneLvs=p.levels.filter((_,li)=>isDone(p.id,li)).length;
+    const row=document.createElement('div');
+    row.className='planet-row'+(locked?' locked':'');
+    const dots=p.levels.map((_,li)=>{
+      const d=isDone(p.id,li);
+      const active=!locked&&!d&&(li===0||isDone(p.id,li-1));
+      return `<div class="lv-dot ${d?'done':active?'active':'locked-dot'}">${li+1}</div>`;
+    }).join('');
+    row.innerHTML=`
+      <div class="planet-ico">${p.ico}</div>
+      <div class="planet-info">
+        <div class="planet-name">${p.name}</div>
+        <div class="planet-desc">${p.desc}</div>
+        <div class="planet-levels">${dots}</div>
+      </div>
+      <div class="planet-lock">${locked?'🔒 '+p.req+'🪙':doneLvs+'/'+p.levels.length+' ✓'}</div>
+    `;
+    if(!locked)row.onclick=()=>showLvlSelect(p);
+    list.appendChild(row);
+  });
+  renderHdr();
+}
+
+function showLvlSelect(planet){
+  curPlanet=planet;
+  document.getElementById('home').style.display='none';
+  document.getElementById('lvl-select').style.display='block';
+  document.getElementById('ls-title').innerHTML=`${planet.ico} <strong>${planet.name}</strong> — Chọn cấp độ`;
+  const grid=document.getElementById('ls-grid');grid.innerHTML='';
+  planet.levels.forEach((lv,li)=>{
+    const done=isDone(planet.id,li);
+    const unlocked=li===0||isDone(planet.id,li-1)||totalCoins()>=planet.req;
+    const active=unlocked&&!done;
+    const card=document.createElement('div');
+    card.className='lv-card'+(done?' lv-done':active?' lv-active-card':' lv-locked');
+    const dstars=['','⬜','🟩','🟨','🟥','⚡'];
+    card.innerHTML=`<div class="lv-num">${li+1}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${lv.name}</div><div class="lv-stars">${done?'✅':'🪙×'+lv.coins}</div><div class="lv-diff">${dstars[lv.diff]||''}</div>`;
+    if(unlocked)card.onclick=()=>startLevel(planet,li);
+    grid.appendChild(card);
+  });
+}
+
+function startLevel(planet,li){
+  curPlanet=planet;curLvIdx=li;lives=3;score=0;qIdx=0;answered=false;
+  const lv=planet.levels[li];
+  curQs=Array.from({length:8},()=>lv.gen());
+  document.getElementById('lvl-select').style.display='none';
+  document.getElementById('game').style.display='block';
+  document.getElementById('g-title').textContent=planet.ico+' '+lv.name;
+  document.getElementById('g-sub').textContent='Cấp '+( li+1)+' / '+planet.levels.length+' · '+planet.name;
+  showQ();renderHdr();
+}
+
+function showQ(){
+  answered=false;
+  document.getElementById('hint-panel').style.display='none';
+  const q=curQs[qIdx];
+  document.getElementById('q-vis').textContent=q.vis;
+  document.getElementById('q-txt').textContent=q.txt;
+  document.getElementById('q-idx').textContent='Câu '+(qIdx+1)+' / '+curQs.length;
+  document.getElementById('q-prog-fill').style.width=Math.round((qIdx/curQs.length)*100)+'%';
+  document.getElementById('g-hearts').textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+  const grid=document.getElementById('ans-grid');grid.innerHTML='';
+  const cols=q.opts.length===3?3:2;
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  q.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='a-btn';b.textContent=o;
+    b.onclick=()=>checkAns(b,o,q);
+    grid.appendChild(b);
+  });
+}
+
+function checkAns(btn,chosen,q){
+  if(answered)return;answered=true;
+  document.querySelectorAll('.a-btn').forEach(b=>b.disabled=true);
+  const ok=String(chosen)===String(q.ans);
+  if(ok){
+    btn.classList.add('correct');score++;
+    const lv=curPlanet.levels[curLvIdx];
+    state.coins+=lv.diff;state.xp+=lv.diff;
+    save();renderHdr();
+    showRound(true,q);
+    if(lv.diff>=3)fireworks();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.a-btn').forEach(b=>{if(String(b.textContent)===String(q.ans))b.classList.add('correct')});
+    lives--;
+    document.getElementById('g-hearts').textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+    if(q.hint){
+      const hp=document.getElementById('hint-panel');
+      hp.style.display='block';
+      hp.innerHTML=q.hint.split('\n').map(l=>'<span class="hs">'+l+'</span>').join('');
+    }
+    showRound(false,q);
+  }
+}
+
+function showRound(ok,q){
+  const isLast=qIdx>=curQs.length-1||lives<=0;
+  const rov=document.getElementById('rov');rov.style.display='flex';
+  const picks_ok=[['🎯','Chính xác!'],['🌟','Tuyệt vời!'],['🏆','Giỏi lắm!'],['🎉','Đúng rồi!']];
+  const picks_no=[['💪','Sai rồi!'],['🤔','Chưa đúng!']];
+  const m=ok?pick(picks_ok):pick(picks_no);
+  document.getElementById('r-emo').textContent=m[0];
+  document.getElementById('r-tit').textContent=m[1];
+  document.getElementById('r-sub').textContent=ok?'Câu '+(qIdx+1)+' đúng! Tiếp tục nào':'Đáp án: '+q.ans+(q.hint?'\n(Xem gợi ý phía trên)':'');
+  document.getElementById('r-coins').textContent=ok?'+'+(curPlanet.levels[curLvIdx].diff)+' 🪙':'❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+  const rb=document.getElementById('r-btn');
+  if(isLast){rb.textContent=qIdx>=curQs.length-1?'Hoàn thành 🎊':'Hết lượt 💔';rb.onclick=()=>{hideR();finishLevel();};}
+  else{rb.textContent='Tiếp ▶';rb.onclick=()=>{hideR();qIdx++;showQ();};}
+}
+
+function hideR(){document.getElementById('rov').style.display='none'}
+
+function finishLevel(){
+  const lv=curPlanet.levels[curLvIdx];
+  const pct=Math.round((score/curQs.length)*100);
+  if(pct>=70){
+    state.done[doneKey(curPlanet.id,curLvIdx)]=true;
+    state.coins+=lv.coins;state.xp+=lv.coins;
+    save();
+  }
+  const rov=document.getElementById('rov');rov.style.display='flex';
+  document.getElementById('r-emo').textContent=pct>=80?'🏆':pct>=60?'👏':'💪';
+  document.getElementById('r-tit').textContent=pct>=80?'Xuất sắc!':pct>=60?'Hoàn thành!':'Thử lại nhé!';
+  document.getElementById('r-sub').textContent=score+'/'+curQs.length+' câu đúng ('+pct+'%)';
+  document.getElementById('r-coins').textContent=pct>=70?'+'+lv.coins+' 🪙 nhận thưởng!':'Cần ≥70% để nhận thưởng';
+  const rb=document.getElementById('r-btn');
+  if(curLvIdx<curPlanet.levels.length-1&&pct>=70){
+    rb.textContent='Cấp tiếp theo ➡';rb.onclick=()=>{hideR();startLevel(curPlanet,curLvIdx+1);};}
+  else{rb.textContent='🪐 Chọn hành tinh';rb.onclick=()=>{hideR();showHome();};}
+  if(pct>=70)fireworks();
+  renderHdr();
+}
+
+function backToLvl(){
+  document.getElementById('game').style.display='none';
+  document.getElementById('hint-panel').style.display='none';
+  showLvlSelect(curPlanet);
+}
+
+function fireworks(){
+  const emojis=['✨','💫','🌟','🎇','🎆'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='fw';el.textContent=pick(emojis);
+    el.style.cssText=`left:${rnd(5,90)}%;top:${rnd(5,60)}%;animation-delay:${rnd(0,10)*0.1}s;z-index:30`;
+    document.getElementById('app').appendChild(el);
+    setTimeout(()=>el.remove(),1800);
+  }
+}
+
+// Starfield
+(()=>{const sf=document.getElementById('starfield');for(let i=0;i<35;i++){const d=document.createElement('div');d.className='star-dot';const s=rnd(1,3);d.style.cssText=`width:${s}px;height:${s}px;left:${rnd(0,100)}%;top:${rnd(0,100)}%;animation-delay:${rnd(0,30)*0.1}s;animation-duration:${rnd(20,40)*0.1}s`;sf.appendChild(d);}})();
+
+showHome();
+</script>
