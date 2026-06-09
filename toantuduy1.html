@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toan Tu Duy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#EEF6FF;min-height:100vh;padding-bottom:70px}
+.header{background:#4A90D9;padding:14px 16px;color:#fff}
+.header h1{font-size:20px;font-weight:800}
+.header-sub{font-size:12px;opacity:0.85;margin-top:2px}
+.xp-bar{height:6px;background:rgba(255,255,255,0.3);border-radius:3px;margin-top:8px;overflow:hidden}
+.xp-fill{height:100%;background:#FFD600;border-radius:3px;transition:width 0.5s}
+.main{padding:12px 14px;max-width:560px;margin:0 auto}
+.score-row{display:flex;gap:8px;margin-bottom:12px}
+.sc{flex:1;background:#fff;border-radius:12px;padding:10px 8px;text-align:center;border:2px solid #E3EEFF;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.sc.hot{border-color:#FF6D00;background:#FFF3E0}
+.sc-v{font-size:22px;font-weight:900;color:#1A237E}
+.sc-l{font-size:11px;color:#888;margin-top:2px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 13px;border-radius:20px;border:2px solid #BBDEFB;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#5C6BC0;white-space:nowrap}
+.tab.on{background:#3F51B5;color:#fff;border-color:#3F51B5}
+.guide{margin-bottom:12px;border-radius:12px;overflow:hidden;border:2px solid #FFE082}
+.guide-h{background:#FFF8E1;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.guide-hl{font-size:13px;font-weight:700;color:#E65100}
+.guide-arr{font-size:14px;color:#E65100;transition:transform 0.2s}
+.guide-b{background:#FFFDE7;padding:12px 14px;display:none}
+.guide-b.open{display:block}
+.gstep{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:#4E342E;line-height:1.5}
+.gnum{min-width:22px;height:22px;border-radius:50%;background:#FF8F00;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.lvtrack{margin-bottom:12px}
+.lvtrack-top{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#888;margin-bottom:5px}
+.lvdots{display:flex;gap:5px}
+.ld{flex:1;height:8px;border-radius:4px;background:#BBDEFB;transition:all 0.4s}
+.ld.done{background:#4CAF50}
+.ld.cur{background:#7C4DFF}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:12px;border:2px solid #E3EEFF;box-shadow:0 3px 14px rgba(0,0,0,0.07);animation:su 0.3s ease}
+@keyframes su{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card.ok{border-color:#81C784;background:#F1F8E9}
+.card.no{border-color:#EF9A9A;background:#FFF8F8}
+.badge{display:inline-block;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px}
+.qtxt{font-size:15px;font-weight:700;color:#1A237E;margin-bottom:12px;line-height:1.4}
+.stage{background:#F0F4FF;border-radius:12px;padding:14px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:60px}
+.em{font-size:34px;display:inline-block;animation:ep 0.3s ease both}
+@keyframes ep{from{transform:scale(0) rotate(-15deg)}to{transform:scale(1) rotate(0)}}
+.grp{display:flex;flex-wrap:wrap;gap:4px;padding:7px 9px;border-radius:9px}
+.grpa{background:rgba(124,77,255,0.1);border:2px dashed rgba(124,77,255,0.3)}
+.grpb{background:rgba(0,137,123,0.1);border:2px dashed rgba(0,137,123,0.3)}
+.plus{font-size:26px;font-weight:900;color:#7C4DFF;padding:0 3px}
+.tenf{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:12px}
+.tfc{aspect-ratio:1;border-radius:8px;border:2px solid #90CAF9;background:#E3F2FD;display:flex;align-items:center;justify-content:center;font-size:22px}
+.tfc.on{background:#fff;border-color:#5C6BC0;animation:ep 0.2s ease both}
+.bond-wrap{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.bcirc{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+.bc-tot{background:#7C4DFF;color:#fff}
+.bc-kn{background:#00897B;color:#fff}
+.bc-unk{background:#fff;border:3px dashed #90CAF9;color:#aaa}
+.bop{font-size:22px;font-weight:900;color:#9E9E9E}
+.cmpw{display:flex;align-items:center;justify-content:space-around;margin-bottom:12px}
+.cmpb{flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:2px solid #E3EEFF;background:#F8F9FF}
+.cmpems{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;min-height:40px;align-items:center}
+.cmpn{font-size:20px;font-weight:900;color:#1A237E;margin-top:4px}
+.cmpvs{font-size:26px;color:#aaa;font-weight:900;padding:0 6px}
+.seqr{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.sn{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;background:#E3F2FD;color:#1A237E;border:2px solid #90CAF9}
+.sn.bl{background:#fff;border:3px dashed #90CAF9;color:#bbb}
+.sarr{font-size:16px;color:#aaa}
+.choices{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ch{width:60px;height:60px;border-radius:14px;border:2.5px solid #BBDEFB;font-size:22px;font-weight:900;cursor:pointer;background:#fff;color:#1A237E;transition:all 0.15s;box-shadow:0 2px 7px rgba(0,0,0,0.07)}
+.ch:hover:not(:disabled){transform:scale(1.08) translateY(-2px);border-color:#7C4DFF}
+.ch.ok{background:#C8E6C9;border-color:#388E3C;color:#1B5E20;transform:scale(1.08)}
+.ch.no{background:#FFCDD2;border-color:#C62828;color:#B71C1C;transform:scale(0.94)}
+.ch.rev{background:#C8E6C9;border-color:#388E3C;color:#1B5E20}
+.ninp{width:64px;height:64px;border-radius:14px;border:2.5px solid #90CAF9;text-align:center;font-size:26px;font-weight:900;color:#1A237E;background:#fff;outline:none}
+.ninp:focus{border-color:#7C4DFF;box-shadow:0 0 0 4px rgba(124,77,255,0.15)}
+.ninp.ok{border-color:#388E3C;background:#C8E6C9;color:#1B5E20}
+.ninp.no{border-color:#C62828;background:#FFCDD2;color:#B71C1C}
+.fb{min-height:34px;display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;margin-top:8px;padding:7px 11px;border-radius:9px}
+.fb.ok{background:#C8E6C9;color:#1B5E20}
+.fb.no{background:#FFCDD2;color:#B71C1C}
+.nextbtn{width:100%;padding:13px;border-radius:20px;border:none;font-size:15px;font-weight:800;cursor:pointer;background:#3F51B5;color:#fff;margin-top:4px;letter-spacing:0.3px}
+.nextbtn:hover{background:#303F9F;transform:translateY(-1px)}
+.cel-overlay{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:999}
+.cel-box{text-align:center;animation:cpop 0.5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cpop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.cel-em{font-size:68px;display:block}
+.cel-txt{font-size:26px;font-weight:900;color:#1A237E;background:#fff;padding:7px 18px;border-radius:18px;box-shadow:0 4px 18px rgba(0,0,0,0.13)}
+.confp{position:fixed;width:10px;height:10px;border-radius:2px;animation:cfall 1.2s ease-in forwards}
+@keyframes cfall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(700deg);opacity:0}}
+.done-scr{text-align:center;padding:28px 16px;animation:su 0.4s ease}
+.done-em{font-size:76px;display:block;margin-bottom:10px}
+.done-t{font-size:24px;font-weight:900;color:#1A237E;margin-bottom:6px}
+.done-s{font-size:14px;color:#888;margin-bottom:20px}
+.stars{display:flex;justify-content:center;gap:8px;margin-bottom:20px;font-size:36px}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #E3EEFF;display:flex;padding:7px 12px 10px;max-width:560px;margin:0 auto;box-shadow:0 -3px 14px rgba(0,0,0,0.07)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:#9E9E9E;background:none;border:none;cursor:pointer;padding:3px;border-radius:8px}
+.nb .ni{font-size:18px}
+.nb.on{color:#3F51B5}
+</style>
+</head>
+<body>
+<div class="header">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between">
+    <div>
+      <h1>Toan Tu Duy</h1>
+      <div class="header-sub" id="lv-name">Cap 1 — Nhan biet so 1-3</div>
+    </div>
+    <div style="text-align:right">
+      <div id="hearts" style="font-size:18px">❤️❤️❤️</div>
+      <div style="font-size:12px;margin-top:2px" id="xp-lbl">0 XP</div>
+    </div>
+  </div>
+  <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+</div>
+
+<div class="main">
+  <div class="score-row">
+    <div class="sc"><div class="sc-v" id="sc-c">0</div><div class="sc-l">Dung</div></div>
+    <div class="sc"><div class="sc-v" id="sc-d">0</div><div class="sc-l">Da lam</div></div>
+    <div class="sc" id="sc-streak"><div class="sc-v" id="sc-s">0</div><div class="sc-l">Chuoi 🔥</div></div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="guide">
+    <div class="guide-h" onclick="toggleGuide()">
+      <span class="guide-hl" id="g-title">Huong dan ba/me</span>
+      <span class="guide-arr" id="g-arr">▼</span>
+    </div>
+    <div class="guide-b" id="g-body"></div>
+  </div>
+  <div class="lvtrack">
+    <div class="lvtrack-top"><span id="lt-lbl">Tien do</span><span id="lt-cnt">0/5</span></div>
+    <div class="lvdots" id="lvdots"></div>
+  </div>
+  <div id="ex"></div>
+</div>
+
+<div class="cel-overlay" id="cel" style="display:none">
+  <div class="cel-box"><span class="cel-em" id="cel-em">⭐</span><div class="cel-txt" id="cel-txt">Tuyet voi!</div></div>
+</div>
+
+<div class="bnav">
+  <button class="nb on" id="nb0" onclick="setMode('sub',this)"><span class="ni">👁</span>Nhin nhanh</button>
+  <button class="nb" id="nb1" onclick="setMode('tf',this)"><span class="ni">▦</span>Khung 10</button>
+  <button class="nb" id="nb2" onclick="setMode('bond',this)"><span class="ni">🔗</span>Phan tach</button>
+  <button class="nb" id="nb3" onclick="setMode('cmp',this)"><span class="ni">↔</span>So sanh</button>
+  <button class="nb" id="nb4" onclick="setMode('seq',this)"><span class="ni">📋</span>Day so</button>
+</div>
+
+<script>
+var EMOJIS=['🐱','🐶','🐰','🦄','🐢','🐭','🐸','🐦','🐬','🦊','🐼','🐨'];
+var MODES=['sub','tf','bond','cmp','seq'];
+var MNAMES={sub:'Nhin nhanh',tf:'Khung 10',bond:'Phan tach',cmp:'So sanh',seq:'Day so'};
+var MICONS={sub:'👁',tf:'▦',bond:'🔗',cmp:'↔',seq:'📋'};
+
+var LEVELS={
+  sub:[
+    {name:'Cap 1 — Nhan biet 1-3',max:3,tot:5},
+    {name:'Cap 2 — Nhan biet 1-5',max:5,tot:6},
+    {name:'Cap 3 — So 4-7',min:4,max:7,tot:7},
+    {name:'Cap 4 — So 1-9',max:9,tot:8},
+    {name:'Cap 5 — Phan xa nhanh',max:9,tot:10}
+  ],
+  tf:[
+    {name:'Cap 1 — Khung 1-5',max:5,tot:5},
+    {name:'Cap 2 — Khung 6-10',min:6,max:10,tot:6},
+    {name:'Cap 3 — Khung 1-10',max:10,tot:7},
+    {name:'Cap 4 — Tim so con thieu',max:10,tot:8}
+  ],
+  bond:[
+    {name:'Cap 1 — Tach so trong 5',max:5,tot:5},
+    {name:'Cap 2 — Tach so trong 7',max:7,tot:6},
+    {name:'Cap 3 — Tach so trong 10',max:10,tot:8},
+    {name:'Cap 4 — Cong tru xen ke',max:10,tot:8}
+  ],
+  cmp:[
+    {name:'Cap 1 — So sanh 1-5',max:5,tot:5},
+    {name:'Cap 2 — So sanh 1-9',max:9,tot:6},
+    {name:'Cap 3 — So gan nhau',close:true,max:9,tot:7},
+    {name:'Cap 4 — Chenh lech bao nhieu',diff:true,max:9,tot:8}
+  ],
+  seq:[
+    {name:'Cap 1 — Day 1-5',max:5,step:1,tot:5},
+    {name:'Cap 2 — Day 1-10',max:10,step:1,tot:6},
+    {name:'Cap 3 — Dem +2',max:10,step:2,tot:7},
+    {name:'Cap 4 — Dem lui',max:10,step:1,bk:true,tot:7},
+    {name:'Cap 5 — So khuyet',max:10,step:1,tot:8}
+  ]
+};
+
+var GUIDES={
+  sub:{title:'👁 Nhin nhanh (Subitizing)',steps:['Muc tieu: be NHIN tong the, KHONG dem tung con mot.','Bat dau so nho 1-3: cho be nhin 2 giay roi hoi: "Co may con?"','Neu be dem ngon tay: "Nhin ca nhom, khong dem nhe!" — khen khi be doan dung nhanh.','Tang dan: 1-3 → 1-5 → 4-7 → 1-9. Chi tang khi be tu tin o cap truoc.','Meo: ba/me che hinh sau 2 giay, hoi be — luyen phan xa.']},
+  tf:{title:'▦ Khung 10 (Ten Frame)',steps:['Khung 10 = 2 hang × 5 o. Be hoc cam nhan so qua vi tri, khong dem.','Hang tren day (5) + hang duoi them X = tong. Day be thuat ngu nay.','Hoi: "Hang tren may o? Hang duoi them may?" — luyen tinh nhanh.','Cap cao: "Can them may o de day khung?" — luyen bo sung thanh 10.','Khi thuan thuc: 7 khung = "5 va them 2" → nen tang cong nhanh.']},
+  bond:{title:'🔗 Phan tach so (Number Bonds)',steps:['Muc tieu: be hieu "7 = 3+4 = 5+2 = 6+1" — nhieu cach tach.','Dung vat that: 6 hat, phan 2 nhom. "Nhom nay may? Nhom kia may?"','Tu tach so trong 5, roi 7, roi 10. Khong nhay cap.','Hoi lai: "Ngoai cach nay, con biet cach nao khac?" — khuyen nhieu cach.','Khi be giai thich duoc tai sao → be hieu that su, khong thuoc long.']},
+  cmp:{title:'↔ So sanh so luong',steps:['Be can hieu nhieu/it/bang nhau qua HINH ANH, khong chi bang so.','Dung vat that: "Dia nay may qua? Dia kia may qua? Dia nao nhieu hon?"','Cap kho: so gan nhau (5 va 6) — be phai nhin that ky.','Cap cao: "Nhieu hon bao nhieu?" — nen tang phep tru sau nay.','Meo: ve 2 hang o, to mau de thay ro cai nao dai hon.']},
+  seq:{title:'📋 Day so va dem co quy luat',steps:['Be hoc rang so co thu tu — moi so = so truoc + 1 (hoac +2).','Bat dau: dem xuoi 1-5, roi 1-10. Be doc to, chi vao tung so.','Day dem nhay (+2): 2,4,6... — nen tang bang nhan sau nay.','Dem lui quan trong: 10,9,8... — nhieu be chi biet dem xuoi.','Tim so khuyet: che 1 so, hoi be so nao bi giau — luyen logic.']}
+};
+
+var S={mode:'sub',lv:{sub:0,tf:0,bond:0,cmp:0,seq:0},step:{sub:0,tf:0,bond:0,cmp:0,seq:0},correct:0,done:0,streak:0,xp:0,hearts:3,ans:false,curAns:null,em:null};
+
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function sh(a){return a.slice().sort(function(){return Math.random()-0.5})}
+function rem(){return EMOJIS[ri(0,EMOJIS.length-1)]}
+
+function init(){
+  renderTabs();
+  updateGuide();
+  updateTrack();
+  S.em=rem();
+  renderEx();
+}
+
+function renderTabs(){
+  var r=document.getElementById('tabs');
+  r.innerHTML=MODES.map(function(m){
+    return '<button class="tab'+(m===S.mode?' on':'')+'" onclick="setMode(\''+m+'\',this)">'+MICONS[m]+' '+MNAMES[m]+'</button>';
+  }).join('');
+}
+
+function setMode(m,btn){
+  S.mode=m; S.ans=false; S.em=rem();
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
+  document.querySelectorAll('.nb').forEach(function(t){t.classList.remove('on')});
+  if(btn){btn.classList.add('on')}
+  var navIdx={sub:0,tf:1,bond:2,cmp:3,seq:4}[m];
+  var nb=document.getElementById('nb'+navIdx);
+  if(nb) nb.classList.add('on');
+  renderTabs();
+  updateGuide();
+  updateTrack();
+  renderEx();
+}
+
+var gOpen=false;
+function updateGuide(){
+  var g=GUIDES[S.mode];
+  document.getElementById('g-title').textContent=g.title;
+  document.getElementById('g-body').innerHTML=g.steps.map(function(s,i){
+    return '<div class="gstep"><div class="gnum">'+(i+1)+'</div><div>'+s+'</div></div>';
+  }).join('');
+}
+function toggleGuide(){
+  gOpen=!gOpen;
+  document.getElementById('g-body').classList.toggle('open',gOpen);
+  document.getElementById('g-arr').style.transform=gOpen?'rotate(180deg)':'';
+}
+
+function updateTrack(){
+  var m=S.mode, lv=LEVELS[m][S.lv[m]], st=S.step[m];
+  document.getElementById('lv-name').textContent=lv.name;
+  document.getElementById('lt-lbl').textContent=lv.name;
+  document.getElementById('lt-cnt').textContent=st+'/'+lv.tot;
+  var dots=document.getElementById('lvdots');
+  dots.innerHTML=Array(lv.tot).fill(0).map(function(_,i){
+    return '<div class="ld'+(i<st?' done':i===st?' cur':'')+'"></div>';
+  }).join('');
+}
+
+function updateScore(){
+  document.getElementById('sc-c').textContent=S.correct;
+  document.getElementById('sc-d').textContent=S.done;
+  document.getElementById('sc-s').textContent=S.streak;
+  document.getElementById('sc-streak').classList.toggle('hot',S.streak>=3);
+  document.getElementById('xp-fill').style.width=Math.min(100,(S.xp%50)*2)+'%';
+  document.getElementById('xp-lbl').textContent=S.xp+' XP';
+  var h=Math.max(0,S.hearts);
+  document.getElementById('hearts').textContent='❤️'.repeat(h)+'🖤'.repeat(3-h);
+}
+
+function handleAns(ok,btn){
+  if(S.ans) return;
+  S.ans=true; S.done++;
+  if(ok){S.correct++;S.streak++;S.xp+=S.streak>=3?3:2;S.step[S.mode]++;}
+  else{S.streak=0;S.hearts=Math.max(0,S.hearts-1);}
+  if(btn){btn.classList.add(ok?'ok':'no');}
+  if(!ok){document.querySelectorAll('.ch').forEach(function(b){if(+b.dataset.v===S.curAns)b.classList.add('rev');});}
+  var fb=document.getElementById('fb');
+  if(fb){
+    var oks=['Tuyet voi! ⭐','Chinh xac! ✓','Gioi lam! 🎉','Dung roi! 👍'];
+    var nos=['Chua dung. Dap an: '+S.curAns,'Thu lai nhe! Dap an: '+S.curAns];
+    fb.className='fb '+(ok?'ok':'no');
+    fb.innerHTML=(ok?'⭐ ':' ❌ ')+(ok?oks[ri(0,oks.length-1)]:nos[ri(0,nos.length-1)]);
+  }
+  if(ok&&S.streak>0&&S.streak%3===0) showCel();
+  updateScore();
+  updateTrack();
+  var m=S.mode, lv=LEVELS[m][S.lv[m]];
+  if(S.step[m]>=lv.tot) setTimeout(showDone,800);
+}
+
+function showCel(){
+  var msgs=['Tuyet voi!','Qua gioi!','Be so 1!','Xuat sac!'];
+  var ems=['⭐','🎉','🏆','✨'];
+  var i=ri(0,3);
+  document.getElementById('cel-em').textContent=ems[i];
+  document.getElementById('cel-txt').textContent=msgs[i];
+  var c=document.getElementById('cel'); c.style.display='flex';
+  confetti();
+  setTimeout(function(){c.style.display='none';},1600);
+}
+
+function confetti(){
+  var cols=['#7C4DFF','#FF6D00','#00897B','#E91E63','#FFD600','#448AFF'];
+  for(var i=0;i<28;i++){
+    var p=document.createElement('div');
+    p.className='confp';
+    p.style.cssText='left:'+ri(5,95)+'%;top:-8px;background:'+cols[ri(0,5)]+';width:'+ri(8,13)+'px;height:'+ri(8,13)+'px;border-radius:'+(ri(0,1)?'50%':'2px')+';animation-delay:'+ri(0,500)+'ms;animation-duration:'+ri(900,1300)+'ms;';
+    document.body.appendChild(p);
+    setTimeout(function(){p.remove();},2000);
+  }
+}
+
+function showDone(){
+  var m=S.mode, isLast=S.lv[m]>=LEVELS[m].length-1;
+  var acc=S.done>0?Math.round(S.correct/S.done*100):0;
+  var stars=acc>=90?3:acc>=70?2:1;
+  document.getElementById('ex').innerHTML='<div class="done-scr"><span class="done-em">'+(isLast?'🏆':'⭐')+'</span><div class="done-t">'+(isLast?'Hoan thanh!':'Qua cap!')+'</div><div class="done-s">Do chinh xac: '+acc+'%</div><div class="stars">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div><button class="nextbtn" onclick="'+(isLast?'resetMode()':'nextLevel()')+'">'+( isLast?'🔄 Luyen lai':'▶ Cap tiep theo →')+'</button></div>';
+  confetti();
+  S.xp+=10; updateScore();
+}
+
+function nextLevel(){
+  var m=S.mode;
+  if(S.lv[m]<LEVELS[m].length-1){S.lv[m]++;S.step[m]=0;}
+  S.ans=false; S.em=rem();
+  updateTrack(); renderEx();
+}
+function resetMode(){
+  var m=S.mode; S.lv[m]=0; S.step[m]=0;
+  S.ans=false; S.em=rem();
+  updateTrack(); renderEx();
+}
+function next(){S.ans=false;S.em=rem();renderEx();}
+
+function getBadge(m){
+  var cols={sub:'background:#EDE7F6;color:#4527A0',tf:'background:#E3F2FD;color:#0D47A1',bond:'background:#E0F2F1;color:#004D40',cmp:'background:#FFF8E1;color:#E65100',seq:'background:#FCE4EC;color:#880E4F'};
+  var lv=LEVELS[m][S.lv[m]];
+  return '<span class="badge" style="'+cols[m]+'">'+MICONS[m]+' '+lv.name+'</span>';
+}
+
+function mkChoices(cs,fn){
+  return '<div class="choices">'+cs.map(function(c){return '<button class="ch" data-v="'+c+'" onclick="'+fn+'('+c+',this)">'+c+'</button>';}).join('')+'</div>';
+}
+
+function makeCs(ans,mn,mx,cnt){
+  mn=mn||1; mx=mx||10; cnt=cnt||4;
+  var cs={}; cs[ans]=1;
+  var tries=0;
+  while(Object.keys(cs).length<cnt&&tries<100){
+    tries++;
+    var c=ri(Math.max(mn,ans-3),Math.min(mx,ans+3));
+    if(c!==ans) cs[c]=1;
+  }
+  var arr=Object.keys(cs).map(Number);
+  if(arr.length<cnt){var c2=ans===mx?ans-1:ans+1;arr.push(c2);}
+  return sh(arr).slice(0,cnt);
+}
+
+function renderEx(){
+  var m=S.mode;
+  if(m==='sub') renderSub();
+  else if(m==='tf') renderTF();
+  else if(m==='bond') renderBond();
+  else if(m==='cmp') renderCmp();
+  else renderSeq();
+}
+
+// ---- SUBITIZE ----
+function renderSub(){
+  var lv=LEVELS.sub[S.lv.sub];
+  var n=ri(lv.min||1,lv.max);
+  S.curAns=n;
+  var em=S.em;
+  var ems=Array(n).fill(0).map(function(_,i){return '<span class="em" style="animation-delay:'+i*45+'ms">'+em+'</span>';}).join('');
+  var cs=makeCs(n,1,lv.max,4);
+  document.getElementById('ex').innerHTML='<div class="card" id="exc">'+getBadge('sub')+'<div class="qtxt">Nhin nhanh — co bao nhieu con vat?</div><div class="stage" id="stage">'+ems+'</div>'+mkChoices(cs,'chkSub')+'<div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+}
+function chkSub(v,b){S.curAns=S.curAns;handleAns(v===S.curAns,b);}
+
+// ---- TEN FRAME ----
+function renderTF(){
+  var lv=LEVELS.tf[S.lv.tf];
+  var n=ri(lv.min||1,lv.max);
+  S.curAns=n;
+  var em=S.em;
+  var cells=Array(10).fill(0).map(function(_,i){
+    return '<div class="tfc'+(i<n?' on':'')+'" style="'+(i<n?'animation-delay:'+i*35+'ms':'')+'">'+( i<n?'<span style="animation:ep 0.2s '+i*35+'ms both">'+em+'</span>':'')+'</div>';
+  }).join('');
+  var cs=makeCs(n,1,10,3);
+  document.getElementById('ex').innerHTML='<div class="card">'+getBadge('tf')+'<div class="qtxt">Khung 10 — co bao nhieu o duoc to?</div><div class="tenf">'+cells+'</div>'+mkChoices(cs,'chkTF')+'<div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+}
+function chkTF(v,b){handleAns(v===S.curAns,b);}
+
+// ---- BOND ----
+function renderBond(){
+  var lv=LEVELS.bond[S.lv.bond];
+  var tot=ri(3,lv.max);
+  var p1=ri(1,tot-1);
+  S.curAns=tot-p1; S.ans=false;
+  var em=S.em;
+  var dots=Array(tot).fill(0).map(function(_,i){
+    return '<span class="em" style="font-size:28px;animation-delay:'+i*35+'ms;opacity:'+(i<p1?1:0.3)+'">'+em+'</span>';
+  }).join('');
+  document.getElementById('ex').innerHTML='<div class="card">'+getBadge('bond')+'<div class="qtxt">Tong <span style="color:#7C4DFF;font-size:18px">'+tot+'</span> con — nhom sang co '+p1+' con, nhom mo co may con?</div><div class="stage">'+dots+'</div><div class="bond-wrap"><div class="bcirc bc-tot">'+tot+'</div><span class="bop">=</span><div class="bcirc bc-kn">'+p1+'</div><span class="bop">+</span><div class="bcirc bc-unk"><input class="ninp" type="number" id="bi" min="0" max="10" placeholder="?" oninput="chkBond()"></div></div><div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+}
+function chkBond(){
+  if(S.ans) return;
+  var v=parseInt(document.getElementById('bi').value);
+  if(isNaN(v)) return;
+  var ok=v===S.curAns;
+  if(ok||String(v).length>=2){
+    document.getElementById('bi').classList.add(ok?'ok':'no');
+    handleAns(ok,null);
+  }
+}
+
+// ---- COMPARE ----
+function renderCmp(){
+  var lv=LEVELS.cmp[S.lv.cmp];
+  var a,b;
+  if(lv.close){a=ri(2,lv.max-1);b=a+(Math.random()<0.5?1:-1);if(b<1)b=2;}
+  else{a=ri(1,lv.max);b=ri(1,lv.max);var t=0;while(b===a&&t<20){b=ri(1,lv.max);t++;}}
+  var em=S.em;
+  var emsA=Array(a).fill(0).map(function(){return '<span style="font-size:24px">'+em+'</span>';}).join('');
+  var emsB=Array(b).fill(0).map(function(){return '<span style="font-size:24px">'+em+'</span>';}).join('');
+  if(lv.diff){
+    S.curAns=Math.abs(a-b);
+    var cs=makeCs(S.curAns,1,6,3);
+    document.getElementById('ex').innerHTML='<div class="card">'+getBadge('cmp')+'<div class="qtxt">Hai nhom chenh lech bao nhieu con?</div><div class="cmpw"><div class="cmpb"><div class="cmpems">'+emsA+'</div><div class="cmpn">'+a+'</div></div><div class="cmpvs">?</div><div class="cmpb"><div class="cmpems">'+emsB+'</div><div class="cmpn">'+b+'</div></div></div>'+mkChoices(cs,'chkCmp')+'<div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+  } else {
+    var sym=a>b?'>':a<b?'<':'=';
+    window._sym=sym;
+    document.getElementById('ex').innerHTML='<div class="card">'+getBadge('cmp')+'<div class="qtxt">Chon ky hieu dung: '+a+' ? '+b+'</div><div class="cmpw"><div class="cmpb"><div class="cmpems">'+emsA+'</div><div class="cmpn">'+a+'</div></div><div class="cmpvs">?</div><div class="cmpb"><div class="cmpems">'+emsB+'</div><div class="cmpn">'+b+'</div></div></div><div class="choices">'+['<','>','='].map(function(s){return '<button class="ch" style="font-size:26px" data-sym="'+s+'" onclick="chkSym(\''+s+'\',this)">'+s+'</button>';}).join('')+'</div><div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+  }
+}
+function chkCmp(v,b){handleAns(v===S.curAns,b);}
+function chkSym(s,btn){
+  if(S.ans) return;
+  var ok=s===window._sym;
+  S.ans=true; S.done++;
+  if(ok){S.correct++;S.streak++;S.xp+=2;S.step[S.mode]++;btn.classList.add('ok');}
+  else{S.streak=0;S.hearts=Math.max(0,S.hearts-1);btn.classList.add('no');document.querySelectorAll('.ch').forEach(function(b){if(b.dataset.sym===window._sym)b.classList.add('rev');});}
+  var fb=document.getElementById('fb');
+  if(fb){fb.className='fb '+(ok?'ok':'no');fb.textContent=(ok?'⭐ Dung roi!':'❌ Dap an la: '+window._sym);}
+  if(ok&&S.streak%3===0) showCel();
+  updateScore(); updateTrack();
+  var m=S.mode, lv=LEVELS[m][S.lv[m]];
+  if(S.step[m]>=lv.tot) setTimeout(showDone,800);
+}
+
+// ---- SEQUENCE ----
+function renderSeq(){
+  var lv=LEVELS.seq[S.lv.seq];
+  var step=lv.step, bk=lv.bk;
+  var start=ri(1,lv.max-step*4);
+  var len=5;
+  var seq=Array(len).fill(0).map(function(_,i){return bk?start+step*(len-1-i):start+step*i;});
+  var bi=ri(1,len-2);
+  S.curAns=seq[bi];
+  var cells=seq.map(function(n,i){
+    return (i>0?'<div class="sarr">→</div>':'')+'<div class="sn'+(i===bi?' bl':'')+'">'+(i===bi?'?':n)+'</div>';
+  }).join('');
+  var cs=makeCs(S.curAns,Math.max(1,S.curAns-4),S.curAns+4,4);
+  document.getElementById('ex').innerHTML='<div class="card">'+getBadge('seq')+'<div class="qtxt">'+(bk?'Day so dem lui — so nao bi che?':'Day so — so nao bi giau?')+'</div><div class="seqr">'+cells+'</div>'+mkChoices(cs,'chkSeq')+'<div class="fb" id="fb"></div></div><button class="nextbtn" onclick="next()">Bai tiep theo →</button>';
+}
+function chkSeq(v,b){handleAns(v===S.curAns,b);}
+
+init();
+</script>
+</body>
+</html>
