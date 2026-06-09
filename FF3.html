@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Family & Friends 3 – English Learning Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--pr:#FF6B35;--sc:#4ECDC4;--ac:#FFE66D;--pu:#A855F7;--pk:#EC4899;--gn:#10B981;--bl:#3B82F6;--dk:#1E1B4B;--bg:#F0F4FF;--tx:#1E1B4B;--rd:20px;--sh:0 8px 32px rgba(30,27,75,.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s}
+#splash h1{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,8vw,5rem);color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.3);text-align:center;line-height:1.1}
+#splash p{color:rgba(255,255,255,.9);font-size:1.2rem;margin-top:.5rem;font-weight:600}
+.slogo{font-size:clamp(4rem,15vw,10rem);margin-bottom:1rem;animation:bounceIn .8s ease}
+.sbtn{margin-top:2rem;padding:1rem 3rem;background:var(--ac);border:none;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--dk);cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2);transition:transform .2s}
+.sbtn:hover{transform:scale(1.05)}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:100;background:linear-gradient(90deg,#667eea,#764ba2);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.htitle{font-family:'Fredoka One',cursive;color:#fff;font-size:clamp(1rem,4vw,1.6rem)}
+.hstats{display:flex;gap:.6rem;align-items:center}
+.sbadge{background:rgba(255,255,255,.2);border-radius:20px;padding:.25rem .7rem;color:#fff;font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.25rem}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:.25rem}
+
+/* NAV */
+#nav{background:#fff;border-bottom:3px solid var(--bg);overflow-x:auto;white-space:nowrap;padding:.4rem;scrollbar-width:none;display:flex;gap:.4rem}
+#nav::-webkit-scrollbar{display:none}
+.nbtn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nbtn.active{color:#fff;transform:scale(1.04);box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.nbtn:not(.active){background:#F3F4F6;color:var(--dk)}
+
+/* MAIN */
+#main{padding:1rem;max-width:1100px;margin:0 auto}
+
+/* HOME */
+.hhero{background:linear-gradient(135deg,#667eea,#764ba2 50%,#EC4899);border-radius:var(--rd);padding:1.5rem;text-align:center;color:#fff;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.hhero h2{font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,5vw,2.2rem);position:relative}
+.hhero p{font-size:.95rem;opacity:.9;margin-top:.4rem;position:relative}
+.ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.9rem}
+.ucard{background:#fff;border-radius:var(--rd);padding:1.1rem;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(0,0,0,.08);border:3px solid transparent;text-align:center;position:relative;overflow:hidden}
+.ucard:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.uicon{font-size:2.2rem;margin-bottom:.4rem}
+.uname{font-weight:800;font-size:.82rem;color:var(--dk);line-height:1.3}
+.upg{margin-top:.4rem;background:#F3F4F6;border-radius:10px;height:5px;overflow:hidden}
+.upgbar{height:100%;border-radius:10px;transition:width .5s}
+.ubadge{position:absolute;top:.4rem;right:.4rem;font-size:.7rem;padding:.15rem .45rem;border-radius:8px;font-weight:700}
+
+/* UNIT PAGE */
+.lhdr{background:#fff;border-radius:var(--rd);padding:1.2rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.9rem;box-shadow:0 4px 15px rgba(0,0,0,.06)}
+.lhdr-icon{font-size:2.5rem}
+.lhdr h2{font-family:'Fredoka One',cursive;font-size:1.4rem}
+.stabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.9rem}
+.stab{padding:.45rem 1rem;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s}
+.stab.active{color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.stab:not(.active){background:#E5E7EB;color:#6B7280}
+
+/* VOCAB */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem}
+.vcard{background:#fff;border-radius:14px;padding:.9rem;text-align:center;cursor:pointer;transition:all .3s;box-shadow:0 3px 10px rgba(0,0,0,.06);border:3px solid transparent;user-select:none}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.vcard.learned{border-color:var(--gn)}
+.vemoji{font-size:2rem;margin-bottom:.35rem}
+.vword{font-weight:800;font-size:.85rem;color:var(--dk)}
+.vspeakbtn{margin-top:.35rem;background:var(--pr);color:#fff;border:none;border-radius:7px;padding:.2rem .45rem;font-size:.72rem;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+
+/* QUIZ SHARED */
+.qcard{background:#fff;border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.qqtext{font-size:1rem;font-weight:700;margin-bottom:.9rem}
+.qemoji{font-size:3.5rem;text-align:center;margin-bottom:.9rem}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
+.qopt{padding:.65rem;border:2px solid #E5E7EB;border-radius:11px;background:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;transition:all .2s;text-align:center}
+.qopt:hover{border-color:var(--pr)}
+.qopt.correct{background:#D1FAE5;border-color:var(--gn)}
+.qopt.wrong{background:#FEE2E2;border-color:#EF4444}
+
+/* GRAMMAR */
+.gcard{background:#fff;border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.gpatt{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:11px;padding:.9rem;color:#fff;font-size:1rem;font-weight:800;margin-bottom:.65rem}
+.gex{background:#F0FDF4;border-left:4px solid var(--gn);padding:.65rem 1rem;border-radius:0 11px 11px 0;font-weight:600;margin-bottom:.45rem}
+.gkey{display:inline-block;background:var(--ac);color:var(--dk);padding:.15rem .65rem;border-radius:20px;font-size:.78rem;font-weight:700}
+.gprac{background:#EFF6FF;border-radius:11px;padding:.9rem;margin-top:.9rem}
+.gprac h4{font-weight:700;margin-bottom:.65rem;color:var(--bl)}
+.fblank{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem;font-size:.95rem;font-weight:600;margin-bottom:.65rem}
+.binput{border:2px solid var(--bl);border-radius:8px;padding:.2rem .45rem;font-family:'Nunito',sans-serif;font-size:.88rem;width:110px;text-align:center;outline:none}
+.binput:focus{border-color:var(--pu)}
+.binput.correct{border-color:var(--gn);background:#D1FAE5}
+.binput.wrong{border-color:#EF4444;background:#FEE2E2}
+.ckbtn{padding:.55rem 1.3rem;background:var(--bl);color:#fff;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;margin-top:.4rem}
+
+/* PHONICS */
+.phcard{background:#fff;border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.snddisp{font-family:'Fredoka One',cursive;font-size:3.5rem;color:var(--pr);text-align:center;padding:.9rem;background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border-radius:14px;margin-bottom:.9rem}
+.phwords{display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;margin-bottom:.9rem}
+.phword{background:var(--bg);padding:.55rem 1.1rem;border-radius:11px;font-weight:800;font-size:.95rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.35rem}
+.phword:hover{background:var(--pr);color:#fff;transform:scale(1.05)}
+.sndpart{color:var(--pr)}
+.phword:hover .sndpart{color:var(--ac)}
+.chantbox{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;padding:1.1rem;color:#fff;font-size:.95rem;line-height:1.9;font-weight:600;white-space:pre-line}
+.chantspeakbtn{margin-top:.65rem;padding:.55rem 1.3rem;background:rgba(255,255,255,.2);border:2px solid #fff;border-radius:11px;color:#fff;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;margin-right:.4rem}
+.chantspeakbtn:hover{background:rgba(255,255,255,.35)}
+
+/* READING */
+.rdcard{background:#fff;border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.rdtitle{font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:.9rem;color:var(--pr)}
+.rdtext{font-size:.95rem;line-height:2;color:#374151;margin-bottom:.9rem;border-left:4px solid var(--sc);padding-left:.9rem}
+.rdspeakbtn{padding:.55rem 1.3rem;background:var(--sc);color:#fff;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;margin-bottom:.9rem}
+.rqopt{padding:.55rem .7rem;border:2px solid #E5E7EB;border-radius:9px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .2s;background:#fff}
+.rqopt:hover{border-color:var(--pr)}
+.rqopt.correct{background:#D1FAE5;border-color:var(--gn)}
+.rqopt.wrong{background:#FEE2E2;border-color:#EF4444}
+
+/* SPEAKING */
+.spkcard{background:#fff;border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.spkprompt{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;padding:1.1rem;color:#fff;font-size:1.05rem;font-weight:700;margin-bottom:.9rem;position:relative}
+.spkprompt::after{content:'🎙️';position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:1.4rem}
+.spkbtn{padding:.8rem 1.7rem;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:.95rem;transition:all .2s;display:flex;align-items:center;gap:.45rem}
+.spkbtn.listen{background:var(--bl);color:#fff}
+.spkbtn.rec{background:var(--pr);color:#fff}
+.spkbtn.rec.recording{background:#EF4444;animation:pulse-btn 1s infinite}
+.spkres{margin-top:.9rem;padding:.9rem;border-radius:11px;font-weight:700}
+.spkres.good{background:#D1FAE5;color:#065F46}
+.spkres.ok{background:#FEF3C7;color:#92400E}
+.spkres.bad{background:#FEE2E2;color:#991B1B}
+.scorebar{margin-top:.45rem;background:#E5E7EB;border-radius:10px;height:9px;overflow:hidden}
+.scorefill{height:100%;border-radius:10px;transition:width .5s}
+.modans{background:#F0FDF4;border-radius:9px;padding:.65rem;margin-top:.45rem;font-size:.88rem;font-weight:600;color:#065F46}
+
+/* SONG */
+.sngcard{background:linear-gradient(135deg,#EC4899,#8B5CF6);border-radius:var(--rd);padding:1.3rem;margin-bottom:.9rem;color:#fff;box-shadow:0 8px 32px rgba(139,92,246,.3)}
+.sngtitle{font-family:'Fredoka One',cursive;font-size:1.6rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.4rem}
+.snglyrics{background:rgba(255,255,255,.15);border-radius:14px;padding:1.1rem;font-size:.95rem;line-height:2;white-space:pre-line;margin-bottom:.9rem}
+.sngbtn{padding:.65rem 1.3rem;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;font-size:.88rem}
+.sngbtn.play{background:#fff;color:var(--pk)}
+.sngbtn.rec{background:rgba(255,255,255,.2);border:2px solid #fff;color:#fff}
+.kline{padding:.25rem .45rem;border-radius:7px;transition:all .3s;cursor:pointer}
+.kline.active{background:rgba(255,255,0,.3);font-weight:800}
+
+/* GAMES */
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.9rem;margin-bottom:1.3rem}
+.gcard{background:#fff;border-radius:var(--rd);padding:1.1rem;text-align:center;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+.gcard:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.gicon{font-size:2.8rem;margin-bottom:.45rem}
+.gname{font-weight:800;font-size:.9rem;color:var(--dk)}
+.gdesc{font-size:.75rem;color:#6B7280;margin-top:.25rem}
+.garea{background:#fff;border-radius:var(--rd);padding:1.3rem;box-shadow:0 4px 15px rgba(0,0,0,.08);min-height:400px}
+.ghdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;gap:.4rem}
+.gtitle{font-family:'Fredoka One',cursive;font-size:1.3rem}
+.gscore{background:var(--ac);padding:.35rem .9rem;border-radius:11px;font-weight:800}
+.gtimer{background:var(--pr);color:#fff;padding:.35rem .9rem;border-radius:11px;font-weight:800}
+
+/* Match */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.mcol{display:flex;flex-direction:column;gap:.45rem}
+.mitem{padding:.65rem .9rem;border:2px solid #E5E7EB;border-radius:11px;cursor:pointer;font-weight:700;text-align:center;transition:all .2s;user-select:none}
+.mitem:hover{border-color:var(--bl)}
+.mitem.sel{border-color:var(--pr);background:#FFF7ED}
+.mitem.matched{border-color:var(--gn);background:#D1FAE5;cursor:default}
+.mitem.wflash{border-color:#EF4444;background:#FEE2E2;animation:shake .3s}
+
+/* Scramble */
+.scword{font-size:2.3rem;font-family:'Fredoka One',cursive;text-align:center;letter-spacing:.25rem;margin:.9rem 0;color:var(--pr)}
+.scinp{width:100%;padding:.65rem;font-size:1.1rem;border:3px solid #E5E7EB;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;text-align:center;outline:none}
+.scinp:focus{border-color:var(--pu)}
+.scsubmit{width:100%;margin-top:.65rem;padding:.75rem;background:var(--pu);color:#fff;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer}
+
+/* Memory */
+.memgrid{display:grid;gap:.45rem}
+.memcard{aspect-ratio:1;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;transition:all .4s;border:2px solid #E5E7EB;background:#fff;user-select:none}
+.memcard.flipped{background:var(--pr);color:#fff;border-color:var(--pr)}
+.memcard.matched{background:var(--gn);border-color:var(--gn);color:#fff}
+.memcard.hidden{background:#E5E7EB;color:#E5E7EB}
+
+/* Sentence */
+.stgt{background:#EFF6FF;border-radius:11px;padding:.9rem;margin-bottom:.9rem;font-weight:700;font-size:.95rem;color:var(--bl)}
+.wbank{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}
+.wchip{padding:.45rem .8rem;background:#fff;border:2px solid #E5E7EB;border-radius:9px;cursor:pointer;font-weight:700;font-size:.88rem;transition:all .2s}
+.wchip:hover:not(.used){border-color:var(--pr);background:#FFF7ED}
+.wchip.used{opacity:.3;cursor:not-allowed}
+.sarea{min-height:55px;border:2px dashed #E5E7EB;border-radius:11px;padding:.65rem;display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-bottom:.65rem}
+.sword{padding:.35rem .7rem;background:var(--pr);color:#fff;border-radius:7px;font-weight:700;cursor:pointer;font-size:.88rem}
+
+/* Typing */
+.tytext{font-size:1rem;line-height:2;margin-bottom:.9rem;padding:.9rem;background:#F9FAFB;border-radius:11px}
+.tychar{display:inline;transition:all .1s}
+.tychar.current{background:var(--ac);border-radius:3px}
+.tychar.correct{color:var(--gn)}
+.tychar.wrong{color:#EF4444;background:#FEE2E2;border-radius:3px}
+.tyinp{width:100%;padding:.65rem;font-size:.95rem;border:3px solid #E5E7EB;border-radius:11px;font-family:'Nunito',sans-serif;outline:none}
+.tystats{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:.65rem}
+.tystat{background:#F3F4F6;padding:.45rem .9rem;border-radius:9px;font-weight:700;font-size:.85rem}
+
+/* Word Search */
+.wsgrid{display:inline-grid;gap:2px;border:3px solid var(--pr);border-radius:11px;padding:5px;background:#fff}
+.wscell{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;border-radius:5px;cursor:pointer;transition:all .15s;user-select:none}
+.wscell:hover{background:#FFF7ED}
+.wscell.sel{background:var(--ac)}
+.wscell.fnd{background:var(--gn);color:#fff}
+.wswords{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.9rem}
+.wsword{padding:.25rem .7rem;border-radius:7px;font-weight:700;font-size:.82rem;background:#F3F4F6}
+.wsword.fnd{background:var(--gn);color:#fff;text-decoration:line-through}
+
+/* Crossword */
+.cwgrid{display:inline-grid;gap:2px;border-radius:7px;overflow:hidden}
+.cwcell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;position:relative}
+.cwcell input{width:100%;height:100%;text-align:center;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;border:none;outline:none;text-transform:uppercase}
+.cwcell input.correct{background:#D1FAE5}
+.cwcell input.wrong{background:#FEE2E2}
+.cwblack{background:#1E1B4B}
+.cwwhite{background:#fff;border:1px solid #D1D5DB}
+.cwnum{position:absolute;top:1px;left:2px;font-size:.5rem;font-weight:900;color:#6B7280;pointer-events:none}
+.cwclues{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.9rem}
+.cwclue{font-size:.82rem;margin-bottom:.25rem}
+.cwclue strong{color:var(--pr)}
+
+/* Story */
+.stopts{display:flex;flex-direction:column;gap:.45rem;margin-top:.9rem}
+.stopt{padding:.65rem .9rem;border:2px solid #E5E7EB;border-radius:11px;cursor:pointer;font-weight:600;transition:all .2s;background:#fff}
+.stopt:hover{border-color:var(--pr);background:#FFF7ED}
+.sttext{background:#F9FAFB;border-radius:11px;padding:.9rem;margin-top:.9rem;font-size:.92rem;line-height:1.8;min-height:90px}
+
+/* Progress */
+.pghero{background:linear-gradient(135deg,#FFE66D,#FF6B35);border-radius:var(--rd);padding:1.7rem;text-align:center;margin-bottom:1.3rem}
+.bigstar{font-size:3.5rem;animation:spin 3s linear infinite}
+.tscore{font-family:'Fredoka One',cursive;font-size:2.8rem;color:var(--dk)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.65rem;margin-bottom:1.3rem}
+.bitem{background:#fff;border-radius:14px;padding:.65rem;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.bitem.earned{background:linear-gradient(135deg,#FFE66D,#FF6B35)}
+.bicon{font-size:1.8rem;margin-bottom:.25rem}
+.bname{font-size:.7rem;font-weight:700}
+.uplist{background:#fff;border-radius:var(--rd);padding:1.1rem;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.upitem{display:flex;align-items:center;gap:.65rem;margin-bottom:.65rem}
+.upicon{font-size:1.4rem;width:36px;text-align:center}
+.upinfo{flex:1}
+.upname{font-weight:700;font-size:.85rem}
+.upbar{background:#F3F4F6;border-radius:5px;height:7px;margin-top:.2rem;overflow:hidden}
+.upfill{height:100%;border-radius:5px;transition:width .5s}
+.uppct{font-weight:700;font-size:.82rem;color:#6B7280}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.3rem;left:50%;transform:translateX(-50%);background:#1E1B4B;color:#fff;padding:.65rem 1.3rem;border-radius:14px;font-weight:700;z-index:9999;animation:slideIn .3s ease;max-width:90vw;text-align:center}
+.toast.success{background:var(--gn)}
+.toast.error{background:#EF4444}
+
+/* ANIMATIONS */
+@keyframes bounceIn{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.1)}80%{transform:scale(.9)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse-btn{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes slideIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes confetti{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.animIn{animation:slideIn 0.3s ease}
+.cpiece{position:fixed;width:9px;height:9px;border-radius:2px;z-index:9999;pointer-events:none;animation:confetti 2s ease-in forwards}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .ugrid{grid-template-columns:repeat(2,1fr)}
+  .vgrid{grid-template-columns:repeat(2,1fr)}
+  .qopts,.rqopts,.lisopts{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:1fr}
+  .cwclues{grid-template-columns:1fr}
+  .ggrid{grid-template-columns:repeat(2,1fr)}
+  .hamburger{display:block}
+  #nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;border:none;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:99}
+  #nav.open{display:flex}
+  .nbtn{border-radius:0;padding:.7rem 1rem}
+}
+@media(max-width:380px){
+  .vemoji{font-size:1.7rem}
+  .snddisp{font-size:3rem}
+  .wscell{width:24px;height:24px;font-size:.78rem}
+  .cwcell{width:28px;height:28px}
+  .cwcell input{font-size:.8rem}
+}
+</style>
+</head>
+<body>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="slogo">📚</div>
+  <h1>Family &amp; Friends 3</h1>
+  <p>English Learning Adventure</p>
+  <div id="sstarsdiv" style="display:flex;gap:.4rem;margin-top:1rem;"></div>
+  <button class="sbtn" onclick="startApp()">🚀 Let's Learn!</button>
+</div>
+<!-- HEADER -->
+<div id="hdr" style="display:none">
+  <button class="hamburger" onclick="toggleNav()">☰</button>
+  <div class="htitle">📚 F&amp;F 3</div>
+  <div class="hstats">
+    <div class="sbadge">⭐<span id="hStars">0</span></div>
+    <div class="sbadge">🏅<span id="hBadges">0</span></div>
+  </div>
+</div>
+<!-- NAV -->
+<nav id="nav" style="display:none">
+  <button class="nbtn" onclick="showPage('home')" id="nb-home">🏠 Home</button>
+  <button class="nbtn" onclick="showPage('games')" id="nb-games">🎮 Games</button>
+  <button class="nbtn" onclick="showPage('progress')" id="nb-progress">📊 Progress</button>
+</nav>
+<!-- MAIN -->
+<div id="main" style="display:none"></div>
+<!-- TOAST -->
+<div id="toast" class="toast" style="display:none"></div>
+
+<script>
+// =====================================================================
+// COURSE DATA – All 16 units
+// =====================================================================
+const U={
+starter:{t:"Starter: My Family",c:"#FF6B9D",ic:"👨‍👩‍👧‍👦",pg:4,
+  v:[{w:"grandma",e:"👵"},{w:"grandpa",e:"👴"},{w:"mum",e:"👩"},{w:"dad",e:"👨"},{w:"aunt",e:"👩‍🦳"},{w:"uncle",e:"👨‍🦳"},{w:"brother",e:"👦"},{w:"sister",e:"👧"},{w:"cousin",e:"🧒"},
+     {w:"January",e:"❄️"},{w:"February",e:"💝"},{w:"March",e:"🌸"},{w:"April",e:"🌷"},{w:"May",e:"🌺"},{w:"June",e:"☀️"},{w:"July",e:"🏖️"},{w:"August",e:"🌻"},{w:"September",e:"🍂"},{w:"October",e:"🎃"},{w:"November",e:"🍁"},{w:"December",e:"⛄"}],
+  gr:[{p:"I'm [name]. I'm [age].",ex:"I'm Leo. I'm eleven.",k:"to be"},{p:"I've got a [relation].",ex:"I've got a sister.",k:"have got"},{p:"The red car is bigger than the blue car.",ex:"The red car is bigger than the blue car.",k:"comparatives"}],
+  ph:{s:[],w:{},ch:""},
+  sg:{t:"Birthday Song",l:"When is your birthday?\nMy birthday is in March.\nHow old are you?\nI'm eight years old!\n\nJanuary, February,\nMarch and April too!\nMay, June, July,\nAugust – just for you!"},
+  rd:{t:"My Family",tx:"Hello. I'm Leo and I'm eleven. Amy is my sister. We've got a big family.\n\nHi. I'm Holly. I'm seven. Max is my brother. He's nine.\n\nHi. I'm Amy. I've got a grandma and a grandpa. I've got an aunt and an uncle, and I've got two cousins.\n\nHello. I'm Leo. I've got a sister. Her name is Holly. She's seven. We've got two cousins. Their names are Amy and Leo.",
+  q:[{q:"How old is Leo?",o:["Eleven","Seven","Eight","Nine"],a:"Eleven"},{q:"What is Holly's brother's name?",o:["Max","Leo","Jack","Tom"],a:"Max"}]},
+  sp:[{q:"Hello! What's your name?",a:"My name is [name]."},{q:"How old are you?",a:"I'm [age]."},{q:"When is your birthday?",a:"My birthday is in [month]."}]
+},
+u1:{t:"Unit 1: They're from Australia!",c:"#4CAF50",ic:"🌏",pg:8,
+  v:[{w:"Egypt",e:"🇪🇬"},{w:"the UK",e:"🇬🇧"},{w:"Russia",e:"🇷🇺"},{w:"Spain",e:"🇪🇸"},{w:"Thailand",e:"🇹🇭"},{w:"Australia",e:"🇦🇺"},{w:"the USA",e:"🇺🇸"},{w:"Brazil",e:"🇧🇷"},{w:"spring",e:"🌸"},{w:"summer",e:"☀️"},{w:"autumn",e:"🍂"},{w:"winter",e:"❄️"},{w:"garden",e:"🌳"},{w:"season",e:"🌍"}],
+  gr:[{p:"I'm from [country].",ex:"I'm from Egypt.",k:"present simple be"},{p:"Where are you from?",ex:"Where are you from? I'm from the UK.",k:"question"},{p:"He's from [country]. She's from [country].",ex:"He's from Brazil.",k:"he/she"},{p:"They're from [country].",ex:"They're from Russia.",k:"they"}],
+  ph:{s:["cr","dr","sp","sn","pl"],w:{cr:["crayon","crown","crab"],dr:["draw","drink","drum"],sp:["spoon","spider","spell"],sn:["snake","snail","snow"],pl:["play","plane","plant"]},ch:"We drink from a cup.\nWe eat with a spoon.\nWe draw with a crayon.\nWe play all afternoon."},
+  sg:{t:"Where are you from?",l:"Where are you from?\nI'm from the UK.\nHello, hello,\nHow are you today?\n\nThis is my friend.\nHe's from the USA.\nHello, hello,\nHow are you today?\n\nI'm from Brazil.\nIt's nice to meet you!\nHello, hello,\nNice to meet you, too."},
+  rd:{t:"The Lazy Bear",tx:"It's spring in the forest. It's warm and sunny, and all the animals are awake, but Bruno the bear is still asleep. Bruno is very lazy!\n\nNow it's summer. The animals are happy because they love summer. But Bruno is still asleep. What a lazy bear!\n\nIn the autumn, the leaves are red and orange. The animals are sleepy. They're ready for winter. But Bruno is still asleep.\n\nNow it's winter and the animals are all asleep. But Bruno is awake! 'What a nice long sleep,' he says.\n\nNow it's spring again. The animals play in the forest. Bruno is awake again. He's happy now. He's hungry, too. He wants his breakfast!",
+  q:[{q:"What season is it at the start?",o:["Spring","Summer","Autumn","Winter"],a:"Spring"},{q:"Is Bruno lazy?",o:["Yes, very!","No, not at all","A little","Very hardworking"],a:"Yes, very!"}]},
+  sp:[{q:"Where are you from?",a:"I'm from [country]."},{q:"Where is she from?",a:"She's from [country]."},{q:"What's your favourite season?",a:"My favourite season is [season]."}]
+},
+u2:{t:"Unit 2: My Weekend",c:"#FF9800",ic:"🏃",pg:14,
+  v:[{w:"read comics",e:"📚"},{w:"skateboard",e:"🛹"},{w:"do gymnastics",e:"🤸"},{w:"play chess",e:"♟️"},{w:"fish",e:"🎣"},{w:"play basketball",e:"🏀"},{w:"take photos",e:"📷"},{w:"play volleyball",e:"🏐"},{w:"paint",e:"🎨"},{w:"cook",e:"👨‍🍳"},{w:"play the piano",e:"🎹"},{w:"play the guitar",e:"🎸"}],
+  gr:[{p:"I like [verb]ing.",ex:"I like reading.",k:"like+ing"},{p:"I don't like [verb]ing.",ex:"I don't like fishing.",k:"don't like"},{p:"Does he like [verb]ing?",ex:"Does he like playing chess?",k:"question"},{p:"Yes, he does. / No, he doesn't.",ex:"Yes, he does.",k:"short answer"}],
+  ph:{s:["a_e","i_e","o_e","u_e"],w:{a_e:["face","space","cake"],i_e:["kite","bike","time"],o_e:["rope","stone","note"],u_e:["June","cube","tune"]},ch:"I've got a kite and a bike.\nI've got some cake on a plate.\nI've got a rope and a stone.\nI've got a cube – it's great!"},
+  sg:{t:"Do You Like?",l:"Do you like swimming?\nYes, I do! Yes, I do!\nDo you like running?\nI don't. How about you?\n\nI like skating,\nAnd dancing, dancing too.\nI like everything!\nHow about you?"},
+  rd:{t:"Hobbies Forum",tx:"Hi! I'm Amy and I'm nine. I love taking photos. My favourite things to photograph are animals and nature. I've got a new camera. Does anyone else like taking photos?\n\nHello everyone! I'm Jack and I'm ten. I like reading comics, but my brother doesn't. He likes skateboarding.\n\nI'm Emma and I'm eight. I like doing gymnastics and playing volleyball. My sister likes playing the piano. She doesn't like sports.",
+  q:[{q:"What does Amy like doing?",o:["Taking photos","Playing chess","Skateboarding","Cooking"],a:"Taking photos"},{q:"Does Jack like skateboarding?",o:["No, his brother does","Yes, he loves it","He doesn't know","It's boring"],a:"No, his brother does"}]},
+  sp:[{q:"Do you like reading?",a:"Yes, I do. / No, I don't."},{q:"Does she like cooking?",a:"Yes, she does. / No, she doesn't."},{q:"What do you like doing at the weekend?",a:"I like [verb]ing."}]
+},
+u3:{t:"Unit 3: My Things",c:"#9C27B0",ic:"🎒",pg:20,
+  v:[{w:"CD player",e:"💿"},{w:"camera",e:"📷"},{w:"computer",e:"💻"},{w:"MP3 player",e:"🎵"},{w:"puzzle",e:"🧩"},{w:"skateboard",e:"🛹"},{w:"skipping rope",e:"🪅"},{w:"doll",e:"🪆"},{w:"shell",e:"🐚"},{w:"badge",e:"🏅"},{w:"sticker",e:"⭐"},{w:"kite",e:"🪁"}],
+  gr:[{p:"That's their CD player.",ex:"That's their CD player.",k:"possessives"},{p:"Can I use your computer?",ex:"Can I use your computer?",k:"can permission"},{p:"Yes, you can. / No, you can't.",ex:"Yes, you can.",k:"short answer"}],
+  ph:{s:["ar"],w:{ar:["car","park","shark","star","scarf"]},ch:"A shark in the park.\nA star on a car.\nI've got a scarf.\nIt's not very far."},
+  sg:{t:"Can I?",l:"Can I use your computer?\nYes, you can! Yes, you can!\nCan I read your comics?\nNo, you can't! No, you can't!\n\nCan we play in your garden?\nYes, you can! Yes, you can!\nCan we watch your DVD?\nNo, you can't! No, you can't!"},
+  rd:{t:"A School Project",tx:"Hello! My name is Sam. I've got a collection. I collect shells. I've got one hundred shells! My favourite shell is big and pink. I found it on a beach in Australia.\n\nMy friend Tom has got a badge collection. He's got fifty badges. Our teacher has got a stamp collection. She's got two hundred stamps!\n\nDo you collect anything? Write and tell me!",
+  q:[{q:"What does Sam collect?",o:["Shells","Badges","Stamps","Coins"],a:"Shells"},{q:"How many badges has Tom got?",o:["Fifty","One hundred","Twenty","Two hundred"],a:"Fifty"}]},
+  sp:[{q:"Has he got a collection?",a:"Yes, he has. He's got a shell collection."},{q:"Can I use your camera?",a:"Yes, you can. / No, you can't."},{q:"How many stickers have you got?",a:"I've got [number] stickers."}]
+},
+u4:{t:"Unit 4: Fun at the Beach!",c:"#00BCD4",ic:"🏖️",pg:32,
+  v:[{w:"swim",e:"🏊"},{w:"snorkel",e:"🤿"},{w:"waterski",e:"🎿"},{w:"sail",e:"⛵"},{w:"surf",e:"🏄"},{w:"windsurf",e:"🪂"},{w:"dive",e:"🤽"},{w:"kayak",e:"🚣"},{w:"beautiful",e:"😍"},{w:"exciting",e:"😃"},{w:"dangerous",e:"⚠️"},{w:"crowded",e:"👥"}],
+  gr:[{p:"I'm [verb]ing.",ex:"I'm swimming.",k:"present continuous"},{p:"She isn't [verb]ing.",ex:"She isn't snorkelling.",k:"negative"},{p:"Are they [verb]ing?",ex:"Are they swimming?",k:"question"},{p:"Yes, they are. / No, they aren't.",ex:"Yes, they are.",k:"short answer"}],
+  ph:{s:["all"],w:{all:["ball","mall","wall","tall","small"]},ch:"A tall wall in the mall.\nA small ball by the wall.\nWe're having a ball!\nWe're having fun at the mall."},
+  sg:{t:"At the Beach!",l:"We're swimming in the sea!\nWe're having so much fun!\nWe're surfing on the waves!\nAnd playing in the sun!\n\nShe isn't waterskiing.\nHe isn't snorkelling.\nWe're all at the beach today!\nSwimming, surfing, sailing!"},
+  rd:{t:"Blue Bay Holiday Brochure",tx:"Welcome to Blue Bay! Blue Bay is a beautiful beach. The water is warm and clear. You can swim, snorkel, and sail.\n\nActivities at Blue Bay:\n• Swimming: The sea is calm and safe for children.\n• Snorkelling: See beautiful fish and coral.\n• Sailing: Try our beginner sailing lessons!\n• Beach volleyball: Play with new friends!\n\nBlue Bay is not crowded. It's quiet and relaxing. Come and visit us!",
+  q:[{q:"What is Blue Bay?",o:["A beautiful beach","A city","A theme park","A museum"],a:"A beautiful beach"},{q:"Is Blue Bay crowded?",o:["No, it's quiet","Yes, very crowded","Sometimes","A little"],a:"No, it's quiet"}]},
+  sp:[{q:"What are you doing?",a:"I'm swimming."},{q:"What is she doing?",a:"She's surfing."},{q:"Are they snorkelling?",a:"Yes, they are. / No, they aren't."}]
+},
+u5:{t:"Unit 5: A Naughty Monkey!",c:"#F44336",ic:"🐒",pg:38,
+  v:[{w:"crocodile",e:"🐊"},{w:"monkey",e:"🐒"},{w:"penguin",e:"🐧"},{w:"giraffe",e:"🦒"},{w:"elephant",e:"🐘"},{w:"lion",e:"🦁"},{w:"tiger",e:"🐯"},{w:"hippo",e:"🦛"},{w:"hungry",e:"😋"},{w:"thirsty",e:"😅"},{w:"tired",e:"😴"},{w:"happy",e:"😊"},{w:"sad",e:"😢"},{w:"angry",e:"😠"}],
+  gr:[{p:"Is the [animal] [verb]ing?",ex:"Is the crocodile eating the sandwich?",k:"present continuous question"},{p:"Yes, it is. / No, it isn't.",ex:"Yes, it is.",k:"short answer"},{p:"Are the monkeys [verb]ing?",ex:"Are the monkeys climbing?",k:"plural question"}],
+  ph:{s:["or","aw"],w:{or:["fork","horse","corn"],aw:["straw","paw","yawn"]},ch:"A horse on a fork.\nA paw on some corn.\nThe horse likes to yawn.\nHe yawns every morn."},
+  sg:{t:"What Are They Doing?",l:"What is the monkey doing?\nHe's climbing up the tree!\nWhat is the lion doing?\nHe's sleeping, can you see?\n\nWhat are the penguins doing?\nThey're swimming in the sea!\nWhat are the giraffes doing?\nThey're eating leaves for tea!"},
+  rd:{t:"The Lion and the Mouse",tx:"One day, a lion is sleeping in the forest. A little mouse runs and jumps on the lion's nose!\n\nThe lion wakes up. He's very angry! He catches the mouse. 'Please don't eat me!' says the mouse. 'One day I can help you!'\n\nThe lion laughs. 'You're very small. How can you help me?' But he lets the mouse go.\n\nThe next day, some hunters catch the lion. They tie him to a tree with a rope. The mouse hears the lion roaring. He comes and chews through the rope. The lion is free!\n\n'Thank you, little mouse!' says the lion. 'You helped me after all!'",
+  q:[{q:"Why is the lion angry?",o:["The mouse jumps on his nose","It's winter","He's hungry","It's hot"],a:"The mouse jumps on his nose"},{q:"How does the mouse help the lion?",o:["He chews the rope","He brings food","He calls for help","He roars"],a:"He chews the rope"}]},
+  sp:[{q:"Is the elephant drinking?",a:"Yes, it is. / No, it isn't."},{q:"Are the monkeys climbing?",a:"Yes, they are."},{q:"What is the tiger doing?",a:"It's sleeping / eating / running."}]
+},
+u6:{t:"Unit 6: Jim's Day",c:"#795548",ic:"⏰",pg:44,
+  v:[{w:"have breakfast",e:"🥐"},{w:"go to school",e:"🏫"},{w:"have lunch",e:"🍱"},{w:"do homework",e:"📝"},{w:"have dinner",e:"🍽️"},{w:"go to bed",e:"🛏️"},{w:"get up",e:"⏰"},{w:"brush teeth",e:"🦷"},{w:"eight o'clock",e:"🕗"},{w:"half past seven",e:"🕢"},{w:"quarter past",e:"🕧"},{w:"quarter to",e:"🕥"}],
+  gr:[{p:"I have breakfast at [time].",ex:"I have breakfast at eight o'clock.",k:"present simple"},{p:"Do they live in a big house?",ex:"Do they live in a big house?",k:"question"},{p:"Yes, they do. / No, they don't.",ex:"Yes, they do.",k:"short answer"},{p:"He doesn't [verb].",ex:"He doesn't go to school.",k:"negative"}],
+  ph:{s:["oy","oi"],w:{oy:["boy","toy","oyster"],oi:["coin","oil","soil"]},ch:"A boy with a toy.\nA coin in the soil.\nThe boy has a toy.\nHe enjoys the oil."},
+  sg:{t:"My Day",l:"I get up at seven o'clock.\nI go to school at eight.\nI have my lunch at twelve o'clock.\nI don't like being late!\n\nI do my homework after school.\nI have my dinner too.\nI go to bed at nine o'clock.\nHow about you?"},
+  rd:{t:"Cyber School",tx:"My name is Kim and I don't go to school. I have lessons at home on my computer. My teacher is Mr. Jones and he lives in Canada!\n\nEvery morning I get up at eight o'clock. I have breakfast and then I start my lessons at nine o'clock.\n\nI have English, Maths, Science, and Art. I have lunch at twelve thirty. I finish at three thirty.\n\nI like Cyber School because I can work in my pyjamas! But I miss my friends.",
+  q:[{q:"Where does Kim have lessons?",o:["At home","At school","At the library","At a café"],a:"At home"},{q:"What time does Kim start lessons?",o:["Nine o'clock","Eight o'clock","Ten o'clock","Seven o'clock"],a:"Nine o'clock"}]},
+  sp:[{q:"What time do you get up?",a:"I get up at [time]."},{q:"Does she go to school?",a:"Yes, she does. / No, she doesn't."},{q:"What do you do after school?",a:"I do homework."}]
+},
+u7:{t:"Unit 7: Places to Go!",c:"#607D8B",ic:"🏙️",pg:56,
+  v:[{w:"cinema",e:"🎬"},{w:"library",e:"📚"},{w:"sports centre",e:"🏋️"},{w:"shopping centre",e:"🛒"},{w:"museum",e:"🏛️"},{w:"theatre",e:"🎭"},{w:"concert hall",e:"🎼"},{w:"theme park",e:"🎡"},{w:"circus",e:"🎪"},{w:"always",e:"✅"},{w:"sometimes",e:"🔄"},{w:"never",e:"❌"}],
+  gr:[{p:"I always go to the library.",ex:"I always go to the library.",k:"always"},{p:"I sometimes go to the cinema.",ex:"I sometimes go to the cinema.",k:"sometimes"},{p:"I never go to the theatre.",ex:"I never go to the theatre.",k:"never"},{p:"My birthday is in [month].",ex:"My birthday is in May.",k:"prepositions of time"}],
+  ph:{s:["ow","ou"],w:{ow:["cow","clown","flower"],ou:["house","trousers","mouse"]},ch:"A cow in a house.\nA clown in trousers.\nA flower by the mouse.\nA tower of blouses."},
+  sg:{t:"I Like Going!",l:"I like going to the cinema.\nI always go on Saturday.\nI like going to the museum.\nI sometimes go on Sunday.\n\nI never go to the theatre.\nIt's boring and it's slow!\nI always go to the sports centre.\nThat's the place I like to go!"},
+  rd:{t:"Film Review – Super Sam",tx:"The Amazing Adventures of Super Sam\n\nThis is a fantastic new film for children! Super Sam is eight years old and he has special powers. He can fly and he's very strong.\n\nIn the film, Super Sam saves his town from a bad robot. The film is exciting and funny. There are lots of amazing special effects.\n\nI always go to the cinema on Saturdays. I sometimes see boring films, but I never see a film like this one! It's the best film of the year!\n\nRating: ⭐⭐⭐⭐⭐",
+  q:[{q:"How old is Super Sam?",o:["Eight","Ten","Nine","Seven"],a:"Eight"},{q:"What does Super Sam do?",o:["Saves his town","Builds robots","Goes to school","Plays football"],a:"Saves his town"}]},
+  sp:[{q:"Where do you sometimes go?",a:"I sometimes go to the [place]."},{q:"Do you always go to the cinema?",a:"Yes, I always do. / No, I never go."},{q:"How often do you go to the library?",a:"I always / sometimes / never go."}]
+},
+u8:{t:"Unit 8: I'd Like a Melon!",c:"#8BC34A",ic:"🍈",pg:62,
+  v:[{w:"melon",e:"🍈"},{w:"mango",e:"🥭"},{w:"pineapple",e:"🍍"},{w:"coconut",e:"🥥"},{w:"cereal",e:"🥣"},{w:"cheese",e:"🧀"},{w:"butter",e:"🧈"},{w:"rice",e:"🍚"},{w:"bread",e:"🍞"},{w:"milk",e:"🥛"},{w:"juice",e:"🧃"},{w:"sugar",e:"🍬"}],
+  gr:[{p:"I'd like a melon.",ex:"I'd like a melon.",k:"would like countable"},{p:"I'd like some cereal.",ex:"I'd like some cereal.",k:"would like uncountable"},{p:"Would you like some milk?",ex:"Would you like some milk?",k:"question"},{p:"Yes, please. / No, thanks.",ex:"Yes, please.",k:"short answer"}],
+  ph:{s:["ld","lt"],w:{ld:["child","shield","field"],lt:["belt","quilt","adult"]},ch:"A child in a field.\nA shield on a belt.\nThe child has a quilt.\nThe adult has felt."},
+  sg:{t:"At the Market!",l:"I'd like a mango please,\nAnd some rice and some cheese!\nWould you like some juice?\nYes, please! Yes, please!\n\nI'd like a pineapple,\nAnd some bread and some butter!\nWould you like some milk?\nNo thanks! No thanks!"},
+  rd:{t:"Fruit Salad Recipe",tx:"Fruit Salad Recipe – Serves 4 people\n\nIngredients:\n• 1 melon\n• 2 mangoes\n• 1 pineapple\n• Some grapes and strawberries\n• Some orange juice\n• Some sugar\n\nMethod:\n1. Cut the melon, mangoes, and pineapple into small pieces.\n2. Put all the fruit in a big bowl.\n3. Add some orange juice and some sugar.\n4. Mix everything together.\n5. Put it in the fridge for one hour.\n6. Enjoy your fruit salad!",
+  q:[{q:"How many mangoes do you need?",o:["Two","One","Three","Four"],a:"Two"},{q:"What do you add for sweetness?",o:["Sugar","Salt","Butter","Cheese"],a:"Sugar"}]},
+  sp:[{q:"What would you like?",a:"I'd like a [food], please."},{q:"Would you like some rice?",a:"Yes, please. / No, thanks."},{q:"Do you like mangoes?",a:"Yes, I do. / No, I don't."}]
+},
+u9:{t:"Unit 9: Fastest Animal in the World",c:"#FF5722",ic:"⚡",pg:68,
+  v:[{w:"mountain",e:"⛰️"},{w:"river",e:"🏞️"},{w:"desert",e:"🏜️"},{w:"ocean",e:"🌊"},{w:"island",e:"🏝️"},{w:"forest",e:"🌲"},{w:"lake",e:"🏔️"},{w:"waterfall",e:"💦"},{w:"big",e:"🐘"},{w:"small",e:"🐭"},{w:"tall",e:"🦒"},{w:"fast",e:"⚡"},{w:"slow",e:"🐢"},{w:"deep",e:"🌊"}],
+  gr:[{p:"Russia is bigger than the UK.",ex:"Russia is bigger than the UK.",k:"comparative adjectives"},{p:"The highest mountain in the world is Mount Everest.",ex:"Mount Everest is the highest mountain.",k:"superlative adjectives"},{p:"The cheetah is faster than the lion.",ex:"The cheetah is faster than the lion.",k:"comparative fast/slow"}],
+  ph:{s:["nd","nt","mp"],w:{nd:["sand","pond","band"],nt:["plant","tent","front"],mp:["lamp","camp","stamp"]},ch:"Sand in a pond.\nA plant in a tent.\nA lamp in a camp.\nA stamp that is bent."},
+  sg:{t:"Amazing World!",l:"The Amazon's the longest river.\nThe Nile is long too!\nThe Pacific is the biggest ocean.\nDeep and cold and blue!\n\nThe cheetah is the fastest animal.\nThe tortoise is so slow!\nAnd Mount Everest is the highest mountain,\nIn the world, you know!"},
+  rd:{t:"World Records",tx:"Amazing World Records!\n\nThe Cheetah: The cheetah is the fastest animal in the world. It can run at 120 kilometres per hour!\n\nThe Blue Whale: The blue whale is the biggest animal in the world. It is 30 metres long!\n\nMount Everest: Mount Everest is the highest mountain in the world. It is 8,849 metres high!\n\nThe Amazon: The Amazon is one of the longest rivers in South America.\n\nThe Sahara: The Sahara is the biggest desert in the world. It is very hot and dry.",
+  q:[{q:"How fast can a cheetah run?",o:["120 km/h","80 km/h","200 km/h","50 km/h"],a:"120 km/h"},{q:"Which is the biggest animal?",o:["Blue whale","Elephant","Giraffe","Hippo"],a:"Blue whale"}]},
+  sp:[{q:"Which is bigger, Russia or Spain?",a:"Russia is bigger than Spain."},{q:"What's the highest mountain?",a:"The highest mountain is Mount Everest."},{q:"Is the cheetah fast?",a:"Yes! It's the fastest animal in the world."}]
+},
+u10:{t:"Unit 10: In the Park!",c:"#009688",ic:"🌿",pg:80,
+  v:[{w:"mobile phone",e:"📱"},{w:"grass",e:"🌿"},{w:"litter",e:"🗑️"},{w:"flowers",e:"🌸"},{w:"dog",e:"🐕"},{w:"bicycle",e:"🚲"},{w:"ball",e:"⚽"},{w:"bench",e:"🪑"},{w:"fountain",e:"⛲"},{w:"path",e:"🛤️"}],
+  gr:[{p:"You must turn off your mobile phone.",ex:"You must turn off your mobile phone.",k:"must obligation"},{p:"You mustn't walk on the grass.",ex:"You mustn't walk on the grass.",k:"mustn't prohibition"},{p:"You must pick up your litter.",ex:"You must pick up your litter.",k:"must rule"}],
+  ph:{s:["long vowel a"],w:{"long vowel a":["rain","train","Monday","tray","case","race"]},ch:"Rain on a train.\nA tray on a case.\nMonday's a rainy day.\nLet's have a race!"},
+  sg:{t:"Park Rules!",l:"You must turn off your phone.\nYou mustn't be alone.\nYou must keep to the path.\nYou mustn't make them laugh!\n\nYou must pick up your litter.\nThe park will be better!\nYou mustn't walk on the grass.\nNow please, let people pass!"},
+  rd:{t:"The Gingerbread Man",tx:"One day, an old woman makes a gingerbread man. She puts him in the oven. But the gingerbread man jumps out!\n\n'Run, run, as fast as you can! You can't catch me, I'm the gingerbread man!'\n\nHe runs past the old man. He runs past the cow. He runs past the horse.\n\nThen he comes to a river. A fox is sitting by the river.\n'I can help you cross the river,' says the fox.\n\nThe gingerbread man jumps on the fox's back. But the fox opens his mouth and... SNAP! He eats the gingerbread man.",
+  q:[{q:"Who makes the gingerbread man?",o:["An old woman","An old man","A fox","A cow"],a:"An old woman"},{q:"Who eats the gingerbread man?",o:["The fox","The old man","The cow","The horse"],a:"The fox"}]},
+  sp:[{q:"What must you do in the park?",a:"You must keep to the path."},{q:"What mustn't you do?",a:"You mustn't walk on the grass."},{q:"Must you pick up your litter?",a:"Yes, you must."}]
+},
+u11:{t:"Unit 11: In the Museum",c:"#3F51B5",ic:"🏛️",pg:86,
+  v:[{w:"train",e:"🚆"},{w:"tram",e:"🚃"},{w:"horse and cart",e:"🐴"},{w:"boat",e:"⛵"},{w:"car",e:"🚗"},{w:"aeroplane",e:"✈️"},{w:"bicycle",e:"🚲"},{w:"bus",e:"🚌"},{w:"lots of",e:"📦"},{w:"some",e:"🔢"},{w:"any",e:"❓"},{w:"yesterday",e:"📅"}],
+  gr:[{p:"There was a park fifty years ago.",ex:"There was a park in our town fifty years ago.",k:"there was"},{p:"There wasn't a park here.",ex:"There wasn't a park here.",k:"there wasn't"},{p:"There were some trains a hundred years ago.",ex:"There were some trains a hundred years ago.",k:"there were"},{p:"There weren't any cars then.",ex:"There weren't any cars then.",k:"there weren't"}],
+  ph:{s:["long vowel e"],w:{"long vowel e":["ice cream","dream","queen","green","jelly","happy"]},ch:"Ice cream and a dream.\nA queen in green.\nJelly and cream.\nA happy, happy scene."},
+  sg:{t:"Long Ago",l:"There were horses in the street.\nThere weren't any cars.\nThere were lots of market stalls.\nPeople looked at stars.\n\nThere was a well in the square.\nThere wasn't any phone.\nThere were candles everywhere.\nPeople walked alone."},
+  rd:{t:"Petra – The Hidden City",tx:"Petra is an amazing ancient city in Jordan. It is two thousand years old. People called the Nabataeans built Petra. They were very clever and very rich.\n\nPetra was a very important city. There were lots of houses, temples, and markets. There was water in the city too.\n\nNow Petra is a famous tourist attraction. Thousands of people visit it every year. There aren't any people living there now, but there are lots of tourists.\n\nPetra is truly one of the wonders of the ancient world!",
+  q:[{q:"How old is Petra?",o:["Two thousand years","Five hundred years","One hundred years","Three thousand years"],a:"Two thousand years"},{q:"Who built Petra?",o:["The Nabataeans","The Egyptians","The Romans","The Greeks"],a:"The Nabataeans"}]},
+  sp:[{q:"Were there any cars fifty years ago?",a:"No, there weren't any cars."},{q:"Was there a museum in your town?",a:"Yes, there was. / No, there wasn't."},{q:"Were there any aeroplanes a hundred years ago?",a:"Yes, there were some."}]
+},
+u12:{t:"Unit 12: A Clever Baby!",c:"#E91E63",ic:"👶",pg:92,
+  v:[{w:"clever",e:"🧠"},{w:"kind",e:"💝"},{w:"funny",e:"😂"},{w:"brave",e:"💪"},{w:"creative",e:"🎨"},{w:"shy",e:"😊"},{w:"noisy",e:"📢"},{w:"quiet",e:"🤫"},{w:"tidy",e:"✨"},{w:"messy",e:"🌀"},{w:"tall",e:"📏"},{w:"short",e:"📐"}],
+  gr:[{p:"I wasn't tall when I was five.",ex:"I wasn't tall when I was five.",k:"past simple be negative"},{p:"You were happy on holiday.",ex:"You were happy on holiday.",k:"past simple be affirmative"},{p:"I had a maths lesson last week.",ex:"I had a maths lesson last week.",k:"past simple have"}],
+  ph:{s:["long vowel i"],w:{"long vowel i":["night","light","sky","dry","smile","shine"]},ch:"A light in the night.\nA dry, sunny sky.\nA smile and a shine.\nAt night it's fine!"},
+  sg:{t:"When I Was Small",l:"When I was small,\nI wasn't tall.\nI was happy every day!\nI was funny,\nKind and sunny,\nAnd I loved to laugh and play!\n\nWhen I was small,\nI had a ball.\nI was creative too!\nI was clever,\nBrave forever,\nAnd my favourite colour's blue!"},
+  rd:{t:"My Grandma – a poem",tx:"My Grandma\n\nMy grandma is very kind.\nShe is always in my mind.\nShe was clever, so they say,\nWhen she was young, far away.\n\nShe had a cat, she had a dog.\nShe wrote her thoughts in a log.\nShe wasn't tall, she wasn't small.\nShe was the best grandma of all!\n\nNow she's old and getting grey,\nBut she laughs and loves to play.\nMy grandma is the best,\nShe puts my heart at rest.",
+  q:[{q:"What is the grandma like?",o:["Kind and clever","Noisy and messy","Shy and quiet","Tall and brave"],a:"Kind and clever"},{q:"Did grandma have pets?",o:["Yes, a cat and a dog","No pets","Only a cat","Only a dog"],a:"Yes, a cat and a dog"}]},
+  sp:[{q:"Were you tall when you were five?",a:"No, I wasn't. I was short."},{q:"Were you happy at school yesterday?",a:"Yes, I was. / No, I wasn't."},{q:"What were you like as a baby?",a:"I was [adjective]."}]
+},
+u13:{t:"Unit 13: The Ancient Egyptians",c:"#FFC107",ic:"🔺",pg:104,
+  v:[{w:"pyramid",e:"🔺"},{w:"pharaoh",e:"👑"},{w:"mummy",e:"⚰️"},{w:"desert",e:"🏜️"},{w:"river",e:"🌊"},{w:"temple",e:"🏛️"},{w:"tomb",e:"⚱️"},{w:"papyrus",e:"📜"},{w:"lived",e:"🏠"},{w:"worked",e:"👷"},{w:"cooked",e:"👨‍🍳"},{w:"painted",e:"🎨"}],
+  gr:[{p:"They lived 5,000 years ago.",ex:"They lived 5,000 years ago.",k:"past simple regular affirmative"},{p:"They didn't cook pizza.",ex:"They didn't cook pizza.",k:"past simple regular negative"},{p:"Did they paint on walls?",ex:"Yes, they did.",k:"past simple question"}],
+  ph:{s:["long vowel o"],w:{"long vowel o":["snow","elbow","coat","soap","nose","stone"]},ch:"Snow on an elbow.\nA coat with a nose.\nSoap on a stone.\nNow everyone knows!"},
+  sg:{t:"Long, Long Ago",l:"They lived in Egypt,\nLong, long ago.\nThey worked by the river,\nLong, long ago.\n\nThey painted on walls,\nLong, long ago.\nThey didn't have phones,\nLong, long ago.\n\nThey cooked special food,\nLong, long ago.\nThey prayed to their gods,\nLong, long ago."},
+  rd:{t:"Papyrus",tx:"The ancient Egyptians were very clever people. They lived in Egypt five thousand years ago.\n\nThe Egyptians invented papyrus. Papyrus is a type of paper. They made it from a plant that grew by the River Nile. They painted pictures and symbols on the papyrus. We call these symbols hieroglyphics.\n\nThe ancient Egyptians also built amazing pyramids. The pyramids were very tall. They used the pyramids as tombs for their pharaohs.\n\nThe Egyptians worked very hard. They didn't use machines. They used their hands and simple tools. It's incredible!",
+  q:[{q:"What is papyrus?",o:["A type of paper","A pyramid","A pharaoh","A type of food"],a:"A type of paper"},{q:"What are hieroglyphics?",o:["Symbols on papyrus","Big pyramids","Ancient tools","A type of food"],a:"Symbols on papyrus"}]},
+  sp:[{q:"Did the Egyptians live 5,000 years ago?",a:"Yes, they did."},{q:"Did they cook pizza?",a:"No, they didn't."},{q:"What did the Egyptians build?",a:"They built amazing pyramids."}]
+},
+u14:{t:"Unit 14: Did You Have a Good Day?",c:"#673AB7",ic:"⛺",pg:110,
+  v:[{w:"tent",e:"⛺"},{w:"campfire",e:"🔥"},{w:"sleeping bag",e:"🛏️"},{w:"torch",e:"🔦"},{w:"backpack",e:"🎒"},{w:"map",e:"🗺️"},{w:"compass",e:"🧭"},{w:"hiking boots",e:"👟"},{w:"yesterday",e:"📅"},{w:"last week",e:"📆"},{w:"first",e:"1️⃣"},{w:"finally",e:"🏁"}],
+  gr:[{p:"Did you have a good day?",ex:"Did you have a good day?",k:"past simple question"},{p:"Yes, I did. / No, I didn't.",ex:"Yes, I did.",k:"short answer"},{p:"What did you watch last night?",ex:"What did you watch last night? A film.",k:"Wh- question"},{p:"Where did you go?",ex:"Where did you go? To the park.",k:"where question"}],
+  ph:{s:["long vowel u"],w:{"long vowel u":["moon","boot","blue","glue","tune","tube"]},ch:"A moon in a boot.\nBlue glue on a tune.\nA tube by the moon.\nIn the afternoon."},
+  sg:{t:"What Did You Do?",l:"Did you have a good day?\nYes, I did! Yes, I did!\nDid you go to the park?\nYes, I did! Yes, I did!\n\nWhat did you do there?\nI played with my friends!\nWhat did you eat there?\nSandwiches – the end!\n\nDid you enjoy yourself?\nYes, I did! Yes, I did!\nIt was the best day ever!\nYes, it was! Yes, it was!"},
+  rd:{t:"A Camping Interview",tx:"Reporter: Did you enjoy your camping trip?\nSam: Yes, I did! It was amazing!\n\nReporter: Where did you go?\nSam: We went to the mountains. First, we drove for three hours. Then we walked to our campsite.\n\nReporter: What did you do there?\nSam: We put up our tent. Then we cooked food on a campfire. Finally, we looked at the stars!\n\nReporter: Did you sleep well?\nSam: No, I didn't! It was very cold!",
+  q:[{q:"Did Sam enjoy his trip?",o:["Yes, it was amazing","No, it was boring","He doesn't say","It was OK"],a:"Yes, it was amazing"},{q:"What did they cook food on?",o:["A campfire","A stove","A barbecue","A fire pit"],a:"A campfire"}]},
+  sp:[{q:"Did you watch TV last night?",a:"Yes, I did. / No, I didn't."},{q:"What did you do yesterday?",a:"I [verb+ed]."},{q:"Where did you go last weekend?",a:"I went to [place]."}]
+},
+u15:{t:"Unit 15: Our Holiday!",c:"#00BCD4",ic:"✈️",pg:116,
+  v:[{w:"beach",e:"🏖️"},{w:"mountains",e:"⛰️"},{w:"city",e:"🏙️"},{w:"campsite",e:"⛺"},{w:"hotel",e:"🏨"},{w:"swimming pool",e:"🏊"},{w:"theme park",e:"🎡"},{w:"museum",e:"🏛️"},{w:"next week",e:"📅"},{w:"tomorrow",e:"🌅"},{w:"this summer",e:"☀️"},{w:"soon",e:"⏰"}],
+  gr:[{p:"He's going to play basketball tomorrow.",ex:"He's going to play basketball tomorrow.",k:"going to affirmative"},{p:"Are you going to swim in the sea?",ex:"Are you going to swim in the sea?",k:"going to question"},{p:"Yes, I am. / No, I'm not.",ex:"Yes, I am.",k:"short answer"},{p:"They aren't going to visit the museum.",ex:"They aren't going to visit the museum.",k:"going to negative"}],
+  ph:{s:["oo"],w:{oo:["book","wool","wood","hood","cook"]},ch:"A book of wool.\nWood in a hood.\nA cook in the wood.\nIs this story good?"},
+  sg:{t:"Holiday Plans!",l:"We're going to the beach tomorrow!\nWe're going to swim in the sea!\nWe're going to eat ice cream!\nHow happy we will be!\n\nAre you going to the mountains?\nAre you going to ski?\nAre you going to the city?\nCome and visit me!"},
+  rd:{t:"Holiday Email",tx:"From: Ben  To: Jake\n\nHi Jake!\n\nHow are you? I'm so excited! Tomorrow we're going to start our holiday!\n\nFirst, we're going to fly to Spain. Then we're going to drive to our hotel. The hotel has got a swimming pool! I'm going to swim every day!\n\nOn Tuesday, we're going to visit a castle. On Wednesday, we're going to go to the beach. On the last day, we're going to go to a theme park.\n\nAre you going to have a holiday this summer? Write soon!\nBen",
+  q:[{q:"Where is Ben going?",o:["Spain","France","Italy","Portugal"],a:"Spain"},{q:"What does the hotel have?",o:["A swimming pool","A theme park","A beach","A castle"],a:"A swimming pool"}]},
+  sp:[{q:"Are you going to have a holiday?",a:"Yes, I am. / No, I'm not."},{q:"What are you going to do?",a:"I'm going to [activity]."},{q:"Where are you going to go?",a:"I'm going to go to [place]."}]
+}
+};
+const UK=Object.keys(U);
+
+// ===================== STATE =====================
+let S={page:"home",unit:null,skill:"v",stars:0,badges:[],up:{},lw:{},game:null,recActive:false};
+function loadS(){try{const d=localStorage.getItem("ff3v2");if(d)Object.assign(S,JSON.parse(d));}catch(e){}}
+function saveS(){try{localStorage.setItem("ff3v2",JSON.stringify({stars:S.stars,badges:S.badges,up:S.up,lw:S.lw}));}catch(e){}}
+
+// ===================== SPEECH =====================
+function spk(txt,rt=0.9){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang="en-US";u.rate=rt;u.pitch=1.1;
+  const vs=speechSynthesis.getVoices();
+  const v=vs.find(x=>x.lang.startsWith("en")&&x.name.toLowerCase().includes("female"))||vs.find(x=>x.lang.startsWith("en"))||vs[0];
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+let recActive=false;
+function startRec(onResult,onEnd){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast("Speech not supported on this browser","error");return null;}
+  const r=new SR();
+  r.lang="en-US";r.continuous=false;r.interimResults=false;
+  r.onresult=e=>{let t="";for(let i=0;i<e.results.length;i++)if(e.results[i].isFinal)t+=e.results[i][0].transcript;if(t)onResult(t.toLowerCase().trim());};
+  r.onend=()=>{recActive=false;if(onEnd)onEnd();};
+  r.onerror=()=>{recActive=false;if(onEnd)onEnd();};
+  recActive=true;r.start();return r;
+}
+function scoreSpk(spoken,target){
+  const t=target.toLowerCase().replace(/[.,!?[\]]/g,"").split(" ");
+  const s=spoken.toLowerCase().replace(/[.,!?]/g,"").split(" ");
+  let m=0;t.forEach(w=>{if(s.includes(w))m++;});
+  return Math.round((m/t.length)*100);
+}
+
+// ===================== UI HELPERS =====================
+function toast(msg,type){
+  const el=document.getElementById("toast");
+  el.textContent=msg;el.className="toast"+(type?" "+type:"");el.style.display="block";
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.display="none",2500);
+}
+function confetti(){
+  const cols=["#FF6B35","#4ECDC4","#FFE66D","#A855F7","#EC4899","#10B981"];
+  for(let i=0;i<28;i++){
+    const el=document.createElement("div");el.className="cpiece";
+    el.style.cssText=`left:${Math.random()*100}vw;background:${cols[i%cols.length]};border-radius:${Math.random()>.5?"50%":"2px"};width:${7+Math.random()*9}px;height:${7+Math.random()*9}px;animation-delay:${Math.random()*.4}s;animation-duration:${1.5+Math.random()}s;`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),2500);
+  }
+}
+function addStars(n){S.stars+=n;document.getElementById("hStars").textContent=S.stars;saveS();if(n>0&&n>=5)confetti();}
+function awardBadge(id,name){
+  if(!S.badges.includes(id)){S.badges.push(id);document.getElementById("hBadges").textContent=S.badges.length;toast("🏅 Badge: "+name);saveS();}
+}
+function setUP(uk,sk,pct){if(!S.up[uk])S.up[uk]={};S.up[uk][sk]=pct;saveS();}
+function getUPct(uk){const p=S.up[uk];if(!p)return 0;const v=Object.values(p);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/6):0;}
+
+// ===================== APP START =====================
+function startApp(){
+  loadS();
+  const sp=document.getElementById("splash");
+  sp.style.opacity="0";
+  setTimeout(()=>{
+    sp.style.display="none";
+    document.getElementById("hdr").style.display="flex";
+    document.getElementById("nav").style.display="flex";
+    document.getElementById("main").style.display="block";
+    document.getElementById("hStars").textContent=S.stars;
+    document.getElementById("hBadges").textContent=S.badges.length;
+    showPage("home");
+  },500);
+}
+function toggleNav(){document.getElementById("nav").classList.toggle("open");}
+function showPage(pg,uk){
+  document.getElementById("nav").classList.remove("open");
+  document.querySelectorAll(".nbtn").forEach(b=>b.className="nbtn");
+  const nb=document.getElementById("nb-"+pg);
+  if(nb){nb.className="nbtn active";nb.style.background=uk?U[uk].c:"var(--pr)";}
+  S.page=pg;if(uk){S.unit=uk;S.skill="v";}
+  const m=document.getElementById("main");m.innerHTML="";m.className="animIn";
+  if(pg==="home")renderHome();
+  else if(pg==="unit")renderUnit();
+  else if(pg==="games")renderGames();
+  else if(pg==="progress")renderProgress();
+}
+function showSkill(sk){
+  S.skill=sk;
+  document.querySelectorAll(".stab").forEach(t=>{
+    t.className="stab"+(t.dataset.sk===sk?" active":"");
+    if(t.dataset.sk===sk)t.style.background=U[S.unit].c;else t.style.background="";
+  });
+  renderSkill();
+}
+
+// ===================== HOME =====================
+function renderHome(){
+  const m=document.getElementById("main");
+  const tw=Object.values(S.lw).reduce((a,b)=>a+b.length,0);
+  const aw=UK.reduce((a,k)=>a+U[k].v.length,0);
+  m.innerHTML=`
+  <div class="hhero">
+    <h2>🌟 Welcome Back!</h2>
+    <p>⭐ ${S.stars} Stars &nbsp;|&nbsp; 📚 ${tw}/${aw} Words &nbsp;|&nbsp; 🏅 ${S.badges.length} Badges</p>
+  </div>
+  <h3 style="font-family:'Fredoka One',cursive;font-size:1.2rem;margin-bottom:.7rem">📖 Choose Your Unit</h3>
+  <div class="ugrid">${UK.map(k=>{
+    const u=U[k],pct=getUPct(k);
+    return `<div class="ucard" onclick="showPage('unit','${k}')" style="border-color:${pct>0?u.c:'transparent'}">
+      <div class="uicon">${u.ic}</div>
+      <div class="uname">${u.t}</div>
+      <div style="font-size:.72rem;color:#9CA3AF;margin-top:.2rem">p.${u.pg}</div>
+      <div class="upg"><div class="upgbar" style="width:${pct}%;background:${u.c}"></div></div>
+      ${pct===100?'<div class="ubadge" style="background:var(--gn);color:#fff">✓</div>':pct>0?`<div class="ubadge" style="background:var(--ac);color:var(--dk)">${pct}%</div>`:""}
+    </div>`;}).join("")}</div>`;
+}
+
+// ===================== UNIT PAGE =====================
+function renderUnit(){
+  const u=U[S.unit];const m=document.getElementById("main");
+  const tabs=[{sk:"v",lb:"📝 Words"},{sk:"gr",lb:"📖 Grammar"},{sk:"ph",lb:"🔤 Phonics"},{sk:"sg",lb:"🎵 Song"},{sk:"rd",lb:"📚 Reading"},{sk:"sp",lb:"🎙️ Speaking"}];
+  m.innerHTML=`
+  <div class="lhdr">
+    <div class="lhdr-icon">${u.ic}</div>
+    <div>
+      <h2>${u.t}</h2>
+      <p style="color:#6B7280;font-size:.85rem">Page ${u.pg} · ${getUPct(S.unit)}% complete</p>
+    </div>
+    <button onclick="showPage('home')" style="margin-left:auto;padding:.4rem .9rem;border:none;border-radius:9px;background:#F3F4F6;cursor:pointer;font-weight:700;font-size:.85rem">🏠 Home</button>
+  </div>
+  <div class="stabs">${tabs.map(t=>`<button class="stab${S.skill===t.sk?" active":""}" data-sk="${t.sk}" onclick="showSkill('${t.sk}')" style="${S.skill===t.sk?"background:"+u.c+";color:#fff;":""}">${t.lb}</button>`).join("")}</div>
+  <div id="sc"></div>`;
+  renderSkill();
+}
+function renderSkill(){
+  const u=U[S.unit];const el=document.getElementById("sc");if(!el)return;
+  if(S.skill==="v")renderVocab(el,u);
+  else if(S.skill==="gr")renderGrammar(el,u);
+  else if(S.skill==="ph")renderPhonics(el,u);
+  else if(S.skill==="sg")renderSong(el,u);
+  else if(S.skill==="rd")renderReading(el,u);
+  else if(S.skill==="sp")renderSpeaking(el,u);
+}
+
+// ===================== VOCAB =====================
+function renderVocab(el,u){
+  const lw=S.lw[S.unit]||[];
+  el.innerHTML=`<div class="vgrid">${u.v.map((v,i)=>`
+  <div class="vcard${lw.includes(i)?" learned":""}" id="vc${i}" onclick="learnW(${i})">
+    <div class="vemoji">${v.e}</div>
+    <div class="vword">${v.w}</div>
+    <button class="vspeakbtn" onclick="event.stopPropagation();spk('${v.w.replace(/'/g,"\\'")}')">🔊</button>
+  </div>`).join("")}</div>
+  <div style="margin-top:1rem;text-align:center">
+    <button onclick="startVQ()" style="padding:.7rem 1.8rem;background:var(--pr);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer">🎯 Quiz!</button>
+    <p style="margin-top:.4rem;color:#6B7280;font-size:.82rem">${lw.length}/${u.v.length} words learned</p>
+  </div>`;
+}
+function learnW(i){
+  if(!S.lw[S.unit])S.lw[S.unit]=[];
+  const u=U[S.unit];spk(u.v[i].w);
+  if(!S.lw[S.unit].includes(i)){
+    S.lw[S.unit].push(i);addStars(1);
+    const c=document.getElementById("vc"+i);if(c)c.classList.add("learned");
+    saveS();
+    if(S.lw[S.unit].length===u.v.length){awardBadge(S.unit+"_v","Vocab Master: "+u.t);setUP(S.unit,"v",100);addStars(10);toast("🌟 All words! +10 bonus stars!");}
+  }
+}
+function startVQ(){
+  const u=U[S.unit];const el=document.getElementById("sc");
+  const words=[...u.v].sort(()=>Math.random()-.5).slice(0,Math.min(8,u.v.length));
+  let qi=0,sc=0;
+  function showQ(){
+    if(qi>=words.length){
+      const pct=Math.round(sc/words.length*100);setUP(S.unit,"v",pct);addStars(sc*2);
+      el.innerHTML=`<div class="qcard" style="text-align:center"><div style="font-size:3.5rem">🏆</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Quiz Done!</h3><p style="font-size:1.1rem;font-weight:700">${sc}/${words.length} correct (${pct}%)</p><p style="color:#6B7280">+${sc*2} stars!</p><button onclick="renderVocab(document.getElementById('sc'),U[S.unit])" style="margin-top:.9rem;padding:.65rem 1.8rem;background:var(--pr);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Again</button></div>`;
+      if(pct>=80)confetti();return;
+    }
+    const q=words[qi];const wrong=u.v.filter(v=>v.w!==q.w).sort(()=>Math.random()-.5).slice(0,3);
+    const opts=[q,...wrong].sort(()=>Math.random()-.5);
+    spk(q.w);
+    el.innerHTML=`<div class="qcard"><p class="qqtext">What is this? (${qi+1}/${words.length})</p><div class="qemoji">${q.e}</div><p style="text-align:center;font-size:.82rem;color:#6B7280;margin-bottom:.7rem">🔊 <button onclick="spk('${q.w.replace(/'/g,"\\'")}')" style="border:none;background:none;cursor:pointer;font-size:1.1rem">🔊</button></p><div class="qopts">${opts.map(o=>`<button class="qopt" onclick="ansQ(this,'${o.w.replace(/'/g,"\\'")}','${q.w.replace(/'/g,"\\'")}')">${o.w}</button>`).join("")}</div></div>`;
+  }
+  window.ansQ=(btn,chosen,correct)=>{
+    document.querySelectorAll(".qopt").forEach(b=>b.onclick=null);
+    if(chosen===correct){btn.classList.add("correct");sc++;toast("✅ Correct! +2 ⭐");}
+    else{btn.classList.add("wrong");document.querySelectorAll(".qopt").forEach(b=>{if(b.textContent.trim()===correct)b.classList.add("correct");});toast("❌ Answer: "+correct,"error");}
+    setTimeout(()=>{qi++;showQ();},1200);
+  };
+  showQ();
+}
+
+// ===================== GRAMMAR =====================
+function renderGrammar(el,u){
+  el.innerHTML=u.gr.map((g,i)=>`
+  <div class="gcard">
+    <div class="gpatt">${g.p}</div>
+    <div class="gex">📝 ${g.ex}</div>
+    <span class="gkey">${g.k}</span>
+    <button onclick="spk('${g.ex.replace(/'/g,"\\'")}');this.textContent='🔊…';setTimeout(()=>this.textContent='🔊',2000)" style="margin-left:.4rem;padding:.18rem .6rem;background:var(--bl);color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:.78rem;font-weight:700">🔊</button>
+  </div>`).join("")+
+  `<div class="gcard"><div class="gprac"><h4>✏️ Practice!</h4>${u.gr.slice(0,3).map((g,i)=>{
+    const words=g.ex.split(" ");const bi=Math.floor(words.length/2);const ans=words[bi].replace(/[.,?!]/g,"");
+    return `<div class="fblank"><span>${words.slice(0,bi).join(" ")} </span><input class="binput" id="bi${i}" placeholder="?" onkeypress="if(event.key==='Enter')ckB(${i},'${ans.replace(/'/g,"\\'")}')"><span> ${words.slice(bi+1).join(" ")}</span></div>`;
+  }).join("")}<button class="ckbtn" onclick="ckAllB()">✅ Check All</button><div id="gr-res"></div></div></div>`;
+  window._grAns=u.gr.slice(0,3).map((g,i)=>{const words=g.ex.split(" ");const bi=Math.floor(words.length/2);return words[bi].replace(/[.,?!]/g,"");});
+}
+window.ckB=(i,ans)=>{const inp=document.getElementById("bi"+i);if(!inp)return;const v=inp.value.trim().toLowerCase();const a=ans.toLowerCase();if(v===a||v.replace(/'/g,"")===a.replace(/'/g,"")){inp.className="binput correct";toast("✅ Correct!");}else{inp.className="binput wrong";toast("Try again!","error");}};
+window.ckAllB=()=>{if(!window._grAns)return;let sc=0;window._grAns.forEach((a,i)=>{const inp=document.getElementById("bi"+i);if(!inp)return;const v=inp.value.trim().toLowerCase();if(v===a.toLowerCase()||v.replace(/'/g,"")===a.replace(/'/g,"")){inp.className="binput correct";sc++;}else inp.className="binput wrong";});addStars(sc);setUP(S.unit,"gr",Math.round(sc/window._grAns.length*100));const res=document.getElementById("gr-res");if(res)res.innerHTML=`<p style="font-weight:700;margin-top:.5rem">${sc}/${window._grAns.length} correct! +${sc} ⭐</p>`;};
+
+// ===================== PHONICS =====================
+function renderPhonics(el,u){
+  const ph=u.ph;
+  if(!ph||!ph.s||ph.s.length===0){el.innerHTML=`<div class="phcard"><p style="color:#6B7280">Phonics for this unit coming soon!</p></div>`;return;}
+  el.innerHTML=ph.s.map(s=>{
+    const ws=(ph.w[s]||[]).map(w=>`<div class="phword" onclick="spk('${w.replace(/'/g,"\\'")}')"><span class="sndpart">${s.replace(/_/g,"").replace("long vowel ","")}</span>${w} 🔊</div>`).join("");
+    return `<div class="phcard"><div class="snddisp">${s}</div><div class="phwords">${ws}</div></div>`;
+  }).join("")+
+  `<div class="phcard"><h4 style="font-weight:800;margin-bottom:.7rem">🎵 Chant!</h4><div class="chantbox">${ph.ch||""}</div><button class="chantspeakbtn" onclick="spk('${(ph.ch||"").replace(/\n/g," ").replace(/'/g,"\\'")}',0.8)">🔊 Listen</button><button class="chantspeakbtn" onclick="phQ()">🎯 Quiz</button></div>`;
+  setUP(S.unit,"ph",50);
+}
+window.phQ=()=>{
+  const u=U[S.unit];const ph=u.ph;const allW=Object.values(ph.w||{}).flat();
+  if(!allW.length){toast("No words!");return;}
+  const el=document.getElementById("sc");const words=allW.sort(()=>Math.random()-.5).slice(0,Math.min(6,allW.length));
+  let qi=0,sc=0;
+  function showPQ(){
+    if(qi>=words.length){setUP(S.unit,"ph",Math.round(sc/words.length*100));addStars(sc*2);el.innerHTML=`<div class="qcard" style="text-align:center"><div style="font-size:3rem">🎉</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Phonics Done!</h3><p style="font-weight:700">${sc}/${words.length} correct!</p><button onclick="renderPhonics(document.getElementById('sc'),U[S.unit])" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--pu);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Back</button></div>`;return;}
+    const w=words[qi];const ow=allW.filter(x=>x!==w).sort(()=>Math.random()-.5).slice(0,3);
+    const opts=[w,...ow].sort(()=>Math.random()-.5);
+    spk(w);
+    el.innerHTML=`<div class="qcard"><p class="qqtext">🔊 Which word? (${qi+1}/${words.length})</p><div style="font-size:3rem;text-align:center;margin:.8rem">🎵</div><button onclick="spk('${w.replace(/'/g,"\\'")}',0.85)" style="display:block;margin:0 auto .8rem;padding:.6rem 1.8rem;background:var(--pu);color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">🔊 Again</button><div class="qopts">${opts.map(o=>`<button class="qopt" onclick="phAns(this,'${o.replace(/'/g,"\\'")}','${w.replace(/'/g,"\\'")}')">${o}</button>`).join("")}</div></div>`;
+  }
+  window.phAns=(btn,chosen,correct)=>{document.querySelectorAll(".qopt").forEach(b=>b.onclick=null);if(chosen===correct){btn.classList.add("correct");sc++;toast("✅ Correct!");}else{btn.classList.add("wrong");document.querySelectorAll(".qopt").forEach(b=>{if(b.textContent===correct)b.classList.add("correct");});toast("❌ "+correct,"error");}setTimeout(()=>{qi++;showPQ();},1200);};
+  showPQ();
+};
+
+// ===================== SONG =====================
+function renderSong(el,u){
+  el.innerHTML=`<div class="sngcard">
+  <div class="sngtitle">🎵 ${u.sg.t}</div>
+  <div class="snglyrics">${u.sg.l}</div>
+  <div style="display:flex;flex-wrap:wrap;gap:.65rem">
+    <button class="sngbtn play" onclick="spk('${u.sg.l.replace(/\n/g," ").replace(/'/g,"\\'")}',0.82)">▶️ Listen</button>
+    <button class="sngbtn rec" id="srec" onclick="singAlong()">🎙️ Sing Along</button>
+    <button class="sngbtn rec" onclick="showKaraoke()">🎤 Karaoke</button>
+  </div>
+  <div id="sng-res"></div>
+  </div>
+  <div id="kar-box"></div>`;
+  setUP(S.unit,"sg",30);
+}
+window.singAlong=()=>{
+  const btn=document.getElementById("srec");const res=document.getElementById("sng-res");
+  if(recActive)return;btn.textContent="🔴 Listening...";btn.style.background="#EF4444";
+  startRec(spoken=>{
+    const u=U[S.unit];const sc=scoreSpk(spoken,u.sg.l.replace(/\n/g," "));
+    addStars(Math.round(sc/20));setUP(S.unit,"sg",Math.max(50,sc));
+    const cls=sc>=70?"good":sc>=40?"ok":"bad";
+    const msg=sc>=70?"🌟 Amazing!":sc>=40?"👍 Good try!":"🎵 Keep going!";
+    if(res)res.innerHTML=`<div class="spkres ${cls}" style="margin-top:.8rem">${msg} Score: ${sc}%<div class="scorebar"><div class="scorefill" style="width:${sc}%;background:${sc>=70?"var(--gn)":sc>=40?"var(--ac)":"#EF4444"}"></div></div></div>`;
+  },()=>{if(btn){btn.textContent="🎙️ Sing Along";btn.style.background="";}});
+};
+window.showKaraoke=()=>{
+  const u=U[S.unit];const lines=u.sg.l.split("\n");const box=document.getElementById("kar-box");
+  box.innerHTML=`<div class="sngcard" style="margin-top:.9rem"><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:.7rem">🎤 Karaoke Mode</div><div style="background:rgba(255,255,255,.15);border-radius:14px;padding:1rem">${lines.map((l,i)=>`<div class="kline" id="kl${i}" onclick="spk('${l.replace(/'/g,"\\'")}');hlKL(${i})">${l||"&nbsp;"}</div>`).join("")}</div><p style="font-size:.82rem;opacity:.8;margin-top:.7rem">Tap each line to listen and repeat!</p></div>`;
+};
+window.hlKL=i=>{document.querySelectorAll(".kline").forEach(l=>l.classList.remove("active"));const el=document.getElementById("kl"+i);if(el)el.classList.add("active");};
+
+// ===================== READING =====================
+function renderReading(el,u){
+  const rd=u.rd;
+  el.innerHTML=`<div class="rdcard">
+  <div class="rdtitle">📖 ${rd.t}</div>
+  <button class="rdspeakbtn" onclick="spk(this.nextElementSibling.textContent.substring(0,500),0.85)">🔊 Listen</button>
+  <div class="rdtext">${rd.tx.replace(/\n/g,"<br>")}</div>
+  <h4 style="font-weight:800;margin-bottom:.7rem">📝 Comprehension</h4>
+  ${(rd.q||[]).map((q,i)=>`<div style="margin-bottom:.9rem">
+    <p style="font-weight:700;margin-bottom:.5rem">${i+1}. ${q.q}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">${q.o.map(o=>`<button class="rqopt" onclick="ansRQ(this,'${o.replace(/'/g,"\\'")}','${q.a.replace(/'/g,"\\'")}',${i})">${o}</button>`).join("")}</div>
+  </div>`).join("")}
+  </div>`;
+  setUP(S.unit,"rd",30);
+}
+window.ansRQ=(btn,chosen,correct,qi)=>{document.querySelectorAll(".rqopt").forEach((b,j)=>{if(Math.floor(j/4)===qi)b.onclick=null;});if(chosen===correct){btn.classList.add("correct");addStars(2);toast("✅ Correct! +2 ⭐");setUP(S.unit,"rd",Math.min(100,(getUPct(S.unit)||0)+20));}else{btn.classList.add("wrong");toast("❌ Try again!","error");}};
+
+// ===================== SPEAKING =====================
+function renderSpeaking(el,u){
+  let qi=0;
+  function showSQ(){
+    if(qi>=u.sp.length){
+      setUP(S.unit,"sp",100);awardBadge(S.unit+"_sp","Speaking Star: "+u.t);addStars(15);confetti();
+      el.innerHTML=`<div class="spkcard" style="text-align:center"><div style="font-size:3.5rem">🎙️</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Speaking Done!</h3><p>You practiced all questions!</p><button onclick="renderSpeaking(document.getElementById('sc'),U[S.unit])" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--bl);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Practice Again</button></div>`;return;
+    }
+    const q=u.sp[qi];const ans=q.a.replace(/\[.*?\]/g,"[your answer]");
+    el.innerHTML=`<div class="spkcard">
+    <p style="font-weight:700;margin-bottom:.5rem">Question ${qi+1} of ${u.sp.length}</p>
+    <div class="spkprompt">${q.q}</div>
+    <p style="color:#6B7280;font-size:.88rem;margin-bottom:.8rem">1. Listen 🔊 → 2. Speak 🎙️ → 3. Score ⭐</p>
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:.7rem">
+      <button class="spkbtn listen" onclick="spk('${q.q.replace(/'/g,"\\'")}')">🔊 Listen</button>
+      <button class="spkbtn rec" id="rec${qi}" onclick="doSpk(${qi},'${q.a.replace(/'/g,"\\'")}')">🎙️ Speak</button>
+      <button class="spkbtn" style="background:#E5E7EB;color:var(--dk)" onclick="spk('${q.a.replace(/\[.*?\]/g,"").replace(/'/g,"\\'")}')">💡 Model</button>
+    </div>
+    <div class="modans">💡 Example: ${ans}</div>
+    <div id="sr${qi}"></div>
+    <div style="margin-top:.8rem"><button onclick="qi++;showSQ()" style="padding:.55rem 1.3rem;background:var(--pr);color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">Next ➡️</button></div>
+    </div>`;
+    spk(q.q);
+  }
+  window.doSpk=(qi,model)=>{
+    const btn=document.getElementById("rec"+qi);const res=document.getElementById("sr"+qi);
+    if(recActive)return;if(btn){btn.textContent="🔴 Listening...";btn.style.background="#EF4444";}
+    startRec(spoken=>{
+      const sc=scoreSpk(spoken,model.replace(/\[.*?\]/g,""));addStars(Math.round(sc/25));
+      const cls=sc>=70?"good":sc>=40?"ok":"bad";const msg=sc>=70?"🌟 Excellent!":sc>=40?"👍 Good!":"🔄 Try again!";
+      if(res)res.innerHTML=`<div class="spkres ${cls}" style="margin-top:.7rem">${msg} "${spoken}" – ${sc}%<div class="scorebar"><div class="scorefill" style="width:${sc}%;background:${sc>=70?"var(--gn)":sc>=40?"var(--ac)":"#EF4444"}"></div></div></div>`;
+      setUP(S.unit,"sp",Math.max(50,sc));
+    },()=>{if(btn){btn.textContent="🎙️ Speak";btn.style.background="";}});
+  };
+  showSQ();
+}
+
+// ===================== GAMES PAGE =====================
+const GL=[
+  {id:"wm",n:"Word Match",ic:"🔗",d:"Match emoji to word",c:"#FF6B35"},
+  {id:"sc",n:"Word Scramble",ic:"🔤",d:"Unscramble letters!",c:"#4ECDC4"},
+  {id:"mem",n:"Memory Cards",ic:"🃏",d:"Find matching pairs",c:"#A855F7"},
+  {id:"sb",n:"Sentence Builder",ic:"🏗️",d:"Put words in order",c:"#10B981"},
+  {id:"bee",n:"Spelling Bee",ic:"🐝",d:"Spell what you hear",c:"#F59E0B"},
+  {id:"ws",n:"Word Search",ic:"🔍",d:"Find hidden words",c:"#3B82F6"},
+  {id:"ty",n:"Speed Typing",ic:"⌨️",d:"Type as fast as you can!",c:"#EF4444"},
+  {id:"st",n:"Story Adventure",ic:"📖",d:"Choose your path",c:"#8B5CF6"},
+  {id:"lq",n:"Listening Quiz",ic:"🎧",d:"Listen and choose",c:"#06B6D4"},
+  {id:"cw",n:"Crossword",ic:"✏️",d:"Fill in the grid",c:"#14B8A6"}
+];
+
+function renderGames(){
+  const m=document.getElementById("main");
+  m.innerHTML=`<div class="hhero" style="margin-bottom:.9rem"><h2>🎮 Games Zone</h2><p>Play, earn stars, learn English!</p></div>
+  <div style="margin-bottom:.9rem"><label style="font-weight:700;margin-right:.5rem">Unit:</label>
+  <select id="gu-sel" style="padding:.35rem .7rem;border:2px solid #E5E7EB;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:700">
+  ${UK.map(k=>`<option value="${k}">${U[k].t}</option>`).join("")}</select></div>
+  <div class="ggrid">${GL.map(g=>`<div class="gcard" onclick="launchGame('${g.id}')" style="border-top:4px solid ${g.c}"><div class="gicon">${g.ic}</div><div class="gname">${g.n}</div><div class="gdesc">${g.d}</div></div>`).join("")}</div>
+  <div id="ga"></div>`;
+}
+function gu(){const s=document.getElementById("gu-sel");return s?s.value:"u1";}
+function launchGame(id){
+  S.game=id;
+  const a=document.getElementById("ga");if(!a)return;
+  a.scrollIntoView({behavior:"smooth"});
+  if(id==="wm")gWM(a);else if(id==="sc")gSC(a);else if(id==="mem")gMem(a);
+  else if(id==="sb")gSB(a);else if(id==="bee")gBee(a);else if(id==="ws")gWS(a);
+  else if(id==="ty")gTy(a);else if(id==="st")gSt(a);else if(id==="lq")gLQ(a);
+  else if(id==="cw")gCW(a);
+}
+
+// ── GAME 1: WORD MATCH ──
+function gWM(a){
+  const u=U[gu()];const words=[...u.v].sort(()=>Math.random()-.5).slice(0,6);
+  let sel=null,score=0,matched=0;
+  function render(){
+    const emojis=[...words.map((w,i)=>({i,v:w.e}))].sort(()=>Math.random()-.5);
+    const names=[...words.map((w,i)=>({i,v:w.w}))].sort(()=>Math.random()-.5);
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🔗 Word Match</div><div class="gscore">⭐ ${score}</div></div>
+    <p style="color:#6B7280;margin-bottom:.9rem">Tap an emoji, then tap its word!</p>
+    <div class="mgrid"><div class="mcol" id="ecol">${emojis.map(e=>`<div class="mitem${matched>=0&&words[e.i]?"":" hidden"}" id="em${e.i}" onclick="wmSel('e','${e.i}')">${e.v}</div>`).join("")}</div>
+    <div class="mcol" id="ncol">${names.map(n=>`<div class="mitem" id="nm${n.i}" onclick="wmSel('n','${n.i}')">${n.v}</div>`).join("")}</div></div>
+    <div id="wm-st" style="margin-top:.8rem;font-weight:700;text-align:center"></div></div>`;
+  }
+  let first=null;
+  window.wmSel=(type,idx)=>{
+    const id=parseInt(idx);
+    const elId=(type==="e"?"em":"nm")+id;
+    const el=document.getElementById(elId);
+    if(!el||el.classList.contains("matched"))return;
+    if(!first){first={type,id,el};el.classList.add("sel");}
+    else{
+      if(first.type===type){first.el.classList.remove("sel");first={type,id,el};el.classList.add("sel");return;}
+      const eid=type==="e"?id:first.id;const nid=type==="n"?id:first.id;
+      if(eid===nid){
+        document.getElementById("em"+eid).classList.remove("sel");document.getElementById("em"+eid).classList.add("matched");
+        document.getElementById("nm"+nid).classList.remove("sel");document.getElementById("nm"+nid).classList.add("matched");
+        score+=3;matched++;addStars(3);spk(words[eid].w);
+        const st=document.getElementById("wm-st");if(st)st.textContent="✅ Match! +3 ⭐";
+        if(matched===words.length){setTimeout(()=>{addStars(15);toast("🏆 All matched! +15 bonus!");},300);}
+      }else{
+        first.el.classList.remove("sel");first.el.classList.add("wflash");el.classList.add("wflash");
+        const st=document.getElementById("wm-st");if(st)st.textContent="❌ Try again!";
+        setTimeout(()=>{first.el.classList.remove("wflash");el.classList.remove("wflash");},500);
+      }
+      first=null;
+    }
+  };
+  render();
+}
+
+// ── GAME 2: SCRAMBLE ──
+function gSC(a){
+  const u=U[gu()];const words=u.v.filter(v=>!v.w.includes(" ")&&v.w.length>=3).sort(()=>Math.random()-.5);
+  let qi=0,score=0;
+  function show(){
+    if(qi>=Math.min(words.length,8)){
+      a.innerHTML=`<div class="garea" style="text-align:center"><div style="font-size:3.5rem">🏆</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Scramble Done!</h3><p style="font-weight:700">Score: ${score}</p><button onclick="gSC(document.getElementById('ga'))" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--pr);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Play Again!</button></div>`;return;
+    }
+    const wobj=words[qi];const w=wobj.w;const scr=w.split("").sort(()=>Math.random()-.5).join("");
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🔤 Scramble!</div><div class="gscore">⭐ ${score}</div></div>
+    <p style="color:#6B7280">Word ${qi+1} of ${Math.min(words.length,8)}</p>
+    <div class="scword">${scr.toUpperCase()}</div>
+    <div style="text-align:center;margin-bottom:.7rem">${wobj.e} – ${w.length} letters</div>
+    <input class="scinp" id="sc-in" placeholder="Type the word…" autocomplete="off" autocorrect="off" spellcheck="false" onkeypress="if(event.key==='Enter')scCheck('${w.replace(/'/g,"\\'")}')">
+    <button class="scsubmit" onclick="scCheck('${w.replace(/'/g,"\\'")}')">✅ Check!</button>
+    <button onclick="spk('${w.replace(/'/g,"\\'")}',0.85)" style="width:100%;margin-top:.4rem;padding:.6rem;background:var(--bl);color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">🔊 Hear</button>
+    <div id="sc-res"></div></div>`;
+    document.getElementById("sc-in").focus();
+  }
+  window.scCheck=correct=>{
+    const inp=document.getElementById("sc-in");const res=document.getElementById("sc-res");if(!inp)return;
+    if(inp.value.trim().toLowerCase()===correct.toLowerCase()){
+      score+=5;addStars(5);spk(correct);
+      if(res)res.innerHTML=`<p style="color:var(--gn);font-weight:800;text-align:center;margin-top:.5rem">✅ +5 ⭐ "${correct}"</p>`;
+      setTimeout(()=>{qi++;show();},1200);
+    }else{
+      inp.style.borderColor="#EF4444";if(res)res.innerHTML=`<p style="color:#EF4444;font-weight:700;text-align:center;margin-top:.5rem">❌ Try again!</p>`;
+      setTimeout(()=>{if(inp)inp.style.borderColor="#E5E7EB";inp.value="";},500);
+    }
+  };
+  show();
+}
+
+// ── GAME 3: MEMORY ──
+function gMem(a){
+  const u=U[gu()];const words=[...u.v].sort(()=>Math.random()-.5).slice(0,6);
+  const pairs=[...words.map((w,i)=>({id:i,type:"e",val:w.e,match:i})),...words.map((w,i)=>({id:i+6,type:"w",val:w.w,match:i}))].sort(()=>Math.random()-.5);
+  let flipped=[],matched=[],moves=0,score=0;
+  function render(){
+    const cols=4;
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🃏 Memory</div><div style="display:flex;gap:.4rem"><div class="gscore">⭐${score}</div><div class="gtimer">Moves:${moves}</div></div></div>
+    <div class="memgrid" style="grid-template-columns:repeat(${cols},1fr);max-width:360px;margin:0 auto">
+    ${pairs.map((p,i)=>{const isM=matched.includes(p.match);const isF=flipped.includes(i);return `<div class="memcard${isM?" matched":isF?" flipped":" hidden"}" onclick="memFlip(${i})">${isM||isF?p.val:"?"}</div>`}).join("")}
+    </div>${matched.length===words.length?`<p style="text-align:center;margin-top:.9rem;font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--gn)">🏆 Done in ${moves} moves!</p>`:""}</div>`;
+  }
+  window.memFlip=i=>{
+    if(flipped.length===2||flipped.includes(i)||matched.includes(pairs[i].match))return;
+    flipped.push(i);moves++;render();
+    if(flipped.length===2){
+      const[a2,b]=flipped;
+      if(pairs[a2].match===pairs[b].match&&pairs[a2].type!==pairs[b].type){
+        matched.push(pairs[a2].match);score+=10;addStars(5);spk(words[pairs[a2].match].w);flipped=[];
+        if(matched.length===words.length){addStars(20);toast("🏆 Memory done! +20 bonus!");}
+      }else setTimeout(()=>{flipped=[];render();},800);
+      setTimeout(render,0);
+    }
+  };
+  render();
+}
+
+// ── GAME 4: SENTENCE BUILDER ──
+function gSB(a){
+  const u=U[gu()];const sents=u.gr.map(g=>g.ex).filter(s=>s.split(" ").length>=3);
+  if(!sents.length){a.innerHTML=`<div class="garea"><p>No sentences. Try another unit!</p></div>`;return;}
+  let qi=0,score=0;
+  function show(){
+    if(qi>=Math.min(sents.length,5)){a.innerHTML=`<div class="garea" style="text-align:center"><div style="font-size:3.5rem">🏗️</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Done!</h3><p style="font-weight:700">Score: ${score}</p><button onclick="gSB(document.getElementById('ga'))" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--gn);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Again!</button></div>`;return;}
+    const sent=sents[qi];const clean=sent.replace(/[.?!]/g,"");const wds=clean.split(" ").sort(()=>Math.random()-.5);
+    let built=[];
+    function renderSB(){
+      a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🏗️ Build It!</div><div class="gscore">⭐${score}</div></div>
+      <p style="font-weight:700;margin-bottom:.4rem">Sentence ${qi+1} of ${Math.min(sents.length,5)}</p>
+      <p style="color:#6B7280;margin-bottom:.7rem">Put words in order:</p>
+      <div class="sarea" id="sb-area">${built.length?built.map((bw,bi)=>`<div class="sword" onclick="sbRm(${bi},${bw.ci})">${bw.w}</div>`).join(""):'<span style="color:#9CA3AF;font-style:italic">Tap words below…</span>'}</div>
+      <div class="wbank" id="sb-bank">${wds.map((w,i)=>`<div class="wchip${built.some(b=>b.ci===i)?" used":""}" onclick="sbAdd('${w.replace(/'/g,"\\'")}',${i})">${w}</div>`).join("")}</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button onclick="sbChk('${clean.replace(/'/g,"\\'")}','${sent.replace(/'/g,"\\'")}')" style="padding:.6rem 1.3rem;background:var(--gn);color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">✅ Check</button>
+        <button onclick="built=[];renderSB()" style="padding:.6rem 1.3rem;background:#E5E7EB;border:none;border-radius:11px;font-weight:700;cursor:pointer">🔄 Clear</button>
+        <button onclick="spk('${sent.replace(/'/g,"\\'")}',0.85)" style="padding:.6rem 1.3rem;background:var(--bl);color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">🔊 Hint</button>
+      </div><div id="sb-res"></div></div>`;
+    }
+    window.sbAdd=(w,ci)=>{if(built.some(b=>b.ci===ci))return;built.push({w,ci});renderSB();};
+    window.sbRm=(bi,ci)=>{built.splice(bi,1);renderSB();};
+    window.sbChk=(correct,full)=>{
+      const blt=built.map(b=>b.w).join(" ").toLowerCase();const res=document.getElementById("sb-res");
+      if(blt===correct.toLowerCase()){score+=10;addStars(10);spk(full);if(res)res.innerHTML=`<p style="color:var(--gn);font-weight:800;margin-top:.7rem">✅ Perfect! +10 ⭐</p>`;setTimeout(()=>{qi++;show();},1500);}
+      else{if(res)res.innerHTML=`<p style="color:#EF4444;font-weight:700;margin-top:.7rem">❌ Try again!</p>`;}
+    };
+    renderSB();
+  }
+  show();
+}
+
+// ── GAME 5: SPELLING BEE ──
+function gBee(a){
+  const u=U[gu()];const words=u.v.filter(v=>!v.w.includes(" ")).sort(()=>Math.random()-.5);
+  let qi=0,score=0,hints=3;
+  function show(){
+    if(qi>=Math.min(words.length,10)){a.innerHTML=`<div class="garea" style="text-align:center"><div style="font-size:3.5rem">🐝</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Bee Done!</h3><p style="font-weight:700">Score: ${score}</p><button onclick="gBee(document.getElementById('ga'))" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--ac);color:var(--dk);border:none;border-radius:14px;font-weight:700;cursor:pointer">🐝 Again!</button></div>`;return;}
+    const wobj=words[qi];let hl=new Set();
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🐝 Spelling Bee</div><div class="gscore">⭐${score}</div></div>
+    <p style="color:#6B7280;margin-bottom:.4rem">Word ${qi+1}/${Math.min(words.length,10)} · 💡 ${hints} hints</p>
+    <div style="font-size:3rem;text-align:center;margin:.8rem">${wobj.e}</div>
+    <button onclick="spk('${wobj.w.replace(/'/g,"\\'")}',0.85)" style="display:block;margin:0 auto .8rem;padding:.65rem 1.8rem;background:var(--bl);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">🔊 Hear Again</button>
+    <input class="scinp" id="bee-in" placeholder="Type spelling…" autocomplete="off" autocorrect="off" spellcheck="false" onkeypress="if(event.key==='Enter')beeChk('${wobj.w.replace(/'/g,"\\'")}')">
+    <div id="bee-hl" style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.6rem;letter-spacing:.25rem;margin:.4rem;color:var(--pr)"></div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;margin:.4rem">
+      <button id="bee-hint-btn" style="padding:.4rem 1rem;background:var(--ac);border:none;border-radius:9px;font-weight:700;cursor:pointer" onclick="beeHint('${wobj.w.replace(/'/g,"\\'")}')">💡 Hint (${hints})</button>
+      <button style="padding:.4rem 1rem;background:#E5E7EB;border:none;border-radius:9px;font-weight:700;cursor:pointer" onclick="beeSkip('${wobj.w.replace(/'/g,"\\'")}')">⏭️ Skip</button>
+    </div>
+    <button onclick="beeChk('${wobj.w.replace(/'/g,"\\'")}',true)" style="width:100%;padding:.75rem;background:var(--pr);color:#fff;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer">✅ Submit!</button>
+    <div id="bee-res"></div></div>`;
+    spk(wobj.w);
+    window.beeHint=w=>{if(hints<=0){toast("No hints left!","error");return;}hints--;const avail=w.split("").map((c,i)=>({c,i})).filter(x=>!hl.has(x.i));if(avail.length){const pk=avail[Math.floor(Math.random()*avail.length)];hl.add(pk.i);}document.getElementById("bee-hl").textContent=w.split("").map((c,i)=>hl.has(i)?c:"_").join(" ");const hb=document.getElementById("bee-hint-btn");if(hb)hb.textContent=`💡 Hint (${hints})`;};
+    window.beeSkip=w=>{const r=document.getElementById("bee-res");if(r)r.innerHTML=`<p style="color:#6B7280;font-weight:700;margin-top:.4rem">Skipped. Word: ${w}</p>`;setTimeout(()=>{qi++;show();},1000);};
+    window.beeChk=w=>{const inp=document.getElementById("bee-in");const res=document.getElementById("bee-res");if(!inp)return;if(inp.value.trim().toLowerCase()===w.toLowerCase()){const pts=hints>=2?10:hints>=1?7:5;score+=pts;addStars(pts);spk(w);if(res)res.innerHTML=`<p style="color:var(--gn);font-weight:800;margin-top:.4rem">✅ +${pts} ⭐</p>`;setTimeout(()=>{qi++;show();},1200);}else{inp.style.borderColor="#EF4444";if(res)res.innerHTML=`<p style="color:#EF4444;font-weight:700;margin-top:.4rem">❌ Try again!</p>`;setTimeout(()=>{if(inp)inp.style.borderColor="#E5E7EB";inp.value="";},500);}};
+  }
+  show();
+}
+
+// ── GAME 6: WORD SEARCH ──
+function gWS(a){
+  const u=U[gu()];const tw=u.v.filter(v=>!v.w.includes(" ")&&v.w.length>=3&&v.w.length<=7).slice(0,6).map(v=>v.w.toUpperCase());
+  const SZ=9;const grid=Array.from({length:SZ},()=>Array(SZ).fill(""));const placed=[];
+  function tryPl(word,r,c,h){
+    const cells=[];for(let i=0;i<word.length;i++){const nr=h?r:r+i;const nc=h?c+i:c;if(nr<0||nr>=SZ||nc<0||nc>=SZ)return false;if(grid[nr][nc]&&grid[nr][nc]!==word[i])return false;cells.push([nr,nc]);}
+    cells.forEach(([nr,nc],i)=>grid[nr][nc]=word[i]);placed.push({word,cells});return true;
+  }
+  tw.forEach(w=>{const dirs=[[0,1],[1,0],[1,1]];for(let at=0;at<60;at++){const d=dirs[Math.floor(Math.random()*dirs.length)];if(tryPl(w,Math.floor(Math.random()*SZ),Math.floor(Math.random()*SZ),d[0]===0))break;}});
+  const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ";for(let r=0;r<SZ;r++)for(let c=0;c<SZ;c++)if(!grid[r][c])grid[r][c]=L[Math.floor(Math.random()*L.length)];
+  let selCells=[],found=[],score=0;
+  function render(){
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🔍 Word Search</div><div class="gscore">⭐${score}</div></div>
+    <div style="overflow-x:auto"><div class="wsgrid" style="grid-template-columns:repeat(${SZ},auto)">
+    ${grid.map((row,r)=>row.map((cell,c)=>{const isF=placed.some(p=>p.cells.some(([pr,pc])=>pr===r&&pc===c)&&found.includes(p.word));const isSel=selCells.some(([sr,sc])=>sr===r&&sc===c);return `<div class="wscell${isF?" fnd":isSel?" sel":""}" onclick="wsClick(${r},${c})">${cell}</div>`;}).join("")).join("")}
+    </div></div>
+    <div class="wswords">${tw.map(w=>`<div class="wsword${found.includes(w)?" fnd":""}">${w}</div>`).join("")}</div>
+    ${found.length===tw.length?`<p style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--gn);margin-top:.8rem">🏆 All found!</p>`:""}</div>`;
+  }
+  window.wsClick=(r,c)=>{
+    if(selCells.length===0){selCells=[[r,c]];}
+    else if(selCells.length===1){
+      selCells.push([r,c]);
+      const[r1,c1]=selCells[0];const[r2,c2]=selCells[1];
+      const dr=Math.sign(r2-r1);const dc=Math.sign(c2-c1);
+      const fs=[];let cr=r1;let cc=c1;const steps=Math.max(Math.abs(r2-r1),Math.abs(c2-c1));
+      for(let i=0;i<=steps;i++){fs.push([cr,cc]);cr+=dr;cc+=dc;}
+      const sw=fs.map(([sr,sc])=>grid[sr][sc]).join("");
+      const fp=placed.find(p=>p.word===sw||p.word===sw.split("").reverse().join(""));
+      if(fp&&!found.includes(fp.word)){found.push(fp.word);score+=15;addStars(15);spk(fp.word.toLowerCase());toast("✅ Found: "+fp.word+" +15 ⭐");if(found.length===tw.length){addStars(30);toast("🏆 All found! +30 bonus!");}}
+      selCells=[];
+    }else{selCells=[[r,c]];}
+    render();
+  };
+  render();
+}
+
+// ── GAME 7: TYPING ──
+function gTy(a){
+  const u=U[gu()];const text=(u.rd.tx||"I like learning English. It is fun and exciting!").replace(/\n/g," ").substring(0,140);
+  let typed="",started=false,startTime=0,finished=false,ti=null;
+  a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">⌨️ Speed Typing</div><div class="gscore">⭐<span id="ty-sc">0</span></div></div>
+  <div class="tystats"><div class="tystat">⏱️<span id="ty-t">0</span>s</div><div class="tystat">✅<span id="ty-a">100</span>%</div><div class="tystat">🚀<span id="ty-w">0</span>WPM</div></div>
+  <div class="tytext" id="ty-txt"></div>
+  <input class="tyinp" id="ty-in" placeholder="Start typing here…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="tyInput(this.value)">
+  <div id="ty-res"></div></div>`;
+  function renderTxt(){const el=document.getElementById("ty-txt");if(!el)return;el.innerHTML=text.split("").map((c,i)=>{const tc=typed[i];if(i<typed.length)return`<span class="tychar ${tc===c?"correct":"wrong"}">${c}</span>`;if(i===typed.length)return`<span class="tychar current">${c}</span>`;return`<span class="tychar">${c}</span>`;}).join("");}
+  function updStats(){const e=Math.round((Date.now()-startTime)/1000)||1;const el=document.getElementById("ty-t");if(el)el.textContent=e;const cor=typed.split("").filter((c,i)=>c===text[i]).length;const acc=typed.length?Math.round(cor/typed.length*100):100;const ae=document.getElementById("ty-a");if(ae)ae.textContent=acc;const wpm=Math.round(typed.split(" ").length/e*60);const we=document.getElementById("ty-w");if(we)we.textContent=wpm;}
+  window.tyInput=v=>{if(!started){started=true;startTime=Date.now();ti=setInterval(updStats,500);}typed=v;renderTxt();if(typed===text.substring(0,typed.length)&&typed.length===text.length&&!finished){finished=true;clearInterval(ti);const el=Math.round((Date.now()-startTime)/1000);const wpm=Math.round(text.split(" ").length/el*60);const pts=Math.min(50,Math.round(wpm/2));addStars(pts);const res=document.getElementById("ty-res");if(res)res.innerHTML=`<div style="background:#D1FAE5;border-radius:11px;padding:.9rem;margin-top:.8rem;font-weight:700;color:#065F46">🏆 Done! ${el}s · ${wpm}WPM · +${pts} ⭐</div>`;}};
+  renderTxt();
+}
+
+// ── GAME 8: STORY ──
+function gSt(a){
+  const stories=[
+    {t:"You are in a forest. You hear a sound.",ch:["Follow the sound 🦜","Stay still 🌲","Go home 🏠"],nx:[1,2,3]},
+    {t:"You follow the sound and find a friendly parrot! It says: 'Hello! I'm from Australia!'",ch:["Where is Australia? 🌏","Ask the parrot's name 🐦","Go home 🏠"],nx:[4,5,3]},
+    {t:"You stay still and see a beautiful deer. It walks past you quietly.",ch:["Follow the deer 🦌","Go home 🏠"],nx:[6,3]},
+    {t:"You go home safely. What a lovely walk! Well done!",ch:["Play again 🔄"],nx:[0]},
+    {t:"The parrot tells you: 'Australia is far away! It has kangaroos and koalas!'",ch:["Amazing! 😮","Ask about kangaroos 🦘","Go home 🏠"],nx:[7,8,3]},
+    {t:"'My name is Polly! I like reading and skateboarding!' says the parrot.",ch:["A sporty parrot! 🛹","Say hello 👋"],nx:[7,7]},
+    {t:"The deer runs into the deep forest. You feel happy and peaceful.",ch:["Play again 🔄"],nx:[0]},
+    {t:"What an amazing adventure! You learned so much today! Great explorer! 🌟",ch:["Play again 🔄"],nx:[0]},
+    {t:"'Kangaroos can jump very high! They're very fast!' says Polly.",ch:["Wow! 😊","Say goodbye 👋"],nx:[7,3]}
+  ];
+  let si=0,score=0;
+  function showS(){
+    const s=stories[si];
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">📖 Story Adventure</div><div class="gscore">⭐${score}</div></div>
+    <div class="sttext">${s.t}</div>
+    <button onclick="spk('${s.t.replace(/'/g,"\\'")}',0.9)" style="padding:.45rem .9rem;background:var(--bl);color:#fff;border:none;border-radius:9px;font-weight:700;cursor:pointer;margin-bottom:.7rem">🔊 Listen</button>
+    <p style="font-weight:700;margin-bottom:.4rem">What do you do?</p>
+    <div class="stopts">${s.ch.map((c,i)=>`<div class="stopt" onclick="stCh(${s.nx[i]||0})">${c}</div>`).join("")}</div></div>`;
+  }
+  window.stCh=nx=>{si=nx;score+=5;addStars(5);if(nx===7)confetti();showS();};
+  showS();
+}
+
+// ── GAME 9: LISTENING QUIZ ──
+function gLQ(a){
+  const u=U[gu()];const words=[...u.v].sort(()=>Math.random()-.5).slice(0,8);
+  let qi=0,score=0;
+  function show(){
+    if(qi>=words.length){addStars(score*3);a.innerHTML=`<div class="garea" style="text-align:center"><div style="font-size:3.5rem">🎧</div><h3 style="font-family:'Fredoka One',cursive;font-size:1.8rem">Listening Done!</h3><p style="font-weight:700">${score}/${words.length} correct!</p><button onclick="gLQ(document.getElementById('ga'))" style="margin-top:.8rem;padding:.65rem 1.8rem;background:var(--sc);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer">Again!</button></div>`;return;}
+    const q=words[qi];const ow=u.v.filter(v=>v.w!==q.w).sort(()=>Math.random()-.5).slice(0,3);
+    const opts=[q,...ow].sort(()=>Math.random()-.5);
+    a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">🎧 Listening Quiz</div><div class="gscore">⭐${score}</div></div>
+    <p style="color:#6B7280;margin-bottom:.4rem">Q ${qi+1}/${words.length}</p>
+    <p style="font-weight:700;margin-bottom:.7rem">🎧 Listen and choose!</p>
+    <button onclick="spk('${q.w.replace(/'/g,"\\'")}',0.85)" style="display:flex;align-items:center;gap:.4rem;padding:.9rem 1.8rem;background:var(--bl);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;margin-bottom:.9rem">▶️ Play Sound</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">${opts.map(o=>`<button class="qopt" onclick="lqAns(this,'${o.w.replace(/'/g,"\\'")}','${q.w.replace(/'/g,"\\'")}')">${o.e} ${o.w}</button>`).join("")}</div></div>`;
+    setTimeout(()=>spk(q.w,0.85),400);
+  }
+  window.lqAns=(btn,chosen,correct)=>{document.querySelectorAll(".qopt").forEach(b=>b.onclick=null);if(chosen===correct){btn.classList.add("correct");score++;addStars(3);toast("✅ Correct! +3 ⭐");}else{btn.classList.add("wrong");document.querySelectorAll(".qopt").forEach(b=>{if(b.textContent.trim().includes(correct))b.classList.add("correct");});toast("❌ It was: "+correct,"error");}setTimeout(()=>{qi++;show();},1200);};
+  show();
+}
+
+// ── GAME 10: CROSSWORD ──
+function gCW(a){
+  const u=U[gu()];const words=u.v.filter(v=>!v.w.includes(" ")&&v.w.length>=3&&v.w.length<=7).slice(0,5);
+  if(words.length<3){a.innerHTML=`<div class="garea"><p>Not enough short words. Try Unit 1!</p></div>`;return;}
+  const SZ=10;const cg=Array.from({length:SZ},()=>Array(SZ).fill(null));const placed=[];
+  function tryP(word,r,c,h){const w=word.toUpperCase();for(let i=0;i<w.length;i++){const nr=h?r:r+i;const nc=h?c+i:c;if(nr>=SZ||nc>=SZ||nr<0||nc<0)return false;if(cg[nr][nc]!==null&&cg[nr][nc]!==w[i])return false;}for(let i=0;i<w.length;i++){const nr=h?r:r+i;const nc=h?c+i:c;cg[nr][nc]=w.toUpperCase()[i];}placed.push({word:w,r,c,h,orig:word});return true;}
+  tryP(words[0].w,2,2,true);
+  for(let k=1;k<words.length;k++){const w=words[k].w.toUpperCase();let done=false;for(let p=0;p<placed.length&&!done;p++){const pw=placed[p];for(let ci=0;ci<pw.word.length&&!done;ci++){for(let wi=0;wi<w.length&&!done;wi++){if(pw.word[ci]===w[wi]){const nr=pw.h?pw.r-wi:pw.r+ci;const nc=pw.h?pw.c+ci:pw.c-wi;if(tryP(words[k].w,nr,nc,!pw.h))done=true;}}}}if(!done)tryP(words[k].w,k+3,1,k%2===0);}
+  let cwScore=0;const total=placed.reduce((s,p)=>s+p.word.length,0);
+  a.innerHTML=`<div class="garea"><div class="ghdr"><div class="gtitle">✏️ Crossword</div><div class="gscore" id="cw-sc">⭐0</div></div>
+  <div style="overflow-x:auto;margin-bottom:.9rem"><div class="cwgrid" style="grid-template-columns:repeat(${SZ},auto)">
+  ${Array.from({length:SZ},(_,r)=>Array.from({length:SZ},(_,c)=>{const isL=cg[r][c]!==null;const ni=placed.findIndex(p=>p.r===r&&p.c===c);return isL?`<div class="cwcell cwwhite">${ni>=0?`<span class="cwnum">${ni+1}</span>`:""}
+  <input maxlength="1" id="cw${r}_${c}" oninput="this.value=this.value.toUpperCase();cwChk(${r},${c},'${cg[r][c]}')" style="text-transform:uppercase"></div>`:`<div class="cwcell cwblack"></div>`;}).join("")).join("")}
+  </div></div>
+  <div class="cwclues">
+  <div><strong>Across:</strong>${placed.filter(p=>p.h).map(p=>{const idx=placed.indexOf(p)+1;const vo=words.find(w=>w.w.toUpperCase()===p.word);return `<div class="cwclue"><strong>${idx}.</strong> ${vo?.e||""} (${p.word.length}) <button onclick="spk('${p.orig}')" style="border:none;background:none;cursor:pointer">🔊</button></div>`;}).join("")}</div>
+  <div><strong>Down:</strong>${placed.filter(p=>!p.h).map(p=>{const idx=placed.indexOf(p)+1;const vo=words.find(w=>w.w.toUpperCase()===p.word);return `<div class="cwclue"><strong>${idx}.</strong> ${vo?.e||""} (${p.word.length}) <button onclick="spk('${p.orig}')" style="border:none;background:none;cursor:pointer">🔊</button></div>`;}).join("")}</div>
+  </div></div>`;
+  window.cwChk=(r,c,correct)=>{const inp=document.getElementById(`cw${r}_${c}`);if(!inp)return;if(inp.value.toUpperCase()===correct){inp.className="correct";cwScore++;const scel=document.getElementById("cw-sc");if(scel)scel.textContent="⭐"+cwScore;addStars(1);if(cwScore>=total){toast("🏆 Crossword done!");addStars(20);confetti();}}else if(inp.value)inp.className="wrong";};
+}
+
+// ===================== PROGRESS PAGE =====================
+function renderProgress(){
+  const m=document.getElementById("main");
+  const tw=Object.values(S.lw).reduce((a,b)=>a+b.length,0);
+  const aw=UK.reduce((a,k)=>a+U[k].v.length,0);
+  const allB=[
+    {id:"starter_v",n:"Family Words",ic:"👨‍👩‍👧‍👦"},{id:"u1_v",n:"Countries",ic:"🌏"},{id:"u2_v",n:"Hobbies",ic:"🏃"},{id:"u3_v",n:"My Things",ic:"🎒"},
+    {id:"u4_v",n:"Beach Fun",ic:"🏖️"},{id:"u5_v",n:"Zoo Animals",ic:"🐒"},{id:"u6_v",n:"Daily Routine",ic:"⏰"},{id:"u7_v",n:"Places",ic:"🏙️"},
+    {id:"u8_v",n:"Food",ic:"🍈"},{id:"u9_v",n:"World Records",ic:"⚡"},{id:"u10_v",n:"Park Rules",ic:"🌿"},{id:"u11_v",n:"Transport",ic:"🏛️"},
+    {id:"u12_v",n:"Adjectives",ic:"👶"},{id:"u13_v",n:"Egyptians",ic:"🔺"},{id:"u14_v",n:"Camping",ic:"⛺"},{id:"u15_v",n:"Holiday",ic:"✈️"},
+    {id:"u1_sp",n:"Speaking 1",ic:"🎙️"},{id:"u5_sp",n:"Speaking 5",ic:"🎙️"},{id:"u10_sp",n:"Speaking 10",ic:"🎙️"},{id:"u15_sp",n:"Speaking 15",ic:"🎙️"}
+  ];
+  m.innerHTML=`<div style="max-width:600px;margin:0 auto">
+  <div class="pghero">
+    <div class="bigstar">⭐</div>
+    <div class="tscore">${S.stars}</div>
+    <p style="font-weight:700;font-size:1.05rem">Total Stars!</p>
+    <p style="font-size:.88rem;opacity:.85">${tw}/${aw} words learned · 🏅 ${S.badges.length} badges</p>
+  </div>
+  <h3 style="font-family:'Fredoka One',cursive;font-size:1.2rem;margin-bottom:.7rem">🏅 My Badges</h3>
+  <div class="bgrid">${allB.map(b=>`<div class="bitem${S.badges.includes(b.id)?" earned":""}"><div class="bicon">${S.badges.includes(b.id)?b.ic:"🔒"}</div><div class="bname">${S.badges.includes(b.id)?b.n:"Locked"}</div></div>`).join("")}</div>
+  <h3 style="font-family:'Fredoka One',cursive;font-size:1.2rem;margin:.9rem 0 .7rem">📊 Unit Progress</h3>
+  <div class="uplist">${UK.map(k=>{const pct=getUPct(k);const u=U[k];return `<div class="upitem"><div class="upicon">${u.ic}</div><div class="upinfo"><div class="upname">${u.t}</div><div class="upbar"><div class="upfill" style="width:${pct}%;background:${u.c}"></div></div></div><div class="uppct">${pct}%</div></div>`;}).join("")}</div>
+  <div style="text-align:center;margin-top:1.3rem">
+    <button onclick="if(confirm('Reset all progress? This cannot be undone.')){localStorage.removeItem('ff3v2');location.reload();}" style="padding:.55rem 1.3rem;background:#EF4444;color:#fff;border:none;border-radius:11px;font-weight:700;cursor:pointer">🔄 Reset</button>
+  </div>
+  </div>`;
+}
+
+// ===================== INIT =====================
+window.addEventListener("load",()=>{
+  if(window.speechSynthesis)window.speechSynthesis.getVoices();
+  loadS();
+  const sp=document.getElementById("sstarsdiv");
+  if(sp&&S.stars>0){const cnt=Math.min(5,Math.floor(S.stars/20));sp.innerHTML=Array(5).fill(0).map((_,i)=>`<span style="font-size:1.6rem;opacity:${i<cnt?1:.3}">⭐</span>`).join("");}
+});
+</script>
+</body>
+</html>
