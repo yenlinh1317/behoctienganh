@@ -37,7 +37,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);displ
 .body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 
 /* SKILL TABS */
-.skill-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:#fff;border-bottom:2px solid #F0EAE0;flex-shrink:0}
+.skill-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;background:#fff;border-bottom:2px solid #F0EAE0;flex-shrink:0}
 .stab{padding:10px 4px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;background:#fff}
 .stab .si{font-size:20px;display:block}
 .stab .sn{font-size:10px;font-weight:700;color:#AAA;display:block}
@@ -207,8 +207,73 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);displ
 .bee-in{width:100%;border:3px solid var(--acc);border-radius:12px;padding:10px 14px;font-family:'Fredoka One',cursive;font-size:22px;text-align:center;color:var(--txt);outline:none;letter-spacing:4px;margin-bottom:8px}
 .bee-in:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}
 
-/* WORD CHAIN */
-.chain-disp{background:var(--pl);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-family:'Fredoka One',cursive;font-size:16px;color:var(--p);word-break:break-word;min-height:44px}
+/* REVIEW SCOPE TOGGLE */
+.rv-scope-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.rv-scope-btn{border:2.5px solid #EEE;border-radius:14px;padding:10px 8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;background:#fff;color:#888;transition:all .15s}
+.rv-scope-btn:active{transform:scale(0.96)}
+.rv-scope-btn.on{border-color:var(--s);background:var(--sl);color:#11998e}
+.rv-filter-label{font-size:11px;color:var(--mut);font-weight:700;margin-bottom:6px}
+.rv-lt-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.rv-lt-chip{width:30px;height:30px;border-radius:8px;border:2px solid #EEE;background:#fff;font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#AAA;transition:all .15s;flex-shrink:0}
+.rv-lt-chip.on{background:var(--p);color:#fff;border-color:var(--p)}
+.rv-lt-chip:active{transform:scale(0.9)}
+
+/* REVIEW SECTION */
+.rv-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.rv-mode-btn{background:#fff;border:2.5px solid #EEE;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.rv-mode-btn:active{transform:scale(0.96)}
+.rv-mode-btn.on{border-color:var(--p);background:var(--pl)}
+.rv-mode-btn .rme{font-size:26px;display:block;margin-bottom:4px}
+.rv-mode-btn .rmn{font-size:11px;font-weight:700;color:#888}
+.rv-mode-btn.on .rmn{color:var(--p)}
+.rv-area{background:#FAFAFA;border-radius:14px;padding:14px;min-height:200px}
+/* Flashcard */
+.fc-wrap{perspective:600px;width:100%;max-width:280px;margin:0 auto 14px;height:150px;cursor:pointer}
+.fc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.fc-wrap.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;gap:6px}
+.fc-front{background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff}
+.fc-back{background:linear-gradient(135deg,#4ECDC4,#44BFA3);color:#fff;transform:rotateY(180deg)}
+.fc-em{font-size:52px;line-height:1}
+.fc-wd{font-family:'Fredoka One',cursive;font-size:20px}
+.fc-ph{font-size:11px;opacity:.8}
+.fc-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.fc-counter{font-family:'Fredoka One',cursive;font-size:14px;color:var(--mut)}
+/* Quiz tổng kết */
+.rv-q{font-size:15px;font-weight:800;text-align:center;margin-bottom:12px;line-height:1.5}
+.rv-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px}
+.rv-opt{background:#fff;border:2.5px solid #EEE;border-radius:12px;padding:11px 8px;text-align:center;cursor:pointer;font-weight:700;font-size:13px;transition:all .15s}
+.rv-opt:active{transform:scale(0.96)}
+.rv-opt .roe{font-size:26px;display:block;margin-bottom:3px}
+.rv-opt.rvok{background:var(--acc2);border-color:#4CAF50}
+.rv-opt.rvno{background:#FFB3B3;border-color:#F44336}
+.rv-prog{display:flex;justify-content:space-between;font-size:11px;color:var(--mut);margin-bottom:4px}
+/* Score board */
+.rv-score-board{background:linear-gradient(135deg,#667EEA,#764BA2);border-radius:16px;padding:16px;color:#fff;text-align:center;margin-bottom:12px}
+.rv-score-big{font-family:'Fredoka One',cursive;font-size:42px}
+.rv-score-sub{font-size:13px;opacity:.85;margin-top:4px}
+.rv-stars{font-size:22px;margin-top:6px}
+.rv-word-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.rv-witem{background:#fff;border-radius:10px;padding:8px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid #EEE;transition:all .15s}
+.rv-witem:active{transform:scale(0.97)}
+.rv-witem .rie{font-size:22px}
+.bubble-arena{position:relative;width:100%;height:240px;background:linear-gradient(180deg,#E0F7FA,#B2EBF2);border-radius:14px;overflow:hidden;margin-bottom:10px;cursor:crosshair}
+.bubble{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s;user-select:none;font-weight:700;border:3px solid rgba(255,255,255,0.6);box-shadow:0 3px 10px rgba(0,0,0,0.15)}
+.bubble:active{transform:scale(0.85)!important}
+.bubble .bem{font-size:22px;line-height:1.1}
+.bubble .bwd{font-size:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);font-weight:800}
+.bubble-q{text-align:center;font-family:'Fredoka One',cursive;font-size:18px;color:var(--p);margin-bottom:8px}
+
+/* MEMORY GAME */
+.mem-grid{display:grid;gap:8px;margin-bottom:10px}
+.mcard{background:linear-gradient(135deg,var(--p),#FF8E53);border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:28px;border:3px solid transparent;user-select:none}
+.mcard:active{transform:scale(0.92)}
+.mcard.mflip{background:#fff;border-color:var(--s);transform:rotateY(0)}
+.mcard.mhit{background:var(--acc2);border-color:#4CAF50;cursor:default}
+.mcard.mmiss{animation:shk .3s}
+.mcard-back{font-size:24px}
+
+/* CATEGORY CSS kept for compatibility but hidden */
 
 /* CATEGORY */
 .sort-items{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
@@ -262,6 +327,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);displ
   <div class="stab" onclick="showSkill('read',this)"><span class="si">📖</span><span class="sn">Đọc</span></div>
   <div class="stab" onclick="showSkill('write',this)"><span class="si">✏️</span><span class="sn">Viết</span></div>
   <div class="stab" onclick="showSkill('games',this)"><span class="si">🎮</span><span class="sn">Games</span></div>
+  <div class="stab" onclick="showSkill('review',this)"><span class="si">📊</span><span class="sn">Ôn tập</span></div>
 </div>
 
 <!-- BODY -->
@@ -389,12 +455,40 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);displ
     <div class="gc" onclick="selGame('fill',this)"><span class="gce">📝</span><span class="gcn">Điền từ</span></div>
     <div class="gc" onclick="selGame('rapid',this)"><span class="gce">⚡</span><span class="gcn">Nhanh tay</span></div>
     <div class="gc" onclick="selGame('spelling',this)"><span class="gce">🐝</span><span class="gcn">Đánh vần</span></div>
-    <div class="gc" onclick="selGame('category',this)"><span class="gce">🗂️</span><span class="gcn">Phân loại</span></div>
-    <div class="gc" onclick="selGame('chain',this)"><span class="gce">🔗</span><span class="gcn">Chuỗi từ</span></div>
+    <div class="gc" onclick="selGame('bubble',this)"><span class="gce">🎯</span><span class="gcn">Bắn bóng</span></div>
+    <div class="gc" onclick="selGame('memory',this)"><span class="gce">🧠</span><span class="gcn">Lật thẻ</span></div>
   </div>
   <div class="garea" id="garea"></div>
   <div style="text-align:center;margin-top:10px">
     <button class="btn btn-p" onclick="startGame()">🎲 Chơi lại</button>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="sec" id="sec-review">
+  <!-- Scope toggle -->
+  <div class="rv-scope-row">
+    <button class="rv-scope-btn on" id="rvScopeCur" onclick="setRvScope('cur',this)">📖 Chữ <span id="rvScopeLbl">A</span></button>
+    <button class="rv-scope-btn" id="rvScopeAll" onclick="setRvScope('all',this)">🌐 Tất cả A-Z</button>
+  </div>
+  <!-- Letter filter (chỉ hiện khi scope=all) -->
+  <div id="rvLtFilter" style="display:none">
+    <div class="rv-filter-label">Lọc theo chữ:</div>
+    <div class="rv-lt-chips" id="rvLtChips"></div>
+  </div>
+  <div class="rv-score-board">
+    <div class="rv-score-big" id="rvScBig">0</div>
+    <div class="rv-score-sub" id="rvScSub">Bắt đầu ôn tập nào!</div>
+    <div class="rv-stars" id="rvStars">☆☆☆☆☆</div>
+  </div>
+  <div class="rv-modes">
+    <div class="rv-mode-btn on" id="rvmFlash" onclick="setRvMode('flash',this)"><span class="rme">🃏</span><span class="rmn">Flashcard</span></div>
+    <div class="rv-mode-btn" id="rvmQuiz" onclick="setRvMode('quiz',this)"><span class="rme">🧪</span><span class="rmn">Kiểm tra</span></div>
+  </div>
+  <div class="rv-area" id="rvArea"></div>
+  <div style="margin-top:14px">
+    <div class="sec-ttl" id="rvWordListTitle">📋 Từ vựng đang ôn</div>
+    <div class="rv-word-list" id="rvWordList"></div>
   </div>
 </div>
 
@@ -704,7 +798,6 @@ let curLt = 'A', stars = 0, lives = 3, streak = 0, score = 0;
 let listenQ = null, listenOk = 0, listenTotal = 0;
 let spkIdx = 0, writeIdx = 0, writeTab = 'letter', curGame = 'match';
 let gData = {}, recTimer = null, rInterval = null;
-let drawing = false, ctx = null, lastX = 0, lastY = 0;
 
 // ===================== INIT =====================
 function init() {
@@ -722,6 +815,7 @@ function init() {
 }
 
 function selectLt(l) {
+  if(rInterval) { clearInterval(rInterval); rInterval = null; }
   curLt = l;
   document.querySelectorAll('.lbtn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('lt-' + l);
@@ -735,6 +829,8 @@ function selectLt(l) {
   document.getElementById('heroRdPh').textContent = ph;
   document.getElementById('wlLt').textContent = l;
   document.getElementById('spkLtTitle').textContent = l;
+  const rvScopeLbl = document.getElementById('rvScopeLbl');
+  if(rvScopeLbl) rvScopeLbl.textContent = l;
   renderAll();
 }
 
@@ -756,12 +852,14 @@ function renderAll() {
 
 // ===================== SKILL TABS =====================
 function showSkill(skill, el) {
+  if(rInterval) { clearInterval(rInterval); rInterval = null; }
   document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('sec-' + skill).classList.add('active');
   document.getElementById('mainBody').scrollTop = 0;
   if(skill === 'games') { selectGame(curGame, document.querySelector('.gc.on')); startGame(); }
+  if(skill === 'review') renderReview();
 }
 
 // ===================== LISTEN =====================
@@ -785,15 +883,17 @@ function renderListen() {
 function genListenQ() {
   const ws = WD[curLt] || [];
   if(!ws.length) return;
-  const correct = ws[Math.floor(Math.random() * ws.length)];
-  let opts = [correct];
-  const all = Object.values(WD).flat();
-  while(opts.length < 4) {
-    const c = all[Math.floor(Math.random() * all.length)];
-    if(!opts.find(o => o.w === c.w)) opts.push(c);
+  // Shuffle và lấy 4 từ khác nhau từ cùng letter
+  const shuffled = [...ws].sort(() => Math.random() - 0.5);
+  let pool = shuffled.slice(0, 4);
+  // Nếu letter có ít hơn 4 từ, bổ sung từ letter khác gần giống (nhưng hiển thị chính xác)
+  if(pool.length < 4) {
+    const all = Object.values(WD).flat().filter(x => !pool.find(o => o.w === x.w));
+    while(pool.length < 4) pool.push(all[Math.floor(Math.random() * all.length)]);
   }
-  opts = opts.sort(() => Math.random() - 0.5);
+  const correct = pool[Math.floor(Math.random() * pool.length)];
   listenQ = correct;
+  const opts = pool.sort(() => Math.random() - 0.5);
   document.getElementById('choices').innerHTML = opts.map(o => `
     <div class="chbtn" onclick="chkListen('${o.w.replace(/'/g,"\\'")}')">
       <span class="cem">${o.e}</span>${o.w}
@@ -1051,6 +1151,7 @@ function nxtWriteWd() {
 
 // ===================== GAMES =====================
 function selGame(game, el) {
+  if(rInterval) { clearInterval(rInterval); rInterval = null; }
   curGame = game;
   document.querySelectorAll('.gc').forEach(c => c.classList.remove('on'));
   if(el) el.classList.add('on');
@@ -1068,8 +1169,8 @@ function startGame() {
   else if(curGame === 'fill') gameFill(ws);
   else if(curGame === 'rapid') gameRapid();
   else if(curGame === 'spelling') gameSpelling(ws);
-  else if(curGame === 'category') gameCategory();
-  else if(curGame === 'chain') gameChain(ws);
+  else if(curGame === 'bubble') gameBubble();
+  else if(curGame === 'memory') gameMemory();
 }
 
 // MATCH
@@ -1239,25 +1340,26 @@ function chkFill(el, word) {
 // RAPID
 function gameRapid() {
   if(rInterval) clearInterval(rInterval);
-  const all = Object.values(WD).flat();
-  const correct = all[Math.floor(Math.random()*all.length)];
-  let opts=[correct];
-  while(opts.length<4){const c=all[Math.floor(Math.random()*all.length)];if(!opts.find(o=>o.w===c.w))opts.push(c);}
-  opts=opts.sort(()=>Math.random()-0.5);
-  let t=10; gData.rapid={correct,answered:false};
-  const area=document.getElementById('garea');
-  area.innerHTML=`
+  const ws = WD[curLt] || [];
+  if(ws.length < 2) { document.getElementById('garea').innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Cần thêm từ!</p>'; return; }
+  const shuffled = [...ws].sort(() => Math.random() - 0.5);
+  const pool = shuffled.slice(0, Math.min(4, ws.length));
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  const opts = pool.sort(() => Math.random() - 0.5);
+  let t = 10; gData.rapid = {correct, answered: false};
+  const area = document.getElementById('garea');
+  area.innerHTML = `
     <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:8px">Chọn hình đúng! ⚡</p>
     <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:22px;color:var(--p);margin-bottom:8px">${correct.w}</div>
     <div class="rtimer"><div class="rtfill" id="rtfill" style="width:100%"></div></div>
     <div style="text-align:center;font-size:12px;color:var(--mut);margin-bottom:10px">⏱ <span id="rsec">10</span>s</div>
-    <div class="ropts">${opts.map(o=>`<div class="ropt" onclick="chkRapid(this,'${o.w.replace(/'/g,"\\'")}')"><span class="roe">${o.e}</span>${o.w}</div>`).join('')}</div>`;
-  rInterval=setInterval(()=>{
+    <div class="ropts">${opts.map(o => `<div class="ropt" onclick="chkRapid(this,'${o.w.replace(/'/g,"\\'")}')"><span class="roe">${o.e}</span>${o.w}</div>`).join('')}</div>`;
+  rInterval = setInterval(() => {
     t--;
-    const sel=document.getElementById('rsec'),bar=document.getElementById('rtfill');
-    if(sel)sel.textContent=t; if(bar)bar.style.width=(t/10*100)+'%';
-    if(t<=0){clearInterval(rInterval);if(!gData.rapid.answered){document.querySelectorAll('.ropt').forEach(o=>{if(o.textContent.includes(correct.w))o.classList.add('rok');});setTimeout(()=>gameRapid(),1400);}}
-  },1000);
+    const sel = document.getElementById('rsec'), bar = document.getElementById('rtfill');
+    if(sel) sel.textContent = t; if(bar) bar.style.width = (t / 10 * 100) + '%';
+    if(t <= 0) { clearInterval(rInterval); if(!gData.rapid.answered) { document.querySelectorAll('.ropt').forEach(o => { if(o.textContent.includes(correct.w)) o.classList.add('rok'); }); setTimeout(() => gameRapid(), 1400); } }
+  }, 1000);
 }
 
 function chkRapid(el,word){
@@ -1294,83 +1396,334 @@ function chkSpell(){
   if(inp===t){fb.style.color='#4CAF50';fb.textContent='🎉 Đúng rồi!';document.getElementById('beeWd').textContent=gData.spell.w;addStar(4);setTimeout(()=>gameSpelling(WD[curLt]),1500);}
 }
 
-// CATEGORY
-function gameCategory() {
-  const animSet = new Set(['bee','bird','butterfly','cat','cow','crab','dog','dolphin','duck','eagle','elephant','fish','fox','frog','giraffe','goat','goose','hamster','hen','hippo','horse','iguana','insect','jellyfish','kangaroo','kitten','koala','lion','lizard','monkey','mouse','octopus','ostrich','owl','panda','parrot','penguin','pig','quail','rabbit','rhino','shark','sheep','snake','tiger','turtle','whale','wolf','yak','zebra']);
-  const foodSet = new Set(['apple','banana','cake','candy','donut','egg','grapes','hamburger','ice cream','jam','jelly','juice','lemon','mango','milk','noodles','nut','olive','onion','orange','pear','pizza','tomato','watermelon','yam','yogurt','zucchini']);
-  const ws = WD[curLt];
-  const animals = ws.filter(w=>animSet.has(w.w)).slice(0,3);
-  const foods = ws.filter(w=>foodSet.has(w.w)).slice(0,3);
-  const mix = [...animals,...foods].sort(()=>Math.random()-0.5);
-  const area = document.getElementById('garea');
-  if(!mix.length){area.innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Chữ '+curLt+' không đủ từ để phân loại, hãy thử chữ khác!</p>';return;}
-  gData.cat = {animals:animals.map(w=>w.w), foods:foods.map(w=>w.w)};
-  area.innerHTML = `
-    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:10px">Nhấn từ rồi nhấn ô để xếp loại!</p>
-    <div class="sort-items" id="sortItems">${mix.map(w=>`<div class="sitem" id="si-${w.w.replace(/\s/g,'_')}" onclick="selSortItem('${w.w.replace(/'/g,"\\'")}',this)">${w.e} ${w.w}</div>`).join('')}</div>
-    <div class="sboxes">
-      <div class="sbox" onclick="dropSortTo('animals')"><div class="sbox-ttl">🐾 Động vật</div><div id="sanim"></div></div>
-      <div class="sbox" onclick="dropSortTo('food')"><div class="sbox-ttl">🍎 Thức ăn</div><div id="sfood"></div></div>
-    </div>`;
-  gData.cat.selected = null;
-}
-
-function selSortItem(word, el) {
-  document.querySelectorAll('.sitem').forEach(e=>e.style.outline='');
-  gData.cat.selected = word;
-  el.style.outline = '3px solid var(--p)';
-}
-
-function dropSortTo(box) {
-  const word = gData.cat.selected;
-  if(!word) return;
-  gData.cat.selected = null;
-  const animSet = new Set(['bee','bird','butterfly','cat','cow','crab','dog','dolphin','duck','eagle','elephant','fish','fox','frog','giraffe','goat','goose','hamster','hen','hippo','horse','iguana','insect','jellyfish','kangaroo','kitten','koala','lion','lizard','monkey','mouse','octopus','ostrich','owl','panda','parrot','penguin','pig','quail','rabbit','rhino','shark','sheep','snake','tiger','turtle','whale','wolf','yak','zebra']);
-  const foodSet = new Set(['apple','banana','cake','candy','donut','egg','grapes','hamburger','ice cream','jam','jelly','juice','lemon','mango','milk','noodles','nut','olive','onion','orange','pear','pizza','tomato','watermelon','yam','yogurt','zucchini']);
-  const isA = animSet.has(word), isF = foodSet.has(word);
-  const correct = (box==='animals'&&isA)||(box==='food'&&isF);
-  const ew = (WD[curLt]||[]).find(x=>x.w===word)||{e:''};
-  const tid = box==='animals'?'sanim':'sfood';
-  const cls = correct ? 'sitem-sorted' : 'sitem-wrong';
-  document.getElementById(tid).innerHTML += `<span class="${cls}">${ew.e} ${word}</span>`;
-  const orig = document.getElementById('si-'+word.replace(/\s/g,'_'));
-  if(orig) orig.style.opacity='0.3';
-  if(correct) addStar(2); else loseLive();
-}
-
-// WORD CHAIN
-function gameChain(ws) {
-  const w = ws[Math.floor(Math.random()*ws.length)];
-  gData.chain = {chain:[w.w], score:0};
+// BUBBLE POP
+function gameBubble() {
+  const ws = WD[curLt] || [];
+  if(ws.length < 3) { document.getElementById('garea').innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Cần ít nhất 3 từ!</p>'; return; }
+  const pool = [...ws].sort(() => Math.random() - 0.5).slice(0, Math.min(6, ws.length));
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  gData.bubble = {correct, pool, score: 0, total: 0};
   const area = document.getElementById('garea');
   area.innerHTML = `
-    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:8px">Nhập từ bắt đầu bằng chữ cuối của từ trước!</p>
-    <div class="chain-disp" id="chainDisp">${w.e} ${w.w}</div>
-    <p style="font-size:13px;font-weight:700;margin-bottom:8px">Từ tiếp theo bắt đầu bằng: <span style="color:var(--p);font-size:16px;font-family:'Fredoka One',cursive" id="chainNext">${w.w.slice(-1).toUpperCase()}</span></p>
-    <input type="text" id="chainIn" class="winput" style="font-size:18px;letter-spacing:3px" placeholder="Nhập từ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <div class="btnrow" style="margin-top:10px;justify-content:center">
-      <button class="btn btn-p" onclick="submitChain()">✅ Nhập</button>
+    <div class="bubble-q">🎯 Bắn bóng có: <span style="color:#333">${correct.w}</span> ${correct.e}</div>
+    <div class="bubble-arena" id="bubbleArena"></div>
+    <div style="text-align:center;font-size:13px;color:var(--mut)">Chạm đúng bóng! Điểm: <span id="bblSc" style="font-weight:800;color:var(--p)">0</span></div>`;
+  renderBubbles(pool, correct);
+}
+
+function renderBubbles(pool, correct) {
+  const arena = document.getElementById('bubbleArena');
+  if(!arena) return;
+  arena.innerHTML = '';
+  const colors = ['#FF6B6B','#4ECDC4','#A78BFA','#FF9800','#4CAF50','#E91E63'];
+  pool.forEach((w, i) => {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const sz = 68 + Math.random() * 14;
+    const x = 8 + (i % 3) * 30 + Math.random() * 8;
+    const y = 8 + Math.floor(i / 3) * 45 + Math.random() * 10;
+    b.style.cssText = `width:${sz}px;height:${sz}px;left:${x}%;top:${y}%;background:${colors[i%colors.length]};`;
+    b.innerHTML = `<div class="bem">${w.e}</div><div class="bwd">${w.w}</div>`;
+    b.onclick = () => {
+      const g = gData.bubble;
+      if(!g || !g.correct) return;
+      if(w.w === g.correct.w) {
+        b.style.transform = 'scale(0)'; b.style.opacity = '0';
+        addStar(3); g.score++; g.total++;
+        document.getElementById('bblSc').textContent = g.score;
+        spk(w.w, 0.8);
+        setTimeout(() => {
+          const ws2 = WD[curLt] || [];
+          const newPool = [...ws2].sort(() => Math.random() - 0.5).slice(0, Math.min(6, ws2.length));
+          const newCorrect = newPool[Math.floor(Math.random() * newPool.length)];
+          gData.bubble = {correct: newCorrect, pool: newPool, score: g.score, total: g.total};
+          document.querySelector('.bubble-q').innerHTML = `🎯 Bắn bóng có: <span style="color:#333">${newCorrect.w}</span> ${newCorrect.e}`;
+          renderBubbles(newPool, newCorrect);
+        }, 600);
+      } else {
+        b.style.animation = 'shk 0.3s';
+        loseLive();
+      }
+    };
+    arena.appendChild(b);
+  });
+}
+
+// MEMORY FLIP
+function gameMemory() {
+  const ws = WD[curLt] || [];
+  if(ws.length < 3) { document.getElementById('garea').innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Cần ít nhất 3 từ!</p>'; return; }
+  const pool = [...ws].sort(() => Math.random() - 0.5).slice(0, 4);
+  // Each word: 1 emoji card + 1 word card = 8 cards total
+  const pairs = [
+    ...pool.map((w, i) => ({id: i, type: 'emoji', val: w.e, word: w.w, key: w.w})),
+    ...pool.map((w, i) => ({id: i+4, type: 'word', val: w.w, word: w.w, key: w.w}))
+  ].sort(() => Math.random() - 0.5);
+  gData.mem = {pairs, flipped: [], matched: [], lock: false, pairs_matched: 0};
+  const area = document.getElementById('garea');
+  area.innerHTML = `
+    <p style="font-size:12px;color:var(--mut);text-align:center;margin-bottom:10px">Lật thẻ tìm cặp hình + từ!</p>
+    <div class="mem-grid" style="grid-template-columns:repeat(4,1fr)" id="memGrid"></div>
+    <div style="text-align:center;font-size:13px;color:var(--mut)">Cặp tìm được: <span id="memSc" style="font-weight:800;color:var(--p)">0</span>/4</div>`;
+  const grid = document.getElementById('memGrid');
+  pairs.forEach((p, i) => {
+    const c = document.createElement('div');
+    c.className = 'mcard'; c.dataset.idx = i;
+    c.innerHTML = '❓';
+    c.onclick = () => clickMem(i);
+    grid.appendChild(c);
+  });
+}
+
+function clickMem(idx) {
+  const g = gData.mem;
+  if(g.lock || g.flipped.includes(idx) || g.matched.includes(idx)) return;
+  const cards = document.querySelectorAll('.mcard');
+  const p = g.pairs[idx];
+  cards[idx].classList.add('mflip');
+  cards[idx].innerHTML = p.type === 'emoji' ? `<span style="font-size:26px">${p.val}</span>` : `<span style="font-size:13px;font-weight:800;color:var(--txt)">${p.val}</span>`;
+  g.flipped.push(idx);
+  if(g.flipped.length === 2) {
+    g.lock = true;
+    const [a, b] = g.flipped;
+    if(g.pairs[a].key === g.pairs[b].key && a !== b) {
+      cards[a].classList.add('mhit'); cards[b].classList.add('mhit');
+      g.matched.push(a, b); g.pairs_matched++;
+      document.getElementById('memSc').textContent = g.pairs_matched;
+      addStar(3); spk(g.pairs[a].word, 0.8);
+      g.flipped = []; g.lock = false;
+      if(g.pairs_matched === 4) setTimeout(() => { showRes('🎉', 'Tìm hết rồi!', '+12 ⭐'); }, 500);
+    } else {
+      setTimeout(() => {
+        [a, b].forEach(i => { cards[i].classList.remove('mflip', 'mmiss'); cards[i].innerHTML = '❓'; });
+        g.flipped = []; g.lock = false;
+      }, 900);
+      cards[a].classList.add('mmiss'); cards[b].classList.add('mmiss');
+      loseLive();
+    }
+  }
+}
+
+// ===================== REVIEW =====================
+let curRvScope = 'cur';          // 'cur' | 'all'
+let rvActiveLetters = new Set(); // khi scope='all', chữ nào đang bật
+
+function getRvWords() {
+  if(curRvScope === 'cur') return WD[curLt] || [];
+  // scope all: lấy từ các letter đang bật, nếu không có thì lấy tất cả
+  const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const src = rvActiveLetters.size > 0
+    ? ALPHA.filter(l => rvActiveLetters.has(l))
+    : ALPHA;
+  return src.flatMap(l => WD[l] || []);
+}
+
+function setRvScope(scope, el) {
+  curRvScope = scope;
+  document.querySelectorAll('.rv-scope-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('rvLtFilter').style.display = scope === 'all' ? 'block' : 'none';
+  rvFcIdx = 0; rvScore = 0; rvTotal = 0;
+  renderReview();
+}
+
+function toggleRvLetter(l, el) {
+  if(rvActiveLetters.has(l)) rvActiveLetters.delete(l);
+  else rvActiveLetters.add(l);
+  el.classList.toggle('on', rvActiveLetters.has(l));
+  rvFcIdx = 0;
+  if(curRvMode === 'flash') renderFlashcard();
+  else renderQuiz();
+  updateRvWordList();
+}
+
+function renderReview() {
+  // Cập nhật label scope button
+  document.getElementById('rvScopeLbl').textContent = curLt;
+  // Khởi tạo chips nếu chưa có
+  const chipsEl = document.getElementById('rvLtChips');
+  if(!chipsEl.children.length) {
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
+      const c = document.createElement('div');
+      c.className = 'rv-lt-chip' + (rvActiveLetters.has(l) ? ' on' : '');
+      c.textContent = l; c.id = 'rvc-' + l;
+      c.onclick = () => toggleRvLetter(l, c);
+      chipsEl.appendChild(c);
+    });
+  }
+  document.getElementById('rvLtFilter').style.display = curRvScope === 'all' ? 'block' : 'none';
+  // Score board
+  updateRvScoreBoard();
+  // Word list
+  updateRvWordList();
+  // Mode content
+  if(curRvMode === 'flash') renderFlashcard();
+  else renderQuiz();
+}
+
+function updateRvScoreBoard() {
+  document.getElementById('rvScBig').textContent = rvScore;
+  document.getElementById('rvScSub').textContent = rvTotal > 0 ? `${rvScore}/${rvTotal} câu đúng` : 'Bắt đầu ôn tập nào!';
+  const pct = rvTotal > 0 ? Math.round(rvScore / rvTotal * 100) : 0;
+  const s = rvTotal > 0 ? (pct >= 90 ? 5 : pct >= 70 ? 4 : pct >= 50 ? 3 : pct >= 30 ? 2 : 1) : 0;
+  document.getElementById('rvStars').textContent = '⭐'.repeat(s) + '☆'.repeat(5 - s);
+}
+
+function updateRvWordList() {
+  const ws = getRvWords();
+  const scopeLabel = curRvScope === 'cur'
+    ? `chữ ${curLt}`
+    : (rvActiveLetters.size > 0 ? [...rvActiveLetters].sort().join(', ') : 'A-Z');
+  const titleEl = document.getElementById('rvWordListTitle');
+  if(titleEl) titleEl.innerHTML = `📋 Từ vựng đang ôn <span style="color:var(--p)">(${ws.length} từ)</span>`;
+  const list = document.getElementById('rvWordList');
+  list.innerHTML = ws.map(w => `
+    <div class="rv-witem" onclick="spk('${w.w.replace(/'/g,"\\'")}',0.75)">
+      <span class="rie">${w.e}</span>
+      <div>
+        <div style="font-size:13px;font-weight:800">${w.w}</div>
+        <div style="font-size:10px;color:var(--mut);font-weight:400">${w.p}</div>
+      </div>
+    </div>`).join('');
+}
+
+function setRvMode(mode, el) {
+  curRvMode = mode;
+  document.querySelectorAll('.rv-mode-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  rvFcIdx = 0; rvScore = 0; rvTotal = 0;
+  updateRvScoreBoard();
+  if(mode === 'flash') renderFlashcard();
+  else renderQuiz();
+}
+
+// --- FLASHCARD ---
+function renderFlashcard() {
+  const ws = getRvWords();
+  if(!ws.length) { document.getElementById('rvArea').innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Không có từ nào!</p>'; return; }
+  rvFcIdx = Math.min(rvFcIdx, ws.length - 1);
+  const w = ws[rvFcIdx];
+  const area = document.getElementById('rvArea');
+  area.innerHTML = `
+    <div class="fc-nav">
+      <button class="btn btn-p" onclick="fcNav(-1)" style="padding:7px 14px">◀</button>
+      <span class="fc-counter">${rvFcIdx + 1} / ${ws.length}</span>
+      <button class="btn btn-p" onclick="fcNav(1)" style="padding:7px 14px">▶</button>
     </div>
-    <div style="text-align:center;font-size:13px;margin-top:8px;color:var(--mut)">Chuỗi: <span style="font-weight:700;color:var(--p)" id="chainSc">0</span> từ</div>
-    <div style="font-size:13px;font-weight:700;text-align:center;margin-top:6px" id="chainFb"></div>`;
+    <div class="fc-wrap" id="fcWrap" onclick="flipFC()">
+      <div class="fc-inner">
+        <div class="fc-front">
+          <div class="fc-em">${w.e}</div>
+          <div style="font-size:11px;opacity:.7;margin-top:4px">Nhấn để lật 👆</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-wd">${w.w}</div>
+          <div class="fc-ph">${w.p}</div>
+          <div style="font-size:11px;opacity:.8;margin-top:4px;padding:0 12px;text-align:center">${w.s}</div>
+        </div>
+      </div>
+    </div>
+    <div class="btnrow" style="justify-content:center;margin-top:6px">
+      <button class="btn btn-s" onclick="spk('${w.w.replace(/'/g,"\\'")}',0.7)">🔊 Nghe từ</button>
+      <button class="btn btn-v" onclick="spk('${w.s.replace(/'/g,"\\'")}',0.8)">📖 Nghe câu</button>
+      <button class="btn btn-o" onclick="fcShuffle()">🔀 Xáo</button>
+    </div>`;
 }
 
-function submitChain(){
-  const inp=document.getElementById('chainIn');
-  const word=inp.value.toLowerCase().trim(); if(!word)return;
-  const g=gData.chain;
-  const nc=g.chain[g.chain.length-1].slice(-1).toLowerCase();
-  const fb=document.getElementById('chainFb');
-  if(!word.startsWith(nc)){fb.style.color='#F44336';fb.textContent='❌ Phải bắt đầu bằng "'+nc.toUpperCase()+'"!';return;}
-  const all=Object.values(WD).flat().map(x=>x.w.toLowerCase());
-  if(!all.includes(word)){fb.style.color='#FF9800';fb.textContent='⚠️ Từ chưa có trong danh sách!';return;}
-  if(g.chain.includes(word)){fb.style.color='#FF9800';fb.textContent='⚠️ Từ đã dùng rồi!';return;}
-  g.chain.push(word); g.score++; addStar(2);
-  const ew=Object.values(WD).flat().find(x=>x.w.toLowerCase()===word)||{e:'⭐'};
-  document.getElementById('chainDisp').innerHTML+=` → ${ew.e} ${word}`;
-  document.getElementById('chainNext').textContent=word.slice(-1).toUpperCase();
-  document.getElementById('chainSc').textContent=g.score;
-  inp.value=''; fb.style.color='#4CAF50'; fb.textContent='🎉 Tốt lắm!';
+function flipFC() {
+  const wrap = document.getElementById('fcWrap');
+  if(wrap) {
+    wrap.classList.toggle('flipped');
+    if(wrap.classList.contains('flipped')) {
+      const ws = getRvWords();
+      if(ws[rvFcIdx]) spk(ws[rvFcIdx].w, 0.75);
+      addStar(1);
+    }
+  }
+}
+
+function fcNav(dir) {
+  const ws = getRvWords();
+  rvFcIdx = (rvFcIdx + dir + ws.length) % ws.length;
+  renderFlashcard();
+}
+
+function fcShuffle() {
+  // Xáo thứ tự bằng cách random index mới
+  const ws = getRvWords();
+  rvFcIdx = Math.floor(Math.random() * ws.length);
+  renderFlashcard();
+}
+
+// --- QUIZ ---
+function renderQuiz() {
+  const ws = getRvWords();
+  if(ws.length < 2) { document.getElementById('rvArea').innerHTML='<p style="text-align:center;color:var(--mut);padding:20px">Cần ít nhất 2 từ để ôn!</p>'; return; }
+  const qtype = Math.floor(Math.random() * 3);
+  const shuffled = [...ws].sort(() => Math.random() - 0.5);
+  const correct = shuffled[0];
+  // Pool 4 từ: ưu tiên từ cùng letter nếu scope=cur, hoặc mix nếu scope=all
+  let pool = shuffled.slice(0, Math.min(4, ws.length));
+  while(pool.length < 4) pool.push(ws[Math.floor(Math.random() * ws.length)]);
+  pool = pool.sort(() => Math.random() - 0.5);
+  rvQuizData = {correct, pool, qtype, answered: false};
+  const area = document.getElementById('rvArea');
+  let qHtml = '';
+  if(qtype === 0) {
+    qHtml = `<div class="rv-q">🔊 Nhấn nghe rồi chọn đúng:</div>
+      <div style="text-align:center;margin-bottom:12px">
+        <button class="audio-circle" style="width:70px;height:70px;font-size:26px" onclick="spk('${correct.w.replace(/'/g,"\\'")}',0.7)">🔊</button>
+      </div>`;
+  } else if(qtype === 1) {
+    qHtml = `<div class="rv-q">Đây là gì? <span style="font-size:32px">${correct.e}</span></div>`;
+  } else {
+    qHtml = `<div class="rv-q">Chọn hình đúng cho từ:<br><span style="font-family:'Fredoka One',cursive;color:var(--p);font-size:22px">${correct.w}</span></div>`;
+  }
+  const optsHtml = pool.map(o => {
+    const display = qtype === 2
+      ? `<span class="roe">${o.e}</span>`
+      : `<span class="roe">${o.e}</span>${o.w}`;
+    return `<div class="rv-opt" onclick="chkQuiz(this,'${o.w.replace(/'/g,"\\'")}')">` + display + `</div>`;
+  }).join('');
+  const pgPct = Math.min((rvTotal % 10) / 10 * 100, 100);
+  area.innerHTML = `
+    <div class="rv-prog"><span>Câu ${(rvTotal % 10) + 1}/10</span><span>${rvScore} đúng</span></div>
+    <div class="pgbar" style="margin-bottom:12px"><div class="pgfill" style="width:${pgPct}%"></div></div>
+    ${qHtml}
+    <div class="rv-opts">${optsHtml}</div>
+    <div style="text-align:center;font-size:13px;font-weight:700;min-height:22px" id="rvFb"></div>`;
+  if(qtype === 0) setTimeout(() => spk(correct.w, 0.7), 400);
+}
+
+function chkQuiz(el, word) {
+  if(rvQuizData.answered) return;
+  rvQuizData.answered = true;
+  document.querySelectorAll('.rv-opt').forEach(o => o.style.pointerEvents = 'none');
+  const c = rvQuizData.correct.w;
+  const fb = document.getElementById('rvFb');
+  rvTotal++;
+  if(word === c) {
+    el.classList.add('rvok'); addStar(3); rvScore++;
+    fb.style.color = '#4CAF50'; fb.textContent = '🎉 Đúng rồi! +3⭐';
+    spk(c, 0.8);
+  } else {
+    el.classList.add('rvno');
+    document.querySelectorAll('.rv-opt').forEach(o => {
+      if(o.textContent.trim().startsWith(rvQuizData.correct.e) || o.textContent.includes(c)) o.classList.add('rvok');
+    });
+    fb.style.color = '#F44336'; fb.textContent = '❌ Chưa đúng! Đáp án: ' + c;
+    loseLive();
+  }
+  updateRvScoreBoard();
+  if(rvTotal % 10 === 0) {
+    const pct = Math.round(rvScore / rvTotal * 100);
+    setTimeout(() => showRes(
+      pct >= 80 ? '🏆' : pct >= 60 ? '🌟' : '💪',
+      pct >= 80 ? 'Xuất sắc!' : pct >= 60 ? 'Tốt lắm!' : 'Cố lên!',
+      `${rvScore}/${rvTotal} câu đúng (${pct}%)`
+    ), 1200);
+  }
+  setTimeout(renderQuiz, 1600);
 }
 
 // ===================== UTILS =====================
