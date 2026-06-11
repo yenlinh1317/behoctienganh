@@ -1,109 +1,409 @@
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Toán Vũ Trụ – Tiểu Học</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0B0E1A;--card:#161B2E;--card2:#1E2540;--accent:#7C3AED;
-  --yellow:#F59E0B;--green:#10B981;--red:#EF4444;--blue:#3B82F6;
-  --pink:#EC4899;--teal:#14B8A6;--orange:#F97316;
-  --text:#F1F5F9;--muted:#94A3B8;--border:#2D3A5A;
+  /* Light theme */
+  --bg:#F0F4FF;
+  --surface:#FFFFFF;
+  --surface2:#EEF2FF;
+  --card:#FFFFFF;
+  --card2:#F5F3FF;
+  --border:#DDE3F8;
+  --border2:#C7D2FE;
+  --accent:#4F46E5;
+  --accent2:#6366F1;
+  --accent-light:#EEF2FF;
+  --yellow:#D97706;
+  --yellow-bg:#FEF3C7;
+  --green:#059669;
+  --green-bg:#D1FAE5;
+  --red:#DC2626;
+  --red-bg:#FEE2E2;
+  --blue:#2563EB;
+  --blue-bg:#DBEAFE;
+  --pink:#DB2777;
+  --teal:#0D9488;
+  --orange:#EA580C;
+  --text:#1E1B4B;
+  --text2:#4338CA;
+  --muted:#6B7280;
+  --shadow:0 2px 12px rgba(79,70,229,.10);
+  --shadow-lg:0 8px 32px rgba(79,70,229,.15);
+  --radius:16px;
+  --radius-sm:10px;
 }
-#app{background:var(--bg);min-height:640px;border-radius:16px;overflow:hidden;position:relative;font-family:'Segoe UI',system-ui,sans-serif;color:var(--text)}
 
-/* Stars bg */
-#starfield{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-.star-dot{position:absolute;background:white;border-radius:50%;animation:twinkle 3s infinite ease-in-out}
-@keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+html,body{
+  height:100%;
+  background:var(--bg);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  color:var(--text);
+}
 
-/* Header */
-#hdr{position:relative;z-index:2;background:rgba(22,27,46,.95);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:10px}
-#hdr-title{font-size:15px;font-weight:700;color:var(--yellow);flex:1;letter-spacing:.3px}
+/* ─── WRAPPER ─────────────────────────────────────────────── */
+#app-wrapper{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0 0 40px;
+  background: linear-gradient(160deg, #EEF2FF 0%, #F0F4FF 60%, #E0E7FF 100%);
+}
+
+/* ─── HEADER ───────────────────────────────────────────────── */
+#hdr{
+  width:100%;
+  max-width:720px;
+  background:var(--surface);
+  border-bottom:2px solid var(--border2);
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  box-shadow:var(--shadow);
+  position:sticky;top:0;z-index:100;
+}
+#hdr-logo{font-size:22px}
+#hdr-title{font-size:15px;font-weight:800;color:var(--accent);flex:1;letter-spacing:.2px}
 #xp-wrap{display:flex;align-items:center;gap:6px}
-#xp-bar-bg{width:80px;height:7px;background:#2D3A5A;border-radius:7px;overflow:hidden}
-#xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--pink));border-radius:7px;transition:width .5s}
-#xp-lv{font-size:11px;font-weight:700;color:var(--yellow)}
-#coin-box{display:flex;align-items:center;gap:4px;background:rgba(245,158,11,.15);border-radius:20px;padding:3px 9px}
-#coin-num{font-size:13px;font-weight:700;color:var(--yellow)}
+#xp-bar-bg{width:72px;height:8px;background:var(--surface2);border-radius:8px;overflow:hidden;border:1px solid var(--border2)}
+#xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:8px;transition:width .5s}
+#xp-lv{font-size:11px;font-weight:800;color:var(--accent);min-width:28px}
+#coin-box{display:flex;align-items:center;gap:4px;background:var(--yellow-bg);border:1.5px solid #FCD34D;border-radius:20px;padding:4px 10px}
+#coin-num{font-size:13px;font-weight:800;color:var(--yellow)}
 
-/* HOME */
-#home{position:relative;z-index:2;padding:10px 12px 14px}
-#home-hero{text-align:center;padding:8px 0 12px}
-#rocket-anim{font-size:42px;animation:float 2.5s ease-in-out infinite}
+/* ─── MAIN CONTENT AREA ────────────────────────────────────── */
+#app{
+  width:100%;
+  max-width:720px;
+  padding:16px 16px 0;
+}
+
+/* ─── GUIDE BANNER ─────────────────────────────────────────── */
+#guide-banner{
+  background:linear-gradient(135deg,#4F46E5,#7C3AED);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  margin-bottom:16px;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  box-shadow:var(--shadow-lg);
+  transition:transform .15s;
+}
+#guide-banner:hover{transform:translateY(-1px)}
+#guide-banner .g-ico{font-size:28px;flex-shrink:0}
+#guide-banner .g-text h3{font-size:14px;font-weight:800;margin-bottom:2px}
+#guide-banner .g-text p{font-size:11px;opacity:.88;line-height:1.4}
+#guide-banner .g-arrow{font-size:18px;margin-left:auto;flex-shrink:0}
+
+/* ─── HOME ─────────────────────────────────────────────────── */
+#home-hero{
+  text-align:center;
+  padding:12px 0 16px;
+}
+#rocket-anim{font-size:52px;display:block;animation:float 2.5s ease-in-out infinite;filter:drop-shadow(0 6px 12px rgba(79,70,229,.3))}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-#home-hero h2{font-size:18px;font-weight:700;color:var(--yellow);margin-top:4px}
-#home-hero p{font-size:11px;color:var(--muted);margin-top:2px}
-#planets-list{display:flex;flex-direction:column;gap:8px}
-.planet-row{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
-.planet-row:hover:not(.locked){border-color:var(--accent);background:var(--card2);transform:translateX(3px)}
-.planet-row.locked{opacity:.5;cursor:not-allowed}
-.planet-ico{font-size:32px;flex-shrink:0}
-.planet-info{flex:1}
-.planet-name{font-size:13px;font-weight:700;color:var(--text)}
-.planet-desc{font-size:10px;color:var(--muted);margin-top:2px}
-.planet-levels{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
-.lv-dot{width:22px;height:22px;border-radius:6px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;border:1px solid transparent}
-.lv-dot.done{background:#10B981;color:white;border-color:#059669}
-.lv-dot.active{background:var(--accent);color:white;border-color:#6D28D9}
-.lv-dot.locked-dot{background:#1E2540;color:#4B5563;border-color:#2D3A5A}
-.planet-lock{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px}
+#home-hero h2{font-size:20px;font-weight:900;color:var(--accent);margin-top:8px}
+#home-hero p{font-size:12px;color:var(--muted);margin-top:4px}
+#progress-overview{
+  background:var(--surface);
+  border:1.5px solid var(--border2);
+  border-radius:var(--radius);
+  padding:12px 16px;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:var(--shadow);
+}
+.prog-stat{text-align:center;flex:1}
+.prog-stat span{display:block;font-size:20px;font-weight:900;color:var(--accent)}
+.prog-stat small{font-size:10px;color:var(--muted)}
+.prog-div{width:1px;height:32px;background:var(--border2)}
 
-/* LEVEL SELECT */
-#lvl-select{display:none;position:relative;z-index:2;padding:10px 12px}
-#ls-back{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 5px;border-radius:7px;margin-bottom:8px}
-#ls-back:hover{background:var(--card2)}
-#ls-title{font-size:16px;font-weight:700;margin-bottom:10px}
-#ls-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.lv-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s}
-.lv-card:hover:not(.lv-locked){border-color:var(--accent);transform:scale(1.05)}
-.lv-card.lv-locked{opacity:.4;cursor:not-allowed}
-.lv-card.lv-done{border-color:var(--green)}
-.lv-card.lv-active-card{border-color:var(--accent);background:rgba(124,58,237,.15)}
-.lv-num{font-size:18px;font-weight:700}
-.lv-stars{font-size:11px;margin-top:3px}
-.lv-diff{font-size:9px;color:var(--muted);margin-top:2px}
+#planets-list{display:flex;flex-direction:column;gap:10px}
+.planet-row{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  cursor:pointer;
+  transition:all .15s;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:var(--shadow);
+}
+.planet-row:hover:not(.locked){
+  border-color:var(--accent);
+  background:var(--accent-light);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-lg);
+}
+.planet-row.locked{opacity:.55;cursor:not-allowed;background:#F9FAFB}
+.planet-ico{font-size:34px;flex-shrink:0}
+.planet-info{flex:1;min-width:0}
+.planet-name{font-size:14px;font-weight:800;color:var(--text)}
+.planet-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.planet-levels{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.lv-dot{width:24px;height:24px;border-radius:7px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;border:1.5px solid transparent}
+.lv-dot.done{background:var(--green-bg);color:var(--green);border-color:#6EE7B7}
+.lv-dot.active{background:var(--accent);color:white;border-color:#4338CA}
+.lv-dot.locked-dot{background:#F3F4F6;color:#9CA3AF;border-color:var(--border)}
+.planet-lock{font-size:11px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;flex-shrink:0}
+.planet-lock strong{font-size:13px;color:var(--text);font-weight:800}
 
-/* GAME */
-#game{display:none;position:relative;z-index:2;padding:8px 12px 12px}
-#g-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-#g-back{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 5px;border-radius:7px}
-#g-back:hover{background:var(--card2)}
+/* ─── LEVEL SELECT ─────────────────────────────────────────── */
+#lvl-select{display:none}
+#ls-back{
+  background:none;border:none;color:var(--accent);
+  font-size:14px;font-weight:700;cursor:pointer;
+  padding:6px 10px;border-radius:var(--radius-sm);
+  margin-bottom:10px;display:flex;align-items:center;gap:5px;
+}
+#ls-back:hover{background:var(--accent-light)}
+#ls-title{font-size:17px;font-weight:900;margin-bottom:12px;color:var(--text)}
+#ls-grid{
+  display:grid;
+  gap:10px;
+}
+.lv-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 12px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .15s;
+  box-shadow:var(--shadow);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.lv-card:hover:not(.lv-locked){
+  border-color:var(--accent);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-lg);
+}
+.lv-card.lv-locked{opacity:.45;cursor:not-allowed;background:#F9FAFB}
+.lv-card.lv-done{border-color:var(--green);background:var(--green-bg)}
+.lv-card.lv-active-card{border-color:var(--accent);background:var(--accent-light)}
+.lv-num{font-size:22px;font-weight:900;color:var(--text)}
+.lv-name{font-size:11px;color:var(--muted);font-weight:600}
+.lv-stars{font-size:13px;margin-top:2px}
+.lv-diff{font-size:10px;color:var(--muted);margin-top:1px}
+.lv-coins-badge{
+  font-size:10px;font-weight:700;
+  background:var(--yellow-bg);color:var(--yellow);
+  border-radius:20px;padding:2px 8px;
+  border:1px solid #FCD34D;
+}
+
+/* ─── GAME ─────────────────────────────────────────────────── */
+#game{display:none}
+#g-hdr{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+  background:var(--surface);border-radius:var(--radius);
+  padding:10px 12px;border:1.5px solid var(--border);
+  box-shadow:var(--shadow);
+}
+#g-back{
+  background:none;border:none;color:var(--accent);
+  font-size:18px;cursor:pointer;padding:2px 6px;border-radius:7px;
+}
+#g-back:hover{background:var(--accent-light)}
 #g-info{flex:1}
-#g-title{font-size:13px;font-weight:700;color:var(--text)}
-#g-sub{font-size:10px;color:var(--muted)}
-#g-hearts{font-size:15px;letter-spacing:1px}
-#q-prog{height:4px;background:var(--border);border-radius:4px;margin-bottom:8px;overflow:hidden}
-#q-prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
-#q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:center;margin-bottom:8px;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#q-vis{font-size:28px;margin-bottom:6px;line-height:1.3;word-break:break-all;max-width:100%;color:var(--text)}
-#q-txt{font-size:14px;color:var(--text);font-weight:600;line-height:1.4}
-#q-idx{font-size:10px;color:var(--muted);margin-top:4px}
-#hint-panel{display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#FCD34D;line-height:1.6}
-#hint-panel .hs{display:block;padding:2px 0;border-bottom:1px dashed rgba(245,158,11,.2)}
+#g-title{font-size:13px;font-weight:800;color:var(--text)}
+#g-sub{font-size:10px;color:var(--muted);margin-top:1px}
+#g-hearts{font-size:16px;letter-spacing:2px}
+#q-prog{height:6px;background:var(--surface2);border-radius:6px;margin-bottom:10px;overflow:hidden;border:1px solid var(--border)}
+#q-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:6px;transition:width .4s}
+#q-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 16px;
+  text-align:center;
+  margin-bottom:10px;
+  min-height:110px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);
+}
+#q-vis{
+  font-size:30px;margin-bottom:8px;line-height:1.35;
+  word-break:break-word;max-width:100%;color:var(--text);
+  font-weight:700;
+}
+#q-txt{font-size:16px;color:var(--text);font-weight:700;line-height:1.5}
+#q-story{font-size:13px;color:var(--text);font-weight:600;line-height:1.6;white-space:pre-wrap;margin-bottom:4px}
+#q-idx{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600}
+#hint-panel{
+  display:none;
+  background:#FFFBEB;
+  border:1.5px solid #FCD34D;
+  border-radius:var(--radius);
+  padding:12px 14px;
+  margin-bottom:10px;
+  font-size:13px;color:var(--yellow);line-height:1.7;
+  box-shadow:0 2px 8px rgba(217,119,6,.1);
+}
+#hint-panel .hs{display:block;padding:2px 0;border-bottom:1px dashed #FDE68A}
 #hint-panel .hs:last-child{border:none}
-#ans-grid{display:grid;gap:7px}
-.a-btn{background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;font-size:20px;font-weight:700;cursor:pointer;color:var(--text);transition:all .15s;text-align:center}
-.a-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(124,58,237,.2);transform:scale(1.03)}
-.a-btn.correct{background:rgba(16,185,129,.2);border-color:var(--green);color:#6EE7B7}
-.a-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--red);color:#FCA5A5}
+#ans-grid{display:grid;gap:8px}
+.a-btn{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:13px 10px;
+  font-size:18px;font-weight:800;
+  cursor:pointer;color:var(--text);
+  transition:all .15s;text-align:center;
+  box-shadow:var(--shadow);
+}
+.a-btn:hover:not(:disabled){
+  border-color:var(--accent);
+  background:var(--accent-light);
+  transform:scale(1.02);
+}
+.a-btn.correct{
+  background:var(--green-bg);
+  border-color:var(--green);
+  color:var(--green);
+}
+.a-btn.wrong{
+  background:var(--red-bg);
+  border-color:var(--red);
+  color:var(--red);
+}
 
-/* RESULT OVERLAY */
-#rov{display:none;position:absolute;inset:0;z-index:20;align-items:center;justify-content:center;background:rgba(0,0,0,.55);border-radius:16px}
-#rbox{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:22px 24px;text-align:center;max-width:260px;width:90%}
-#r-emo{font-size:48px;margin-bottom:6px}
-#r-tit{font-size:20px;font-weight:700;margin-bottom:4px}
-#r-sub{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
-#r-coins{font-size:16px;margin-bottom:12px;color:var(--yellow)}
-#r-btn{background:var(--accent);color:white;border:none;border-radius:11px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
-#r-btn:hover{background:#6D28D9}
+/* ─── RESULT OVERLAY ───────────────────────────────────────── */
+#rov{
+  display:none;position:fixed;inset:0;z-index:200;
+  align-items:center;justify-content:center;
+  background:rgba(30,27,75,.45);backdrop-filter:blur(4px);
+}
+#rbox{
+  background:var(--card);
+  border:2px solid var(--border2);
+  border-radius:24px;
+  padding:28px 28px;
+  text-align:center;
+  max-width:320px;width:88%;
+  box-shadow:0 20px 60px rgba(79,70,229,.25);
+}
+#r-emo{font-size:54px;margin-bottom:8px}
+#r-tit{font-size:22px;font-weight:900;margin-bottom:6px;color:var(--text)}
+#r-sub{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6;white-space:pre-wrap}
+#r-coins{font-size:16px;margin-bottom:16px;font-weight:700;padding:8px 16px;border-radius:20px}
+#r-coins.ok{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid #FCD34D}
+#r-coins.no{background:var(--red-bg);color:var(--red);border:1.5px solid #FECACA}
+#r-btn{
+  background:var(--accent);color:white;border:none;
+  border-radius:var(--radius);padding:12px 32px;
+  font-size:15px;font-weight:800;cursor:pointer;
+  transition:background .15s;width:100%;
+}
+#r-btn:hover{background:#4338CA}
 
-/* FIREWORK */
-.fw{position:absolute;pointer-events:none;font-size:16px;animation:fwfall 1.2s ease-out forwards}
-@keyframes fwfall{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(120px) scale(.3)}}
+/* ─── GUIDE MODAL ──────────────────────────────────────────── */
+#guide-modal{
+  display:none;position:fixed;inset:0;z-index:300;
+  align-items:flex-start;justify-content:center;
+  background:rgba(30,27,75,.5);backdrop-filter:blur(4px);
+  padding-top:20px;overflow-y:auto;
+}
+#guide-box{
+  background:var(--card);
+  border-radius:24px;
+  padding:24px;
+  max-width:680px;width:93%;
+  box-shadow:0 20px 60px rgba(79,70,229,.25);
+  margin:0 auto 40px;
+}
+#guide-box h2{
+  font-size:18px;font-weight:900;color:var(--accent);
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.guide-close{
+  background:none;border:none;font-size:22px;cursor:pointer;
+  margin-left:auto;color:var(--muted);padding:0 4px;
+}
+.guide-section{
+  background:var(--surface2);border:1.5px solid var(--border2);
+  border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;
+}
+.guide-section h3{
+  font-size:13px;font-weight:800;color:var(--accent);
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+.guide-section p,.guide-section li{
+  font-size:12px;color:var(--text);line-height:1.8;
+}
+.guide-section ul{padding-left:16px}
+.guide-section li{margin-bottom:3px}
+.planet-guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.pg-item{
+  background:var(--card);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;
+}
+.pg-item .pg-name{font-size:12px;font-weight:800;margin-bottom:4px}
+.pg-item .pg-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.tip-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center}
+.tip-item .tip-ico{font-size:22px;margin-bottom:4px}
+.tip-item p{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ─── FIREWORK ─────────────────────────────────────────────── */
+.fw{position:fixed;pointer-events:none;font-size:20px;animation:fwfall 1.4s ease-out forwards;z-index:400}
+@keyframes fwfall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(140px) rotate(180deg) scale(.2)}}
+
+/* ─── RESPONSIVE: DESKTOP ──────────────────────────────────── */
+@media (min-width:600px){
+  #hdr{border-radius:0 0 var(--radius) var(--radius);border:none;border-bottom:2px solid var(--border2)}
+  #app{padding:20px 20px 0}
+  #ls-grid{grid-template-columns:repeat(4,1fr)}
+  .planet-guide-grid{grid-template-columns:repeat(4,1fr)}
+  .tip-grid{grid-template-columns:repeat(4,1fr)}
+  #home-hero h2{font-size:24px}
+  #rocket-anim{font-size:60px}
+  .a-btn{font-size:20px;padding:16px 12px}
+  #q-vis{font-size:34px}
+  #q-txt{font-size:18px}
+  #rbox{padding:36px 36px}
+  #guide-banner .g-text h3{font-size:15px}
+  #guide-banner .g-text p{font-size:12px}
+}
+
+@media (min-width:900px){
+  #app{padding:24px 24px 0}
+}
+
+/* ─── RESPONSIVE: MOBILE SMALL ─────────────────────────────── */
+@media (max-width:400px){
+  #ls-grid{grid-template-columns:repeat(3,1fr)}
+  .planet-guide-grid{grid-template-columns:1fr 1fr}
+  .tip-grid{grid-template-columns:1fr 1fr}
+  #hdr-title{font-size:13px}
+  .a-btn{font-size:16px;padding:11px 8px}
+  #guide-box{padding:18px 14px}
+}
+
+@media (max-width:340px){
+  #ls-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
+</head>
+<body>
 
-<div id="app">
-  <div id="starfield"></div>
+<div id="app-wrapper">
   <div id="hdr">
-    <span style="font-size:20px">🚀</span>
+    <span id="hdr-logo">🚀</span>
     <span id="hdr-title">Toán Vũ Trụ – Tiểu Học</span>
     <div id="xp-wrap">
       <div id="xp-bar-bg"><div id="xp-bar" style="width:0%"></div></div>
@@ -112,52 +412,160 @@
     <div id="coin-box"><span>🪙</span><span id="coin-num">0</span></div>
   </div>
 
-  <!-- HOME -->
-  <div id="home">
-    <div id="home-hero">
-      <div id="rocket-anim">🚀</div>
-      <h2>Khám Phá Vũ Trụ Toán Học!</h2>
-      <p>Chinh phục 5 hành tinh • 20 cấp độ • Từ lớp 1 → lớp 3</p>
-    </div>
-    <div id="planets-list"></div>
-  </div>
-
-  <!-- LEVEL SELECT -->
-  <div id="lvl-select">
-    <button id="ls-back" onclick="showHome()">⬅ Quay lại</button>
-    <div id="ls-title"></div>
-    <div id="ls-grid"></div>
-  </div>
-
-  <!-- GAME -->
-  <div id="game">
-    <div id="g-hdr">
-      <button id="g-back" onclick="backToLvl()">⬅</button>
-      <div id="g-info">
-        <div id="g-title"></div>
-        <div id="g-sub"></div>
+  <div id="app">
+    <!-- HOME -->
+    <div id="home">
+      <!-- Guide Banner -->
+      <div id="guide-banner" onclick="showGuide()">
+        <div class="g-ico">📖</div>
+        <div class="g-text">
+          <h3>Hướng dẫn Ba/Mẹ dạy cùng con</h3>
+          <p>Gợi ý cách học, giải thích từng chủ đề và mẹo khuyến khích bé</p>
+        </div>
+        <div class="g-arrow">›</div>
       </div>
-      <span id="g-hearts"></span>
-    </div>
-    <div id="q-prog"><div id="q-prog-fill" style="width:0%"></div></div>
-    <div id="hint-panel"></div>
-    <div id="q-card">
-      <div id="q-vis"></div>
-      <div id="q-txt"></div>
-      <div id="q-idx"></div>
-    </div>
-    <div id="ans-grid"></div>
-  </div>
 
-  <!-- RESULT -->
-  <div id="rov">
-    <div id="rbox">
-      <div id="r-emo"></div>
-      <div id="r-tit"></div>
-      <div id="r-sub"></div>
-      <div id="r-coins"></div>
-      <button id="r-btn"></button>
+      <div id="home-hero">
+        <span id="rocket-anim">🚀</span>
+        <h2>Khám Phá Vũ Trụ Toán Học!</h2>
+        <p>Chinh phục 5 hành tinh • 25 cấp độ • Từ lớp 1 → lớp 3</p>
+      </div>
+
+      <div id="progress-overview">
+        <div class="prog-stat">
+          <span id="stat-done">0</span>
+          <small>Cấp hoàn thành</small>
+        </div>
+        <div class="prog-div"></div>
+        <div class="prog-stat">
+          <span id="stat-coins">0</span>
+          <small>Xu tích lũy</small>
+        </div>
+        <div class="prog-div"></div>
+        <div class="prog-stat">
+          <span id="stat-lv">1</span>
+          <small>Cấp độ hiện tại</small>
+        </div>
+      </div>
+
+      <div id="planets-list"></div>
     </div>
+
+    <!-- LEVEL SELECT -->
+    <div id="lvl-select">
+      <button id="ls-back" onclick="showHome()">← Quay lại</button>
+      <div id="ls-title"></div>
+      <div id="ls-grid"></div>
+    </div>
+
+    <!-- GAME -->
+    <div id="game">
+      <div id="g-hdr">
+        <button id="g-back" onclick="backToLvl()">←</button>
+        <div id="g-info">
+          <div id="g-title"></div>
+          <div id="g-sub"></div>
+        </div>
+        <span id="g-hearts"></span>
+      </div>
+      <div id="q-prog"><div id="q-prog-fill" style="width:0%"></div></div>
+      <div id="hint-panel"></div>
+      <div id="q-card">
+        <div id="q-vis"></div>
+        <div id="q-story"></div>
+        <div id="q-txt"></div>
+        <div id="q-idx"></div>
+      </div>
+      <div id="ans-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div id="rov" style="display:none">
+  <div id="rbox">
+    <div id="r-emo"></div>
+    <div id="r-tit"></div>
+    <div id="r-sub"></div>
+    <div id="r-coins" class="ok"></div>
+    <button id="r-btn"></button>
+  </div>
+</div>
+
+<!-- GUIDE MODAL -->
+<div id="guide-modal" onclick="closeGuide(event)">
+  <div id="guide-box">
+    <h2>📖 Hướng Dẫn Ba/Mẹ Dạy Cùng Con
+      <button class="guide-close" onclick="hideGuide()">✕</button>
+    </h2>
+
+    <div class="guide-section">
+      <h3>🎯 Ứng dụng này dành cho ai?</h3>
+      <p>Thiết kế cho bé <strong>lớp 1 – lớp 3</strong> (6–9 tuổi), học toán theo chương trình tiểu học Việt Nam. Ba/mẹ có thể dùng cùng con hoặc để con tự học có giám sát.</p>
+    </div>
+
+    <div class="guide-section">
+      <h3>🪐 5 Hành Tinh – Nội Dung Học</h3>
+      <div class="planet-guide-grid">
+        <div class="pg-item">
+          <div class="pg-name">🟠 Sao Thủy – Lớp 1</div>
+          <div class="pg-desc">Cộng trừ trong 10 và 20. Nhận biết số qua hình ảnh trực quan.</div>
+        </div>
+        <div class="pg-item">
+          <div class="pg-name">🌕 Sao Kim – Lớp 2a</div>
+          <div class="pg-desc">Bảng nhân 2, 5, 10. Chia cho 2. Nhân bảng 3 và 4.</div>
+        </div>
+        <div class="pg-item">
+          <div class="pg-name">🌍 Trái Đất – Lớp 2b</div>
+          <div class="pg-desc">Số có 2 chữ số. Cộng có nhớ, trừ có mượn. Nhân bảng 6, 7, 8.</div>
+        </div>
+        <div class="pg-item">
+          <div class="pg-name">🔴 Sao Hỏa – Lớp 2-3</div>
+          <div class="pg-desc">Đo độ dài. Chu vi hình vuông, chữ nhật. Toán đố có lời văn.</div>
+        </div>
+        <div class="pg-item" style="grid-column:1/-1">
+          <div class="pg-name">🟡 Sao Mộc – Lớp 3</div>
+          <div class="pg-desc">Phân số đơn giản. Nhân bảng 9. Số hàng trăm. Toán đố nhân chia. Tổng hợp nâng cao.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h3>👨‍👩‍👧 Cách Ba/Mẹ Dạy Hiệu Quả</h3>
+      <ul>
+        <li><strong>Ngồi cùng con</strong> trong 10–15 phút/ngày. Không cần dài, chỉ cần đều đặn.</li>
+        <li><strong>Đọc to câu hỏi</strong> cùng con trước khi con chọn đáp án.</li>
+        <li><strong>Khi con sai:</strong> Không la mắng – bấm "Xem gợi ý 💡" và giải thích bước giải.</li>
+        <li><strong>Khi con đúng:</strong> Khen ngay "Con giỏi quá!" – trẻ cần khích lệ ngay lập tức.</li>
+        <li><strong>Đừng thay trẻ bấm</strong> – để con tự chọn đáp án, dù có chậm.</li>
+        <li><strong>Tiến độ:</strong> Mỗi ngày 1–2 cấp độ là vừa. Không nên ép làm nhiều một lúc.</li>
+      </ul>
+    </div>
+
+    <div class="guide-section">
+      <h3>💡 Cách Giải Thích Từng Chủ Đề</h3>
+      <ul>
+        <li><strong>Cộng hình:</strong> Dùng đồ vật thực (táo, ngón tay) đếm cùng con.</li>
+        <li><strong>Bảng nhân:</strong> Đọc bảng nhân như bài hát – "2 nhân 1 bằng 2, 2 nhân 2 bằng 4..."</li>
+        <li><strong>Chu vi:</strong> Dùng thước đo cạnh bàn học thực tế cho con hiểu "chu vi" là gì.</li>
+        <li><strong>Toán đố:</strong> Đọc đề 2 lần – lần 1 để hiểu, lần 2 để tìm số liệu.</li>
+        <li><strong>Phân số:</strong> Dùng bánh hoặc pizza: "1/2 cái bánh là chia đôi".</li>
+      </ul>
+    </div>
+
+    <div class="guide-section">
+      <h3>⭐ Hệ Thống Thưởng</h3>
+      <div class="tip-grid">
+        <div class="tip-item"><div class="tip-ico">🪙</div><p>Trả lời đúng → nhận Xu</p></div>
+        <div class="tip-item"><div class="tip-ico">📊</div><p>Đạt 70% → hoàn thành cấp</p></div>
+        <div class="tip-item"><div class="tip-ico">🔓</div><p>Tích xu → mở hành tinh mới</p></div>
+        <div class="tip-item"><div class="tip-ico">⬆️</div><p>Tích điểm XP → tăng cấp độ</p></div>
+      </div>
+    </div>
+
+    <button onclick="hideGuide()" style="width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:var(--radius);font-size:15px;font-weight:800;cursor:pointer;margin-top:4px">
+      Bắt đầu học cùng con! 🚀
+    </button>
   </div>
 </div>
 
@@ -173,31 +581,26 @@ const ITEMS=['🍎','🍊','🍋','🍇','🍓','🐱','🐶','⭐','🌸','🚂
 const PLANETS=[
 {id:'mercury',name:'Sao Thủy',ico:'🟠',desc:'Cộng trừ cơ bản · Lớp 1',color:'#F97316',req:0,
  levels:[
-  // Lv1: cộng trong 10 bằng hình
   {name:'Cộng hình',diff:1,coins:3,
    gen:()=>{const a=rnd(1,5),b=rnd(1,4);const e=pick(ITEMS);const ans=a+b;
     const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
     return{vis:rep(e,a)+' + '+rep(e,b),txt:`${a} + ${b} = ?`,ans,opts,
     hint:`💡 Đếm tất cả: ${rep(e,a+b)}\n${a} + ${b} = ${ans}`}}},
-  // Lv2: cộng số trong 10
   {name:'Cộng trong 10',diff:1,coins:3,
    gen:()=>{const a=rnd(2,6),b=rnd(2,10-a);const ans=a+b;
     const opts=shuf([ans,ans+1,ans-1,ans+2].slice(0,4));
     return{vis:`${a} ➕ ${b}`,txt:`${a} + ${b} = ?`,ans,opts,hint:`💡 Đếm thêm từ ${a}: ${Array.from({length:b},(_,i)=>a+i+1).join(', ')}\n= ${ans}`}}},
-  // Lv3: trừ trong 10
   {name:'Trừ trong 10',diff:1,coins:3,
    gen:()=>{const b=rnd(1,4),ans=rnd(1,5),a=ans+b;const e=pick(ITEMS);
     const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
     return{vis:rep(e,a)+' ➖ ❌❌❌'.slice(0,b*2),txt:`${a} - ${b} = ?`,ans,opts,
     hint:`💡 Có ${a}, bỏ ${b}: ${a} - ${b} = ${ans}`}}},
-  // Lv4: cộng trừ hỗn hợp trong 10
   {name:'Hỗn hợp ≤10',diff:2,coins:4,
    gen:()=>{const t=rnd(0,1);const a=rnd(2,7);const b=rnd(1,t?Math.min(a-1,4):10-a);
     const ans=t?a-b:a+b;
     const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+2].slice(0,4));
     return{vis:t?`${a} ➖ ${b}`:`${a} ➕ ${b}`,txt:t?`${a} - ${b} = ?`:`${a} + ${b} = ?`,ans,opts,
     hint:`💡 ${t?`Trừ: ${a} - ${b}`:`Cộng: ${a} + ${b}`} = ${ans}`}}},
-  // Lv5: cộng trừ trong 20
   {name:'Trong 20',diff:2,coins:5,
    gen:()=>{const t=rnd(0,1);const a=rnd(5,15);const b=t?rnd(1,a-1):rnd(1,20-a);
     const ans=t?a-b:a+b;
@@ -208,31 +611,26 @@ const PLANETS=[
 
 {id:'venus',name:'Sao Kim',ico:'🌕',desc:'Nhân chia nhập môn · Lớp 2',color:'#EAB308',req:8,
  levels:[
-  // Lv1: nhân bảng 2
   {name:'Nhân bảng 2',diff:2,coins:5,
    gen:()=>{const b=rnd(1,10);const ans=2*b;
     const opts=shuf([ans,ans+2,Math.max(0,ans-2),ans+4].slice(0,4));
     return{vis:'2️⃣ × '+b,txt:`2 × ${b} = ?`,ans,opts,
     hint:`💡 2 × ${b} = cộng ${b} lần 2: ${Array.from({length:b},(_,i)=>2*(i+1)).join(', ')}\n= ${ans}`}}},
-  // Lv2: nhân bảng 5
   {name:'Nhân bảng 5',diff:2,coins:5,
    gen:()=>{const b=rnd(1,10);const ans=5*b;
     const opts=shuf([ans,ans+5,Math.max(0,ans-5),ans+10].slice(0,4));
     return{vis:'5️⃣ × '+b,txt:`5 × ${b} = ?`,ans,opts,
     hint:`💡 5 × ${b}: đếm 5, 10, 15… đến lần thứ ${b} = ${ans}`}}},
-  // Lv3: nhân bảng 10
   {name:'Nhân bảng 10',diff:2,coins:5,
    gen:()=>{const b=rnd(1,10);const ans=10*b;
     const opts=shuf([ans,ans+10,ans-10,ans+20].slice(0,4));
     return{vis:'🔟 × '+b,txt:`10 × ${b} = ?`,ans,opts,
     hint:`💡 10 × ${b} = thêm số 0 vào sau ${b} → ${ans}`}}},
-  // Lv4: chia cho 2
   {name:'Chia cho 2',diff:3,coins:6,
    gen:()=>{const q=rnd(1,10);const a=2*q;
     const opts=shuf([q,q+1,q-1,q+2].filter(x=>x>0).slice(0,4));
     return{vis:`${a} ➗ 2`,txt:`${a} ÷ 2 = ?`,ans:q,opts,
     hint:`💡 ${a} ÷ 2: chia đôi thành 2 phần bằng nhau = ${q}`}}},
-  // Lv5: nhân bảng 3 & 4
   {name:'Nhân bảng 3 & 4',diff:3,coins:7,
    gen:()=>{const t=pick([3,4]);const b=rnd(1,10);const ans=t*b;
     const opts=shuf([ans,ans+t,Math.max(0,ans-t),ans+t*2].slice(0,4));
@@ -242,116 +640,98 @@ const PLANETS=[
 
 {id:'earth',name:'Trái Đất',ico:'🌍',desc:'Số học nâng cao · Lớp 2',color:'#22C55E',req:20,
  levels:[
-  // Lv1: số có 2 chữ số
   {name:'Số hàng chục',diff:2,coins:5,
    gen:()=>{const c=rnd(1,9),d=rnd(0,9);const n=c*10+d;
     const opts=shuf([n,n+10,n-10,n+1].filter(x=>x>=0&&x<100).slice(0,4));
     return{vis:`${c} chục + ${d} đơn vị`,txt:`= bao nhiêu?`,ans:n,opts,
     hint:`💡 ${c} chục = ${c*10}, cộng ${d} đơn vị = ${n}`}}},
-  // Lv2: cộng có nhớ
   {name:'Cộng có nhớ',diff:3,coins:6,
    gen:()=>{const a=rnd(15,49),b=rnd(6,15);const ans=a+b;
     const opts=shuf([ans,ans+1,ans-1,ans+10].slice(0,4));
     return{vis:`${a} + ${b}`,txt:`${a} + ${b} = ?`,ans,opts,
-    hint:`💡 Tách: ${a} + ${b} = (${a}+${Math.floor(b/10)*10}) + ${b%10} = ${a+Math.floor(b/10)*10} + ${b%10} = ${ans}`}}},
-  // Lv3: trừ có mượn
+    hint:`💡 Tách: ${a}+${b} = (${a}+${Math.floor(b/10)*10})+${b%10} = ${a+Math.floor(b/10)*10}+${b%10} = ${ans}`}}},
   {name:'Trừ có mượn',diff:3,coins:6,
    gen:()=>{const a=rnd(20,50),b=rnd(6,15);const ans=a-b;
     const opts=shuf([ans,ans+1,Math.max(0,ans-1),ans+10].slice(0,4));
     return{vis:`${a} - ${b}`,txt:`${a} - ${b} = ?`,ans,opts,
-    hint:`💡 ${a} - ${b} = ${a} - ${Math.floor(b/10)*10} - ${b%10} = ${a-Math.floor(b/10)*10} - ${b%10} = ${ans}`}}},
-  // Lv4: bảng nhân 6 7 8
+    hint:`💡 ${a}-${b} = ${a}-${Math.floor(b/10)*10}-${b%10} = ${a-Math.floor(b/10)*10}-${b%10} = ${ans}`}}},
   {name:'Nhân 6 7 8',diff:4,coins:8,
    gen:()=>{const t=pick([6,7,8]);const b=rnd(2,9);const ans=t*b;
     const opts=shuf([ans,ans+t,ans-t,ans+t*2].slice(0,4));
     return{vis:`${t} × ${b}`,txt:`${t} × ${b} = ?`,ans,opts,
-    hint:`💡 ${t} × ${b}:\n${t} × ${b-1} = ${t*(b-1)}\nThêm ${t}: ${t*(b-1)} + ${t} = ${ans}`}}},
-  // Lv5: chia hết
+    hint:`💡 ${t}×${b}:\n${t}×${b-1} = ${t*(b-1)}\nThêm ${t}: ${t*(b-1)}+${t} = ${ans}`}}},
   {name:'Chia có dư',diff:4,coins:8,
    gen:()=>{const d=rnd(2,5);const q=rnd(2,9);const r=rnd(0,d-1);const a=d*q+r;
     const opts=shuf([`${q} dư ${r}`,`${q+1} dư ${r}`,`${q} dư ${r+1}`,`${q-1} dư ${r}`].slice(0,4));
     const ans=`${q} dư ${r}`;
     return{vis:`${a} ÷ ${d}`,txt:`${a} ÷ ${d} = ?`,ans,opts,
-    hint:`💡 ${d} × ${q} = ${d*q}\n${a} - ${d*q} = ${r} (phần dư)\n→ ${q} dư ${r}`}}},
+    hint:`💡 ${d}×${q}=${d*q}\n${a}-${d*q}=${r} (phần dư)\n→ ${q} dư ${r}`}}},
  ]},
 
 {id:'mars',name:'Sao Hỏa',ico:'🔴',desc:'Toán đố & Hình học · Lớp 2-3',color:'#EF4444',req:40,
  levels:[
-  // Lv1: đo độ dài
   {name:'Đo độ dài',diff:2,coins:5,
-   gen:()=>{const a=rnd(2,20);const u=pick(['cm','dm','m']);
-    const eq=u==='cm'?a+' cm':u==='dm'?a+' dm':a+' m';
-    const conv=u==='cm'?`${a} cm = __ mm`:`${a} dm = __ cm`;
-    const mul=u==='cm'?10:10;const ans=a*mul;
-    const opts=shuf([ans,ans+mul,ans-mul,ans+mul*2].filter(x=>x>0).slice(0,4));
-    return{vis:'📏 '+eq,txt:u==='m'?`${a} m = __ dm`:conv,ans,opts,
-    hint:`💡 1 ${u==='cm'?'cm = 10mm':u==='dm'?'dm = 10cm':'m = 10dm'}\n× ${a} = ${ans}`}}},
-  // Lv2: chu vi hình vuông
+   gen:()=>{const a=rnd(2,20);const u=pick(['cm','dm']);
+    const ans=a*10;
+    const opts=shuf([ans,ans+10,ans-10,ans+20].filter(x=>x>0).slice(0,4));
+    return{vis:'📏 '+a+' '+u,txt:`${a} ${u} = __ ${u==='cm'?'mm':'cm'}`,ans,opts,
+    hint:`💡 1 ${u}=10 ${u==='cm'?'mm':'cm'}\n${a}×10 = ${ans}`}}},
   {name:'Chu vi □',diff:3,coins:6,
    gen:()=>{const a=rnd(2,15);const ans=4*a;
     const opts=shuf([ans,ans+4,ans-4,ans+8].filter(x=>x>0).slice(0,4));
     return{vis:`⬛ Cạnh = ${a} cm`,txt:`Chu vi hình vuông = ?`,ans,opts,
-    hint:`💡 Hình vuông 4 cạnh bằng nhau\n${a} × 4 = ${ans} cm`}}},
-  // Lv3: chu vi hình chữ nhật
+    hint:`💡 Hình vuông 4 cạnh bằng nhau\n${a}×4 = ${ans} cm`}}},
   {name:'Chu vi CN',diff:3,coins:6,
    gen:()=>{const a=rnd(3,12),b=rnd(2,10);const ans=2*(a+b);
     const opts=shuf([ans,ans+2,ans-2,ans+4].filter(x=>x>0).slice(0,4));
     return{vis:`📐 Dài ${a}cm · Rộng ${b}cm`,txt:`Chu vi = ?`,ans,opts,
-    hint:`💡 CV = (dài + rộng) × 2\n= (${a} + ${b}) × 2 = ${a+b} × 2 = ${ans} cm`}}},
-  // Lv4: toán đố cộng trừ
+    hint:`💡 CV=(dài+rộng)×2\n=(${a}+${b})×2=${a+b}×2=${ans} cm`}}},
   {name:'Toán đố',diff:3,coins:7,
    gen:()=>{
     const stories=[
-      ()=>{const a=rnd(10,30),b=rnd(5,15);const ans=a+b;return{vis:'🏫',txt:`Lớp có ${a} bạn, thêm ${b} bạn nữa vào.\nTất cả có mấy bạn?`,ans,hint:`💡 Thêm vào → cộng: ${a} + ${b} = ${ans}`}},
-      ()=>{const a=rnd(15,30),b=rnd(3,10);const ans=a-b;return{vis:'🍎',txt:`Có ${a} quả táo, ăn ${b} quả.\nCòn lại mấy quả?`,ans,hint:`💡 Bớt đi → trừ: ${a} - ${b} = ${ans}`}},
-      ()=>{const a=rnd(5,15),b=rnd(5,15);const ans=a+b;return{vis:'🚗',txt:`Bãi xe có ${a} ô tô và ${b} xe máy.\nTổng cộng mấy xe?`,ans,hint:`💡 Cộng tất cả: ${a} + ${b} = ${ans}`}},
+      ()=>{const a=rnd(10,30),b=rnd(5,15);const ans=a+b;return{vis:'🏫',story:`Lớp có ${a} bạn, thêm ${b} bạn nữa vào.\nTất cả có mấy bạn?`,ans,hint:`💡 Thêm vào → cộng: ${a}+${b}=${ans}`}},
+      ()=>{const a=rnd(15,30),b=rnd(3,10);const ans=a-b;return{vis:'🍎',story:`Có ${a} quả táo, ăn ${b} quả.\nCòn lại mấy quả?`,ans,hint:`💡 Bớt đi → trừ: ${a}-${b}=${ans}`}},
+      ()=>{const a=rnd(5,15),b=rnd(5,15);const ans=a+b;return{vis:'🚗',story:`Bãi xe có ${a} ô tô và ${b} xe máy.\nTổng cộng mấy xe?`,ans,hint:`💡 Cộng tất cả: ${a}+${b}=${ans}`}},
     ];
     const s=pick(stories)();
     const ans=s.ans;
     const opts=shuf([ans,ans+1,ans-1,ans+5].filter(x=>x>0).slice(0,4));
-    return{vis:s.vis,txt:s.txt,ans,opts,hint:s.hint}}},
-  // Lv5: diện tích hình chữ nhật
+    return{vis:s.vis,story:s.story,txt:'',ans,opts,hint:s.hint}}},
   {name:'Diện tích CN',diff:4,coins:9,
    gen:()=>{const a=rnd(2,10),b=rnd(2,8);const ans=a*b;
     const opts=shuf([ans,ans+a,ans+b,ans-b].filter(x=>x>0).slice(0,4));
     return{vis:`📐 Dài ${a}cm · Rộng ${b}cm`,txt:`Diện tích = ?`,ans,opts,
-    hint:`💡 Diện tích = dài × rộng\n= ${a} × ${b} = ${ans} cm²`}}},
+    hint:`💡 Diện tích=dài×rộng\n=${a}×${b}=${ans} cm²`}}},
  ]},
 
 {id:'jupiter',name:'Sao Mộc',ico:'🟡',desc:'Toán nâng cao · Lớp 3',color:'#A855F7',req:70,
  levels:[
-  // Lv1: phân số đơn giản
   {name:'Phân số',diff:3,coins:7,
    gen:()=>{const d=pick([2,4,8]);const n=rnd(1,d-1);
-    const eq=`${n}/${d}`;const pct=Math.round(n/d*100);
+    const eq=`${n}/${d}`;
     const others=[`${n+1}/${d}`,`${Math.max(1,n-1)}/${d}`,`${n}/${d+2}`];
     const opts=shuf([eq,...others].slice(0,4));
     return{vis:`${'🟦'.repeat(n)}${'⬜'.repeat(d-n)}\n(${d} ô, tô ${n} ô)`,txt:`Phân số biểu diễn phần tô màu?`,ans:eq,opts,
     hint:`💡 ${n} ô được tô / tổng ${d} ô = ${eq}`}}},
-  // Lv2: nhân bảng 9
   {name:'Nhân bảng 9',diff:3,coins:7,
    gen:()=>{const b=rnd(2,9);const ans=9*b;
     const opts=shuf([ans,ans+9,ans-9,ans+18].filter(x=>x>0).slice(0,4));
     return{vis:`9️⃣ × ${b}`,txt:`9 × ${b} = ?`,ans,opts,
-    hint:`💡 Mẹo: 9 × ${b} = 10 × ${b} - ${b} = ${10*b} - ${b} = ${ans}`}}},
-  // Lv3: số tròn chục trăm
+    hint:`💡 Mẹo: 9×${b}=10×${b}-${b}=${10*b}-${b}=${ans}`}}},
   {name:'Hàng trăm',diff:3,coins:7,
    gen:()=>{const h=rnd(1,9),t=rnd(0,9),d=rnd(0,9);const n=h*100+t*10+d;
     const opts=shuf([n,n+100,n-100,n+10].filter(x=>x>0).slice(0,4));
     return{vis:`${h} trăm + ${t} chục + ${d}`,txt:`= bao nhiêu?`,ans:n,opts,
-    hint:`💡 ${h}×100 + ${t}×10 + ${d} = ${h*100} + ${t*10} + ${d} = ${n}`}}},
-  // Lv4: toán đố nhân chia
+    hint:`💡 ${h}×100+${t}×10+${d}=${h*100}+${t*10}+${d}=${n}`}}},
   {name:'Đố nhân chia',diff:4,coins:9,
    gen:()=>{
     const stories=[
-      ()=>{const g=rnd(3,6),e=rnd(2,5);const ans=g*e;return{vis:'🏪',txt:`${g} hộp, mỗi hộp có ${e} quả.\nTất cả có mấy quả?`,ans,hint:`💡 Nhân: ${g} × ${e} = ${ans}`}},
-      ()=>{const t=rnd(12,30),g=rnd(2,5);const ans=Math.floor(t/g);return{vis:'🎁',txt:`Có ${t} kẹo chia đều cho ${g} bạn.\nMỗi bạn được mấy cái?`,ans,hint:`💡 Chia đều: ${t} ÷ ${g} = ${ans}`}},
+      ()=>{const g=rnd(3,6),e=rnd(2,5);const ans=g*e;return{vis:'🏪',story:`${g} hộp, mỗi hộp có ${e} quả.\nTất cả có mấy quả?`,ans,hint:`💡 Nhân: ${g}×${e}=${ans}`}},
+      ()=>{const t=rnd(12,30),g=rnd(2,5);const ans=Math.floor(t/g);return{vis:'🎁',story:`Có ${t} kẹo chia đều cho ${g} bạn.\nMỗi bạn được mấy cái?`,ans,hint:`💡 Chia đều: ${t}÷${g}=${ans}`}},
     ];
-    const s=pick(stories)();
-    const ans=s.ans;
+    const s=pick(stories)();const ans=s.ans;
     const opts=shuf([ans,ans+1,ans-1,ans+2].filter(x=>x>0).slice(0,4));
-    return{vis:s.vis,txt:s.txt,ans,opts,hint:s.hint}}},
-  // Lv5: toán tư duy tổng hợp
+    return{vis:s.vis,story:s.story,txt:'',ans,opts,hint:s.hint}}},
   {name:'Tổng hợp ⚡',diff:5,coins:12,
    gen:()=>{
     const types=[
@@ -367,7 +747,7 @@ const PLANETS=[
 ];
 
 // ── STATE ────────────────────────────────────────────────────
-const SAVE_KEY='vutru_save';
+const SAVE_KEY='vutru_save_v2';
 let state={coins:0,xp:0,done:{}};
 try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');if(s.coins!==undefined)state=s;}catch(e){}
 let curPlanet=null,curLvIdx=0,curQs=[],qIdx=0,lives=3,score=0,answered=false;
@@ -383,7 +763,11 @@ function renderHdr(){
   const maxXP=PLANETS.reduce((s,p)=>s+p.levels.reduce((s2,l)=>s2+l.coins,0),0);
   const pct=Math.min(100,Math.round((state.xp/maxXP)*100));
   document.getElementById('xp-bar').style.width=pct+'%';
-  document.getElementById('xp-lv').textContent='Lv'+(Math.floor(state.xp/30)+1);
+  const lv=Math.floor(state.xp/30)+1;
+  document.getElementById('xp-lv').textContent='Lv'+lv;
+  document.getElementById('stat-coins').textContent=state.coins;
+  document.getElementById('stat-done').textContent=totalDone();
+  document.getElementById('stat-lv').textContent=lv;
 }
 
 function showHome(){
@@ -409,7 +793,7 @@ function showHome(){
         <div class="planet-desc">${p.desc}</div>
         <div class="planet-levels">${dots}</div>
       </div>
-      <div class="planet-lock">${locked?'🔒 '+p.req+'🪙':doneLvs+'/'+p.levels.length+' ✓'}</div>
+      <div class="planet-lock">${locked?'🔒<br><strong>'+p.req+'🪙</strong>':`<strong>${doneLvs}/${p.levels.length}</strong><br>✓ hoàn thành`}</div>
     `;
     if(!locked)row.onclick=()=>showLvlSelect(p);
     list.appendChild(row);
@@ -423,14 +807,22 @@ function showLvlSelect(planet){
   document.getElementById('lvl-select').style.display='block';
   document.getElementById('ls-title').innerHTML=`${planet.ico} <strong>${planet.name}</strong> — Chọn cấp độ`;
   const grid=document.getElementById('ls-grid');grid.innerHTML='';
+  // Responsive: mobile=3col, desktop=4col (via CSS)
+  grid.style.gridTemplateColumns='';
   planet.levels.forEach((lv,li)=>{
     const done=isDone(planet.id,li);
     const unlocked=li===0||isDone(planet.id,li-1)||totalCoins()>=planet.req;
     const active=unlocked&&!done;
     const card=document.createElement('div');
     card.className='lv-card'+(done?' lv-done':active?' lv-active-card':' lv-locked');
-    const dstars=['','⬜','🟩','🟨','🟥','⚡'];
-    card.innerHTML=`<div class="lv-num">${li+1}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${lv.name}</div><div class="lv-stars">${done?'✅':'🪙×'+lv.coins}</div><div class="lv-diff">${dstars[lv.diff]||''}</div>`;
+    const dstar=['','⚪','🟢','🟡','🔴','⚡'];
+    card.innerHTML=`
+      <div class="lv-num">${li+1}</div>
+      <div class="lv-name">${lv.name}</div>
+      <div class="lv-stars">${done?'✅ Xong':''}</div>
+      <div class="lv-coins-badge">${done?'Đã nhận':'🪙×'+lv.coins}</div>
+      <div class="lv-diff">${dstar[lv.diff]||''} ${'★'.repeat(lv.diff)}</div>
+    `;
     if(unlocked)card.onclick=()=>startLevel(planet,li);
     grid.appendChild(card);
   });
@@ -443,16 +835,18 @@ function startLevel(planet,li){
   document.getElementById('lvl-select').style.display='none';
   document.getElementById('game').style.display='block';
   document.getElementById('g-title').textContent=planet.ico+' '+lv.name;
-  document.getElementById('g-sub').textContent='Cấp '+( li+1)+' / '+planet.levels.length+' · '+planet.name;
+  document.getElementById('g-sub').textContent='Cấp '+(li+1)+'/'+planet.levels.length+' · '+planet.name;
   showQ();renderHdr();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function showQ(){
   answered=false;
   document.getElementById('hint-panel').style.display='none';
   const q=curQs[qIdx];
-  document.getElementById('q-vis').textContent=q.vis;
-  document.getElementById('q-txt').textContent=q.txt;
+  document.getElementById('q-vis').textContent=q.vis||'';
+  document.getElementById('q-story').textContent=q.story||'';
+  document.getElementById('q-txt').textContent=q.txt||'';
   document.getElementById('q-idx').textContent='Câu '+(qIdx+1)+' / '+curQs.length;
   document.getElementById('q-prog-fill').style.width=Math.round((qIdx/curQs.length)*100)+'%';
   document.getElementById('g-hearts').textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
@@ -500,11 +894,13 @@ function showRound(ok,q){
   const m=ok?pick(picks_ok):pick(picks_no);
   document.getElementById('r-emo').textContent=m[0];
   document.getElementById('r-tit').textContent=m[1];
-  document.getElementById('r-sub').textContent=ok?'Câu '+(qIdx+1)+' đúng! Tiếp tục nào':'Đáp án: '+q.ans+(q.hint?'\n(Xem gợi ý phía trên)':'');
-  document.getElementById('r-coins').textContent=ok?'+'+(curPlanet.levels[curLvIdx].diff)+' 🪙':'❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+  document.getElementById('r-sub').textContent=ok?'Câu '+(qIdx+1)+' đúng! Tiếp tục nào':'Đáp án đúng: '+q.ans+(q.hint?'\n(Xem gợi ý bên trên)':'');
+  const rc=document.getElementById('r-coins');
+  if(ok){rc.textContent='+'+(curPlanet.levels[curLvIdx].diff)+' 🪙';rc.className='ok';}
+  else{rc.textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);rc.className='no';}
   const rb=document.getElementById('r-btn');
   if(isLast){rb.textContent=qIdx>=curQs.length-1?'Hoàn thành 🎊':'Hết lượt 💔';rb.onclick=()=>{hideR();finishLevel();};}
-  else{rb.textContent='Tiếp ▶';rb.onclick=()=>{hideR();qIdx++;showQ();};}
+  else{rb.textContent='Câu tiếp ▶';rb.onclick=()=>{hideR();qIdx++;showQ();};}
 }
 
 function hideR(){document.getElementById('rov').style.display='none'}
@@ -521,7 +917,9 @@ function finishLevel(){
   document.getElementById('r-emo').textContent=pct>=80?'🏆':pct>=60?'👏':'💪';
   document.getElementById('r-tit').textContent=pct>=80?'Xuất sắc!':pct>=60?'Hoàn thành!':'Thử lại nhé!';
   document.getElementById('r-sub').textContent=score+'/'+curQs.length+' câu đúng ('+pct+'%)';
-  document.getElementById('r-coins').textContent=pct>=70?'+'+lv.coins+' 🪙 nhận thưởng!':'Cần ≥70% để nhận thưởng';
+  const rc=document.getElementById('r-coins');
+  if(pct>=70){rc.textContent='+'+lv.coins+' 🪙 nhận thưởng!';rc.className='ok';}
+  else{rc.textContent='Cần ≥70% để nhận thưởng';rc.className='no';}
   const rb=document.getElementById('r-btn');
   if(curLvIdx<curPlanet.levels.length-1&&pct>=70){
     rb.textContent='Cấp tiếp theo ➡';rb.onclick=()=>{hideR();startLevel(curPlanet,curLvIdx+1);};}
@@ -537,18 +935,32 @@ function backToLvl(){
 }
 
 function fireworks(){
-  const emojis=['✨','💫','🌟','🎇','🎆'];
-  for(let i=0;i<18;i++){
+  const emojis=['✨','💫','🌟','🎇','🎆','⭐'];
+  for(let i=0;i<20;i++){
     const el=document.createElement('div');
     el.className='fw';el.textContent=pick(emojis);
-    el.style.cssText=`left:${rnd(5,90)}%;top:${rnd(5,60)}%;animation-delay:${rnd(0,10)*0.1}s;z-index:30`;
-    document.getElementById('app').appendChild(el);
+    el.style.cssText=`left:${rnd(5,90)}%;top:${rnd(5,70)}%;animation-delay:${rnd(0,10)*0.1}s`;
+    document.body.appendChild(el);
     setTimeout(()=>el.remove(),1800);
   }
 }
 
-// Starfield
-(()=>{const sf=document.getElementById('starfield');for(let i=0;i<35;i++){const d=document.createElement('div');d.className='star-dot';const s=rnd(1,3);d.style.cssText=`width:${s}px;height:${s}px;left:${rnd(0,100)}%;top:${rnd(0,100)}%;animation-delay:${rnd(0,30)*0.1}s;animation-duration:${rnd(20,40)*0.1}s`;sf.appendChild(d);}})();
+function showGuide(){document.getElementById('guide-modal').style.display='flex';}
+function hideGuide(){document.getElementById('guide-modal').style.display='none';}
+function closeGuide(e){if(e.target===document.getElementById('guide-modal'))hideGuide();}
+
+// Responsive grid for level select
+function updateLsGrid(){
+  const grid=document.getElementById('ls-grid');
+  if(!grid)return;
+  const w=window.innerWidth;
+  if(w>=600)grid.style.gridTemplateColumns='repeat(4,1fr)';
+  else if(w>=380)grid.style.gridTemplateColumns='repeat(3,1fr)';
+  else grid.style.gridTemplateColumns='repeat(2,1fr)';
+}
+window.addEventListener('resize',updateLsGrid);
 
 showHome();
 </script>
+</body>
+</html>
