@@ -1,107 +1,267 @@
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🧠 Toán Tư Duy – Bé 5 Tuổi</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --sky:#E8F4FD;--c1:#FF6B6B;--c2:#FF9F43;--c3:#48C9B0;--c4:#5DADE2;--c5:#A569BD;--c6:#F1948A;
   --star:#FFD700;--white:#fff;--dark:#2C3E50;--muted:#7F8C8D;
+  --app-max:900px;--radius:16px;
 }
-#app{background:var(--sky);min-height:600px;border-radius:16px;overflow:hidden;position:relative;font-family:'Segoe UI',sans-serif}
-#bg-scene{height:100px;background:linear-gradient(180deg,#87CEEB 0%,#B0E0E6 60%,#90EE90 100%);position:relative;overflow:hidden}
+
+html,body{
+  width:100%;min-height:100vh;background:#d0e8f7;
+  display:flex;align-items:flex-start;justify-content:center;
+  font-family:'Segoe UI',system-ui,sans-serif;
+}
+
+/* ─── APP SHELL ─── */
+#app{
+  width:100%;max-width:var(--app-max);
+  background:var(--sky);border-radius:0;overflow:hidden;position:relative;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+@media(min-width:600px){
+  body{padding:24px 16px;align-items:flex-start;}
+  #app{border-radius:20px;min-height:unset;box-shadow:0 8px 40px rgba(0,0,0,.15);}
+}
+
+/* ─── DESKTOP TWO-COLUMN ─── */
+@media(min-width:700px){
+  #two-col{display:grid;grid-template-columns:1fr 320px;gap:0;flex:1;}
+  #sidebar{border-left:2px solid #d6eaf8;display:block!important;}
+}
+#two-col{display:flex;flex-direction:column;flex:1;}
+#sidebar{display:none;background:#fff;padding:16px;overflow-y:auto;}
+
+/* ─── HEADER SCENE ─── */
+#bg-scene{
+  height:90px;
+  background:linear-gradient(180deg,#87CEEB 0%,#B0E0E6 60%,#90EE90 100%);
+  position:relative;overflow:hidden;flex-shrink:0;
+}
 .cloud{position:absolute;background:white;border-radius:50px;opacity:.85}
-.ca{width:80px;height:26px;top:14px;left:30px;animation:drift 12s infinite linear}
-.cb{width:55px;height:20px;top:28px;left:200px;animation:drift 17s infinite linear}
-.cc{width:65px;height:22px;top:10px;left:420px;animation:drift 14s infinite linear}
+.ca{width:70px;height:22px;top:12px;left:24px;animation:drift 12s infinite linear}
+.cb{width:50px;height:18px;top:26px;left:160px;animation:drift 17s infinite linear}
+.cc{width:60px;height:20px;top:9px;left:340px;animation:drift 14s infinite linear}
+.cd{width:55px;height:18px;top:18px;left:520px;animation:drift 16s infinite linear}
 @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(18px)}}
-#sun{position:absolute;right:28px;top:8px;font-size:46px;animation:bob 3s ease-in-out infinite}
+#sun{position:absolute;right:22px;top:8px;font-size:42px;animation:bob 3s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-#title-area{position:absolute;bottom:0;left:0;right:0;text-align:center;background:rgba(255,255,255,.2);padding:3px 0}
-#title-area h1{font-size:17px;font-weight:700;color:#1a5276}
+#title-area{position:absolute;bottom:0;left:0;right:0;text-align:center;background:rgba(255,255,255,.22);padding:4px 0}
+#title-area h1{font-size:15px;font-weight:800;color:#1a5276;letter-spacing:.4px}
+@media(min-width:600px){
+  #bg-scene{height:110px;}
+  #title-area h1{font-size:18px;}
+  #sun{font-size:52px;}
+}
 
-#topbar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:white;border-bottom:1.5px solid #d6eaf8}
-#star-count{font-size:15px;font-weight:700;color:#e67e22;min-width:36px}
-#prog-wrap{flex:1;height:9px;background:#f0f0f0;border-radius:9px;overflow:hidden}
+/* ─── TOP BAR ─── */
+#topbar{
+  display:flex;align-items:center;gap:8px;padding:7px 14px;
+  background:white;border-bottom:1.5px solid #d6eaf8;flex-shrink:0;
+}
+#star-count{font-size:14px;font-weight:700;color:#e67e22;min-width:32px}
+#prog-wrap{flex:1;height:8px;background:#f0f0f0;border-radius:9px;overflow:hidden}
 #prog-fill{height:100%;background:linear-gradient(90deg,#f6d365,#fda085);border-radius:9px;transition:width .5s}
-#lv-badge{background:#f39c12;color:white;border-radius:20px;padding:1px 9px;font-size:11px;font-weight:700}
+#lv-badge{background:#f39c12;color:white;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+#guide-btn{background:#e8f4fd;border:1.5px solid #5dade2;color:#1a5276;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#guide-btn:hover{background:#d6eaf8}
 
-#home{padding:10px 10px 14px}
-#home h2{text-align:center;font-size:13px;color:#555;margin-bottom:8px}
-#mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.mc{border-radius:13px;padding:10px 6px 8px;text-align:center;cursor:pointer;border:2px solid transparent;transition:transform .13s;position:relative}
-.mc:hover:not(.locked){transform:scale(1.04)}
+/* ─── MAIN AREA (scrollable) ─── */
+#main-area{flex:1;overflow-y:auto;padding:10px 12px 16px;}
+@media(min-width:600px){#main-area{padding:14px 20px 20px;}}
+
+/* ─── HOME ─── */
+#home h2{text-align:center;font-size:13px;color:#555;margin-bottom:10px;font-weight:600;}
+#mod-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+@media(min-width:500px){
+  #mod-grid{grid-template-columns:repeat(4,1fr);gap:10px;}
+}
+@media(min-width:700px){
+  #mod-grid{grid-template-columns:repeat(3,1fr);}
+}
+.mc{
+  border-radius:13px;padding:10px 6px 8px;text-align:center;
+  cursor:pointer;border:2px solid transparent;transition:transform .13s,box-shadow .13s;
+  position:relative;
+}
+.mc:hover:not(.locked){transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,.12)}
 .mc.locked{opacity:.5;cursor:not-allowed}
-.mc .em{font-size:30px;display:block;margin-bottom:3px}
-.mc .mn{font-size:11px;font-weight:700;color:var(--dark)}
+.mc .em{font-size:28px;display:block;margin-bottom:3px}
+.mc .mn{font-size:11px;font-weight:700;color:var(--dark);line-height:1.2}
 .mc .md{font-size:9px;color:var(--muted);margin-top:1px}
 .mc .ms{font-size:9px;margin-top:3px}
 .lk{position:absolute;top:4px;right:6px;font-size:12px}
 .difficulty-dots{font-size:8px;margin-top:2px;letter-spacing:1px}
+@media(min-width:600px){
+  .mc .em{font-size:32px;}
+  .mc .mn{font-size:12px;}
+  .mc .md{font-size:10px;}
+  .mc .ms{font-size:10px;}
+}
 
-#game{display:none;padding:8px 12px 12px}
-#ghdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-#back-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:2px 5px;border-radius:7px}
+/* ─── GAME ─── */
+#game{display:none;flex-direction:column;gap:8px;}
+#ghdr{display:flex;align-items:center;gap:8px}
+#back-btn{background:none;border:none;font-size:22px;cursor:pointer;padding:3px 6px;border-radius:8px}
 #back-btn:hover{background:#f0f0f0}
 #gtitle{font-size:14px;font-weight:700;color:var(--dark);flex:1}
-#lives{font-size:16px;letter-spacing:2px}
-#diff-label{font-size:10px;background:#eee;border-radius:10px;padding:2px 7px;color:#555}
+#lives{font-size:15px;letter-spacing:2px}
+#diff-label{font-size:10px;background:#eee;border-radius:10px;padding:2px 7px;color:#555;white-space:nowrap}
 
-#qarea{background:white;border-radius:14px;padding:12px 10px;text-align:center;margin-bottom:8px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #d6eaf8}
-#qvis{font-size:30px;margin-bottom:5px;min-height:40px;line-height:1.3;word-break:break-all;max-width:100%}
-#qtxt{font-size:15px;color:var(--dark);font-weight:600}
-#qnum{font-size:10px;color:var(--muted);margin-top:3px}
+#qarea{
+  background:white;border-radius:14px;padding:14px 12px;text-align:center;
+  min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid #d6eaf8;
+}
+#qvis{font-size:28px;margin-bottom:6px;min-height:38px;line-height:1.4;word-break:break-all;max-width:100%}
+#qtxt{font-size:15px;color:var(--dark);font-weight:600;white-space:pre-line;line-height:1.5}
+#qnum{font-size:10px;color:var(--muted);margin-top:4px}
+@media(min-width:600px){
+  #qarea{padding:20px 18px;min-height:150px;}
+  #qvis{font-size:34px;}
+  #qtxt{font-size:17px;}
+}
 
-#ans-wrap{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.ab{border:2.5px solid #e0e0e0;background:white;border-radius:13px;padding:11px 6px;font-size:22px;font-weight:700;cursor:pointer;transition:all .13s;color:var(--dark);text-align:center;line-height:1.2}
+#ans-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ab{
+  border:2.5px solid #e0e0e0;background:white;border-radius:13px;
+  padding:14px 8px;font-size:22px;font-weight:700;cursor:pointer;
+  transition:all .13s;color:var(--dark);text-align:center;line-height:1.2;
+  min-height:58px;display:flex;align-items:center;justify-content:center;
+}
 .ab:hover:not(:disabled){transform:scale(1.05);border-color:#aaa}
 .ab.correct{background:#d5f5e3;border-color:#2ecc71;color:#27ae60}
 .ab.wrong{background:#fde8e8;border-color:#e74c3c;color:#c0392b}
+@media(min-width:600px){
+  .ab{padding:16px 12px;font-size:24px;min-height:66px;}
+}
 
-#hint-box{display:none;background:#fffde7;border:1.5px solid #ffe082;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:#795548;line-height:1.5}
-#hint-box .hico{font-size:20px;margin-right:6px;vertical-align:middle}
-#hint-box .hstep{display:block;margin-top:5px;font-size:12px;padding:3px 0;border-bottom:1px dashed #ffe082}
+#hint-box{
+  display:none;background:#fffde7;border:1.5px solid #ffe082;
+  border-radius:12px;padding:10px 12px;font-size:12px;color:#795548;line-height:1.6;
+}
+#hint-box .hico{font-size:18px;margin-right:5px;vertical-align:middle}
+#hint-box .hstep{display:block;margin-top:4px;font-size:12px;padding:3px 0;border-bottom:1px dashed #ffe082}
 #hint-box .hstep:last-child{border-bottom:none}
 
-#rov{display:none;position:absolute;inset:0;align-items:center;justify-content:center;z-index:10;background:rgba(0,0,0,.38);border-radius:16px}
-#rbox{background:white;border-radius:18px;padding:20px 22px;text-align:center;max-width:270px}
-#remi{font-size:46px;margin-bottom:6px}
-#rtit{font-size:20px;font-weight:700;margin-bottom:3px}
-#rsub{font-size:12px;color:#555;margin-bottom:10px}
-#rstars{font-size:20px;letter-spacing:3px;margin-bottom:10px}
-#rnxt{background:#f39c12;color:white;border:none;border-radius:11px;padding:9px 24px;font-size:14px;font-weight:700;cursor:pointer}
+/* ─── RESULT OVERLAY ─── */
+#rov{
+  display:none;position:fixed;inset:0;align-items:center;justify-content:center;
+  z-index:100;background:rgba(0,0,0,.45);
+}
+#rbox{
+  background:white;border-radius:20px;padding:24px 28px;text-align:center;
+  max-width:300px;width:88%;box-shadow:0 10px 40px rgba(0,0,0,.2);
+}
+#remi{font-size:52px;margin-bottom:6px}
+#rtit{font-size:22px;font-weight:800;margin-bottom:4px}
+#rsub{font-size:12px;color:#555;margin-bottom:12px;line-height:1.6}
+#rstars{font-size:22px;letter-spacing:4px;margin-bottom:12px}
+#rnxt{
+  background:#f39c12;color:white;border:none;border-radius:12px;
+  padding:10px 26px;font-size:14px;font-weight:700;cursor:pointer;
+}
 #rnxt:hover{background:#e67e22}
-.cf{position:absolute;width:7px;height:7px;border-radius:2px;animation:fall 1.5s ease-out forwards;pointer-events:none}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(220px) rotate(720deg);opacity:0}}
-</style>
 
+/* ─── CONFETTI ─── */
+.cf{position:fixed;width:8px;height:8px;border-radius:2px;animation:fall 1.5s ease-out forwards;pointer-events:none;z-index:200}
+@keyframes fall{0%{transform:translateY(-30px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(720deg);opacity:0}}
+
+/* ─── SIDEBAR / GUIDE ─── */
+#sidebar h3{font-size:13px;font-weight:800;color:#1a5276;margin-bottom:12px;border-bottom:2px solid #d6eaf8;padding-bottom:6px}
+.guide-section{margin-bottom:14px}
+.guide-section h4{font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.guide-item{background:#f8fbff;border-radius:9px;padding:8px 10px;margin-bottom:6px;border-left:3px solid #5dade2;}
+.guide-item .gi-title{font-size:12px;font-weight:700;color:#1a5276;margin-bottom:3px}
+.guide-item p{font-size:11px;color:#555;line-height:1.5}
+.guide-item .gi-tip{background:#fff9e6;border-radius:6px;padding:4px 7px;margin-top:5px;font-size:10px;color:#7a6000;border-left:2px solid #ffc107}
+
+/* ─── MODAL GUIDE (mobile) ─── */
+#guide-modal{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;
+}
+@media(min-width:700px){#guide-modal{display:none!important;}}
+#guide-modal.open{display:flex}
+#gm-box{
+  background:white;border-radius:20px 20px 0 0;
+  padding:16px;max-height:75vh;overflow-y:auto;width:100%;max-width:var(--app-max);
+}
+#gm-box h3{font-size:14px;font-weight:800;color:#1a5276;margin-bottom:12px;text-align:center}
+#gm-close{
+  position:absolute;top:12px;right:14px;background:#f0f0f0;border:none;
+  border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ─── PROGRESS BADGES ─── */
+#badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.badge{background:#fff;border:2px solid #d6eaf8;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:#555}
+.badge.earned{background:#fff3cd;border-color:#ffc107;color:#856404}
+</style>
+</head>
+<body>
 <div id="app">
+  <!-- HEADER -->
   <div id="bg-scene">
-    <div class="cloud ca"></div><div class="cloud cb"></div><div class="cloud cc"></div>
+    <div class="cloud ca"></div><div class="cloud cb"></div>
+    <div class="cloud cc"></div><div class="cloud cd"></div>
     <div id="sun">☀️</div>
     <div id="title-area"><h1>🧠 Toán Tư Duy – Bé 5 Tuổi</h1></div>
   </div>
+  <!-- TOPBAR -->
   <div id="topbar">
     <span>⭐</span><span id="star-count">0</span>
     <div id="prog-wrap"><div id="prog-fill" style="width:0%"></div></div>
     <span id="lv-badge">Lv 1</span>
+    <button id="guide-btn" onclick="openGuide()">📖 Hướng dẫn</button>
   </div>
-  <div id="home">
-    <h2>✨ Chọn bài học!</h2>
-    <div id="mod-grid"></div>
-  </div>
-  <div id="game">
-    <div id="ghdr">
-      <button id="back-btn" onclick="goHome()">⬅</button>
-      <span id="gtitle"></span>
-      <span id="diff-label"></span>
-      <span id="lives">❤️❤️❤️</span>
+
+  <!-- TWO-COLUMN WRAPPER -->
+  <div id="two-col">
+    <!-- MAIN AREA -->
+    <div id="main-area">
+      <!-- HOME -->
+      <div id="home">
+        <div id="badge-row"></div>
+        <h2>✨ Chọn bài học – bấm vào để bắt đầu!</h2>
+        <div id="mod-grid"></div>
+      </div>
+      <!-- GAME -->
+      <div id="game">
+        <div id="ghdr">
+          <button id="back-btn" onclick="goHome()">⬅</button>
+          <span id="gtitle"></span>
+          <span id="diff-label"></span>
+          <span id="lives">❤️❤️❤️</span>
+        </div>
+        <div id="hint-box"></div>
+        <div id="qarea">
+          <div id="qvis"></div>
+          <div id="qtxt"></div>
+          <div id="qnum"></div>
+        </div>
+        <div id="ans-wrap"></div>
+      </div>
     </div>
-    <div id="hint-box"></div>
-    <div id="qarea">
-      <div id="qvis"></div>
-      <div id="qtxt"></div>
-      <div id="qnum"></div>
+
+    <!-- SIDEBAR (desktop only) -->
+    <div id="sidebar">
+      <h3>📖 Hướng dẫn Ba Mẹ</h3>
+      <div id="sidebar-content"></div>
     </div>
-    <div id="ans-wrap"></div>
   </div>
+
+  <!-- RESULT OVERLAY -->
   <div id="rov">
     <div id="rbox">
       <div id="remi"></div><div id="rtit"></div><div id="rsub"></div>
@@ -110,15 +270,206 @@
   </div>
 </div>
 
+<!-- GUIDE MODAL (mobile) -->
+<div id="guide-modal">
+  <div id="gm-box">
+    <button id="gm-close" onclick="closeGuide()">✕</button>
+    <h3>📖 Hướng dẫn Ba Mẹ</h3>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
 <script>
+// ─── DATA ───
 const ITEMS=['🍎','🍊','🍋','🍇','🍓','🍒','🥕','🌽','🐱','🐶','🐸','🐼','🦊','🐰','🦋','🌸','🌟','⚽','🚂','🎈'];
 function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function pick(arr){return arr[rnd(0,arr.length-1)]}
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 function rep(e,n){return e.repeat(Math.min(n,15))}
 
+// ─── HƯỚNG DẪN DẠY HỌC ───
+const GUIDE_DATA = {
+  sections: [
+    {
+      title: '🎯 Mục tiêu chương trình',
+      items: [
+        {
+          title: 'Phù hợp lứa tuổi',
+          body: 'App được thiết kế cho bé 4–6 tuổi, khớp chương trình mầm non Việt Nam. Bao gồm 15 bài học từ dễ đến nâng cao.',
+          tip: '💡 Nên chơi 10–15 phút mỗi ngày, không nên ép bé chơi quá lâu.'
+        },
+        {
+          title: 'Hệ thống sao ⭐ & cấp độ',
+          body: 'Bé trả lời đúng nhận sao. Mỗi 20 sao lên 1 cấp. Các bài khó hơn sẽ mở khóa khi đủ sao. Ba mẹ có thể dùng số sao để thưởng thêm cho bé.',
+          tip: '💡 Hãy khen bé mỗi khi lên cấp để tạo động lực!'
+        }
+      ]
+    },
+    {
+      title: '🔢 Nhóm Đếm Số',
+      items: [
+        {
+          title: 'Đếm 1–5 (🔢)',
+          body: 'Bài cơ bản nhất. Bé đếm số đồ vật hiện trên màn hình. Không cần biết đọc số.',
+          tip: '💡 Ba mẹ hãy đếm to cùng bé: "Một, hai, ba... có 3 cái nhé!"'
+        },
+        {
+          title: 'Đếm 6–10 (🔟)',
+          body: 'Tương tự nhưng số lượng nhiều hơn. Bé cần kiên nhẫn đếm hết.',
+          tip: '💡 Nếu bé đếm nhầm, ba mẹ giúp bé chỉ từng cái một khi đếm.'
+        },
+        {
+          title: 'Đếm 11–20 (2️⃣0️⃣)',
+          body: 'Bài nâng cao. Bé cần biết dãy số 11–20. Có gợi ý tự động khi trả lời sai.',
+          tip: '💡 Hỗ trợ bé học thuộc: "mười một, mười hai..." trước khi chơi bài này.'
+        }
+      ]
+    },
+    {
+      title: '⚖️ Nhóm So Sánh',
+      items: [
+        {
+          title: 'So sánh hình (⚖️)',
+          body: 'Bé nhìn hai hàng đồ vật và chọn dấu >, <, =. Rèn tư duy trực quan.',
+          tip: '💡 Hãy dùng ngón tay đếm cùng bé để so sánh hai hàng.'
+        },
+        {
+          title: 'Dấu < > = (🔣)',
+          body: 'So sánh hai số viết dạng chữ số. Có mẹo "miệng cá sấu" trong gợi ý.',
+          tip: '💡 Mẹo nhớ: miệng cá sấu luôn há về phía số LỚN hơn 🐊'
+        },
+        {
+          title: 'Xếp thứ tự (📶)',
+          body: 'Bé điền số còn thiếu trong dãy số tăng dần. Tư duy sắp xếp.',
+          tip: '💡 Đọc dãy số to với bé, để bé "nghe" số nào đang thiếu.'
+        }
+      ]
+    },
+    {
+      title: '➕ Nhóm Phép Tính',
+      items: [
+        {
+          title: 'Cộng trong 5 (➕)',
+          body: 'Dùng emoji để minh họa phép cộng. Bé đếm tổng cả hai nhóm.',
+          tip: '💡 Khuyến khích bé đếm tất cả emoji từ đầu, không đoán mò.'
+        },
+        {
+          title: 'Cộng trong 10 (🔟)',
+          body: 'Phép cộng không có hình minh họa, bé cần nhẩm trong đầu.',
+          tip: '💡 Dạy bé "đếm tiếp": bắt đầu từ số lớn hơn rồi đếm thêm.'
+        },
+        {
+          title: 'Trừ trong 10 (➖)',
+          body: 'Bé thấy emoji bị "xóa" (❌) và tìm số còn lại. Rèn tư duy trừ.',
+          tip: '💡 Hỏi bé "còn mấy cái không bị xóa?" để hiểu bản chất phép trừ.'
+        }
+      ]
+    },
+    {
+      title: '🔷 Nhóm Hình Học',
+      items: [
+        {
+          title: 'Hình cơ bản (🔷)',
+          body: 'Nhận biết tròn, vuông, tam giác, thoi. Nền tảng hình học mầm non.',
+          tip: '💡 Chỉ các đồ vật thật: "bánh xe là hình tròn, gạch là hình vuông".'
+        },
+        {
+          title: 'Đếm hình (🖼️)',
+          body: 'Đếm một loại hình cụ thể trong nhóm nhiều hình lẫn lộn. Rèn tập trung.',
+          tip: '💡 Dạy bé dùng ngón tay chỉ và đánh dấu từng hình đã đếm.'
+        }
+      ]
+    },
+    {
+      title: '🌈 Nhóm Quy Luật & Logic',
+      items: [
+        {
+          title: 'Quy luật 2 bước (🎨)',
+          body: 'Bé nhận ra quy luật lặp A-B-A-B và đoán tiếp theo.',
+          tip: '💡 Vỗ tay theo nhịp cùng bé: "đỏ-xanh, đỏ-xanh..." để cảm nhận quy luật.'
+        },
+        {
+          title: 'Quy luật 3 màu (🌈)',
+          body: 'Quy luật phức tạp hơn: A-B-C-A-B-C. Bé cần ghi nhớ 3 bước.',
+          tip: '💡 Đọc to chuỗi cùng bé 2–3 lần trước khi cho bé tự trả lời.'
+        },
+        {
+          title: 'Quy luật số (📈)',
+          body: 'Dãy số tăng đều, bé tìm số thiếu. Bài khó nhất, chỉ mở ở cấp cao.',
+          tip: '💡 Hỏi "mỗi lần tăng thêm mấy?" để bé tự tìm ra quy luật.'
+        }
+      ]
+    },
+    {
+      title: '🔗 Nhóm Ghép đôi & Logic',
+      items: [
+        {
+          title: 'Ghép đôi (🔗)',
+          body: 'Tìm đồ vật đi cùng nhau. Rèn kiến thức thực tế và liên hệ.',
+          tip: '💡 Sau khi chơi, hỏi bé lý do tại sao chúng đi cùng nhau.'
+        },
+        {
+          title: 'Phân loại (🗂️)',
+          body: 'Tìm 1 cái khác loại trong nhóm 4 cái. Tư duy phân nhóm.',
+          tip: '💡 Hỏi "3 cái kia giống nhau thế nào?" để bé giải thích tư duy.'
+        },
+        {
+          title: 'Toán đố hình (🧩)',
+          body: 'Bài toán có ngữ cảnh: "có X, thêm/bớt Y, còn lại mấy?". Bài nâng cao nhất.',
+          tip: '💡 Đọc đề to và chậm cùng bé, nhấn mạnh từ khóa "thêm" hay "bớt".'
+        }
+      ]
+    },
+    {
+      title: '📋 Lịch học gợi ý',
+      items: [
+        {
+          title: 'Tuần 1–2 (mới bắt đầu)',
+          body: 'Chỉ chơi: Đếm 1–5, Hình cơ bản, So sánh hình. Mỗi ngày 1 bài, 2–3 lần.',
+          tip: ''
+        },
+        {
+          title: 'Tuần 3–4',
+          body: 'Thêm: Đếm 6–10, Ghép đôi, Quy luật đơn, Dấu < > =.',
+          tip: ''
+        },
+        {
+          title: 'Tuần 5 trở đi',
+          body: 'Mở dần các bài nâng cao khi bé đã tự tin. Ưu tiên bài bé yêu thích.',
+          tip: '💡 Để bé tự chọn bài học sẽ giúp bé chủ động và hứng thú hơn.'
+        }
+      ]
+    }
+  ]
+};
+
+function buildGuideHTML() {
+  return GUIDE_DATA.sections.map(sec => `
+    <div class="guide-section">
+      <h4>${sec.title}</h4>
+      ${sec.items.map(item => `
+        <div class="guide-item">
+          <div class="gi-title">${item.title}</div>
+          <p>${item.body}</p>
+          ${item.tip ? `<div class="gi-tip">${item.tip}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function openGuide() {
+  const isDesktop = window.innerWidth >= 700;
+  if (isDesktop) return;
+  document.getElementById('modal-content').innerHTML = buildGuideHTML();
+  document.getElementById('guide-modal').classList.add('open');
+}
+function closeGuide() {
+  document.getElementById('guide-modal').classList.remove('open');
+}
+
+// ─── MODULES ───
 const MODULES=[
-  // ── ĐẾM SỐ ──
   {id:'c1',name:'Đếm 1–5',desc:'Đếm đồ vật nhỏ',emoji:'🔢',color:'#FFE4E1',border:'#FF6B6B',unlock:0,diff:1,
    gen:()=>{
     const n=rnd(1,5),e=pick(ITEMS);
@@ -138,8 +489,6 @@ const MODULES=[
     return{vis:rep(e,n),txt:'Đếm xem có mấy?',ans:n,opts,
     hint:`💡 Đếm từng cái một: 1, 2, 3 … đến cuối cùng là ${n}`}
    }},
-
-  // ── SO SÁNH ──
   {id:'s1',name:'So sánh hình',desc:'Nhiều hơn ít hơn?',emoji:'⚖️',color:'#E8F5E9',border:'#48C9B0',unlock:0,diff:1,
    gen:()=>{
     const a=rnd(1,6),b=rnd(1,6),e1=pick(ITEMS),e2=pick(ITEMS);
@@ -166,8 +515,6 @@ const MODULES=[
     return{vis:'📶',txt:display+'\n(từ bé ➡️ lớn)',ans,opts,
     hint:`💡 Dãy tăng dần: ${sorted.join(' < ')}\n❓ = ${ans}`}
    }},
-
-  // ── HÌNH HỌC ──
   {id:'h1',name:'Hình cơ bản',desc:'Tròn vuông tam giác',emoji:'🔷',color:'#EDE7F6',border:'#AB47BC',unlock:5,diff:1,
    gen:()=>{
     const shapes=[{v:'⬛',n:'□'},{v:'🔴',n:'○'},{v:'🔺',n:'△'},{v:'🔷',n:'◇'}];
@@ -195,8 +542,6 @@ const MODULES=[
     const opts=shuffle([p[1],...wrong.slice(0,3)]);
     return{vis:p[0],txt:'Hình này tên là gì?',ans:p[1],opts,hint:null}
    }},
-
-  // ── PHÉP TÍNH ──
   {id:'a1',name:'Cộng trong 5',desc:'Đếm thêm',emoji:'➕',color:'#E3F2FD',border:'#42A5F5',unlock:15,diff:2,
    gen:()=>{
     const a=rnd(1,4),b=rnd(1,4-a+1);
@@ -204,7 +549,7 @@ const MODULES=[
     const ans=a+b;
     const opts=shuffle([ans,...new Set([ans+1,Math.max(0,ans-1),ans+2])].slice(0,4));
     return{vis:`${rep(e1,a)} + ${rep(e2,b)}`,txt:`${a} + ${b} = ?`,ans,opts,
-    hint:`💡 Đếm hết: ${rep(e1,a)} ${rep(e2,b)}\n${a} + ${b} = ${ans}`}
+    hint:`💡 Đếm hết tất cả: ${rep(e1,a)} ${rep(e2,b)}\n${a} + ${b} = ${ans}`}
    }},
   {id:'a2',name:'Cộng trong 10',desc:'Tổng không quá 10',emoji:'🔟',color:'#DCEEFB',border:'#1E88E5',unlock:35,diff:2,
    gen:()=>{
@@ -222,8 +567,6 @@ const MODULES=[
     return{vis:`${rep(e,a)} ➖ ${rep('❌',b)}`,txt:`${a} - ${b} = ?`,ans,opts,
     hint:`💡 Có ${a} ${e}, xóa ${b} cái\nCòn lại: ${rep(e,ans)}\n${a} - ${b} = ${ans}`}
    }},
-
-  // ── QUY LUẬT ──
   {id:'p1',name:'Quy luật đơn',desc:'Tiếp theo là gì?',emoji:'🎨',color:'#FCE4EC',border:'#F06292',unlock:12,diff:2,
    gen:()=>{
     const pats=[
@@ -259,8 +602,6 @@ const MODULES=[
     return{vis:'📈',txt:display,ans,opts,
     hint:`💡 Mỗi bước tăng thêm ${step}\n${seq.join(' → ')}\n❓ = ${ans}`}
    }},
-
-  // ── GHÉP ĐÔI / LOGIC ──
   {id:'l1',name:'Ghép đôi',desc:'Cái nào đi cùng?',emoji:'🔗',color:'#E0F2F1',border:'#26A69A',unlock:20,diff:2,
    gen:()=>{
     const pairs=[
@@ -303,15 +644,32 @@ const MODULES=[
    }},
 ];
 
+// ─── BADGES ───
+const BADGES = [
+  {id:'b1',label:'🌱 Khởi đầu',need:5},
+  {id:'b2',label:'⭐ 20 sao',need:20},
+  {id:'b3',label:'🔥 50 sao',need:50},
+  {id:'b4',label:'🏆 100 sao',need:100},
+  {id:'b5',label:'💎 150 sao',need:150},
+];
+
+// ─── STATE ───
 let stars=parseInt(localStorage.getItem('ttdv2_stars')||'0');
 let qIdx=0,curMod=null,lives=3,score=0,questions=[],answered=false;
 
 function saveStars(){localStorage.setItem('ttdv2_stars',stars)}
+
 function render(){
   document.getElementById('star-count').textContent=stars;
   const pct=Math.min(100,Math.round((stars/150)*100));
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('lv-badge').textContent='Lv '+(Math.floor(stars/20)+1);
+
+  // Badges
+  const br=document.getElementById('badge-row');
+  br.innerHTML=BADGES.map(b=>`<span class="badge${stars>=b.need?' earned':''}">${b.label}</span>`).join('');
+
+  // Module grid
   const grid=document.getElementById('mod-grid');
   grid.innerHTML='';
   MODULES.forEach(m=>{
@@ -332,13 +690,16 @@ function render(){
     if(!locked)el.onclick=()=>startMod(m);
     grid.appendChild(el);
   });
+
+  // Sidebar
+  document.getElementById('sidebar-content').innerHTML = buildGuideHTML();
 }
 
 function startMod(m){
   curMod=m;lives=3;score=0;qIdx=0;answered=false;
   questions=Array.from({length:8},()=>m.gen());
   document.getElementById('home').style.display='none';
-  document.getElementById('game').style.display='block';
+  document.getElementById('game').style.display='flex';
   document.getElementById('gtitle').textContent=m.emoji+' '+m.name;
   const dnames=['','⬜ Dễ','🟩 TB','🟨 Khó','🟥 Nâng cao'];
   document.getElementById('diff-label').textContent=dnames[m.diff]||'';
@@ -437,14 +798,16 @@ function goHome(){
 
 function confetti(){
   const colors=['#FF6B6B','#FFD93D','#48C9B0','#5DADE2','#A569BD','#FF9F43'];
-  for(let i=0;i<24;i++){
+  for(let i=0;i<28;i++){
     const el=document.createElement('div');
     el.className='cf';
-    el.style.cssText=`left:${rnd(5,95)}%;top:${rnd(5,45)}%;background:${pick(colors)};animation-delay:${rnd(0,12)*0.1}s`;
-    document.getElementById('app').appendChild(el);
-    setTimeout(()=>el.remove(),2200);
+    el.style.cssText=`left:${rnd(5,95)}%;top:${rnd(5,45)}%;background:${pick(colors)};animation-delay:${rnd(0,14)*0.1}s`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2400);
   }
 }
 
 render();
 </script>
+</body>
+</html>
