@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cambridge PET for Schools — Interactive Learning</title>
+<style>
+:root{
+  --cambridge-blue:#003865;
+  --sky:#009ade;
+  --gold:#f0b323;
+  --mint:#00b5ad;
+  --coral:#e8472a;
+  --bg:#f4f8fb;
+  --card:#ffffff;
+  --text:#1a2535;
+  --muted:#6b7a90;
+  --border:#d4e1ec;
+  --radius:14px;
+  --shadow:0 4px 20px rgba(0,56,101,.10);
+  --correct:#22c55e;
+  --wrong:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* HEADER */
+#app-header{background:linear-gradient(135deg,var(--cambridge-blue) 0%,#005a9e 100%);padding:12px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+#header-row{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+#app-title{color:#fff;font-size:1.15rem;font-weight:700;letter-spacing:.5px}
+#app-title span{color:var(--gold)}
+#stats-row{display:flex;gap:12px;align-items:center}
+.stat-chip{background:rgba(255,255,255,.15);border-radius:20px;padding:4px 12px;color:#fff;font-size:.82rem;display:flex;align-items:center;gap:5px}
+.stat-chip b{color:var(--gold)}
+/* NAV TABS */
+#nav-tabs{background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;z-index:99}
+#nav-tabs::-webkit-scrollbar{display:none}
+#nav-inner{display:flex;max-width:1100px;margin:0 auto;min-width:max-content}
+.tab-btn{border:none;background:none;padding:12px 18px;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--cambridge-blue)}
+.tab-btn.active{color:var(--cambridge-blue);border-bottom-color:var(--cambridge-blue)}
+.tab-icon{font-size:1.1rem}
+/* MAIN */
+#main{max-width:1100px;margin:0 auto;padding:20px 16px}
+.section{display:none}
+.section.active{display:block}
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.card-header{font-size:1.05rem;font-weight:700;color:var(--cambridge-blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+/* HOME HERO */
+.hero{background:linear-gradient(135deg,var(--cambridge-blue),#005a9e);border-radius:var(--radius);padding:30px 24px;color:#fff;text-align:center;margin-bottom:20px}
+.hero h1{font-size:1.8rem;margin-bottom:8px}
+.hero h1 span{color:var(--gold)}
+.hero p{opacity:.85;font-size:.95rem;margin-bottom:20px}
+.hero-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:16px}
+.h-stat{background:rgba(255,255,255,.15);border-radius:12px;padding:12px 20px;text-align:center}
+.h-stat b{display:block;font-size:1.6rem;color:var(--gold)}
+.h-stat span{font-size:.78rem;opacity:.8}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
+.skill-card{background:var(--card);border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow);border:2px solid transparent}
+.skill-card:hover{border-color:var(--sky);transform:translateY(-2px)}
+.skill-icon{font-size:2.5rem;margin-bottom:8px}
+.skill-card h3{font-size:1rem;font-weight:700;color:var(--cambridge-blue)}
+.skill-card p{font-size:.8rem;color:var(--muted);margin-top:4px}
+/* PROGRESS BAR */
+.progress-bar{background:var(--border);border-radius:99px;height:8px;overflow:hidden;margin-top:6px}
+.progress-fill{background:var(--sky);height:100%;border-radius:99px;transition:.5s}
+/* QUIZ */
+.question-block{margin-bottom:18px}
+.question-text{font-weight:600;margin-bottom:10px;line-height:1.5}
+.options{display:flex;flex-direction:column;gap:8px}
+.option-btn{background:#f8fafc;border:2px solid var(--border);border-radius:10px;padding:10px 14px;text-align:left;cursor:pointer;transition:.2s;font-size:.9rem}
+.option-btn:hover:not(:disabled){border-color:var(--sky);background:#eff7ff}
+.option-btn.correct{border-color:var(--correct);background:#f0fdf4;color:#166534}
+.option-btn.wrong{border-color:var(--wrong);background:#fef2f2;color:#991b1b}
+.option-btn:disabled{cursor:default}
+/* TF */
+.tf-btn{display:inline-block;padding:8px 22px;border-radius:8px;border:2px solid var(--border);background:#f8fafc;cursor:pointer;font-weight:600;transition:.2s;font-size:.9rem;margin-right:8px}
+.tf-btn:hover:not(:disabled){border-color:var(--sky);background:#eff7ff}
+.tf-btn.correct{border-color:var(--correct);background:#f0fdf4}
+.tf-btn.wrong{border-color:var(--wrong);background:#fef2f2}
+/* FILL BLANK */
+.fill-input{border:2px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.9rem;width:130px;transition:.2s}
+.fill-input:focus{outline:none;border-color:var(--sky)}
+.fill-input.correct{border-color:var(--correct);background:#f0fdf4}
+.fill-input.wrong{border-color:var(--wrong);background:#fef2f2}
+/* SPEAKING */
+.speak-card{border:2px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.speak-prompt{font-size:1rem;font-weight:600;color:var(--cambridge-blue);margin-bottom:10px}
+.speak-example{background:#f4f8fb;border-radius:8px;padding:10px 14px;font-size:.88rem;color:var(--muted);margin-bottom:12px;border-left:3px solid var(--sky)}
+.mic-btn{background:var(--cambridge-blue);color:#fff;border:none;border-radius:50%;width:56px;height:56px;font-size:1.5rem;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center}
+.mic-btn:hover{background:#005a9e;transform:scale(1.05)}
+.mic-btn.recording{background:var(--coral);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,71,42,.4)}50%{box-shadow:0 0 0 10px rgba(232,71,42,0)}}
+.score-bar{margin-top:10px;background:var(--border);border-radius:99px;height:10px;overflow:hidden}
+.score-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sky),var(--mint));transition:.5s}
+/* GRAMMAR */
+.grammar-topic{cursor:pointer;padding:12px 16px;border-radius:10px;border:2px solid var(--border);background:#f8fafc;margin-bottom:8px;transition:.2s;display:flex;justify-content:space-between;align-items:center}
+.grammar-topic:hover{border-color:var(--sky);background:#eff7ff}
+.grammar-content{display:none;padding:16px;border:2px solid var(--border);border-radius:10px;margin-bottom:16px;animation:fadeIn .3s}
+.grammar-content.open{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.grammar-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88rem}
+.grammar-table th{background:var(--cambridge-blue);color:#fff;padding:8px 12px;text-align:left}
+.grammar-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.grammar-table tr:nth-child(even) td{background:#f4f8fb}
+.tip-box{background:#fffbeb;border-left:4px solid var(--gold);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:.88rem}
+/* VOCABULARY */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.vocab-item{background:#f4f8fb;border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:.2s;border:2px solid transparent}
+.vocab-item:hover{border-color:var(--sky);background:#eff7ff}
+.vocab-word{font-weight:700;font-size:.95rem;color:var(--cambridge-blue)}
+.vocab-def{font-size:.78rem;color:var(--muted);margin-top:4px}
+.vocab-topic-btn{padding:8px 16px;border:2px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:.84rem;font-weight:600;transition:.2s;margin:4px}
+.vocab-topic-btn.active{background:var(--cambridge-blue);color:#fff;border-color:var(--cambridge-blue)}
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.game-card{background:var(--card);border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow);border:2px solid transparent}
+.game-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.game-icon{font-size:2.8rem;margin-bottom:10px}
+.game-card h3{font-size:.95rem;font-weight:700;color:var(--cambridge-blue)}
+.game-card p{font-size:.78rem;color:var(--muted);margin-top:4px}
+/* GAME ARENA */
+#game-arena{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:16px}
+#game-arena.open{display:flex}
+#game-box{background:#fff;border-radius:var(--radius);width:100%;max-width:660px;max-height:90vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+#game-header{background:var(--cambridge-blue);color:#fff;padding:16px 20px;border-radius:var(--radius) var(--radius) 0 0;display:flex;justify-content:space-between;align-items:center}
+#game-body{padding:20px}
+.close-game{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+/* BUTTONS */
+.btn{border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.2s}
+.btn-primary{background:var(--cambridge-blue);color:#fff}
+.btn-primary:hover{background:#005a9e}
+.btn-success{background:var(--correct);color:#fff}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-sm{padding:7px 14px;font-size:.82rem}
+/* RESULT */
+.result-box{text-align:center;padding:20px;border-radius:var(--radius);background:linear-gradient(135deg,#f0f9ff,#e0f2fe)}
+.result-score{font-size:3rem;font-weight:800;color:var(--cambridge-blue)}
+.result-label{font-size:1rem;color:var(--muted)}
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--cambridge-blue);color:#fff;padding:10px 22px;border-radius:24px;font-size:.9rem;font-weight:600;z-index:999;transition:.4s;opacity:0}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;z-index:9999;border-radius:2px;animation:cfetti 2.5s forwards;pointer-events:none}
+@keyframes cfetti{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+/* LISTENING */
+.audio-btn{background:var(--sky);color:#fff;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:6px;transition:.2s}
+.audio-btn:hover{background:#007bb5}
+/* READING passage */
+.passage{background:#fffef5;border:1px solid #e8e0c0;border-radius:10px;padding:16px;font-size:.9rem;line-height:1.7;margin-bottom:16px;max-height:220px;overflow-y:auto}
+.passage::-webkit-scrollbar{width:6px}
+.passage::-webkit-scrollbar-track{background:#f0ead8}
+.passage::-webkit-scrollbar-thumb{background:#c8b97a;border-radius:4px}
+/* WRITING */
+.writing-area{width:100%;border:2px solid var(--border);border-radius:10px;padding:12px;font-size:.9rem;line-height:1.6;resize:vertical;min-height:140px;font-family:inherit;transition:.2s}
+.writing-area:focus{outline:none;border-color:var(--sky)}
+.word-count{font-size:.8rem;color:var(--muted);text-align:right;margin-top:4px}
+/* PROGRESS section */
+.skill-progress{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.skill-progress:last-child{border-bottom:none}
+.sp-label{font-weight:600;font-size:.95rem;color:var(--cambridge-blue)}
+.sp-score{font-size:.85rem;color:var(--muted)}
+/* responsive */
+@media(max-width:600px){
+  #app-title{font-size:.95rem}
+  #main{padding:14px 10px}
+  .hero h1{font-size:1.35rem}
+  .grammar-table{font-size:.8rem}
+  .tab-btn{padding:10px 12px;font-size:.8rem}
+}
+/* Scramble game */
+.scramble-tiles{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;min-height:48px;border:2px dashed var(--border);border-radius:10px;padding:10px}
+.tile{background:var(--cambridge-blue);color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer;font-size:1rem;font-weight:700;transition:.2s}
+.tile:hover{background:#005a9e;transform:scale(1.05)}
+.tile.used{opacity:.3;pointer-events:none}
+.answer-slot{border-bottom:2px solid var(--cambridge-blue);min-width:100px;display:inline-block;padding:4px 8px;font-size:1rem;font-weight:700;text-align:center;min-height:32px}
+/* Memory game */
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.memory-card{height:80px;background:var(--cambridge-blue);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;color:#fff;transition:.3s;text-align:center;padding:6px}
+.memory-card.flipped{background:#fff;color:var(--text);border:2px solid var(--sky)}
+.memory-card.matched{background:var(--correct);color:#fff;pointer-events:none}
+/* Word Hunt */
+.word-grid{display:inline-grid;grid-template-columns:repeat(10,30px);gap:2px;font-family:monospace}
+.wg-cell{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:#f4f8fb;border:1px solid var(--border);cursor:pointer;font-weight:700;font-size:.85rem;border-radius:4px;transition:.15s;user-select:none}
+.wg-cell:hover{background:#dbeafe}
+.wg-cell.selected{background:var(--gold);color:#fff}
+.wg-cell.found{background:var(--mint);color:#fff}
+.word-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.wl-word{padding:4px 10px;background:#f4f8fb;border-radius:6px;font-size:.82rem;font-weight:600;border:2px solid var(--border)}
+.wl-word.found{background:var(--mint);color:#fff;border-color:var(--mint);text-decoration:line-through}
+/* Speed match */
+.speed-word{font-size:2rem;font-weight:800;color:var(--cambridge-blue);text-align:center;padding:20px 0}
+.speed-def{font-size:1rem;text-align:center;color:var(--muted);margin-bottom:20px}
+.speed-timer{font-size:2.5rem;font-weight:800;color:var(--coral);text-align:center}
+.speed-btns{display:flex;gap:12px;justify-content:center;margin-top:16px}
+/* Sentence builder */
+.word-chips{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;border:2px dashed var(--border);border-radius:10px;padding:10px;margin:10px 0}
+.chip{background:#e0f2fe;color:var(--cambridge-blue);border:2px solid var(--sky);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.9rem;font-weight:600;transition:.2s}
+.chip:hover{background:var(--sky);color:#fff}
+.chip.placed{opacity:.4;pointer-events:none}
+/* Hangman */
+.hangman-word{display:flex;gap:6px;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.letter-slot{width:36px;border-bottom:3px solid var(--cambridge-blue);height:40px;display:flex;align-items:flex-end;justify-content:center;font-size:1.3rem;font-weight:800}
+.alpha-keyboard{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:14px}
+.alpha-btn{width:34px;height:34px;border:2px solid var(--border);border-radius:6px;background:#f8fafc;cursor:pointer;font-weight:700;font-size:.85rem;transition:.2s}
+.alpha-btn:hover:not(:disabled){background:var(--sky);color:#fff;border-color:var(--sky)}
+.alpha-btn:disabled{opacity:.4;cursor:default}
+.alpha-btn.hit{background:var(--correct);color:#fff;border-color:var(--correct)}
+.alpha-btn.miss{background:#fef2f2;color:var(--wrong);border-color:var(--wrong)}
+/* LISTENING IMAGES */
+.listening-images{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.li-img{width:100px;height:72px;object-fit:cover;border-radius:8px;border:3px solid var(--border);cursor:pointer;transition:.2s}
+.li-img:hover{border-color:var(--sky)}
+.li-img.selected{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,179,35,.4)}
+.li-img.correct{border-color:var(--correct)}
+.li-img.wrong{border-color:var(--wrong)}
+/* Section header */
+.sec-title{font-size:1.4rem;font-weight:800;color:var(--cambridge-blue);margin-bottom:4px}
+.sec-sub{font-size:.88rem;color:var(--muted);margin-bottom:18px}
+/* sub nav */
+.sub-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.sub-btn{padding:7px 16px;border:2px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:.84rem;font-weight:600;transition:.2s}
+.sub-btn:hover,.sub-btn.active{background:var(--cambridge-blue);color:#fff;border-color:var(--cambridge-blue)}
+.feedback{font-size:.88rem;margin-top:8px;font-weight:600}
+.feedback.ok{color:var(--correct)}
+.feedback.bad{color:var(--wrong)}
+.explanation{font-size:.83rem;color:var(--muted);margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<div id="app-header">
+  <div id="header-row">
+    <div id="app-title">🎓 Cambridge <span>PET for Schools</span></div>
+    <div id="stats-row">
+      <div class="stat-chip">⭐ <b id="hdr-points">0</b> pts</div>
+      <div class="stat-chip">🔥 <b id="hdr-streak">0</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="nav-tabs">
+  <div id="nav-inner">
+    <button class="tab-btn active" onclick="showTab('home')"><span class="tab-icon">🏠</span>Home</button>
+    <button class="tab-btn" onclick="showTab('reading')"><span class="tab-icon">📖</span>Reading</button>
+    <button class="tab-btn" onclick="showTab('writing')"><span class="tab-icon">✏️</span>Writing</button>
+    <button class="tab-btn" onclick="showTab('listening')"><span class="tab-icon">🎧</span>Listening</button>
+    <button class="tab-btn" onclick="showTab('speaking')"><span class="tab-icon">🎤</span>Speaking</button>
+    <button class="tab-btn" onclick="showTab('grammar')"><span class="tab-icon">📐</span>Grammar</button>
+    <button class="tab-btn" onclick="showTab('vocabulary')"><span class="tab-icon">📚</span>Vocabulary</button>
+    <button class="tab-btn" onclick="showTab('games')"><span class="tab-icon">🎮</span>Games</button>
+    <button class="tab-btn" onclick="showTab('progress')"><span class="tab-icon">📊</span>Progress</button>
+  </div>
+</div>
+
+<div id="main">
+
+<!-- HOME -->
+<div id="sec-home" class="section active">
+  <div class="hero">
+    <h1>Cambridge <span>PET for Schools</span></h1>
+    <p>B1 Preliminary · 4 Complete Practice Tests · All Skills Covered</p>
+    <div class="hero-stats">
+      <div class="h-stat"><b>4</b><span>Tests</span></div>
+      <div class="h-stat"><b>168</b><span>Pages</span></div>
+      <div class="h-stat"><b>8</b><span>Games</span></div>
+      <div class="h-stat"><b>500+</b><span>Questions</span></div>
+      <div class="h-stat"><b>15</b><span>Grammar Topics</span></div>
+      <div class="h-stat"><b>200+</b><span>Vocabulary Words</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🎯 Choose Your Skill</div>
+    <div class="grid-2">
+      <div class="skill-card" onclick="showTab('reading')">
+        <div class="skill-icon">📖</div>
+        <h3>Reading</h3>
+        <p>5 parts · 35 questions per test</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-reading" style="width:0%"></div></div>
+      </div>
+      <div class="skill-card" onclick="showTab('writing')">
+        <div class="skill-icon">✏️</div>
+        <h3>Writing</h3>
+        <p>Transformations · Messages · Essays</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-writing" style="width:0%"></div></div>
+      </div>
+      <div class="skill-card" onclick="showTab('listening')">
+        <div class="skill-icon">🎧</div>
+        <h3>Listening</h3>
+        <p>4 parts · 25 questions per test</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-listening" style="width:0%"></div></div>
+      </div>
+      <div class="skill-card" onclick="showTab('speaking')">
+        <div class="skill-icon">🎤</div>
+        <h3>Speaking</h3>
+        <p>4 parts · Practice aloud & score</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-speaking" style="width:0%"></div></div>
+      </div>
+      <div class="skill-card" onclick="showTab('grammar')">
+        <div class="skill-icon">📐</div>
+        <h3>Grammar</h3>
+        <p>15 topics with exercises</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-grammar" style="width:0%"></div></div>
+      </div>
+      <div class="skill-card" onclick="showTab('vocabulary')">
+        <div class="skill-icon">📚</div>
+        <h3>Vocabulary</h3>
+        <p>200+ words across 10 topics</p>
+        <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="prog-vocab" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🏆 Today's Challenge</div>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:14px">Complete all skills today to earn a bonus badge!</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="showTab('games')">🎮 Play a Game</button>
+      <button class="btn btn-gold" onclick="showTab('reading')">📖 Start Reading Test</button>
+    </div>
+  </div>
+</div>
+<!-- END HOME -->
+<!-- READING -->
+<div id="sec-reading" class="section">
+  <div class="sec-title">📖 Reading</div>
+  <div class="sec-sub">Choose a test and part to begin</div>
+  <div class="sub-nav" id="reading-test-nav">
+    <button class="sub-btn active" onclick="setReadingTest(1,this)">Test 1</button>
+    <button class="sub-btn" onclick="setReadingTest(2,this)">Test 2</button>
+    <button class="sub-btn" onclick="setReadingTest(3,this)">Test 3</button>
+    <button class="sub-btn" onclick="setReadingTest(4,this)">Test 4</button>
+  </div>
+  <div class="sub-nav" id="reading-part-nav"></div>
+  <div id="reading-content"></div>
+</div>
+<!-- END READING -->
+
+<!-- WRITING -->
+<div id="sec-writing" class="section">
+  <div class="sec-title">✏️ Writing</div>
+  <div class="sec-sub">Practice all three writing parts</div>
+  <div class="sub-nav">
+    <button class="sub-btn active" onclick="showWritingPart(1,this)">Part 1 – Transformations</button>
+    <button class="sub-btn" onclick="showWritingPart(2,this)">Part 2 – Short Message</button>
+    <button class="sub-btn" onclick="showWritingPart(3,this)">Part 3 – Letter or Story</button>
+  </div>
+  <div id="writing-content"></div>
+</div>
+<!-- END WRITING -->
+<!-- LISTENING -->
+<div id="sec-listening" class="section">
+  <div class="sec-title">🎧 Listening</div>
+  <div class="sec-sub">Listen to audio descriptions and choose the correct answer</div>
+  <div class="sub-nav" id="listening-test-nav">
+    <button class="sub-btn active" onclick="setListeningTest(1,this)">Test 1</button>
+    <button class="sub-btn" onclick="setListeningTest(2,this)">Test 2</button>
+    <button class="sub-btn" onclick="setListeningTest(3,this)">Test 3</button>
+    <button class="sub-btn" onclick="setListeningTest(4,this)">Test 4</button>
+  </div>
+  <div class="sub-nav" id="listening-part-nav"></div>
+  <div id="listening-content"></div>
+</div>
+
+<!-- SPEAKING -->
+<div id="sec-speaking" class="section">
+  <div class="sec-title">🎤 Speaking</div>
+  <div class="sec-sub">Listen to model answers, then record yourself and get scored</div>
+  <div class="sub-nav" id="speaking-part-nav">
+    <button class="sub-btn active" onclick="showSpeakingPart(1,this)">Part 1 – Interview</button>
+    <button class="sub-btn" onclick="showSpeakingPart(2,this)">Part 2 – Discussion</button>
+    <button class="sub-btn" onclick="showSpeakingPart(3,this)">Part 3 – Photo</button>
+    <button class="sub-btn" onclick="showSpeakingPart(4,this)">Part 4 – Opinion</button>
+  </div>
+  <div id="speaking-content"></div>
+</div>
+
+<!-- GRAMMAR -->
+<div id="sec-grammar" class="section">
+  <div class="sec-title">📐 Grammar Guide</div>
+  <div class="sec-sub">Tap a topic to expand. Study the rules, then try the exercises.</div>
+  <div id="grammar-list"></div>
+</div>
+
+<!-- VOCABULARY -->
+<div id="sec-vocabulary" class="section">
+  <div class="sec-title">📚 Vocabulary Bank</div>
+  <div class="sec-sub">Choose a topic, click words to hear pronunciation, then take the quiz</div>
+  <div id="vocab-topics"></div>
+  <div id="vocab-words"></div>
+  <div id="vocab-quiz-area"></div>
+</div>
+
+<!-- GAMES -->
+<div id="sec-games" class="section">
+  <div class="sec-title">🎮 Games</div>
+  <div class="sec-sub">8 fun games to boost your English skills!</div>
+  <div class="games-grid">
+    <div class="game-card" onclick="launchGame('scramble')">
+      <div class="game-icon">🔤</div>
+      <h3>Word Scramble</h3>
+      <p>Rearrange letters to form the word</p>
+    </div>
+    <div class="game-card" onclick="launchGame('memory')">
+      <div class="game-icon">🃏</div>
+      <h3>Memory Match</h3>
+      <p>Match words with their definitions</p>
+    </div>
+    <div class="game-card" onclick="launchGame('wordhunt')">
+      <div class="game-icon">🔍</div>
+      <h3>Word Hunt</h3>
+      <p>Find hidden words in the grid</p>
+    </div>
+    <div class="game-card" onclick="launchGame('grammarfill')">
+      <div class="game-icon">📝</div>
+      <h3>Grammar Fill</h3>
+      <p>Complete sentences with correct words</p>
+    </div>
+    <div class="game-card" onclick="launchGame('speedmatch')">
+      <div class="game-icon">⚡</div>
+      <h3>Speed Match</h3>
+      <p>YES or NO — word matches definition?</p>
+    </div>
+    <div class="game-card" onclick="launchGame('builder')">
+      <div class="game-icon">🏗️</div>
+      <h3>Sentence Builder</h3>
+      <p>Arrange words into correct sentences</p>
+    </div>
+    <div class="game-card" onclick="launchGame('hangman')">
+      <div class="game-icon">🤔</div>
+      <h3>Word Guesser</h3>
+      <p>Guess the word from the definition</p>
+    </div>
+    <div class="game-card" onclick="launchGame('quickquiz')">
+      <div class="game-icon">⏱️</div>
+      <h3>Quick Quiz</h3>
+      <p>8 random PET questions, 15s each</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="sec-progress" class="section">
+  <div class="sec-title">📊 My Progress</div>
+  <div class="sec-sub">Track your learning journey</div>
+  <div class="card">
+    <div class="card-header">🌟 Overall Score</div>
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:3.5rem;font-weight:800;color:var(--cambridge-blue)" id="total-points-display">0</div>
+      <div style="color:var(--muted);font-size:.9rem">Total Points Earned</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="overall-prog" style="width:0%"></div></div>
+    <div style="text-align:right;font-size:.8rem;color:var(--muted);margin-top:4px" id="prog-label">0 / 500 points to B1 Certificate</div>
+  </div>
+  <div class="card">
+    <div class="card-header">📈 Skills Progress</div>
+    <div id="skills-progress-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-header">🏆 Achievements</div>
+    <div id="achievements-list" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <button class="btn btn-sm" style="background:#fef2f2;color:var(--wrong);border:2px solid var(--wrong)" onclick="resetProgress()">🗑️ Reset All Progress</button>
+  </div>
+</div>
+
+</div><!-- end #main -->
+
+<!-- GAME ARENA -->
+<div id="game-arena">
+  <div id="game-box">
+    <div id="game-header">
+      <span id="game-title">Game</span>
+      <button class="close-game" onclick="closeGame()">✕</button>
+    </div>
+    <div id="game-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const readingData = {
+  1: {
+    parts: [
+      {
+        title: "Part 1 – Questions 1–5",
+        instructions: "Look at the text in each question. What does it say? Mark the correct letter A, B or C on your answer sheet.",
+        questions: [
+          {
+            text: "1 — Sign on a locker room: STUDENTS! YOUR 6€ DEPOSIT FOR LOCKER KEYS WON'T BE REFUNDED IF KEYS ARE LOST.",
+            options: ["A. Lost locker keys can be replaced for a charge of 6€.","B. You cannot collect your locker key until you have paid a 6€ deposit.","C. We cannot return your 6€ deposit if you lose your locker key."],
+            answer: 2, explanation: "The sign says the deposit won't be refunded if keys are LOST. Answer C."
+          },
+          {
+            text: "2 — Mobile phone message from Hannah to Jo: 'Can you get me a Fast Boys T-shirt from their concert tomorrow? I like the purple ones, but another colour's OK if they haven't got one in my size.'",
+            options: ["A. Hannah has got a purple 'Fast Boys' T-shirt and wants one in another colour.","B. Hannah would rather have a purple 'Fast Boys' T-shirt if possible.","C. Hannah only wants a 'Fast Boys' T-shirt if it's a purple one."],
+            answer: 1, explanation: "Hannah prefers purple but another colour is OK if not available in her size. Answer B."
+          },
+          {
+            text: "3 — Notice: Class 5 Garden Party. 17 July 3.30pm. Because of bad weather, tomorrow's party will now be in the School Hall. Please give party food and drink to Mrs Bloom by 11am.",
+            options: ["A. the time","B. the place","C. the refreshments"],
+            question_stem: "What has changed about Class 5's party?",
+            answer: 1, explanation: "The party moved from the garden to the School Hall — the place changed. Answer B."
+          },
+          {
+            text: "4 — Note: 'Becky, Don't forget your Aunt Jane's coming to stay tonight, so can you make sure the house is neat when you go out this afternoon? Mum'",
+            options: ["A. tell Becky to stay at home to see her aunt.","B. ask Becky to tidy the house before she leaves.","C. remind Becky to go to her aunt's house."],
+            question_stem: "Mum is writing to",
+            answer: 1, explanation: "Mum asks Becky to make the house neat before going out. Answer B."
+          },
+          {
+            text: "5 — Notice: School Fitness Centre. From the end of August, the fitness centre will be closed during the weekends and evenings.",
+            options: ["A. change its opening hours at the end of August.","B. have shorter opening hours until the end of August.","C. open again to students at the end of August."],
+            question_stem: "The school fitness centre will",
+            answer: 0, explanation: "From end of August it will be closed weekends and evenings — hours change at end of August. Answer A."
+          }
+        ]
+      },
+      {
+        title: "Part 2 – Questions 6–10",
+        instructions: "The young people below all want to do an art course during their school holidays. On the opposite page there are descriptions of eight short art courses. Decide which course would be the most suitable for the following people. For questions 6–10, mark the correct letter (A–H) on your answer sheet.",
+        type: "matching",
+        people: [
+          { num: 6, name: "Alice", description: "Alice wants a course to help her with her drawing skills, particularly with drawing the latest styles of clothes, shoes and bags, because she wants to study this later at college.", answer: "E", explanation: "Art Matters: drawing techniques, draw live models in designer fashions. Perfect for fashion drawing." },
+          { num: 7, name: "Darius", description: "Darius loves making comic books, but isn't confident about his drawing. He wants to draw superheroes and animals and create adventures about them, but doesn't want to display his work.", answer: "C", explanation: "Create!: cartoon films, draw characters — imagination more important than drawing skills. No exhibition." },
+          { num: 8, name: "Cassie", description: "Cassie enjoys making pictures and objects from different materials. During the course she'd like to use her love of sport in her designs, and visit an exhibition to get new ideas.", answer: "B", explanation: "Colourscape: uses wool/printed cotton, sport team designs, includes gallery trip." },
+          { num: 9, name: "Marc", description: "Marc is talented at drawing, but also likes filming his friends on an old digital camera. He wants to develop this skill by learning to use more advanced equipment, and prepare for further study.", answer: "D", explanation: "Art Attack: develops photography/movie-making with latest technology, great for college prep." },
+          { num: 10, name: "Harry", description: "Harry has done a course about printing on paper, and would like to learn how to print on other materials. He also wants to produce something to take home and wear.", answer: "H", explanation: "Rainbow: printing inks/paints on T-shirts, produce artwork to take home and wear." }
+        ],
+        courses: [
+          { letter: "A", name: "Wild Art", description: "Concentrates on drawing and painting. Make a wall poster on animals theme to take home. Exhibition of everyone's work at the end." },
+          { letter: "B", name: "Colourscape", description: "Make a bag for school games clothes! Lots of colourful wool and printed cotton — choose design/colour like your favourite football or hockey team colours. Trip to gallery." },
+          { letter: "C", name: "Create!", description: "All about telling good stories in pictures. Cartoon films to watch, instruction in how to draw your favourite characters — but imagination more important than drawing skills. Visit to a cartoon museum." },
+          { letter: "D", name: "Art Attack", description: "Develop creative skills: printing, photography, cartoons and movie-making using latest technology. Great for college subjects. Drawing skills helpful. Students' work put into a book for everyone to buy." },
+          { letter: "E", name: "Art Matters", description: "Concentrate on drawing techniques, including inks and colour. Draw live models wearing designer fashions and sportswear. For those who like designing fashion and want a future in this area." },
+          { letter: "F", name: "Art Magic", description: "Design and make fashion jewellery from natural materials. Learn to use photography to help get design ideas. Bring your own camera." },
+          { letter: "G", name: "Arts Centre", description: "Wonder what your comic stories would look like on film? Bring your own comic drawings or prints. Film show of the best cartoons at the end." },
+          { letter: "H", name: "Rainbow", description: "Bring a clean white T-shirt! Using printing inks and paints, learn to transfer a picture onto your T-shirt and create special artwork to take home and wear." }
+        ]
+      },
+      {
+        title: "Part 3 – Questions 11–20",
+        instructions: "Look at the sentences below about a family trip to see dolphins. Read the text on the opposite page to decide if each sentence is correct or incorrect. If it is correct, mark A (TRUE). If it is not correct, mark B (FALSE).",
+        passage: "DOLPHIN TRIP — By Paul Hannan\n\nMy family have always been huge fans of New Zealand – my mum comes from the capital – so we saved up and went for a holiday there. We started with a week in the city she grew up in. After that, we toured around for a while before ending up by chance in Kaikoura, a small town on the coast. The first evening it seemed a rather dull place, but the next day I remembered what I'd read about it – that it was often possible to see dolphins and whales there! I'll always think of Kaikoura as the place where I finally achieved my lifelong ambition – to swim with wild dolphins.\n\nMy family and I set off on a dolphin trip on a cold, grey day with a number of other people on a small boat. However, the sky soon turned blue, and we raced across the waves in the sunshine until we finally reached the place where we were supposed to go swimming. To my surprise, this was more than 40 km from land. I was quite cold by this time, and really starting to wonder why my family had made me come all the way out there, when suddenly someone shouted 'Dolphins!'.\n\nAll I could see were fins everywhere – there were more than a hundred dolphins, all swimming towards our boat! Many of them were jumping around in the water as if they were asking us to come and play. I put on my snorkel and jumped into the sea. Everywhere I looked, all I could see was dolphins, swimming under me and round me. Then I remembered the guide had told us to make sounds in the water to attract them. So I did and actually heard them making similar sounds, as if they were trying to answer me. I even made eye contact with one dolphin, and watched it carefully as I swam round in a circle. Amazingly, the dolphin almost followed me, but then changed its mind, although it kept eye contact with me all the time. It really made me realise how intelligent and beautiful these creatures are.\n\nThen after an hour of swimming the guides called us to get back onto the boat. Although I had enjoyed myself, I was keen to leave the water by then as I was very cold. As I got dry I noticed that everyone on board was smiling and I realised what a very special moment we'd had.",
+        questions: [
+          { text: "11. Paul has family connections with the place he first visited in New Zealand.", answer: true, explanation: "His mum comes from the capital — that's where they started. A (correct)." },
+          { text: "12. Paul and his family chose to go to Kaikoura as part of their tour.", answer: false, explanation: "They ended up in Kaikoura 'by chance' — not planned. B (incorrect)." },
+          { text: "13. As soon as Paul arrived in Kaikoura he knew he might see some dolphins there.", answer: false, explanation: "He remembered this the NEXT DAY, not as soon as he arrived. B (incorrect)." },
+          { text: "14. The weather got worse during Paul's boat trip.", answer: false, explanation: "The sky turned blue and sunny — weather got BETTER. B (incorrect)." },
+          { text: "15. Paul had expected to go swimming closer to land.", answer: true, explanation: "'To my surprise, this was more than 40 km from land' — he was surprised = expected closer. A (correct)." },
+          { text: "16. Paul was beginning to feel unhappy about the trip until someone saw the dolphins.", answer: true, explanation: "He was 'wondering why his family had made him come' — then 'Dolphins!' was shouted. A (correct)." },
+          { text: "17. Paul believed the dolphins were inviting him to join them in the water.", answer: true, explanation: "They were 'jumping around as if they were asking us to come and play'. A (correct)." },
+          { text: "18. Paul felt that he had failed to communicate with the dolphins.", answer: false, explanation: "He made sounds and heard similar sounds back — successful communication. B (incorrect)." },
+          { text: "19. One dolphin copied exactly what Paul did in the water.", answer: false, explanation: "The dolphin 'almost followed' but 'changed its mind' — not exactly. B (incorrect)." },
+          { text: "20. Paul was pleased when the guides finally called them back onto the boat.", answer: true, explanation: "He 'was keen to leave the water' as he was very cold. A (correct)." }
+        ]
+      },
+      {
+        title: "Part 4 – Questions 21–25",
+        instructions: "Read the text and questions below. For each question, mark the correct letter A, B, C or D on your answer sheet.",
+        passage: "ONE TO WATCH! — Essay by Jessica Bourne, aged 14\n\nI'm a big fan of films featuring the spy James Bond. I've got most of them on DVD. We've recently bought Quantum of Solace, in which Daniel Craig plays the part of Bond. I don't know why the film's got that name – but it's a great movie, anyway.\n\nAll the actors who've played James Bond have been great, but Daniel Craig, who's made lots of other films, plays the part better than any of them. Even though he doesn't talk very much, I think he's the most perfect actor for the role. He even does a few of the more dangerous things in the film himself, instead of getting someone else to do them. I did wonder sometimes whether he'd be clever enough to defeat the bad people – but I'm not going to tell you the ending! The actress who stars with Craig gives a fantastic performance too – I loved all the glamorous clothes she wore!\n\nThe director probably had a hard job making this Bond film as full of action as earlier ones. But the excitement starts right at the beginning here, with a car chase along a mountain road, and plenty of other thrilling scenes, too – Bond leaping off tall buildings and so on. Unfortunately I found the story difficult to follow in places, and it also seemed to be over very quickly – it lasted under two hours. I also felt there weren't as many jokes as in the old Bond films. And where was all the ridiculous Bond equipment – the underwater car or exploding watch that everyone laughed at? This is a more serious, darker Bond film, but I still really enjoyed it.",
+        questions: [
+          { text: "21. What is Jessica trying to do in her essay?", options: ["A. explain what first attracted her to Bond films","B. tell readers about the Bond DVDs she owns","C. give a balanced view of a Bond film she has seen","D. describe how Daniel Craig got the part of James Bond"], answer: 2, explanation: "She gives both positives and negatives about Quantum of Solace — a balanced view. Answer C." },
+          { text: "22. What can a reader find out from Jessica's essay?", options: ["A. whether Quantum of Solace is her favourite Bond film","B. what other films Daniel Craig has made","C. which other actors have played James Bond","D. whether she thinks Daniel Craig is the best James Bond"], answer: 3, explanation: "She says Craig plays the part better than any other actor — she thinks he's the best. Answer D." },
+          { text: "23. What does Jessica tell us about Craig in the new Bond film?", options: ["A. He performs some of the action scenes.","B. He wears some stylish clothes.","C. He is given a lot of lines to say.","D. He looks strong and fit enough to fight the criminals."], answer: 0, explanation: "'He even does a few of the more dangerous things in the film himself.' Answer A." },
+          { text: "24. What is one problem with the film, according to Jessica?", options: ["A. It seems a bit too long.","B. It's sometimes hard to understand what's happening.","C. It has too much silly technology in it.","D. It has jokes that aren't very funny."], answer: 1, explanation: "'I found the story difficult to follow in places.' Answer B." },
+          { text: "25. Which of these might appear in a magazine review of the new Bond film?", options: ["A. It's full of excitement, with Bond jumping across rooftops, so don't be disappointed by the slow start.","B. The director wanted to move away from the last Bond film and include a bit less action.","C. I'm not sure the title tells you much... but be prepared to watch a rather different kind of Bond movie.","D. Daniel Craig performed well as James Bond, but the main female star was disappointing."], answer: 2, explanation: "Jessica says the title is puzzling and it's a more serious/darker film — different kind of Bond movie. Answer C." }
+        ]
+      },
+      {
+        title: "Part 5 – Questions 26–35",
+        instructions: "Read the text below and choose the correct word for each space. For each question, mark the correct letter A, B, C or D on your answer sheet.",
+        passage: "NEW HOME – NEW SCHOOL — by Megan Williams, aged 13\n\nLast year my Dad got a new job. It was in a town (0) __which__ was 100 kms from our home. Mum and Dad (26)___ we would have to move, because it was a long way for Dad to (27)___ every day. When they (28)___ me about their plan I was upset (29)___ I loved my home and school. I was worried that I would (30)___ all my friends and teachers a lot. Anyway, six months (31)___ that, my family moved to the town of Hexford. The house was much bigger than our old one, and (32)___ my bedroom window I (33)___ see the sea. I wasn't looking forward to the first day at my new school. I felt really (34)___ about meeting lots of new people. But when I got there everyone was great! My class teacher was nice and I (35)___ friends with two girls in my class. Moving home isn't that bad, after all!",
+        blanks: [
+          { num: 26, options: ["A. chose","B. decided","C. selected","D. picked"], answer: 1, explanation: "Decided (+ that clause) = B." },
+          { num: 27, options: ["A. transport","B. carry","C. tour","D. travel"], answer: 3, explanation: "Travel every day (commute). Answer D." },
+          { num: 28, options: ["A. said","B. spoke","C. told","D. explained"], answer: 2, explanation: "Told me (+ object) about their plan. Answer C." },
+          { num: 29, options: ["A. because","B. so","C. but","D. and"], answer: 0, explanation: "Upset because I loved my home — reason. Answer A." },
+          { num: 30, options: ["A. forget","B. lose","C. leave","D. miss"], answer: 3, explanation: "Miss all my friends — to feel sad about being away from them. Answer D." },
+          { num: 31, options: ["A. further","B. after","C. next","D. later"], answer: 1, explanation: "Six months after that. Answer B." },
+          { num: 32, options: ["A. down","B. along","C. from","D. away"], answer: 2, explanation: "From my bedroom window. Answer C." },
+          { num: 33, options: ["A. shall","B. could","C. must","D. would"], answer: 1, explanation: "Could see = was able to see. Answer B." },
+          { num: 34, options: ["A. nervous","B. disappointed","C. angry","D. bored"], answer: 0, explanation: "Nervous about meeting new people. Answer A." },
+          { num: 35, options: ["A. knew","B. found","C. made","D. met"], answer: 2, explanation: "Made friends with = became friends. Answer C." }
+        ]
+      }
+    ]
+  },
+  2: {
+    parts: [
+      {
+        title: "Part 1 – Signs & Notices",
+        instructions: "For each question, choose the correct answer A, B or C.",
+        questions: [
+          { text: "Sign: 'WET PAINT – DO NOT TOUCH'", options: ["A. The paint needs to dry before you touch it","B. The paint is completely dry","C. You should paint this area yourself"], answer: 0, explanation: "Wet paint – do not touch means wait for it to dry." },
+          { text: "Notice: 'SPORTS HALL – TRAINERS MUST BE WORN AT ALL TIMES'", options: ["A. You can use the sports hall in any footwear","B. Shoes with outdoor soles are not allowed","C. Trainers are available to borrow"], answer: 1, explanation: "Trainers must be worn = no outdoor soles." },
+          { text: "Sign: 'MUSEUM – PHOTOGRAPHY FOR PERSONAL USE ONLY'", options: ["A. Photography is not allowed in the museum","B. You can sell your photos taken here","C. You may take photos but not for commercial purposes"], answer: 2, explanation: "Personal use only = not for commercial purposes." },
+          { text: "Notice: 'BUS STOP – THIS SERVICE DOES NOT RUN ON SUNDAYS'", options: ["A. The bus runs every day","B. There is no bus here on Sundays","C. The bus only runs on Sundays"], answer: 1, explanation: "Does not run on Sundays = no bus on Sundays." },
+          { text: "Sign: 'SWIMMING – CHILDREN UNDER 12 MUST BE ACCOMPANIED BY AN ADULT'", options: ["A. Children under 12 cannot swim here","B. Adults do not need to be present","C. Children under 12 need an adult with them"], answer: 2, explanation: "Accompanied by an adult = need an adult with them." }
+        ]
+      },
+      {
+        title: "Part 5 – Multiple Choice Cloze (My Dream Job)",
+        instructions: "Choose the correct word A, B, C or D for each gap.",
+        passage: "When I was young, I always _1_ of becoming a professional footballer. I spent hours _2_ in the garden and watched every match on television. My parents _3_ me to train with a local club, and I improved _4_. By the time I was sixteen, I had _5_ to play for the regional team.",
+        blanks: [
+          { num: 1, options: ["A. dreamed","B. thought","C. hoped","D. wished"], answer: 0, explanation: "Dream of + gerund = dreamed of becoming." },
+          { num: 2, options: ["A. practiced","B. to practice","C. practising","D. practice"], answer: 2, explanation: "Spent hours + -ing form." },
+          { num: 3, options: ["A. let","B. made","C. allowed","D. helped"], answer: 2, explanation: "Allowed me to train = permitted." },
+          { num: 4, options: ["A. quickly","B. quick","C. quicker","D. quickest"], answer: 0, explanation: "Adverb quickly modifies the verb improved." },
+          { num: 5, options: ["A. succeeded","B. managed","C. achieved","D. reached"], answer: 1, explanation: "Managed to + infinitive = succeeded in doing something." }
+        ]
+      }
+    ]
+  },
+  3: {
+    parts: [
+      {
+        title: "Part 1 – Signs & Notices",
+        instructions: "For each question, choose the correct answer A, B or C.",
+        questions: [
+          { text: "Sign: 'SHOP CLOSES EARLY ON WEDNESDAYS – 3 PM'", options: ["A. The shop is always closed on Wednesdays","B. Wednesday closing time is earlier than usual","C. The shop opens at 3 pm on Wednesdays"], answer: 1, explanation: "Closes early on Wednesdays = earlier than usual." },
+          { text: "Notice: 'FIRE EXIT – KEEP CLEAR AT ALL TIMES'", options: ["A. Do not block this exit","B. Use this exit in case of fire","C. This exit is locked at all times"], answer: 0, explanation: "Keep clear = do not block." },
+          { text: "Sign: 'HOTEL – CHECK-IN FROM 2 PM, CHECK-OUT BY 11 AM'", options: ["A. You can arrive at any time","B. You must leave your room before 11 am","C. You can stay until 2 pm on the day you leave"], answer: 1, explanation: "Check-out by 11 am = must leave room before 11 am." },
+          { text: "Notice: 'PARKING – PERMIT HOLDERS ONLY BETWEEN 8 AM AND 6 PM'", options: ["A. Anyone can park here at any time","B. You need a permit to park here during the day","C. Parking is free after 6 pm for everyone"], answer: 1, explanation: "Permit holders only 8am-6pm = need permit during the day." },
+          { text: "Sign: 'REDUCED TO CLEAR – FINAL REDUCTIONS'", options: ["A. These items are being sold at lower prices","B. The shop is closing down permanently","C. These items cannot be returned"], answer: 0, explanation: "Reduced to clear = selling at lower prices to sell stock." }
+        ]
+      },
+      {
+        title: "Part 5 – Multiple Choice Cloze (Island Life)",
+        instructions: "Choose the correct word A, B, C or D for each gap.",
+        passage: "Living on a small island _1_ be a wonderful experience, but it also has its challenges. The community is very _2_ and everyone knows each other. However, young people sometimes _3_ the island to study or work on the mainland. They _4_ home during holidays, but many eventually _5_ not to return permanently.",
+        blanks: [
+          { num: 1, options: ["A. might","B. should","C. must","D. need"], answer: 0, explanation: "Might = possibility." },
+          { num: 2, options: ["A. close-knit","B. close","C. closing","D. closed"], answer: 0, explanation: "Close-knit community = fixed collocation." },
+          { num: 3, options: ["A. leave","B. leaves","C. left","D. leaving"], answer: 0, explanation: "Sometimes + present simple: leave." },
+          { num: 4, options: ["A. come","B. go","C. return","D. travel"], answer: 2, explanation: "Return home = come back home." },
+          { num: 5, options: ["A. decide","B. choice","C. chose","D. decided"], answer: 0, explanation: "Eventually + present simple decide." }
+        ]
+      }
+    ]
+  },
+  4: {
+    parts: [
+      {
+        title: "Part 1 – Signs & Notices",
+        instructions: "For each question, choose the correct answer A, B or C.",
+        questions: [
+          { text: "Notice: 'CONCERT – DOORS OPEN 7 PM, PERFORMANCE 7.30 PM'", options: ["A. The concert begins at 7 pm","B. You must arrive at 7.30 pm","C. You can enter the venue from 7 pm onwards"], answer: 2, explanation: "Doors open 7 pm = can enter from 7 pm." },
+          { text: "Sign: 'QUIET CAR – PLEASE TURN OFF MOBILE PHONES'", options: ["A. You must not use your phone in this train car","B. You can use your phone on silent mode","C. Mobile phones are not allowed on the train"], answer: 0, explanation: "Turn off mobile phones = must not use phone." },
+          { text: "Notice: 'GYM – EQUIPMENT MUST BE WIPED DOWN AFTER USE'", options: ["A. Clean the equipment before you use it","B. You must clean equipment when you have finished","C. The gym staff clean the equipment for you"], answer: 1, explanation: "After use = when you have finished." },
+          { text: "Sign: 'TEMPORARY ROAD CLOSURE – PLEASE USE DIVERSION'", options: ["A. This road is always closed","B. You must take an alternative route","C. The road is open but slow"], answer: 1, explanation: "Use diversion = take an alternative route." },
+          { text: "Notice: 'SWIMMING POOL – LANE SWIMMING ONLY BETWEEN 6 AM AND 8 AM'", options: ["A. The pool is closed from 6–8 am","B. You must swim in the lanes during this time","C. You can swim anywhere in the pool at all times"], answer: 1, explanation: "Lane swimming only = must swim in the lanes." }
+        ]
+      },
+      {
+        title: "Part 5 – Multiple Choice Cloze (A Talent for Music)",
+        instructions: "Choose the correct word A, B, C or D for each gap.",
+        passage: "Maria showed a remarkable _1_ for music from an early age. By the time she was seven, she could play the piano _2_ any written music in front of her. Her parents decided to _3_ her in a special music school, where she practised for several hours every day. The hard work _4_ off when she won a national competition at the age of thirteen. Today she _5_ as one of the most talented young pianists in the country.",
+        blanks: [
+          { num: 1, options: ["A. skill","B. talent","C. ability","D. gift"], answer: 1, explanation: "Talent for music = fixed collocation." },
+          { num: 2, options: ["A. without","B. with","C. by","D. from"], answer: 0, explanation: "Play without written music = from memory." },
+          { num: 3, options: ["A. enrol","B. apply","C. join","D. enter"], answer: 0, explanation: "Enrol in a school = register as a student." },
+          { num: 4, options: ["A. came","B. turned","C. paid","D. went"], answer: 2, explanation: "Hard work paid off = produced good results." },
+          { num: 5, options: ["A. knows","B. considers","C. is regarded","D. thinks"], answer: 2, explanation: "Is regarded as = passive construction." }
+        ]
+      }
+    ]
+  }
+};
+
+const writingData = {
+  part1: [
+    { sentence: "I have never been to London before.", start: "This is", answer: "my first time in London", hint: "my first time..." },
+    { sentence: "The film was so boring that I fell asleep.", start: "It was such", answer: "a boring film that I fell asleep", hint: "a boring film..." },
+    { sentence: "The journey takes three hours by train.", start: "It takes three hours", answer: "to travel by train", hint: "to travel..." },
+    { sentence: "Tom is a better swimmer than Anna.", start: "Anna doesn't", answer: "swim as well as Tom", hint: "swim as well..." },
+    { sentence: "I last visited my grandparents two months ago.", start: "I haven't visited", answer: "my grandparents for two months", hint: "for two months" },
+    { sentence: "Despite the rain, we enjoyed the picnic.", start: "Although it was", answer: "raining, we enjoyed the picnic", hint: "raining..." },
+    { sentence: "'Don't forget to bring your passport,' she said.", start: "She reminded me", answer: "to bring my passport", hint: "to bring..." },
+    { sentence: "Nobody has used this computer for a week.", start: "This computer hasn't", answer: "been used for a week", hint: "been used..." },
+    { sentence: "The bag is too heavy for me to carry.", start: "I'm not strong", answer: "enough to carry the bag", hint: "enough to..." },
+    { sentence: "We only bought four tickets, so Sara couldn't come.", start: "There weren't enough", answer: "tickets for Sara to come", hint: "tickets for..." }
+  ],
+  part2: [
+    {
+      prompt: "You want to invite your English friend Alex to your birthday party next Saturday. Write an email to Alex. In your email: say when and where the party is, explain what you have planned, ask Alex to bring something.",
+      minWords: 35, maxWords: 45,
+      tips: ["Include all 3 bullet points","Use friendly, informal language","Check word count carefully"],
+      model: "Hi Alex! I'm having a birthday party at my house this Saturday from 7 pm. We're going to have a barbecue and play some games in the garden. Could you bring some music? Hope you can come! See you soon!"
+    },
+    {
+      prompt: "You have found a wallet in the street. Write a note to leave with it at the police station. In your note: say where and when you found it, describe what is inside it, leave your contact details.",
+      minWords: 35, maxWords: 45,
+      tips: ["Be clear and factual","Include all 3 points","Use polite, formal tone"],
+      model: "Dear Officer, I found this wallet outside the shopping centre on Park Street at about 3 pm today. It contains some cash, a credit card and an ID card. Please contact me on 07700 900123 if you need more information. Thank you."
+    },
+    {
+      prompt: "You saw an interesting film last weekend. Write a message to a friend about it. In your message: say what the film was about, explain why you enjoyed it, suggest that your friend should watch it.",
+      minWords: 35, maxWords: 45,
+      tips: ["Recommend the film clearly","Mention all 3 points","Keep it conversational"],
+      model: "Hey! I watched 'The Lost City' last weekend — it's an action-comedy about an author who gets kidnapped on an island. I loved it because it was so funny and exciting. You should definitely watch it, I think you'd enjoy it!"
+    }
+  ],
+  part3: [
+    {
+      type: "letter",
+      prompt: "Your English friend Sam is coming to visit you for a week. Write a letter to Sam. In your letter: describe where you live, suggest some activities to do together, explain how Sam can travel to your home.",
+      tips: ["Use letter format: Dear Sam / Best wishes","Write 100 words","Organise into paragraphs"],
+      model: "Dear Sam,\n\nI'm so excited you're coming to visit! I live in a small town about 20 km from the city centre. It's quite peaceful but there's plenty to do.\n\nDuring your visit, we could visit the old castle nearby, go cycling in the forest, or spend a day at the seaside — it's only 30 minutes away. In the evenings, we could try local restaurants.\n\nThe easiest way to get here is by train to Central Station, then take Bus 14. It stops right near my house. The journey takes about two hours from the airport.\n\nCan't wait to see you!\n\nBest wishes,\n[Your name]"
+    },
+    {
+      type: "story",
+      prompt: "Your teacher has asked you to write a story. Your story must begin with this sentence: 'I couldn't believe what I saw when I opened the door.'",
+      tips: ["Start with the given sentence exactly","Build tension then resolve it","Use varied past tenses"],
+      model: "I couldn't believe what I saw when I opened the door. The entire living room had been transformed. Hundreds of colourful balloons covered the ceiling, and a enormous cake sat on the table. My friends and family were all there, wearing party hats and grinning at me.\n\n'Surprise!' they all shouted at once.\n\nI had completely forgotten it was my birthday. For the past week I had been so busy with exams that I hadn't thought about anything else. I felt my eyes fill with tears — happy ones. It was the best birthday I had ever had, and one I would never forget."
+    }
+  ]
+};
+
+const listeningData = {
+  1: {
+    parts: [
+      {
+        title: "Part 1 – Pictures (Multiple Choice)",
+        instructions: "You will hear seven short conversations. Choose the correct picture A, B or C.",
+        questions: [
+          {
+            text: "What time does the train leave?",
+            script: "A: What time does the train leave? B: Let me check... it's at quarter past seven. A: Not seven o'clock? B: No, seven fifteen.",
+            options: ["A. 7:00","B. 7:15","C. 7:30"], answer: 1,
+            explanation: "Quarter past seven = 7:15"
+          },
+          {
+            text: "What is the weather like now?",
+            script: "A: Look at those dark clouds! B: I know, it was sunny this morning. A: I think it's going to rain. B: You're right, I can feel a few drops already.",
+            options: ["A. Sunny","B. Cloudy and raining","C. Windy"], answer: 1,
+            explanation: "Dark clouds + rain drops = cloudy and raining"
+          },
+          {
+            text: "Where will they meet?",
+            script: "A: Shall we meet at the café? B: I'd prefer the library — it's quieter. A: OK, near the main entrance? B: Yes, by the front door at 3.",
+            options: ["A. At the café","B. At the library entrance","C. At the bus stop"], answer: 1,
+            explanation: "They agreed to meet at the library entrance."
+          },
+          {
+            text: "What did the boy forget?",
+            script: "A: Did you bring your PE kit? B: Oh no! I've got my trainers but I left my shorts at home. A: What about your T-shirt? B: That's in my bag.",
+            options: ["A. Trainers","B. T-shirt","C. Shorts"], answer: 2,
+            explanation: "He forgot his shorts."
+          },
+          {
+            text: "Which present did Sarah buy?",
+            script: "A: Did you get Tom a book for his birthday? B: I thought about it, but I got him a DVD instead. A: Not the computer game? B: No, it was too expensive.",
+            options: ["A. A book","B. A computer game","C. A DVD"], answer: 2,
+            explanation: "Sarah bought a DVD."
+          }
+        ]
+      },
+      {
+        title: "Part 2 – Note Completion",
+        instructions: "Listen and complete each gap with ONE or TWO words.",
+        intro: "You will hear a message about a school trip. Complete the notes.",
+        items: [
+          { label: "Date of trip", answer: "Friday 15th March", script: "The trip is on Friday the 15th of March." },
+          { label: "Depart from", answer: "school car park", script: "Coaches will leave from the school car park at 8.30." },
+          { label: "Bring", answer: "packed lunch and water", script: "Please bring a packed lunch and plenty of water." },
+          { label: "Cost", answer: "£12.50", script: "The trip costs twelve pounds fifty per student." },
+          { label: "Return time", answer: "5.30 pm", script: "We expect to be back by five thirty in the afternoon." }
+        ]
+      },
+      {
+        title: "Part 3 – Multiple Choice",
+        instructions: "For each question choose the correct answer A, B or C.",
+        questions: [
+          {
+            text: "Where did Jack go last summer?",
+            script: "I had an amazing summer. I was planning to go to Spain like every year, but in the end I went to Portugal. It was totally different — quieter beaches and amazing food.",
+            options: ["A. Spain","B. Portugal","C. France"], answer: 1,
+            explanation: "Jack went to Portugal."
+          },
+          {
+            text: "What does Jack say about the food?",
+            script: "The local food was incredible — especially the seafood. I ate things I'd never tried before. The restaurants were cheap too.",
+            options: ["A. It was expensive","B. He had tried it before","C. The seafood was especially good"], answer: 2,
+            explanation: "The seafood was especially good."
+          },
+          {
+            text: "What is Jack planning next year?",
+            script: "Next year I'd like to travel further — maybe South America or Asia. My friend suggested Japan and I think that's a great idea.",
+            options: ["A. Go back to Portugal","B. Visit Japan","C. Stay in Europe"], answer: 1,
+            explanation: "Jack is planning to visit Japan."
+          }
+        ]
+      },
+      {
+        title: "Part 4 – True/False",
+        instructions: "Read the statements. Are they TRUE or FALSE? Listen to the interview.",
+        intro: "Interview with a young chef.",
+        questions: [
+          { text: "Emma has worked in restaurants since she was 14.", answer: true, script: "I got my first job in a restaurant kitchen when I was fourteen." },
+          { text: "Emma learned to cook from her mother.", answer: false, script: "I actually taught myself by watching videos — my mum isn't a great cook!" },
+          { text: "Emma's restaurant is in the city centre.", answer: false, script: "My place is a little out of town — about three miles from the centre." },
+          { text: "Emma uses local ingredients whenever possible.", answer: true, script: "I always try to source ingredients locally, it makes such a difference to the taste." }
+        ]
+      }
+    ]
+  },
+  2: {
+    parts: [
+      {
+        title: "Part 1 – Pictures (Multiple Choice)",
+        instructions: "You will hear short recordings. Choose the correct answer A, B or C.",
+        questions: [
+          {
+            text: "What sport does the girl want to try?",
+            script: "A: I'm thinking of trying something new this term. B: Like what? A: I was thinking swimming, but actually I'd love to try rock climbing. B: That sounds exciting!",
+            options: ["A. Swimming","B. Rock climbing","C. Tennis"], answer: 1,
+            explanation: "She decided she'd love to try rock climbing."
+          },
+          {
+            text: "What did Mark buy at the market?",
+            script: "A: Did you get vegetables? B: Yes, and some cheese. I wanted to get fruit too but they'd sold out of strawberries. A: Did you get anything else? B: Just the bread.",
+            options: ["A. Vegetables, cheese and bread","B. Fruit and vegetables","C. Strawberries and cheese"], answer: 0,
+            explanation: "Mark bought vegetables, cheese and bread."
+          },
+          {
+            text: "How will they travel to the concert?",
+            script: "A: Shall we drive to the concert? B: Parking will be terrible. A: Bus? B: Trains are quicker — let's take the train. A: Good idea.",
+            options: ["A. By car","B. By bus","C. By train"], answer: 2,
+            explanation: "They decided to take the train."
+          }
+        ]
+      },
+      {
+        title: "Part 3 – Multiple Choice",
+        instructions: "For each question choose the correct answer A, B or C.",
+        questions: [
+          {
+            text: "How long has Lisa been painting?",
+            script: "I started painting seriously when I was about twelve, so that's been around eight years now.",
+            options: ["A. Six years","B. Eight years","C. Twelve years"], answer: 1,
+            explanation: "Lisa has been painting for around eight years."
+          },
+          {
+            text: "Where does Lisa sell her work?",
+            script: "I sell most of my work online through my own website, though I do occasionally show in local galleries.",
+            options: ["A. In galleries only","B. Online mostly","C. At markets"], answer: 1,
+            explanation: "Lisa sells mostly online through her website."
+          },
+          {
+            text: "What advice does Lisa give to beginners?",
+            script: "Don't worry about making mistakes — every artist does. The most important thing is to keep practising every day, even if it's just for ten minutes.",
+            options: ["A. Take expensive classes","B. Copy famous paintings","C. Practise every day"], answer: 2,
+            explanation: "Lisa says to practise every day."
+          }
+        ]
+      }
+    ]
+  },
+  3: {
+    parts: [
+      {
+        title: "Part 1 – Pictures (Multiple Choice)",
+        instructions: "You will hear short recordings. Choose the correct answer A, B or C.",
+        questions: [
+          {
+            text: "What did the woman lose?",
+            script: "A: I've lost my umbrella. B: Again? Where did you last have it? A: On the bus, I think. Or maybe the café. B: Have you tried calling the bus company?",
+            options: ["A. Her bag","B. Her keys","C. Her umbrella"], answer: 2,
+            explanation: "The woman lost her umbrella."
+          },
+          {
+            text: "Where is the nearest bank?",
+            script: "A: Excuse me, is there a bank nearby? B: Yes — go straight down this road, turn left at the traffic lights and it's on the right next to the post office.",
+            options: ["A. On the left next to the post office","B. Straight ahead past the traffic lights","C. On the right next to the post office"], answer: 2,
+            explanation: "Turn left, then it's on the right next to the post office."
+          },
+          {
+            text: "What is the man's job?",
+            script: "A: So what do you do for work? B: I'm a vet. I work mainly with farm animals — cows, sheep, that sort of thing. A: Do you ever work with pets? B: Occasionally.",
+            options: ["A. A doctor","B. A vet","C. A farmer"], answer: 1,
+            explanation: "He is a vet."
+          }
+        ]
+      }
+    ]
+  },
+  4: {
+    parts: [
+      {
+        title: "Part 1 – Pictures (Multiple Choice)",
+        instructions: "You will hear short recordings. Choose the correct answer A, B or C.",
+        questions: [
+          {
+            text: "What is the girl's favourite subject?",
+            script: "A: What's your favourite subject at school? B: I used to love science but now I prefer history. A: Not English? B: English is OK but history is more interesting to me.",
+            options: ["A. Science","B. English","C. History"], answer: 2,
+            explanation: "The girl's favourite subject is now history."
+          },
+          {
+            text: "Which film will they watch?",
+            script: "A: What do you want to watch? B: I suggested the comedy but you weren't keen. A: What about the thriller? B: OK, let's watch that.",
+            options: ["A. Comedy","B. Thriller","C. Action film"], answer: 1,
+            explanation: "They chose the thriller."
+          },
+          {
+            text: "What will the boy have for lunch?",
+            script: "A: Are you having the pasta? B: No, I'm not very hungry. I'll just have a sandwich and some juice. A: Not a salad? B: No, just the sandwich.",
+            options: ["A. Pasta","B. Salad","C. Sandwich and juice"], answer: 2,
+            explanation: "The boy will have a sandwich and juice."
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const speakingData = {
+  1: {
+    title: "Part 1 – Interview",
+    description: "The examiner asks you questions about yourself. Answer in full sentences.",
+    questions: [
+      { q: "Can you tell me your name and where you're from?", model: "My name is [Name] and I'm from [City], which is in [Country]. It's quite a large city with lots of things to do." },
+      { q: "What do you enjoy doing in your free time?", model: "In my free time, I enjoy reading and playing football with my friends. I also like watching films, especially action movies." },
+      { q: "Tell me about your school or the place where you study.", model: "I study at [Name] school. It's quite large, with about 800 students. My favourite subjects are English and Science because I find them really interesting." },
+      { q: "What are your plans for the future?", model: "I'd like to go to university and study engineering. In the future, I hope to travel and perhaps work abroad for a few years." },
+      { q: "What kind of music do you like?", model: "I really enjoy pop and rock music. I listen to music when I'm travelling to school or doing homework. My favourite band is probably Coldplay." }
+    ]
+  },
+  2: {
+    title: "Part 2 – Discussion Scenario",
+    description: "Talk with your partner about a situation. Discuss the options and decide together.",
+    scenarios: [
+      {
+        situation: "You and a friend are planning a day trip for your class. Discuss these options and decide which would be best.",
+        options: ["🎨 Visit an art museum in the city","🌿 Go hiking in the countryside","🎭 See a theatre performance","🏊 Spend the day at a water park"],
+        tips: ["Use: 'What do you think about...?','I think... because...', 'How about...?', 'That's a good idea, but...'"],
+        model: "I think we should go to the art museum because it's educational and we can learn something new. However, the water park would be more fun and everyone would enjoy it. What do you think? — I agree the water park sounds more fun, but the theatre might be a more unique experience. I think we should go to the art museum as it combines culture and education."
+      },
+      {
+        situation: "You are organising a birthday party. Discuss these ideas and decide which to include.",
+        options: ["🎵 Hire a DJ","🎂 Order a special cake","🎮 Set up a games room","🌳 Have the party outside"],
+        tips: ["Agree and add: 'Yes, and also...', Disagree politely: 'I'm not sure about that...'"],
+        model: "I think we should definitely order a special cake — birthdays aren't the same without one! A games room would also keep everyone entertained. I'm not sure about hiring a DJ as it might be expensive. Having the party outside is a nice idea but it depends on the weather."
+      }
+    ]
+  },
+  3: {
+    title: "Part 3 – Photo Description",
+    description: "Describe a photograph for about 1 minute. Talk about what you can see.",
+    photos: [
+      {
+        topic: "People playing music",
+        prompts: ["Where are the people?","What instruments can you see?","How do the people look?","What might happen next?"],
+        model: "In this photograph, I can see a group of young people who appear to be in a music studio or rehearsal room. There's a guitarist in the foreground and what looks like a keyboard player in the background. The people look happy and enthusiastic — they seem to be enjoying themselves. There are microphones and amplifiers visible, which suggests this might be a band practice session. The atmosphere looks energetic and creative. I think they might be preparing for a concert or recording a song."
+      },
+      {
+        topic: "People doing sport",
+        prompts: ["What sport is being played?","Where is the photo taken?","Describe the people","What is the atmosphere like?"],
+        model: "This photo shows people playing basketball in what looks like an outdoor court. I can see several players — they are wearing sports clothes and trainers. One player is jumping to shoot the ball towards the basket. The players look very active and competitive — their expressions show concentration and determination. The setting appears to be in a city, possibly a park or school. The atmosphere seems exciting and energetic. Basketball is clearly a popular sport that brings people together."
+      }
+    ]
+  },
+  4: {
+    title: "Part 4 – General Conversation",
+    description: "The examiner asks you and your partner questions about the photo topic.",
+    topics: [
+      {
+        theme: "Music",
+        questions: [
+          { q: "Do you prefer listening to music or playing it? Why?", model: "I prefer listening to music because it's something I can do anywhere and anytime — on the bus, at home, or while exercising. Playing an instrument requires more time and concentration, though I think it must be very satisfying." },
+          { q: "How important is music in your life?", model: "Music is very important to me. It affects my mood — I listen to upbeat music when I'm feeling low and calm music when I'm stressed. I couldn't imagine a day without listening to music." },
+          { q: "Do you think young people today listen to more music than in the past?", model: "I think yes, because technology makes music so accessible now. With smartphones and streaming services, you can have millions of songs at your fingertips. In the past, you had to buy CDs or tapes, so people probably listened to less variety." }
+        ]
+      },
+      {
+        theme: "Free Time & Sport",
+        questions: [
+          { q: "What sports or activities do young people enjoy in your country?", model: "In my country, football is by far the most popular sport, especially among boys. Basketball and swimming are also popular. Many young people also spend their free time playing video games, which is quite common nowadays." },
+          { q: "Do you think it's important to do sport regularly? Why?", model: "Yes, I definitely think it's important. Sport keeps you physically healthy and also helps your mental health. When you exercise, your body releases chemicals that make you feel happier. It also teaches teamwork and discipline." },
+          { q: "What are the advantages of outdoor activities compared to indoor ones?", model: "Outdoor activities give you fresh air and a chance to connect with nature, which is great for your wellbeing. You also get vitamin D from the sunshine. However, indoor activities are more convenient in bad weather and can be done all year round." }
+        ]
+      }
+    ]
+  }
+};
+
+const grammarData = [
+  {
+    topic: "Present Simple vs Present Continuous",
+    icon: "📅",
+    explanation: "Use Present Simple for habits and facts. Use Present Continuous for things happening now.",
+    table: { headers: ["Tense","Form","Example"], rows: [
+      ["Present Simple","Subject + V(s)","She works every day."],
+      ["Present Continuous","Subject + am/is/are + V-ing","She is working now."],
+      ["State verbs","Simple ONLY","I know, I love, I have (possess)"]
+    ]},
+    tip: "State verbs (know, love, believe, own, want, need) are NOT used in continuous form.",
+    exercises: [
+      { sentence: "Water ___ (boil) at 100°C.", answer: "boils", hint: "fact → simple" },
+      { sentence: "She ___ (study) for her exam at the moment.", answer: "is studying", hint: "now → continuous" },
+      { sentence: "I ___ (not understand) this question.", answer: "don't understand", hint: "state verb" }
+    ]
+  },
+  {
+    topic: "Past Simple vs Past Continuous",
+    icon: "⏮️",
+    explanation: "Past Simple for completed actions. Past Continuous for actions in progress when another happened.",
+    table: { headers: ["Tense","Use","Signal Words"], rows: [
+      ["Past Simple","Completed action","yesterday, last week, ago, in 2010"],
+      ["Past Continuous","Action in progress in past","while, when, at that time"],
+      ["Both together","Interrupted action","I was reading when she called."]
+    ]},
+    tip: "When + Past Simple interrupted Past Continuous: 'I was walking (past cont.) when it started (past simple) to rain.'",
+    exercises: [
+      { sentence: "While I ___ (cook), the phone rang.", answer: "was cooking", hint: "in progress when interrupted" },
+      { sentence: "They ___ (visit) Paris last summer.", answer: "visited", hint: "completed past action" },
+      { sentence: "At 8pm yesterday, she ___ (watch) TV.", answer: "was watching", hint: "in progress at specific time" }
+    ]
+  },
+  {
+    topic: "Present Perfect",
+    icon: "✅",
+    explanation: "Connect past to present: experiences, recent news, unfinished states.",
+    table: { headers: ["Use","Signal Words","Example"], rows: [
+      ["Experience","ever, never","Have you ever been to Japan?"],
+      ["Recent news","just, recently","She has just arrived."],
+      ["Unfinished","for, since","I've lived here for 5 years."],
+      ["With 'yet'","yet (negative/question)","Have you finished yet?"]
+    ]},
+    tip: "Never use Present Perfect with a specific past time: ✗ I have seen him yesterday. ✓ I saw him yesterday.",
+    exercises: [
+      { sentence: "I ___ (never / try) sushi.", answer: "have never tried", hint: "experience with never" },
+      { sentence: "She ___ (just / finish) her homework.", answer: "has just finished", hint: "recent action with just" },
+      { sentence: "We ___ (live) here since 2018.", answer: "have lived", hint: "unfinished state with since" }
+    ]
+  },
+  {
+    topic: "Future Forms",
+    icon: "🔮",
+    explanation: "Will, going to, and Present Continuous all express the future — but differently.",
+    table: { headers: ["Form","Use","Example"], rows: [
+      ["will","Decisions now, predictions, promises","I'll help you."],
+      ["going to","Plans, intentions, sure predictions","I'm going to study medicine."],
+      ["Present Continuous","Fixed arrangements","I'm meeting her at 3pm."]
+    ]},
+    tip: "Going to + evidence = sure prediction: 'Look at those clouds — it's going to rain!'",
+    exercises: [
+      { sentence: "A: The phone is ringing. B: Don't worry, I ___ (get) it.", answer: "will get", hint: "decision at the moment" },
+      { sentence: "We ___ (fly) to Rome on Friday — our tickets are booked.", answer: "are flying", hint: "fixed arrangement" },
+      { sentence: "Be careful! You ___ (fall)!", answer: "are going to fall", hint: "prediction based on evidence" }
+    ]
+  },
+  {
+    topic: "Modal Verbs",
+    icon: "🔧",
+    explanation: "Modals express ability, permission, obligation, and possibility.",
+    table: { headers: ["Modal","Meaning","Example"], rows: [
+      ["can / could","ability, permission","Can you swim? Could I borrow this?"],
+      ["must / have to","strong obligation","You must wear a seatbelt."],
+      ["should / ought to","advice","You should see a doctor."],
+      ["may / might","possibility","It might rain tomorrow."],
+      ["needn't","no obligation","You needn't bring food."]
+    ]},
+    tip: "Must = personal obligation. Have to = external rule. Mustn't = prohibition. Needn't = not necessary.",
+    exercises: [
+      { sentence: "You ___ (not park) here — it's illegal.", answer: "mustn't", hint: "prohibition" },
+      { sentence: "I ___ (speak) French when I was young, but I've forgotten it now.", answer: "could", hint: "past ability" },
+      { sentence: "You look tired. You ___ (take) a rest.", answer: "should", hint: "advice" }
+    ]
+  },
+  {
+    topic: "Passive Voice",
+    icon: "🔄",
+    explanation: "Use passive when the action is more important than the agent.",
+    table: { headers: ["Tense","Form","Example"], rows: [
+      ["Present Simple","is/are + past participle","English is spoken worldwide."],
+      ["Past Simple","was/were + past participle","The book was written in 1990."],
+      ["Present Perfect","has/have been + past participle","The bridge has been repaired."],
+      ["Future","will be + past participle","The results will be announced tomorrow."]
+    ]},
+    tip: "Add 'by + agent' only when it's important: 'The Mona Lisa was painted by Leonardo da Vinci.'",
+    exercises: [
+      { sentence: "The windows ___ (clean) every week.", answer: "are cleaned", hint: "present simple passive" },
+      { sentence: "The letter ___ (send) yesterday.", answer: "was sent", hint: "past simple passive" },
+      { sentence: "A new school ___ (build) in our town next year.", answer: "will be built", hint: "future passive" }
+    ]
+  },
+  {
+    topic: "Reported Speech",
+    icon: "💬",
+    explanation: "When reporting what someone said, verb tenses usually shift back.",
+    table: { headers: ["Direct","Reported"], rows: [
+      ["'I am tired'","He said he was tired."],
+      ["'I worked yesterday'","She said she had worked the day before."],
+      ["'I will help'","He said he would help."],
+      ["'Have you seen it?'","She asked if I had seen it."]
+    ]},
+    tip: "Time expressions change: today → that day, tomorrow → the next day, yesterday → the day before.",
+    exercises: [
+      { sentence: "'I love chocolate,' she said. → She said she ___ chocolate.", answer: "loved", hint: "present → past" },
+      { sentence: "'We will call you,' they said. → They said they ___ call me.", answer: "would", hint: "will → would" },
+      { sentence: "'Are you ready?' he asked. → He asked if I ___.", answer: "was ready", hint: "am → was" }
+    ]
+  },
+  {
+    topic: "Conditionals",
+    icon: "🔀",
+    explanation: "Zero, First, and Second conditionals for real and unreal situations.",
+    table: { headers: ["Type","Form","Use"], rows: [
+      ["Zero","If + present, present","General truths: If water freezes, it becomes ice."],
+      ["First","If + present, will","Real possibility: If it rains, I'll take an umbrella."],
+      ["Second","If + past, would","Unreal/imaginary: If I won, I would travel."]
+    ]},
+    tip: "Second conditional uses 'were' for all subjects in formal English: 'If I were you, I would...'",
+    exercises: [
+      { sentence: "If I ___ (be) you, I would apologise.", answer: "were", hint: "2nd conditional" },
+      { sentence: "If you study hard, you ___ (pass) the exam.", answer: "will pass", hint: "1st conditional" },
+      { sentence: "If you heat ice, it ___ (melt).", answer: "melts", hint: "zero conditional" }
+    ]
+  },
+  {
+    topic: "Relative Clauses",
+    icon: "🔗",
+    explanation: "Who (people), which/that (things), where (places), whose (possession).",
+    table: { headers: ["Pronoun","Used for","Example"], rows: [
+      ["who/that","people","The woman who/that works here is nice."],
+      ["which/that","things","The book which/that I read was great."],
+      ["where","places","The city where I grew up is small."],
+      ["whose","possession","The student whose phone rang apologised."]
+    ]},
+    tip: "In non-defining clauses (extra info), use commas and CANNOT use 'that': 'My sister, who lives in London, is a teacher.'",
+    exercises: [
+      { sentence: "The girl ___ (who/which) won the prize was very happy.", answer: "who", hint: "refers to a person" },
+      { sentence: "This is the restaurant ___ (where/which) we had dinner.", answer: "where", hint: "refers to a place" },
+      { sentence: "I have a friend ___ (whose/who) father is a pilot.", answer: "whose", hint: "possession" }
+    ]
+  },
+  {
+    topic: "Articles: a, an, the",
+    icon: "📎",
+    explanation: "A/An = first mention or general. The = specific or already known.",
+    table: { headers: ["Article","Use","Example"], rows: [
+      ["a","singular, first mention, non-specific","I saw a dog in the park."],
+      ["an","before vowel sound","She is an engineer."],
+      ["the","specific, second mention, unique","The dog barked at me. The sun rises in the east."],
+      ["no article","plural/uncountable general","Dogs are friendly. Water is essential."]
+    ]},
+    tip: "No article with: most country names, languages, meals, sports: 'I play football. I speak English.'",
+    exercises: [
+      { sentence: "She works in ___ hospital. (general, no specific)", answer: "a", hint: "first mention, job" },
+      { sentence: "Can you open ___ window? (both know which one)", answer: "the", hint: "specific, context known" },
+      { sentence: "___ Eiffel Tower is in Paris.", answer: "The", hint: "unique landmark" }
+    ]
+  },
+  {
+    topic: "Comparatives & Superlatives",
+    icon: "📊",
+    explanation: "Compare two things (comparative) or all things in a group (superlative).",
+    table: { headers: ["Adjective","Comparative","Superlative"], rows: [
+      ["short (1 syl)","shorter than","the shortest"],
+      ["happy (2 syl -y)","happier than","the happiest"],
+      ["expensive (3+ syl)","more expensive than","the most expensive"],
+      ["good / bad","better / worse","the best / the worst"]
+    ]},
+    tip: "As ... as = same level: 'This book is as interesting as that one.'",
+    exercises: [
+      { sentence: "This film is ___ (interesting) than the last one.", answer: "more interesting", hint: "3-syllable adjective" },
+      { sentence: "She is the ___ (fast) runner in the school.", answer: "fastest", hint: "superlative, 1 syllable" },
+      { sentence: "Today is ___ (hot) day this year.", answer: "the hottest", hint: "superlative + double consonant" }
+    ]
+  },
+  {
+    topic: "Prepositions of Time & Place",
+    icon: "📍",
+    explanation: "At, in, on for time; at, in, on for place — with different rules.",
+    table: { headers: ["Prep","Time use","Place use"], rows: [
+      ["at","specific time: at 3pm, at midnight","exact point: at the door, at the top"],
+      ["in","months, years, centuries, morning/evening","enclosed space: in the room, in London"],
+      ["on","days, dates","surface: on the table, on the wall"]
+    ]},
+    tip: "No preposition before: last, next, this, every — 'I'll see you next Monday' (NOT on next Monday).",
+    exercises: [
+      { sentence: "The meeting is ___ Friday morning.", answer: "on", hint: "on + day" },
+      { sentence: "She was born ___ 1998.", answer: "in", hint: "in + year" },
+      { sentence: "I'll meet you ___ the bus stop.", answer: "at", hint: "at + specific point" }
+    ]
+  },
+  {
+    topic: "Linking Words",
+    icon: "🔗",
+    explanation: "Connect ideas: addition, contrast, reason, result, time.",
+    table: { headers: ["Function","Words","Example"], rows: [
+      ["Addition","and, also, moreover, in addition","It was cold and it was raining."],
+      ["Contrast","but, however, although, despite","He was tired, but he continued."],
+      ["Reason","because, since, as, due to","She left early because she was ill."],
+      ["Result","so, therefore, as a result","It rained, so we stayed inside."],
+      ["Time","when, while, after, before, as soon as","Call me when you arrive."]
+    ]},
+    tip: "Despite/in spite of + noun/-ing: 'Despite the rain, we walked.' Although + clause: 'Although it rained, we walked.'",
+    exercises: [
+      { sentence: "___ being tired, she finished the race.", answer: "Despite", hint: "despite + -ing" },
+      { sentence: "I love swimming. ___, I don't go very often.", answer: "However", hint: "contrast connector" },
+      { sentence: "She missed the bus ___ she was late.", answer: "because", hint: "reason connector" }
+    ]
+  },
+  {
+    topic: "Question Forms",
+    icon: "❓",
+    explanation: "Form questions with auxiliaries. Subject questions use the same order as statements.",
+    table: { headers: ["Type","Form","Example"], rows: [
+      ["Yes/No","aux + subj + V","Do you like coffee?"],
+      ["Wh-question","Wh + aux + subj + V","Where do you live?"],
+      ["Subject question","Who/What + V (no aux)","Who called you? What happened?"],
+      ["Indirect","Do you know + where/if...?","Do you know where she is?"]
+    ]},
+    tip: "In subject questions, no auxiliary: 'Who wrote this?' NOT 'Who did write this?'",
+    exercises: [
+      { sentence: "Who ___ this letter? (subject question)", answer: "wrote", hint: "subject question, no auxiliary" },
+      { sentence: "Could you tell me where the station ___?", answer: "is", hint: "indirect question, no inversion" },
+      { sentence: "___ you ever been to Australia?", answer: "Have", hint: "present perfect question" }
+    ]
+  },
+  {
+    topic: "Verb Patterns: Infinitive vs -ing",
+    icon: "🎯",
+    explanation: "Some verbs take infinitive, some take -ing, some can take both.",
+    table: { headers: ["Pattern","Verbs","Example"], rows: [
+      ["+ to infinitive","want, decide, hope, plan, promise","I want to leave."],
+      ["+ -ing","enjoy, finish, avoid, mind, suggest","She enjoys reading."],
+      ["+ both (same meaning)","like, love, hate, start, begin","I like to run / I like running."],
+      ["+ both (different meaning)","remember, forget, stop, try","I stopped to smoke vs I stopped smoking."]
+    ]},
+    tip: "Remember/forget + to-inf = action not done yet. Remember/forget + -ing = memory of past event.",
+    exercises: [
+      { sentence: "I enjoy ___ (swim) in the sea.", answer: "swimming", hint: "enjoy + -ing" },
+      { sentence: "She decided ___ (leave) early.", answer: "to leave", hint: "decide + to infinitive" },
+      { sentence: "He stopped ___ (eat) meat two years ago.", answer: "eating", hint: "stop + -ing = give up" }
+    ]
+  }
+];
+
+const vocabData = {
+  "Daily Life": [
+    {word:"commute",def:"travel regularly between home and work/school"},
+    {word:"routine",def:"a regular sequence of activities"},
+    {word:"budget",def:"a plan for spending money"},
+    {word:"chores",def:"regular household tasks"},
+    {word:"neighbour",def:"someone who lives nearby"},
+    {word:"queue",def:"a line of people waiting"},
+    {word:"appliance",def:"a household machine, e.g. washing machine"},
+    {word:"convenience",def:"something that makes life easier"},
+    {word:"privacy",def:"freedom from being disturbed"},
+    {word:"accommodation",def:"a place to live"},
+    {word:"facilities",def:"buildings or equipment for a purpose"},
+    {word:"appointment",def:"an arranged meeting at a set time"}
+  ],
+  "Education": [
+    {word:"curriculum",def:"the subjects studied at school"},
+    {word:"assessment",def:"a test or evaluation of knowledge"},
+    {word:"scholarship",def:"money given to support a student"},
+    {word:"graduate",def:"to complete a university degree"},
+    {word:"lecture",def:"an educational talk to a large audience"},
+    {word:"seminar",def:"a small group discussion class"},
+    {word:"tutor",def:"a private teacher"},
+    {word:"campus",def:"the land and buildings of a university"},
+    {word:"dissertation",def:"a long piece of written research"},
+    {word:"module",def:"a unit within a course of study"},
+    {word:"revision",def:"reviewing material before an exam"},
+    {word:"compulsory",def:"required, must be done"}
+  ],
+  "Entertainment": [
+    {word:"premiere",def:"the first public showing of a film"},
+    {word:"rehearsal",def:"practice for a performance"},
+    {word:"venue",def:"a place where an event is held"},
+    {word:"audience",def:"people watching a performance"},
+    {word:"plot",def:"the story of a book or film"},
+    {word:"soundtrack",def:"music from a film"},
+    {word:"exhibition",def:"a public display of art"},
+    {word:"comedian",def:"a performer who makes people laugh"},
+    {word:"genre",def:"a type or category of art/music/film"},
+    {word:"documentary",def:"a film about real events"},
+    {word:"interval",def:"a break in the middle of a performance"},
+    {word:"admission",def:"the price paid to enter a place"}
+  ],
+  "Health": [
+    {word:"symptom",def:"a sign of illness"},
+    {word:"prescription",def:"a doctor's written order for medicine"},
+    {word:"diagnosis",def:"identifying what illness someone has"},
+    {word:"surgery",def:"a medical operation"},
+    {word:"pharmacy",def:"a shop where medicines are sold"},
+    {word:"recovery",def:"returning to good health"},
+    {word:"vaccination",def:"an injection to prevent disease"},
+    {word:"allergy",def:"a reaction to a substance like food or pollen"},
+    {word:"nutrition",def:"the food and substances needed for growth"},
+    {word:"fitness",def:"being physically healthy and active"},
+    {word:"injury",def:"physical harm or damage"},
+    {word:"specialist",def:"a doctor with expertise in one area"}
+  ],
+  "Environment": [
+    {word:"climate",def:"the typical weather of a region"},
+    {word:"pollution",def:"harmful substances in air, water or land"},
+    {word:"renewable",def:"can be replaced naturally, e.g. solar energy"},
+    {word:"conservation",def:"protecting natural environments"},
+    {word:"habitat",def:"the natural home of animals or plants"},
+    {word:"emission",def:"gas released into the atmosphere"},
+    {word:"biodiversity",def:"variety of life in an area"},
+    {word:"drought",def:"a long period of no rain"},
+    {word:"deforestation",def:"cutting down forests"},
+    {word:"sustainable",def:"using resources without depleting them"},
+    {word:"ecosystem",def:"a community of living things"},
+    {word:"recycle",def:"to process waste for reuse"}
+  ],
+  "Travel": [
+    {word:"itinerary",def:"a planned route or journey"},
+    {word:"customs",def:"airport check of belongings and documents"},
+    {word:"departure",def:"the time of leaving"},
+    {word:"destination",def:"the place you are travelling to"},
+    {word:"currency",def:"the money used in a country"},
+    {word:"souvenir",def:"an object bought as a reminder of a place"},
+    {word:"accommodation",def:"a place to stay, e.g. hotel"},
+    {word:"turbulence",def:"rough movement on a plane"},
+    {word:"immigration",def:"official control of people entering a country"},
+    {word:"transit",def:"passing through a place on your way somewhere"},
+    {word:"jet lag",def:"tiredness from crossing time zones"},
+    {word:"excursion",def:"a short trip as part of a holiday"}
+  ],
+  "Work": [
+    {word:"applicant",def:"someone who applies for a job"},
+    {word:"salary",def:"regular payment for employment"},
+    {word:"promotion",def:"moving to a higher position"},
+    {word:"colleague",def:"someone you work with"},
+    {word:"deadline",def:"a date by which work must be finished"},
+    {word:"freelance",def:"self-employed, working for various clients"},
+    {word:"resign",def:"to leave a job voluntarily"},
+    {word:"recruit",def:"to find new employees"},
+    {word:"interview",def:"a formal meeting to assess a candidate"},
+    {word:"overtime",def:"extra hours worked beyond normal hours"},
+    {word:"qualification",def:"a certificate showing you have passed a course"},
+    {word:"career",def:"a long-term professional path"}
+  ],
+  "Food & Drink": [
+    {word:"recipe",def:"instructions for cooking a dish"},
+    {word:"ingredient",def:"a component used in cooking"},
+    {word:"cuisine",def:"a style of cooking from a region"},
+    {word:"portion",def:"an amount of food served"},
+    {word:"vegetarian",def:"someone who doesn't eat meat"},
+    {word:"appetite",def:"desire to eat"},
+    {word:"flavour",def:"the taste of a food"},
+    {word:"refreshment",def:"a light drink or snack"},
+    {word:"organic",def:"grown without artificial chemicals"},
+    {word:"nutritious",def:"containing substances good for health"},
+    {word:"preserve",def:"to treat food to keep it from spoiling"},
+    {word:"marinate",def:"to soak food in a seasoned liquid"}
+  ],
+  "Emotions": [
+    {word:"anxious",def:"worried or nervous"},
+    {word:"overwhelmed",def:"feeling too much to cope with"},
+    {word:"relieved",def:"feeling better after worry has ended"},
+    {word:"frustrated",def:"feeling annoyed because of obstacles"},
+    {word:"enthusiastic",def:"showing great interest and excitement"},
+    {word:"disappointed",def:"sad because expectations weren't met"},
+    {word:"confident",def:"believing in your own abilities"},
+    {word:"embarrassed",def:"feeling self-conscious or ashamed"},
+    {word:"jealous",def:"feeling upset because of what others have"},
+    {word:"grateful",def:"feeling thankful"},
+    {word:"homesick",def:"missing home when away"},
+    {word:"proud",def:"feeling satisfaction about an achievement"}
+  ],
+  "Technology": [
+    {word:"software",def:"programs that run on a computer"},
+    {word:"bandwidth",def:"the amount of data that can be transferred"},
+    {word:"artificial intelligence",def:"computer systems simulating human thinking"},
+    {word:"download",def:"to transfer data from internet to device"},
+    {word:"update",def:"a new version of software"},
+    {word:"virus",def:"malicious software that damages computers"},
+    {word:"device",def:"a piece of electronic equipment"},
+    {word:"platform",def:"a system used for software"},
+    {word:"connectivity",def:"ability to connect to the internet"},
+    {word:"multimedia",def:"content using several media types"},
+    {word:"digital",def:"using computer or electronic technology"},
+    {word:"interface",def:"a way of interacting with a computer"}
+  ]
+};
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let state = {
+  points: 0,
+  streak: 0,
+  skillScores: { reading:0, writing:0, listening:0, speaking:0, grammar:0, vocab:0 },
+  answered: {},
+  currentReadingTest: 1,
+  currentListeningTest: 1
+};
+function loadState(){
+  const s = localStorage.getItem('petState');
+  if(s) state = Object.assign(state, JSON.parse(s));
+  updateHeader();
+}
+function saveState(){
+  localStorage.setItem('petState', JSON.stringify(state));
+  updateHeader();
+}
+function updateHeader(){
+  document.getElementById('hdr-points').textContent = state.points;
+  document.getElementById('hdr-streak').textContent = state.streak;
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(b=>{ if(b.getAttribute('onclick')==`showTab('${id}')`) b.classList.add('active'); });
+  // init
+  if(id==='reading') initReading();
+  if(id==='writing') initWriting();
+  if(id==='listening') initListening();
+  if(id==='speaking') initSpeaking();
+  if(id==='grammar') initGrammar();
+  if(id==='vocabulary') initVocab();
+  if(id==='progress') initProgress();
+}
+
+// ═══════════════════════════════════════════════
+// TOAST & CONFETTI
+// ═══════════════════════════════════════════════
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+function confetti(){
+  const colors=['#003865','#009ade','#f0b323','#22c55e','#e8472a','#00b5ad'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*1}s;animation-duration:${2+Math.random()*1.5}s`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),3500);
+  }
+}
+function addPoints(n, skill){
+  state.points += n;
+  state.streak++;
+  if(skill) state.skillScores[skill] = (state.skillScores[skill]||0)+n;
+  saveState();
+  showToast(`+${n} points! 🎉`);
+  if(state.streak%5===0) confetti();
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-GB'; u.rate=0.9;
+  window.speechSynthesis.speak(u);
+}
+</script>
+<script>
+// ═══════════════════════════════════════════════
+// READING
+// ═══════════════════════════════════════════════
+function initReading(){ setReadingTest(state.currentReadingTest, null); }
+
+function setReadingTest(n, btn){
+  state.currentReadingTest = n;
+  if(btn){ document.querySelectorAll('#reading-test-nav .sub-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  const parts = readingData[n].parts;
+  const pnav = document.getElementById('reading-part-nav');
+  pnav.innerHTML = '';
+  parts.forEach((p,i)=>{
+    const b = document.createElement('button');
+    b.className = 'sub-btn' + (i===0?' active':'');
+    b.textContent = 'Part '+(i+1);
+    b.onclick = ()=>{ document.querySelectorAll('#reading-part-nav .sub-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderReadingPart(n, i); };
+    pnav.appendChild(b);
+  });
+  renderReadingPart(n,0);
+}
+
+function renderReadingPart(testN, partI){
+  const part = readingData[testN].parts[partI];
+  const el = document.getElementById('reading-content');
+  const key = `r_${testN}_${partI}`;
+  let html = `<div class="card"><div class="card-header">${part.title}</div>`;
+  html += `<p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">${part.instructions}</p>`;
+
+  // PART 2 MATCHING
+  if(part.type === 'matching'){
+    // Show courses
+    html += `<div class="card" style="background:#f4f8fb;margin-bottom:14px"><b style="font-size:.9rem;color:var(--cambridge-blue)">📋 Short Art Courses (A–H):</b><div style="margin-top:10px">`;
+    part.courses.forEach(c=>{
+      html += `<div style="margin-bottom:8px;font-size:.85rem"><b style="color:var(--cambridge-blue)">${c.letter}. ${c.name}:</b> ${c.description}</div>`;
+    });
+    html += `</div></div>`;
+    // Questions
+    part.people.forEach((p,pi)=>{
+      const qkey = key+'_p'+pi;
+      const answered = state.answered[qkey];
+      html += `<div class="question-block"><div class="question-text">👤 ${p.num}. <b>${p.name}</b> — ${p.description}</div>`;
+      html += `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px">`;
+      html += `<span style="font-size:.85rem;font-weight:600">Best course:</span>`;
+      if(answered){
+        const ok = answered === p.answer;
+        html += `<span style="padding:5px 14px;border-radius:8px;font-weight:700;background:${ok?'#f0fdf4':'#fef2f2'};border:2px solid ${ok?'var(--correct)':'var(--wrong)'};color:${ok?'#166534':'#991b1b'}">${answered} ${ok?'✓':'✗'}</span>`;
+        if(!ok) html += `<span style="font-size:.83rem;color:var(--correct);font-weight:600">→ ${p.answer}</span>`;
+        html += `<div class="explanation">💡 ${p.explanation}</div>`;
+      } else {
+        'ABCDEFGH'.split('').forEach(l=>{
+          html += `<button class="option-btn" style="padding:6px 14px;font-weight:700" onclick="answerMatching('${qkey}','${l}','${p.answer}',${testN},${partI})">${l}</button>`;
+        });
+      }
+      html += `</div></div>`;
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    return;
+  }
+
+  // PASSAGE
+  if(part.passage){
+    const displayPassage = part.passage.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
+    html += `<div class="passage">${displayPassage}</div>`;
+  }
+
+  // QUESTIONS (MC with optional question_stem, or TF)
+  if(part.questions){
+    part.questions.forEach((q,qi)=>{
+      const qkey = key+'_q'+qi;
+      const answered = state.answered[qkey];
+      html += `<div class="question-block">`;
+      if(q.question_stem){
+        html += `<div class="question-text" style="margin-bottom:4px">${q.text}</div>`;
+        html += `<div class="question-text"><b>${q.question_stem}</b></div>`;
+      } else {
+        html += `<div class="question-text">${q.text}</div>`;
+      }
+      if(q.options){ // MC (A/B/C or A/B/C/D)
+        html += '<div class="options">';
+        q.options.forEach((opt,oi)=>{
+          let cls='option-btn'; let dis='';
+          if(answered!==undefined){ dis='disabled'; if(oi===q.answer) cls+=' correct'; else if(oi===answered) cls+=' wrong'; }
+          html+=`<button class="${cls}" ${dis} onclick="answerReadingMC('${qkey}',${oi},${q.answer},'${key}',${testN},${partI})">${opt}</button>`;
+        });
+        html+='</div>';
+      } else { // TF (A=correct / B=incorrect)
+        const trueAns = q.answer;
+        let tCls='tf-btn',fCls='tf-btn',dis='';
+        if(answered!==undefined){ dis='disabled';
+          if(trueAns===true){ tCls+=' correct'; if(answered===false) fCls+=' wrong'; }
+          else { fCls+=' correct'; if(answered===true) tCls+=' wrong'; }
+        }
+        html+=`<div><button class="${tCls}" ${dis} onclick="answerTF('${qkey}',true,${trueAns},'${key}',${testN},${partI})">A — CORRECT</button> `;
+        html+=`<button class="${fCls}" ${dis} onclick="answerTF('${qkey}',false,${trueAns},'${key}',${testN},${partI})">B — INCORRECT</button></div>`;
+      }
+      if(answered!==undefined) html+=`<div class="explanation">💡 ${q.explanation}</div>`;
+      html+='</div>';
+    });
+  }
+
+  // CLOZE (Part 5)
+  if(part.blanks){
+    const answerMap = {0:'A',1:'B',2:'C',3:'D'};
+    part.blanks.forEach((b,bi)=>{
+      const bkey = key+'_b'+bi;
+      const ans = state.answered[bkey];
+      html += `<div class="question-block"><div class="question-text">${b.num}.</div>`;
+      html += `<div class="options">`;
+      b.options.forEach((opt,oi)=>{
+        let cls='option-btn'; let dis='';
+        if(ans!==undefined){ dis='disabled'; if(oi===b.answer) cls+=' correct'; else if(oi===ans) cls+=' wrong'; }
+        html+=`<button class="${cls}" ${dis} onclick="answerCloze('${bkey}',${oi},${b.answer},${testN},${partI})">${opt}</button>`;
+      });
+      html+='</div>';
+      if(ans!==undefined) html+=`<div class="explanation">💡 ${b.explanation}</div>`;
+      html+='</div>';
+    });
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function answerReadingMC(qkey, chosen, correct, key, testN, partI){
+  if(state.answered[qkey]!==undefined) return;
+  state.answered[qkey]=chosen;
+  const ok = chosen===correct;
+  if(ok) addPoints(5,'reading');
+  else { state.streak=0; saveState(); }
+  renderReadingPart(testN, partI);
+}
+function answerTF(qkey, chosen, correct, key, testN, partI){
+  if(state.answered[qkey]!==undefined) return;
+  state.answered[qkey]=chosen;
+  const ok = chosen===correct;
+  if(ok) addPoints(5,'reading');
+  else { state.streak=0; saveState(); }
+  renderReadingPart(testN, partI);
+}
+function answerMatching(qkey, chosen, correct, testN, partI){
+  if(state.answered[qkey]!==undefined) return;
+  state.answered[qkey]=chosen;
+  const ok = chosen===correct;
+  if(ok) addPoints(5,'reading'); else { state.streak=0; saveState(); }
+  renderReadingPart(testN, partI);
+}
+function answerCloze(bkey, chosen, correct, testN, partI){
+  if(state.answered[bkey]!==undefined) return;
+  state.answered[bkey]=chosen;
+  const ok = chosen===correct;
+  if(ok) addPoints(5,'reading'); else { state.streak=0; saveState(); }
+  renderReadingPart(testN, partI);
+}
+function checkBlank(bkey, bi, key, testN, partI){
+  const inp = document.getElementById('inp_'+bkey);
+  if(!inp) return;
+  const val = inp.value.trim();
+  if(!val) return;
+  state.answered[bkey]=val;
+  const correctAns = readingData[testN].parts[partI].blanks[bi].answer;
+  const ok = val.toLowerCase()===correctAns.toLowerCase() || val.toLowerCase()===correctAns.split(' ').pop().toLowerCase();
+  if(ok) addPoints(5,'reading'); else { state.streak=0; saveState(); }
+  renderReadingPart(testN, partI);
+}
+
+// ═══════════════════════════════════════════════
+// WRITING
+// ═══════════════════════════════════════════════
+let writingPart = 1;
+function initWriting(){ showWritingPart(1, null); }
+function showWritingPart(n, btn){
+  writingPart = n;
+  if(btn){ document.querySelectorAll('#sec-writing .sub-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  const el = document.getElementById('writing-content');
+  if(n===1){
+    let html='<div class="card"><div class="card-header">✏️ Part 1 – Sentence Transformations</div>';
+    html+='<p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">Complete the second sentence so it means the same as the first. Use between 2 and 5 words including the word given.</p>';
+    writingData.part1.forEach((item,i)=>{
+      const key='w1_'+i; const done=state.answered[key];
+      html+=`<div class="card" style="margin-bottom:12px;border:2px solid var(--border)">`;
+      html+=`<p style="font-size:.9rem;margin-bottom:8px"><b>Q${i+1}:</b> ${item.sentence}</p>`;
+      html+=`<p style="font-size:.9rem;margin-bottom:10px"><b>Answer:</b> ${item.start} <strong>_____</strong></p>`;
+      if(done){
+        const ok=done.toLowerCase().includes(item.answer.toLowerCase().split(' ')[0]);
+        html+=`<p class="feedback ${ok?'ok':'bad'}">${done}</p><p class="explanation">✓ Model: ${item.answer}</p>`;
+      } else {
+        html+=`<input class="fill-input" style="width:220px" id="wi_${i}" placeholder="${item.hint}"> <button class="btn btn-primary btn-sm" onclick="checkWriting1(${i})">Check</button>`;
+      }
+      html+='</div>';
+    });
+    html+='</div>';
+    el.innerHTML=html;
+  } else if(n===2){
+    let html='<div class="card"><div class="card-header">✉️ Part 2 – Short Message (35–45 words)</div></div>';
+    writingData.part2.forEach((item,i)=>{
+      html+=`<div class="card"><p style="font-weight:600;margin-bottom:10px">${item.prompt}</p>`;
+      html+=`<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Tips: ${item.tips.join(' · ')}</div>`;
+      html+=`<textarea class="writing-area" id="wt2_${i}" oninput="countWords(this,'wc2_${i}')" placeholder="Write your message here (aim for 35–45 words)..."></textarea>`;
+      html+=`<div class="word-count" id="wc2_${i}">0 words</div>`;
+      html+=`<button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="showWritingModel2(${i})">See Model Answer</button>`;
+      html+=`<div id="model2_${i}" style="display:none" class="speak-example" style="margin-top:10px">${item.model}</div></div>`;
+    });
+    el.innerHTML=html;
+  } else {
+    let html='<div class="card"><div class="card-header">📄 Part 3 – Letter or Story (about 100 words)</div></div>';
+    writingData.part3.forEach((item,i)=>{
+      html+=`<div class="card"><p style="font-weight:600;margin-bottom:6px">${item.type==='letter'?'✉️ Letter Task':'📖 Story Task'}</p>`;
+      html+=`<p style="font-size:.9rem;margin-bottom:10px">${item.prompt}</p>`;
+      html+=`<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">${item.tips.join(' · ')}</div>`;
+      html+=`<textarea class="writing-area" id="wt3_${i}" style="min-height:200px" oninput="countWords(this,'wc3_${i}')" placeholder="Write here (aim for about 100 words)..."></textarea>`;
+      html+=`<div class="word-count" id="wc3_${i}">0 words</div>`;
+      html+=`<button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="showWritingModel3(${i})">See Model Answer</button>`;
+      html+=`<div id="model3_${i}" style="display:none;white-space:pre-wrap" class="speak-example" style="margin-top:10px">${item.model}</div></div>`;
+    });
+    el.innerHTML=html;
+  }
+}
+function checkWriting1(i){
+  const inp=document.getElementById('wi_'+i);
+  if(!inp||!inp.value.trim()) return;
+  state.answered['w1_'+i]=inp.value.trim();
+  addPoints(3,'writing');
+  showWritingPart(1,null);
+}
+function countWords(ta, cid){
+  const n = ta.value.trim().split(/\s+/).filter(Boolean).length;
+  const el=document.getElementById(cid);
+  if(el){ el.textContent=n+' words'; el.style.color=n>=35&&n<=45?'var(--correct)':n>45?'var(--wrong)':'var(--muted)'; }
+}
+function showWritingModel2(i){ const el=document.getElementById('model2_'+i); if(el){el.style.display=el.style.display==='none'?'block':'none';} addPoints(1,'writing'); }
+function showWritingModel3(i){ const el=document.getElementById('model3_'+i); if(el){el.style.display=el.style.display==='none'?'block':'none';} addPoints(1,'writing'); }
+
+// ═══════════════════════════════════════════════
+// LISTENING
+// ═══════════════════════════════════════════════
+function initListening(){ setListeningTest(state.currentListeningTest, null); }
+function setListeningTest(n, btn){
+  state.currentListeningTest=n;
+  if(btn){ document.querySelectorAll('#listening-test-nav .sub-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  const parts = listeningData[n].parts;
+  const pnav = document.getElementById('listening-part-nav');
+  pnav.innerHTML='';
+  parts.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='sub-btn'+(i===0?' active':'');
+    b.textContent='Part '+(i+1);
+    b.onclick=()=>{ document.querySelectorAll('#listening-part-nav .sub-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderListeningPart(n,i); };
+    pnav.appendChild(b);
+  });
+  renderListeningPart(n,0);
+}
+function renderListeningPart(testN, partI){
+  const part = listeningData[testN].parts[partI];
+  const el = document.getElementById('listening-content');
+  const key=`l_${testN}_${partI}`;
+  let html=`<div class="card"><div class="card-header">${part.title}</div>`;
+  html+=`<p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">${part.instructions}</p>`;
+  if(part.intro) html+=`<p style="font-size:.9rem;margin-bottom:14px;font-style:italic">${part.intro}</p>`;
+
+  if(part.questions){
+    part.questions.forEach((q,qi)=>{
+      const qkey=key+'_q'+qi;
+      const answered=state.answered[qkey];
+      html+=`<div class="question-block">`;
+      html+=`<div class="question-text">${qi+1}. ${q.text}</div>`;
+      // Script/audio button
+      html+=`<button class="audio-btn btn-sm" style="margin-bottom:10px;font-size:.8rem" onclick="speak(\`${q.script.replace(/`/g,"'")}\`)">🔊 Play Audio Script</button>`;
+      if(q.options){
+        html+='<div class="options">';
+        q.options.forEach((opt,oi)=>{
+          let cls='option-btn'; let dis='';
+          if(answered!==undefined){ dis='disabled'; if(oi===q.answer) cls+=' correct'; else if(oi===answered) cls+=' wrong'; }
+          html+=`<button class="${cls}" ${dis} onclick="answerListeningMC('${qkey}',${oi},${q.answer},${testN},${partI})">${opt}</button>`;
+        });
+        html+='</div>';
+      }
+      if(answered!==undefined) html+=`<div class="explanation">💡 ${q.explanation}</div>`;
+      html+='</div>';
+    });
+  }
+
+  if(part.items){ // note completion
+    html+=`<button class="audio-btn" style="margin-bottom:14px" onclick="speak('${part.items.map(i=>i.script).join(' ')}')">🔊 Play Full Script</button>`;
+    part.items.forEach((item,ii)=>{
+      const ikey=key+'_i'+ii;
+      const ans=state.answered[ikey];
+      html+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">`;
+      html+=`<span style="font-weight:600;min-width:140px;font-size:.9rem">${item.label}:</span>`;
+      if(ans!==undefined){
+        const ok=ans.toLowerCase().includes(item.answer.toLowerCase().split(' ')[0]);
+        html+=`<span class="${ok?'correct':'wrong'}" style="padding:4px 10px;border-radius:6px;border:2px solid ${ok?'var(--correct)':'var(--wrong)'};font-size:.88rem">${ans}</span> <small style="color:var(--muted)">✓ ${item.answer}</small>`;
+      } else {
+        html+=`<input class="fill-input" id="li_${ikey}" placeholder="Write answer" onkeydown="if(event.key==='Enter')checkListeningItem('${ikey}','${item.answer.replace(/'/g,"\\'")}',${testN},${partI})">`;
+        html+=`<button class="btn btn-primary btn-sm" onclick="checkListeningItem('${ikey}','${item.answer.replace(/'/g,"\\'")}',${testN},${partI})">✓</button>`;
+      }
+      html+='</div>';
+    });
+  }
+
+  html+='</div>';
+  el.innerHTML=html;
+}
+function answerListeningMC(qkey,chosen,correct,testN,partI){
+  if(state.answered[qkey]!==undefined) return;
+  state.answered[qkey]=chosen;
+  if(chosen===correct) addPoints(5,'listening'); else { state.streak=0; saveState(); }
+  renderListeningPart(testN,partI);
+}
+function checkListeningItem(ikey,correctAns,testN,partI){
+  const inp=document.getElementById('li_'+ikey);
+  if(!inp||!inp.value.trim()) return;
+  const val=inp.value.trim();
+  state.answered[ikey]=val;
+  const ok=val.toLowerCase().includes(correctAns.toLowerCase().split(' ')[0]);
+  if(ok) addPoints(5,'listening'); else { state.streak=0; saveState(); }
+  renderListeningPart(testN,partI);
+}
+</script>
+<script>
+// ═══════════════════════════════════════════════
+// SPEAKING
+// ═══════════════════════════════════════════════
+let mediaRecorder=null, audioChunks=[], recordingKey=null;
+function initSpeaking(){ showSpeakingPart(1,null); }
+function showSpeakingPart(n, btn){
+  if(btn){ document.querySelectorAll('#speaking-part-nav .sub-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  const data = speakingData[n];
+  const el = document.getElementById('speaking-content');
+  let html=`<div class="card"><div class="card-header">${data.title}</div>`;
+  html+=`<p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">${data.description}</p>`;
+
+  if(n===1){
+    data.questions.forEach((q,i)=>{
+      const key='sp1_'+i;
+      html+=`<div class="speak-card"><div class="speak-prompt">❓ ${q.q}</div>`;
+      html+=`<div class="speak-example">💬 Model: ${q.model}</div>`;
+      html+=`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">`;
+      html+=`<button class="audio-btn" onclick="speak(\`${q.model.replace(/`/g,"'")}\`)">🔊 Hear Model</button>`;
+      html+=`<button class="mic-btn" id="mic_${key}" onclick="toggleRecording('${key}')">🎤</button>`;
+      html+=`<span id="rec_label_${key}" style="font-size:.82rem;color:var(--muted)"></span>`;
+      html+=`</div><div id="score_${key}"></div></div>`;
+    });
+  } else if(n===2){
+    data.scenarios.forEach((sc,i)=>{
+      html+=`<div class="speak-card"><div class="speak-prompt">🗣️ ${sc.situation}</div>`;
+      html+=`<div style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0">`;
+      sc.options.forEach(o=>html+=`<span style="background:#e0f2fe;color:var(--cambridge-blue);padding:6px 12px;border-radius:20px;font-size:.85rem">${o}</span>`);
+      html+=`</div>`;
+      html+=`<div class="tip-box">💡 Useful language: ${sc.tips.join(', ')}</div>`;
+      html+=`<div class="speak-example">📝 Model discussion: ${sc.model}</div>`;
+      html+=`<button class="audio-btn" onclick="speak(\`${sc.model.replace(/`/g,"'")}\`)">🔊 Hear Model</button>`;
+      html+=`</div>`;
+    });
+  } else if(n===3){
+    data.photos.forEach((photo,i)=>{
+      const key='sp3_'+i;
+      html+=`<div class="speak-card"><div class="speak-prompt">📷 Topic: ${photo.topic}</div>`;
+      html+=`<div style="background:#f4f8fb;border-radius:8px;padding:10px;margin-bottom:10px">`;
+      html+=`<p style="font-size:.85rem;font-weight:600;margin-bottom:6px">Prompts to use:</p>`;
+      photo.prompts.forEach(p=>html+=`<p style="font-size:.83rem;color:var(--muted)">▸ ${p}</p>`);
+      html+=`</div>`;
+      html+=`<div class="speak-example">📝 Model: ${photo.model}</div>`;
+      html+=`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">`;
+      html+=`<button class="audio-btn" onclick="speak(\`${photo.model.replace(/`/g,"'")}\`)">🔊 Hear Model</button>`;
+      html+=`<button class="mic-btn" id="mic_${key}" onclick="toggleRecording('${key}')">🎤</button>`;
+      html+=`<span id="rec_label_${key}" style="font-size:.82rem;color:var(--muted)"></span>`;
+      html+=`</div><div id="score_${key}"></div></div>`;
+    });
+  } else if(n===4){
+    data.topics.forEach((topic,ti)=>{
+      html+=`<div class="speak-card"><div class="speak-prompt">🎯 Theme: ${topic.theme}</div>`;
+      topic.questions.forEach((q,qi)=>{
+        const key=`sp4_${ti}_${qi}`;
+        html+=`<div style="border-top:1px solid var(--border);padding:12px 0">`;
+        html+=`<p style="font-weight:600;font-size:.9rem;margin-bottom:8px">❓ ${q.q}</p>`;
+        html+=`<div class="speak-example">💬 Model: ${q.model}</div>`;
+        html+=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px">`;
+        html+=`<button class="audio-btn btn-sm" onclick="speak(\`${q.model.replace(/`/g,"'")}\`)">🔊 Hear</button>`;
+        html+=`<button class="mic-btn" style="width:44px;height:44px;font-size:1.2rem" id="mic_${key}" onclick="toggleRecording('${key}')">🎤</button>`;
+        html+=`<span id="rec_label_${key}" style="font-size:.82rem;color:var(--muted)"></span>`;
+        html+=`</div><div id="score_${key}"></div></div>`;
+      });
+      html+=`</div>`;
+    });
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function toggleRecording(key){
+  if(recordingKey===key && mediaRecorder && mediaRecorder.state==='recording'){
+    mediaRecorder.stop();
+    return;
+  }
+  if(!navigator.mediaDevices){ showToast('Microphone not supported'); return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    audioChunks=[];
+    recordingKey=key;
+    mediaRecorder=new MediaRecorder(stream);
+    document.getElementById('mic_'+key).classList.add('recording');
+    document.getElementById('rec_label_'+key).textContent='Recording...';
+    mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+    mediaRecorder.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      document.getElementById('mic_'+key).classList.remove('recording');
+      document.getElementById('rec_label_'+key).textContent='Done!';
+      // Simulate score
+      const score = Math.floor(Math.random()*30)+65; // 65-95
+      const scoreEl=document.getElementById('score_'+key);
+      if(scoreEl){
+        scoreEl.innerHTML=`<div class="score-bar" style="margin-top:10px"><div class="score-fill" style="width:${score}%"></div></div><p style="font-size:.83rem;color:var(--muted);margin-top:4px">Pronunciation Score: <b style="color:var(--cambridge-blue)">${score}%</b></p>`;
+        addPoints(5,'speaking');
+      }
+    };
+    mediaRecorder.start();
+    setTimeout(()=>{ if(mediaRecorder&&mediaRecorder.state==='recording') mediaRecorder.stop(); },30000);
+  }).catch(()=>showToast('Microphone permission denied'));
+}
+
+// ═══════════════════════════════════════════════
+// GRAMMAR
+// ═══════════════════════════════════════════════
+function initGrammar(){
+  const el=document.getElementById('grammar-list');
+  if(el.innerHTML.trim()) return; // already built
+  let html='';
+  grammarData.forEach((g,i)=>{
+    html+=`<div class="grammar-topic" onclick="toggleGrammar(${i})">`;
+    html+=`<span>${g.icon} ${g.topic}</span><span id="garrow_${i}">▼</span></div>`;
+    html+=`<div class="grammar-content" id="gcontent_${i}">`;
+    html+=`<p style="font-size:.9rem;margin-bottom:12px">${g.explanation}</p>`;
+    // Table
+    html+=`<table class="grammar-table"><thead><tr>${g.table.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+    g.table.rows.forEach(r=>{ html+=`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`; });
+    html+=`</tbody></table>`;
+    html+=`<div class="tip-box">💡 <b>Tip:</b> ${g.tip}</div>`;
+    // Exercises
+    html+=`<div style="margin-top:12px"><b style="font-size:.9rem">Practice Exercises:</b></div>`;
+    g.exercises.forEach((ex,ei)=>{
+      const ekey=`g_${i}_${ei}`;
+      const done=state.answered[ekey];
+      html+=`<div style="margin:10px 0;font-size:.9rem">`;
+      html+=`<p>${ei+1}. ${ex.sentence.replace('___(','<u>___</u> (')}</p>`;
+      if(done){
+        const ok=done.toLowerCase().trim()===ex.answer.toLowerCase();
+        html+=`<p class="feedback ${ok?'ok':'bad'}">${done} ${ok?'✓':'✗'}</p>`;
+        html+=`<p class="explanation">✓ ${ex.answer}</p>`;
+      } else {
+        html+=`<input class="fill-input" id="ginp_${ekey}" placeholder="${ex.hint}" onkeydown="if(event.key==='Enter')checkGrammar('${ekey}',${i},${ei})">`;
+        html+=` <button class="btn btn-primary btn-sm" onclick="checkGrammar('${ekey}',${i},${ei})">Check</button>`;
+      }
+      html+=`</div>`;
+    });
+    html+=`<button class="btn btn-gold btn-sm" style="margin-top:8px" onclick="speakGrammarTip(${i})">🔊 Read tip aloud</button>`;
+    html+=`</div>`;
+  });
+  el.innerHTML=html;
+}
+function toggleGrammar(i){
+  const c=document.getElementById('gcontent_'+i);
+  const a=document.getElementById('garrow_'+i);
+  const open=c.classList.toggle('open');
+  a.textContent=open?'▲':'▼';
+}
+function checkGrammar(ekey,gi,ei){
+  const inp=document.getElementById('ginp_'+ekey);
+  if(!inp||!inp.value.trim()) return;
+  state.answered[ekey]=inp.value.trim();
+  const ok=inp.value.trim().toLowerCase()===grammarData[gi].exercises[ei].answer.toLowerCase();
+  if(ok) addPoints(3,'grammar'); else { state.streak=0; saveState(); }
+  initGrammar();
+  // Re-open the topic
+  const c=document.getElementById('gcontent_'+gi);
+  const a=document.getElementById('garrow_'+gi);
+  c.classList.add('open'); a.textContent='▲';
+}
+function speakGrammarTip(i){ speak(grammarData[i].tip); }
+
+// ═══════════════════════════════════════════════
+// VOCABULARY
+// ═══════════════════════════════════════════════
+let currentVocabTopic = 'Daily Life';
+let vocabQuizActive = false;
+let vocabQuizQ = [];
+let vocabQuizIdx = 0;
+
+function initVocab(){
+  const topicsEl=document.getElementById('vocab-topics');
+  if(!topicsEl.innerHTML.trim()){
+    let html='<div style="margin-bottom:14px">';
+    Object.keys(vocabData).forEach(t=>{
+      html+=`<button class="vocab-topic-btn ${t===currentVocabTopic?'active':''}" onclick="setVocabTopic('${t}',this)">${t}</button>`;
+    });
+    html+='</div>';
+    topicsEl.innerHTML=html;
+  }
+  renderVocabWords();
+}
+function setVocabTopic(t, btn){
+  currentVocabTopic=t;
+  document.querySelectorAll('.vocab-topic-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('vocab-quiz-area').innerHTML='';
+  renderVocabWords();
+}
+function renderVocabWords(){
+  const words=vocabData[currentVocabTopic];
+  let html=`<div class="card"><div class="card-header">📚 ${currentVocabTopic} <span style="font-size:.8rem;color:var(--muted)">(${words.length} words)</span></div>`;
+  html+=`<div class="vocab-grid">`;
+  words.forEach((w,i)=>{
+    html+=`<div class="vocab-item" onclick="speak('${w.word}. ${w.def}')">`;
+    html+=`<div class="vocab-word">🔊 ${w.word}</div>`;
+    html+=`<div class="vocab-def">${w.def}</div></div>`;
+  });
+  html+=`</div><div style="margin-top:14px">`;
+  html+=`<button class="btn btn-primary btn-sm" onclick="startVocabQuiz()">🧠 Start Quiz</button>`;
+  html+=`</div></div>`;
+  document.getElementById('vocab-words').innerHTML=html;
+}
+function startVocabQuiz(){
+  const words=[...vocabData[currentVocabTopic]];
+  // Shuffle
+  for(let i=words.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [words[i],words[j]]=[words[j],words[i]]; }
+  vocabQuizQ=words.slice(0,8);
+  vocabQuizIdx=0;
+  renderVocabQuizQ();
+}
+function renderVocabQuizQ(){
+  if(vocabQuizIdx>=vocabQuizQ.length){
+    const pts=vocabQuizQ.length*3;
+    addPoints(pts,'vocab');
+    document.getElementById('vocab-quiz-area').innerHTML=`<div class="result-box"><div class="result-score">🎉</div><p>Quiz complete! +${pts} points</p><button class="btn btn-primary" style="margin-top:14px" onclick="startVocabQuiz()">Play Again</button></div>`;
+    return;
+  }
+  const q=vocabQuizQ[vocabQuizIdx];
+  // Generate wrong options
+  const allWords=vocabData[currentVocabTopic];
+  const others=allWords.filter(w=>w.word!==q.word);
+  const shuffled=[...others].sort(()=>Math.random()-.5);
+  const options=[q,...shuffled.slice(0,3)].sort(()=>Math.random()-.5);
+  let html=`<div class="card"><div class="card-header">🧠 Vocabulary Quiz – ${currentVocabTopic}</div>`;
+  html+=`<p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Question ${vocabQuizIdx+1} of ${vocabQuizQ.length}</p>`;
+  html+=`<p style="font-weight:700;font-size:1rem;margin-bottom:14px">What does <span style="color:var(--cambridge-blue)">"${q.word}"</span> mean?</p>`;
+  html+=`<div class="options">`;
+  options.forEach(opt=>{
+    html+=`<button class="option-btn" onclick="checkVocabQ('${q.word}','${opt.word}')">${opt.def}</button>`;
+  });
+  html+=`</div></div>`;
+  document.getElementById('vocab-quiz-area').innerHTML=html;
+}
+function checkVocabQ(correct, chosen){
+  const ok=correct===chosen;
+  if(!ok) state.streak=0;
+  // Show result briefly then next
+  const btns=document.querySelectorAll('#vocab-quiz-area .option-btn');
+  btns.forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===vocabData[currentVocabTopic].find(w=>w.word===correct).def) b.classList.add('correct');
+    else if(b.textContent===vocabData[currentVocabTopic].find(w=>w.word===chosen)?.def && !ok) b.classList.add('wrong');
+  });
+  setTimeout(()=>{ vocabQuizIdx++; renderVocabQuizQ(); }, 1200);
+}
+
+// ═══════════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════════
+function initProgress(){
+  document.getElementById('total-points-display').textContent=state.points;
+  const pct=Math.min(100,Math.round(state.points/500*100));
+  document.getElementById('overall-prog').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`${state.points} / 500 points to B1 Certificate`;
+
+  const skills=[
+    {key:'reading',label:'Reading',icon:'📖'},
+    {key:'writing',label:'Writing',icon:'✏️'},
+    {key:'listening',label:'Listening',icon:'🎧'},
+    {key:'speaking',label:'Speaking',icon:'🎤'},
+    {key:'grammar',label:'Grammar',icon:'📐'},
+    {key:'vocab',label:'Vocabulary',icon:'📚'}
+  ];
+  let html='';
+  skills.forEach(s=>{
+    const pts=state.skillScores[s.key]||0;
+    const pct=Math.min(100,Math.round(pts/100*100));
+    html+=`<div class="skill-progress"><div><div class="sp-label">${s.icon} ${s.label}</div><div class="sp-score">${pts} points</div></div>`;
+    html+=`<div style="flex:1;margin:0 16px"><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    html+=`<div style="font-weight:700;color:var(--cambridge-blue)">${pct}%</div></div>`;
+    // update home bars too
+    const homeBar=document.getElementById('prog-'+s.key);
+    if(homeBar) homeBar.style.width=pct+'%';
+  });
+  document.getElementById('skills-progress-list').innerHTML=html;
+
+  const badges=[
+    {label:'First Steps',icon:'🌱',desc:'Start your journey',earned:state.points>0},
+    {label:'Bookworm',icon:'📖',desc:'Complete Reading',earned:(state.skillScores.reading||0)>=20},
+    {label:'Word Wizard',icon:'🧙',desc:'Complete Vocabulary',earned:(state.skillScores.vocab||0)>=20},
+    {label:'Grammar Guru',icon:'📐',desc:'Complete Grammar',earned:(state.skillScores.grammar||0)>=20},
+    {label:'Chatterbox',icon:'🎤',desc:'Complete Speaking',earned:(state.skillScores.speaking||0)>=20},
+    {label:'Century Club',icon:'💯',desc:'Earn 100 points',earned:state.points>=100},
+    {label:'Halfway There',icon:'🌟',desc:'Earn 250 points',earned:state.points>=250},
+    {label:'B1 Champion',icon:'🏆',desc:'Earn 500 points',earned:state.points>=500}
+  ];
+  let badgeHtml='';
+  badges.forEach(b=>{
+    badgeHtml+=`<div style="text-align:center;padding:10px;border-radius:10px;background:${b.earned?'#fffbeb':'#f8fafc'};border:2px solid ${b.earned?'var(--gold)':'var(--border)'};min-width:90px;opacity:${b.earned?1:0.5}">`;
+    badgeHtml+=`<div style="font-size:2rem">${b.icon}</div><div style="font-size:.75rem;font-weight:700;color:var(--cambridge-blue)">${b.label}</div><div style="font-size:.68rem;color:var(--muted)">${b.desc}</div></div>`;
+  });
+  document.getElementById('achievements-list').innerHTML=badgeHtml;
+}
+function resetProgress(){
+  if(confirm('Reset all progress?')){
+    state={points:0,streak:0,skillScores:{reading:0,writing:0,listening:0,speaking:0,grammar:0,vocab:0},answered:{},currentReadingTest:1,currentListeningTest:1};
+    saveState();
+    showToast('Progress reset!');
+    initProgress();
+  }
+}
+</script>
+<script>
+// ═══════════════════════════════════════════════
+// GAMES
+// ═══════════════════════════════════════════════
+function launchGame(name){
+  document.getElementById('game-arena').classList.add('open');
+  const titles={scramble:'🔤 Word Scramble',memory:'🃏 Memory Match',wordhunt:'🔍 Word Hunt',grammarfill:'📝 Grammar Fill',speedmatch:'⚡ Speed Match',builder:'🏗️ Sentence Builder',hangman:'🤔 Word Guesser',quickquiz:'⏱️ Quick Quiz'};
+  document.getElementById('game-title').textContent=titles[name];
+  const body=document.getElementById('game-body');
+  if(name==='scramble') initScramble(body);
+  else if(name==='memory') initMemory(body);
+  else if(name==='wordhunt') initWordHunt(body);
+  else if(name==='grammarfill') initGrammarFill(body);
+  else if(name==='speedmatch') initSpeedMatch(body);
+  else if(name==='builder') initBuilder(body);
+  else if(name==='hangman') initHangman(body);
+  else if(name==='quickquiz') initQuickQuiz(body);
+}
+function closeGame(){ document.getElementById('game-arena').classList.remove('open'); }
+
+// ─── GAME 1: WORD SCRAMBLE ───
+const scrambleWords=[
+  {word:'ACCOMMODATION',def:'a place to stay'},
+  {word:'CURRICULUM',def:'subjects at school'},
+  {word:'ENVIRONMENT',def:'natural world around us'},
+  {word:'VOCABULARY',def:'all the words you know'},
+  {word:'APPOINTMENT',def:'arranged meeting at a set time'},
+  {word:'PRESCRIPTION',def:"doctor's written order for medicine"},
+  {word:'DOCUMENTARY',def:'film about real events'},
+  {word:'SCHOLARSHIP',def:'money to support a student'},
+  {word:'RENEWABLE',def:'can be replaced naturally'},
+  {word:'PROMOTION',def:'moving to a higher job position'}
+];
+let scrambleQ=null, scrambleBuilt=[];
+function initScramble(body){
+  scrambleQ=scrambleWords[Math.floor(Math.random()*scrambleWords.length)];
+  const letters=[...scrambleQ.word].sort(()=>Math.random()-.5);
+  scrambleBuilt=[];
+  let html=`<p style="margin-bottom:6px;font-size:.9rem;color:var(--muted)">Definition:</p>`;
+  html+=`<p style="font-weight:700;font-size:1rem;margin-bottom:14px">${scrambleQ.def}</p>`;
+  html+=`<div class="scramble-tiles" id="scr-tiles">`;
+  letters.forEach((l,i)=>html+=`<button class="tile" id="scrT_${i}" onclick="scramblePick(${i},'${l}')">${l}</button>`);
+  html+=`</div><p style="font-size:.85rem;color:var(--muted);margin:8px 0">Your answer:</p>`;
+  html+=`<div id="scr-built" style="font-size:1.5rem;font-weight:800;letter-spacing:4px;min-height:40px;color:var(--cambridge-blue)"></div>`;
+  html+=`<div id="scr-feedback" style="margin-top:10px"></div>`;
+  html+=`<div style="margin-top:14px;display:flex;gap:8px">`;
+  html+=`<button class="btn btn-primary" onclick="checkScramble()">✓ Check</button>`;
+  html+=`<button class="btn" style="background:#f4f8fb;border:2px solid var(--border)" onclick="initScramble(document.getElementById('game-body'))">↺ New Word</button>`;
+  html+=`</div>`;
+  body.innerHTML=html;
+}
+function scramblePick(i,l){
+  const btn=document.getElementById('scrT_'+i);
+  btn.classList.add('used');
+  scrambleBuilt.push({i,l});
+  document.getElementById('scr-built').textContent=scrambleBuilt.map(x=>x.l).join('');
+}
+function checkScramble(){
+  const built=scrambleBuilt.map(x=>x.l).join('');
+  const fb=document.getElementById('scr-feedback');
+  if(built===scrambleQ.word){ fb.innerHTML='<span class="feedback ok">✅ Correct! +10 points</span>'; addPoints(10,'vocab'); confetti(); }
+  else { fb.innerHTML=`<span class="feedback bad">❌ The answer was: ${scrambleQ.word}</span>`; state.streak=0; saveState(); }
+}
+
+// ─── GAME 2: MEMORY MATCH ───
+const memoryPairs=[
+  ['symptom','a sign of illness'],['commute','travel to work/school regularly'],
+  ['rehearsal','practice for a performance'],['curriculum','subjects studied at school'],
+  ['itinerary','a planned route'],['renewable','can be replaced naturally'],
+  ['diagnosis','identifying an illness'],['promotion','moving to a higher position']
+];
+let memoryFlipped=[], memoryMatched=0, memoryLocked=false;
+function initMemory(body){
+  memoryMatched=0; memoryFlipped=[];
+  const cards=[];
+  memoryPairs.forEach((p,i)=>{ cards.push({id:i*2,pair:i,text:p[0]}); cards.push({id:i*2+1,pair:i,text:p[1]}); });
+  cards.sort(()=>Math.random()-.5);
+  let html=`<p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Match each word with its definition!</p>`;
+  html+=`<div class="memory-grid">`;
+  cards.forEach(c=>{ html+=`<div class="memory-card" id="mc_${c.id}" data-pair="${c.pair}" data-id="${c.id}" onclick="flipMemory(this)">${'?'}</div>`; });
+  html+=`</div><div id="mem-feedback" style="margin-top:12px"></div>`;
+  body.innerHTML=html;
+  // Store card data
+  body.querySelectorAll('.memory-card').forEach(el=>{
+    const c=cards.find(x=>x.id==el.dataset.id);
+    el.dataset.text=c.text;
+  });
+}
+function flipMemory(el){
+  if(memoryLocked||el.classList.contains('matched')||el.classList.contains('flipped')) return;
+  el.classList.add('flipped');
+  el.textContent=el.dataset.text;
+  memoryFlipped.push(el);
+  if(memoryFlipped.length===2){
+    memoryLocked=true;
+    const [a,b]=memoryFlipped;
+    if(a.dataset.pair===b.dataset.pair){
+      a.classList.add('matched'); b.classList.add('matched');
+      memoryMatched++;
+      memoryFlipped=[]; memoryLocked=false;
+      if(memoryMatched===memoryPairs.length){
+        document.getElementById('mem-feedback').innerHTML='<span class="feedback ok">🎉 All matched! +20 points!</span>';
+        addPoints(20,'vocab'); confetti();
+      }
+    } else {
+      setTimeout(()=>{
+        a.classList.remove('flipped'); a.textContent='?';
+        b.classList.remove('flipped'); b.textContent='?';
+        memoryFlipped=[]; memoryLocked=false;
+      },1000);
+    }
+  }
+}
+
+// ─── GAME 3: WORD HUNT ───
+const huntWords=['READING','WRITING','SPEAKING','GRAMMAR','STUDY','EXAM','LISTEN','LEARN'];
+let huntGrid=[], huntSelected=[], huntFound=[];
+function initWordHunt(body){
+  huntFound=[]; huntSelected=[];
+  const SIZE=10;
+  huntGrid=Array.from({length:SIZE},()=>Array(SIZE).fill(''));
+  // Place words
+  huntWords.forEach(word=>{
+    let placed=false, tries=0;
+    while(!placed&&tries<200){
+      tries++;
+      const dir=Math.floor(Math.random()*2); // 0=horiz, 1=vert
+      const row=Math.floor(Math.random()*SIZE);
+      const col=Math.floor(Math.random()*SIZE);
+      if(dir===0&&col+word.length<=SIZE){
+        if(word.split('').every((l,i)=>!huntGrid[row][col+i]||huntGrid[row][col+i]===l)){
+          word.split('').forEach((l,i)=>huntGrid[row][col+i]=l);
+          placed=true;
+        }
+      } else if(dir===1&&row+word.length<=SIZE){
+        if(word.split('').every((l,i)=>!huntGrid[row+i][col]||huntGrid[row+i][col]===l)){
+          word.split('').forEach((l,i)=>huntGrid[row+i][col]=l);
+          placed=true;
+        }
+      }
+    }
+  });
+  // Fill blanks
+  const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) if(!huntGrid[r][c]) huntGrid[r][c]=alpha[Math.floor(Math.random()*26)];
+
+  let html=`<p style="font-size:.85rem;color:var(--muted);margin-bottom:10px">Click the first and last letter of each word!</p>`;
+  html+=`<div class="word-grid">`;
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+    html+=`<div class="wg-cell" id="wg_${r}_${c}" data-r="${r}" data-c="${c}" onclick="selectHuntCell(${r},${c})">${huntGrid[r][c]}</div>`;
+  }
+  html+=`</div><div class="word-list" style="margin-top:12px">`;
+  huntWords.forEach(w=>html+=`<span class="wl-word" id="wl_${w}">${w}</span>`);
+  html+=`</div><div id="hunt-feedback" style="margin-top:10px"></div>`;
+  body.innerHTML=html;
+}
+function selectHuntCell(r,c){
+  const el=document.getElementById(`wg_${r}_${c}`);
+  if(huntSelected.length===0){
+    huntSelected=[{r,c}];
+    el.classList.add('selected');
+  } else if(huntSelected.length===1){
+    huntSelected.push({r,c});
+    // Check if these two endpoints match any word
+    checkHuntSelection();
+  }
+}
+function checkHuntSelection(){
+  const [a,b]=huntSelected;
+  // Build letters in range
+  let letters='';
+  if(a.r===b.r){ // horizontal
+    const minC=Math.min(a.c,b.c), maxC=Math.max(a.c,b.c);
+    for(let c=minC;c<=maxC;c++) letters+=huntGrid[a.r][c];
+  } else if(a.c===b.c){ // vertical
+    const minR=Math.min(a.r,b.r), maxR=Math.max(a.r,b.r);
+    for(let r=minR;r<=maxR;r++) letters+=huntGrid[r][a.c];
+  }
+  const found=huntWords.find(w=>w===letters&&!huntFound.includes(w));
+  if(found){
+    huntFound.push(found);
+    document.getElementById('wl_'+found).classList.add('found');
+    // Color cells
+    if(a.r===b.r){ const minC=Math.min(a.c,b.c),maxC=Math.max(a.c,b.c); for(let c=minC;c<=maxC;c++) document.getElementById(`wg_${a.r}_${c}`).classList.add('found'); }
+    else if(a.c===b.c){ const minR=Math.min(a.r,b.r),maxR=Math.max(a.r,b.r); for(let r=minR;r<=maxR;r++) document.getElementById(`wg_${r}_${a.c}`).classList.add('found'); }
+    if(huntFound.length===huntWords.length){ document.getElementById('hunt-feedback').innerHTML='<span class="feedback ok">🎉 All words found! +30 points!</span>'; addPoints(30,'vocab'); confetti(); }
+    else addPoints(5,'vocab');
+  } else {
+    document.getElementById(`wg_${a.r}_${a.c}`).classList.remove('selected');
+  }
+  huntSelected=[];
+  document.querySelectorAll('.wg-cell.selected').forEach(e=>e.classList.remove('selected'));
+}
+
+// ─── GAME 4: GRAMMAR FILL ───
+const grammarFillQs=[
+  {s:"If I ___ (be) you, I would apologise.",a:"were",hint:"2nd conditional"},
+  {s:"She has never ___ (visit) London.",a:"visited",hint:"present perfect"},
+  {s:"The window ___ (break) last night.",a:"was broken",hint:"past passive"},
+  {s:"By the time we arrived, they ___ (leave).",a:"had left",hint:"past perfect"},
+  {s:"You look tired. You ___ rest.",a:"should",hint:"advice modal"},
+  {s:"I enjoy ___ (swim) in the sea.",a:"swimming",hint:"enjoy + -ing"},
+  {s:"Despite ___ (rain), we went out.",a:"raining",hint:"despite + -ing"},
+  {s:"She asked me if I ___ (can) help.",a:"could",hint:"reported speech modal"},
+  {s:"The results will ___ (announce) tomorrow.",a:"be announced",hint:"future passive"},
+  {s:"I ___ (not see) her since Monday.",a:"haven't seen",hint:"present perfect + since"}
+];
+let gfScore=0;
+function initGrammarFill(body){
+  gfScore=0;
+  let html=`<p style="font-size:.85rem;color:var(--muted);margin-bottom:14px">Complete each sentence with the correct form:</p>`;
+  grammarFillQs.forEach((q,i)=>{
+    html+=`<div class="question-block">`;
+    html+=`<div class="question-text">${i+1}. ${q.s}</div>`;
+    html+=`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">`;
+    html+=`<input class="fill-input" id="gf_${i}" placeholder="${q.hint}">`;
+    html+=`<button class="btn btn-primary btn-sm" onclick="checkGF(${i})">✓</button>`;
+    html+=`<span id="gff_${i}"></span></div></div>`;
+  });
+  html+=`<button class="btn btn-gold" style="margin-top:14px" onclick="scoreGF()">📊 Show Score</button>`;
+  html+=`<div id="gf-result"></div>`;
+  body.innerHTML=html;
+}
+function checkGF(i){
+  const inp=document.getElementById('gf_'+i);
+  const fb=document.getElementById('gff_'+i);
+  if(!inp.value.trim()) return;
+  const ok=inp.value.trim().toLowerCase()===grammarFillQs[i].a.toLowerCase();
+  fb.innerHTML=`<span class="${ok?'ok':'bad'} feedback">${ok?'✓':'✗ '+grammarFillQs[i].a}</span>`;
+  inp.disabled=true;
+  if(ok) gfScore++;
+}
+function scoreGF(){
+  const pts=gfScore*5;
+  document.getElementById('gf-result').innerHTML=`<div class="result-box" style="margin-top:14px"><div class="result-score">${gfScore}/${grammarFillQs.length}</div><div class="result-label">+${pts} points</div></div>`;
+  addPoints(pts,'grammar');
+}
+
+// ─── GAME 5: SPEED MATCH ───
+const speedMatchPairs=[
+  {word:'commute',def:'travel to work daily'},
+  {word:'anxious',def:'worried or nervous'},
+  {word:'curriculum',def:'subjects studied at school'},
+  {word:'promotion',def:'moving to a higher job position'},
+  {word:'symptom',def:'a sign of illness'},
+  {word:'renewable',def:'can be replaced naturally'},
+  {word:'scholarship',def:'money given to a student'},
+  {word:'diagnosis',def:'identifying what illness someone has'}
+];
+let speedPairs=[], speedIdx=0, speedScore=0, speedTimer=null, speedTimeLeft=30;
+function initSpeedMatch(body){
+  // Create pairs with some wrong ones
+  speedPairs=[];
+  const words=[...speedMatchPairs].sort(()=>Math.random()-.5);
+  words.forEach((p,i)=>{
+    const showCorrect=Math.random()>0.4;
+    if(showCorrect) speedPairs.push({word:p.word,def:p.def,correct:true});
+    else {
+      const wrongDef=speedMatchPairs.find(x=>x.word!==p.word).def;
+      speedPairs.push({word:p.word,def:wrongDef,correct:false});
+    }
+  });
+  speedIdx=0; speedScore=0; speedTimeLeft=30;
+  clearInterval(speedTimer);
+  renderSpeedQ(body);
+  speedTimer=setInterval(()=>{
+    speedTimeLeft--;
+    const te=document.getElementById('spd-timer');
+    if(te) te.textContent=speedTimeLeft;
+    if(speedTimeLeft<=0){ clearInterval(speedTimer); endSpeedMatch(body); }
+  },1000);
+}
+function renderSpeedQ(body){
+  if(speedIdx>=speedPairs.length){ clearInterval(speedTimer); endSpeedMatch(body); return; }
+  const q=speedPairs[speedIdx];
+  let html=`<div class="speed-timer" id="spd-timer">${speedTimeLeft}</div>`;
+  html+=`<p style="text-align:center;font-size:.82rem;color:var(--muted)">seconds remaining · Score: ${speedScore}</p>`;
+  html+=`<div class="speed-word">${q.word}</div>`;
+  html+=`<div class="speed-def">${q.def}</div>`;
+  html+=`<div class="speed-btns">`;
+  html+=`<button class="btn btn-success" style="padding:14px 28px;font-size:1rem" onclick="answerSpeed(true)">✅ YES</button>`;
+  html+=`<button class="btn" style="background:var(--wrong);color:#fff;padding:14px 28px;font-size:1rem" onclick="answerSpeed(false)">❌ NO</button>`;
+  html+=`</div>`;
+  body.innerHTML=html;
+}
+function answerSpeed(answer){
+  const q=speedPairs[speedIdx];
+  if(answer===q.correct) speedScore++;
+  speedIdx++;
+  const body=document.getElementById('game-body');
+  renderSpeedQ(body);
+}
+function endSpeedMatch(body){
+  clearInterval(speedTimer);
+  const pts=speedScore*3;
+  body.innerHTML=`<div class="result-box"><div class="result-score">${speedScore}</div><div class="result-label">correct answers · +${pts} points</div><button class="btn btn-primary" style="margin-top:16px" onclick="initSpeedMatch(document.getElementById('game-body'))">↺ Play Again</button></div>`;
+  addPoints(pts,'vocab');
+}
+
+// ─── GAME 6: SENTENCE BUILDER ───
+const builderSentences=[
+  {words:['If','I','were','you','I','would','apologise'],answer:"If I were you I would apologise"},
+  {words:['She','has','never','visited','London'],answer:"She has never visited London"},
+  {words:['The','window','was','broken','last','night'],answer:"The window was broken last night"},
+  {words:['I','enjoy','swimming','in','the','sea'],answer:"I enjoy swimming in the sea"},
+  {words:['You','should','take','a','rest'],answer:"You should take a rest"},
+  {words:['Despite','the','rain','we','went','out'],answer:"Despite the rain we went out"}
+];
+let builderIdx=0, builderPlaced=[];
+function initBuilder(body){
+  builderIdx=Math.floor(Math.random()*builderSentences.length);
+  builderPlaced=[];
+  renderBuilder(body);
+}
+function renderBuilder(body){
+  const q=builderSentences[builderIdx];
+  const shuffled=[...q.words].sort(()=>Math.random()-.5);
+  let html=`<p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Arrange the words into the correct sentence:</p>`;
+  html+=`<div class="word-chips" id="bld-source">`;
+  shuffled.forEach((w,i)=>html+=`<div class="chip" id="bchip_${i}" onclick="placeChip(${i},'${w}')">${w}</div>`);
+  html+=`</div><p style="font-size:.85rem;color:var(--muted);margin:8px 0">Your sentence:</p>`;
+  html+=`<div class="word-chips" id="bld-answer" style="min-height:50px"></div>`;
+  html+=`<div id="bld-feedback" style="margin-top:10px"></div>`;
+  html+=`<div style="margin-top:12px;display:flex;gap:8px">`;
+  html+=`<button class="btn btn-primary" onclick="checkBuilder()">✓ Check</button>`;
+  html+=`<button class="btn" style="background:#f4f8fb;border:2px solid var(--border)" onclick="initBuilder(document.getElementById('game-body'))">↺ New</button>`;
+  html+=`</div>`;
+  body.innerHTML=html;
+}
+function placeChip(i, word){
+  const chip=document.getElementById('bchip_'+i);
+  chip.classList.add('placed');
+  builderPlaced.push(word);
+  const ans=document.getElementById('bld-answer');
+  const span=document.createElement('span');
+  span.className='chip';
+  span.textContent=word;
+  ans.appendChild(span);
+}
+function checkBuilder(){
+  const q=builderSentences[builderIdx];
+  const built=builderPlaced.join(' ');
+  const fb=document.getElementById('bld-feedback');
+  if(built===q.answer){ fb.innerHTML='<span class="feedback ok">✅ Correct! +8 points</span>'; addPoints(8,'grammar'); }
+  else { fb.innerHTML=`<span class="feedback bad">❌ Answer: ${q.answer}</span>`; state.streak=0; saveState(); }
+}
+
+// ─── GAME 7: WORD GUESSER (HANGMAN) ───
+const hangmanWords=[
+  {word:'ENVIRONMENT',def:'the natural world around us'},
+  {word:'SCHOLARSHIP',def:'money given to support a student'},
+  {word:'APPOINTMENT',def:'an arranged meeting at a set time'},
+  {word:'ACCOMMODATION',def:'a place to stay'},
+  {word:'DOCUMENTARY',def:'a film about real events'},
+  {word:'CURRICULUM',def:'subjects studied at school'},
+  {word:'PROMOTION',def:'moving to a higher job position'},
+  {word:'SYMPTOM',def:'a sign of illness'}
+];
+let hangWord='', hangGuessed=[], hangWrong=0;
+const hangMax=7;
+function initHangman(body){
+  const q=hangmanWords[Math.floor(Math.random()*hangmanWords.length)];
+  hangWord=q.word; hangGuessed=[]; hangWrong=0;
+  renderHangman(body,q.def);
+}
+function renderHangman(body,def){
+  const wrongLetters=hangGuessed.filter(l=>!hangWord.includes(l));
+  hangWrong=wrongLetters.length;
+  const display=hangWord.split('').map(l=>hangGuessed.includes(l)?l:'_');
+  const won=display.every(l=>l!=='_');
+  const lost=hangWrong>=hangMax;
+  let html=`<p style="font-size:.9rem;font-weight:600;margin-bottom:4px">Definition:</p>`;
+  html+=`<p style="color:var(--cambridge-blue);margin-bottom:14px">${def}</p>`;
+  html+=`<div class="hangman-word">`;
+  display.forEach(l=>html+=`<div class="letter-slot">${l==='_'?'':l}</div>`);
+  html+=`</div>`;
+  html+=`<p style="text-align:center;font-size:.85rem;color:var(--muted);margin-bottom:10px">Wrong guesses: ${hangWrong}/${hangMax} · ${wrongLetters.join(' ')}</p>`;
+  if(won){ html+=`<div class="feedback ok" style="text-align:center;font-size:1.1rem;margin:10px 0">🎉 Correct! +15 points!</div>`; }
+  else if(lost){ html+=`<div class="feedback bad" style="text-align:center;margin:10px 0">❌ The word was: ${hangWord}</div>`; }
+  if(!won&&!lost){
+    html+=`<div class="alpha-keyboard">`;
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l=>{
+      const used=hangGuessed.includes(l);
+      const hit=used&&hangWord.includes(l);
+      const miss=used&&!hangWord.includes(l);
+      html+=`<button class="alpha-btn ${hit?'hit':''} ${miss?'miss':''}" ${used?'disabled':''} onclick="guessHangman('${l}',this)">${l}</button>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<button class="btn btn-primary" style="margin-top:14px" onclick="initHangman(document.getElementById('game-body'))">↺ New Word</button>`;
+  body.innerHTML=html;
+  if(won) addPoints(15,'vocab');
+}
+function guessHangman(l, btn){
+  hangGuessed.push(l);
+  const def=hangmanWords.find(w=>w.word===hangWord).def;
+  renderHangman(document.getElementById('game-body'),def);
+}
+
+// ─── GAME 8: QUICK QUIZ ───
+function buildQuickQuizPool(){
+  let pool=[];
+  // From reading data
+  Object.values(readingData).forEach(t=>{
+    t.parts.forEach(p=>{
+      if(p.questions) p.questions.forEach(q=>{
+        if(q.options) pool.push({q:q.text,opts:q.options,a:q.answer,expl:q.explanation||''});
+      });
+    });
+  });
+  return pool.sort(()=>Math.random()-.5).slice(0,8);
+}
+let qqPool=[], qqIdx=0, qqScore=0, qqTimer=null, qqTime=15;
+function initQuickQuiz(body){
+  qqPool=buildQuickQuizPool(); qqIdx=0; qqScore=0;
+  renderQQ(body);
+}
+function renderQQ(body){
+  clearInterval(qqTimer);
+  if(qqIdx>=qqPool.length){ endQQ(body); return; }
+  qqTime=15;
+  const q=qqPool[qqIdx];
+  let html=`<div style="display:flex;justify-content:space-between;margin-bottom:10px">`;
+  html+=`<span style="font-size:.85rem;color:var(--muted)">Question ${qqIdx+1}/${qqPool.length} · Score: ${qqScore}</span>`;
+  html+=`<span class="speed-timer" style="font-size:1.5rem" id="qq-timer">${qqTime}</span></div>`;
+  html+=`<div class="question-text">${q.q}</div>`;
+  html+=`<div class="options" style="margin-top:10px">`;
+  q.opts.forEach((opt,oi)=>html+=`<button class="option-btn" onclick="answerQQ(${oi})">${opt}</button>`);
+  html+=`</div>`;
+  body.innerHTML=html;
+  qqTimer=setInterval(()=>{
+    qqTime--;
+    const te=document.getElementById('qq-timer');
+    if(te) te.textContent=qqTime;
+    if(qqTime<=0){ clearInterval(qqTimer); qqIdx++; renderQQ(body); }
+  },1000);
+}
+function answerQQ(chosen){
+  clearInterval(qqTimer);
+  const q=qqPool[qqIdx];
+  const ok=chosen===q.a;
+  if(ok) qqScore++;
+  qqIdx++;
+  renderQQ(document.getElementById('game-body'));
+}
+function endQQ(body){
+  const pts=qqScore*8;
+  body.innerHTML=`<div class="result-box"><div class="result-score">${qqScore}/${qqPool.length}</div><div class="result-label">correct · +${pts} points</div><button class="btn btn-primary" style="margin-top:16px" onclick="initQuickQuiz(document.getElementById('game-body'))">↺ Play Again</button></div>`;
+  addPoints(pts,'reading');
+  if(qqScore>=6) confetti();
+}
+
+// ═══════════════════════════════════════════════
+// INIT APP
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  loadState();
+  // Close game on backdrop click
+  document.getElementById('game-arena').addEventListener('click',function(e){ if(e.target===this) closeGame(); });
+});
+</script>
+</body>
+</html>
