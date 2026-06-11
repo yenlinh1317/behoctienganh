@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kid's Box New Generation 1 - Learning App</title>
+<style>
+:root {
+  --pink: #e8174b;
+  --yellow: #ffd700;
+  --blue: #1e90ff;
+  --green: #22c55e;
+  --purple: #9333ea;
+  --orange: #f97316;
+  --teal: #0d9488;
+  --bg: #fff9f0;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --shadow: 0 4px 20px rgba(0,0,0,0.12);
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', 'Comic Sans MS', Nunito, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+#app-header {
+  background: linear-gradient(135deg, var(--pink) 0%, #ff6b9d 50%, var(--orange) 100%);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 3px 15px rgba(232,23,75,0.4);
+  position: sticky; top: 0; z-index: 100;
+}
+#app-header .logo {
+  font-size: 1.6rem; font-weight: 900; color: white;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  letter-spacing: -0.5px;
+}
+#app-header .subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.9); font-weight: 600; }
+#score-display {
+  margin-left: auto; background: rgba(255,255,255,0.25);
+  border-radius: 20px; padding: 6px 14px;
+  color: white; font-weight: 800; font-size: 0.9rem;
+  border: 2px solid rgba(255,255,255,0.4);
+  cursor: pointer; transition: all 0.2s;
+}
+#score-display:hover { background: rgba(255,255,255,0.4); }
+
+/* ===== MAIN NAV ===== */
+#main-nav {
+  display: flex; gap: 4px; padding: 12px 16px 0;
+  overflow-x: auto; background: white;
+  border-bottom: 3px solid #f0f0f0;
+  scrollbar-width: none; flex-shrink: 0;
+}
+#main-nav::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex-shrink: 0; padding: 9px 16px;
+  border: none; border-radius: 12px 12px 0 0;
+  font-weight: 700; font-size: 0.82rem; cursor: pointer;
+  transition: all 0.2s; background: #f5f5f5; color: #666;
+  letter-spacing: 0.3px;
+}
+.nav-tab.active {
+  background: var(--pink); color: white;
+  box-shadow: 0 -3px 10px rgba(232,23,75,0.3);
+}
+.nav-tab:hover:not(.active) { background: #ffe0ea; color: var(--pink); }
+
+/* ===== SCREENS ===== */
+.screen { display: none; padding: 16px; animation: fadeIn 0.3s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== UNIT GRID (HOME) ===== */
+.units-header { text-align: center; margin-bottom: 20px; }
+.units-header h2 { font-size: 1.5rem; color: var(--pink); font-weight: 900; }
+.units-header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.unit-card {
+  background: white; border-radius: var(--radius);
+  padding: 16px 12px; text-align: center;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: all 0.25s; border: 3px solid transparent;
+  position: relative; overflow: hidden;
+}
+.unit-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--c1,#fff) 0%, var(--c2,#fff) 100%);
+  opacity: 0.08; z-index: 0;
+}
+.unit-card:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
+.unit-card .unit-num {
+  width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; font-weight: 900; color: white; position: relative; z-index: 1;
+}
+.unit-card .unit-title { font-weight: 800; font-size: 0.9rem; color: var(--text); position: relative; z-index: 1; }
+.unit-card .unit-topic { font-size: 0.72rem; color: #888; margin-top: 3px; position: relative; z-index: 1; }
+.unit-card .unit-progress {
+  margin-top: 8px; height: 5px; background: #f0f0f0;
+  border-radius: 3px; overflow: hidden; position: relative; z-index: 1;
+}
+.unit-card .unit-progress-bar { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+/* ===== UNIT DETAIL ===== */
+#unit-detail { display: none; padding: 16px; }
+.unit-detail-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  padding: 16px; border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--uc1,var(--pink)), var(--uc2,var(--orange)));
+  color: white;
+}
+.unit-detail-header .back-btn {
+  background: rgba(255,255,255,0.25); border: none;
+  border-radius: 50%; width: 36px; height: 36px;
+  font-size: 1.1rem; cursor: pointer; color: white;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.unit-detail-header h2 { font-size: 1.3rem; font-weight: 900; }
+.unit-detail-header p { font-size: 0.8rem; opacity: 0.9; margin-top: 2px; }
+.section-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.section-tabs::-webkit-scrollbar { display: none; }
+.sec-tab {
+  flex-shrink: 0; padding: 8px 14px; border: 2px solid #e0e0e0;
+  border-radius: 20px; font-weight: 700; font-size: 0.78rem;
+  cursor: pointer; transition: all 0.2s; background: white; color: #666;
+}
+.sec-tab.active { background: var(--pink); border-color: var(--pink); color: white; }
+.section-content { display: none; }
+.section-content.active { display: block; }
+
+/* ===== VOCAB SECTION ===== */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px; margin-bottom: 20px;
+}
+.vocab-card {
+  background: white; border-radius: 14px;
+  padding: 14px 10px; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  cursor: pointer; transition: all 0.2s;
+  border: 2px solid transparent;
+}
+.vocab-card:hover { transform: scale(1.05); border-color: var(--pink); }
+.vocab-card .vocab-emoji { font-size: 2.2rem; margin-bottom: 6px; display: block; }
+.vocab-card .vocab-word { font-weight: 800; font-size: 0.95rem; color: var(--pink); }
+.vocab-card .vocab-hint { font-size: 0.72rem; color: #999; margin-top: 2px; }
+
+/* ===== SPEAK SECTION ===== */
+.speak-card {
+  background: white; border-radius: var(--radius); padding: 24px;
+  box-shadow: var(--shadow); margin-bottom: 14px;
+}
+.speak-card .phrase {
+  font-size: 1.5rem; font-weight: 800; color: var(--text);
+  text-align: center; margin-bottom: 8px;
+}
+.speak-card .translation {
+  text-align: center; color: #999; font-size: 0.85rem; margin-bottom: 18px;
+}
+.speak-btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  padding: 11px 22px; border: none; border-radius: 25px;
+  font-weight: 700; font-size: 0.85rem; cursor: pointer;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-pink { background: var(--pink); color: white; }
+.btn-pink:hover { background: #c8003a; transform: scale(1.05); }
+.btn-blue { background: var(--blue); color: white; }
+.btn-blue:hover { background: #0060d0; transform: scale(1.05); }
+.btn-green { background: var(--green); color: white; }
+.btn-green:hover { background: #16a34a; transform: scale(1.05); }
+.btn-purple { background: var(--purple); color: white; }
+.btn-purple:hover { background: #7e22ce; transform: scale(1.05); }
+.btn-yellow { background: var(--yellow); color: #333; }
+.btn-yellow:hover { background: #e6c200; transform: scale(1.05); }
+.btn-outline { background: white; color: var(--pink); border: 2px solid var(--pink); }
+.btn-outline:hover { background: var(--pink); color: white; }
+.score-bar {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 14px;
+  border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+}
+.score-bar.good { background: #d1fae5; color: #065f46; }
+.score-bar.ok { background: #fef3c7; color: #92400e; }
+.score-bar.bad { background: #fee2e2; color: #991b1b; }
+.mic-anim {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--pink); margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(232,23,75,0.4);
+  animation: pulse-mic 1.5s infinite;
+}
+@keyframes pulse-mic {
+  0% { box-shadow: 0 0 0 0 rgba(232,23,75,0.4); }
+  70% { box-shadow: 0 0 0 18px rgba(232,23,75,0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,23,75,0); }
+}
+
+/* ===== GRAMMAR ===== */
+.grammar-card {
+  background: white; border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow); margin-bottom: 14px;
+}
+.grammar-card .g-title {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--purple); margin-bottom: 10px;
+  padding-bottom: 8px; border-bottom: 2px dashed #e0e0e0;
+}
+.grammar-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.grammar-table td {
+  padding: 8px 12px; border: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+.grammar-table tr:nth-child(odd) td { background: #fafafa; }
+.grammar-table .q-col { color: #333; font-weight: 600; }
+.grammar-table .a-col { color: var(--blue); font-weight: 700; }
+.grammar-rule {
+  background: linear-gradient(135deg, #f3e8ff, #ede9fe);
+  border-left: 4px solid var(--purple);
+  padding: 12px 14px; border-radius: 0 10px 10px 0;
+  margin: 10px 0; font-size: 0.88rem; color: #4a1d96;
+}
+.grammar-example {
+  display: flex; gap: 10px; align-items: flex-start; margin: 8px 0;
+  padding: 8px 12px; background: #f0fdf4; border-radius: 10px;
+  font-size: 0.88rem;
+}
+.grammar-example .eg-label {
+  flex-shrink: 0; font-weight: 800; color: var(--green);
+  font-size: 0.72rem; background: #dcfce7; padding: 2px 6px;
+  border-radius: 4px; margin-top: 2px;
+}
+.contraction-box {
+  display: inline-block; background: #fef3c7;
+  border: 2px solid var(--yellow); border-radius: 8px;
+  padding: 4px 10px; margin: 3px; font-size: 0.85rem; font-weight: 700;
+  color: #78350f;
+}
+
+/* ===== PHONICS ===== */
+.phonics-hero {
+  background: linear-gradient(135deg, #1e3a5f, #0f2647);
+  border-radius: var(--radius); padding: 24px; text-align: center;
+  margin-bottom: 16px; color: white;
+}
+.phonics-hero .sound-letter {
+  font-size: 5rem; font-weight: 900; color: var(--yellow);
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.3); line-height: 1;
+}
+.phonics-hero .tongue-twister {
+  font-size: 1rem; font-style: italic; color: rgba(255,255,255,0.85);
+  margin-top: 8px; line-height: 1.5;
+}
+.phonics-hero .sound-btn {
+  margin-top: 14px; padding: 10px 24px; background: var(--yellow);
+  border: none; border-radius: 20px; font-weight: 800; font-size: 0.9rem;
+  cursor: pointer; color: #333; transition: all 0.2s;
+}
+.phonics-hero .sound-btn:hover { transform: scale(1.07); }
+.phonics-words {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; justify-content: center;
+}
+.phonics-word-chip {
+  background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 20px; padding: 6px 14px; font-size: 0.85rem; color: white;
+  cursor: pointer; transition: all 0.2s;
+}
+.phonics-word-chip:hover { background: rgba(255,255,255,0.3); transform: scale(1.07); }
+.phonics-word-chip .highlight { color: var(--yellow); font-weight: 900; }
+
+/* ===== GAMES ===== */
+.games-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(155px,1fr));
+  gap: 12px;
+}
+.game-card {
+  background: white; border-radius: var(--radius); padding: 18px 14px;
+  text-align: center; box-shadow: var(--shadow); cursor: pointer;
+  transition: all 0.25s; border: 3px solid transparent;
+}
+.game-card:hover { transform: translateY(-5px); border-color: var(--pink); }
+.game-card .game-icon { font-size: 2.8rem; margin-bottom: 8px; display: block; }
+.game-card .game-name { font-weight: 800; font-size: 0.9rem; color: var(--text); }
+.game-card .game-desc { font-size: 0.72rem; color: #888; margin-top: 4px; }
+.game-card .game-badge {
+  display: inline-block; margin-top: 6px; padding: 3px 8px;
+  border-radius: 10px; font-size: 0.68rem; font-weight: 700;
+  background: #fef3c7; color: #78350f;
+}
+
+/* ===== GAME MODAL ===== */
+#game-modal {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); overflow-y: auto;
+  padding: 16px;
+}
+#game-modal.active { display: flex; align-items: flex-start; justify-content: center; }
+.game-window {
+  background: white; border-radius: 20px; width: 100%;
+  max-width: 600px; margin: auto; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.game-header {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  padding: 14px 18px; display: flex; align-items: center; gap: 10px; color: white;
+}
+.game-header .close-game {
+  margin-left: auto; background: rgba(255,255,255,0.2); border: none;
+  border-radius: 50%; width: 32px; height: 32px; color: white;
+  font-size: 1rem; cursor: pointer;
+}
+.game-body { padding: 20px; }
+.game-score-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #f8f8f8; border-radius: 10px; padding: 8px 14px;
+  margin-bottom: 16px; font-weight: 700; font-size: 0.85rem;
+}
+.game-score-bar .g-score { color: var(--pink); font-size: 1.1rem; }
+.game-score-bar .g-lives { color: var(--orange); }
+.game-question {
+  text-align: center; font-size: 1.3rem; font-weight: 800;
+  margin-bottom: 18px; color: var(--text); min-height: 60px;
+  display: flex; align-items: center; justify-content: center;
+}
+.options-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+}
+.option-btn {
+  padding: 14px 10px; border: 3px solid #e0e0e0; border-radius: 14px;
+  background: white; font-weight: 700; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.option-btn:hover { border-color: var(--pink); background: #fff0f5; transform: scale(1.03); }
+.option-btn.correct { background: #d1fae5; border-color: var(--green); color: #065f46; animation: bounce 0.3s; }
+.option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+@keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.feedback-toast {
+  text-align: center; padding: 12px; border-radius: 12px;
+  font-weight: 800; font-size: 1rem; margin-bottom: 12px;
+  display: none;
+}
+.feedback-toast.show { display: block; }
+.feedback-toast.correct { background: #d1fae5; color: #065f46; }
+.feedback-toast.wrong { background: #fee2e2; color: #991b1b; }
+
+/* ===== QUIZ SECTION ===== */
+.quiz-card {
+  background: white; border-radius: var(--radius); padding: 22px;
+  box-shadow: var(--shadow); margin-bottom: 14px;
+}
+.quiz-card .q-num {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: #999; margin-bottom: 6px;
+}
+.quiz-card .q-text {
+  font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 14px;
+  line-height: 1.4;
+}
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.quiz-opt {
+  padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 12px;
+  background: white; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.quiz-opt:hover { border-color: var(--pink); background: #fff0f5; }
+.quiz-opt.selected { border-color: var(--blue); background: #eff6ff; }
+.quiz-opt.correct { border-color: var(--green); background: #d1fae5; color: #065f46; }
+.quiz-opt.incorrect { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+.quiz-actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+.quiz-results {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  border-radius: var(--radius); padding: 28px; text-align: center; color: white;
+  margin-bottom: 14px;
+}
+.quiz-results .result-score { font-size: 3.5rem; font-weight: 900; }
+.quiz-results .result-label { font-size: 1rem; opacity: 0.9; }
+.quiz-results .stars { font-size: 2rem; margin: 10px 0; }
+
+/* ===== PROGRESS ===== */
+.progress-screen .prog-summary {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  border-radius: var(--radius); padding: 20px; color: white;
+  text-align: center; margin-bottom: 20px;
+}
+.progress-screen .prog-summary .big-score { font-size: 3rem; font-weight: 900; }
+.prog-unit-row {
+  display: flex; align-items: center; gap: 12px;
+  background: white; border-radius: 12px; padding: 12px 14px;
+  margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.prog-unit-row .p-name { font-weight: 700; font-size: 0.88rem; flex: 1; }
+.prog-unit-row .p-bar { flex: 2; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.prog-unit-row .p-bar-fill { height: 100%; border-radius: 4px; background: var(--pink); transition: width 0.8s; }
+.prog-unit-row .p-pct { font-weight: 700; font-size: 0.8rem; color: var(--pink); min-width: 36px; text-align: right; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .unit-grid { grid-template-columns: repeat(2, 1fr); }
+  .vocab-grid { grid-template-columns: repeat(2, 1fr); }
+  .games-grid { grid-template-columns: repeat(2, 1fr); }
+  .options-grid { grid-template-columns: 1fr; }
+  .quiz-options { grid-template-columns: 1fr; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  #app-header { padding: 8px 16px; }
+  .screen { padding: 10px; }
+}
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed; width: 10px; height: 10px;
+  border-radius: 2px; pointer-events: none; z-index: 1000;
+  animation: confetti-fall 2s ease-in forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== STARS ANIMATION ===== */
+.star-pop {
+  position: fixed; font-size: 2rem; pointer-events: none; z-index: 999;
+  animation: starPop 1s ease-out forwards;
+}
+@keyframes starPop {
+  0% { transform: scale(0) translateY(0); opacity: 1; }
+  60% { transform: scale(1.3) translateY(-40px); opacity: 1; }
+  100% { transform: scale(0.5) translateY(-80px); opacity: 0; }
+}
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #333; color: white; padding: 10px 22px; border-radius: 25px;
+  font-weight: 700; font-size: 0.88rem; z-index: 300;
+  transition: transform 0.3s; pointer-events: none; white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ===== TYPING GAME ===== */
+.type-input-row { display: flex; gap: 8px; margin-top: 12px; }
+.type-input-row input {
+  flex: 1; padding: 11px 14px; border: 2px solid #e0e0e0;
+  border-radius: 12px; font-size: 1rem; font-weight: 600;
+  outline: none; transition: border-color 0.2s;
+}
+.type-input-row input:focus { border-color: var(--pink); }
+
+/* ===== SENTENCE BUILD ===== */
+.word-bank { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; min-height: 44px; }
+.word-chip {
+  padding: 7px 14px; background: white; border: 2px solid var(--blue);
+  border-radius: 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  transition: all 0.2s; color: var(--blue);
+}
+.word-chip:hover { background: var(--blue); color: white; }
+.word-chip.used { opacity: 0.3; pointer-events: none; }
+.answer-slots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; padding: 8px; background: #f9f9f9; border-radius: 12px; border: 2px dashed #ddd; margin: 10px 0; }
+.answer-chip {
+  padding: 7px 14px; background: var(--pink); color: white;
+  border: none; border-radius: 20px; font-weight: 700; font-size: 0.88rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.answer-chip:hover { background: #c8003a; transform: scale(0.95); }
+
+/* ===== MATCHING GAME ===== */
+.match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.match-col { display: flex; flex-direction: column; gap: 8px; }
+.match-item {
+  padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 12px;
+  background: white; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.match-item:hover { border-color: var(--pink); background: #fff0f5; }
+.match-item.selected { border-color: var(--blue); background: #eff6ff; }
+.match-item.matched { border-color: var(--green); background: #d1fae5; color: #065f46; }
+.match-item.wrong-match { border-color: #ef4444; background: #fee2e2; animation: shake 0.3s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ===== MEMORY GAME ===== */
+.memory-grid { display: grid; gap: 8px; }
+.mem-card {
+  aspect-ratio: 1; border-radius: 12px; border: none;
+  cursor: pointer; font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.mem-card.flipped { background: white; border: 2px solid var(--pink); box-shadow: 0 2px 8px rgba(232,23,75,0.2); }
+.mem-card.matched { background: #d1fae5; border: 2px solid var(--green); opacity: 0.7; }
+.mem-card .mem-front { display: none; font-size: 1.4rem; }
+.mem-card.flipped .mem-front { display: block; }
+.mem-card .mem-back { color: white; font-size: 1.8rem; }
+.mem-card.flipped .mem-back { display: none; }
+
+/* ===== CROSSWORD ===== */
+.crossword-grid td {
+  width: 34px; height: 34px; text-align: center;
+  border: 1px solid #999; font-size: 1rem; font-weight: 700;
+  background: white; padding: 0;
+}
+.crossword-grid td.black { background: #1a1a1a; border-color: #1a1a1a; }
+.crossword-grid td input {
+  width: 100%; height: 100%; border: none; text-align: center;
+  font-size: 1rem; font-weight: 700; background: transparent; outline: none;
+  text-transform: uppercase;
+}
+.crossword-clues { font-size: 0.82rem; line-height: 1.8; color: #444; }
+.crossword-clues b { color: var(--pink); }
+
+</style>
+</head>
+<body>
+
+<div id="app-header">
+  <div>
+    <div class="logo">⭐ Kid's Box 1</div>
+    <div class="subtitle">New Generation · British English</div>
+  </div>
+  <div id="score-display" onclick="showScreen('progress')">⭐ <span id="total-stars">0</span> Stars</div>
+</div>
+
+<div id="main-nav">
+  <button class="nav-tab active" onclick="showScreen('home')">🏠 Units</button>
+  <button class="nav-tab" onclick="showScreen('games-screen')">🎮 Games</button>
+  <button class="nav-tab" onclick="showScreen('grammar-screen')">📘 Grammar</button>
+  <button class="nav-tab" onclick="showScreen('phonics-screen')">🔤 Phonics</button>
+  <button class="nav-tab" onclick="showScreen('quiz-screen')">📝 Quiz</button>
+  <button class="nav-tab" onclick="showScreen('progress')">📊 Progress</button>
+</div>
+
+<!-- HOME SCREEN -->
+<div id="home" class="screen active">
+  <div class="units-header">
+    <h2>Choose Your Unit! 🌟</h2>
+    <p>12 exciting units · Cambridge Pre A1 Starters</p>
+  </div>
+  <div class="unit-grid" id="unit-grid"></div>
+</div>
+
+<!-- UNIT DETAIL -->
+<div id="unit-detail">
+  <div class="unit-detail-header" id="unit-header">
+    <button class="back-btn" onclick="closeUnitDetail()">←</button>
+    <div>
+      <h2 id="unit-detail-title"></h2>
+      <p id="unit-detail-sub"></p>
+    </div>
+  </div>
+  <div class="section-tabs">
+    <button class="sec-tab active" onclick="showSection('vocab')">📚 Vocabulary</button>
+    <button class="sec-tab" onclick="showSection('speak')">🎤 Speaking</button>
+    <button class="sec-tab" onclick="showSection('grammar')">📘 Grammar</button>
+    <button class="sec-tab" onclick="showSection('phonics')">🔤 Phonics</button>
+    <button class="sec-tab" onclick="showSection('unit-quiz')">📝 Quiz</button>
+  </div>
+  <div id="sec-vocab" class="section-content active"></div>
+  <div id="sec-speak" class="section-content"></div>
+  <div id="sec-grammar" class="section-content"></div>
+  <div id="sec-phonics" class="section-content"></div>
+  <div id="sec-unit-quiz" class="section-content"></div>
+</div>
+
+<!-- GAMES SCREEN -->
+<div id="games-screen" class="screen">
+  <div class="units-header">
+    <h2>🎮 Learning Games</h2>
+    <p>8 fun games to practise English!</p>
+  </div>
+  <div class="games-grid">
+    <div class="game-card" onclick="launchGame('flashcard')">
+      <span class="game-icon">🃏</span>
+      <div class="game-name">Flashcard Flip</div>
+      <div class="game-desc">See word, guess meaning</div>
+      <span class="game-badge">All Units</span>
+    </div>
+    <div class="game-card" onclick="launchGame('matching')">
+      <span class="game-icon">🔗</span>
+      <div class="game-name">Word Match</div>
+      <div class="game-desc">Match words & pictures</div>
+      <span class="game-badge">Vocabulary</span>
+    </div>
+    <div class="game-card" onclick="launchGame('memory')">
+      <span class="game-icon">🧠</span>
+      <div class="game-name">Memory Cards</div>
+      <div class="game-desc">Find the pairs!</div>
+      <span class="game-badge">Memory</span>
+    </div>
+    <div class="game-card" onclick="launchGame('sentence')">
+      <span class="game-icon">🔤</span>
+      <div class="game-name">Build a Sentence</div>
+      <div class="game-desc">Put words in order</div>
+      <span class="game-badge">Grammar</span>
+    </div>
+    <div class="game-card" onclick="launchGame('spelling')">
+      <span class="game-icon">✏️</span>
+      <div class="game-name">Spell It!</div>
+      <div class="game-desc">Type the correct word</div>
+      <span class="game-badge">Spelling</span>
+    </div>
+    <div class="game-card" onclick="launchGame('whatsthis')">
+      <span class="game-icon">🔍</span>
+      <div class="game-name">What's This?</div>
+      <div class="game-desc">Quick-fire Q&A</div>
+      <span class="game-badge">Speaking</span>
+    </div>
+    <div class="game-card" onclick="launchGame('wordchoose')">
+      <span class="game-icon">🎯</span>
+      <div class="game-name">Pick the Word</div>
+      <div class="game-desc">4-choice vocabulary</div>
+      <span class="game-badge">Vocabulary</span>
+    </div>
+    <div class="game-card" onclick="launchGame('crossword')">
+      <span class="game-icon">📰</span>
+      <div class="game-name">Mini Crossword</div>
+      <div class="game-desc">Fill in the letters</div>
+      <span class="game-badge">Spelling</span>
+    </div>
+  </div>
+</div>
+
+<!-- GRAMMAR SCREEN (all 12 units) -->
+<div id="grammar-screen" class="screen">
+  <div class="units-header">
+    <h2>📘 Grammar Reference</h2>
+    <p>All 12 units · Easy explanations</p>
+  </div>
+  <div id="all-grammar-content"></div>
+</div>
+
+<!-- PHONICS SCREEN -->
+<div id="phonics-screen" class="screen">
+  <div class="units-header">
+    <h2>🔤 Sounds & Spelling</h2>
+    <p>Monty's phonics for all 12 units</p>
+  </div>
+  <div id="all-phonics-content"></div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quiz-screen" class="screen">
+  <div class="units-header">
+    <h2>📝 Big Quiz!</h2>
+    <p>Test everything you've learned</p>
+  </div>
+  <div id="quiz-container"></div>
+</div>
+
+<!-- PROGRESS SCREEN -->
+<div id="progress" class="screen progress-screen">
+  <div class="prog-summary">
+    <div>Total Stars</div>
+    <div class="big-score">⭐ <span id="prog-stars">0</span></div>
+    <div style="font-size:.85rem;opacity:.85;margin-top:4px">Keep going, you're amazing!</div>
+  </div>
+  <div id="prog-units"></div>
+</div>
+
+<!-- GAME MODAL -->
+<div id="game-modal">
+  <div class="game-window">
+    <div class="game-header">
+      <span id="game-modal-title" style="font-weight:800;font-size:1rem;">Game</span>
+      <button class="close-game" onclick="closeGame()">✕</button>
+    </div>
+    <div class="game-body" id="game-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ==================== DATA ====================
+const UNITS = [
+  {
+    id:1, title:"Hello!", topic:"Greetings & Numbers",
+    color1:"#e8174b", color2:"#ff6b9d",
+    vocab:[
+      {w:"Mr Star", e:"👨‍🦱", hint:"character"}, {w:"Mrs Star", e:"👩", hint:"character"},
+      {w:"Stella", e:"👧", hint:"character"}, {w:"Simon", e:"👦", hint:"character"},
+      {w:"Suzy", e:"👶", hint:"character"}, {w:"Marie", e:"👩‍🔬", hint:"character"},
+      {w:"Maskman", e:"🦸", hint:"character"}, {w:"Monty", e:"🐭", hint:"character"},
+      {w:"Meera", e:"👦", hint:"character"},
+      {w:"one", e:"1️⃣", hint:"number"}, {w:"two", e:"2️⃣", hint:"number"},
+      {w:"three", e:"3️⃣", hint:"number"}, {w:"four", e:"4️⃣", hint:"number"},
+      {w:"five", e:"5️⃣", hint:"number"}, {w:"six", e:"6️⃣", hint:"number"},
+      {w:"seven", e:"7️⃣", hint:"number"}, {w:"eight", e:"8️⃣", hint:"number"},
+      {w:"nine", e:"9️⃣", hint:"number"}, {w:"ten", e:"🔟", hint:"number"},
+      {w:"blue", e:"🔵", hint:"colour"}, {w:"green", e:"💚", hint:"colour"},
+      {w:"pink", e:"🩷", hint:"colour"}, {w:"purple", e:"💜", hint:"colour"},
+      {w:"red", e:"🔴", hint:"colour"}, {w:"orange", e:"🟠", hint:"colour"},
+      {w:"yellow", e:"💛", hint:"colour"}, {w:"rainbow", e:"🌈", hint:"colour"},
+    ],
+    grammar:{
+      title:"Unit 1 Grammar",
+      items:[
+        {q:"What's your name?", a:"I'm Stella.", note:"what's = what is · I'm = I am"},
+        {q:"How old are you?", a:"I'm five.", note:"Use a NUMBER with 'I'm'"},
+        {q:"Hello!", a:"Hello! / Goodbye!", note:"Greetings"},
+      ],
+      rules:["Use I'M + name/number", "What's your name? → I'm (Stella).", "How old are you? → I'm (five)."],
+      contractions:["what's = what is","I'm = I am"]
+    },
+    phonics:{sound:"r", words:["red","robot","rainbow"], twister:"A red robot on a rainbow"},
+    speak:[
+      {p:"Hello! What's your name?", r:"I'm Stella."}, {p:"How old are you?", r:"I'm seven."},
+      {p:"Goodbye!", r:"Goodbye!"}, {p:"What colour is this?", r:"It's red!"},
+    ],
+    quiz:[
+      {q:"What's your name? ___", opts:["I'm Stella.","You're Stella.","He's Stella.","We're Stella."], ans:0},
+      {q:"How old are you? ___ six.", opts:["You're","He's","I'm","She's"], ans:2},
+      {q:"Which is a colour?", opts:["Simon","table","red","seven"], ans:2},
+      {q:"'What's' means...", opts:["what are","what is","how is","who is"], ans:1},
+      {q:"Hello! I'm ___", opts:["five","Stella","blue","one"], ans:1},
+    ]
+  },
+  {
+    id:2, title:"My School", topic:"School objects & Questions",
+    color1:"#1e90ff", color2:"#00c6fb",
+    vocab:[
+      {w:"book", e:"📚", hint:"school"}, {w:"chair", e:"🪑", hint:"school"},
+      {w:"eraser", e:"🧹", hint:"school"}, {w:"pen", e:"🖊️", hint:"school"},
+      {w:"pencil", e:"✏️", hint:"school"}, {w:"table", e:"🪑", hint:"school"},
+      {w:"Alex", e:"👦", hint:"character"}, {w:"Lenny", e:"👦", hint:"character"},
+    ],
+    grammar:{
+      title:"Unit 2 Grammar",
+      items:[
+        {q:"Who's that?", a:"That's Alex.", note:"who's = who is · that's = that is"},
+        {q:"How old is he/she?", a:"He's/She's seven.", note:"he's = he is · she's = she is"},
+        {q:"Is he/she ...?", a:"Yes, he/she is. / No, he/she isn't.", note:"isn't = is not"},
+        {q:"How are you?", a:"I'm fine, thank you.", note:""},
+      ],
+      rules:["Who's that? → That's (Alex).","How old is he? → He's (seven).","Isn't = is not"],
+      contractions:["who's = who is","that's = that is","he's = he is","she's = she is","isn't = is not"]
+    },
+    phonics:{sound:"p / b", words:["pen","bag","purple","bike","pencil","book"], twister:"A purple pen in a big bag"},
+    speak:[
+      {p:"Who's that?", r:"That's Alex."}, {p:"How old is he?", r:"He's seven."},
+      {p:"Is he nine?", r:"No, he isn't!"}, {p:"How are you?", r:"I'm fine, thank you."},
+    ],
+    quiz:[
+      {q:"Who's that? ___ Alex.", opts:["I'm","That's","He's","She's"], ans:1},
+      {q:"How old is she? ___ six.", opts:["I'm","That's","She's","They're"], ans:2},
+      {q:"Is he seven? Yes, ___ ___.", opts:["he is","she is","I am","you are"], ans:0},
+      {q:"'Isn't' means...", opts:["is not","is now","is nice","is new"], ans:0},
+      {q:"Which is a school object?", opts:["brother","pen","blue","happy"], ans:1},
+    ]
+  },
+  {
+    id:3, title:"Favourite Toys", topic:"Toys & Prepositions of place",
+    color1:"#9333ea", color2:"#c084fc",
+    vocab:[
+      {w:"ball", e:"⚽", hint:"toy"}, {w:"bike", e:"🚲", hint:"toy"},
+      {w:"car", e:"🚗", hint:"toy"}, {w:"computer", e:"💻", hint:"toy"},
+      {w:"doll", e:"🪆", hint:"toy"}, {w:"drum", e:"🥁", hint:"toy"},
+      {w:"train", e:"🚂", hint:"toy"},
+      {w:"black", e:"⬛", hint:"colour"}, {w:"brown", e:"🟫", hint:"colour"},
+      {w:"grey", e:"🩶", hint:"colour"}, {w:"white", e:"⬜", hint:"colour"},
+      {w:"in", e:"📦", hint:"preposition"}, {w:"on", e:"⬆️", hint:"preposition"},
+      {w:"under", e:"⬇️", hint:"preposition"}, {w:"next to", e:"↔️", hint:"preposition"},
+    ],
+    grammar:{
+      title:"Unit 3 Grammar",
+      items:[
+        {q:"Where's your ball?", a:"It's next to the chair.", note:"where's = where is · it's = it is"},
+        {q:"Is your ball in your bag?", a:"Yes, it is. / No, it isn't.", note:""},
+        {q:"My favourite toy's a drum.", a:"What's your favourite toy?", note:"toy's = toy is"},
+      ],
+      rules:["Where's your (ball)? → It's (under) the (table).","In / on / under / next to","Is the (ball) on the (chair)? Yes, it is. No, it isn't."],
+      contractions:["where's = where is","it's = it is","isn't = is not"]
+    },
+    phonics:{sound:"t / d", words:["toy","doll","table","drum","train","dog"], twister:"Two toys on a table"},
+    speak:[
+      {p:"Where's your ball?", r:"It's under the table."}, {p:"Is the car on the table?", r:"Yes, it is."},
+      {p:"What's your favourite toy?", r:"My favourite toy's a drum."}, {p:"Is the doll in the bag?", r:"No, it isn't."},
+    ],
+    quiz:[
+      {q:"Where's your ball? ___ under the table.", opts:["I'm","It's","He's","They're"], ans:1},
+      {q:"Is the car on the chair? No, ___ ___.", opts:["it is","it isn't","I am","she is"], ans:1},
+      {q:"Which is a preposition?", opts:["ball","blue","under","Lenny"], ans:2},
+      {q:"'Where's' means...", opts:["where are","what is","where is","who is"], ans:2},
+      {q:"Which is a toy?", opts:["table","eraser","drum","pencil"], ans:2},
+    ]
+  },
+  {
+    id:4, title:"My Family", topic:"Family & Adjectives",
+    color1:"#f97316", color2:"#fbbf24",
+    vocab:[
+      {w:"brother", e:"👦", hint:"family"}, {w:"sister", e:"👧", hint:"family"},
+      {w:"father", e:"👨", hint:"family"}, {w:"mother", e:"👩", hint:"family"},
+      {w:"grandfather", e:"👴", hint:"family"}, {w:"grandmother", e:"👵", hint:"family"},
+      {w:"beautiful", e:"😍", hint:"adjective"}, {w:"happy", e:"😊", hint:"adjective"},
+      {w:"sad", e:"😢", hint:"adjective"}, {w:"old", e:"🧓", hint:"adjective"},
+      {w:"young", e:"👶", hint:"adjective"},
+    ],
+    grammar:{
+      title:"Unit 4 Grammar",
+      items:[
+        {q:"He's happy.", a:"He isn't ugly.", note:"Use is/isn't + adjective"},
+        {q:"She's beautiful.", a:"She isn't sad.", note:"he's = he is / she's = she is"},
+        {q:"We're young.", a:"We aren't old.", note:"we're = we are"},
+      ],
+      rules:["He's / She's + adjective","He/She isn't + adjective (negative)","We're (young). / They're (happy)."],
+      contractions:["he's = he is","she's = she is","isn't = is not","we're = we are"]
+    },
+    phonics:{sound:"a (short)", words:["hat","cat","bag","hand","happy","apple"], twister:"A happy cat in a hat"},
+    speak:[
+      {p:"He's happy!", r:"He's happy!"}, {p:"She isn't sad.", r:"She isn't sad."},
+      {p:"We're young!", r:"We're young!"}, {p:"Is she old?", r:"No, she isn't."},
+    ],
+    quiz:[
+      {q:"He ___ happy.", opts:["am","is","are","be"], ans:1},
+      {q:"She ___ sad. (negative)", opts:["isn't","aren't","am not","is"], ans:0},
+      {q:"Which is an adjective?", opts:["table","sister","happy","under"], ans:2},
+      {q:"We're young = We ___ young.", opts:["is","am","are","be"], ans:2},
+      {q:"Who is a family member?", opts:["pen","grandfather","ball","red"], ans:1},
+    ]
+  },
+  {
+    id:5, title:"Our Pets", topic:"Animals & Adjectives",
+    color1:"#22c55e", color2:"#86efac",
+    vocab:[
+      {w:"bird", e:"🐦", hint:"animal"}, {w:"cat", e:"🐱", hint:"animal"},
+      {w:"dog", e:"🐶", hint:"animal"}, {w:"fish", e:"🐟", hint:"animal"},
+      {w:"horse", e:"🐴", hint:"animal"}, {w:"mouse", e:"🐭", hint:"animal"},
+      {w:"big", e:"🐘", hint:"adjective"}, {w:"small", e:"🐜", hint:"adjective"},
+      {w:"clean", e:"✨", hint:"adjective"}, {w:"dirty", e:"🪣", hint:"adjective"},
+      {w:"long", e:"📏", hint:"adjective"}, {w:"short", e:"📐", hint:"adjective"},
+    ],
+    grammar:{
+      title:"Unit 5 Grammar",
+      items:[
+        {q:"It's (long).", a:"They're (dirty).", note:"it's = it is · they're = they are"},
+        {q:"Is it clean?", a:"Yes, it is. / No, it isn't.", note:""},
+        {q:"Are they big?", a:"Yes, they are. / No, they aren't.", note:"aren't = are not"},
+      ],
+      rules:["It's + adjective (for one animal)","They're + adjective (for two or more)","Are they (big)? → Yes, they are."],
+      contractions:["it's = it is","they're = they are","aren't = are not","isn't = is not"]
+    },
+    phonics:{sound:"e (short)", words:["hen","red","pen","egg","elephant","bed"], twister:"A hen in a bed with a red egg"},
+    speak:[
+      {p:"It's a cat!", r:"It's a cat!"}, {p:"Is it big?", r:"Yes, it is!"},
+      {p:"They're dirty.", r:"They're dirty."}, {p:"Are they small?", r:"No, they aren't."},
+    ],
+    quiz:[
+      {q:"___ small. (one cat)", opts:["They're","We're","It's","She's"], ans:2},
+      {q:"___ dirty. (two dogs)", opts:["It's","He's","They're","I'm"], ans:2},
+      {q:"Are they big? Yes, ___ ___.", opts:["it is","they are","he is","she is"], ans:1},
+      {q:"Which is an animal?", opts:["table","eraser","horse","happy"], ans:2},
+      {q:"'Aren't' means...", opts:["are not","is not","am not","were not"], ans:0},
+    ]
+  },
+  {
+    id:6, title:"My Face", topic:"Body & Have got",
+    color1:"#0d9488", color2:"#2dd4bf",
+    vocab:[
+      {w:"ears", e:"👂", hint:"face"}, {w:"eyes", e:"👀", hint:"face"},
+      {w:"face", e:"😊", hint:"face"}, {w:"hair", e:"💇", hint:"face"},
+      {w:"head", e:"🧠", hint:"body"}, {w:"knees", e:"🦵", hint:"body"},
+      {w:"mouth", e:"👄", hint:"face"}, {w:"nose", e:"👃", hint:"face"},
+      {w:"shoulders", e:"🦱", hint:"body"}, {w:"toes", e:"🦶", hint:"body"},
+      {w:"tooth/teeth", e:"🦷", hint:"body"},
+    ],
+    grammar:{
+      title:"Unit 6 Grammar: Have got",
+      items:[
+        {q:"I've got (big ears).", a:"I haven't got small ears.", note:"I've = I have · haven't = have not"},
+        {q:"Have you got (big ears)?", a:"Yes, I have. / No, I haven't.", note:""},
+        {q:"We've got (black hair).", a:"We haven't got white hair.", note:"we've = we have"},
+      ],
+      rules:["I've got / You've got / We've got + noun","Haven't got = negative","Have you got...? → Yes, I have. / No, I haven't."],
+      contractions:["I've = I have","we've = we have","haven't = have not"]
+    },
+    phonics:{sound:"t / th", words:["tooth","three","thirteen","think","tooth","thick"], twister:"Three thick teeth"},
+    speak:[
+      {p:"Have you got big eyes?", r:"Yes, I have!"}, {p:"Have you got long hair?", r:"No, I haven't."},
+      {p:"I've got a small nose.", r:"I've got a small nose."}, {p:"We've got white teeth!", r:"We've got white teeth!"},
+    ],
+    quiz:[
+      {q:"I ___ got blue eyes.", opts:["have","am","is","are"], ans:0},
+      {q:"Have you got a big nose? No, I ___.", opts:["have","hasn't","haven't","aren't"], ans:2},
+      {q:"___ = I have", opts:["I'm","I've","I'd","I'll"], ans:1},
+      {q:"Which is part of the face?", opts:["train","nose","fish","happy"], ans:1},
+      {q:"'Haven't' means...", opts:["have not","has not","had not","having"], ans:0},
+    ]
+  },
+  {
+    id:7, title:"Wild Animals", topic:"Wild animals & Have got",
+    color1:"#16a34a", color2:"#4ade80",
+    vocab:[
+      {w:"bear", e:"🐻", hint:"wild"}, {w:"crocodile", e:"🐊", hint:"wild"},
+      {w:"elephant", e:"🐘", hint:"wild"}, {w:"giraffe", e:"🦒", hint:"wild"},
+      {w:"hippo", e:"🦛", hint:"wild"}, {w:"monkey", e:"🐒", hint:"wild"},
+      {w:"snake", e:"🐍", hint:"wild"}, {w:"tiger", e:"🐯", hint:"wild"},
+      {w:"arm", e:"💪", hint:"body"}, {w:"foot/feet", e:"🦶", hint:"body"},
+      {w:"hand", e:"🤚", hint:"body"}, {w:"leg", e:"🦵", hint:"body"},
+      {w:"tail", e:"🐾", hint:"body"},
+    ],
+    grammar:{
+      title:"Unit 7 Grammar: They've got",
+      items:[
+        {q:"They've got short legs.", a:"They haven't got big heads.", note:"they've = they have"},
+        {q:"Let's do the crocodile smile!", a:"Let's = Let us", note:""},
+      ],
+      rules:["They've got + body part (for describing animals)","They haven't got + noun (negative)","Let's = Let us → suggestion"],
+      contractions:["they've = they have","haven't = have not","let's = let us"]
+    },
+    phonics:{sound:"i (short)", words:["river","hippo","big","six","milk","fish"], twister:"Six big hippos in the river"},
+    speak:[
+      {p:"They've got big ears!", r:"They've got big ears!"}, {p:"Has a giraffe got a long neck?", r:"Yes, it has!"},
+      {p:"They haven't got short tails.", r:"They haven't got short tails."}, {p:"Let's do the crocodile smile!", r:"Let's do the crocodile smile!"},
+    ],
+    quiz:[
+      {q:"___ got long tails. (tigers)", opts:["It's","They've","She's","I've"], ans:1},
+      {q:"A snake hasn't got ___.", opts:["a tail","legs","a mouth","eyes"], ans:1},
+      {q:"Let's = Let ___", opts:["him","her","us","them"], ans:2},
+      {q:"Which is a wild animal?", opts:["fish","pen","giraffe","clean"], ans:2},
+      {q:"They ___ got short legs.", opts:["has","have","is","are"], ans:1},
+    ]
+  },
+  {
+    id:8, title:"My Clothes", topic:"Clothes & He/She has got",
+    color1:"#ec4899", color2:"#f9a8d4",
+    vocab:[
+      {w:"cap", e:"🧢", hint:"clothes"}, {w:"jacket", e:"🧥", hint:"clothes"},
+      {w:"shoes", e:"👟", hint:"clothes"}, {w:"shorts", e:"🩳", hint:"clothes"},
+      {w:"skirt", e:"👗", hint:"clothes"}, {w:"socks", e:"🧦", hint:"clothes"},
+      {w:"trousers", e:"👖", hint:"clothes"}, {w:"T-shirt", e:"👕", hint:"clothes"},
+    ],
+    grammar:{
+      title:"Unit 8 Grammar: He/She has got",
+      items:[
+        {q:"She's got a blue cap.", a:"He hasn't got red shorts.", note:"hasn't = has not"},
+        {q:"Has he got a purple ball?", a:"Yes, he has. / No, he hasn't.", note:""},
+      ],
+      rules:["He's got / She's got + noun","He/She hasn't got + noun (negative)","Has he/she got...? → Yes/No"],
+      contractions:["hasn't = has not","he's = he is / he has"]
+    },
+    phonics:{sound:"s / sh", words:["spider","shoe","shorts","shirt","socks","snake"], twister:"She sells shiny shoes"},
+    speak:[
+      {p:"She's got a blue jacket!", r:"She's got a blue jacket!"}, {p:"Has he got red shoes?", r:"Yes, he has!"},
+      {p:"He hasn't got a cap.", r:"He hasn't got a cap."}, {p:"What colour are your socks?", r:"They're white!"},
+    ],
+    quiz:[
+      {q:"She ___ got a pink skirt.", opts:["have","am","has","is"], ans:2},
+      {q:"Has he got blue trousers? No, ___ ___.", opts:["he has","he hasn't","she has","she hasn't"], ans:1},
+      {q:"'Hasn't' means...", opts:["has not","have not","had not","is not"], ans:0},
+      {q:"Which is clothing?", opts:["elephant","happy","jacket","blue"], ans:2},
+      {q:"He ___ got (= he has not)", opts:["haven't","hasn't","isn't","aren't"], ans:1},
+    ]
+  },
+  {
+    id:9, title:"Fun Time!", topic:"Sports & Can/Can't",
+    color1:"#2563eb", color2:"#60a5fa",
+    vocab:[
+      {w:"play basketball", e:"🏀", hint:"sport"}, {w:"play football", e:"⚽", hint:"sport"},
+      {w:"play tennis", e:"🎾", hint:"sport"}, {w:"play guitar", e:"🎸", hint:"music"},
+      {w:"play piano", e:"🎹", hint:"music"}, {w:"ride a bike", e:"🚲", hint:"activity"},
+      {w:"swim", e:"🏊", hint:"activity"}, {w:"sing", e:"🎤", hint:"activity"},
+    ],
+    grammar:{
+      title:"Unit 9 Grammar: Can / Can't",
+      items:[
+        {q:"I / You can swim.", a:"She can't sing.", note:"can't = cannot"},
+        {q:"Can you play football?", a:"Yes, I can. / No, I can't.", note:""},
+        {q:"He/She can't (sing).", a:"Can he/she play football?", note:""},
+      ],
+      rules:["Can + verb (no -s, no -ing!)","Can't = cannot (negative)","Can you...? → Yes, I can. / No, I can't."],
+      contractions:["can't = cannot"]
+    },
+    phonics:{sound:"ay / ai / ey", words:["day","snail","grey","play","rain","they"], twister:"A grey snail plays in the rain"},
+    speak:[
+      {p:"Can you swim?", r:"Yes, I can!"}, {p:"Can she play guitar?", r:"No, she can't."},
+      {p:"I can ride a bike!", r:"I can ride a bike!"}, {p:"Can he play tennis?", r:"Yes, he can!"},
+    ],
+    quiz:[
+      {q:"___ you swim? (question)", opts:["Do","Have","Can","Are"], ans:2},
+      {q:"She ___ sing. (negative)", opts:["can","can't","isn't","aren't"], ans:1},
+      {q:"Can he play football? Yes, ___ ___.", opts:["he can","he can't","she can","I can"], ans:0},
+      {q:"'Can't' means...", opts:["can not","is not","are not","do not"], ans:0},
+      {q:"Which is a sport?", opts:["jacket","play tennis","happy","tooth"], ans:1},
+    ]
+  },
+  {
+    id:10, title:"At the Funfair", topic:"Transport & Present Continuous",
+    color1:"#d97706", color2:"#fbbf24",
+    vocab:[
+      {w:"boat", e:"⛵", hint:"transport"}, {w:"bus", e:"🚌", hint:"transport"},
+      {w:"helicopter", e:"🚁", hint:"transport"}, {w:"lorry", e:"🚛", hint:"transport"},
+      {w:"motorbike", e:"🏍️", hint:"transport"}, {w:"plane", e:"✈️", hint:"transport"},
+    ],
+    grammar:{
+      title:"Unit 10 Grammar: Present Continuous",
+      items:[
+        {q:"What are you doing?", a:"I'm (riding a bike).", note:"I'm = I am · verb + -ing"},
+        {q:"Are you (driving a car)?", a:"Yes, I am. / No, I'm not.", note:"I'm not = I am not"},
+        {q:"They're flying.", a:"They aren't swimming.", note:"they're = they are"},
+      ],
+      rules:["am/is/are + verb+-ing = Present Continuous","Use for actions happening NOW","ride→riding · swim→swimming · run→running"],
+      contractions:["I'm not = I am not","aren't = are not","they're = they are"]
+    },
+    phonics:{sound:"ng", words:["sing","ring","jumping","flying","running","swimming"], twister:"A king is singing on a swing"},
+    speak:[
+      {p:"What are you doing?", r:"I'm flying a plane!"}, {p:"Are you riding a bike?", r:"Yes, I am!"},
+      {p:"They're swimming.", r:"They're swimming."}, {p:"I'm not driving a lorry.", r:"I'm not driving a lorry."},
+    ],
+    quiz:[
+      {q:"What are you ___? I'm riding.", opts:["do","does","doing","did"], ans:2},
+      {q:"___ riding a bike. (I)", opts:["I are","I'm","She's","They're"], ans:1},
+      {q:"Are you flying? No, ___ ___.", opts:["I'm not","I'm","you are","she is"], ans:0},
+      {q:"Which is transport?", opts:["cap","song","helicopter","nose"], ans:2},
+      {q:"swim → swimming: we double the ___ before -ing", opts:["vowel","consonant","noun","adjective"], ans:1},
+    ]
+  },
+  {
+    id:11, title:"Our House", topic:"Rooms & Present Continuous",
+    color1:"#7c3aed", color2:"#a78bfa",
+    vocab:[
+      {w:"bathroom", e:"🛁", hint:"room"}, {w:"bedroom", e:"🛏️", hint:"room"},
+      {w:"dining room", e:"🍽️", hint:"room"}, {w:"hall", e:"🚪", hint:"room"},
+      {w:"kitchen", e:"🍳", hint:"room"}, {w:"living room", e:"🛋️", hint:"room"},
+    ],
+    grammar:{
+      title:"Unit 11 Grammar: What's he/she doing?",
+      items:[
+        {q:"What's he doing?", a:"He's drawing a picture.", note:"what's = what is"},
+        {q:"What's she doing?", a:"She's reading a book.", note:""},
+        {q:"They're watching TV.", a:"They aren't eating.", note:""},
+      ],
+      rules:["What's he/she doing? → He's/She's + verb-ing","Use rooms: in the kitchen / in the bedroom","He's / She's = He is / She is + -ing action"],
+      contractions:["what's = what is","he's = he is","she's = she is","they're = they are"]
+    },
+    phonics:{sound:"m", words:["mouse","mouth","mum","milk","monkey","room"], twister:"A mouse in my mother's room"},
+    speak:[
+      {p:"What's he doing?", r:"He's reading a book."}, {p:"Where's your bedroom?", r:"It's upstairs!"},
+      {p:"She's cooking in the kitchen.", r:"She's cooking in the kitchen."}, {p:"What's she doing?", r:"She's watching TV."},
+    ],
+    quiz:[
+      {q:"What's ___ doing? (she)", opts:["he","she","they","I"], ans:1},
+      {q:"He ___ reading. (present continuous)", opts:["is","are","am","be"], ans:0},
+      {q:"Which is a room?", opts:["jacket","kitchen","snake","sing"], ans:1},
+      {q:"She's drawing = She ___ drawing.", opts:["are","am","is","be"], ans:2},
+      {q:"'What's' means...", opts:["what are","what is","how is","who is"], ans:1},
+    ]
+  },
+  {
+    id:12, title:"Party Time!", topic:"Food & Present Simple",
+    color1:"#dc2626", color2:"#fb923c",
+    vocab:[
+      {w:"apple", e:"🍎", hint:"food"}, {w:"banana", e:"🍌", hint:"food"},
+      {w:"burger", e:"🍔", hint:"food"}, {w:"cake", e:"🎂", hint:"food"},
+      {w:"chocolate", e:"🍫", hint:"food"}, {w:"fish", e:"🐟", hint:"food"},
+      {w:"ice cream", e:"🍦", hint:"food"},
+    ],
+    grammar:{
+      title:"Unit 12 Grammar: Present Simple (like)",
+      items:[
+        {q:"I like (apples).", a:"I don't like (cake).", note:"don't = do not"},
+        {q:"Do you like (fish)?", a:"Yes, I do. / No, I don't.", note:""},
+      ],
+      rules:["I like + noun (Present Simple)","I don't like + noun (negative)","Do you like...? → Yes, I do. / No, I don't."],
+      contractions:["don't = do not"]
+    },
+    phonics:{sound:"Review", words:["r/b/p/d/t/a/e/th/i/sh/s/ng/m"], twister:"Review all sounds: r·b·p·d·t·a·e·th·i·sh·s·ng·m"},
+    speak:[
+      {p:"Do you like cake?", r:"Yes, I do!"}, {p:"Do you like fish?", r:"No, I don't."},
+      {p:"I like ice cream!", r:"I like ice cream!"}, {p:"I don't like burgers.", r:"I don't like burgers."},
+    ],
+    quiz:[
+      {q:"___ you like cake? (question)", opts:["Do","Does","Are","Have"], ans:0},
+      {q:"I don't like fish. 'Don't' means...", opts:["do not","does not","did not","am not"], ans:0},
+      {q:"Do you like apples? Yes, ___ ___.", opts:["I do","I don't","I like","I am"], ans:0},
+      {q:"Which is food?", opts:["bathroom","chocolate","lorry","socks"], ans:1},
+      {q:"I ___ like bananas. (positive)", opts:["don't","like","do","am"], ans:1},
+    ]
+  },
+];
+
+// All vocab pool for games
+const ALL_VOCAB = UNITS.flatMap(u => u.vocab.map(v => ({...v, unit: u.id, unitTitle: u.title})));
+
+// State
+let state = {
+  stars: parseInt(localStorage.getItem('kb1_stars') || '0'),
+  unitProgress: JSON.parse(localStorage.getItem('kb1_progress') || '{}'),
+  currentUnit: null,
+  currentGame: null,
+  gameScore: 0,
+  gameLives: 3,
+  gameQ: 0,
+  quizAnswers: [],
+  matchSelected: null,
+  memFlipped: [],
+  memMatched: [],
+  memCards: [],
+  sentWords: [],
+  sentAnswer: [],
+  speechRec: null,
+  isListening: false,
+};
+
+function saveState() {
+  localStorage.setItem('kb1_stars', state.stars);
+  localStorage.setItem('kb1_progress', JSON.stringify(state.unitProgress));
+  document.getElementById('total-stars').textContent = state.stars;
+  document.getElementById('prog-stars').textContent = state.stars;
+}
+
+// ==================== NAVIGATION ====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('unit-detail').style.display = 'none';
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const map = {home:0,'games-screen':1,'grammar-screen':2,'phonics-screen':3,'quiz-screen':4,'progress':5};
+  const tabs = document.querySelectorAll('.nav-tab');
+  if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+  const s = document.getElementById(id);
+  if (s) s.classList.add('active');
+  if (id === 'grammar-screen') renderAllGrammar();
+  if (id === 'phonics-screen') renderAllPhonics();
+  if (id === 'quiz-screen') renderBigQuiz();
+  if (id === 'progress') renderProgress();
+}
+
+function openUnit(id) {
+  state.currentUnit = id;
+  const u = UNITS.find(u => u.id === id);
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const det = document.getElementById('unit-detail');
+  det.style.display = 'block';
+  det.scrollTop = 0;
+  document.getElementById('unit-detail-title').textContent = `Unit ${u.id}: ${u.title}`;
+  document.getElementById('unit-detail-sub').textContent = u.topic;
+  det.style.setProperty('--uc1', u.color1); det.style.setProperty('--uc2', u.color2);
+  // Reset tabs
+  document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sec-tab')[0].classList.add('active');
+  document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-vocab').classList.add('active');
+  renderVocab(u);
+  renderSpeak(u);
+  renderGrammarUnit(u);
+  renderPhonicsUnit(u);
+  renderUnitQuiz(u);
+}
+
+function closeUnitDetail() {
+  document.getElementById('unit-detail').style.display = 'none';
+  document.getElementById('home').classList.add('active');
+  document.querySelectorAll('.nav-tab')[0].classList.add('active');
+}
+
+function showSection(name) {
+  document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+}
+
+// ==================== UNIT GRID ====================
+function renderUnitGrid() {
+  const grid = document.getElementById('unit-grid');
+  grid.innerHTML = UNITS.map(u => {
+    const prog = state.unitProgress[u.id] || 0;
+    return `<div class="unit-card" onclick="openUnit(${u.id})" style="--c1:${u.color1};--c2:${u.color2}">
+      <div class="unit-num" style="background:linear-gradient(135deg,${u.color1},${u.color2})">${u.id}</div>
+      <div class="unit-title">${u.title}</div>
+      <div class="unit-topic">${u.topic}</div>
+      <div class="unit-progress"><div class="unit-progress-bar" style="width:${prog}%;background:${u.color1}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== VOCAB ====================
+function renderVocab(u) {
+  const c = document.getElementById('sec-vocab');
+  c.innerHTML = `<h3 style="font-size:1rem;color:#666;margin-bottom:12px;font-weight:700">📚 Unit ${u.id} Vocabulary</h3>
+  <div class="vocab-grid">${u.vocab.map(v => `
+    <div class="vocab-card" onclick="speakWord('${v.w}');addStars(1)">
+      <span class="vocab-emoji">${v.e}</span>
+      <div class="vocab-word">${v.w}</div>
+      <div class="vocab-hint">${v.hint}</div>
+    </div>`).join('')}
+  </div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="btn btn-pink" onclick="speakAll(${u.id})">🔊 Listen to All Words</button>
+  </div>`;
+}
+
+async function speakAll(unitId) {
+  const u = UNITS.find(u => u.id === unitId);
+  for (const v of u.vocab) {
+    speakWord(v.w);
+    await new Promise(r => setTimeout(r, 900));
+  }
+  showToast('All words played! ⭐');
+}
+
+// ==================== SPEAK ====================
+function renderSpeak(u) {
+  const c = document.getElementById('sec-speak');
+  c.innerHTML = `<h3 style="font-size:1rem;color:#666;margin-bottom:12px;font-weight:700">🎤 Speaking Practice</h3>
+  ${u.speak.map((s, i) => `
+  <div class="speak-card">
+    <div class="phrase">${s.p}</div>
+    <div class="translation">Say: "${s.r}"</div>
+    <div id="mic-anim-${u.id}-${i}" style="display:none">
+      <div class="mic-anim">🎙️</div>
+      <div style="text-align:center;font-size:.8rem;color:#999">Listening...</div>
+    </div>
+    <div class="speak-btn-row">
+      <button class="btn btn-blue" onclick="speakWord('${s.p}')">🔊 Listen</button>
+      <button class="btn btn-pink" onclick="startSpeaking('${s.r}',${u.id},${i})">🎤 Speak</button>
+    </div>
+    <div id="speak-result-${u.id}-${i}"></div>
+  </div>`).join('')}
+  <div style="padding:12px;background:#fff3cd;border-radius:12px;font-size:0.8rem;color:#856404;margin-top:10px">
+    💡 <b>Tip:</b> Press 🎤 Speak then say the phrase clearly. Scoring uses your microphone.
+  </div>`;
+}
+
+function startSpeaking(expected, unitId, idx) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Speech not supported on this browser 😢');
+    document.getElementById(`speak-result-${unitId}-${idx}`).innerHTML = `<div class="score-bar ok">⚠️ Try Chrome or Edge for speech recognition!</div>`;
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR();
+  rec.lang = 'en-GB'; rec.interimResults = false; rec.maxAlternatives = 3;
+  const micDiv = document.getElementById(`mic-anim-${unitId}-${idx}`);
+  micDiv.style.display = 'block';
+  rec.onresult = (e) => {
+    micDiv.style.display = 'none';
+    const said = Array.from(e.results[0]).map(r => r.transcript.toLowerCase().trim());
+    const exp = expected.toLowerCase().replace(/[.,!?']/g,'').trim();
+    const best = said.map(s => s.replace(/[.,!?']/g,'')).find(s => {
+      const sl = s.split(' '), el = exp.split(' ');
+      const matches = el.filter(w => sl.includes(w)).length;
+      return matches / el.length > 0.6;
+    });
+    const score = best ? 100 : (said.some(s => s.includes(exp.split(' ')[0])) ? 60 : 30);
+    const res = document.getElementById(`speak-result-${unitId}-${idx}`);
+    if (score >= 80) {
+      res.innerHTML = `<div class="score-bar good">✅ Excellent! Score: ${score}/100 🌟</div>`;
+      addStars(2); launchConfetti();
+    } else if (score >= 50) {
+      res.innerHTML = `<div class="score-bar ok">👍 Good try! Score: ${score}/100. You said: "${said[0]}"</div>`;
+      addStars(1);
+    } else {
+      res.innerHTML = `<div class="score-bar bad">Try again! Say: "${expected}" · You said: "${said[0]}"</div>`;
+    }
+    updateUnitProgress(unitId);
+  };
+  rec.onerror = () => { micDiv.style.display = 'none'; showToast('Could not hear. Try again!'); };
+  rec.start();
+}
+
+// ==================== GRAMMAR (UNIT) ====================
+function renderGrammarUnit(u) {
+  const c = document.getElementById('sec-grammar');
+  c.innerHTML = buildGrammarCard(u);
+}
+
+function buildGrammarCard(u) {
+  const g = u.grammar;
+  return `<div class="grammar-card">
+    <div class="g-title">📘 ${g.title}</div>
+    <table class="grammar-table">
+      <tr><td style="background:#fce7f3;font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Question / Statement</td>
+          <td style="background:#e0f2fe;font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Answer / Response</td></tr>
+      ${g.items.map(i => `<tr><td class="q-col">${i.q}</td><td class="a-col">${i.a}</td></tr>
+        ${i.note ? `<tr><td colspan="2" style="font-size:.75rem;color:#888;font-style:italic;padding:4px 12px">→ ${i.note}</td></tr>` : ''}`).join('')}
+    </table>
+    <div class="grammar-rule">📌 Rules:<br>${g.rules.map(r => `• ${r}`).join('<br>')}</div>
+    <div style="margin-top:10px">
+      <span style="font-size:.78rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px">Contractions: </span>
+      ${g.contractions.map(c => `<span class="contraction-box">${c}</span>`).join('')}
+    </div>
+    <button class="btn btn-outline" style="margin-top:14px" onclick="speakWord('${g.items[0].q}')">🔊 Hear Example</button>
+  </div>`;
+}
+
+// ==================== GRAMMAR SCREEN (ALL) ====================
+function renderAllGrammar() {
+  const c = document.getElementById('all-grammar-content');
+  if (c.innerHTML) return;
+  c.innerHTML = UNITS.map(u => `
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,${u.color1},${u.color2});color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem">${u.id}</div>
+        <span style="font-weight:800;font-size:1rem">${u.title}</span>
+        <span style="font-size:.8rem;color:#888">· ${u.topic}</span>
+      </div>
+      ${buildGrammarCard(u)}
+    </div>`).join('');
+}
+
+// ==================== PHONICS (UNIT) ====================
+function renderPhonicsUnit(u) {
+  const c = document.getElementById('sec-phonics');
+  c.innerHTML = buildPhonicsCard(u);
+}
+
+function buildPhonicsCard(u) {
+  const p = u.phonics;
+  const words = p.words.filter(w => typeof w === 'string' && !w.includes('/'));
+  return `<div class="phonics-hero">
+    <div style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-bottom:6px">Monty's Sound</div>
+    <div class="sound-letter">'${p.sound}'</div>
+    <div class="tongue-twister">"${p.twister}"</div>
+    <div class="phonics-words">
+      ${words.map(w => {
+        const idx = w.toLowerCase().indexOf(p.sound.split('/')[0].trim().toLowerCase());
+        const hi = idx >= 0 ? w.slice(0,idx) + '<span class="highlight">' + w.slice(idx,idx+p.sound.split('/')[0].trim().length) + '</span>' + w.slice(idx+p.sound.split('/')[0].trim().length) : w;
+        return `<span class="phonics-word-chip" onclick="speakWord('${w}')">${hi}</span>`;
+      }).join('')}
+    </div>
+    <button class="sound-btn" onclick="speakWord('${p.twister}')">🔊 Say the tongue twister!</button>
+  </div>`;
+}
+
+// ==================== PHONICS SCREEN (ALL) ====================
+function renderAllPhonics() {
+  const c = document.getElementById('all-phonics-content');
+  if (c.innerHTML) return;
+  c.innerHTML = UNITS.map(u => `
+    <div style="margin-bottom:14px">
+      <div style="font-weight:800;margin-bottom:6px;color:#666;font-size:.85rem">UNIT ${u.id} · ${u.title}</div>
+      ${buildPhonicsCard(u)}
+    </div>`).join('');
+}
+
+// ==================== UNIT QUIZ ====================
+function renderUnitQuiz(u) {
+  const c = document.getElementById('sec-unit-quiz');
+  state.quizAnswers = new Array(u.quiz.length).fill(null);
+  c.innerHTML = `<h3 style="font-size:1rem;color:#666;margin-bottom:12px;font-weight:700">📝 Unit ${u.id} Quiz</h3>
+  ${u.quiz.map((q, qi) => `
+    <div class="quiz-card" id="uq-${qi}">
+      <div class="q-num">Question ${qi+1} of ${u.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,oi) => `<button class="quiz-opt" onclick="answerUnitQ(${qi},${oi},${q.ans},${u.id})">${o}</button>`).join('')}
+      </div>
+    </div>`).join('')}
+  <div class="quiz-actions">
+    <button class="btn btn-pink" onclick="submitUnitQuiz(${u.id})">✅ Check Answers</button>
+    <button class="btn btn-outline" onclick="resetUnitQuiz(${u.id})">🔄 Reset</button>
+  </div>
+  <div id="unit-quiz-result-${u.id}"></div>`;
+}
+
+function answerUnitQ(qi, oi, correct, uid) {
+  state.quizAnswers[qi] = oi;
+  const card = document.getElementById(`uq-${qi}`);
+  card.querySelectorAll('.quiz-opt').forEach((b,i) => {
+    b.classList.remove('selected','correct','incorrect');
+    if (i === oi) b.classList.add('selected');
+  });
+}
+
+function submitUnitQuiz(uid) {
+  const u = UNITS.find(u => u.id === uid);
+  let correct = 0;
+  u.quiz.forEach((q, qi) => {
+    const card = document.getElementById(`uq-${qi}`);
+    const opts = card.querySelectorAll('.quiz-opt');
+    opts.forEach((b,i) => { b.classList.remove('selected','correct','incorrect'); b.disabled = true; });
+    if (state.quizAnswers[qi] !== null) {
+      if (state.quizAnswers[qi] === q.ans) { opts[q.ans].classList.add('correct'); correct++; }
+      else { opts[state.quizAnswers[qi]].classList.add('incorrect'); opts[q.ans].classList.add('correct'); }
+    } else { opts[q.ans].classList.add('correct'); }
+  });
+  const pct = Math.round(correct / u.quiz.length * 100);
+  const stars = correct >= 4 ? '⭐⭐⭐' : correct >= 3 ? '⭐⭐' : '⭐';
+  document.getElementById(`unit-quiz-result-${uid}`).innerHTML = `
+    <div class="quiz-results">
+      <div class="result-score">${correct}/${u.quiz.length}</div>
+      <div class="stars">${stars}</div>
+      <div class="result-label">${pct}% · ${pct>=80?'Excellent!':pct>=60?'Good job!':'Keep practising!'}</div>
+    </div>`;
+  addStars(correct * 2);
+  updateUnitProgress(uid, pct);
+  if (pct >= 80) launchConfetti();
+}
+
+function resetUnitQuiz(uid) {
+  const u = UNITS.find(u => u.id === uid);
+  renderUnitQuiz(u);
+}
+
+// ==================== BIG QUIZ ====================
+function renderBigQuiz() {
+  const c = document.getElementById('quiz-container');
+  if (c.innerHTML) return;
+  // Build 30-question quiz from all units
+  const allQ = UNITS.flatMap(u => u.quiz.map(q => ({...q, unitId:u.id, unitTitle:u.title})));
+  const selected = shuffle(allQ).slice(0,30);
+  state.bigQuizAnswers = new Array(selected.length).fill(null);
+  state.bigQuizData = selected;
+  c.innerHTML = selected.map((q,i) => `
+    <div class="quiz-card" id="bq-${i}">
+      <div class="q-num" style="color:#999">Unit ${q.unitId}: ${q.unitTitle} · Q${i+1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,oi) => `<button class="quiz-opt" onclick="answerBigQ(${i},${oi})">${o}</button>`).join('')}
+      </div>
+    </div>`).join('') + `
+  <div class="quiz-actions">
+    <button class="btn btn-pink" onclick="submitBigQuiz()">✅ Submit Quiz</button>
+    <button class="btn btn-outline" onclick="document.getElementById('quiz-container').innerHTML='';renderBigQuiz()">🔄 New Quiz</button>
+  </div>
+  <div id="big-quiz-result"></div>`;
+}
+
+function answerBigQ(qi, oi) {
+  state.bigQuizAnswers[qi] = oi;
+  const card = document.getElementById(`bq-${qi}`);
+  card.querySelectorAll('.quiz-opt').forEach((b,i) => { b.classList.remove('selected'); if(i===oi) b.classList.add('selected'); });
+}
+
+function submitBigQuiz() {
+  let correct = 0;
+  state.bigQuizData.forEach((q,i) => {
+    const card = document.getElementById(`bq-${i}`);
+    const opts = card.querySelectorAll('.quiz-opt');
+    opts.forEach(b => { b.classList.remove('selected'); b.disabled = true; });
+    if (state.bigQuizAnswers[i] !== null) {
+      if (state.bigQuizAnswers[i] === q.ans) { opts[q.ans].classList.add('correct'); correct++; }
+      else { opts[state.bigQuizAnswers[i]].classList.add('incorrect'); opts[q.ans].classList.add('correct'); }
+    } else opts[q.ans].classList.add('correct');
+  });
+  const pct = Math.round(correct / state.bigQuizData.length * 100);
+  const stars = pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+  document.getElementById('big-quiz-result').innerHTML = `
+    <div class="quiz-results">
+      <div class="result-score">${correct}/${state.bigQuizData.length}</div>
+      <div class="stars">${stars}</div>
+      <div class="result-label">${pct}% · ${pct>=90?'SUPERSTAR! 🌟':pct>=75?'Excellent! 🎉':pct>=60?'Good job! 👍':'Keep practising! 💪'}</div>
+    </div>`;
+  addStars(correct * 3);
+  if (pct >= 70) launchConfetti();
+}
+
+// ==================== GAMES ====================
+function launchGame(type) {
+  state.currentGame = type;
+  state.gameScore = 0; state.gameLives = 3; state.gameQ = 0;
+  state.matchSelected = null; state.memFlipped = []; state.memMatched = [];
+  const modal = document.getElementById('game-modal');
+  modal.classList.add('active');
+  const titles = {
+    flashcard:'🃏 Flashcard Flip', matching:'🔗 Word Match',
+    memory:'🧠 Memory Cards', sentence:'🔤 Build a Sentence',
+    spelling:'✏️ Spell It!', whatsthis:'🔍 What\'s This?',
+    wordchoose:'🎯 Pick the Word', crossword:'📰 Mini Crossword',
+  };
+  document.getElementById('game-modal-title').textContent = titles[type];
+  const body = document.getElementById('game-body');
+  if (type === 'flashcard') renderFlashcard(body);
+  else if (type === 'matching') renderMatching(body);
+  else if (type === 'memory') renderMemory(body);
+  else if (type === 'sentence') renderSentence(body);
+  else if (type === 'spelling') renderSpelling(body);
+  else if (type === 'whatsthis') renderWhatsThis(body);
+  else if (type === 'wordchoose') renderWordChoose(body);
+  else if (type === 'crossword') renderCrossword(body);
+}
+
+function closeGame() {
+  document.getElementById('game-modal').classList.remove('active');
+  if (state.speechRec) { try { state.speechRec.stop(); } catch(e){} }
+}
+
+function gameScoreBar() {
+  return `<div class="game-score-bar"><span class="g-score">⭐ ${state.gameScore}</span><span class="g-lives">${'❤️'.repeat(state.gameLives)}</span></div>`;
+}
+
+// --- FLASHCARD ---
+function renderFlashcard(body) {
+  const pool = shuffle(ALL_VOCAB).slice(0, 20);
+  state.flashPool = pool; state.flashIdx = 0; state.flashFlipped = false;
+  showFlashcard(body);
+}
+function showFlashcard(body) {
+  const v = state.flashPool[state.flashIdx];
+  body.innerHTML = gameScoreBar() + `
+    <div style="text-align:center;color:#888;font-size:.8rem;margin-bottom:8px">Card ${state.flashIdx+1} / ${state.flashPool.length}</div>
+    <div id="fc-card" onclick="flipCard()" style="background:linear-gradient(135deg,${UNITS.find(u=>u.id===v.unit)?.color1||'#e8174b'},${UNITS.find(u=>u.id===v.unit)?.color2||'#ff6b9d'});
+      border-radius:20px;padding:40px 20px;text-align:center;cursor:pointer;margin-bottom:14px;min-height:180px;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      box-shadow:0 8px 30px rgba(0,0,0,0.2)">
+      <div id="fc-front" style="color:white">
+        <div style="font-size:4rem;margin-bottom:10px">${v.e}</div>
+        <div style="font-size:.85rem;opacity:.8;font-weight:600">Tap to reveal word!</div>
+      </div>
+      <div id="fc-back" style="display:none;color:white">
+        <div style="font-size:2.5rem;font-weight:900">${v.w}</div>
+        <div style="font-size:.85rem;opacity:.8;margin-top:6px">Unit ${v.unit}: ${v.unitTitle}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn btn-pink" onclick="nextFlash(true)">✅ I know it!</button>
+      <button class="btn btn-outline" onclick="nextFlash(false)">🔄 Again later</button>
+      <button class="btn btn-blue" onclick="speakWord('${v.w}')">🔊</button>
+    </div>`;
+}
+function flipCard() {
+  document.getElementById('fc-front').style.display = 'none';
+  document.getElementById('fc-back').style.display = 'block';
+  state.flashFlipped = true;
+}
+function nextFlash(knew) {
+  if (knew) { state.gameScore++; addStars(1); }
+  state.flashIdx++;
+  if (state.flashIdx >= state.flashPool.length) {
+    document.getElementById('game-body').innerHTML = gameScoreBar() + `
+      <div style="text-align:center;padding:30px">
+        <div style="font-size:3rem">🎉</div>
+        <div style="font-size:1.5rem;font-weight:900;margin:10px 0">Finished! ${state.gameScore} known!</div>
+        <button class="btn btn-pink" onclick="launchGame('flashcard')">Play Again</button>
+      </div>`;
+    if (state.gameScore >= 15) launchConfetti();
+    return;
+  }
+  showFlashcard(document.getElementById('game-body'));
+}
+
+// --- WORD CHOOSE ---
+function renderWordChoose(body) {
+  const pool = shuffle(ALL_VOCAB);
+  state.wcPool = pool; state.wcIdx = 0; state.gameScore = 0; state.gameLives = 3;
+  showWordChoose(body);
+}
+function showWordChoose(body) {
+  if (state.gameLives <= 0 || state.wcIdx >= 15) {
+    body.innerHTML = gameScoreBar() + `<div style="text-align:center;padding:30px">
+      <div style="font-size:3rem">${state.gameScore>=12?'🌟':'🎮'}</div>
+      <div style="font-size:1.5rem;font-weight:900">Score: ${state.gameScore}/15</div>
+      <button class="btn btn-pink" style="margin-top:14px" onclick="launchGame('wordchoose')">Play Again</button>
+    </div>`;
+    if (state.gameScore >= 12) launchConfetti();
+    return;
+  }
+  const correct = state.wcPool[state.wcIdx];
+  const wrong = shuffle(state.wcPool.filter(v => v.w !== correct.w)).slice(0,3);
+  const options = shuffle([correct, ...wrong]);
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.8rem;color:#888;text-align:center;margin-bottom:8px">Question ${state.wcIdx+1}/15</div>
+    <div class="game-question">${correct.e}<br><span style="font-size:1rem;font-weight:600;color:#666">What is this?</span></div>
+    <div id="wc-feedback" class="feedback-toast"></div>
+    <div class="options-grid">
+      ${options.map(o => `<button class="option-btn" onclick="checkWordChoose('${o.w}','${correct.w}',this)">${o.w}</button>`).join('')}
+    </div>`;
+}
+function checkWordChoose(chosen, correct, btn) {
+  const fb = document.getElementById('wc-feedback');
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  if (chosen === correct) {
+    btn.classList.add('correct'); state.gameScore++; addStars(1);
+    fb.textContent = '✅ Correct! Well done! 🌟'; fb.className = 'feedback-toast correct show';
+    speakWord('Correct!');
+  } else {
+    btn.classList.add('wrong'); state.gameLives--;
+    fb.textContent = `❌ It's "${correct}"! Try again next time.`; fb.className = 'feedback-toast wrong show';
+    document.querySelectorAll('.option-btn').forEach(b => { if(b.textContent===correct) b.classList.add('correct'); });
+  }
+  state.wcIdx++;
+  setTimeout(() => showWordChoose(document.getElementById('game-body')), 1200);
+}
+
+// --- MATCHING ---
+function renderMatching(body) {
+  const pool = shuffle(ALL_VOCAB.filter(v => v.e && v.e.length)).slice(0,6);
+  state.matchPairs = pool;
+  state.matchSelected = null; state.matchMatched = [];
+  const leftItems = shuffle(pool.map(v => ({id:v.w, text:v.e})));
+  const rightItems = shuffle(pool.map(v => ({id:v.w, text:v.w})));
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.85rem;color:#666;text-align:center;margin-bottom:12px;font-weight:600">Match the picture to the word!</div>
+    <div class="match-grid">
+      <div class="match-col" id="match-left">${leftItems.map(i => `<div class="match-item" id="ml-${i.id}" onclick="selectMatch('left','${i.id}',this)">${i.text}</div>`).join('')}</div>
+      <div class="match-col" id="match-right">${rightItems.map(i => `<div class="match-item" id="mr-${i.id}" onclick="selectMatch('right','${i.id}',this)">${i.text}</div>`).join('')}</div>
+    </div>
+    <div id="match-fb" style="text-align:center;font-weight:700;margin-top:12px;font-size:.9rem"></div>`;
+}
+let matchLastSide = null, matchLastId = null;
+function selectMatch(side, id, el) {
+  if (state.matchMatched.includes(id)) return;
+  if (!matchLastSide) {
+    matchLastSide = side; matchLastId = id;
+    document.querySelectorAll('.match-item').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+  } else if (matchLastSide === side) {
+    document.querySelectorAll('.match-item').forEach(e => e.classList.remove('selected'));
+    matchLastSide = side; matchLastId = id; el.classList.add('selected');
+  } else {
+    if (matchLastId === id) {
+      document.getElementById('ml-'+id).classList.remove('selected');
+      document.getElementById('ml-'+id).classList.add('matched');
+      document.getElementById('mr-'+id).classList.remove('selected');
+      document.getElementById('mr-'+id).classList.add('matched');
+      state.matchMatched.push(id); state.gameScore++; addStars(1);
+      speakWord(id);
+      document.getElementById('match-fb').textContent = '✅ Correct! +1 ⭐';
+      if (state.matchMatched.length === state.matchPairs.length) {
+        setTimeout(() => { document.getElementById('match-fb').innerHTML = '<div style="font-size:1.3rem">🎉 All matched! Great job!</div>'; launchConfetti(); }, 300);
+      }
+    } else {
+      document.getElementById('ml-'+matchLastId)?.classList.add('wrong-match');
+      el.classList.add('wrong-match');
+      document.getElementById('match-fb').textContent = '❌ Try again!';
+      setTimeout(() => {
+        document.querySelectorAll('.match-item').forEach(e => { e.classList.remove('selected','wrong-match'); });
+        document.getElementById('match-fb').textContent = '';
+      }, 700);
+    }
+    matchLastSide = null; matchLastId = null;
+  }
+}
+
+// --- MEMORY ---
+function renderMemory(body) {
+  const pool = shuffle(ALL_VOCAB).slice(0,6);
+  const cards = shuffle([...pool.map(v=>({id:v.w,front:v.e,back:v.w,type:'img'})),
+                          ...pool.map(v=>({id:v.w,front:v.w,back:v.w,type:'word'}))]);
+  state.memCards = cards; state.memFlipped = []; state.memMatched = []; state.gameScore = 0;
+  const cols = window.innerWidth > 500 ? 4 : 3;
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.82rem;color:#666;text-align:center;margin-bottom:10px">Find all matching pairs! Tap two cards.</div>
+    <div class="memory-grid" style="grid-template-columns:repeat(${cols},1fr)">${cards.map((_,i) =>
+      `<div class="mem-card" id="mc-${i}" onclick="flipMemCard(${i})">
+        <span class="mem-front">${cards[i].front}</span>
+        <span class="mem-back">⭐</span>
+      </div>`).join('')}
+    </div>
+    <div id="mem-fb" style="text-align:center;font-weight:700;margin-top:10px;font-size:.88rem"></div>`;
+}
+let memLock = false;
+function flipMemCard(i) {
+  if (memLock) return;
+  if (state.memMatched.includes(i) || state.memFlipped.includes(i)) return;
+  const el = document.getElementById('mc-'+i);
+  el.classList.add('flipped');
+  state.memFlipped.push(i);
+  if (state.memFlipped.length === 2) {
+    memLock = true;
+    const [a,b] = state.memFlipped;
+    if (state.memCards[a].id === state.memCards[b].id && state.memCards[a].type !== state.memCards[b].type) {
+      state.memMatched.push(a,b); state.gameScore++; addStars(2);
+      document.getElementById('mc-'+a).classList.add('matched');
+      document.getElementById('mc-'+b).classList.add('matched');
+      speakWord(state.memCards[a].id);
+      document.getElementById('mem-fb').textContent = '✅ Match! +2 ⭐';
+      state.memFlipped = []; memLock = false;
+      if (state.memMatched.length === state.memCards.length) {
+        document.getElementById('mem-fb').innerHTML = '🎉 All found! Amazing memory!'; launchConfetti();
+      }
+    } else {
+      document.getElementById('mem-fb').textContent = '❌ Not a match, try again!';
+      setTimeout(() => {
+        document.getElementById('mc-'+a).classList.remove('flipped');
+        document.getElementById('mc-'+b).classList.remove('flipped');
+        state.memFlipped = []; memLock = false;
+        document.getElementById('mem-fb').textContent = '';
+      }, 900);
+    }
+  }
+}
+
+// --- SENTENCE BUILD ---
+const SENTENCES = [
+  {words:["What's","your","name","?"], answer:"What's your name ?"},
+  {words:["I'm","seven","years","old","."], answer:"I'm seven years old ."},
+  {words:["It's","under","the","table","."], answer:"It's under the table ."},
+  {words:["She","has","got","big","eyes","."], answer:"She has got big eyes ."},
+  {words:["Can","you","swim","?"], answer:"Can you swim ?"},
+  {words:["I","like","ice","cream","."], answer:"I like ice cream ."},
+  {words:["They","are","riding","bikes","."], answer:"They are riding bikes ."},
+  {words:["What","are","you","doing","?"], answer:"What are you doing ?"},
+  {words:["He","hasn't","got","a","cap","."], answer:"He hasn't got a cap ."},
+  {words:["My","favourite","toy","is","a","drum","."], answer:"My favourite toy is a drum ."},
+];
+function renderSentence(body) {
+  state.sentIdx = 0; state.gameScore = 0;
+  showSentence(body);
+}
+function showSentence(body) {
+  if (state.sentIdx >= SENTENCES.length) {
+    body.innerHTML = `<div style="text-align:center;padding:30px">
+      <div style="font-size:3rem">🏆</div>
+      <div style="font-size:1.5rem;font-weight:900">Score: ${state.gameScore}/${SENTENCES.length}</div>
+      <button class="btn btn-pink" style="margin-top:14px" onclick="launchGame('sentence')">Play Again</button>
+    </div>`;
+    if (state.gameScore >= 8) launchConfetti();
+    return;
+  }
+  const s = SENTENCES[state.sentIdx];
+  const words = shuffle([...s.words]);
+  state.sentAnswer = [];
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.8rem;color:#888;text-align:center;margin-bottom:8px">Sentence ${state.sentIdx+1}/${SENTENCES.length}</div>
+    <div style="font-size:.9rem;color:#666;text-align:center;margin-bottom:10px;font-weight:600">Put the words in the right order! 👇</div>
+    <div class="answer-slots" id="sent-answer"></div>
+    <div style="font-size:.8rem;color:#999;margin:6px 0 4px;font-weight:600">Word bank:</div>
+    <div class="word-bank" id="sent-bank">
+      ${words.map((w,i) => `<span class="word-chip" id="sw-${i}" onclick="pickWord('${w}',${i})">${w}</span>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-green" onclick="checkSentence('${s.answer.replace(/'/g,"\\'")}')">✅ Check</button>
+      <button class="btn btn-outline" onclick="resetSentence()">🔄 Reset</button>
+    </div>
+    <div id="sent-fb" style="margin-top:10px;font-weight:700;font-size:.9rem;text-align:center"></div>`;
+}
+function pickWord(w, idx) {
+  state.sentAnswer.push({w, idx});
+  document.getElementById('sw-'+idx).classList.add('used');
+  const slot = document.getElementById('sent-answer');
+  const chip = document.createElement('span');
+  chip.className = 'answer-chip';
+  chip.textContent = w;
+  chip.dataset.idx = idx;
+  chip.onclick = () => removeWord(chip, idx);
+  slot.appendChild(chip);
+}
+function removeWord(chip, idx) {
+  document.getElementById('sw-'+idx)?.classList.remove('used');
+  state.sentAnswer = state.sentAnswer.filter(i => i.idx != idx);
+  chip.remove();
+}
+function resetSentence() { showSentence(document.getElementById('game-body')); }
+function checkSentence(correct) {
+  const ans = state.sentAnswer.map(i => i.w).join(' ');
+  const fb = document.getElementById('sent-fb');
+  if (ans.toLowerCase() === correct.toLowerCase()) {
+    fb.innerHTML = '<span style="color:#065f46;background:#d1fae5;padding:8px 14px;border-radius:10px;display:inline-block">✅ Correct! 🌟 +2 stars</span>';
+    state.gameScore++; addStars(2);
+    setTimeout(() => { state.sentIdx++; showSentence(document.getElementById('game-body')); }, 1000);
+  } else {
+    fb.innerHTML = `<span style="color:#991b1b;background:#fee2e2;padding:8px 14px;border-radius:10px;display:inline-block">❌ Try again! Answer: ${correct}</span>`;
+  }
+}
+
+// --- SPELLING ---
+const SPELL_WORDS = shuffle(ALL_VOCAB).slice(0, 20);
+function renderSpelling(body) {
+  state.spellIdx = 0; state.gameScore = 0;
+  showSpelling(body);
+}
+function showSpelling(body) {
+  if (state.spellIdx >= 10) {
+    body.innerHTML = `<div style="text-align:center;padding:30px">
+      <div style="font-size:3rem">${state.gameScore>=8?'🌟':'👍'}</div>
+      <div style="font-size:1.5rem;font-weight:900">Score: ${state.gameScore}/10</div>
+      <button class="btn btn-pink" style="margin-top:14px" onclick="launchGame('spelling')">Play Again</button>
+    </div>`;
+    if (state.gameScore >= 8) launchConfetti();
+    return;
+  }
+  const v = SPELL_WORDS[state.spellIdx];
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.8rem;color:#888;text-align:center;margin-bottom:8px">Word ${state.spellIdx+1}/10</div>
+    <div style="text-align:center;font-size:4rem;margin:10px 0">${v.e}</div>
+    <div style="text-align:center;font-size:.9rem;color:#666;margin-bottom:12px;font-weight:600">${v.hint}</div>
+    <button class="btn btn-blue" style="display:block;margin:0 auto 12px" onclick="speakWord('${v.w}')">🔊 Hear word</button>
+    <div class="type-input-row">
+      <input type="text" id="spell-input" placeholder="Type the word..." autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="btn btn-pink" onclick="checkSpelling('${v.w}')">✅</button>
+    </div>
+    <div id="spell-fb" style="margin-top:10px;font-weight:700;text-align:center;font-size:.9rem"></div>`;
+  document.getElementById('spell-input').focus();
+  document.getElementById('spell-input').onkeypress = (e) => { if(e.key==='Enter') checkSpelling(v.w); };
+}
+function checkSpelling(correct) {
+  const typed = document.getElementById('spell-input').value.trim().toLowerCase();
+  const fb = document.getElementById('spell-fb');
+  if (typed === correct.toLowerCase()) {
+    fb.innerHTML = '<span style="color:#065f46;background:#d1fae5;padding:8px 14px;border-radius:10px;display:inline-block">✅ Correct! 🌟</span>';
+    state.gameScore++; addStars(2);
+    setTimeout(() => { state.spellIdx++; showSpelling(document.getElementById('game-body')); }, 900);
+  } else {
+    fb.innerHTML = `<span style="color:#991b1b;background:#fee2e2;padding:8px 14px;border-radius:10px;display:inline-block">❌ Answer: "${correct}". Try again!</span>`;
+  }
+}
+
+// --- WHAT'S THIS ---
+const QA_POOL = [
+  {q:"Hello! What's your name?", a:"I'm Stella!"}, {q:"How old are you?", a:"I'm seven!"},
+  {q:"What's this?", a:"It's a pencil!"}, {q:"Where's the ball?", a:"It's on the table!"},
+  {q:"What colour is it?", a:"It's blue!"}, {q:"Is it a cat?", a:"Yes, it is!"},
+  {q:"Can you swim?", a:"Yes, I can!"}, {q:"Have you got a dog?", a:"Yes, I have!"},
+  {q:"What are you doing?", a:"I'm reading!"}, {q:"Do you like cake?", a:"Yes, I do!"},
+];
+function renderWhatsThis(body) {
+  state.wtIdx = 0; state.gameScore = 0;
+  showWhatsThis(body);
+}
+function showWhatsThis(body) {
+  if (state.wtIdx >= QA_POOL.length) {
+    body.innerHTML = `<div style="text-align:center;padding:30px">
+      <div style="font-size:3rem">🎤</div>
+      <div style="font-size:1.5rem;font-weight:900">Great speaking! ${state.gameScore} pts</div>
+      <button class="btn btn-pink" style="margin-top:14px" onclick="launchGame('whatsthis')">Play Again</button>
+    </div>`;
+    return;
+  }
+  const qa = QA_POOL[state.wtIdx];
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.8rem;color:#888;text-align:center;margin-bottom:8px">Q${state.wtIdx+1}/${QA_POOL.length}</div>
+    <div class="game-question" style="flex-direction:column;gap:8px">
+      <span style="font-size:1.2rem">${qa.q}</span>
+      <span style="font-size:.85rem;color:#999">Say the answer!</span>
+    </div>
+    <div id="wt-mic" style="display:none;text-align:center">
+      <div class="mic-anim" style="margin:0 auto 10px">🎙️</div>
+      <div style="font-size:.8rem;color:#999">Listening...</div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px">
+      <button class="btn btn-blue" onclick="speakWord('${qa.q}')">🔊 Hear Q</button>
+      <button class="btn btn-pink" onclick="startWT('${qa.a}')">🎤 Answer</button>
+      <button class="btn btn-green" onclick="speakWord('${qa.a}')">💡 Hint</button>
+    </div>
+    <div style="background:#f8f8f8;border-radius:12px;padding:10px;font-size:.85rem;color:#666;text-align:center">
+      Sample answer: <b>${qa.a}</b>
+    </div>
+    <div id="wt-fb" style="margin-top:10px;text-align:center;font-weight:700"></div>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn btn-outline" onclick="state.wtIdx++;showWhatsThis(document.getElementById('game-body'))">Next →</button>
+    </div>`;
+}
+function startWT(expected) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Use Chrome/Edge for speech!');
+    state.gameScore++; addStars(1);
+    state.wtIdx++;
+    setTimeout(() => showWhatsThis(document.getElementById('game-body')), 500);
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR(); rec.lang = 'en-GB'; rec.maxAlternatives = 3;
+  document.getElementById('wt-mic').style.display = 'block';
+  rec.onresult = (e) => {
+    document.getElementById('wt-mic').style.display = 'none';
+    const said = e.results[0][0].transcript.toLowerCase();
+    const exp = expected.toLowerCase().replace(/[!?,.']/g,'');
+    const words = exp.split(' ');
+    const matchCount = words.filter(w => said.includes(w)).length;
+    const score = Math.round(matchCount / words.length * 100);
+    const fb = document.getElementById('wt-fb');
+    if (score >= 60) {
+      fb.innerHTML = `<span style="color:#065f46;background:#d1fae5;padding:8px 14px;border-radius:10px;display:inline-block">✅ ${score}%! Great! 🌟</span>`;
+      state.gameScore += 2; addStars(2);
+    } else {
+      fb.innerHTML = `<span style="color:#92400e;background:#fef3c7;padding:8px 14px;border-radius:10px;display:inline-block">👍 ${score}% · Say: "${expected}"</span>`;
+      state.gameScore++; addStars(1);
+    }
+  };
+  rec.onerror = () => { document.getElementById('wt-mic').style.display = 'none'; showToast('Try again!'); };
+  rec.start();
+}
+
+// --- CROSSWORD ---
+function renderCrossword(body) {
+  // Mini 5-word crossword
+  body.innerHTML = gameScoreBar() + `
+    <div style="font-size:.85rem;color:#666;margin-bottom:12px;font-weight:600;text-align:center">Fill in the crossword! Use the clues below.</div>
+    <div style="overflow-x:auto;margin-bottom:14px">
+    <table class="crossword-grid" style="margin:0 auto;border-collapse:collapse">
+      <tr>
+        <td class="black"></td><td><input maxlength="1" oninput="checkCW(this,'c','1')" data-ans="C"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+      </tr>
+      <tr>
+        <td><input maxlength="1" oninput="checkCW(this,'b','1')" data-ans="B"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'a','1')" data-ans="A"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'l','1')" data-ans="L"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'l','2')" data-ans="L"></td>
+        <td class="black"></td>
+      </tr>
+      <tr>
+        <td class="black"></td><td><input maxlength="1" oninput="checkCW(this,'t','1')" data-ans="T"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+      </tr>
+      <tr>
+        <td class="black"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'p','1')" data-ans="P"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'e','1')" data-ans="E"></td>
+        <td><input maxlength="1" oninput="checkCW(this,'n','1')" data-ans="N"></td>
+        <td class="black"></td>
+      </tr>
+    </table>
+    </div>
+    <div class="crossword-clues">
+      <b>ACROSS:</b><br>
+      2. You use this to play ⚽ (4 letters)<br>
+      4. You write with this ✏️ (3 letters)<br><br>
+      <b>DOWN:</b><br>
+      1. 🐱 You have this as a pet (3 letters)<br>
+      2. You carry books in this 🎒 (3 letters)<br>
+    </div>
+    <button class="btn btn-pink" style="margin-top:12px" onclick="checkAllCW()">✅ Check Crossword</button>
+    <div id="cw-fb" style="margin-top:10px;font-weight:700;text-align:center"></div>`;
+}
+function checkCW(input, letter, pos) {
+  input.value = input.value.toUpperCase();
+}
+function checkAllCW() {
+  const inputs = document.querySelectorAll('.crossword-grid input');
+  let correct = 0;
+  inputs.forEach(i => {
+    if (i.value.toUpperCase() === i.dataset.ans) { correct++; i.style.color='#065f46'; i.style.background='#d1fae5'; }
+    else { i.style.color='#991b1b'; i.style.background='#fee2e2'; }
+  });
+  const fb = document.getElementById('cw-fb');
+  fb.textContent = `${correct}/${inputs.length} correct! ${correct===inputs.length?'🌟 Perfect!':'Keep trying!'}`;
+  if (correct === inputs.length) { addStars(5); launchConfetti(); }
+  else addStars(correct);
+}
+
+// ==================== PROGRESS ====================
+function renderProgress() {
+  document.getElementById('prog-units').innerHTML = UNITS.map(u => {
+    const prog = state.unitProgress[u.id] || 0;
+    return `<div class="prog-unit-row">
+      <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,${u.color1},${u.color2});color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;flex-shrink:0">${u.id}</div>
+      <div class="p-name">${u.title}</div>
+      <div class="p-bar"><div class="p-bar-fill" style="width:${prog}%;background:${u.color1}"></div></div>
+      <div class="p-pct">${prog}%</div>
+    </div>`;
+  }).join('');
+}
+
+function updateUnitProgress(uid, score) {
+  const cur = state.unitProgress[uid] || 0;
+  const newVal = Math.max(cur, score || cur + 10);
+  state.unitProgress[uid] = Math.min(100, newVal);
+  saveState();
+  renderUnitGrid();
+}
+
+// ==================== UTILITIES ====================
+function speakWord(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB'; u.rate = 0.85; u.pitch = 1.1; u.volume = 1;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+function addStars(n) {
+  state.stars += n;
+  saveState();
+  document.getElementById('total-stars').textContent = state.stars;
+  document.getElementById('prog-stars').textContent = state.stars;
+  spawnStar();
+}
+
+function spawnStar() {
+  const star = document.createElement('div');
+  star.className = 'star-pop';
+  star.textContent = '⭐';
+  star.style.left = Math.random()*80+10 + 'vw';
+  star.style.top = Math.random()*60+20 + 'vh';
+  document.body.appendChild(star);
+  setTimeout(() => star.remove(), 1000);
+}
+
+function launchConfetti() {
+  const colors = ['#e8174b','#ffd700','#1e90ff','#22c55e','#9333ea','#f97316'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = Math.random()*100+'vw';
+    c.style.top = '-10px';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.style.animationDelay = Math.random()*1 + 's';
+    c.style.width = c.style.height = (Math.random()*8+6)+'px';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+function showToast(msg, dur=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+// ==================== INIT ====================
+renderUnitGrid();
+document.getElementById('total-stars').textContent = state.stars;
+document.getElementById('prog-stars').textContent = state.stars;
+showToast("Welcome to Kid's Box 1! 🌟 Tap a unit to start!", 3000);
+</script>
+</body>
+</html>
