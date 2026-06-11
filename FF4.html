@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Family & Friends 4 – Learn English</title>
+<style>
+:root{--p:#FF6B35;--s:#4ECDC4;--a:#FFE66D;--v:#9B59B6;--g:#2ECC71;--b:#3498DB;--r:#E74C3C;--d:#2C3E50;--l:#F8F9FA;--sh:0 4px 20px rgba(0,0,0,.15);--ra:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;color:var(--d)}
+#app{max-width:900px;margin:0 auto;padding:10px}
+.hdr{background:linear-gradient(135deg,var(--p),#FF8E53);border-radius:var(--ra);padding:14px 18px;margin-bottom:10px;box-shadow:var(--sh);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr h1{color:#fff;font-size:clamp(1rem,3vw,1.4rem);flex:1}
+.sub{color:rgba(255,255,255,.85);font-size:.78rem}
+.stars{background:rgba(255,255,255,.2);border-radius:20px;padding:5px 12px;color:#fff;font-weight:700;font-size:.88rem}
+.nav{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.nb{flex:1;min-width:72px;padding:9px 5px;border:none;border-radius:10px;cursor:pointer;font-size:.75rem;font-weight:600;transition:all .2s;color:#fff}
+.nb.u{background:var(--b)}.nb.g{background:var(--g)}.nb.sp{background:var(--v)}.nb.ph{background:var(--p)}.nb.gr{background:var(--s);color:var(--d)}.nb.pr{background:var(--d)}
+.nb:hover{transform:translateY(-2px);box-shadow:var(--sh)}.nb.active{box-shadow:0 0 0 3px #fff,var(--sh)}
+.panel{background:#fff;border-radius:var(--ra);padding:16px;box-shadow:var(--sh);min-height:380px}
+.pt{font-size:1.05rem;font-weight:700;color:var(--d);margin-bottom:12px}
+.ug{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.uc{border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;color:#fff;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--c1,#667eea),var(--c2,#764ba2))}
+.uc:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.uc .un{font-size:1.6rem;font-weight:900;opacity:.22;position:absolute;right:7px;top:3px}
+.uc h3{font-size:.82rem;font-weight:700;margin-bottom:3px;padding-right:28px}
+.uc p{font-size:.7rem;opacity:.85}
+.uc .pb{height:3px;background:rgba(255,255,255,.3);border-radius:2px;margin-top:7px}
+.uc .pf{height:100%;background:#fff;border-radius:2px}
+.lh{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+.bb{background:var(--l);border:none;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem;font-weight:600}
+.lt{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.tb{padding:6px 11px;border:2px solid currentColor;border-radius:18px;cursor:pointer;font-size:.75rem;font-weight:600;background:#fff;transition:all .2s}
+.tb.active{color:#fff!important;border-color:transparent}
+.tb.w{color:var(--b)}.tb.w.active{background:var(--b)}
+.tb.g2{color:var(--g)}.tb.g2.active{background:var(--g)}
+.tb.ph2{color:var(--p)}.tb.ph2.active{background:var(--p)}
+.tb.sk{color:var(--v)}.tb.sk.active{background:var(--v)}
+.tb.dl{color:var(--s);border-color:var(--s)}.tb.dl.active{background:var(--s);color:var(--d)}
+.wg{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px}
+.wc{border-radius:11px;padding:11px;text-align:center;cursor:pointer;color:#fff;transition:all .2s}
+.wc:hover{transform:scale(1.05)}
+.wc .em{font-size:1.7rem;margin-bottom:5px;display:block}
+.wc .wd{font-size:.83rem;font-weight:700}
+.wc .sb{background:rgba(255,255,255,.3);border:none;border-radius:18px;color:#fff;padding:3px 9px;font-size:.7rem;cursor:pointer;margin-top:4px}
+.gb{background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border-radius:11px;padding:13px;margin-bottom:11px}
+.gb h3{font-weight:700;margin-bottom:7px;color:var(--d);font-size:.92rem}
+.ge{background:#fff;border-radius:7px;padding:8px 11px;margin:4px 0;font-size:.85rem}
+.gr2{background:rgba(255,255,255,.65);border-radius:7px;padding:9px;margin-top:7px;font-size:.8rem;line-height:1.55}
+.eq{background:#fff;border-radius:9px;padding:11px;margin:6px 0;box-shadow:0 2px 5px rgba(0,0,0,.06)}
+.eq p{font-size:.85rem;margin-bottom:6px}
+.eo{display:flex;gap:5px;flex-wrap:wrap}
+.ob{padding:5px 11px;border:2px solid var(--s);border-radius:18px;background:#fff;cursor:pointer;font-size:.8rem;transition:all .2s}
+.ob:hover{background:var(--s);color:#fff}
+.ob.cor{background:var(--g);border-color:var(--g);color:#fff}
+.ob.wr{background:var(--r);border-color:var(--r);color:#fff}
+.pc{background:linear-gradient(135deg,#fff9c4,#e0f7fa);border-radius:13px;padding:13px;margin-bottom:11px}
+.pc h3{color:var(--d);font-size:.92rem;margin-bottom:9px}
+.sc{background:#fff;border-radius:18px;padding:6px 13px;font-size:.85rem;font-weight:700;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.1);transition:all .2s;display:inline-block;margin:2px}
+.sc:hover{transform:scale(1.1);background:var(--a)}
+.pw{background:var(--p);color:#fff;border-radius:7px;padding:4px 9px;font-size:.8rem;cursor:pointer;display:inline-block;margin:2px}
+.db{border-radius:11px;padding:9px 13px;margin:6px 0;max-width:87%;position:relative}
+.db.L{background:#e8f4fd;margin-right:auto}.db.R{background:#d5f5e3;margin-left:auto}
+.ds{font-weight:700;font-size:.75rem;color:var(--p);margin-bottom:3px}
+.dt{font-size:.85rem;line-height:1.5}
+.rt{background:var(--l);border-radius:11px;padding:13px;line-height:1.85;font-size:.85rem;margin-bottom:9px;white-space:pre-wrap}
+.tb2{background:var(--b);color:#fff;border:none;border-radius:18px;padding:7px 14px;cursor:pointer;font-size:.82rem;margin:3px}
+.tb2:hover{opacity:.85}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:9px}
+.gc{border-radius:13px;padding:13px;text-align:center;cursor:pointer;color:#fff;transition:all .2s;box-shadow:0 3px 10px rgba(0,0,0,.1);background:linear-gradient(135deg,var(--gc1,#f7971e),var(--gc2,#ffd200))}
+.gc:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.gc .gi{font-size:2rem;margin-bottom:6px;display:block}
+.gc h3{font-size:.85rem;font-weight:700}
+.gc p{font-size:.7rem;opacity:.85;margin-top:2px}
+.gsb{display:flex;justify-content:space-between;align-items:center;background:var(--l);border-radius:9px;padding:9px 13px;margin-bottom:12px;font-weight:600;font-size:.85rem}
+.qc{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:13px;padding:16px;text-align:center;margin-bottom:12px}
+.qc h2{font-size:.95rem;margin-bottom:7px}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ab{padding:11px;border:none;border-radius:11px;cursor:pointer;font-size:.85rem;font-weight:600;background:#fff;transition:all .2s;box-shadow:0 2px 5px rgba(0,0,0,.07)}
+.ab:hover{transform:scale(1.02);background:var(--a)}
+.ab.cor{background:var(--g);color:#fff}.ab.wr{background:var(--r);color:#fff}
+.tmr{font-size:1.15rem;font-weight:700;color:var(--r)}
+.mg{display:grid;gap:7px}
+.mc{aspect-ratio:1;border-radius:9px;cursor:pointer;background:linear-gradient(135deg,var(--b),var(--v));display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;font-weight:700;transition:all .3s;box-shadow:0 2px 5px rgba(0,0,0,.14);user-select:none}
+.mc.fl{background:#fff;color:var(--d);border:2px solid var(--a)}
+.mc.ma{background:var(--g);color:#fff;pointer-events:none}
+.mxg{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mc2{display:flex;flex-direction:column;gap:6px}
+.mi{padding:9px 11px;background:#fff;border:2px solid #ddd;border-radius:9px;cursor:pointer;font-size:.82rem;text-align:center;transition:all .2s}
+.mi:hover{border-color:var(--b)}.mi.sel{border-color:var(--p);background:#fff3e0}
+.mi.ma2{border-color:var(--g);background:#d4edda;pointer-events:none}
+.hl{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:9px 0}
+.hl2{width:30px;height:30px;border-bottom:3px solid var(--d);display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700}
+.kg{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:9px}
+.kb{width:31px;height:31px;border:2px solid var(--s);border-radius:6px;background:#fff;cursor:pointer;font-weight:700;font-size:.8rem}
+.kb:hover{background:var(--s);color:#fff}.kb:disabled{opacity:.35;cursor:not-allowed}
+.sw{font-size:1.7rem;font-weight:900;letter-spacing:5px;color:var(--v);text-align:center;margin:12px 0}
+.si{width:100%;padding:9px;font-size:.92rem;border:2px solid var(--s);border-radius:9px;text-align:center;outline:none}
+.wt{background:var(--b);color:#fff;border-radius:14px;padding:4px 11px;font-size:.8rem;cursor:pointer;display:inline-block;margin:2px}
+.bw{background:#fff;border:2px solid var(--s);border-radius:14px;padding:4px 11px;font-size:.8rem;cursor:pointer;transition:all .2s;display:inline-block;margin:2px}
+.bw:hover{background:var(--s);color:#fff}.bw.ud{opacity:.3;pointer-events:none}
+.po{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px}
+.pi{background:#fff;border-radius:11px;padding:9px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.07)}
+.pci{width:42px;height:42px;margin:0 auto 5px;position:relative}
+.pci .bg2{fill:none;stroke:#eee;stroke-width:6}
+.pci .fi{fill:none;stroke:var(--p);stroke-width:6;stroke-linecap:round}
+.pn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.7rem;font-weight:700}
+.pi p{font-size:.7rem;color:#666}
+.cf{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.cn{position:absolute;border-radius:2px;animation:fall 3s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+details{border:1px solid #eee;border-radius:9px;padding:8px 11px;margin-bottom:7px}
+details summary{cursor:pointer;font-weight:600;font-size:.85rem;padding:3px 0;list-style:none}
+details[open]{border-color:var(--s)}
+@media(max-width:480px){.ag{grid-template-columns:1fr}.wg{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}.gg{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}.ug{grid-template-columns:repeat(auto-fill,minmax(135px,1fr))}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="hdr">
+  <div style="flex:1"><h1>🎒 Family &amp; Friends 4</h1><div class="sub">Complete English Learning · 138 Pages · 15 Units + Games + Speaking</div></div>
+  <div class="stars">⭐ <span id="ts">0</span></div>
+</div>
+<div class="nav">
+  <button class="nb u active" onclick="S('units')">📚 Units</button>
+  <button class="nb gr" onclick="S('grammar')">📝 Grammar</button>
+  <button class="nb ph" onclick="S('phonics')">🔤 Phonics</button>
+  <button class="nb sp" onclick="S('speaking')">🎤 Speak</button>
+  <button class="nb g" onclick="S('games')">🎮 Games</button>
+  <button class="nb pr" onclick="S('progress')">📊 Progress</button>
+</div>
+<div class="panel"><div id="ca"></div></div>
+</div>
+<script>
+
+// ============================================================
+// DATA – Family & Friends 4 (All 138 pages)
+// ============================================================
+const U=[
+{id:0,ti:"Back Together!",su:"Starter",to:"School & Friends",pg:4,c1:"#667eea",c2:"#764ba2",
+w:["skateboard","take photos","play sports","listen to music","play with toys","read books","homework","timetable","playground","classroom"],
+e:["🛹","📸","⚽","🎵","🧸","📚","📋","📅","🛝","🏫"],
+dl:[["Teacher","Welcome to Primary 4. I'm your new teacher, Miss Wells. Who's first?"],["Max","My name's Max. I like reading and learning about everything."],["Teacher","That's great, Max."],["Max","I've got a younger sister Holly who likes listening to music and playing with her toys."],["Amy","Hello, Miss Wells. I love taking photos and playing sports."],["Max","My other cousin is Leo. He really loves skateboarding and we do lots of things together."],["Teacher","Great. And do you skateboard together?"],["Max","Well, he skateboards and I read books about skateboards!"]],
+gr:[
+{n:"like + verb -ing",r:"Use like/love/enjoy + verb-ing to talk about hobbies and preferences.",
+ex:["Max likes reading.","Holly loves listening to music.","Leo enjoys skateboarding.","Amy likes taking photos."],
+qs:[{q:"Max ___ reading.",o:["like","likes","is like","to like"],a:1},{q:"She ___ playing with toys.",o:["love","loves","is loves","to love"],a:1},{q:"What does he like ___?",o:["do","done","doing","to do"],a:2},{q:"They enjoy ___ together.",o:["play","plays","to play","playing"],a:3}]},
+{n:"can for permission / requests",r:"Use 'Can I...?' to ask for permission. 'You can/can't...' gives or denies permission.",
+ex:["Can I play some games on the computer, please?","Sorry. No, you can't. I'm working.","You can listen to your MP3 player.","You can't watch the DVD here."],
+qs:[{q:"___ I play some games?",o:["Can","Could","Do","Is"],a:0},{q:"No, you ___. I'm working.",o:["can","can't","don't","won't"],a:1},{q:"You ___ watch it in the living room.",o:["can","can't","could","would"],a:0}]},
+{n:"a / an / some",r:"a + consonant sound. an + vowel sound. some + uncountable or plural nouns.",
+ex:["I'd like a sandwich.","I'd like an apple.","I'd like some milk.","Have some grapes."],
+qs:[{q:"I'd like ___ orange.",o:["a","an","some","the"],a:1},{q:"I'd like ___ bread.",o:["a","an","some","any"],a:2},{q:"She has ___ big book.",o:["a","an","some","any"],a:0}]},
+{n:"be going to + verb",r:"Use 'be going to + verb' for plans and intentions.",
+ex:["I'm going to visit my grandma.","She's going to study English.","We're going to have pizza tonight."],
+qs:[{q:"I ___ going to visit my friend.",o:["am","is","are","be"],a:0},{q:"She is going ___ play tennis.",o:["at","to","for","by"],a:1},{q:"They ___ going to travel to Spain.",o:["am","is","are","be"],a:2}]},
+{n:"Comparative and superlative adjectives",r:"Short adj: -er/-est. Long adj: more/most. Irregular: good→better→best, bad→worse→worst.",
+ex:["London is bigger than Oxford.","The Amazon is the longest river.","This hotel is more comfortable.","It was the best day!"],
+qs:[{q:"London is ___ than Oxford. (big)",o:["more big","biggest","bigger","most big"],a:2},{q:"This is the ___ (long) river.",o:["longer","most long","longest","more long"],a:2},{q:"She runs ___ (fast) than him.",o:["faster","fastest","more fast","most fast"],a:0}]}
+],
+ph:{s:["Food words","Alphabetical order"],w:["apple","banana","cereal","grapes","lemon","melon","milk","onions","pasta","potato"],
+st:"Amy and Leo love healthy food. Amy always eats an apple. Leo prefers avocado. They are very good at putting food in alphabetical order! Try it: apple, banana, cereal, grapes, lemon.",
+qs:[{q:"Which comes FIRST alphabetically?",o:["melon","apple","banana","cherry"],a:1},{q:"Which comes LAST of these?",o:["apple","grape","pasta","kiwi"],a:2}]},
+sk:{rd:{t:"Food words – Alphabetical order",tx:"pasta, bread, onions, meat, cheese, eggs, melon, cucumber, cereal, lemon, milk, potato, grapes, bananas, butter, yoghurt, fruit, vegetables, juice, water"},
+sp:"Ask and answer: What does Max like doing? He likes reading.",wr:"Write about what your friend would like to eat.",li:"Identifying children's food preferences"}},
+
+{id:1,ti:"The food here is great!",su:"Unit 1",to:"The restaurant",pg:8,c1:"#f7971e",c2:"#ffd200",
+w:["waiter","waitress","uniform","menu","customer","bottle of water","cup of coffee","glass of milk","bowl of soup","plate of salad"],
+e:["🧑‍🍳","👩‍🍳","👕","📋","🙋","🍶","☕","🥛","🍲","🥗"],
+dl:[["Max","We often come to this restaurant. The food here is great!"],["Holly","Look! All the waiters are wearing green today. They usually wear blue uniforms."],["Dad","Can I have a bowl of pasta and some salad, please?"],["Waiter","Sorry, we haven't got any pasta. But we've got a selection of pizzas. Look!"],["Holly","That's strange! You usually have pasta. We have pasta every time."],["Waiter","Usually? But you're our first customers!"],["Max","Really? But this is Ken's Café, isn't it?"],["Waiter","Ken's Café is next door. This is The Pizza Place. We only opened today."],["Dad","So that's why it's different! Well, let's try it."],["Waiter","You're our first customers. Have free ice creams!"],["Holly","Wow! Thank you!"]],
+gr:[
+{n:"Present simple and present continuous",r:"PRESENT SIMPLE: habits/routines (always/usually/sometimes/never). PRESENT CONTINUOUS: right now (now/today/at the moment).",
+ex:["They usually wear blue uniforms. (simple)","They're wearing green today. (continuous)","We usually have pasta. (simple)","But we're having pizza now. (continuous)"],
+qs:[{q:"She ___ a glass of water now.",o:["drink","drinking","drinks","is drinking"],a:3},{q:"The family ___ by the door today.",o:["sit","is sitting","are sitting","sits"],a:2},{q:"They usually ___ by the window.",o:["sit","sitting","are sitting","is sitting"],a:0},{q:"He never ___ soup.",o:["have","having","has","is having"],a:2},{q:"She ___ soup at the moment.",o:["has","is having","have","having"],a:1}]},
+{n:"Time markers: present simple & continuous",r:"Simple: always/usually/sometimes/rarely/never/every day. Continuous: now/today/at the moment/right now.",
+ex:["She always has breakfast at 7am.","We sometimes go to restaurants.","I'm eating pizza right now.","They're working at the moment."],
+qs:[{q:"Which marker → present SIMPLE?",o:["right now","at the moment","usually","is eating"],a:2},{q:"Which marker → present CONTINUOUS?",o:["never","always","at the moment","usually"],a:2},{q:"She ___ (sometimes) eat here.",o:["sometimes eats","eat sometimes","is eating sometimes","sometimes is eating"],a:0}]}
+],
+ph:{s:["Long a","long e"],w:["train","tray","cake","tree","leaves","key","play","rain","feet","sea"],
+st:"I'm sitting on a train looking out at the rain. I can see big trees with orange leaves. There's a party today with lovely cakes on a tray. Oh no! I can't find my key.",
+qs:[{q:"Which has DIFFERENT vowel from train/tray/play?",o:["rain","tree","cake","day"],a:1},{q:"Which has long 'e' sound?",o:["cake","leaves","tray","train"],a:1},{q:"Which has long 'a' sound?",o:["key","leaves","tree","tray"],a:3}]},
+sk:{rd:{t:"A magazine article about eating habits",tx:"People eat very different things for breakfast around the world. In Japan, many people eat rice and fish. In Mexico, people often have eggs, beans and tortillas. In France, people usually have bread with butter and jam. In England, a traditional breakfast is eggs, bacon, sausages and toast."},
+sp:"Talk about eating habits using: always, usually, sometimes, never.",wr:"Write about your eating habits.",li:"Identifying details about family meals"}},
+
+{id:2,ti:"We had a concert",su:"Unit 2",to:"The concert",pg:14,c1:"#4ECDC4",c2:"#44CF6C",
+w:["concert","audience","stage","microphone","guitar","drum","violin","trumpet","flute","clap"],
+e:["🎵","👥","🎭","🎤","🎸","🥁","🎻","🎺","🪈","👏"],
+dl:[["Holly","All our friends were there."],["Max","The audience clapped and cheered. It was amazing!"],["Leo","Two weeks ago, we had our school concert."],["Max","Holly played the violin. She was brilliant!"],["Holly","And Leo played the trumpet last night."],["Amy","Everyone danced and sang. They enjoyed it so much!"]],
+gr:[
+{n:"Past simple: have and be",r:"be → was (I/he/she/it), were (you/we/they). have → had.",
+ex:["All our friends were there.","It was fantastic!","We had a great time.","The musicians were brilliant."],
+qs:[{q:"All our friends ___ there.",o:["was","were","are","be"],a:1},{q:"The concert ___ last night.",o:["was","were","is","be"],a:0},{q:"We ___ a great time.",o:["have","had","has","are"],a:1},{q:"The musicians ___ brilliant.",o:["was","were","are","be"],a:1}]},
+{n:"Past simple: regular verbs",r:"Add -ed. Spelling: dance→danced, clap→clapped, carry→carried.",
+ex:["The audience clapped and cheered.","She danced beautifully.","They enjoyed the music.","Holly played the violin."],
+qs:[{q:"The audience ___ and cheered.",o:["clap","clapped","claps","clapping"],a:1},{q:"She ___ to the music.",o:["dance","dancing","danced","to dance"],a:2},{q:"They ___ the show.",o:["enjoy","enjoys","enjoyed","enjoying"],a:2},{q:"Holly ___ the violin.",o:["play","plays","played","playing"],a:2}]},
+{n:"Time markers: past simple",r:"last week / yesterday / last night / two weeks ago / in [year]",
+ex:["We went to the concert last week.","She played yesterday.","Two weeks ago, we had our concert."],
+qs:[{q:"We went to London ___ week.",o:["last","ago","before","next"],a:0},{q:"They saw the show two weeks ___.",o:["last","before","ago","previous"],a:2},{q:"She played the violin ___.",o:["tomorrow","last night","next week","soon"],a:1}]}
+],
+ph:{s:["Long i","long o","long u"],w:["light","cry","bike","boat","blow","bone","room","blue","flute","moon"],
+st:"She rides her bike to school every day. The moon is bright at night. She blew the flute in the concert. The boat sailed on the blue sea. A light shone through the room.",
+qs:[{q:"Which has long 'i' sound?",o:["bone","blue","light","room"],a:2},{q:"Which has long 'o' sound?",o:["bike","boat","blue","light"],a:1},{q:"Which has long 'u' sound?",o:["cry","bone","light","flute"],a:3}]},
+sk:{rd:{t:"A poem about music",tx:"Drums and trumpets, guitars too,\nMusic old and music new.\nSinging high and singing low,\nOn with the wonderful show!\nViolins and flutes so sweet,\nMaking every rhythm beat."},
+sp:"Ask about musical preferences: Can you play an instrument? What music do you like?",wr:"Double consonant rule (clap→clapped). Write a description of a picture.",li:"Identifying different musical activities"}},
+
+{id:3,ti:"The dinosaur museum",su:"Unit 3",to:"Dinosaur museum",pg:20,c1:"#a8edea",c2:"#fed6e3",
+w:["dinosaur","skeleton","fossil","museum","exhibit","prehistoric","carnivore","herbivore","enormous","scales"],
+e:["🦕","💀","🪨","🏛️","🖼️","⏳","🦁","🌿","🐘","🐍"],
+dl:[["Holly","We didn't go to school on Wednesday."],["Max","We went to the dinosaur museum!"],["Amy","We saw huge dinosaur skeletons. It was incredible!"],["Guide","Did they go to a museum?"],["Holly","Yes, they did! We saw fossils too."],["Max","What did you see?"],["Amy","I saw a T-Rex model. It was enormous and very scary!"]],
+gr:[
+{n:"Past simple: irregular verbs – negatives",r:"didn't + BASE verb (no -ed after didn't).",
+ex:["We didn't go to school.","She didn't see the dinosaur.","They didn't do their homework."],
+qs:[{q:"We ___ go to school on Wednesday.",o:["didn't","don't","wasn't","weren't"],a:0},{q:"She ___ see the T-Rex.",o:["not","didn't","doesn't","no"],a:1},{q:"They didn't ___ the museum.",o:["visit","visited","visiting","to visit"],a:0},{q:"He ___ lunch yesterday.",o:["didn't ate","not ate","didn't eat","not eat"],a:2}]},
+{n:"Past simple: irregular verbs – questions",r:"Did + subject + BASE verb? (no -ed after Did).",
+ex:["Did they go to the museum?","What did you see?","Where did she go?"],
+qs:[{q:"___ they go to the museum?",o:["Did","Do","Was","Were"],a:0},{q:"What ___ you see?",o:["do","does","did","was"],a:2},{q:"___ did she go?",o:["What","Where","When","How"],a:1},{q:"Did you ___ it?",o:["enjoyed","enjoys","enjoying","enjoy"],a:3}]}
+],
+ph:{s:["f spellings","ph spellings"],w:["flamingo","scarf","feet","phone","nephew","alphabet","photo","elephant","laugh","graph"],
+st:"My nephew Philip loves taking photos of flamingos. He has a fantastic phone. The alphabet chart has photos of all the animals. He wears a scarf to keep his feet warm.",
+qs:[{q:"Which uses 'ph' for /f/ sound?",o:["feet","flamingo","phone","scarf"],a:2},{q:"Which uses 'f' for /f/ sound?",o:["phone","nephew","alphabet","flamingo"],a:3},{q:"'elephant' uses which spelling?",o:["f","ff","ph","gh"],a:2}]},
+sk:{rd:{t:"A non-fiction text about dinosaurs",tx:"Dinosaurs lived on Earth for about 165 million years. The Brachiosaurus was a huge herbivore that ate only plants. The T-Rex was a famous carnivore. Scientists called palaeontologists study dinosaur fossils to learn about prehistoric life."},
+sp:"Ask and answer about school trips: Did you go to a museum? What did you see?",wr:"Exclamation marks (!). Write a webpage about my school trip.",li:"Identifying favourite things on a school trip"}},
+
+{id:4,ti:"Whose jacket is this?",su:"Unit 4",to:"Sports time",pg:32,c1:"#f953c6",c2:"#b91d73",
+w:["jacket","tennis","helmet","trainers","tracksuit","racket","goalkeeper","referee","medal","trophy"],
+e:["🧥","🎾","⛑️","👟","🏃","🎾","🥅","🦺","🥇","🏆"],
+dl:[["Holly","Whose jacket is this? Is it yours?"],["Max","No, it's not mine. It might be Amy's."],["Amy","Mine is green. That one is his – it's Leo's!"],["Leo","Oh yes! That's mine. Thanks!"],["Holly","The trophy is ours – we won!"],["Max","And these medals are theirs – they came second."]],
+gr:[
+{n:"Possessive pronouns",r:"mine/yours/his/hers/ours/theirs – stand alone without a noun.",
+ex:["Whose jacket is it? It's mine.","This bag isn't mine – it's yours.","The blue ball is his, the red one is hers.","The trophy is ours!"],
+qs:[{q:"Whose jacket is it? It's ___. (I)",o:["my","mine","me","myself"],a:1},{q:"This isn't my bag. Is it ___? (you)",o:["your","yours","you","yourself"],a:1},{q:"The red ball is ___. (she)",o:["her","hers","herself","she's"],a:1},{q:"The trophy is ___. (we)",o:["our","ours","us","ourselves"],a:1}]},
+{n:"Adverbs: +ly and irregular",r:"Adj + -ly = adverb. Irregular: good→well, fast→fast, hard→hard.",
+ex:["He ran slowly.","They played well.","She sang beautifully.","Max works hard."],
+qs:[{q:"She sings ___. (beautiful)",o:["beautiful","beautifully","more beautiful","beauty"],a:1},{q:"He plays tennis ___. (good)",o:["good","goodly","well","nicely"],a:2},{q:"They ran ___. (quick)",o:["quick","quicken","quickly","quickness"],a:2},{q:"She works ___. (hard)",o:["hardly","hardness","hard","harder"],a:2}]}
+],
+ph:{s:["ll endings","rr words"],w:["smell","bell","shell","mirror","carrot","cherry","parrot","barrel","grill","arrow"],
+st:"The rabbit looked in the mirror and ate a cherry. The bell rang and the smell of carrots filled the hall. The shell was small. The parrot sat on the barrel.",
+qs:[{q:"Which word has double 'l'?",o:["mirror","smell","carrot","cherry"],a:1},{q:"Which word has double 'r'?",o:["shell","bell","mirror","smell"],a:2},{q:"'barrel' has double...?",o:["l","r","t","n"],a:1}]},
+sk:{rd:{t:"A history poster about the Olympics",tx:"The Olympic Games started in ancient Greece over 2,700 years ago. Modern Olympics began in 1896 in Athens. Athletes come from all over the world to compete for gold, silver and bronze medals. The Olympics take place every four years."},
+sp:"Ask and answer about sports: What's your favourite sport? How often do you play?",wr:"It's or Its. Write instructions for a sport.",li:"Identifying children's favourite sports"}},
+
+{id:5,ti:"Go back to the roundabout",su:"Unit 5",to:"Directions",pg:38,c1:"#11998e",c2:"#38ef7d",
+w:["roundabout","traffic lights","turn left","turn right","go straight on","crossroads","petrol station","post office","car park","town centre"],
+e:["🔄","🚦","⬅️","➡️","⬆️","✖️","⛽","📮","🅿️","🏙️"],
+dl:[["Amy","Excuse me. How do we get to the castle?"],["Man","Go straight on at the traffic lights, then turn left at the roundabout."],["Holly","Why are we at this petrol station?"],["Max","Because we took the wrong road! We have to go back to the roundabout."],["Amy","I had to walk for ages yesterday."],["Leo","Go straight on at the crossroads, past the post office, and it's on the left."]],
+gr:[
+{n:"have to / had to",r:"have to = obligation (present). had to = obligation (past).",
+ex:["We have to go back to the roundabout.","She had to take the bus yesterday.","Do you have to wear a uniform?"],
+qs:[{q:"We ___ go back. (present obligation)",o:["have to","had to","must to","should to"],a:0},{q:"Yesterday she ___ walk to school.",o:["have to","had to","must","should"],a:1},{q:"___ you have to wear a uniform?",o:["Must","Do","Did","Have"],a:1},{q:"He ___ work late yesterday.",o:["has to","had to","have to","must"],a:1}]},
+{n:"Giving directions",r:"Go straight on / Turn left/right / Take the first turning / Go past / It's on the left/right.",
+ex:["Go straight on at the traffic lights.","Turn left at the roundabout.","Go past the post office.","Take the second turning on the right."],
+qs:[{q:"___ straight on at the traffic lights.",o:["Take","Go","Turn","Move"],a:1},{q:"Turn ___ at the roundabout.",o:["straight","left","ahead","forward"],a:1},{q:"Take the ___ turning on the right.",o:["one","first","once","former"],a:1}]},
+{n:"why / because",r:"Why = question asking for reason. Because = gives a reason.",
+ex:["Why are we here? Because we took the wrong road!","Why is she happy? Because she got a medal."],
+qs:[{q:"___ are you late?",o:["Because","Where","Why","What"],a:2},{q:"I was late ___ the bus was slow.",o:["why","so","because","since"],a:2}]}
+],
+ph:{s:["ck spellings","c endings"],w:["neck","duck","clock","rock","plastic","picnic","music","comic","stick","topic"],
+st:"The clock on the rock showed six o'clock. The duck swam near the picnic blanket. We listened to music at the picnic. The plastic comic book fell into the neck of the bottle.",
+qs:[{q:"Which uses 'ck'?",o:["music","picnic","clock","comic"],a:2},{q:"Which uses 'c' for /k/ at the end?",o:["rock","neck","clock","picnic"],a:3},{q:"'stick' ends with which spelling?",o:["c","k","ck","kk"],a:2}]},
+sk:{rd:{t:"An informative webpage about shadow puppet theatre",tx:"Shadow puppet theatre is popular in many Asian countries including Indonesia, Malaysia and India. In Indonesia these shows are called 'wayang'. The stories are often about good and evil. The puppets are made from leather and are very detailed and beautifully decorated."},
+sp:"Give and follow directions: go straight on, turn left/right, take the first/second turning.",wr:"Write instructions and an invitation.",li:"Understanding directions"}},
+
+{id:6,ti:"The best bed!",su:"Unit 6",to:"Comparing things",pg:44,c1:"#a18cd1",c2:"#fbc2eb",
+w:["comfortable","hard","soft","enormous","tiny","ancient","modern","expensive","cheap","crowded"],
+e:["😌","🪨","🛏️","🐘","🐜","🏺","🏙️","💰","🪙","👥"],
+dl:[["Holly","My bed is more comfortable than this one!"],["Max","That bed is the hardest in the world. And the smallest!"],["Amy","This is worse than my bed at home."],["Leo","It's the best bed I've ever slept in!"],["Holly","An ant is smaller than a bee. But a bee is more dangerous!"],["Max","The grasshopper was lazier than the ant."]],
+gr:[
+{n:"Comparatives & superlatives: long adjectives",r:"Long adj (2+ syllables): more + adj + than / the most + adj.",
+ex:["My bed is more comfortable than this one.","This is the most expensive hotel.","She is more intelligent than him."],
+qs:[{q:"This bed is ___ comfortable than mine.",o:["more","most","much","very"],a:0},{q:"It's the ___ expensive room.",o:["more","most","much","very"],a:1},{q:"She is ___ than her sister. (tall)",o:["more tall","most tall","taller","tallest"],a:2},{q:"This is the ___ (beautiful) flower.",o:["more beautiful","most beautiful","beautifuler","beautifulest"],a:1}]},
+{n:"Irregular comparatives & superlatives",r:"good→better→the best | bad→worse→the worst | far→further→the furthest",
+ex:["This hotel is better than the last one.","That was worse than I expected.","It's the best holiday ever!"],
+qs:[{q:"This is ___ (bad) than yesterday.",o:["more bad","badder","worse","worst"],a:2},{q:"Today was the ___ (good) day of my life!",o:["better","gooder","more good","best"],a:3},{q:"The red team played ___ (bad) than the blue.",o:["worse","worst","badder","more bad"],a:0}]}
+],
+ph:{s:["Soft c","soft g sounds"],w:["city","ice","dance","rice","cage","page","giraffe","stage","circle","giant"],
+st:"The giraffe danced on the stage in the city. It looked like an ice sculpture. The audience turned the page in silence. A large cage sat on the ice. The giant circle was in the centre.",
+qs:[{q:"Which has soft 'c' (/s/ sound)?",o:["cat","clock","city","cold"],a:2},{q:"Which has soft 'g' (/dʒ/ sound)?",o:["game","go","got","giraffe"],a:3},{q:"'dance' has soft 'c' because...",o:["it is short","c comes before e","c comes after a","c is at the start"],a:1}]},
+sk:{rd:{t:"A fable: The Ant and the Grasshopper",tx:"In the summer, the ant worked hard every day to gather food for the winter. The grasshopper sang and played all day. When winter came, the grasshopper was cold and hungry. 'I worked hard in summer,' said the ant, 'and now I have food for winter.' Moral: Work hard and be prepared."},
+sp:"Tell a story from pictures using past tense: was/were, worked, sang, came, asked.",wr:"Identify irregular plurals. Write a fable.",li:"Identifying chronology in a fable"}},
+
+{id:7,ti:"Will it really happen?",su:"Unit 7",to:"In space",pg:56,c1:"#1a1a2e",c2:"#16213e",
+w:["the future","travel","satellite","the moon","the sun","planets","rocket","astronaut","star","spaceship"],
+e:["🔮","✈️","📡","🌙","☀️","🌍","🚀","👨‍🚀","⭐","🛸"],
+dl:[["Mum","Amy and Leo have to go back to Australia."],["Holly","Oh no! Will they miss our holiday?"],["Mum","No, they won't. They'll be here for another four months."],["Max","Look at this magazine. It says there will be super-fast planes!"],["Holly","Amazing! Will it really happen?"],["Mum","Well, there aren't any planes like that yet. But maybe one day!"],["Max","In the future, people will travel in super-fast planes in just five hours from England to Australia!"]],
+gr:[
+{n:"The future with will",r:"will + base verb. Positive: will/'ll. Negative: won't (will not). Question: Will...?",
+ex:["People will travel in super-fast planes.","Will they go back to Australia?","There won't be any more long journeys.","I'll visit you next year."],
+qs:[{q:"People ___ travel in super-fast planes.",o:["will","going to","are","shall"],a:0},{q:"___ they go back to Australia?",o:["Are","Will","Do","Shall"],a:1},{q:"There ___ be any long journeys.",o:["won't","will not to","will","isn't"],a:0},{q:"I ___ visit you tomorrow.",o:["'ll","going","am","'m going"],a:0}]},
+{n:"Time markers: the future",r:"tomorrow / soon / later / next week / in two weeks' time / on Monday / this evening",
+ex:["They'll arrive next week.","I'll phone you tomorrow.","She'll be here soon.","In two weeks' time, we'll be in Australia."],
+qs:[{q:"She'll finish ___. (very soon)",o:["soon","yesterday","last week","before"],a:0},{q:"We'll be there ___ a month's time.",o:["on","in","at","by"],a:1}]}
+],
+ph:{s:["au/aw spellings","or spellings"],w:["sauce","August","autumn","jigsaw","straw","paw","horse","sport","morning","born"],
+st:"In autumn, the horse eats straw every morning. The dog holds his paw up for a sport trophy. We played with the jigsaw in August. Pour some sauce on the plate.",
+qs:[{q:"Which spells /ɔː/ with 'aw'?",o:["sauce","sport","straw","morning"],a:2},{q:"Which spells /ɔː/ with 'or'?",o:["paw","autumn","August","horse"],a:3},{q:"Which spells /ɔː/ with 'au'?",o:["straw","horse","sauce","sport"],a:2}]},
+sk:{rd:{t:"A website forum about the future",tx:"What will the world be like in 2100? Liam (12): I think robots will do all the hard work and people will have more free time. Beth (11): People will live on other planets. Oliver (10): Cars won't need drivers – they'll drive themselves. Maya (13): We will have found a cure for every disease."},
+sp:"Offer opinions: I think... / I don't think... / In my opinion...",wr:"Compound words (spaceship, moonlight). Expand notes into a text.",li:"Identifying children's predictions about the future"}},
+
+{id:8,ti:"How much time have we got?",su:"Unit 8",to:"At the airport",pg:62,c1:"#3a7bd5",c2:"#3a6073",
+w:["money","passenger","arrivals","departures","luggage","passport","suitcase","magazine","newspaper","coin"],
+e:["💰","🧑","✈️","🛫","🧳","📘","💼","📰","📄","🪙"],
+dl:[["Holly","How much time have we got, Mum? Is there time to look in the shops?"],["Mum","Yes, there's still lots of time. Here's some money for each of you."],["Holly","How much money have you got?"],["Amy","One pound."],["Leo","How many pencils have you got already?"],["Amy","I've got an idea. Why don't we put our money together and buy one really nice thing?"],["Mum","So, what did you buy?"],["Leo","A present for you!"],["Mum","For me? You know I love chocolates. Thank you!"]],
+gr:[
+{n:"Expressing quantity: some/any/much/many",r:"some = positive. any = negatives/questions. much + uncountable. many + countable.",
+ex:["How much money have you got?","I haven't got much money.","Have you got any newspapers?","How many pencils have you got?"],
+qs:[{q:"How ___ money have you got?",o:["many","much","any","some"],a:1},{q:"I haven't got ___ money.",o:["some","many","much","a"],a:2},{q:"Have you got ___ newspapers?",o:["some","much","many","any"],a:3},{q:"How ___ pencils have you got?",o:["much","any","many","some"],a:2}]}
+],
+ph:{s:["Past simple -ed endings: /t/ /ɪd/ /d/"],w:["walked /t/","waited /ɪd/","showed /d/","looked /t/","landed /ɪd/","played /d/","clapped /t/","smiled /d/"],
+st:"We walked to the airport and waited for the plane. The pilot showed us the cockpit. We all clapped when we landed. The passengers looked out and smiled.",
+qs:[{q:"'walked' ends with which sound?",o:["/d/","/ɪd/","/t/","/əd/"],a:2},{q:"'waited' ends with which sound?",o:["/d/","/ɪd/","/t/","/əd/"],a:1},{q:"'played' ends with which sound?",o:["/d/","/ɪd/","/t/","/əd/"],a:0}]},
+sk:{rd:{t:"A letter about a holiday",tx:"Dear Grandma,\nI'm writing to tell you about our holiday. We flew to Spain and went to the beach every day. The hotel was amazing – it had three swimming pools! The food was delicious. We tried lots of different Spanish dishes. I hope we can visit you soon.\nLove, Holly"},
+sp:"Ask and answer about your holiday: Where did you go? What did you do? Did you enjoy it?",wr:"Addressing envelopes. Write a letter about my holiday.",li:"Identifying details about holidays"}}
+];
+
+// Units 9-15
+U.push(
+{id:9,ti:"Something new to watch!",su:"Unit 9",to:"TV & entertainment",pg:68,c1:"#f7971e",c2:"#ff5f6d",
+w:["documentary","comedy","cartoon","quiz show","nature programme","sports programme","chat show","news","weather forecast","drama"],
+e:["🎬","😂","🐭","❓","🌍","⚽","💬","📺","🌤️","🎭"],
+dl:[["Holly","I turned on the TV to watch sports."],["Max","We went to the cinema to see the dolphins."],["Amy","I watch TV every day."],["Leo","How often do you watch TV?"],["Amy","Three times a week."],["Holly","I watch nature programmes to learn about animals."],["Max","My favourite is the quiz show. I watch it every Friday to test my knowledge."]],
+gr:[
+{n:"Infinitive of purpose",r:"to + base verb answers the question 'Why?'",
+ex:["I turned on the TV to watch sports.","We went to the cinema to see the dolphins.","She reads every day to improve her English."],
+qs:[{q:"She turned on the TV ___ the news.",o:["for watch","to watch","watching","watch"],a:1},{q:"I go to the library ___ books.",o:["for read","reading","to read","reads"],a:2},{q:"He exercises every day ___ fit.",o:["for stay","to stay","staying","stay"],a:1},{q:"Why do you study? ___ get good grades.",o:["For","So","Because","To"],a:3}]},
+{n:"How often...?",r:"How often = asking about frequency. Answers: every day / twice a week / once a month.",
+ex:["How often do you watch TV? Every day.","How often does she exercise? Three times a week."],
+qs:[{q:"___ do you watch TV?",o:["How many","How much","How often","How long"],a:2},{q:"I watch TV ___ times a week.",o:["each","every","three","third"],a:2},{q:"She exercises ___ a week. (x2)",o:["two times","twice","two","second"],a:1}]}
+],
+ph:{s:["er endings","or endings"],w:["mother","father","September","visitor","doctor","actor","teacher","collector","October","sister"],
+st:"My mother is a doctor. In September, an actor visited our school. My father is a visitor from another city. Every October, a collector visits our teacher.",
+qs:[{q:"'doctor' ends with which spelling?",o:["-er","-or","-ar","-ur"],a:1},{q:"'mother' ends with which spelling?",o:["-er","-or","-ar","-ur"],a:0},{q:"Both endings sound like...?",o:["/ɔː/","/ɜː/","/ə/","/eɪ/"],a:2}]},
+sk:{rd:{t:"A TV guide",tx:"FRIDAY EVENING TV\n7:00 Nature World: Dolphins of the Pacific\n7:30 Comedy Zone: The Funny Family\n8:00 Junior News: Today's Top Stories\n8:30 Space Quest: Journey to Mars – a documentary about future space travel."},
+sp:"Talk about favourite TV shows: What's your favourite programme? Why do you like it?",wr:"The prefix un- (unhappy, unusual). Write a TV guide.",li:"Identifying children's favourite TV shows"}},
+
+{id:10,ti:"I've printed my homework",su:"Unit 10",to:"Computers",pg:80,c1:"#43c6ac",c2:"#f8ffae",
+w:["computer","keyboard","screen","mouse","printer","email","website","download","upload","password"],
+e:["💻","⌨️","🖥️","🖱️","🖨️","📧","🌐","⬇️","⬆️","🔑"],
+dl:[["Max","He's put the books on the shelves."],["Holly","Have you seen my new speakers?"],["Amy","Yes, I have. They're in the bedroom."],["Leo","I've printed my homework."],["Max","Have you switched on the printer?"],["Holly","No, I haven't. I forgot."],["Leo","She has already sent the email. Have you finished yet?"],["Max","No, I haven't finished yet. I've downloaded the photos but I haven't uploaded them."]],
+gr:[
+{n:"Present perfect: affirmative",r:"have/has + past participle. For recent actions or unspecified past experiences.",
+ex:["He's put the books on the shelves.","I've printed my homework.","She's switched on the computer.","They've arrived."],
+qs:[{q:"He ___ put the books away.",o:["have","has","is","did"],a:1},{q:"I ___ printed my homework.",o:["have","has","am","did"],a:0},{q:"She has ___ on the computer.",o:["switch","switching","switched","switches"],a:2},{q:"They ___ already sent the email.",o:["have","has","did","are"],a:0}]},
+{n:"Present perfect: questions & negatives",r:"Have/Has + subject + past participle? Yes, I have. / No, I haven't.",
+ex:["Have you seen my new speakers? Yes, I have. / No, I haven't.","Has she finished? No, she hasn't."],
+qs:[{q:"___ you seen my speakers?",o:["Do","Have","Has","Did"],a:1},{q:"Has she ___ the computer?",o:["fix","fixed","fixes","fixing"],a:1},{q:"No, I ___.",o:["haven't","hasn't","didn't","don't"],a:0},{q:"___ he finished yet?",o:["Have","Has","Did","Is"],a:1}]}
+],
+ph:{s:["ur spellings","ir spellings"],w:["hurt","Thursday","nurse","curtains","circle","girl","shirt","bird","burn","first"],
+st:"The nurse wore a shirt on Thursday. The girl hurt herself in the circle. The bird sat on the curtains. The first Thursday in the year was very cold.",
+qs:[{q:"Which word has 'ur' spelling for /ɜː/?",o:["circle","girl","hurt","shirt"],a:2},{q:"Which word has 'ir' spelling for /ɜː/?",o:["nurse","curtains","hurt","bird"],a:3},{q:"'Thursday' has which spelling?",o:["ir","ur","er","or"],a:1}]},
+sk:{rd:{t:"Online instructions for using a computer",tx:"How to print a document:\n1. Press the power button to turn on the computer.\n2. Type your password to log in.\n3. Open your document.\n4. Click File, then Print.\n5. Choose your printer and click OK.\n6. Collect your printed document."},
+sp:"Talk about computer use: How often do you use a computer? What do you use it for?",wr:"Parts of speech (nouns, verbs, adjectives). Write about how I use a computer.",li:"Identifying children's computer use"}},
+
+{id:11,ti:"Have you ever been ...?",su:"Unit 11",to:"Places",pg:86,c1:"#ee9ca7",c2:"#ffdde1",
+w:["mountains","jungle","desert","volcano","glacier","waterfall","cave","island","coral reef","canyon"],
+e:["⛰️","🌴","🏜️","🌋","🧊","💧","🕳️","🏝️","🐠","🪨"],
+dl:[["Amy","Have you ever been to space?"],["Max","No, I haven't. But I'd love to go!"],["Leo","Have you ever climbed a mountain?"],["Holly","Yes! We've climbed Ben Nevis."],["Amy","Wow! We've never fallen in the mountains."],["Holly","Have you ever been to Australia?"],["Amy","Yes, I live there! I've been there lots of times!"]],
+gr:[
+{n:"Present perfect: ever",r:"'Have you ever...?' = experience in your whole life. ever = at any time.",
+ex:["Have you ever been to France?","Yes, I have. / No, I haven't.","Have you ever climbed a mountain?"],
+qs:[{q:"Have you ___ been to France?",o:["never","ever","always","just"],a:1},{q:"___ you ever eaten sushi?",o:["Do","Have","Did","Are"],a:1},{q:"Have you ever ___ a mountain?",o:["climb","climbed","climbing","to climb"],a:1},{q:"Have you ever ___ to Japan?",o:["be","was","been","being"],a:2}]},
+{n:"Present perfect: never",r:"I've never... = I have not done this at any time in my life.",
+ex:["We've never fallen in the mountains.","She's never visited Australia.","He's never eaten raw fish."],
+qs:[{q:"She's ___ eaten sushi.",o:["ever","never","always","sometimes"],a:1},{q:"I've never ___ to Japan.",o:["been","be","being","go"],a:0},{q:"He has ___ been on a plane.",o:["ever","never","always","been"],a:1}]}
+],
+ph:{s:["ea = short /e/","e = short /e/"],w:["feather","bread","head","heavy","spend","tent","present","help","weather","ready"],
+st:"She spread bread and feathers on the table. The heavy tent fell in the wind. We spent time helping near the meadow. Bread is made with flour and yeast. Heavy weather ahead!",
+qs:[{q:"Which spells short /e/ with 'ea'?",o:["seat","mean","feather","beat"],a:2},{q:"Which spells short /e/ with just 'e'?",o:["bread","feather","head","spend"],a:3},{q:"'bread' and 'head' both have which sound?",o:["/iː/","/eɪ/","/e/","/ɑː/"],a:2}]},
+sk:{rd:{t:"An account of a mountain expedition",tx:"Our team set off from base camp at dawn. We climbed for six hours through thick snow. At the summit, we could see for hundreds of miles. It was the most breathtaking view I have ever seen. We have climbed many mountains, but this was the best."},
+sp:"Interview an explorer: Have you ever...? Tell me about a time when...",wr:"Topic sentences. Write a blog entry.",li:"Identifying details about a mountain expedition"}},
+
+{id:12,ti:"What's the matter?",su:"Unit 12",to:"How to stay healthy",pg:92,c1:"#c94b4b",c2:"#4b134f",
+w:["headache","stomachache","toothache","fever","sore throat","broken arm","cut","bruise","medicine","appointment"],
+e:["🤕","🤢","🦷","🌡️","😷","🦴","🩹","🤜","💊","📅"],
+dl:[["Mum","You should drink some water."],["Holly","You shouldn't eat lots of cakes."],["Max","Max couldn't eat his dinner."],["Holly","But he could eat lots of cakes!"],["Doctor","You should rest. You shouldn't exercise today."],["Max","You could try honey and lemon for your sore throat."]],
+gr:[
+{n:"should / shouldn't",r:"Use should/shouldn't to give advice or recommendations.",
+ex:["You should drink some water.","You shouldn't eat lots of cakes.","She should see the doctor."],
+qs:[{q:"You ___ drink some water. (good advice)",o:["will","should","must","can"],a:1},{q:"You ___ eat so many sweets. (bad advice)",o:["shouldn't","won't","can't","must"],a:0},{q:"She ___ see a doctor. (recommendation)",o:["can","should","will","might"],a:1}]},
+{n:"could / couldn't",r:"could/couldn't = was/were able to / not able to (past ability).",
+ex:["Max couldn't eat his dinner.","But he could eat cakes.","She could run fast when young."],
+qs:[{q:"Max ___ eat his dinner. (unable, past)",o:["could","couldn't","can","can't"],a:1},{q:"She ___ swim when she was five.",o:["can","could","couldn't","should"],a:1},{q:"___ you ride a bike when you were 6?",o:["Can","Should","Could","Would"],a:2}]}
+],
+ph:{s:["le endings","al endings"],w:["candle","castle","table","people","sandal","animal","hospital","cereal","handle","capital"],
+st:"The animal in the castle was eating cereal at the table. The candle lit up the sandal by the hospital. People came to see the capital city.",
+qs:[{q:"Which word ends in '-al'?",o:["candle","table","animal","castle"],a:2},{q:"Which word ends in '-le'?",o:["hospital","animal","cereal","people"],a:3},{q:"Both endings are pronounced...?",o:["/el/","/æl/","/əl/","/il/"],a:2}]},
+sk:{rd:{t:"An information leaflet about staying healthy",tx:"Top Tips for Staying Healthy!\n✓ Eat five portions of fruit and vegetables every day.\n✓ Drink eight glasses of water.\n✓ Sleep for at least eight hours every night.\n✓ Exercise thirty minutes, at least three times a week.\n✓ Wash your hands regularly.\n✓ Visit your doctor and dentist for regular check-ups."},
+sp:"Describe what you do to stay healthy: I always... / I sometimes... / I should...",wr:"Connect sentences using 'because' and 'so'. Write an information leaflet.",li:"Identifying children's healthy lifestyles"}},
+
+{id:13,ti:"Can you help me?",su:"Unit 13",to:"Making smoothies",pg:104,c1:"#e65c00",c2:"#F9D423",
+w:["smoothie","milk","fridge","pour","blender","strawberry","chop","lid","mango","peel"],
+e:["🥤","🥛","❄️","🫗","🔄","🍓","🔪","🪤","🥭","🫙"],
+dl:[["Mum","Can you help me make fruit smoothies? Leo, get milk from the fridge and pour it in the blender."],["Mum","Here are some strawberries. Chop them up please, Amy."],["Holly","I'll help her."],["Mum","Leo's got the blender. Give them to Leo when you've finished."],["Leo","I know, Mum! Now I turn on the blender. Ahh..."],["Mum","Here, Leo – this is the lid which goes on the blender."],["Leo","Sorry, Mum. I'll clean it up."]],
+gr:[
+{n:"Object pronouns",r:"me/you/him/her/it/them/us – used as the object of a verb.",
+ex:["Can you help me?","Give them to Leo.","She helped him carry the bags.","We gave it to her."],
+qs:[{q:"Can you help ___? (I)",o:["I","me","my","mine"],a:1},{q:"She gave ___ the book. (they)",o:["their","they","them","theirs"],a:2},{q:"He called ___. (she)",o:["she","her","hers","herself"],a:1},{q:"Give ___ to Holly. (it)",o:["its","it","them","they"],a:1}]},
+{n:"Relative pronouns: who and which",r:"who = people. which = things.",
+ex:["This is the boy who didn't put the lid on.","This is the smoothie which was in the blender.","She's the girl who helped me."],
+qs:[{q:"This is the boy ___ didn't put the lid on.",o:["which","that","who","where"],a:2},{q:"This is the smoothie ___ was in the blender.",o:["who","whose","which","whom"],a:2},{q:"She's the girl ___ helped us.",o:["which","that","who","what"],a:2}]}
+],
+ph:{s:["el endings","il endings"],w:["tunnel","camel","towel","travel","lentils","pencil","April","pupil","label","fossil"],
+st:"The camel carried a pencil and towel on its travels in April. The pupil drew a tunnel with lentils. The label on the fossil read 'prehistoric'.",
+qs:[{q:"Which ends in '-il'?",o:["tunnel","camel","pencil","towel"],a:2},{q:"Which ends in '-el'?",o:["pupil","April","lentils","camel"],a:3},{q:"'travel' and 'tunnel' both end in...?",o:["-il","-al","-el","-le"],a:2}]},
+sk:{rd:{t:"Two accounts about helping others",tx:"Account 1: There's an elderly man in our street who needs help with his shopping. Every Saturday I carry his bags to his front door. He always smiles and says thank you.\n\nAccount 2: I volunteer at the local animal shelter every Sunday. I walk the dogs, clean their cages and give them food and water. It makes me feel happy to help the animals."},
+sp:"Ask about jobs: What do you do? How do you help people? Do you enjoy it?",wr:"Sub-clauses. Write an interview.",li:"Matching people with how they help others"}},
+
+{id:14,ti:"We were fishing",su:"Unit 14",to:"Family",pg:110,c1:"#485563",c2:"#29323c",
+w:["relatives","grandparents","aunt","uncle","cousin","nephew","niece","fishing","camping","sailing"],
+e:["👨‍👩‍👧‍👦","👴","👩","👨","🧑","👦","👧","🎣","⛺","⛵"],
+dl:[["Holly","What were you doing?"],["Max","I was looking at photos."],["Amy","We were fishing with Grandpa when it started to rain."],["Leo","What was she doing when the phone rang?"],["Holly","She was cooking dinner."],["Max","My dad was born in 1971."],["Amy","My mum was born on 9th July 1972."]],
+gr:[
+{n:"Past continuous",r:"was/were + verb-ing. For actions in progress at a specific past time.",
+ex:["What were you doing? I was looking at photos.","We were fishing when it started to rain.","She was cooking when he called."],
+qs:[{q:"What ___ you doing?",o:["are","were","was","did"],a:1},{q:"I ___ looking at photos.",o:["were","am","was","did"],a:2},{q:"She ___ playing when he called.",o:["was","were","is","did"],a:0},{q:"They ___ fishing when it rained.",o:["are","is","were","was"],a:2}]},
+{n:"Dates and I was born",r:"Born ON a specific date. Born IN a month or year. Ordinal numbers: 1st, 2nd, 3rd, 4th...",
+ex:["My dad was born in 1971.","She was born on 9th July.","He was born on 9th July 1971."],
+qs:[{q:"I was born ___ July. (month)",o:["at","in","on","by"],a:1},{q:"She was born ___ 9th July. (specific date)",o:["on","at","by","in"],a:0},{q:"He was born ___ 1998. (year)",o:["on","at","by","in"],a:3}]},
+{n:"Past continuous + past simple",r:"Past continuous (background) + WHEN + past simple (interruption).",
+ex:["When I was working, the phone rang.","She was cooking when the fire started.","I was reading when he called."],
+qs:[{q:"I ___ reading when she called.",o:["am","was","were","did"],a:1},{q:"When the rain ___, we were fishing.",o:["starting","starts","started","start"],a:2}]}
+],
+ph:{s:["tion endings","shion endings"],w:["addition","subtraction","invitation","celebration","fashion","cushion","nation","station","mention","passion"],
+st:"She got an invitation to the fashion show. The addition and subtraction problems were easy. The cushion had a beautiful pattern. The nation celebrated the occasion at the station.",
+qs:[{q:"Which suffix means an action or result?",o:["-tion","-shion","-ment","-ing"],a:0},{q:"Which word has the 'shion' ending?",o:["addition","invitation","cushion","subtraction"],a:2},{q:"'invitation' ends with...?",o:["-tion","-shion","-sion","-xion"],a:0}]},
+sk:{rd:{t:"A poem about favourite memories",tx:"I remember summer days,\nFlying kites in sunny rays.\nGrandma baking, apple pie,\nWatching clouds drift across the sky.\nRelatives coming, games we'd play,\nLaughing all those hours away."},
+sp:"Talk about your favourite memories: What were you doing? Who were you with? What happened?",wr:"Poem structure and rhyme. Complete a poem.",li:"Identifying favourite memories"}},
+
+{id:15,ti:"Good news, bad news",su:"Unit 15",to:"Jobs",pg:116,c1:"#56ab2f",c2:"#a8e063",
+w:["pilot","nurse","teacher","firefighter","chef","dentist","journalist","scientist","engineer","architect"],
+e:["✈️","💉","📚","🧯","👨‍🍳","🦷","📰","🔬","⚙️","🏗️"],
+dl:[["Holly","When I was working, the phone rang."],["Max","There is some good news."],["Mum","There's some bad news about the weather."],["Holly","There's their house. They're very happy in it."],["Max","When she was studying, the teacher came in."],["Amy","When Leo was sleeping, his phone rang three times!"]],
+gr:[
+{n:"Past simple + past continuous (combined)",r:"Past continuous = background. Past simple = interrupting action.",
+ex:["When I was working, the phone rang.","She was cooking when the fire started.","I was reading when he called."],
+qs:[{q:"When I ___ working, the phone rang.",o:["am","was","were","did"],a:1},{q:"She was cooking when the fire ___.",o:["starting","start","started","starts"],a:2},{q:"They ___ playing when it started to rain.",o:["are","is","were","was"],a:2}]},
+{n:"Homophones: there/they're/their",r:"there = place/existence. they're = they are. their = belonging to them.",
+ex:["There is some good news.","They're all very clever.","Their dog is friendly."],
+qs:[{q:"___ is some good news. (existence)",o:["There","Their","They're","The"],a:0},{q:"___ all very clever. (they are)",o:["There","Their","They're","The're"],a:2},{q:"I like ___ house. (belonging)",o:["there","their","they're","the"],a:1},{q:"Come ___ please. (place)",o:["their","they're","there","the're"],a:2}]},
+{n:"Vocabulary homophones",r:"Words that sound the same but have different spellings and meanings.",
+ex:["see/sea | hear/here | wear/where | write/right"],
+qs:[{q:"I can ___ the birds. (sound)",o:["here","hear","her","hire"],a:1},{q:"Come ___ please. (place)",o:["hear","here","her","hire"],a:1},{q:"I ___ my uniform to school. (clothes)",o:["where","wear","were","ware"],a:1},{q:"Can you ___ your name? (mark on paper)",o:["right","write","wrote","ride"],a:1}]}
+],
+ph:{s:["Homophones","Vocabulary"],w:["see/sea","hear/here","wear/where","write/right","know/no","new/knew","buy/by","eight/ate"],
+st:"Can you hear the sea? Can you see where we are? Write your name on the right side. Wear your shoes here. I know the new way to buy tickets.",
+qs:[{q:"'sea' and 'see' are...?",o:["synonyms","antonyms","homophones","homographs"],a:2},{q:"I can ___ the sea from here. (with eyes)",o:["sea","see","si","ce"],a:1}]},
+sk:{rd:{t:"A traditional story: Three Wishes",tx:"One day, a woodcutter found a magic fish. 'I will grant you three wishes,' said the fish. The woodcutter wished for a big house, then a beautiful garden, then he wished for his old simple life back! The lesson is: be happy with what you have."},
+sp:"Talk about your wishes: If I had three wishes, I would...",wr:"Speech marks. Write the end of a story.",li:"Identifying children's wishes"}}
+);
+
+// Fluency Times
+const FT=[
+{id:"ft1",ti:"Fluency Time 1 – Eating out",to:"Ordering food",pg:26,
+ph:["I'd like...","Can I have...?","What would you like?","Anything else?","The bill, please.","Here you are."],
+dl:[["Waiter","Good evening. Are you ready to order?"],["Max","Yes, I'd like a margherita pizza, please."],["Waiter","And to drink?"],["Max","A glass of orange juice, please."],["Waiter","Anything else?"],["Max","No, thank you. That's all."],["Waiter","Coming right up!"]]},
+{id:"ft2",ti:"Fluency Time 2 – Making phone calls",to:"Telephone conversations",pg:50,
+ph:["Can I speak to...?","Who's calling?","Hold on a minute.","It's [name] here.","I'll call back later.","Speaking!"],
+dl:[["Dad","Hello."],["Anna","Hi. Can I speak to Sara, please?"],["Dad","Yes. Who's calling, please?"],["Anna","It's Anna here."],["Dad","Hold on a minute, please."],["Dad","Sara! It's for you!"]]},
+{id:"ft3",ti:"Fluency Time 3 – Choosing TV programmes",to:"TV & media",pg:74,
+ph:["What shall we watch?","Let's watch...","I'd rather watch...","How about...?","Shall we watch...?","I don't mind."],
+dl:[["Holly","What shall we watch?"],["Max","Let's watch the nature programme."],["Holly","But I want to watch the comedy!"],["Max","How about we watch the news first, then your comedy?"],["Holly","OK. That sounds fair."]]},
+{id:"ft4",ti:"Fluency Time 4 – Describing accidents",to:"Accidents & injuries",pg:98,
+ph:["What happened?","Are you all right?","I fell off...","My ... really hurts.","You should...","I'm so sorry."],
+dl:[["Max","Oh no! What happened?"],["Leo","I fell off my bike."],["Max","Are you all right?"],["Leo","My arm really hurts."],["Max","You should go to hospital."],["Leo","I'll be fine. Can you help me?"]]},
+{id:"ft5",ti:"Fluency Time 5 – In the playground",to:"Games & sports",pg:122,
+ph:["Do you want to play?","How do you play?","You have to...","It's your turn.","Well played!","That's not fair!"],
+dl:[["Amy","What are you playing?"],["Leo","We're playing tag. Do you want to join?"],["Amy","Yes please! How do you play?"],["Leo","You have to run and the person who is 'it' has to catch you."],["Amy","Sounds fun! I'm in!"]]}
+];
+
+// Extensive Reading
+const ER=[
+{id:"er1",ti:"Fossils",pg:30,tx:"Fossils are the remains of plants and animals that lived millions of years ago. When an animal dies, its bones can be preserved in rock over millions of years. Scientists called palaeontologists study fossils to learn about life in prehistoric times. Mary Anning was a famous fossil hunter who discovered many important fossils on the English coast in the 1800s.",
+qs:[{q:"What are fossils?",a:"The remains of plants and animals that lived millions of years ago."},{q:"Who studies fossils?",a:"Scientists called palaeontologists."},{q:"Who was Mary Anning?",a:"A famous fossil hunter who discovered important fossils."}]},
+{id:"er2",ti:"Sport",pg:54,tx:"Sport is important for health and happiness. The most popular sport in the world is football – over 250 million people play it in over 200 countries. The Olympic Games take place every four years and include over 30 sports. Some unusual sports include cheese rolling in England, bog snorkelling in Wales and wife carrying in Finland!",
+qs:[{q:"What is the most popular sport?",a:"Football."},{q:"How many people play football?",a:"Over 250 million."},{q:"How often do the Olympics happen?",a:"Every four years."}]},
+{id:"er3",ti:"Travel",pg:78,tx:"Travelling is a wonderful way to learn about the world. Some people travel by plane to far-away countries. Others prefer slower travel by ship or train. Backpackers carry everything in a rucksack. The world's longest train journey is the Trans-Siberian Railway in Russia, which takes about a week. It passes through eight time zones!",
+qs:[{q:"How do backpackers carry their things?",a:"In a rucksack."},{q:"What is the world's longest train journey?",a:"The Trans-Siberian Railway."},{q:"How long does it take?",a:"About a week."}]},
+{id:"er4",ti:"Exciting Places",pg:102,tx:"There are many exciting places to visit. The Great Barrier Reef in Australia is the world's largest coral reef. The Amazon Rainforest in South America is home to over three million species of plants and animals. Antarctica is the coldest place on Earth, where temperatures can drop to minus 89 degrees Celsius!",
+qs:[{q:"Where is the Great Barrier Reef?",a:"In Australia."},{q:"What lives in the Amazon Rainforest?",a:"Over three million species of plants and animals."},{q:"What is the coldest place on Earth?",a:"Antarctica."}]},
+{id:"er5",ti:"Gold",pg:126,tx:"Gold is one of the most valuable metals in the world. People have used gold for thousands of years to make jewellery and coins. Today, gold is also used in electronics because it conducts electricity very well. The largest gold nugget ever found was called the Welcome Stranger and was discovered in Australia in 1869. It weighed over 70 kilograms!",
+qs:[{q:"Why is gold used in electronics?",a:"Because it conducts electricity very well."},{q:"What was the largest gold nugget called?",a:"The Welcome Stranger."},{q:"Where was it found?",a:"In Australia."}]}
+];
+
+// Culture
+const CU=[
+{id:"c1",ti:"Shopping",pg:130,tx:"Lots of British people love shopping. Liam (10) loves Hamleys toy shop in London with five floors of toys – five million people visit every year! Bryony (11) loves Brick Lane Market on Sundays where stalls sell unusual things. Caitlin (9) shops at Westfield Shopping Centre. Danny (13) is on Tottenham Court Road looking for a radio for his uncle.",
+qs:[{q:"How many floors does Hamleys have?",a:"Five floors."},{q:"When does Bryony go to Brick Lane Market?",a:"On Sundays."},{q:"What is Danny looking for?",a:"A radio for his uncle."}]},
+{id:"c2",ti:"Watching Wildlife",pg:132,tx:"Britain has amazing wildlife. You can see red deer in Scotland, puffins on the coast and red squirrels in forests. The RSPB (Royal Society for the Protection of Birds) helps protect birds and their habitats. Every year, millions of people take part in the Big Garden Birdwatch to count the birds in their gardens.",
+qs:[{q:"Where can you see red deer?",a:"In Scotland."},{q:"What does the RSPB do?",a:"It helps protect birds and their habitats."},{q:"What is the Big Garden Birdwatch?",a:"An event where people count birds in their gardens."}]},
+{id:"c3",ti:"Australia",pg:134,tx:"Australia is the world's sixth largest country with a population of about 25 million. The capital city is Canberra, but the largest city is Sydney. Australia is famous for its unique wildlife including kangaroos, koalas and wombats. The Great Barrier Reef is one of the seven natural wonders of the world.",
+qs:[{q:"What is the capital of Australia?",a:"Canberra."},{q:"What is the largest city?",a:"Sydney."},{q:"Name one unique Australian animal.",a:"Kangaroo / koala / wombat."}]}
+];
+
+const GAMES=[
+{id:"quiz",ti:"Word Quiz",ds:"Choose the right word!",ic:"❓",c1:"#f7971e",c2:"#ffd200"},
+{id:"match",ti:"Word Matching",ds:"Match words to pictures",ic:"🎯",c1:"#4ECDC4",c2:"#44CF6C"},
+{id:"memory",ti:"Memory Match",ds:"Flip cards to find pairs",ic:"🧠",c1:"#667eea",c2:"#764ba2"},
+{id:"hangman",ti:"Hangman",ds:"Guess the word letter by letter",ic:"🎪",c1:"#f953c6",c2:"#b91d73"},
+{id:"scramble",ti:"Word Scramble",ds:"Unscramble the letters",ic:"🔀",c1:"#11998e",c2:"#38ef7d"},
+{id:"fillblank",ti:"Fill the Blank",ds:"Complete the sentence",ic:"✏️",c1:"#a18cd1",c2:"#fbc2eb"},
+{id:"sentence",ti:"Sentence Builder",ds:"Put words in order",ic:"🔧",c1:"#c94b4b",c2:"#4b134f"},
+{id:"grammar",ti:"Grammar Challenge",ds:"Beat the clock!",ic:"⏱️",c1:"#43c6ac",c2:"#f8ffae"},
+{id:"listening",ti:"Listen & Choose",ds:"Hear it, answer it",ic:"👂",c1:"#ee9ca7",c2:"#ffdde1"},
+{id:"clues",ti:"Word Clues",ds:"Use clues to find words",ic:"📰",c1:"#485563",c2:"#29323c"}
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+const ST={
+  sec:'units',uv:null,tab:'w',gid:null,
+  gs:0,gl:3,gqs:[],gqi:0,gtm:20,
+  ts:parseInt(localStorage.getItem('ff4s')||'0'),
+  prog:JSON.parse(localStorage.getItem('ff4p')||'{}'),
+  hword:'',hguess:[],
+  scrWords:[],scrIdx:0,
+  memCards:[],memFlip:[],memMatch:[],
+  mxPairs:[],mxSel:{},mxDone:[],
+  sbWords:[],sbBuilt:[],sbCorrect:'',
+  clueWords:[],clueIdx:0,gcTmrId:null
+};
+
+function save(){localStorage.setItem('ff4s',ST.ts);localStorage.setItem('ff4p',JSON.stringify(ST.prog));}
+function addStars(n){ST.ts+=n;document.getElementById('ts').textContent=ST.ts;save();if(n>0)confetti(n);}
+function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function S(sec){
+  ST.sec=sec;ST.uv=null;ST.gid=null;
+  if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  const m={units:'u',grammar:'gr',phonics:'ph',speaking:'sp',games:'g',progress:'pr'};
+  const el=document.querySelector('.nb.'+m[sec]);if(el)el.classList.add('active');
+  render();
+}
+
+function render(){
+  const ca=document.getElementById('ca');
+  if(ST.gid){ca.innerHTML=rGame();aGame();return;}
+  if(ST.uv){ca.innerHTML=rLesson();return;}
+  switch(ST.sec){
+    case'units':ca.innerHTML=rUnits();break;
+    case'grammar':ca.innerHTML=rGramHub();break;
+    case'phonics':ca.innerHTML=rPhonHub();break;
+    case'speaking':ca.innerHTML=rSpeakHub();break;
+    case'games':ca.innerHTML=rGamesHub();break;
+    case'progress':ca.innerHTML=rProgress();break;
+  }
+}
+
+// ============================================================
+// UNITS LIST
+// ============================================================
+function rUnits(){
+  let h='<div class="pt">📚 All Units &amp; Content</div><div class="ug">';
+  U.forEach(u=>{
+    const pg=ST.prog['u'+u.id]||0;
+    h+=`<div class="uc" style="--c1:${u.c1};--c2:${u.c2}" onclick="openU(${u.id})">
+      <div class="un">${u.id===0?'S':u.id}</div>
+      <h3>${u.ti}</h3><p>${u.to}</p>
+      <div class="pb"><div class="pf" style="width:${pg}%"></div></div>
+    </div>`;
+  });
+  FT.forEach(ft=>h+=`<div class="uc" style="--c1:#FF6B35;--c2:#FF8E53" onclick="openFT('${ft.id}')">
+    <div class="un">💬</div><h3>${ft.ti}</h3><p>${ft.to}</p></div>`);
+  ER.forEach(er=>h+=`<div class="uc" style="--c1:#2C3E50;--c2:#4CA1AF" onclick="openER('${er.id}')">
+    <div class="un">📖</div><h3>${er.ti}</h3><p>Extensive Reading</p></div>`);
+  CU.forEach(c=>h+=`<div class="uc" style="--c1:#27ae60;--c2:#2ecc71" onclick="openCU('${c.id}')">
+    <div class="un">🌍</div><h3>${c.ti}</h3><p>Culture</p></div>`);
+  h+='</div>';return h;
+}
+
+function openU(id){ST.uv={t:'unit',id};ST.tab='w';render();}
+function openFT(id){ST.uv={t:'ft',id};render();}
+function openER(id){ST.uv={t:'er',id};render();}
+function openCU(id){ST.uv={t:'cu',id};render();}
+function back(){ST.uv=null;render();}
+function setTab(t){ST.tab=t;render();}
+
+// ============================================================
+// LESSON VIEW
+// ============================================================
+function rLesson(){
+  if(ST.uv.t==='ft')return rFT();
+  if(ST.uv.t==='er')return rER();
+  if(ST.uv.t==='cu')return rCU();
+  const u=U.find(x=>x.id===ST.uv.id);
+  let h=`<div class="lh"><button class="bb" onclick="back()">← Back</button>
+    <div><strong>${u.su}: ${u.ti}</strong><br><small>📄 p.${u.pg} · ${u.to}</small></div></div>
+  <div class="lt">
+    <button class="tb w ${ST.tab==='w'?'active':''}" onclick="setTab('w')">📝 Words</button>
+    <button class="tb g2 ${ST.tab==='g'?'active':''}" onclick="setTab('g')">📐 Grammar</button>
+    ${u.ph?`<button class="tb ph2 ${ST.tab==='p'?'active':''}" onclick="setTab('p')">🔤 Phonics</button>`:''}
+    <button class="tb sk ${ST.tab==='s'?'active':''}" onclick="setTab('s')">🎯 Skills</button>
+    <button class="tb dl ${ST.tab==='d'?'active':''}" onclick="setTab('d')">💬 Story</button>
+  </div>`;
+  if(ST.tab==='w')h+=rWords(u);
+  else if(ST.tab==='g')h+=rGram(u);
+  else if(ST.tab==='p'&&u.ph)h+=rPhon(u);
+  else if(ST.tab==='s')h+=rSkills(u);
+  else if(ST.tab==='d')h+=rDialog(u);
+  return h;
+}
+
+function rWords(u){
+  const cls=['linear-gradient(135deg,#f093fb,#f5576c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)','linear-gradient(135deg,#fa709a,#fee140)','linear-gradient(135deg,#a18cd1,#fbc2eb)','linear-gradient(135deg,#ffecd2,#fcb69f)','linear-gradient(135deg,#a1c4fd,#c2e9fb)','linear-gradient(135deg,#d4fc79,#96e6a1)','linear-gradient(135deg,#e0c3fc,#8ec5fc)','linear-gradient(135deg,#f9d423,#ff4e50)'];
+  let h=`<div class="pt">📝 Vocabulary – ${u.ti}</div><div class="wg">`;
+  u.w.forEach((w,i)=>{
+    h+=`<div class="wc" style="background:${cls[i%cls.length]}" onclick="say('${esc(w)}')">
+      <span class="em">${u.e[i]||'📌'}</span><div class="wd">${w}</div>
+      <button class="sb" onclick="event.stopPropagation();say('${esc(w)}')">🔊 Hear</button>
+    </div>`;
+  });
+  h+=`</div><br><button onclick="startWQ(${u.id})" style="background:var(--p);color:#fff;border:none;border-radius:11px;padding:10px 20px;cursor:pointer;font-size:.85rem;font-weight:600;margin-top:8px">🎯 Quiz These Words!</button>`;
+  return h;
+}
+
+function rGram(u){
+  let h=`<div class="pt">📐 Grammar – ${u.ti}</div>`;
+  u.gr.forEach((g,gi)=>{
+    h+=`<div class="gb"><h3>📌 ${g.n}</h3><div class="gr2">${g.r}</div>`;
+    g.ex.forEach(ex=>h+=`<div class="ge">${ex} <button onclick="say('${esc(ex)}')" style="background:none;border:none;cursor:pointer;font-size:.8rem">🔊</button></div>`);
+    h+=`<div style="margin-top:10px">`;
+    g.qs.forEach((q,qi)=>{
+      h+=`<div class="eq" id="eq-${gi}-${qi}"><p><strong>Q${qi+1}:</strong> ${q.q}</p><div class="eo">`;
+      q.o.forEach((o,oi)=>h+=`<button class="ob" onclick="chkGr(${gi},${qi},${oi},${q.a},this)">${o}</button>`);
+      h+=`</div></div>`;
+    });
+    h+=`</div></div>`;
+  });
+  return h;
+}
+
+function rPhon(u){
+  const ph=u.ph;
+  let h=`<div class="pt">🔤 Phonics – ${ph.s.join(' &amp; ')}</div>
+  <div class="pc"><h3>Key Sounds &amp; Words</h3><div>`;
+  ph.w.forEach(w=>h+=`<span class="sc" onclick="say('${esc(w.split('/')[0].trim())}')">${w}</span>`);
+  h+=`</div></div>
+  <div class="gb"><h3>📖 Phonics Story</h3><div class="rt">${ph.st}</div>
+    <button onclick="say('${esc(ph.st)}')" class="tb2">🔊 Listen to Story</button>
+  </div><div class="pt" style="font-size:.9rem;margin-top:10px">✏️ Quick Check</div>`;
+  ph.qs.forEach((q,qi)=>{
+    h+=`<div class="eq" id="phq-${qi}"><p><strong>Q${qi+1}:</strong> ${q.q}</p><div class="eo">`;
+    q.o.forEach((o,oi)=>h+=`<button class="ob" onclick="chkPh(${qi},${oi},${q.a},this)">${o}</button>`);
+    h+=`</div></div>`;
+  });
+  return h;
+}
+
+function rSkills(u){
+  const sk=u.sk;
+  let h=`<div class="pt">🎯 Skills – ${u.ti}</div>`;
+  if(sk.rd){
+    h+=`<div class="gb"><h3>📖 Reading: ${sk.rd.t}</h3>
+      <div class="rt">${sk.rd.tx}</div>
+      <button onclick="say('${esc(sk.rd.tx)}')" class="tb2">🔊 Listen</button></div>`;
+  }
+  if(sk.li)h+=`<div class="gb"><h3>👂 Listening</h3><div class="gr2">${sk.li}</div></div>`;
+  h+=`<div class="gb"><h3>🗣️ Speaking</h3><div class="gr2">${sk.sp}</div>
+    <button onclick="recSp('${esc(sk.sp)}')" class="tb2" style="background:var(--v);margin-top:8px">🎤 Practice Speaking</button></div>`;
+  if(sk.wr)h+=`<div class="gb"><h3>✏️ Writing</h3><div class="gr2">${sk.wr}</div></div>`;
+  return h;
+}
+
+function rDialog(u){
+  let h=`<div class="pt">💬 Story – ${u.ti}</div>`;
+  const sides={};
+  u.dl.forEach(d=>{if(!sides[d[0]])sides[d[0]]=Object.keys(sides).length%2===0?'L':'R';});
+  u.dl.forEach(d=>{
+    h+=`<div class="db ${sides[d[0]]}">
+      <div class="ds">${d[0]}</div><div class="dt">${d[1]}</div>
+      <button onclick="say('${esc(d[1])}')" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--b)">🔊</button>
+    </div>`;
+  });
+  h+=`<br><button onclick="readDl(${u.id})" class="tb2">🔊 Play All</button>
+  <button onclick="recSp('${esc(u.dl[0][1])}')" class="tb2" style="background:var(--v);margin-left:6px">🎤 Speak Along</button>`;
+  return h;
+}
+
+function rFT(){
+  const ft=FT.find(x=>x.id===ST.uv.id);
+  let h=`<div class="lh"><button class="bb" onclick="back()">← Back</button><div><strong>${ft.ti}</strong><br><small>${ft.to}</small></div></div>
+  <div class="pt">💬 Key Phrases</div><div class="pc"><div>`;
+  ft.ph.forEach(p=>h+=`<span class="sc" onclick="say('${esc(p)}')">${p}</span>`);
+  h+=`</div></div><div class="pt">📖 Dialogue</div>`;
+  ft.dl.forEach(d=>{
+    h+=`<div class="db L"><div class="ds">${d[0]}</div><div class="dt">${d[1]}</div>
+    <button onclick="say('${esc(d[1])}')" style="background:none;border:none;cursor:pointer">🔊</button></div>`;
+  });
+  h+=`<br><button onclick="readFT('${ft.id}')" class="tb2">🔊 Play All</button>
+  <button onclick="recSp('${esc(ft.ph[0])}')" class="tb2" style="background:var(--v);margin-left:6px">🎤 Practice</button>`;
+  return h;
+}
+
+function rER(){
+  const er=ER.find(x=>x.id===ST.uv.id);
+  let h=`<div class="lh"><button class="bb" onclick="back()">← Back</button><div><strong>Extensive Reading: ${er.ti}</strong></div></div>
+  <div class="rt" style="font-size:.92rem;line-height:1.9">${er.tx}</div>
+  <button onclick="say('${esc(er.tx)}')" class="tb2">🔊 Listen</button>
+  <div class="pt" style="margin-top:14px">✏️ Comprehension Questions</div>`;
+  er.qs.forEach((q,i)=>{
+    h+=`<div class="eq"><p><strong>Q${i+1}:</strong> ${q.q}</p>
+      <button onclick="showAns(this,'${esc(q.a)}','era${i}')" class="tb2" style="background:var(--s);color:var(--d)">Show Answer</button>
+      <div id="era${i}" style="display:none;margin-top:5px;padding:7px;background:#d4edda;border-radius:7px;font-size:.85rem">✅ ${q.a}</div>
+    </div>`;
+  });
+  return h;
+}
+
+function rCU(){
+  const c=CU.find(x=>x.id===ST.uv.id);
+  let h=`<div class="lh"><button class="bb" onclick="back()">← Back</button><div><strong>Culture: ${c.ti}</strong></div></div>
+  <div class="rt" style="font-size:.92rem;line-height:1.9">${c.tx}</div>
+  <button onclick="say('${esc(c.tx)}')" class="tb2">🔊 Listen</button>
+  <div class="pt" style="margin-top:14px">✏️ Comprehension Questions</div>`;
+  c.qs.forEach((q,i)=>{
+    h+=`<div class="eq"><p><strong>Q${i+1}:</strong> ${q.q}</p>
+      <button onclick="showAns(this,'${esc(q.a)}','cua${i}')" class="tb2" style="background:var(--s);color:var(--d)">Show Answer</button>
+      <div id="cua${i}" style="display:none;margin-top:5px;padding:7px;background:#d4edda;border-radius:7px;font-size:.85rem">✅ ${q.a}</div>
+    </div>`;
+  });
+  return h;
+}
+
+function showAns(btn,ans,id){document.getElementById(id).style.display='block';btn.style.display='none';}
+
+// ============================================================
+// GRAMMAR & PHONICS HUBs
+// ============================================================
+function rGramHub(){
+  let h='<div class="pt">📐 Grammar Reference – All Units</div>';
+  U.forEach(u=>{
+    h+=`<div style="margin-bottom:10px"><div style="font-weight:700;font-size:.82rem;color:var(--p);margin-bottom:5px">${u.su}: ${u.ti}</div>`;
+    u.gr.forEach((g,gi)=>{
+      h+=`<details><summary>📌 ${g.n}</summary>
+        <div class="gr2" style="margin-top:7px">${g.r}</div>`;
+      g.ex.forEach(ex=>h+=`<div class="ge">${ex} <button onclick="say('${esc(ex)}')" style="background:none;border:none;cursor:pointer">🔊</button></div>`);
+      h+=`<div style="margin-top:8px">`;
+      g.qs.forEach((q,qi)=>{
+        h+=`<div class="eq" id="gh-${u.id}-${gi}-${qi}"><p><strong>Q${qi+1}:</strong> ${q.q}</p><div class="eo">`;
+        q.o.forEach((o,oi)=>h+=`<button class="ob" onclick="chkGH(${u.id},${gi},${qi},${oi},${q.a},this)">${o}</button>`);
+        h+=`</div></div>`;
+      });
+      h+=`</div></details>`;
+    });
+    h+=`</div>`;
+  });
+  return h;
+}
+
+function rPhonHub(){
+  let h='<div class="pt">🔤 Phonics &amp; Spelling – All Units</div>';
+  U.forEach(u=>{
+    if(!u.ph)return;
+    h+=`<div class="pc" style="margin-bottom:10px">
+      <h3>${u.su}: ${u.ph.s.join(' &amp; ')}</h3><div>`;
+    u.ph.w.forEach(w=>h+=`<span class="sc" onclick="say('${esc(w.split('/')[0].trim())}')">${w}</span>`);
+    h+=`</div><button onclick="say('${esc(u.ph.st)}')" class="tb2" style="margin-top:6px;font-size:.78rem">🔊 Story</button></div>`;
+  });
+  return h;
+}
+
+// ============================================================
+// SPEAKING HUB
+// ============================================================
+function rSpeakHub(){
+  let phrases=[];
+  U.forEach(u=>{
+    if(u.sk&&u.sk.sp)phrases.push({unit:u.su,text:u.sk.sp});
+    u.dl.slice(0,2).forEach(d=>phrases.push({unit:u.ti,text:d[1]}));
+  });
+  FT.forEach(ft=>ft.ph.forEach(p=>phrases.push({unit:ft.ti,text:p})));
+  let h=`<div class="pt">🎤 Speaking Practice</div>
+  <div class="gr2" style="margin-bottom:12px">🔊 Listen to a phrase → 🎤 Record yourself → Get a score! Tip: Use Chrome browser for best results.</div>`;
+  phrases.slice(0,25).forEach((p,i)=>{
+    h+=`<div class="eq"><p><strong>${p.unit}:</strong> ${p.text}</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">
+        <button onclick="say('${esc(p.text)}')" class="tb2">🔊 Listen</button>
+        <button onclick="rec('${esc(p.text)}',${i})" class="tb2" style="background:var(--v)" id="rb${i}">🎤 Speak</button>
+        <span id="rs${i}" style="font-weight:700;color:var(--g);align-self:center"></span>
+      </div></div>`;
+  });
+  return h;
+}
+
+// ============================================================
+// TTS & SPEECH RECOGNITION
+// ============================================================
+function say(t){
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='en-US';u.rate=0.82;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+
+async function readDl(uid){
+  const u=U.find(x=>x.id===uid);
+  for(const d of u.dl){
+    await new Promise(r=>{const ut=new SpeechSynthesisUtterance(d[0]+' says: '+d[1]);ut.lang='en-US';ut.rate=0.8;ut.onend=r;speechSynthesis.cancel();speechSynthesis.speak(ut);});
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+async function readFT(id){
+  const ft=FT.find(x=>x.id===id);
+  for(const d of ft.dl){
+    await new Promise(r=>{const ut=new SpeechSynthesisUtterance(d[0]+' says: '+d[1]);ut.lang='en-US';ut.rate=0.8;ut.onend=r;speechSynthesis.cancel();speechSynthesis.speak(ut);});
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+
+function rec(phrase,idx){
+  if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){
+    alert('Speech recognition needs Chrome browser!');return;
+  }
+  const btn=document.getElementById('rb'+idx);
+  const sc=document.getElementById('rs'+idx);
+  if(!btn||!sc)return;
+  btn.textContent='🔴 Recording...';btn.style.background='var(--r)';
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const r=new SR();r.lang='en-US';r.interimResults=false;r.maxAlternatives=1;
+  r.start();
+  r.onresult=e=>{
+    const said=e.results[0][0].transcript.toLowerCase().trim();
+    const target=phrase.toLowerCase().trim();
+    const score=calcScore(said,target);
+    sc.textContent=score+'/100 ⭐';
+    if(score>=70){addStars(2);sc.style.color='var(--g)';}
+    else if(score>=40){addStars(1);sc.style.color='orange';}
+    else sc.style.color='var(--r)';
+    btn.textContent='🎤 Speak';btn.style.background='var(--v)';
+  };
+  r.onerror=()=>{btn.textContent='🎤 Speak';btn.style.background='var(--v)';sc.textContent='Try again';};
+}
+function recSp(phrase){S('speaking');setTimeout(()=>say(phrase),600);}
+function calcScore(said,target){
+  const sw=said.split(' ').filter(w=>w);
+  const tw=target.replace(/[?.!,]/g,'').split(' ').filter(w=>w);
+  if(!tw.length)return 0;
+  let m=0;
+  tw.forEach(t=>{if(sw.some(s=>s.includes(t)||t.includes(s)))m++;});
+  return Math.round(m/tw.length*100);
+}
+
+// ============================================================
+// ANSWER CHECKING
+// ============================================================
+function chkGr(gi,qi,sel,cor,btn){
+  const c=document.getElementById(`eq-${gi}-${qi}`);if(!c)return;
+  c.querySelectorAll('.ob').forEach(b=>b.disabled=true);
+  if(sel===cor){btn.classList.add('cor');addStars(1);}
+  else{btn.classList.add('wr');c.querySelectorAll('.ob')[cor].classList.add('cor');}
+}
+function chkGH(uid,gi,qi,sel,cor,btn){
+  const c=document.getElementById(`gh-${uid}-${gi}-${qi}`);if(!c)return;
+  c.querySelectorAll('.ob').forEach(b=>b.disabled=true);
+  if(sel===cor){btn.classList.add('cor');addStars(1);}
+  else{btn.classList.add('wr');c.querySelectorAll('.ob')[cor].classList.add('cor');}
+}
+function chkPh(qi,sel,cor,btn){
+  const c=document.getElementById(`phq-${qi}`);if(!c)return;
+  c.querySelectorAll('.ob').forEach(b=>b.disabled=true);
+  if(sel===cor){btn.classList.add('cor');addStars(1);}
+  else{btn.classList.add('wr');c.querySelectorAll('.ob')[cor].classList.add('cor');}
+}
+
+// ============================================================
+// GAMES
+// ============================================================
+function rGamesHub(){
+  let h='<div class="pt">🎮 Games &amp; Activities</div><div class="gg">';
+  GAMES.forEach(g=>h+=`<div class="gc" style="--gc1:${g.c1};--gc2:${g.c2}" onclick="startG('${g.id}')">
+    <span class="gi">${g.ic}</span><h3>${g.ti}</h3><p>${g.ds}</p></div>`);
+  h+='</div>';return h;
+}
+
+function allWords(){let w=[];U.forEach(u=>u.w.forEach((wd,i)=>w.push({word:wd,emoji:u.e[i]||'📌',unit:u.su})));return w;}
+function allGramQs(){let q=[];U.forEach(u=>u.gr.forEach(g=>g.qs.forEach(qu=>q.push({...qu,topic:g.n}))));return q;}
+function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
+
+function startG(id){
+  if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}
+  ST.gid=id;ST.gs=0;ST.gl=3;ST.gqi=0;
+  if(id==='quiz'){
+    const ws=shuffle(allWords()).slice(0,15);
+    ST.gqs=ws.map(w=>{
+      const wrong=shuffle(allWords().filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.word);
+      return{q:'What is this? '+w.emoji,o:shuffle([w.word,...wrong]),a:w.word};
+    });
+  }else if(id==='grammar'){
+    ST.gqs=shuffle(allGramQs()).slice(0,15);ST.gtm=20;
+  }else if(id==='fillblank'){
+    ST.gqs=shuffle(allGramQs().filter(q=>q.q.includes('___'))).slice(0,10);
+  }else if(id==='listening'){
+    const ws=shuffle(allWords()).slice(0,12);
+    ST.gqs=ws.map(w=>{
+      const wrong=shuffle(allWords().filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.word);
+      return{q:w.word,o:shuffle([w.word,...wrong]),a:w.word};
+    });
+  }else if(id==='hangman')initHangman();
+  else if(id==='scramble')initScramble();
+  else if(id==='memory')initMemory();
+  else if(id==='match')initMatch();
+  else if(id==='sentence')initSentence();
+  else if(id==='clues')initClues();
+  render();
+  if(id==='grammar')setTimeout(startGTmr,120);
+  if(id==='listening')setTimeout(()=>say(ST.gqs[0].q),700);
+}
+
+function rGame(){
+  const g=GAMES.find(x=>x.id===ST.gid)||{ti:ST.gid};
+  let h=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:11px">
+    <button class="bb" onclick="if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}ST.gid=null;render()">← Back</button>
+    <strong>${g.ti}</strong><span style="margin-left:auto">❤️${ST.gl} ⭐${ST.gs}</span></div>`;
+  switch(ST.gid){
+    case'quiz':h+=rQuiz();break;
+    case'grammar':h+=rGramGame();break;
+    case'listening':h+=rListening();break;
+    case'fillblank':h+=rFill();break;
+    case'hangman':h+='<div id="hma"></div>';break;
+    case'scramble':h+='<div id="sca"></div>';break;
+    case'memory':h+='<div id="mma"></div>';break;
+    case'match':h+='<div id="mxa"></div>';break;
+    case'sentence':h+='<div id="sba"></div>';break;
+    case'clues':h+='<div id="cla"></div>';break;
+  }
+  return h;
+}
+
+function aGame(){
+  setTimeout(()=>{
+    if(ST.gid==='hangman')rHangman();
+    else if(ST.gid==='scramble')rScramble();
+    else if(ST.gid==='memory')rMemory();
+    else if(ST.gid==='match')rMatch();
+    else if(ST.gid==='sentence')rSentence();
+    else if(ST.gid==='clues')rClues();
+  },60);
+}
+
+// --- QUIZ ---
+function rQuiz(){
+  if(ST.gqi>=ST.gqs.length)return rGameOver();
+  const q=ST.gqs[ST.gqi];
+  return`<div class="qc"><h2>${q.q}</h2><div style="font-size:.75rem;opacity:.7">${ST.gqi+1}/${ST.gqs.length}</div></div>
+  <div class="ag">${q.o.map(o=>`<button class="ab" onclick="ansQ('${esc(o)}','${esc(q.a)}')">${o}</button>`).join('')}</div>`;
+}
+function ansQ(sel,cor){
+  const bs=document.querySelectorAll('.ab');
+  bs.forEach(b=>{b.disabled=true;if(b.textContent===cor)b.classList.add('cor');});
+  if(sel===cor){ST.gs+=10;addStars(1);}
+  else{bs.forEach(b=>{if(b.textContent===sel)b.classList.add('wr');});ST.gl--;}
+  setTimeout(()=>{ST.gqi++;if(ST.gl<=0||ST.gqi>=ST.gqs.length)gameOver();else render();},800);
+}
+
+// --- GRAMMAR CHALLENGE ---
+function rGramGame(){
+  if(ST.gqi>=ST.gqs.length)return rGameOver();
+  const q=ST.gqs[ST.gqi];
+  return`<div class="gsb"><span>Q${ST.gqi+1}/${ST.gqs.length}</span><span class="tmr" id="gct">${ST.gtm}</span><span>⭐${ST.gs}</span></div>
+  <div class="qc"><h2>${q.q}</h2>${q.topic?`<small style="opacity:.7">${q.topic}</small>`:''}</div>
+  <div class="ag">${q.o.map((o,i)=>`<button class="ab" onclick="ansGr(${i},${q.a})">${o}</button>`).join('')}</div>`;
+}
+function startGTmr(){
+  if(ST.gcTmrId)clearInterval(ST.gcTmrId);
+  ST.gtm=20;
+  ST.gcTmrId=setInterval(()=>{
+    ST.gtm--;
+    const el=document.getElementById('gct');if(el)el.textContent=ST.gtm;
+    if(ST.gtm<=0){
+      clearInterval(ST.gcTmrId);ST.gcTmrId=null;
+      ST.gl--;ST.gqi++;
+      if(ST.gl<=0||ST.gqi>=ST.gqs.length)gameOver();
+      else{ST.gtm=20;render();setTimeout(startGTmr,120);}
+    }
+  },1000);
+}
+function ansGr(sel,cor){
+  if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}
+  const bs=document.querySelectorAll('.ab');bs.forEach(b=>b.disabled=true);
+  if(sel===cor){ST.gs+=10;addStars(1);bs[sel].classList.add('cor');}
+  else{bs[sel].classList.add('wr');bs[cor].classList.add('cor');ST.gl--;}
+  setTimeout(()=>{ST.gqi++;if(ST.gl<=0||ST.gqi>=ST.gqs.length)gameOver();else{ST.gtm=20;render();setTimeout(startGTmr,120);}},800);
+}
+
+// --- LISTENING ---
+function rListening(){
+  if(ST.gqi>=ST.gqs.length)return rGameOver();
+  const q=ST.gqs[ST.gqi];
+  return`<div class="qc" onclick="say('${esc(q.q)}')">
+    <h2>👂 Listen and choose!</h2>
+    <button class="tb2" style="margin-top:7px" onclick="event.stopPropagation();say('${esc(q.q)}')">🔊 Play Again</button>
+    <div style="font-size:.75rem;opacity:.7;margin-top:7px">${ST.gqi+1}/${ST.gqs.length}</div>
+  </div>
+  <div class="ag">${q.o.map(o=>`<button class="ab" onclick="ansLi('${esc(o)}','${esc(q.a)}')">${o}</button>`).join('')}</div>`;
+}
+function ansLi(sel,cor){
+  const bs=document.querySelectorAll('.ab');
+  bs.forEach(b=>{b.disabled=true;if(b.textContent===cor)b.classList.add('cor');});
+  if(sel===cor){ST.gs+=10;addStars(1);}
+  else{bs.forEach(b=>{if(b.textContent===sel)b.classList.add('wr');});ST.gl--;}
+  setTimeout(()=>{ST.gqi++;if(ST.gl<=0||ST.gqi>=ST.gqs.length)gameOver();else{render();setTimeout(()=>say(ST.gqs[ST.gqi].q),400);}},800);
+}
+
+// --- FILL BLANK ---
+function rFill(){
+  if(ST.gqi>=ST.gqs.length)return rGameOver();
+  const q=ST.gqs[ST.gqi];
+  return`<div class="qc"><h2>✏️ Fill in the blank:</h2><p style="margin-top:7px;font-size:.95rem">${q.q}</p></div>
+  <div style="margin:14px 0;text-align:center">
+    <input type="text" id="fli" style="width:180px;font-size:.95rem;padding:9px;border:2px solid var(--s);border-radius:9px;text-align:center;outline:none" placeholder="Your answer..." onkeypress="if(event.key==='Enter')chkFill()">
+    <div style="margin-top:10px"><button onclick="chkFill()" class="tb2">✓ Check</button></div>
+    <div style="margin-top:5px;font-size:.75rem;color:#999">Options: ${q.o.join(' / ')}</div>
+  </div>`;
+}
+function chkFill(){
+  const inp=document.getElementById('fli');if(!inp)return;
+  const q=ST.gqs[ST.gqi];const cor=q.o[q.a].toLowerCase();
+  if(inp.value.toLowerCase().trim()===cor){inp.style.border='2px solid var(--g)';ST.gs+=10;addStars(1);}
+  else{inp.style.border='2px solid var(--r)';inp.value=q.o[q.a];}
+  inp.disabled=true;
+  setTimeout(()=>{ST.gqi++;if(ST.gqi>=ST.gqs.length)gameOver();else render();},1000);
+}
+
+// --- HANGMAN ---
+function initHangman(){
+  const ws=shuffle(allWords());ST.hword=ws[0].word.toLowerCase();ST.hguess=[];
+}
+function rHangman(){
+  const area=document.getElementById('hma');if(!area)return;
+  const wd=ST.hword,gs=ST.hguess;
+  const wrong=gs.filter(g=>!wd.includes(g));
+  const lives=6-wrong.length;
+  const disp=wd.split('').map(c=>gs.includes(c)?c:'_');
+  const won=disp.join('')===wd,lost=lives<=0;
+  const parts=['','<line x1="40" y1="12" x2="40" y2="50" stroke="#333" stroke-width="3"/>','<circle cx="40" cy="60" r="10" fill="none" stroke="#333" stroke-width="3"/>','<line x1="40" y1="70" x2="40" y2="100" stroke="#333" stroke-width="3"/>','<line x1="40" y1="80" x2="22" y2="95" stroke="#333" stroke-width="3"/>','<line x1="40" y1="80" x2="58" y2="95" stroke="#333" stroke-width="3"/>','<line x1="40" y1="100" x2="22" y2="115" stroke="#333" stroke-width="3"/>'];
+  let h=`<div style="text-align:center"><svg viewBox="0 0 100 130" width="110" height="130" style="display:block;margin:0 auto">
+    <line x1="10" y1="125" x2="90" y2="125" stroke="#333" stroke-width="3"/>
+    <line x1="30" y1="10" x2="30" y2="125" stroke="#333" stroke-width="3"/>
+    <line x1="30" y1="10" x2="60" y2="10" stroke="#333" stroke-width="3"/>
+    <line x1="60" y1="10" x2="60" y2="40" stroke="#333" stroke-width="3"/>
+    ${parts.slice(0,6-lives+1).join('')}
+  </svg></div>
+  <div class="hl">${disp.map(c=>c==='_'?'<div class="hl2">_</div>':`<div class="hl2">${c}</div>`).join('')}</div>
+  <div style="text-align:center;font-size:.82rem;color:#666;margin-bottom:5px">Wrong guesses: ${wrong.join(', ')||'none'} · Lives: ${lives}</div>`;
+  if(won){
+    h+=`<div style="text-align:center;color:var(--g);font-size:1.3rem;font-weight:700;margin:8px 0">🎉 "${wd}"! Well done!</div>`;
+    addStars(3);
+    h+=`<div style="text-align:center"><button onclick="initHangman();rHangman()" class="tb2">Play Again ▶</button></div>`;
+  }else if(lost){
+    h+=`<div style="text-align:center;color:var(--r);font-size:1.1rem;font-weight:700;margin:8px 0">😢 The word was: "<strong>${wd}</strong>"</div>`;
+    h+=`<div style="text-align:center"><button onclick="initHangman();rHangman()" class="tb2">Try Again ▶</button></div>`;
+  }else{
+    h+=`<div class="kg">`+'abcdefghijklmnopqrstuvwxyz'.split('').map(l=>`<button class="kb" ${gs.includes(l)?'disabled':''} onclick="guessL('${l}')">${l}</button>`).join('')+'</div>';
+  }
+  area.innerHTML=h;
+}
+function guessL(l){ST.hguess.push(l);rHangman();}
+
+// --- SCRAMBLE ---
+function initScramble(){ST.scrWords=shuffle(allWords()).slice(0,10);ST.scrIdx=0;ST.gs=0;}
+function rScramble(){
+  const area=document.getElementById('sca');if(!area)return;
+  if(ST.scrIdx>=ST.scrWords.length){
+    area.innerHTML=`<div style="text-align:center"><div style="font-size:2.5rem">🎉</div><h2 style="margin:8px 0">Done! ${ST.gs}/${ST.scrWords.length} correct</h2><button onclick="initScramble();rScramble()" class="tb2">Play Again</button></div>`;
+    return;
+  }
+  const w=ST.scrWords[ST.scrIdx];
+  const sc=shuffle(w.word.split('')).join('');
+  area.innerHTML=`<div style="text-align:center">
+    <div style="font-size:.82rem;color:#666">Word ${ST.scrIdx+1}/${ST.scrWords.length} · Score: ${ST.gs}</div>
+    <div style="font-size:2.8rem;margin:12px 0">${w.emoji}</div>
+    <div class="sw">${sc.toUpperCase()}</div>
+    <input type="text" class="si" id="sci" placeholder="Unscramble the letters..." onkeypress="if(event.key==='Enter')chkScr('${esc(w.word)}')">
+    <div style="margin-top:10px">
+      <button onclick="chkScr('${esc(w.word)}')" class="tb2">✓ Check</button>
+      <button onclick="say('${esc(w.word)}')" class="tb2" style="background:var(--b)">🔊 Hint</button>
+    </div>
+  </div>`;
+}
+function chkScr(word){
+  const inp=document.getElementById('sci');if(!inp)return;
+  if(inp.value.toLowerCase().trim()===word){ST.gs++;addStars(1);inp.style.border='3px solid var(--g)';}
+  else{inp.style.border='3px solid var(--r)';setTimeout(()=>{inp.value=word;},500);}
+  setTimeout(()=>{ST.scrIdx++;rScramble();},900);
+}
+
+// --- MEMORY ---
+function initMemory(){
+  const ws=shuffle(allWords()).slice(0,8);
+  const pairs=ws.map(w=>({id:w.word,emoji:w.emoji,word:w.word}));
+  const cards=shuffle([...pairs.map(p=>({...p,face:p.emoji,type:'e'})),...pairs.map(p=>({...p,face:p.word,type:'w'}))]);
+  ST.memCards=cards.map((c,i)=>({...c,idx:i,fl:false,ma:false}));
+  ST.memFlip=[];ST.memMatch=[];
+}
+function rMemory(){
+  const area=document.getElementById('mma');if(!area)return;
+  const cols=window.innerWidth<400?3:4;
+  area.innerHTML=`<div class="mg" style="grid-template-columns:repeat(${cols},1fr);max-width:340px;margin:0 auto">
+    ${ST.memCards.map((c,i)=>{
+      const show=c.fl||c.ma;
+      return`<div class="mc ${c.fl?'fl':''} ${c.ma?'ma':''}" onclick="flipM(${i})">${show?c.face:'?'}</div>`;
+    }).join('')}
+  </div>
+  <div style="text-align:center;margin-top:10px;font-size:.85rem">Matched: ${ST.memMatch.length}/8 pairs · ⭐${ST.gs}</div>`;
+}
+function flipM(idx){
+  const c=ST.memCards[idx];
+  if(c.ma||c.fl||ST.memFlip.length>=2)return;
+  c.fl=true;ST.memFlip.push(idx);rMemory();
+  if(ST.memFlip.length===2){
+    const[a,b]=ST.memFlip.map(i=>ST.memCards[i]);
+    if(a.id===b.id&&a.type!==b.type){
+      setTimeout(()=>{
+        ST.memCards[ST.memFlip[0]].ma=ST.memCards[ST.memFlip[1]].ma=true;
+        ST.memMatch.push(a.id);ST.memFlip=[];ST.gs+=10;addStars(1);
+        if(ST.memMatch.length===8){addStars(5);say('Congratulations! You matched them all!');}
+        rMemory();
+      },600);
+    }else{
+      setTimeout(()=>{ST.memCards[ST.memFlip[0]].fl=ST.memCards[ST.memFlip[1]].fl=false;ST.memFlip=[];rMemory();},900);
+    }
+  }
+}
+
+// --- MATCHING ---
+function initMatch(){ST.mxPairs=shuffle(allWords()).slice(0,6);ST.mxSel={};ST.mxDone=[];}
+function rMatch(){
+  const area=document.getElementById('mxa');if(!area)return;
+  const right=shuffle(ST.mxPairs.map(p=>p.word));
+  area.innerHTML=`<div class="mxg">
+    <div class="mc2">${ST.mxPairs.map((p,i)=>`<div class="mi ${ST.mxDone.includes(p.word)?'ma2':''} ${ST.mxSel.left===p.emoji?'sel':''}" onclick="selMx('L','${esc(p.emoji)}','${esc(p.word)}')">${p.emoji}</div>`).join('')}</div>
+    <div class="mc2">${right.map(w=>`<div class="mi ${ST.mxDone.includes(w)?'ma2':''} ${ST.mxSel.right===w?'sel':''}" onclick="selMx('R','${esc(w)}',null)">${w}</div>`).join('')}</div>
+  </div>
+  <div style="text-align:center;margin-top:10px;font-size:.82rem">Matched: ${ST.mxDone.length}/6 · ⭐${ST.gs}
+  ${ST.mxDone.length===6?'<br><button onclick="initMatch();rMatch()" class="tb2" style="margin-top:8px">Play Again ▶</button>':''}</div>`;
+}
+function selMx(side,val,pair){
+  if(side==='L'){ST.mxSel.left=val;ST.mxSel.lp=pair;}else ST.mxSel.right=val;
+  rMatch();
+  if(ST.mxSel.left&&ST.mxSel.right){
+    if(ST.mxSel.lp===ST.mxSel.right){ST.mxDone.push(ST.mxSel.right);ST.gs+=10;addStars(1);if(ST.mxDone.length===6)addStars(3);}
+    else say('Try again!');
+    ST.mxSel={};setTimeout(rMatch,400);
+  }
+}
+
+// --- SENTENCE BUILDER ---
+const SB=[
+  {w:['They','usually','wear','blue','uniforms'],c:'They usually wear blue uniforms'},
+  {w:['She','is','eating','pizza','now'],c:'She is eating pizza now'},
+  {w:['Did','they','go','to','the','museum'],c:'Did they go to the museum'},
+  {w:['Have','you','ever','been','to','France'],c:'Have you ever been to France'},
+  {w:['You','should','drink','some','water'],c:'You should drink some water'},
+  {w:['The','audience','clapped','and','cheered'],c:'The audience clapped and cheered'},
+  {w:['I','was','looking','at','photos'],c:'I was looking at photos'},
+  {w:['Will','they','go','back','to','Australia'],c:'Will they go back to Australia'},
+  {w:['She','turned','on','the','TV','to','watch','sports'],c:'She turned on the TV to watch sports'},
+  {w:['When','I','was','working','the','phone','rang'],c:'When I was working the phone rang'},
+  {w:['This','is','the','boy','who','helped','me'],c:'This is the boy who helped me'},
+  {w:['People','will','travel','in','super-fast','planes'],c:'People will travel in super-fast planes'},
+  {w:['Max','couldn\'t','eat','his','dinner'],c:"Max couldn't eat his dinner"},
+  {w:['How','much','money','have','you','got'],c:'How much money have you got'},
+  {w:['The','grasshopper','was','lazier','than','the','ant'],c:'The grasshopper was lazier than the ant'}
+];
+function initSentence(){
+  const s=shuffle(SB)[0];
+  ST.sbWords=shuffle(s.w);ST.sbCorrect=s.c;ST.sbBuilt=[];
+}
+function rSentence(){
+  const area=document.getElementById('sba');if(!area)return;
+  const built=ST.sbBuilt.join(' ');
+  const ok=built.toLowerCase().replace(/[?.!,]/g,'')===ST.sbCorrect.toLowerCase().replace(/[?.!,]/g,'');
+  area.innerHTML=`<div style="font-size:.82rem;color:#666;margin-bottom:10px;text-align:center">Put the words in the correct order:</div>
+  <div style="min-height:44px;background:var(--l);border-radius:9px;padding:8px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px;align-items:center">
+    ${ST.sbBuilt.map((w,i)=>`<div class="wt" onclick="rmW(${i})">${w} ✕</div>`).join('')}
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+    ${ST.sbWords.map(w=>`<div class="bw ${ST.sbBuilt.includes(w)?'ud':''}" onclick="addW('${esc(w)}')">${w}</div>`).join('')}
+  </div>
+  <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+    <button onclick="chkSB()" class="tb2">✓ Check</button>
+    <button onclick="ST.sbBuilt=[];rSentence()" class="tb2" style="background:#999">↺ Reset</button>
+    <button onclick="initSentence();rSentence()" class="tb2" style="background:var(--s);color:var(--d)">Next ▶</button>
+  </div>
+  ${ok&&ST.sbBuilt.length>0?'<div style="text-align:center;color:var(--g);font-size:1.2rem;font-weight:700;margin-top:8px">✅ Correct! Well done!</div>':''}`;
+}
+function addW(w){if(!ST.sbBuilt.includes(w)){ST.sbBuilt.push(w);rSentence();}}
+function rmW(i){ST.sbBuilt.splice(i,1);rSentence();}
+function chkSB(){
+  const built=ST.sbBuilt.join(' ');
+  if(built.toLowerCase().replace(/[?.!,]/g,'')===ST.sbCorrect.toLowerCase().replace(/[?.!,]/g,'')){addStars(2);say('Correct! Well done!');}
+  else say('Try again!');
+  rSentence();
+}
+
+// --- WORD CLUES ---
+function initClues(){ST.clueWords=shuffle(allWords()).slice(0,10);ST.clueIdx=0;}
+function rClues(){
+  const area=document.getElementById('cla');if(!area)return;
+  if(ST.clueIdx>=ST.clueWords.length){
+    area.innerHTML=`<div style="text-align:center"><div style="font-size:2.5rem">🏆</div><h2 style="margin:8px 0">All done! Score: ${ST.gs}</h2><button onclick="initClues();rClues()" class="tb2">Play Again</button></div>`;
+    return;
+  }
+  const w=ST.clueWords[ST.clueIdx];
+  area.innerHTML=`<div style="text-align:center">
+    <div style="font-size:.82rem;color:#666">Word ${ST.clueIdx+1}/${ST.clueWords.length} · Score: ${ST.gs}</div>
+    <div style="font-size:2.8rem;margin:12px 0">${w.emoji}</div>
+    <div class="gr2" style="margin:8px auto;max-width:280px">This word has <strong>${w.word.length} letters</strong> · Unit: ${w.unit}</div>
+    <div style="font-size:1.2rem;font-weight:700;letter-spacing:8px;color:var(--v);margin:10px 0">${'_ '.repeat(w.word.length).trim()}</div>
+    <input type="text" class="si" id="cli" placeholder="Type the word..." maxlength="${w.word.length+5}" onkeypress="if(event.key==='Enter')chkClue('${esc(w.word)}')">
+    <div style="margin-top:10px">
+      <button onclick="chkClue('${esc(w.word)}')" class="tb2">✓ Check</button>
+      <button onclick="say('${esc(w.word)}')" class="tb2" style="background:var(--b)">🔊 Hear</button>
+    </div>
+  </div>`;
+}
+function chkClue(word){
+  const inp=document.getElementById('cli');if(!inp)return;
+  if(inp.value.toLowerCase().trim()===word){ST.gs+=10;addStars(1);inp.style.border='3px solid var(--g)';}
+  else{inp.style.border='3px solid var(--r)';setTimeout(()=>{inp.value=word;},400);}
+  setTimeout(()=>{ST.clueIdx++;rClues();},900);
+}
+
+// --- GAME OVER ---
+function rGameOver(){
+  const total=ST.gqs.length||10;
+  const pct=Math.round(ST.gs/(total*10)*100);
+  return`<div style="text-align:center;padding:26px">
+    <div style="font-size:3.5rem">${pct>=80?'🏆':pct>=50?'⭐':'💪'}</div>
+    <h2 style="margin:8px 0">Game Over!</h2>
+    <div style="font-size:2.2rem;font-weight:900;color:var(--g);margin:8px 0">${ST.gs} pts</div>
+    <div style="margin-bottom:14px">${pct}% correct</div>
+    <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+      <button onclick="startG(ST.gid)" class="tb2">Play Again</button>
+      <button onclick="if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}ST.gid=null;render()" class="tb2" style="background:var(--d)">Other Games</button>
+    </div>
+  </div>`;
+}
+function gameOver(){
+  if(ST.gcTmrId){clearInterval(ST.gcTmrId);ST.gcTmrId=null;}
+  const ca=document.getElementById('ca');
+  ca.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <button class="bb" onclick="ST.gid=null;render()">← Back</button><strong>Game Over</strong></div>`+rGameOver();
+}
+
+function startWQ(uid){
+  const u=U.find(x=>x.id===uid);
+  ST.gid='quiz';ST.gs=0;ST.gl=3;ST.gqi=0;
+  const allW=allWords();
+  ST.gqs=u.w.map((wd,i)=>{
+    const wrong=shuffle(allW.filter(x=>x.word!==wd)).slice(0,3).map(x=>x.word);
+    return{q:'What is this? '+(u.e[i]||'📌'),o:shuffle([wd,...wrong]),a:wd};
+  });
+  S('games');
+}
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function rProgress(){
+  const levels=[{s:0,e:15,l:'Beginner 🌱'},{s:15,e:40,l:'Learner 📚'},{s:40,e:80,l:'Explorer 🔍'},{s:80,e:150,l:'Achiever ⭐'},{s:150,e:300,l:'Champion 🏆'},{s:300,e:9999,l:'Master 🎓'}];
+  const lv=levels.find(x=>ST.ts>=x.s&&ST.ts<x.e)||levels[levels.length-1];
+  let h=`<div class="pt">📊 My Progress</div>
+  <div style="text-align:center;margin-bottom:14px;padding:14px;background:linear-gradient(135deg,var(--p),#FF8E53);border-radius:12px;color:#fff">
+    <div style="font-size:2.2rem;font-weight:900">⭐ ${ST.ts}</div>
+    <div>Total Stars · Level: <strong>${lv.l}</strong></div>
+  </div><div class="po">`;
+  U.forEach(u=>{
+    const pg=ST.prog['u'+u.id]||0;
+    const r=18,circ=(2*Math.PI*r).toFixed(1),off=((2*Math.PI*r)*(1-pg/100)).toFixed(1);
+    h+=`<div class="pi">
+      <div class="pci"><svg viewBox="0 0 44 44" width="44" height="44">
+        <circle class="bg2" cx="22" cy="22" r="${r}"/>
+        <circle class="fi" cx="22" cy="22" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="${off}" transform="rotate(-90 22 22)"/>
+      </svg><div class="pn">${pg}%</div></div>
+      <p>${u.id===0?'St':('U'+u.id)}: ${u.ti.substring(0,12)}</p>
+    </div>`;
+  });
+  h+=`</div>
+  <div style="margin-top:14px;text-align:center">
+    <button onclick="if(confirm('Reset all progress?')){ST.ts=0;ST.prog={};save();document.getElementById('ts').textContent=0;render()}" style="background:var(--r);color:#fff;border:none;border-radius:9px;padding:9px 18px;cursor:pointer;font-size:.82rem">🔄 Reset Progress</button>
+  </div>`;
+  return h;
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function confetti(n){
+  let c=document.querySelector('.cf');
+  if(!c){c=document.createElement('div');c.className='cf';document.body.appendChild(c);}
+  const cols=['#f7971e','#ffd200','#4ECDC4','#FF6B35','#9B59B6','#2ECC71','#E74C3C','#3498DB'];
+  for(let i=0;i<Math.min(n*4,40);i++){
+    const el=document.createElement('div');el.className='cn';
+    el.style.cssText=`left:${Math.random()*100}vw;top:${-Math.random()*10}vh;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*.4}s;width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;`;
+    c.appendChild(el);setTimeout(()=>el.remove(),4500);
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById('ts').textContent=ST.ts;
+render();
+</script>
+</body>
+</html>
