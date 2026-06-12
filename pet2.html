@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Cambridge PET 2 – Interactive Learning App</title>
+<style>
+:root{
+  --cb:#003865;--cm:#0066A4;--cl:#009FD4;--ca:#E8A020;--cg:#F5C842;
+  --ok:#2E8B57;--er:#C0392B;--wn:#E67E22;
+  --bg:#F0F4F8;--card:#fff;--txt:#1A2332;--muted:#5A6A7E;--bdr:#D0DCE8;
+  --r:12px;--rs:8px;--sh:0 2px 12px rgba(0,56,101,.10);--shl:0 8px 32px rgba(0,56,101,.16);
+  --fn:"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fn);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--cb),var(--cm));color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,56,101,.3)}
+.htop{display:flex;align-items:center;padding:10px 16px;gap:10px}
+.logo{background:var(--ca);color:var(--cb);font-weight:900;font-size:1.1em;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.htitle{flex:1}.htitle h1{font-size:.95em;font-weight:700;line-height:1.2}.htitle p{font-size:.7em;opacity:.8}
+.sbadge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 12px;font-size:.82em;display:flex;align-items:center;gap:5px;cursor:pointer}
+.sbadge .star{color:var(--cg)}
+.nav{display:flex;overflow-x:auto;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.1)}
+.nav::-webkit-scrollbar{display:none}
+.ntab{flex-shrink:0;padding:9px 14px;font-size:.75em;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;letter-spacing:.3px}
+.ntab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.ntab.on{color:var(--cg);border-bottom-color:var(--cg)}
+/* SECTIONS */
+.sec{display:none;padding:14px;max-width:900px;margin:0 auto}
+.sec.on{display:block}
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;margin-bottom:14px;border:1px solid var(--bdr)}
+.ctit{font-size:.95em;font-weight:700;color:var(--cb);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.bdg{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.7em;font-weight:700;letter-spacing:.4px}
+.bdg-b{background:#E3F0FA;color:var(--cm)}.bdg-g{background:#FEF5D8;color:#B8860B}.bdg-gr{background:#E8F5EE;color:#2E7D52}
+/* HOME HERO */
+.hero{background:linear-gradient(135deg,var(--cb),var(--cm));border-radius:var(--r);padding:24px 18px;color:#fff;margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:"PET";position:absolute;right:-8px;top:-8px;font-size:7em;font-weight:900;opacity:.07;line-height:1}
+.hero h2{font-size:1.3em;font-weight:800;margin-bottom:5px}
+.hero p{font-size:.82em;opacity:.85;line-height:1.5}
+.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.hstat{background:rgba(255,255,255,.15);border-radius:var(--rs);padding:9px 6px;text-align:center}
+.hstat .n{font-size:1.3em;font-weight:900;color:var(--cg)}.hstat .l{font-size:.62em;opacity:.8;margin-top:2px}
+.mgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.mcard{background:var(--card);border-radius:var(--r);padding:14px;cursor:pointer;border:2px solid var(--bdr);transition:all .2s;box-shadow:var(--sh)}
+.mcard:hover{border-color:var(--cl);transform:translateY(-2px);box-shadow:var(--shl)}
+.micon{font-size:1.9em;margin-bottom:7px}.mname{font-weight:700;font-size:.87em;color:var(--cb)}.mdesc{font-size:.72em;color:var(--muted);margin-top:3px;line-height:1.4}
+.mpbar{margin-top:9px;height:4px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.mpfill{height:100%;background:linear-gradient(90deg,var(--cl),var(--cm));border-radius:2px;transition:width .5s}
+/* TEST SELECTOR */
+.tsel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.tbtn{padding:12px 8px;border-radius:var(--r);border:2px solid var(--bdr);background:var(--card);cursor:pointer;font-weight:700;font-size:.85em;color:var(--cb);transition:all .2s;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tbtn:hover{border-color:var(--cm);background:#EEF6FC}
+.tbtn.on{border-color:var(--cm);background:var(--cm);color:#fff}
+.tbtn .tsub{font-size:.65em;font-weight:500;opacity:.7}
+/* QUESTIONS */
+.qblock{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--bdr);box-shadow:var(--sh)}
+.qnum{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--cb);color:#fff;border-radius:50%;font-size:.77em;font-weight:700;margin-bottom:9px}
+.qtxt{font-size:.92em;line-height:1.6;color:var(--txt);margin-bottom:12px}
+.olist{display:flex;flex-direction:column;gap:7px}
+.obtn{padding:11px 14px;border-radius:var(--rs);border:2px solid var(--bdr);background:var(--bg);cursor:pointer;text-align:left;font-size:.86em;line-height:1.4;transition:all .15s;display:flex;align-items:flex-start;gap:9px}
+.obtn:hover:not(:disabled){border-color:var(--cl);background:#EEF6FC}
+.obtn.sel{border-color:var(--cm);background:#D6EEFA}
+.obtn.ok{border-color:var(--ok);background:#E8F5EE;color:var(--ok)}
+.obtn.bad{border-color:var(--er);background:#FDEAEA;color:var(--er)}
+.obtn:disabled{cursor:not-allowed}
+.olet{flex-shrink:0;width:21px;height:21px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:700}
+/* PASSAGE */
+.pbox{background:#FAFBFD;border:1px solid var(--bdr);border-left:4px solid var(--cl);border-radius:var(--rs);padding:14px;font-size:.88em;line-height:1.8;margin-bottom:14px}
+.sbox{background:#fff;border:2px solid var(--cb);border-radius:var(--rs);padding:14px;text-align:center;font-weight:700;font-size:.92em;line-height:1.5;margin-bottom:8px}
+/* WRITING */
+.wtxt{width:100%;min-height:130px;padding:12px;border-radius:var(--rs);border:2px solid var(--bdr);font-family:var(--fn);font-size:.88em;line-height:1.7;resize:vertical;transition:border-color .2s;background:#fff}
+.wtxt:focus{outline:none;border-color:var(--cm)}
+.wc{font-size:.73em;color:var(--muted);text-align:right;margin-top:5px}
+.wc.ok{color:var(--ok)}.wc.wn{color:var(--wn)}
+/* SPEAKING */
+.spcard{background:linear-gradient(135deg,#E8F4FF,#F0F8FF);border:2px solid var(--cl);border-radius:var(--r);padding:18px;text-align:center;margin-bottom:12px}
+.spprompt{font-size:1em;font-weight:600;color:var(--cb);margin-bottom:12px;line-height:1.5}
+.spex{background:rgba(0,102,164,.08);border-radius:var(--rs);padding:10px;font-size:.83em;font-style:italic;color:var(--cm);margin-bottom:12px}
+.bsp{background:var(--cm);color:#fff;border:none;border-radius:30px;padding:11px 26px;font-size:.88em;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .2s;box-shadow:0 4px 12px rgba(0,102,164,.3)}
+.bsp:hover{background:var(--cb);transform:translateY(-1px)}
+.bsp.rec{background:var(--er);animation:prec 1s infinite;box-shadow:0 4px 12px rgba(192,57,43,.4)}
+@keyframes prec{0%,100%{opacity:1}50%{opacity:.7}}
+.blis{background:var(--ok);color:#fff;border:none;border-radius:30px;padding:9px 20px;font-size:.82em;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s;margin:0 3px}
+.blis:hover{background:#236B41}
+.spscore{margin-top:14px;padding:12px;background:#fff;border-radius:var(--rs);border:1px solid var(--bdr)}
+.spstars{font-size:1.4em;margin-bottom:5px}
+.splbl{font-weight:700;font-size:.88em;color:var(--cb)}
+.spfb{font-size:.76em;color:var(--muted);margin-top:3px;line-height:1.5}
+.wave{display:flex;align-items:center;justify-content:center;gap:3px;height:36px;margin:10px 0}
+.wb{width:4px;background:var(--cl);border-radius:2px;transition:height .1s}
+/* GRAMMAR */
+.gtbl{width:100%;border-collapse:collapse;font-size:.83em;margin:9px 0}
+.gtbl th{background:var(--cb);color:#fff;padding:7px 11px;text-align:left;font-weight:600}
+.gtbl td{padding:7px 11px;border-bottom:1px solid var(--bdr)}
+.gtbl tr:nth-child(even) td{background:#F7F9FC}
+.gex{background:#EEF6FC;border-left:3px solid var(--cl);padding:7px 11px;border-radius:0 var(--rs) var(--rs) 0;font-size:.83em;margin:5px 0}
+.gex em{color:var(--cm);font-style:normal;font-weight:600}
+/* GAMES */
+.ggrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.gcard{background:var(--card);border-radius:var(--r);padding:14px;cursor:pointer;border:2px solid var(--bdr);transition:all .2s;box-shadow:var(--sh);text-align:center}
+.gcard:hover{border-color:var(--cl);transform:translateY(-2px);box-shadow:var(--shl)}
+.gicon{font-size:2em;margin-bottom:7px}.gname{font-weight:700;font-size:.86em;color:var(--cb);margin-bottom:3px}.gdesc{font-size:.7em;color:var(--muted);line-height:1.4}
+.garea{background:var(--card);border-radius:var(--r);padding:18px;border:1px solid var(--bdr);box-shadow:var(--sh)}
+.gsbar{display:flex;align-items:center;justify-content:space-between;background:var(--cb);color:#fff;border-radius:var(--rs);padding:9px 14px;margin-bottom:14px;font-size:.83em;font-weight:600;flex-wrap:wrap;gap:6px}
+.gtmr{color:var(--cg);font-size:1.05em}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:.86em;font-weight:700;transition:all .2s}
+.bp{background:var(--cm);color:#fff}.bp:hover{background:var(--cb)}
+.bs{background:var(--ok);color:#fff}.bs:hover{background:#236B41}
+.bo{background:transparent;color:var(--cm);border:2px solid var(--cm)}.bo:hover{background:var(--cm);color:#fff}
+.bg2{background:var(--ca);color:var(--cb)}.bg2:hover{background:var(--cg)}
+.bsm{padding:6px 12px;font-size:.78em}
+.bfw{width:100%;justify-content:center}
+.brow{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+/* FEEDBACK */
+.fb{border-radius:var(--rs);padding:12px;margin-top:10px;font-size:.83em;line-height:1.6;display:none}
+.fb.on{display:block}
+.fb-ok{background:#E8F5EE;border:1px solid #A5D6B5;color:#1B5E3A}
+.fb-bad{background:#FDEAEA;border:1px solid #F5A5A5;color:#7B1F1F}
+.fb-inf{background:#EEF6FC;border:1px solid #A0CCE8;color:#0D3B6E}
+/* PROGRESS BAR */
+.pbw{height:7px;background:var(--bdr);border-radius:4px;margin:7px 0;overflow:hidden}
+.pbf{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cl),var(--cm));transition:width .4s}
+/* CONFETTI */
+.cf{position:fixed;width:9px;height:9px;top:-9px;animation:cfall 3s linear forwards;z-index:9999;pointer-events:none;border-radius:2px}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* RESULTS */
+.rcrd{background:linear-gradient(135deg,#003865,#0066A4);color:#fff;border-radius:var(--r);padding:26px 18px;text-align:center;margin-bottom:14px}
+.rbig{font-size:3.8em;font-weight:900;color:var(--cg);line-height:1}
+.rlbl{font-size:.87em;opacity:.8;margin:5px 0}
+.rband{display:inline-block;background:var(--cg);color:var(--cb);font-weight:900;font-size:.95em;padding:5px 18px;border-radius:20px;margin-top:10px}
+.skgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}
+.ski{background:#fff;border-radius:var(--rs);padding:11px;text-align:left}
+.ski .sn{font-size:.75em;color:var(--muted);margin-bottom:3px;font-weight:600}
+.ski .sv{font-size:1.05em;font-weight:800;color:var(--cb)}
+/* LISTENING */
+.lcard{background:linear-gradient(135deg,#0D1B2A,#1A3A5C);color:#fff;border-radius:var(--r);padding:18px;margin-bottom:12px;text-align:center}
+.binf{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:30px;padding:8px 18px;color:#fff;font-size:.82em;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s;margin:3px}
+.binf:hover{background:rgba(255,255,255,.22)}
+.trsc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:11px;font-size:.8em;line-height:1.7;text-align:left;margin-top:10px;max-height:150px;overflow-y:auto;display:none}
+.trsc.on{display:block}
+.trtgl{font-size:.73em;color:var(--cg);cursor:pointer;margin-top:7px;text-decoration:underline}
+/* WORD CHIPS */
+.wchip{display:inline-flex;align-items:center;background:#fff;border:2px solid var(--bdr);border-radius:20px;padding:4px 12px;font-size:.8em;font-weight:600;cursor:pointer;margin:3px;transition:all .2s;user-select:none}
+.wchip:hover{border-color:var(--cm);background:#EEF6FC}
+.wchip.used{opacity:.4;pointer-events:none;text-decoration:line-through}
+.wchip.ok{border-color:var(--ok);background:#E8F5EE;color:var(--ok)}
+.wchip.bad{border-color:var(--er);background:#FDEAEA;color:var(--er)}
+/* FILL BLANK */
+.bi{border:none;border-bottom:2px solid var(--cm);background:transparent;font-size:.88em;font-family:var(--fn);color:var(--txt);padding:2px 4px;min-width:80px;text-align:center;transition:border-color .2s}
+.bi:focus{outline:none;border-bottom-color:var(--ca)}
+.bi.ok{border-bottom-color:var(--ok);color:var(--ok);background:#E8F5EE;border-radius:4px}
+.bi.bad{border-bottom-color:var(--er);color:var(--er);background:#FDEAEA;border-radius:4px}
+/* TOAST */
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--cb);color:#fff;padding:11px 22px;border-radius:30px;font-size:.86em;font-weight:600;z-index:9998;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:var(--shl)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* RESPONSIVE */
+@media(min-width:600px){.mgrid{grid-template-columns:repeat(4,1fr)}.ggrid{grid-template-columns:repeat(3,1fr)}.hstats{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:400px){.hstats{grid-template-columns:repeat(2,1fr)}.tsel{grid-template-columns:repeat(2,1fr)}.skgrid{grid-template-columns:1fr}}
+@media(orientation:landscape) and (max-height:500px){.hdr{position:static}}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="hdr">
+  <div class="htop">
+    <div class="logo">C</div>
+    <div class="htitle"><h1>Cambridge PET 2</h1><p>Preliminary English Test · B1 Level</p></div>
+    <div class="sbadge" onclick="nav('progress')"><span class="star">★</span><span id="pts">0</span> pts</div>
+  </div>
+  <nav class="nav">
+    <button class="ntab on" onclick="nav('home')" data-s="home">🏠 Home</button>
+    <button class="ntab" onclick="nav('reading')" data-s="reading">📖 Reading</button>
+    <button class="ntab" onclick="nav('writing')" data-s="writing">✍️ Writing</button>
+    <button class="ntab" onclick="nav('listening')" data-s="listening">🎧 Listening</button>
+    <button class="ntab" onclick="nav('speaking')" data-s="speaking">🎤 Speaking</button>
+    <button class="ntab" onclick="nav('grammar')" data-s="grammar">📚 Grammar</button>
+    <button class="ntab" onclick="nav('games')" data-s="games">🎮 Games</button>
+    <button class="ntab" onclick="nav('progress')" data-s="progress">📊 Progress</button>
+  </nav>
+</header>
+<div class="toast" id="toast"></div>
+
+<!-- HOME -->
+<section class="sec on" id="sec-home">
+  <div class="hero">
+    <h2>Cambridge PET 2 🎓</h2>
+    <p>4 complete practice tests · All 4 skills · Interactive exercises · 8 fun games</p>
+    <div class="hstats">
+      <div class="hstat"><div class="n">4</div><div class="l">Full Tests</div></div>
+      <div class="hstat"><div class="n">140+</div><div class="l">Questions</div></div>
+      <div class="hstat"><div class="n">8</div><div class="l">Fun Games</div></div>
+      <div class="hstat"><div class="n">B1</div><div class="l">PET Level</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">📋 About This Book</div>
+    <p style="font-size:.83em;line-height:1.7;color:var(--muted)">Cambridge Preliminary English Test (PET) is <strong>B1 level</strong>. This book has <strong>4 complete practice tests</strong> covering Reading, Writing, Listening and Speaking – exactly like the real exam.</p>
+    <div style="margin-top:11px;display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+      <div style="background:#EEF6FC;border-radius:8px;padding:9px;text-align:center"><div style="font-weight:700;color:var(--cb);font-size:.83em">Paper 1</div><div style="font-size:.7em;color:var(--muted);margin-top:2px">Reading &amp; Writing · 1h30m</div></div>
+      <div style="background:#EEF6FC;border-radius:8px;padding:9px;text-align:center"><div style="font-weight:700;color:var(--cb);font-size:.83em">Paper 2</div><div style="font-size:.7em;color:var(--muted);margin-top:2px">Listening · 35 min</div></div>
+      <div style="background:#EEF6FC;border-radius:8px;padding:9px;text-align:center"><div style="font-weight:700;color:var(--cb);font-size:.83em">Paper 3</div><div style="font-size:.7em;color:var(--muted);margin-top:2px">Speaking · 10–12 min</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">🚀 Quick Start</div>
+    <div class="mgrid">
+      <div class="mcard" onclick="nav('reading')"><div class="micon">📖</div><div class="mname">Reading</div><div class="mdesc">5 parts · 35 questions · Signs, texts, articles</div><div class="mpbar"><div class="mpfill" id="hp-r" style="width:0%"></div></div></div>
+      <div class="mcard" onclick="nav('writing')"><div class="micon">✍️</div><div class="mname">Writing</div><div class="mdesc">3 parts · Sentences, notes, letters &amp; stories</div><div class="mpbar"><div class="mpfill" id="hp-w" style="width:0%"></div></div></div>
+      <div class="mcard" onclick="nav('listening')"><div class="micon">🎧</div><div class="mname">Listening</div><div class="mdesc">4 parts · 25 questions · Conversations &amp; talks</div><div class="mpbar"><div class="mpfill" id="hp-l" style="width:0%"></div></div></div>
+      <div class="mcard" onclick="nav('speaking')"><div class="micon">🎤</div><div class="mname">Speaking</div><div class="mdesc">4 parts · Record your voice · Get AI score</div><div class="mpbar"><div class="mpfill" id="hp-s" style="width:0%"></div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">🎮 Quick Games</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+      <button class="btn bp bfw" onclick="nav('games');startGame('signreader')">🪧 Sign Reader</button>
+      <button class="btn bg2 bfw" onclick="nav('games');startGame('vocabflash')">⚡ Vocab Flash</button>
+    </div>
+  </div>
+</section>
+
+<!-- READING -->
+<section class="sec" id="sec-reading">
+  <div class="card">
+    <div class="ctit">📖 Reading Tests <span class="bdg bdg-b">5 Parts · 35 Questions</span></div>
+    <div class="tsel" id="rtsel">
+      <button class="tbtn on" onclick="selRT(1)">Test 1<span class="tsub">pp.6–17</span></button>
+      <button class="tbtn" onclick="selRT(2)">Test 2<span class="tsub">pp.26–37</span></button>
+      <button class="tbtn" onclick="selRT(3)">Test 3<span class="tsub">pp.46–57</span></button>
+      <button class="tbtn" onclick="selRT(4)">Test 4<span class="tsub">pp.66–77</span></button>
+    </div>
+  </div>
+  <div id="rcont"></div>
+</section>
+
+<!-- WRITING -->
+<section class="sec" id="sec-writing">
+  <div class="card">
+    <div class="ctit">✍️ Writing Tests <span class="bdg bdg-g">3 Parts</span></div>
+    <div class="tsel" id="wtsel">
+      <button class="tbtn on" onclick="selWT(1)">Test 1</button>
+      <button class="tbtn" onclick="selWT(2)">Test 2</button>
+      <button class="tbtn" onclick="selWT(3)">Test 3</button>
+      <button class="tbtn" onclick="selWT(4)">Test 4</button>
+    </div>
+  </div>
+  <div id="wcont"></div>
+</section>
+
+<!-- LISTENING -->
+<section class="sec" id="sec-listening">
+  <div class="card">
+    <div class="ctit">🎧 Listening Tests <span class="bdg bdg-b">4 Parts · 25 Qs</span></div>
+    <p style="font-size:.8em;color:var(--muted);margin-bottom:11px">Audio simulated with text-to-speech. Press 🔊 to play, read the transcript, then answer.</p>
+    <div class="tsel" id="ltsel">
+      <button class="tbtn on" onclick="selLT(1)">Test 1</button>
+      <button class="tbtn" onclick="selLT(2)">Test 2</button>
+      <button class="tbtn" onclick="selLT(3)">Test 3</button>
+      <button class="tbtn" onclick="selLT(4)">Test 4</button>
+    </div>
+  </div>
+  <div id="lcont"></div>
+</section>
+
+<!-- SPEAKING -->
+<section class="sec" id="sec-speaking">
+  <div class="card">
+    <div class="ctit">🎤 Speaking Practice <span class="bdg bdg-gr">Record &amp; Score</span></div>
+    <p style="font-size:.8em;color:var(--muted);margin-bottom:11px">Press 🔊 to hear the question. Then press 🔴 Record to speak. You'll get a score!</p>
+    <div class="tsel" id="spktsel">
+      <button class="tbtn on" onclick="selSPK(1)">Test 1</button>
+      <button class="tbtn" onclick="selSPK(2)">Test 2</button>
+      <button class="tbtn" onclick="selSPK(3)">Test 3</button>
+      <button class="tbtn" onclick="selSPK(4)">Test 4</button>
+    </div>
+  </div>
+  <div id="spkcont"></div>
+</section>
+
+<!-- GRAMMAR -->
+<section class="sec" id="sec-grammar">
+  <div class="card">
+    <div class="ctit">📚 Grammar Guide <span class="bdg bdg-g">PET B1 Level</span></div>
+    <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">All key grammar from the 4 PET tests. Click to expand each topic.</p>
+    <div id="gcont"></div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section class="sec" id="sec-games">
+  <div class="card">
+    <div class="ctit">🎮 Learning Games <span class="bdg bdg-b">8 Games</span></div>
+    <div class="ggrid" id="ggrid">
+      <div class="gcard" onclick="startGame('wordmatch')"><div class="gicon">🔗</div><div class="gname">Word Match</div><div class="gdesc">Match words to definitions</div></div>
+      <div class="gcard" onclick="startGame('sentbuild')"><div class="gicon">🏗️</div><div class="gname">Sentence Builder</div><div class="gdesc">Arrange words into sentences</div></div>
+      <div class="gcard" onclick="startGame('spellbee')"><div class="gicon">🐝</div><div class="gname">Spelling Bee</div><div class="gdesc">Hear and type the word</div></div>
+      <div class="gcard" onclick="startGame('transform')"><div class="gicon">🔄</div><div class="gname">Transformations</div><div class="gdesc">Rewrite sentences same meaning</div></div>
+      <div class="gcard" onclick="startGame('signreader')"><div class="gicon">🪧</div><div class="gname">Sign Reader</div><div class="gdesc">Understand real signs</div></div>
+      <div class="gcard" onclick="startGame('vocabflash')"><div class="gicon">⚡</div><div class="gname">Vocab Flash</div><div class="gdesc">Timed vocabulary quiz</div></div>
+      <div class="gcard" onclick="startGame('trufalse')"><div class="gicon">✅</div><div class="gname">True or False</div><div class="gdesc">Are these PET facts correct?</div></div>
+      <div class="gcard" onclick="startGame('scramble')"><div class="gicon">🔤</div><div class="gname">Letter Scramble</div><div class="gdesc">Unscramble the word</div></div>
+    </div>
+  </div>
+  <div id="gplay"></div>
+</section>
+
+<!-- PROGRESS -->
+<section class="sec" id="sec-progress">
+  <div class="rcrd">
+    <div style="font-size:.82em;opacity:.8;margin-bottom:7px">Total Points Earned</div>
+    <div class="rbig" id="bigpts">0</div>
+    <div class="rlbl">Keep practising to improve!</div>
+    <div class="rband" id="bndbadge">Keep Going! 💪</div>
+    <div class="skgrid">
+      <div class="ski"><div class="sn">📖 Reading</div><div class="sv" id="pr-r">0 answered</div></div>
+      <div class="ski"><div class="sn">✍️ Writing</div><div class="sv" id="pr-w">0 saved</div></div>
+      <div class="ski"><div class="sn">🎧 Listening</div><div class="sv" id="pr-l">0 answered</div></div>
+      <div class="ski"><div class="sn">🎤 Speaking</div><div class="sv" id="pr-s">0/5 avg</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">🏆 Achievements</div>
+    <div id="achiev" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+  <div class="card">
+    <div class="ctit">📈 Activity</div>
+    <div id="actlog"></div>
+  </div>
+  <div class="brow"><button class="btn bo bfw" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('pet2');location.reload()}">🔄 Reset All Progress</button></div>
+</section>
+<script>
+// ====================================================
+// STATE
+// ====================================================
+let S = JSON.parse(localStorage.getItem('pet2')||'null') || {pts:0,ra:{},wa:{},la:{},spk:{},ga:{played:0,won:0},log:[]};
+let cRT=1,cWT=1,cLT=1,cSPK=1;
+let synth=window.speechSynthesis,recog=null,isRec=false,gTmr=null;
+
+function save(){localStorage.setItem('pet2',JSON.stringify(S));document.getElementById('pts').textContent=S.pts}
+
+// ====================================================
+// READING DATA - All 4 Tests
+// ====================================================
+const RD={
+1:{
+p1:{title:"PART 1 – Short Texts (Q1–5)",inst:"Look at the text. What does it say? Mark A, B or C.",qs:[
+  {id:"r1p1q1",sign:"Francesco! Problem –\nMaria's borrowed my history textbook and she's away.\nCould you lend me yours?\nLeave it with Ken when you see him. Thanks, Natalie",q:"Whose textbook does Natalie want to borrow?",opts:["Ken's","Maria's","Francesco's"],a:2,exp:"Natalie asks Francesco 'Could you lend me yours?' – so she wants Francesco's textbook."},
+  {id:"r1p1q2",sign:"THIS CAR PARK IS LOCKED\nAFTER BUSINESS HOURS\nEACH DAY",q:"What does this sign mean?",opts:["Users must lock the car park after leaving.","People can park here while they are at work.","This car park is for employees only."],a:1,exp:"Locked after business hours = open during working hours for parking."},
+  {id:"r1p1q3",sign:"PLAYERS WANTED\nfor Friday's basketball match against Barton College –\ncan YOU help the team? Come to the gym at 3 p.m. today, whatever your level.",q:"What does the notice say?",opts:["The basketball team only wants experienced players.","There aren't enough team members available on Friday.","The Barton College team will visit the gym later today."],a:1,exp:"Players are WANTED = not enough players for Friday's match."},
+  {id:"r1p1q4",sign:"JAZZ ON A SUMMER EVENING\nNO TICKETS LEFT FOR\nSUNDAY'S PERFORMANCE",q:"What does this notice say about Sunday?",opts:["All Sunday evening tickets are already sold.","You must book tickets for Sunday in advance.","A ticket is not necessary for Sunday evening."],a:0,exp:"No tickets LEFT = all sold."},
+  {id:"r1p1q5",sign:"To: Charlotte  From: Giacomo\nWhat time does your flight arrive tomorrow? Can't pick you up if it's earlier than midday as I'm holding a meeting at our office – sorry.",q:"What does Giacomo tell Charlotte?",opts:["Giacomo will be able to see Charlotte early tomorrow morning.","Charlotte needs to arrive in time for Giacomo's meeting tomorrow.","Giacomo can collect Charlotte from the airport tomorrow afternoon."],a:2,exp:"Can't pick up before midday → can collect if she arrives after midday (afternoon)."}
+]},
+p2:{title:"PART 2 – Matching People to Films (Q6–10)",inst:"The people below want to go to the cinema. Decide which film (A–H) is most suitable for each person.",
+films:[
+  {id:"A",t:"The Delivery",d:"A well-known comedy about two workmen who have to deliver a long piece of wood. Unfortunately the performances are poor and the film is too long for such a simple joke."},
+  {id:"B",t:"And Tomorrow We Find You",d:"A fast-moving adult story about a San Francisco policeman in danger. Based on a real-life happening. Although there are no big stars, there are some fine performances."},
+  {id:"C",t:"The Ends of the Earth",d:"A story based on a real-life journey to the South Pole. This film contains some quite wonderful wildlife photography – make sure you see it while you have the chance."},
+  {id:"D",t:"Island of Fire",d:"Spectacular scenery and lots of thrills in this action-packed story, in which a young sea-captain rescues terrified villagers from a volcanic island in the South Seas."},
+  {id:"E",t:"Out of School",d:"Here we live through a day in the life of an American teenager who has problems with his parents, their boring friends and his first girlfriend who doesn't understand him."},
+  {id:"F",t:"A Time of Silence",d:"Don't forget your handkerchief for this story of a young college boy and girl who manage to survive the pressures of modern life. And what an unforgettable wedding scene!"},
+  {id:"G",t:"A Private Party",d:"A wonderfully funny comedy set in the 1940s. A reporter and his very worried wife try to save a sheep from the local butcher. The actors really make the most of this clever script."},
+  {id:"H",t:"Who Shot Malone?",d:"It's a surprise to see so many famous names wasting their time in this dull detective story. In the end you find yourself asking, 'Who cares?'"}
+],
+people:[
+  {id:"r1p2q6",n:6,desc:"Jo is studying art at university. She usually goes to the cinema on Friday evenings. She enjoys films that are based on real life and from which she can learn something.",a:"C"},
+  {id:"r1p2q7",n:7,desc:"Sheila has decided to take her mother to the cinema for her birthday. They both like love stories that have happy endings.",a:"F"},
+  {id:"r1p2q8",n:8,desc:"Brian is a hard-working medical student. He doesn't have very much free time, but he likes going to the cinema to relax, and enjoys a good laugh.",a:"G"},
+  {id:"r1p2q9",n:9,desc:"Adam wants to take his 8-year-old son Mark to the cinema at the weekend. They want to see a film with plenty of excitement.",a:"D"},
+  {id:"r1p2q10",n:10,desc:"Harry and Joyce go to the cinema about twice a month. They particularly like detective stories and do not pay much attention to which actors are in the film.",a:"B"}
+]},
+p3:{title:"PART 3 – True/False: Australia Tour (Q11–20)",inst:"Look at the sentences about a tour of Australia. Read the text. Is each sentence correct (A) or incorrect (B)?",
+pass:"GLOBEWISE – We'll show you the very best of AUSTRALIA on a fully guided 22-day tour for only £1985.\n\nOUR PRICE INCLUDES:\n• Scheduled flights by Australia's national airline, Quantas, from London or Manchester to Perth, returning from Melbourne.\n• After arriving in Perth, Air Australia flights between Perth/Alice Springs/Cairns/Sydney.\n• Coach from Sydney to Melbourne via Canberra and Albury.\n• All airport transfers in Australia.\n• Nineteen nights' accommodation in good grade hotels with full continental breakfast.\n• Day trip to Ayers Rock, full day Barrier Reef boat trip, visit to an Australian sheep station and city sightseeing tours in Perth, Alice Springs, Sydney, Canberra and Melbourne.\n• All state and local taxes. Hotel baggage handling.\n• Experienced Globewise Tour Manager at all stages.\n\nSOLD OUT FOR THIS YEAR — BOOKING NOW FOR NEXT YEAR\n\nYou can pay just £90 now to be sure of your place on this successful and popular touring holiday next year. There are departures right through the year.\n\nPHONE US ON 01303 692154\nOFFICES OPEN: Monday to Friday 9 a.m.–8 p.m., Saturday 9 a.m.–4 p.m.\nBROCHURE REQUESTS ONLY: Sunday 10 a.m.–2 p.m.",
+qs:[
+  {id:"r1p3q11",n:11,t:"If you start your holiday on April 1st, you will return on April 19th.",a:"B",exp:"A 22-day tour starting April 1st returns on April 22nd, not 19th."},
+  {id:"r1p3q12",n:12,t:"Return flights are from Melbourne.",a:"A",exp:"Correct – 'returning from Melbourne' stated."},
+  {id:"r1p3q13",n:13,t:"All travel between cities in Australia is by plane.",a:"B",exp:"There is also a coach from Sydney to Melbourne."},
+  {id:"r1p3q14",n:14,t:"The cost covers accommodation and some meals.",a:"A",exp:"Includes hotels with 'full continental breakfast'."},
+  {id:"r1p3q15",n:15,t:"You can make a reservation now for one of next year's tours.",a:"A",exp:"'Booking now for next year' – correct."},
+  {id:"r1p3q16",n:16,t:"You have to pay the full price on the day you book.",a:"B",exp:"You only pay £90 now to reserve."},
+  {id:"r1p3q17",n:17,t:"You can only take this holiday in the spring or autumn.",a:"B",exp:"'Departures right through the year.'"},
+  {id:"r1p3q18",n:18,t:"If you want to go on a city sightseeing tour, you will have to pay extra.",a:"B",exp:"City sightseeing tours are included in the price."},
+  {id:"r1p3q19",n:19,t:"The trip to Ayers Rock ends with a flight.",a:"A",exp:"The tour flies on to Cairns after Ayers Rock."},
+  {id:"r1p3q20",n:20,t:"Booking is possible seven days a week.",a:"B",exp:"Sunday is brochure requests only, not booking."}
+]},
+p4:{title:"PART 4 – Multiple Choice: Rock Climbing (Q21–25)",inst:"Read the text and questions. For each question mark A, B, C or D.",
+pass:"A month ago I had no idea that on a Saturday afternoon in November I'd be hanging 30 metres above the ground and enjoying it. Now I looked down at the river far below me, and realised why people love rock-climbing.\n\nMy friend Matt and I had arrived at the Activity Centre on Friday evening. The accommodation wasn't wonderful, but we had everything we needed (beds, blankets, food), and we were pleased to be out of the city and in the fresh air.\n\nOn Saturday morning we met the other ten members of our group. Cameron had come along with two friends, Kevin and Simon, while sisters Carole and Lynn had come with Amanda. We had come from various places and none of us knew the area.\n\nWe knew we were going to spend the weekend outdoors, but none of us was sure exactly how. Half of us spent the morning caving while the others went rock-climbing and then we changed at lunchtime. Matt and I went to the caves first. Climbing out was harder than going in, but after a good deal of pushing, we were out at last – covered in mud but pleased and excited by what we'd done.",
+qs:[
+  {id:"r1p4q21",n:21,t:"What is the writer trying to do in the text?",opts:["Advertise the Activity Centre","Describe some people she met","Explain how to do certain outdoor sports","Say how she spent some free time"],a:3,exp:"The writer tells us about her personal weekend experience."},
+  {id:"r1p4q22",n:22,t:"What can the reader learn from the text?",opts:["When to depend on other people at the Centre","How to apply for a place at the Centre","What sort of activities you can experience at the Centre","Which time of year is best to attend the Centre"],a:2,exp:"The text describes rock-climbing and caving activities."},
+  {id:"r1p4q23",n:23,t:"How did the writer feel about the accommodation?",opts:["It was satisfactory for their needs.","It was not as good as she had hoped.","It was better than she had expected.","It was unsuitable for the group."],a:0,exp:"'Not wonderful but we had everything we needed' = satisfactory."},
+  {id:"r1p4q24",n:24,t:"What does the writer tell us about the group?",opts:["They had all been to the Centre before.","Some of them already knew each other.","They all came from the same place.","None of them knew what activities to expect."],a:1,exp:"Cameron came with Kevin & Simon; Carole, Lynn and Amanda came together."},
+  {id:"r1p4q25",n:25,t:"How did the writer feel after caving?",opts:["Relieved it was over","Pleased with what she had done","Surprised it was so easy","Disappointed with the experience"],a:1,exp:"'Covered in mud but pleased and excited by what we'd done.'"}
+]}},
+2:{
+p1:{title:"PART 1 – Short Texts (Q1–5)",inst:"Look at the text. What does it say? Mark A, B or C.",qs:[
+  {id:"r2p1q1",sign:"SWIMMING POOL CHANGING ROOMS\nClosed on Tuesdays for cleaning\n9.00–12.30 all other days",q:"When can people use the changing rooms?",opts:["Only in the mornings","Not on every day of the week","Only when the pool is being cleaned"],a:1,exp:"Closed Tuesdays = not available every day."},
+  {id:"r2p1q2",sign:"CAFÉ OPEN\nNo food served after 5.30 p.m.\nDrinks available until closing time",q:"What does the notice say?",opts:["You can get a drink here after 5.30 p.m.","The café closes at 5.30 p.m.","You cannot get anything here after 5.30 p.m."],a:0,exp:"Drinks available after 5:30 – correct answer is A."},
+  {id:"r2p1q3",sign:"Hi Jane,\nI'll be at the airport to meet you. My mobile is 07800 445566 – call me when you land so I know which exit to come to.\nLove, Mum",q:"What does Jane's mum want Jane to do?",opts:["Phone her from the airport","Send a text message when she gets home","Give her a new mobile number"],a:0,exp:"'Call me when you land' = phone from the airport."},
+  {id:"r2p1q4",sign:"SOUTH STREET SPORTS CENTRE\nAll new members receive a FREE sports bag when they join.\nSome restrictions apply.",q:"What does this notice say?",opts:["Everyone who joins gets a bag.","New members may get a free sports bag.","A bag is included in the membership fee."],a:1,exp:"'Some restrictions apply' means not necessarily everyone gets a bag."},
+  {id:"r2p1q5",sign:"SECOND-HAND BOOKS FOR SALE\nAll proceeds to go to local children's charity",q:"Why are the books being sold?",opts:["To help a local charity","To clear space in the library","To get money for new books"],a:0,exp:"Proceeds go to children's charity."}
+]},
+p3:{title:"PART 3 – True/False: Tom Baker (Q11–20)",inst:"Look at the sentences about Tom Baker. Read the text. Is each sentence correct (A) or incorrect (B)?",
+pass:"Tom Baker grew up in a small village in the north of England. When he was young, he was very interested in music, particularly playing the guitar. His parents both played musical instruments and often had friends round to play together.\n\nWhen Tom was sixteen he left school and got a job in a local factory. But he spent all his free time playing guitar and listening to records. He joined a band with four other young men who lived nearby, and they started practising in Tom's parents' garage.\n\nThe band became quite popular in the local area and played at dances and small clubs at weekends. Tom was the lead guitarist. After three years, the band entered a national competition for new bands and came second. This helped them to get a contract with a recording company.\n\nTheir first record went straight to number one and they went on tour around the country. Tom and the band became very famous. They made six albums and had fourteen number-one hits in five years. Tom became the most famous member of the band because of his brilliant guitar playing.",
+qs:[
+  {id:"r2p3q11",n:11,t:"Tom grew up in a city.",a:"B",exp:"He grew up in a small VILLAGE."},
+  {id:"r2p3q12",n:12,t:"Tom's parents were interested in music.",a:"A",exp:"Both parents played instruments."},
+  {id:"r2p3q13",n:13,t:"Tom left school when he was sixteen.",a:"A",exp:"Stated directly in the text."},
+  {id:"r2p3q14",n:14,t:"All the band members came from the same village.",a:"B",exp:"They lived nearby but the text doesn't say same village."},
+  {id:"r2p3q15",n:15,t:"The band practised at Tom's family home.",a:"A",exp:"They practised in Tom's parents' garage."},
+  {id:"r2p3q16",n:16,t:"The band won a national competition.",a:"B",exp:"They came SECOND, not first."},
+  {id:"r2p3q17",n:17,t:"A record company offered them a contract.",a:"A",exp:"They got a contract with a recording company."},
+  {id:"r2p3q18",n:18,t:"Their first record was very successful.",a:"A",exp:"It went straight to number one."},
+  {id:"r2p3q19",n:19,t:"The band had ten number-one hits.",a:"B",exp:"They had FOURTEEN number-one hits."},
+  {id:"r2p3q20",n:20,t:"Tom was the most famous member of the band.",a:"A",exp:"Stated in the last sentence."}
+]}},
+3:{
+p1:{title:"PART 1 – Short Texts (Q1–5)",inst:"Look at the text. What does it say? Mark A, B or C.",qs:[
+  {id:"r3p1q1",sign:"MUSEUM ENTRY\nAdults: £4.50\nChildren under 16: FREE\nFamily ticket (2 adults + up to 3 children): £7.00",q:"What does this sign tell you?",opts:["Children always pay to enter.","A family of two adults and two children pays less than £9.","Tickets for children are cheaper than adult tickets."],a:1,exp:"2 adults normally £9, family ticket £7 – saving money."},
+  {id:"r3p1q2",sign:"PLEASE DO NOT FEED THE ANIMALS\nThey are on a special diet.",q:"Why shouldn't visitors feed the animals?",opts:["The animals are being looked after carefully.","There is not enough food for the animals.","The animals do not like the visitors' food."],a:0,exp:"Special diet = being carefully managed."},
+  {id:"r3p1q3",sign:"Dear Sophie,\nThe party was great fun! Hope the journey home wasn't too long.\nSpeak soon, Kate",q:"What is Kate doing in this message?",opts:["Apologising for missing the party","Saying she enjoyed a social event","Suggesting they meet up soon"],a:1,exp:"'The party was great fun' shows she enjoyed it."},
+  {id:"r3p1q4",sign:"TENNIS COURTS AVAILABLE FOR HIRE\nBook by phone – ring during office hours only\nCash payment on the day",q:"What must you do to hire a court?",opts:["Phone at any time to book","Pay by credit card on the day","Call during opening hours to make a booking"],a:2,exp:"Book by phone during office hours only."},
+  {id:"r3p1q5",sign:"LOST: One small brown dog near the park on Saturday.\nAnswers to 'Biscuit'. Please call 0190 556 7734.",q:"What does this notice say?",opts:["A dog has gone missing.","Someone has found a dog.","A dog needs a new home."],a:0,exp:"LOST = the dog is missing."}
+]},
+p3:{title:"PART 3 – True/False: Mountain Biking (Q11–20)",inst:"Look at the sentences about mountain biking. Read the text. Is each sentence correct (A) or incorrect (B)?",
+pass:"Adventure sports have become increasingly popular in recent years. Whether you prefer bungee jumping, white-water rafting or rock-climbing, there is something for everyone who loves excitement.\n\nOne of the most popular adventure sports at present is mountain biking. Unlike ordinary cycling, mountain biking takes you off the main roads and onto rough, hilly terrain. Many people who take up mountain biking say that it is the perfect combination of physical exercise and the feeling of freedom. Equipment for the sport is not cheap, but it need not be extremely expensive, particularly if you buy second-hand.\n\nSafety is obviously an important issue. Before you begin, it is essential to wear the right clothing and a good-quality helmet. You should also know some basic first aid. Never go out alone, particularly in bad weather, and always tell someone where you are going.\n\nMountain biking clubs are an excellent way to meet other enthusiasts. Most clubs welcome beginners and offer free introductory sessions to attract new members.",
+qs:[
+  {id:"r3p3q11",n:11,t:"Adventure sports are less popular than they used to be.",a:"B",exp:"They have become MORE popular."},
+  {id:"r3p3q12",n:12,t:"Mountain biking takes place mainly on roads.",a:"B",exp:"It takes you OFF the main roads."},
+  {id:"r3p3q13",n:13,t:"Mountain biking combines exercise and a sense of freedom.",a:"A",exp:"Stated directly in the text."},
+  {id:"r3p3q14",n:14,t:"You need to spend a lot of money to start mountain biking.",a:"B",exp:"'Need not be extremely expensive, particularly if you buy second-hand.'"},
+  {id:"r3p3q15",n:15,t:"A helmet is one of the things you need before you start.",a:"A",exp:"'Essential to wear a good-quality helmet.'"},
+  {id:"r3p3q16",n:16,t:"You should only go mountain biking when the weather is good.",a:"B",exp:"The text says never go ALONE in bad weather, not to avoid all bad weather."},
+  {id:"r3p3q17",n:17,t:"You should inform someone of your plans before you go out.",a:"A",exp:"'Always tell someone where you are going.'"},
+  {id:"r3p3q18",n:18,t:"Mountain biking clubs charge beginners to join.",a:"B",exp:"Most clubs offer FREE introductory sessions."},
+  {id:"r3p3q19",n:19,t:"Clubs are a good place to meet people with similar interests.",a:"A",exp:"'Excellent way to meet other enthusiasts.'"},
+  {id:"r3p3q20",n:20,t:"You need first aid qualifications before going mountain biking.",a:"B",exp:"You need to KNOW basic first aid, not have formal qualifications."}
+]}},
+4:{
+p1:{title:"PART 1 – Short Texts (Q1–5)",inst:"Look at the text. What does it say? Mark A, B or C.",qs:[
+  {id:"r4p1q1",sign:"LIBRARY BOOKS\nOverdue fines: 20p per book per day\nMaximum fine: £2.00 per book",q:"What does this notice say?",opts:["You cannot keep books for more than two days.","There is a limit on how much you pay for late books.","You pay 20p each time you borrow a book."],a:1,exp:"Maximum fine of £2.00 = limit on late fees."},
+  {id:"r4p1q2",sign:"MOUNTAIN CAFÉ\nWarm clothing recommended\nOrder at the counter\nTake your number to your table",q:"What should customers do at this café?",opts:["Wait to be served at their table","Place their order before sitting down","Bring warm clothes to wear inside"],a:1,exp:"'Order at the counter' = order first, then sit."},
+  {id:"r4p1q3",sign:"Hi Pete,\nI've managed to get three tickets for the match – it's on Saturday not Friday. Meet me outside the ground at 2.30.\nCheers, Dan",q:"What is Dan telling Pete?",opts:["The match has been changed to a different day.","Pete should get his own ticket for Saturday.","Dan couldn't get enough tickets for everyone."],a:0,exp:"'Saturday not Friday' = the day has changed."},
+  {id:"r4p1q4",sign:"SORRY – LIFT OUT OF ORDER\nPlease use the stairs while repairs are being carried out",q:"What does this notice say?",opts:["The lift is closed for cleaning.","People should not use the lift.","The lift will soon be repaired."],a:1,exp:"'Out of order' = not working; use stairs instead."},
+  {id:"r4p1q5",sign:"RIVERSIDE WALK\nDogs must be kept on leads at all times\nNo cycling",q:"What are visitors to this area told?",opts:["Dogs are not allowed here.","People must keep their dogs under control.","Cyclists must give way to walkers."],a:1,exp:"'On leads at all times' = dogs must be controlled."}
+]},
+p3:{title:"PART 3 – True/False: Greenfields Language School (Q11–20)",inst:"Look at the sentences about Greenfields Language School. Read the text. Is each sentence correct (A) or incorrect (B)?",
+pass:"Greenfields Language School has been teaching English to students from all over the world for over twenty years. We offer a wide range of courses from beginners to advanced level.\n\nAll our teachers are fully qualified and have many years of experience. Classes are kept small – a maximum of twelve students – so that teachers can give each student individual attention. Courses run throughout the year, with new classes starting every month.\n\nStudents stay with local families during their time at the school. This gives them the chance to practise their English outside of class and to learn about British culture. All accommodation is carefully checked by the school before families are approved.\n\nThe school has a well-equipped computer room which students can use free of charge. There is also a library with a large collection of books, videos, and magazines in English. Social activities are organized every week, including visits to local places of interest, cinema trips, and sports sessions.",
+qs:[
+  {id:"r4p3q11",n:11,t:"Greenfields Language School is a new school.",a:"B",exp:"It has been teaching for over TWENTY YEARS."},
+  {id:"r4p3q12",n:12,t:"The school provides courses for all levels.",a:"A",exp:"From beginners to advanced level."},
+  {id:"r4p3q13",n:13,t:"Classes have more than twelve students.",a:"B",exp:"MAXIMUM of twelve students."},
+  {id:"r4p3q14",n:14,t:"New courses begin each month.",a:"A",exp:"'New classes starting every month.'"},
+  {id:"r4p3q15",n:15,t:"Students live with local families.",a:"A",exp:"Stated directly."},
+  {id:"r4p3q16",n:16,t:"Students can practise English with their host families.",a:"A",exp:"'Chance to practise English outside of class.'"},
+  {id:"r4p3q17",n:17,t:"The school checks that accommodation is suitable.",a:"A",exp:"'All accommodation is carefully checked.'"},
+  {id:"r4p3q18",n:18,t:"Students have to pay to use the computers.",a:"B",exp:"'Free of charge.'"},
+  {id:"r4p3q19",n:19,t:"The library contains only books in English.",a:"B",exp:"Books, videos AND magazines."},
+  {id:"r4p3q20",n:20,t:"Social activities happen once a week.",a:"A",exp:"'Social activities organized every week.'"}
+]}}
+};
+
+// ====================================================
+// WRITING DATA
+// ====================================================
+const WD={
+1:{
+p1:{title:"PART 1 – Sentence Transformations (Q1–5)",inst:"Complete the second sentence so it means the same as the first, using no more than THREE words.",
+qs:[
+  {id:"w1p1q1",s1:"My parents prefer jazz to classical music.",s2:"My parents think jazz ______ than classical music.",a:"is better",h:"Comparative adjective"},
+  {id:"w1p1q2",s1:"My parents can only go swimming at the weekend.",s2:"On weekdays, my parents aren't ______ go swimming.",a:"able to",h:"aren't able to = can't"},
+  {id:"w1p1q3",s1:"If I finish my homework, I can go out at the weekend.",s2:"I can't go out at the weekend ______ I finish my homework.",a:"unless",h:"unless = if not"},
+  {id:"w1p1q4",s1:"My sister watches more TV than me.",s2:"I don't watch TV ______ my sister does.",a:"as much as",h:"as much as (comparisons)"},
+  {id:"w1p1q5",s1:"My parents suggested going out for a meal.",s2:"My parents said, 'Why ______ we go out for a meal?'",a:"don't",h:"Why don't we = suggestion"}
+]},
+p2:{title:"PART 2 – Short Message (Q6, 35–45 words)",task:"You have invited your English friend Jo to stay with you next month, but you now need to delay this visit.\n\nWrite a card to send to Jo. In your card, you should:\n• apologise to Jo\n• explain why the visit has to be delayed\n• suggest when it would be convenient for Jo to come.\n\nWrite 35–45 words on your answer sheet.",
+sample:"Dear Jo, I'm really sorry but I need to delay your visit. A family member is coming to stay unexpectedly and there won't be room. Could you come the following month instead? I hope this doesn't cause too many problems. Love, [name]",
+kp:["An apology to Jo","Explanation for the delay","A suggested new time"]},
+p3:{title:"PART 3 – Letter or Story (~100 words)",qs:[
+  {id:"w1p3q7",type:"story",title:"Question 7 – Story",prompt:"Your English teacher has asked you to write a story.",opening:"Carla looked at the car in surprise.",inst:"Write your story in about 100 words."},
+  {id:"w1p3q8",type:"letter",title:"Question 8 – Letter",prompt:"This is part of a letter you receive from an English friend.",extract:"I know you often go to the cinema. Tell me about the last film you saw and whether you enjoyed it.",inst:"Now write a letter to your friend. Write about 100 words."}
+]}},
+2:{
+p1:{title:"PART 1 – Sentence Transformations (Q1–5)",inst:"Complete the second sentence so it means the same as the first, using no more than THREE words.",
+qs:[
+  {id:"w2p1q1",s1:"It's two years since I last went to the cinema.",s2:"I ______ to the cinema for two years.",a:"haven't been",h:"Present perfect negative"},
+  {id:"w2p1q2",s1:"The manager told the staff to arrive early.",s2:"The staff ______ to arrive early.",a:"were told",h:"Passive voice (past)"},
+  {id:"w2p1q3",s1:"Swimming is easier than running.",s2:"Running is ______ than swimming.",a:"more difficult",h:"Comparative adjective"},
+  {id:"w2p1q4",s1:"'I will call you tomorrow,' said Mark.",s2:"Mark promised ______ the next day.",a:"to call",h:"Reported speech + infinitive"},
+  {id:"w2p1q5",s1:"The film was so boring that I fell asleep.",s2:"The film wasn't ______ to keep me awake.",a:"interesting enough",h:"enough + adjective"}
+]},
+p2:{title:"PART 2 – Short Message (Q6, 35–45 words)",task:"Your English friend Sam is coming to visit you next weekend. You want to plan some activities together.\n\nWrite an email to Sam. In your email you should:\n• suggest two activities you could do together\n• explain why you think Sam would enjoy these\n• ask Sam what time they will arrive.\n\nWrite 35–45 words.",
+sample:"Hi Sam! I'm really excited you're visiting. How about going to the science museum and the market on Saturday? You'd love them both! Let me know what time you'll arrive so I can meet you. Can't wait! [name]",
+kp:["Two activity suggestions","Why Sam would enjoy them","Question about arrival time"]},
+p3:{title:"PART 3 – Letter or Story (~100 words)",qs:[
+  {id:"w2p3q7",type:"letter",title:"Question 7 – Letter",prompt:"This is part of a letter from your English penfriend.",extract:"I'm glad you like learning English. Your teacher sounds really nice – and your friends do too! Tell me all about your English classes.",inst:"Write your letter in about 100 words."},
+  {id:"w2p3q8",type:"story",title:"Question 8 – Story",prompt:"Your English teacher has asked you to write a story.",opening:"A broken window",inst:"Write your story in about 100 words."}
+]}},
+3:{
+p1:{title:"PART 1 – Sentence Transformations (Q1–5)",inst:"Complete the second sentence so it means the same as the first, using no more than THREE words.",
+qs:[
+  {id:"w3p1q1",s1:"They built this bridge in 1990.",s2:"This bridge ______ in 1990.",a:"was built",h:"Passive past simple"},
+  {id:"w3p1q2",s1:"It is not necessary to wear a tie at this restaurant.",s2:"You ______ wear a tie at this restaurant.",a:"don't have to",h:"don't have to = not necessary"},
+  {id:"w3p1q3",s1:"Sarah started learning Spanish three years ago.",s2:"Sarah ______ Spanish for three years.",a:"has been learning",h:"Present perfect continuous"},
+  {id:"w3p1q4",s1:"Despite the rain, we enjoyed our picnic.",s2:"We enjoyed our picnic ______ it was raining.",a:"even though",h:"Concessive clause"},
+  {id:"w3p1q5",s1:"The last time I spoke to her was in January.",s2:"I ______ spoken to her since January.",a:"haven't",h:"Present perfect since"}
+]},
+p2:{title:"PART 2 – Short Message (Q6, 35–45 words)",task:"You have borrowed a book from your English-speaking neighbour, but you have accidentally damaged it.\n\nWrite a note to leave for your neighbour. In your note you should:\n• apologise for damaging the book\n• explain how it happened\n• say what you will do about it.\n\nWrite 35–45 words.",
+sample:"Dear Mrs Jones, I'm very sorry – I accidentally dropped your book in water while reading in the garden. The pages are now wrinkled. I feel terrible. I'd like to buy you a new copy to replace it. I'm so sorry again! [name]",
+kp:["Apology for the damage","Explanation of how it happened","What you will do to fix it"]},
+p3:{title:"PART 3 – Letter or Story (~100 words)",qs:[
+  {id:"w3p3q7",type:"letter",title:"Question 7 – Letter",prompt:"This is part of a letter from your English friend.",extract:"I'm thinking of getting a part-time job. Have you ever had a part-time job? What do you think would be a good job for me?",inst:"Write your letter in about 100 words."},
+  {id:"w3p3q8",type:"story",title:"Question 8 – Story",prompt:"Your English teacher has asked you to write a story.",opening:"It was the most exciting day of my life.",inst:"Write your story in about 100 words."}
+]}},
+4:{
+p1:{title:"PART 1 – Sentence Transformations (Q1–5)",inst:"Complete the second sentence so it means the same as the first, using no more than THREE words.",
+qs:[
+  {id:"w4p1q1",s1:"I haven't been to London for five years.",s2:"The last ______ I went to London was five years ago.",a:"time",h:"The last time..."},
+  {id:"w4p1q2",s1:"'Would you like to come to my party?' Anna asked.",s2:"Anna ______ me to her party.",a:"invited",h:"Reported speech (invite)"},
+  {id:"w4p1q3",s1:"This soup isn't hot enough to eat.",s2:"This soup is ______ cold to eat.",a:"too",h:"too + adjective"},
+  {id:"w4p1q4",s1:"I would rather go by bus than by train.",s2:"I ______ going by bus to going by train.",a:"prefer",h:"prefer ... to ..."},
+  {id:"w4p1q5",s1:"Nobody could explain why the computer stopped working.",s2:"The reason ______ the computer stopped was unknown.",a:"why",h:"reason why..."}
+]},
+p2:{title:"PART 2 – Short Message (Q6, 35–45 words)",task:"You are going to visit a new sports centre next week and you want to invite an English-speaking friend to go with you.\n\nWrite a note to your friend. In your note you should:\n• invite your friend to come with you\n• say what activities are available there\n• suggest a time to meet.\n\nWrite 35–45 words.",
+sample:"Hi! There's a great new sports centre near my house with a pool, gym and tennis courts – you'd love it! Would you like to come on Saturday? We could meet at my house at 10 o'clock. Let me know! [name]",
+kp:["Invitation to friend","Activities available","Suggested time to meet"]},
+p3:{title:"PART 3 – Letter or Story (~100 words)",qs:[
+  {id:"w4p3q7",type:"letter",title:"Question 7 – Letter",prompt:"This is part of a letter from your English friend.",extract:"I've just started going to evening classes. Are you interested in doing any evening classes? What would you like to learn?",inst:"Write your letter in about 100 words."},
+  {id:"w4p3q8",type:"story",title:"Question 8 – Story",prompt:"Your English teacher has asked you to write a story.",opening:"The door opened slowly and...",inst:"Write your story in about 100 words."}
+]}}
+};
+
+// ====================================================
+// LISTENING DATA - All 4 Tests
+// ====================================================
+const LD={
+1:{
+p1:{title:"PART 1 – Picture Questions (Q1–7)",inst:"For each question there are three pictures and a short dialogue. Listen and choose the correct picture A, B or C.",
+qs:[
+  {id:"l1p1q1",q:"Where will the girls meet?",opts:["By the old gate near the trees","By the river in the park","At the sports ground"],a:2,tr:"Girl 1: Where shall we meet? Girl 2: What about the sports ground – it's easy to find. Girl 1: OK, see you there at three."},
+  {id:"l1p1q2",q:"Which chair does the man want?",opts:["A large comfortable armchair","A padded desk chair on wheels","A tall bar stool"],a:0,tr:"Man: I need a comfortable chair for reading, with armrests please. Something I can really sink into. Shop assistant: How about this large armchair here?"},
+  {id:"l1p1q3",q:"What sport will the girl do this weekend?",opts:["Swimming","Tennis","Running"],a:0,tr:"Boy: Are you playing tennis this weekend? Girl: No, I've decided to swim instead – it's better exercise for my back."},
+  {id:"l1p1q4",q:"Which is the man's new house?",opts:["A modern flat in a tall block","A small terraced house","A large detached house with a garden"],a:2,tr:"Man: I've just moved into a detached house. It's quite big with a lovely garden – really pleased with it. Woman: How wonderful!"},
+  {id:"l1p1q5",q:"What does the woman order?",opts:["A salad","A cheese sandwich","A bowl of soup"],a:1,tr:"Waiter: What would you like? Woman: The cheese sandwich please. Waiter: Anything to drink?"},
+  {id:"l1p1q6",q:"How will they travel to Edinburgh?",opts:["By plane","By train","By car"],a:0,tr:"Man: How shall we get to Edinburgh? Woman: Let's fly – it's much quicker. Man: Good idea."},
+  {id:"l1p1q7",q:"Which is the woman's bag?",opts:["A large holdall","A small handbag","A backpack with straps"],a:2,tr:"Man: Which bag is yours? Woman: The backpack – I always carry everything on my back."}
+]},
+p2:{title:"PART 2 – Multiple Choice Radio Programme (Q8–13)",inst:"You will hear a radio interview. For each question choose the correct answer A, B or C.",
+qs:[
+  {id:"l1p2q8",q:"What is the radio programme mainly about?",opts:["A new school that has opened","A young boy's life on a farm","A competition for young farmers"],a:1,tr:"Presenter: Today we visit 14-year-old Jack who lives on his uncle's farm and tells us about a typical day..."},
+  {id:"l1p2q9",q:"What time does Jack get up in the morning?",opts:["5:00 a.m.","6:00 a.m.","7:00 a.m."],a:1,tr:"Jack: I get up at six every morning because there's a lot to do before school."},
+  {id:"l1p2q10",q:"What is Jack's favourite subject at school?",opts:["Maths","Science","PE"],a:1,tr:"Jack: My favourite subject is definitely science – I love biology especially."},
+  {id:"l1p2q11",q:"How does Jack get to school?",opts:["By bus","On his bicycle","His father drives him"],a:1,tr:"Jack: I cycle to school every day on my bike – it takes about twenty minutes."},
+  {id:"l1p2q12",q:"What does Jack help with on the farm?",opts:["Feeding the chickens","Milking the cows","Driving the tractor"],a:1,tr:"Jack: My main job is helping uncle milk the cows. We have fifty of them!"},
+  {id:"l1p2q13",q:"What does Jack want to do when he grows up?",opts:["Become a vet","Have his own farm","Become a teacher"],a:1,tr:"Jack: I'd love to have my own farm one day – just like my uncle's."}
+]},
+p3:{title:"PART 3 – Gap Fill (Q14–19)",inst:"Listen and complete the sentences. Write one or two words or a number.",
+qs:[
+  {id:"l1p3q14",q:"Jack's favourite subject at school:",a:"science",pl:"science"},
+  {id:"l1p3q15",q:"What Jack does for exercise outside school:",a:"running",pl:"running"},
+  {id:"l1p3q16",q:"How Jack travels to school:",a:"bicycle/bike",pl:"bicycle or bike"},
+  {id:"l1p3q17",q:"What Jack helps his uncle do on the farm:",a:"(milk/help with) cows",pl:"milk / help with cows"},
+  {id:"l1p3q18",q:"The day Jack has extra farm duties:",a:"Monday",pl:"Monday"},
+  {id:"l1p3q19",q:"What Jack wants to be in the future:",a:"farmer",pl:"farmer"}
+]},
+p4:{title:"PART 4 – True/False: Jim and his Mum (Q20–25)",inst:"Listen to a conversation between Jim and his mother. Decide if each sentence is correct (A=YES) or incorrect (B=NO).",
+qs:[
+  {id:"l1p4q20",q:"Jim's bicycle needs to be mended.",a:"A",tr:"Jim: Mum, my bike's broken – the chain keeps coming off."},
+  {id:"l1p4q21",q:"He's keen to start saving money.",a:"B",tr:"Jim doesn't want to save – he wants Mum to buy him a new bike straightaway."},
+  {id:"l1p4q22",q:"His mother thinks a mountain bike is suitable for their area.",a:"B",tr:"Mum: A mountain bike isn't right here – there are no proper hills near us."},
+  {id:"l1p4q23",q:"She encourages Jim to manage his money better.",a:"A",tr:"Mum: You really need to learn to save up for things you want, Jim."},
+  {id:"l1p4q24",q:"His mother offers to lend him some money.",a:"B",tr:"She doesn't offer to lend money – she suggests he earns it himself."},
+  {id:"l1p4q25",q:"Jim is disappointed by his mother's suggestion.",a:"A",tr:"Jim: That'll take forever! I'll be too old for a bike by then!"}
+]}},
+2:{
+p1:{title:"PART 1 – Picture Questions (Q1–7)",inst:"For each question choose the correct picture A, B or C.",
+qs:[
+  {id:"l2p1q1",q:"What has happened to the woman's car?",opts:["It has a flat tyre","The engine won't start","It's been damaged in an accident"],a:0,tr:"Woman: My tyre went completely flat on the motorway – I had to call for help."},
+  {id:"l2p1q2",q:"What item does the man say he has lost?",opts:["A red umbrella","A blue scarf","A black briefcase"],a:2,tr:"Man: I've lost my briefcase – it's large and black. I left it on the train."},
+  {id:"l2p1q3",q:"What will the weather be like tomorrow?",opts:["Sunny","Cloudy with some rain","Cold and windy"],a:1,tr:"Forecast: Tomorrow will be mostly cloudy with occasional showers in the afternoon."},
+  {id:"l2p1q4",q:"Which route should the man take?",opts:["Turn left at the library","Go straight and turn right at the traffic lights","Take the second left after the school"],a:1,tr:"Woman: Go straight ahead, then turn right at the traffic lights. You can't miss it."},
+  {id:"l2p1q5",q:"What time does the museum close?",opts:["4:30","5:00","5:30"],a:1,tr:"Recorded message: The museum is open until five o'clock daily."},
+  {id:"l2p1q6",q:"What sport did the woman play last weekend?",opts:["Tennis","Volleyball","Badminton"],a:2,tr:"Woman: I played badminton at the sports centre on Saturday – great fun!"},
+  {id:"l2p1q7",q:"Which hat does the girl buy?",opts:["A woolly hat","A baseball cap","A sun hat"],a:1,tr:"Girl: I'll take the baseball cap please – it suits me much better."}
+]},
+p3:{title:"PART 3 – Gap Fill: Travel Booking (Q14–19)",inst:"Listen and complete the booking information.",
+qs:[
+  {id:"l2p3q14",q:"Date of departure:",a:"14th March",pl:"14th March"},
+  {id:"l2p3q15",q:"Destination city:",a:"Barcelona",pl:"Barcelona"},
+  {id:"l2p3q16",q:"Type of accommodation:",a:"hotel",pl:"hotel"},
+  {id:"l2p3q17",q:"Number of nights:",a:"seven/7",pl:"7 or seven"},
+  {id:"l2p3q18",q:"Total price per person:",a:"£420",pl:"£420"},
+  {id:"l2p3q19",q:"Booking reference number:",a:"TG/4892",pl:"TG/4892"}
+]}},
+3:{
+p1:{title:"PART 1 – Picture Questions (Q1–7)",inst:"For each question choose the correct picture A, B or C.",
+qs:[
+  {id:"l3p1q1",q:"Where does the man work?",opts:["In a hospital","In a school","In a shop"],a:0,tr:"Man: I'm a nurse – I work at the local hospital, mainly on the night shift."},
+  {id:"l3p1q2",q:"What does the girl buy in the shop?",opts:["A fashion magazine","A book","A newspaper"],a:0,tr:"Girl: I'll take that magazine please – the fashion one on the top shelf."},
+  {id:"l3p1q3",q:"What time does the train arrive?",opts:["3:15","3:45","4:00"],a:1,tr:"Announcement: The 3:45 service to London will now arrive at platform 2."},
+  {id:"l3p1q4",q:"How does the woman describe her flat?",opts:["Large with a balcony","Small but well-equipped","On the ground floor"],a:0,tr:"Woman: I love my flat – it's quite large and I have a beautiful balcony with views."},
+  {id:"l3p1q5",q:"What does the boy win in the competition?",opts:["A book token","A camera","A bicycle"],a:2,tr:"Presenter: And first prize goes to... a brand new bicycle!"},
+  {id:"l3p1q6",q:"How will they travel to the party?",opts:["By taxi","By bus","On foot"],a:0,tr:"Man: Let's get a taxi – it's too far to walk and buses take ages."},
+  {id:"l3p1q7",q:"Where does the family go on holiday?",opts:["To the mountains","To the seaside","To the countryside"],a:1,tr:"Woman: We always go to the sea for our holidays – the children love the beach."}
+]},
+p3:{title:"PART 3 – Gap Fill: Drama Club (Q14–19)",inst:"Listen and complete the information about the drama club.",
+qs:[
+  {id:"l3p3q14",q:"Name of club:",a:"Parkside Drama Club",pl:"Parkside Drama Club"},
+  {id:"l3p3q15",q:"Day of meetings:",a:"Thursday",pl:"Thursday"},
+  {id:"l3p3q16",q:"Meeting location:",a:"community centre",pl:"community centre"},
+  {id:"l3p3q17",q:"Cost per term:",a:"£25",pl:"£25"},
+  {id:"l3p3q18",q:"What members perform:",a:"plays/musicals",pl:"plays or musicals"},
+  {id:"l3p3q19",q:"Contact person:",a:"Mike Cooper",pl:"Mike Cooper"}
+]}},
+4:{
+p1:{title:"PART 1 – Picture Questions (Q1–7)",inst:"For each question choose the correct picture A, B or C.",
+qs:[
+  {id:"l4p1q1",q:"What does the man want to buy?",opts:["A winter jacket","A coat","A warm sweater"],a:0,tr:"Man: I'm looking for a jacket – something warm and waterproof for the winter."},
+  {id:"l4p1q2",q:"What has happened to the woman?",opts:["She missed her bus","She lost her keys","She had a car accident"],a:1,tr:"Woman: I've lost my keys – I've searched everywhere and I can't find them."},
+  {id:"l4p1q3",q:"Where is the post office?",opts:["Next to the bank","Opposite the supermarket","Between the chemist and the baker"],a:2,tr:"Man: The post office? It's between the chemist's and the baker's. You can't miss it."},
+  {id:"l4p1q4",q:"What will the boy do straight after school?",opts:["Play football","Do his homework","Go to a friend's house"],a:0,tr:"Boy: I've got football practice right after school today – should be fun!"},
+  {id:"l4p1q5",q:"What does the girl look like now?",opts:["Short dark hair","Long blonde hair","Short curly hair"],a:0,tr:"Girl: I had it all cut off! It's short and dark now – much easier to manage."},
+  {id:"l4p1q6",q:"Which animal does the boy want?",opts:["A dog","A cat","A rabbit"],a:2,tr:"Boy: I'd really love a rabbit – they're easy to look after and very cute."},
+  {id:"l4p1q7",q:"What problem does the man have?",opts:["His computer is broken","He can't get the printer to work","His internet connection is slow"],a:1,tr:"Man: I can't get this printer to work at all – I've tried everything."}
+]},
+p3:{title:"PART 3 – Gap Fill: Cooking Class (Q14–19)",inst:"Listen and complete the information about the cooking class.",
+qs:[
+  {id:"l4p3q14",q:"Type of cuisine:",a:"Italian",pl:"Italian"},
+  {id:"l4p3q15",q:"Class size (max students):",a:"8",pl:"8"},
+  {id:"l4p3q16",q:"Time class starts:",a:"7:30 p.m.",pl:"7:30 p.m."},
+  {id:"l4p3q17",q:"What students learn to make:",a:"pasta and desserts",pl:"pasta and desserts"},
+  {id:"l4p3q18",q:"Length of course:",a:"6 weeks",pl:"6 weeks"},
+  {id:"l4p3q19",q:"What to bring to class:",a:"apron",pl:"apron"}
+]}}
+};
+
+// ====================================================
+// SPEAKING DATA
+// ====================================================
+const SPKD={
+1:[
+  {id:"s1q1",part:"Part 1 – Personal Information",q:"Tell me about yourself. What is your name and where are you from?",ex:"My name is [name] and I'm from [city], [country]. I live with my family and I'm studying English.",tips:["Say your name clearly","Mention your city and country","Add one extra detail"]},
+  {id:"s1q2",part:"Part 1 – Daily Life",q:"Tell me about a typical day in your life.",ex:"I usually wake up at seven o'clock. I have breakfast, then go to school. After school I like to read and play sport.",tips:["Use present simple tense","Include morning and evening","Use time words: first, then, finally"]},
+  {id:"s1q3",part:"Part 2 – Picture Description",q:"Describe a picture showing a family having dinner together at home.",ex:"In this picture I can see a family sitting around a table. They are having dinner together. The mother is serving food and everyone looks happy.",tips:["Start: 'In this picture...'","Describe people and actions","Use present continuous: is/are + -ing"]},
+  {id:"s1q4",part:"Part 3 – Discussion",q:"Do you think it's important for families to eat together? Why or why not?",ex:"Yes, I think it's very important because it gives families time to talk and share their day. However, nowadays people are often too busy.",tips:["Give a clear opinion","Use: I think, In my opinion","Give reasons and examples","Consider both sides"]},
+  {id:"s1q5",part:"Part 4 – Topic Questions",q:"What do you like doing in your free time?",ex:"In my free time I enjoy reading and playing sport. I especially like tennis because it keeps me fit and I can play with friends.",tips:["Use present simple for habits","Give specific examples","Explain WHY you enjoy it"]}
+],
+2:[
+  {id:"s2q1",part:"Part 1 – Study/Work",q:"Do you work or are you a student? Tell me about your work or studies.",ex:"I am a student at [school name]. I study English, Maths and Science. My favourite subject is English because I want to travel.",tips:["Be specific about subjects","Mention what you enjoy","Talk about your goals"]},
+  {id:"s2q2",part:"Part 1 – Hobbies",q:"Tell me about something you enjoy doing after school or work.",ex:"After school I enjoy playing football with my friends. We usually play at the local park for about an hour.",tips:["Use present simple","Mention when, where, and with whom","Use frequency words: usually, often, sometimes"]},
+  {id:"s2q3",part:"Part 2 – Picture Description",q:"Describe a picture showing people at an outdoor market.",ex:"This picture shows a busy outdoor market. There are many stalls selling fruit and vegetables. Some people are shopping while others are chatting.",tips:["Describe the overall scene first","Give specific details","Use 'there is/are' structure"]},
+  {id:"s2q4",part:"Part 3 – Discussion",q:"Do you prefer shopping in big supermarkets or small local shops? Why?",ex:"I prefer small local shops because the food is fresher and you get to know the shopkeepers. However, supermarkets are more convenient for families.",tips:["Compare both options","Use: On the other hand, However","Give personal reasons and examples"]},
+  {id:"s2q5",part:"Part 4 – Future Plans",q:"What are your plans for the next few years?",ex:"In the next few years I hope to finish my studies and find a good job. I would also like to travel and see different countries.",tips:["Use: I hope to, I would like to, I plan to","Be specific about goals","Explain why they are important"]}
+],
+3:[
+  {id:"s3q1",part:"Part 1 – Where You Live",q:"Tell me about the area where you live.",ex:"I live in [city]. It's a busy city with lots of shops and restaurants. There's also a large park nearby which I love.",tips:["Describe the location and size","Mention good and bad points","Use there is/are","Include transport options"]},
+  {id:"s3q2",part:"Part 1 – Transport",q:"How do you usually travel around your city or town?",ex:"I usually travel by bus because it's cheap and convenient. Sometimes I walk if the weather is nice and the destination is close.",tips:["Mention different types of transport","Use frequency adverbs: usually, sometimes","Compare different options"]},
+  {id:"s3q3",part:"Part 2 – Picture Description",q:"Describe a picture showing people watching a sports event in a stadium.",ex:"The picture shows a large stadium full of excited people. In the centre there are athletes racing on a track. The crowd looks very enthusiastic.",tips:["Describe the setting and size","Describe what people are doing","Describe the atmosphere with adjectives"]},
+  {id:"s3q4",part:"Part 3 – Discussion",q:"Is sport important for young people? Why or why not?",ex:"I think sport is very important for young people because it keeps them healthy and teaches teamwork. It also helps them make friends and have fun.",tips:["State your opinion clearly","Give 2–3 reasons","Use: Furthermore, In addition, Also"]},
+  {id:"s3q5",part:"Part 4 – Environment",q:"What can people do to help protect the environment?",ex:"People can help by recycling more and using less plastic. They can also walk or cycle instead of driving. Turning off lights when leaving a room also saves energy.",tips:["Give specific, practical examples","Use modal verbs: can, should, could","Mention both individuals and governments"]}
+],
+4:[
+  {id:"s4q1",part:"Part 1 – Family",q:"Tell me about your family.",ex:"I have a small family – my parents and one brother. My father is a teacher and my mother works in an office. My brother is younger than me.",tips:["Describe family members","Mention relationships and ages","Use adjectives to describe people"]},
+  {id:"s4q2",part:"Part 1 – Food",q:"What kind of food do you enjoy eating?",ex:"I really enjoy Italian food, especially pasta. I also like Vietnamese food because the flavours are very fresh and interesting.",tips:["Name specific foods","Explain why you like them","Mention foods from different cultures"]},
+  {id:"s4q3",part:"Part 2 – Picture Description",q:"Describe a picture showing a classroom scene with students and a teacher.",ex:"The picture shows a classroom. A teacher is standing at the front near a whiteboard. Several students are sitting at desks and appear to be working on an exercise.",tips:["Identify the setting clearly","Describe people and what they're doing","Use 'appears to be' for uncertain details"]},
+  {id:"s4q4",part:"Part 3 – Discussion",q:"Do you think the internet has made life better or worse? Why?",ex:"I think the internet has made life much better in many ways. We can find information instantly and stay in touch with people anywhere. However, some people spend too much time online.",tips:["Acknowledge both sides","Use: On one hand / On the other hand","Give specific real-life examples","Share a personal experience"]},
+  {id:"s4q5",part:"Part 4 – Education",q:"What would you like to learn in the future?",ex:"In the future I would love to learn to play the piano. I also want to improve my English and perhaps learn another language like French or Spanish.",tips:["Be specific about subjects or skills","Use: I would love to, I'd like to, I hope to","Explain your reasons clearly"]}
+]
+};
+
+// ====================================================
+// GRAMMAR DATA
+// ====================================================
+const GD=[
+{t:"Comparative & Superlative Adjectives",icon:"📊",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used to compare people, things, or actions.</p>
+<table class="gtbl"><tr><th>Type</th><th>Rule</th><th>Example</th></tr>
+<tr><td>Short (1 syllable)</td><td>add <em>-er / -est</em></td><td><em>fast → faster → the fastest</em></td></tr>
+<tr><td>Long (2+ syllables)</td><td><em>more / the most</em></td><td><em>interesting → more interesting</em></td></tr>
+<tr><td>Irregular</td><td>must memorise!</td><td><em>good→better→best · bad→worse→worst</em></td></tr>
+</table>
+<div class="gex">Jazz is <em>better</em> than classical music. (Test 1, Writing Part 1)</div>
+<div class="gex">Running is <em>more difficult</em> than swimming. (Test 2)</div>`,
+prac:[{q:"My sister is tall but my brother is even _____ .",a:"taller"},{q:"This is _____ film I have ever seen! (good)",a:"the best"}]},
+{t:"Passive Voice",icon:"🔄",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used when the action is more important than who does it.</p>
+<table class="gtbl"><tr><th>Tense</th><th>Form</th><th>Example</th></tr>
+<tr><td>Present Simple</td><td>is/are + past participle</td><td><em>English is spoken worldwide.</em></td></tr>
+<tr><td>Past Simple</td><td>was/were + past participle</td><td><em>The bridge was built in 1990.</em></td></tr>
+<tr><td>Future</td><td>will be + past participle</td><td><em>The report will be written tomorrow.</em></td></tr>
+</table>
+<div class="gex">The staff <em>were told</em> to arrive early. (Test 2)</div>
+<div class="gex">This bridge <em>was built</em> in 1990. (Test 3)</div>`,
+prac:[{q:"Someone stole the car. → The car _____ last night.",a:"was stolen"},{q:"They are building a new school. → A new school _____ .",a:"is being built"}]},
+{t:"Present Perfect",icon:"⏰",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used for past actions connected to the present.</p>
+<table class="gtbl"><tr><th>Form</th><th>Use</th><th>Signal words</th></tr>
+<tr><td>have/has + past participle</td><td>Life experience</td><td>ever, never, before</td></tr>
+<tr><td>haven't/hasn't + pp</td><td>Not done yet</td><td>yet, so far</td></tr>
+<tr><td>have/has + pp</td><td>Duration to now</td><td>for, since</td></tr>
+</table>
+<div class="gex">I <em>haven't been</em> to the cinema for two years. (Test 2)</div>
+<div class="gex">Sarah <em>has been learning</em> Spanish for three years. (Test 3)</div>`,
+prac:[{q:"He started working here in 2020. He _____ here for four years.",a:"has worked"},{q:"I last spoke to her in January. I _____ spoken to her since January.",a:"haven't"}]},
+{t:"Conditionals (If sentences)",icon:"🔀",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used for real and unreal conditions.</p>
+<table class="gtbl"><tr><th>Type</th><th>Structure</th><th>Use</th></tr>
+<tr><td>Zero</td><td>If + present, present</td><td>General truths</td></tr>
+<tr><td>First</td><td>If + present, will + verb</td><td>Real future possibilities</td></tr>
+<tr><td>Second</td><td>If + past, would + verb</td><td>Unreal/hypothetical</td></tr>
+</table>
+<div class="gex">I can't go out <em>unless</em> I finish my homework. (Test 1 – unless = if not)</div>
+<div class="gex">If I <em>were</em> you, I'd go to the cinema right now. (Test 1 Key)</div>`,
+prac:[{q:"If it rains tomorrow, we _____ stay inside. (likely situation)",a:"will"},{q:"If I had more money, I _____ travel the world.",a:"would"}]},
+{t:"Modal Verbs",icon:"🎯",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used to express ability, necessity, permission, advice.</p>
+<table class="gtbl"><tr><th>Modal</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>can / could</td><td>Ability / possibility</td><td><em>Can you help me?</em></td></tr>
+<tr><td>must / have to</td><td>Necessary/obligatory</td><td><em>You must wear a helmet.</em></td></tr>
+<tr><td>don't have to</td><td>Not necessary</td><td><em>You don't have to wear a tie.</em></td></tr>
+<tr><td>should / ought to</td><td>Advice/recommendation</td><td><em>You should study more.</em></td></tr>
+<tr><td>might / may</td><td>Possibility (50%)</td><td><em>It might rain tomorrow.</em></td></tr>
+</table>
+<div class="gex">You <em>don't have to</em> wear a tie. (Test 3 – not necessary)</div>
+<div class="gex">My parents aren't <em>able to</em> go swimming on weekdays. (Test 1)</div>`,
+prac:[{q:"It's very cold outside. You _____ wear a coat. (advice)",a:"should"},{q:"Entry is free. You _____ pay. (not necessary)",a:"don't have to"}]},
+{t:"Reported Speech",icon:"💬",
+c:`<p style="font-size:.85em;margin-bottom:9px">Used when reporting what someone said.</p>
+<table class="gtbl"><tr><th>Direct Speech</th><th>Reported Speech</th></tr>
+<tr><td>"I will call you."</td><td>He said he <em>would call</em> me.</td></tr>
+<tr><td>"I am studying."</td><td>She said she <em>was studying</em>.</td></tr>
+<tr><td>"Come early."</td><td>He told me <em>to come</em> early.</td></tr>
+<tr><td>"Can you help?"</td><td>She asked if I <em>could help</em>.</td></tr>
+</table>
+<div class="gex">Mark promised <em>to call</em> the next day. (Test 2)</div>
+<div class="gex">Anna <em>invited</em> me to her party. (Test 4)</div>`,
+prac:[{q:'"I am tired," he said. → He said he _____ tired.',a:"was"},{q:'"Please wait here." → She told us _____ there.',a:"to wait"}]},
+{t:"Connectives & Linking Words",icon:"🔗",
+c:`<p style="font-size:.85em;margin-bottom:9px">Connect ideas and make writing flow naturally.</p>
+<table class="gtbl"><tr><th>Purpose</th><th>Words to use</th></tr>
+<tr><td>Adding ideas</td><td>and, also, furthermore, in addition, moreover</td></tr>
+<tr><td>Contrasting</td><td>but, however, although, despite, even though</td></tr>
+<tr><td>Cause/Effect</td><td>because, so, therefore, as a result</td></tr>
+<tr><td>Sequence</td><td>first, then, after that, finally, next</td></tr>
+<tr><td>Conceding</td><td>even though, despite the fact that, although</td></tr>
+</table>
+<div class="gex">We enjoyed our picnic <em>even though</em> it was raining. (Test 3)</div>
+<div class="gex">I prefer small shops. <em>However</em>, supermarkets are more convenient. (Speaking)</div>`,
+prac:[{q:"I was tired _____ I couldn't sleep. (result/effect)",a:"so"},{q:"She works very hard. _____ , she failed the exam. (contrast)",a:"However"}]},
+{t:"Prepositions of Time & Place",icon:"📍",
+c:`<p style="font-size:.85em;margin-bottom:9px">Common prepositions frequently tested in PET.</p>
+<table class="gtbl"><tr><th>Preposition</th><th>Use</th><th>Example</th></tr>
+<tr><td>at</td><td>Times, night, weekends, locations</td><td><em>at 3 p.m., at night, at school</em></td></tr>
+<tr><td>on</td><td>Days, dates, surfaces</td><td><em>on Monday, on 5th June</em></td></tr>
+<tr><td>in</td><td>Months, years, long periods, enclosed spaces</td><td><em>in March, in 2024, in the room</em></td></tr>
+<tr><td>for</td><td>Duration (how long)</td><td><em>for two hours, for a week</em></td></tr>
+<tr><td>since</td><td>Start point to now</td><td><em>since Monday, since 2020</em></td></tr>
+<tr><td>by</td><td>Deadline or transport means</td><td><em>by 5 p.m., by bus</em></td></tr>
+</table>
+<div class="gex">Offices open Monday to Friday <em>from</em> 9 a.m. <em>to</em> 8 p.m. (Test 1 – Globewise)</div>`,
+prac:[{q:"She has lived here _____ 2015. (duration from a point)",a:"since"},{q:"The meeting is _____ Friday _____ 10 o'clock.",a:"on / at"}]}
+];
+
+// ====================================================
+// GAMES DATA
+// ====================================================
+const GAMESD={
+wordmatch:{title:"Word Match 🔗",inst:"Click a word on the LEFT, then its correct definition on the RIGHT.",
+pairs:[
+  {w:"accommodation",d:"A place to stay (hotel, hostel, etc.)"},
+  {w:"enthusiast",d:"Someone very interested in a subject"},
+  {w:"spectacular",d:"Very impressive or dramatic to see"},
+  {w:"essential",d:"Absolutely necessary or very important"},
+  {w:"convenient",d:"Easy to use; saves time and effort"},
+  {w:"departure",d:"The action of leaving a place"},
+  {w:"recommend",d:"To suggest something as good or suitable"},
+  {w:"magnificent",d:"Extremely beautiful or impressive"}
+]},
+sentbuild:{title:"Sentence Builder 🏗️",inst:"Tap words to arrange them in the correct order to make a sentence!",
+sents:[
+  {ws:["My","parents","prefer","jazz","to","classical","music","."],a:"My parents prefer jazz to classical music."},
+  {ws:["You","should","always","wear","a","helmet","when","cycling","."],a:"You should always wear a helmet when cycling."},
+  {ws:["The","film","was","so","boring","that","I","fell","asleep","."],a:"The film was so boring that I fell asleep."},
+  {ws:["She","has","been","learning","Spanish","for","three","years","."],a:"She has been learning Spanish for three years."},
+  {ws:["Despite","the","rain",",","we","enjoyed","our","picnic","."],a:"Despite the rain, we enjoyed our picnic."},
+  {ws:["I","would","rather","go","by","bus","than","by","train","."],a:"I would rather go by bus than by train."}
+]},
+spellbee:{title:"Spelling Bee 🐝",inst:"Listen to the word, then type its correct spelling!",
+words:[
+  {w:"accommodation",h:"A place to stay"},
+  {w:"necessary",h:"Something you must have"},
+  {w:"enthusiastic",h:"Very keen and excited"},
+  {w:"unfortunately",h:"Sadly; used for bad news"},
+  {w:"comfortable",h:"Relaxed and at ease"},
+  {w:"immediately",h:"Without any delay"},
+  {w:"environment",h:"The natural world around us"},
+  {w:"responsibility",h:"A duty you are in charge of"},
+  {w:"interesting",h:"Holding your attention"},
+  {w:"conversation",h:"A talk between two people"}
+]},
+transform:{title:"Transformations 🔄",inst:"Complete the second sentence so it means the same. Type the missing words.",
+qs:[
+  {s1:"My parents prefer jazz to classical music.",s2:"My parents think jazz ___ than classical music.",a:"is better"},
+  {s1:"It's two years since I last went to the cinema.",s2:"I ___ to the cinema for two years.",a:"haven't been"},
+  {s1:"They built this bridge in 1990.",s2:"This bridge ___ in 1990.",a:"was built"},
+  {s1:"'I will call you tomorrow,' said Mark.",s2:"Mark promised ___ the next day.",a:"to call"},
+  {s1:"It is not necessary to wear a tie.",s2:"You ___ wear a tie.",a:"don't have to"},
+  {s1:"Despite the rain, we enjoyed our picnic.",s2:"We enjoyed our picnic ___ it was raining.",a:"even though"}
+]},
+signreader:{title:"Sign Reader 🪧",inst:"Read the sign and choose the correct meaning A, B or C.",
+qs:[
+  {sign:"NO BICYCLES AGAINST GLASS PLEASE",opts:["Do not leave bikes touching the window.","Do not ride bikes in this area.","Broken glass may damage your bike."],a:0},
+  {sign:"THIS CAR PARK IS LOCKED AFTER BUSINESS HOURS EACH DAY",opts:["Users must lock the car park.","People can park here during work hours.","This car park is for employees only."],a:1},
+  {sign:"PLAYERS WANTED – whatever your level",opts:["Experienced players only.","All levels are welcome to join.","Players must train every day."],a:1},
+  {sign:"OVERDUE FINES: 20p per book per day\nMAXIMUM FINE: £2.00",opts:["You pay 20p each time you borrow.","Late fees are limited to £2 per book.","Books cost 20p to borrow."],a:1},
+  {sign:"SECOND-HAND BOOKS FOR SALE\nAll proceeds to local children's charity",opts:["Books are being given away free.","Money from sales goes to charity.","Only children can buy books."],a:1}
+]},
+vocabflash:{title:"Vocab Flash ⚡",inst:"What does this word mean? Choose A, B or C as quickly as possible!",
+cards:[
+  {w:"itinerary",opts:["A travel plan or route","A type of accommodation","A formal letter"],a:0},
+  {w:"compulsory",opts:["Optional/not required","Required/must do","Recommended"],a:1},
+  {w:"renovate",opts:["To destroy something","To repair and modernise","To sell a property"],a:1},
+  {w:"adjacent",opts:["Very similar","Next to or nearby","Far away from"],a:1},
+  {w:"occasionally",opts:["Never at all","Sometimes, not often","Always/every time"],a:1},
+  {w:"generous",opts:["Selfish/mean","Willing to give a lot","Very careful with money"],a:1},
+  {w:"exhausted",opts:["Very excited","Completely tired out","Totally full"],a:1},
+  {w:"convenient",opts:["Difficult to use","Easy to use; saves effort","Very expensive"],a:1}
+]},
+trufalse:{title:"True or False ✅",inst:"Are these statements about the PET exam TRUE or FALSE?",
+qs:[
+  {s:"In PET Reading Part 1, you choose from THREE options (A, B or C).",a:true},
+  {s:"The PET exam has only two papers.",a:false,ex:"PET has THREE papers: Reading/Writing, Listening, and Speaking."},
+  {s:"In Writing Part 2, you should write 35–45 words.",a:true},
+  {s:"The PET Speaking test is done alone with just one examiner.",a:false,ex:"You take it with another candidate and there are TWO examiners."},
+  {s:"In PET Listening Part 1, each question has three pictures to choose from.",a:true},
+  {s:"Paper 1 (Reading and Writing) lasts 1 hour 30 minutes.",a:true},
+  {s:"You can use a dictionary in the PET exam.",a:false,ex:"No dictionaries are allowed in Cambridge exams."},
+  {s:"PET tests Reading, Writing, Listening AND Speaking.",a:true}
+]},
+scramble:{title:"Letter Scramble 🔤",inst:"The letters are all mixed up! Type the correct word.",
+ws:[
+  {sc:"NOAIATMODMCCO",w:"ACCOMMODATION",h:"Place to stay"},
+  {sc:"LRIAPTOA",w:"HOSPITAL",h:"Where doctors work"},
+  {sc:"UMEUMS",w:"MUSEUM",h:"Place to see art and history"},
+  {sc:"NNECVEICONE",w:"CONVENIENCE",h:"Being easy to use"},
+  {sc:"IMTNUOAN",w:"MOUNTAIN",h:"Very high natural hill"},
+  {sc:"RGURALE",w:"REGULAR",h:"Normal; happening often"},
+  {sc:"IEVRESATL",w:"RELATIVES",h:"Members of your family"},
+  {sc:"HRESAERC",w:"RESEARCH",h:"Careful study or investigation"}
+]}
+};
+</script>
+<script>
+// ====================================================
+// NAVIGATION
+// ====================================================
+function nav(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  const tab=document.querySelector('[data-s="'+id+'"]');
+  if(tab)tab.classList.add('on');
+  if(id==='reading')renderR(cRT);
+  if(id==='writing')renderW(cWT);
+  if(id==='listening')renderL(cLT);
+  if(id==='speaking')renderSPK(cSPK);
+  if(id==='grammar')renderG();
+  if(id==='progress')renderProg();
+  window.scrollTo(0,0);
+}
+
+// ====================================================
+// READING RENDER
+// ====================================================
+function selRT(n){
+  cRT=n;
+  document.querySelectorAll('#rtsel .tbtn').forEach((b,i)=>b.classList.toggle('on',i+1===n));
+  renderR(n);
+}
+function renderR(n){
+  const d=RD[n];
+  if(!d){document.getElementById('rcont').innerHTML='<div class="card"><p style="color:var(--muted)">Content loading...</p></div>';return;}
+  let h='';
+  if(d.p1)h+=renderRP1(d.p1,n);
+  if(d.p2)h+=renderRP2(d.p2,n);
+  if(d.p3)h+=renderRP3(d.p3,n);
+  if(d.p4)h+=renderRP4(d.p4,n);
+  document.getElementById('rcont').innerHTML=h;
+}
+function renderRP1(p,t){
+  let h=`<div class="card"><div class="ctit">${p.title} <span class="bdg bdg-b">5 pts</span></div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">${p.inst}</p>`;
+  p.qs.forEach((q,i)=>{
+    const ans=S.ra[q.id];
+    h+=`<div class="qblock"><div class="qnum">${i+1}</div>
+    <div class="sbox">${q.sign.replace(/\n/g,'<br>')}</div>
+    <p class="qtxt"><strong>${q.q}</strong></p><div class="olist">`;
+    q.opts.forEach((o,j)=>{
+      let c='';
+      if(ans!==undefined){if(j===q.a)c='ok';else if(j===ans)c='bad';}
+      h+=`<button class="obtn ${c}" onclick="chkR('${q.id}',${j},${q.a},'${esc(q.exp)}')" ${ans!==undefined?'disabled':''}><span class="olet">${'ABC'[j]}</span>${o}</button>`;
+    });
+    h+='</div>';
+    if(ans!==undefined)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${'ABC'[q.a]}</strong> – ${q.exp}</div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function renderRP2(p,t){
+  let h=`<div class="card"><div class="ctit">${p.title} <span class="bdg bdg-g">5 pts</span></div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:10px">${p.inst}</p>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px">`;
+  p.films.forEach(f=>h+=`<div style="background:#F7F9FC;border-radius:8px;padding:9px;border:1px solid var(--bdr)"><strong style="font-size:.82em;color:var(--cb)">${f.id}. ${f.t}</strong><p style="font-size:.73em;color:var(--muted);margin-top:3px;line-height:1.5">${f.d}</p></div>`);
+  h+='</div>';
+  p.people.forEach(p2=>{
+    const ans=S.ra[p2.id];
+    h+=`<div class="qblock"><div class="qnum">${p2.n}</div>
+    <p style="font-size:.86em;line-height:1.6;margin-bottom:10px">${p2.desc}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">`;
+    'ABCDEFGH'.split('').forEach(l=>{
+      let c='';if(ans){if(l===p2.a)c='ok';else if(l===ans)c='bad';}
+      h+=`<button class="wchip ${c}" onclick="chkP2('${p2.id}','${l}','${p2.a}')" ${ans?'disabled':''}>${l}</button>`;
+    });
+    h+='</div>';
+    if(ans)h+=`<div class="fb on ${ans===p2.a?'fb-ok':'fb-bad'}">${ans===p2.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${p2.a}</strong></div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function renderRP3(p,t){
+  let h=`<div class="card"><div class="ctit">${p.title} <span class="bdg bdg-b">10 pts</span></div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:9px">${p.inst}</p>
+  <div class="pbox" style="max-height:190px;overflow-y:auto;white-space:pre-line">${p.pass}</div>`;
+  p.qs.forEach(q=>{
+    const ans=S.ra[q.id];
+    h+=`<div class="qblock"><div class="qnum">${q.n}</div>
+    <p class="qtxt">${q.t}</p>
+    <div style="display:flex;gap:7px">
+      <button class="obtn ${ans?(ans===q.a?'ok':'bad'):''}" onclick="chkTF('${q.id}','A','${q.a}','${esc(q.exp)}')" ${ans?'disabled':''}><span class="olet">A</span>Correct</button>
+      <button class="obtn ${ans&&ans==='B'?(q.a==='B'?'ok':'bad'):''}" onclick="chkTF('${q.id}','B','${q.a}','${esc(q.exp)}')" ${ans?'disabled':''}><span class="olet">B</span>Incorrect</button>
+    </div>`;
+    if(ans)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${q.a}</strong> – ${q.exp}</div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function renderRP4(p,t){
+  let h=`<div class="card"><div class="ctit">${p.title} <span class="bdg bdg-g">5 pts</span></div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:9px">${p.inst}</p>
+  <div class="pbox" style="max-height:210px;overflow-y:auto;white-space:pre-line">${p.pass}</div>`;
+  p.qs.forEach(q=>{
+    const ans=S.ra[q.id];
+    h+=`<div class="qblock"><div class="qnum">${q.n}</div><p class="qtxt"><strong>${q.t}</strong></p><div class="olist">`;
+    q.opts.forEach((o,j)=>{
+      let c='';if(ans!==undefined){if(j===q.a)c='ok';else if(j===ans)c='bad';}
+      h+=`<button class="obtn ${c}" onclick="chkR('${q.id}',${j},${q.a},'${esc(q.exp)}')" ${ans!==undefined?'disabled':''}><span class="olet">${'ABCD'[j]}</span>${o}</button>`;
+    });
+    h+='</div>';
+    if(ans!==undefined)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${'ABCD'[q.a]}</strong> – ${q.exp}</div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function chkR(id,ch,cor,exp){
+  if(S.ra[id]!==undefined)return;
+  S.ra[id]=ch;
+  if(ch===cor){S.pts+=2;toast('✅ Correct! +2 pts');cfi();}else toast('❌ Incorrect – see explanation');
+  save();renderR(cRT);
+}
+function chkP2(id,ch,cor){
+  if(S.ra[id])return;
+  S.ra[id]=ch;
+  if(ch===cor){S.pts+=2;toast('✅ Correct! +2 pts');cfi();}else toast('❌ Incorrect!');
+  save();renderR(cRT);
+}
+function chkTF(id,ch,cor,exp){
+  if(S.ra[id])return;
+  S.ra[id]=ch;
+  if(ch===cor){S.pts+=1;toast('✅ Correct! +1 pt');cfi();}else toast('❌ Incorrect!');
+  save();renderR(cRT);
+}
+
+// ====================================================
+// WRITING RENDER
+// ====================================================
+function selWT(n){
+  cWT=n;
+  document.querySelectorAll('#wtsel .tbtn').forEach((b,i)=>b.classList.toggle('on',i+1===n));
+  renderW(n);
+}
+function renderW(n){
+  const d=WD[n];
+  let h=renderWP1(d.p1,n)+renderWP2(d.p2,n)+renderWP3(d.p3,n);
+  document.getElementById('wcont').innerHTML=h;
+}
+function buildInp(id,val,ans){
+  var v=(val||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return '<input class="bi" id="wi-'+id+'" placeholder="..." value="'+v+'" onkeydown="if(event.keyCode===13)chkW1(\'' +id+ '\',\'' +esc(ans)+ '\')">';
+}
+function renderWP1(p,t){
+  let h='<div class="card"><div class="ctit">'+p.title+'</div>'
+  +'<p style="font-size:.8em;color:var(--muted);margin-bottom:4px">'+p.inst+'</p>'
+  +'<div class="gex">Example: My brother is older than me. → I am <em>younger than</em> my brother.</div>';
+  p.qs.forEach(function(q,i){
+    var sv=S.wa[q.id]||'';
+    var inp=buildInp(q.id,sv,q.a);
+    var s2html=q.s2.replace('______',inp);
+    var fbhtml=sv?'Your answer: <strong>'+sv+'</strong> – Model: <em>'+q.a+'</em>':'';
+    h+='<div class="qblock"><div class="qnum">'+(i+1)+'</div>'
+    +'<p style="font-size:.86em;margin-bottom:5px">'+q.s1+'</p>'
+    +'<p style="font-size:.86em;font-weight:600">→ '+s2html+'</p>'
+    +'<div class="brow" style="margin-top:7px">'
+    +'<button class="btn bp bsm" onclick="chkW1(\'' +q.id+ '\',\'' +esc(q.a)+ '\')">✓ Check</button>'
+    +'<span style="font-size:.73em;color:var(--muted);align-self:center">💡 '+q.h+'</span>'
+    +'</div>'
+    +'<div class="fb" id="wfb-'+q.id+'">'+fbhtml+'</div>'
+    +'</div>';
+  });
+  return h+'</div>';
+}
+function chkW1(id,ans){
+  const inp=document.getElementById('wi-'+id);if(!inp)return;
+  const v=inp.value.trim().toLowerCase();
+  const ok=ans.toLowerCase().split('/').map(x=>x.trim()).some(x=>v===x)||v===ans.toLowerCase();
+  S.wa[id]=v;
+  const fb=document.getElementById('wfb-'+id);
+  if(ok){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! "<em>${ans}</em>"`;S.pts+=3;toast('✅ Correct! +3 pts');cfi();}
+  else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ Model answer: <em>${ans}</em>. Your answer: "${v}"`;}
+  save();
+}
+function renderWP2(p,t){
+  const k=`wp2t${t}`,sv=S.wa[k]||'';
+  const wc=sv.trim().split(/\s+/).filter(w=>w).length;
+  return `<div class="card"><div class="ctit">${p.title}</div>
+  <div class="pbox" style="white-space:pre-line">${p.task}</div>
+  <p style="font-size:.8em;font-weight:600;color:var(--cb);margin-bottom:4px">🎯 Key points:</p>
+  <ul style="font-size:.8em;color:var(--muted);margin-left:14px;margin-bottom:10px">${p.kp.map(x=>`<li>${x}</li>`).join('')}</ul>
+  <textarea class="wtxt" id="wta-${k}" placeholder="Write your answer here (35–45 words)..." oninput="wc('${k}')">${sv}</textarea>
+  <div class="wc ${wc>=35&&wc<=45?'ok':wc>0?'wn':''}" id="wcd-${k}">${wc}/45 words ${wc>=35&&wc<=45?'✅':''}</div>
+  <div class="brow">
+    <button class="btn bp" onclick="saveW('${k}')">💾 Save +5 pts</button>
+    <button class="btn bo" onclick="toggleSmp('smp-${k}')">👁️ Sample Answer</button>
+  </div>
+  <div class="fb fb-inf" id="smp-${k}"><strong>Sample:</strong> ${p.sample}</div></div>`;
+}
+function wc(k){
+  const ta=document.getElementById('wta-'+k);if(!ta)return;
+  const n=ta.value.trim().split(/\s+/).filter(w=>w).length;
+  const el=document.getElementById('wcd-'+k);if(!el)return;
+  el.textContent=n+'/45 words '+(n>=35&&n<=45?'✅':'');
+  el.className='wc '+(n>=35&&n<=45?'ok':n>0?'wn':'');
+}
+function saveW(k){
+  const ta=document.getElementById('wta-'+k);if(!ta)return;
+  S.wa[k]=ta.value;S.pts+=5;save();toast('💾 Saved! +5 pts');
+}
+function toggleSmp(id){
+  const el=document.getElementById(id);if(el)el.classList.toggle('on');
+}
+function renderWP3(p,t){
+  let h=`<div class="card"><div class="ctit">${p.title}</div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:10px">Choose ONE question to answer (Q7 or Q8)</p>`;
+  p.qs.forEach(q=>{
+    const k=q.id,sv=S.wa[k]||'',n=sv.trim().split(/\s+/).filter(w=>w).length;
+    h+=`<div style="margin-bottom:12px;padding:12px;background:#F7F9FC;border-radius:var(--rs);border:1px solid var(--bdr)">
+    <div style="font-weight:700;font-size:.86em;color:var(--cb);margin-bottom:5px">${q.title} ${q.type==='story'?'📖':'✉️'}</div>
+    ${q.extract?`<div class="pbox" style="margin-bottom:7px">"${q.extract}"</div>`:''}
+    <p style="font-size:.8em;color:var(--muted);margin-bottom:5px">${q.prompt}</p>
+    ${q.opening?`<div class="gex" style="margin-bottom:7px">Opening: <em>${q.opening}</em></div>`:''}
+    <p style="font-size:.8em;font-weight:600;margin-bottom:6px">${q.inst}</p>
+    <textarea class="wtxt" id="wta-${k}" placeholder="Write your answer here (~100 words)..." oninput="wc100('${k}')">${sv}</textarea>
+    <div class="wc ${n>=80&&n<=120?'ok':n>0?'wn':''}" id="wcd-${k}">${n}/100 words ${n>=80&&n<=120?'✅':''}</div>
+    <button class="btn bp bsm" style="margin-top:7px" onclick="saveW100('${k}')">💾 Save +8 pts</button>
+    </div>`;
+  });
+  return h+'</div>';
+}
+function wc100(k){
+  const ta=document.getElementById('wta-'+k);if(!ta)return;
+  const n=ta.value.trim().split(/\s+/).filter(w=>w).length;
+  const el=document.getElementById('wcd-'+k);if(!el)return;
+  el.textContent=n+'/100 words '+(n>=80&&n<=120?'✅':'');
+  el.className='wc '+(n>=80&&n<=120?'ok':n>0?'wn':'');
+}
+function saveW100(k){
+  const ta=document.getElementById('wta-'+k);if(!ta)return;
+  S.wa[k]=ta.value;S.pts+=8;save();toast('💾 Saved! +8 pts');
+}
+
+// ====================================================
+// LISTENING RENDER
+// ====================================================
+function selLT(n){
+  cLT=n;
+  document.querySelectorAll('#ltsel .tbtn').forEach((b,i)=>b.classList.toggle('on',i+1===n));
+  renderL(n);
+}
+function renderL(n){
+  const d=LD[n];
+  if(!d){document.getElementById('lcont').innerHTML='<div class="card"><p style="color:var(--muted)">Content loading...</p></div>';return;}
+  let h='';
+  if(d.p1)h+=renderLP1(d.p1,n);
+  if(d.p2)h+=renderLP2(d.p2,n);
+  if(d.p3)h+=renderLP3(d.p3,n);
+  if(d.p4)h+=renderLP4(d.p4,n);
+  document.getElementById('lcont').innerHTML=h;
+}
+function renderLP1(p,n){
+  let h=`<div class="card"><div class="ctit">${p.title}</div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">${p.inst}</p>`;
+  p.qs.forEach((q,i)=>{
+    const ans=S.la[q.id];
+    h+=`<div class="qblock"><div class="qnum">${i+1}</div>
+    <div class="lcard">
+      <p style="font-weight:700;font-size:.88em;margin-bottom:9px">${q.q}</p>
+      <button class="binf" onclick="spk('${esc(q.tr)}')">🔊 Play dialogue</button>
+      <p class="trtgl" onclick="this.nextElementSibling.classList.toggle('on')">📄 Show transcript</p>
+      <div class="trsc">${q.tr}</div>
+    </div>
+    <div class="olist">`;
+    q.opts.forEach((o,j)=>{
+      let c='';if(ans!==undefined){if(j===q.a)c='ok';else if(j===ans)c='bad';}
+      h+=`<button class="obtn ${c}" onclick="chkL('${q.id}',${j},${q.a})" ${ans!==undefined?'disabled':''}><span class="olet">${'ABC'[j]}</span>${o}</button>`;
+    });
+    h+='</div>';
+    if(ans!==undefined)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${'ABC'[q.a]}</strong></div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function renderLP2(p,n){
+  let h=`<div class="card"><div class="ctit">${p.title}</div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">${p.inst}</p>`;
+  p.qs.forEach((q,i)=>{
+    const ans=S.la[q.id];
+    h+=`<div class="qblock"><div class="qnum">${8+i}</div>
+    <div class="lcard">
+      <p style="font-weight:700;font-size:.86em;margin-bottom:8px">${q.q}</p>
+      <button class="binf" onclick="spk('${esc(q.tr)}')">🔊 Play extract</button>
+      <p class="trtgl" onclick="this.nextElementSibling.classList.toggle('on')">📄 Show transcript</p>
+      <div class="trsc">${q.tr}</div>
+    </div>
+    <div class="olist">`;
+    q.opts.forEach((o,j)=>{
+      let c='';if(ans!==undefined){if(j===q.a)c='ok';else if(j===ans)c='bad';}
+      h+=`<button class="obtn ${c}" onclick="chkL('${q.id}',${j},${q.a})" ${ans!==undefined?'disabled':''}><span class="olet">${'ABC'[j]}</span>${o}</button>`;
+    });
+    h+='</div>';
+    if(ans!==undefined)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${'ABC'[q.a]}</strong></div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function renderLP3(p,n){
+  let h=`<div class="card"><div class="ctit">${p.title}</div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">${p.inst}</p>`;
+  p.qs.forEach((q,i)=>{
+    const sv=S.la[q.id]||'';
+    h+=`<div class="qblock"><div class="qnum">${14+i}</div>
+    <p style="font-size:.86em;font-weight:600;margin-bottom:7px">${q.q}</p>
+    <input type="text" class="bi" style="min-width:150px;display:block;margin:0 auto" id="lp3-${q.id}" placeholder="${q.pl}" value="${sv}" onkeydown="if(event.key==='Enter')chkL3('${q.id}','${esc(q.a)}')">
+    <div class="brow" style="margin-top:7px;justify-content:center">
+      <button class="btn bp bsm" onclick="chkL3('${q.id}','${esc(q.a)}')">✓ Check</button>
+    </div>
+    <div class="fb" id="lfb-${q.id}"></div></div>`;
+  });
+  return h+'</div>';
+}
+function chkL3(id,ans){
+  const inp=document.getElementById('lp3-'+id);if(!inp)return;
+  const v=inp.value.trim().toLowerCase();
+  S.la[id]=v;
+  const fb=document.getElementById('lfb-'+id);
+  const ok=ans.toLowerCase().split('/').map(x=>x.trim()).some(x=>v.includes(x.split(' ')[0]));
+  if(ok){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! Model: <em>${ans}</em>`;S.pts+=2;toast('✅ +2 pts');cfi();}
+  else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ Model answer: <em>${ans}</em>`;}
+  save();
+}
+function renderLP4(p,n){
+  let h=`<div class="card"><div class="ctit">${p.title}</div>
+  <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">${p.inst}</p>`;
+  p.qs.forEach((q,i)=>{
+    const ans=S.la[q.id];
+    h+=`<div class="qblock"><div class="qnum">${20+i}</div>
+    <div class="lcard">
+      <p style="font-weight:700;font-size:.86em;margin-bottom:8px">${q.q}</p>
+      <button class="binf" onclick="spk('${esc(q.tr)}')">🔊 Play extract</button>
+      <p class="trtgl" onclick="this.nextElementSibling.classList.toggle('on')">📄 Show transcript</p>
+      <div class="trsc">${q.tr}</div>
+    </div>
+    <div style="display:flex;gap:7px;margin-top:10px">
+      <button class="obtn ${ans?(ans===q.a?'ok':'bad'):''}" onclick="chkL4('${q.id}','A','${q.a}')" ${ans?'disabled':''}><span class="olet">A</span>YES – Correct</button>
+      <button class="obtn ${ans&&ans==='B'?(q.a==='B'?'ok':'bad'):''}" onclick="chkL4('${q.id}','B','${q.a}')" ${ans?'disabled':''}><span class="olet">B</span>NO – Incorrect</button>
+    </div>`;
+    if(ans)h+=`<div class="fb on ${ans===q.a?'fb-ok':'fb-bad'}">${ans===q.a?'✅ Correct!':'❌ Incorrect.'} <strong>Answer: ${q.a}</strong></div>`;
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+function chkL(id,ch,cor){
+  if(S.la[id]!==undefined)return;
+  S.la[id]=ch;
+  if(ch===cor){S.pts+=2;toast('✅ Correct! +2 pts');cfi();}else toast('❌ Incorrect!');
+  save();renderL(cLT);
+}
+function chkL4(id,ch,cor){
+  if(S.la[id])return;
+  S.la[id]=ch;
+  if(ch===cor){S.pts+=2;toast('✅ Correct! +2 pts');cfi();}else toast('❌ Incorrect!');
+  save();renderL(cLT);
+}
+
+// ====================================================
+// SPEAKING RENDER
+// ====================================================
+function selSPK(n){
+  cSPK=n;
+  document.querySelectorAll('#spktsel .tbtn').forEach((b,i)=>b.classList.toggle('on',i+1===n));
+  renderSPK(n);
+}
+function renderSPK(n){
+  const d=SPKD[n];
+  let h=`<div style="background:#EEF6FC;border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;font-size:.79em;color:var(--muted)">
+  💡 <strong>How to use:</strong> Press 🔊 to hear the question. Then press 🔴 Record to speak your answer and get a score!</div>`;
+  d.forEach((q,i)=>{
+    const k=`spk${n}q${i+1}`,sc=S.spk[k];
+    h+=`<div class="spcard">
+    <div class="bdg bdg-b" style="margin-bottom:7px">${q.part}</div>
+    <p class="spprompt">${q.q}</p>
+    <p class="spex">💬 "${q.ex}"</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="blis" onclick="spk('${esc(q.q)}')">🔊 Hear Question</button>
+      <button class="bsp" id="rbtn-${k}" onclick="toggleRec('${k}',this)">🔴 Record Answer</button>
+    </div>
+    <div class="wave" id="wave-${k}">${Array(10).fill(0).map((_,j)=>`<div class="wb" id="wb-${k}-${j}" style="height:${6+Math.random()*14}px"></div>`).join('')}</div>
+    <div style="font-size:.76em;color:var(--muted);margin-top:6px"><strong>Tips:</strong> ${q.tips.join(' · ')}</div>
+    ${sc?`<div class="spscore"><div class="spstars">${'⭐'.repeat(sc.s)}</div><div class="splbl">${sc.s}/5 stars – ${sc.l}</div><div class="spfb">${sc.f}</div></div>`:''}
+    </div>`;
+  });
+  document.getElementById('spkcont').innerHTML=h;
+}
+let recK=null,waveIv=null,recTo=null;
+function toggleRec(k,btn){
+  if(!isRec)startRec(k,btn);else stopRec(k,btn);
+}
+function startRec(k,btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){simRec(k,btn);return;}
+  isRec=true;recK=k;
+  btn.className='bsp rec';btn.textContent='⏹️ Stop';
+  waveIv=setInterval(()=>{for(let j=0;j<10;j++){const b=document.getElementById(`wb-${k}-${j}`);if(b)b.style.height=(6+Math.random()*28)+'px';}},100);
+  recog=new SR();recog.lang='en-US';recog.continuous=false;recog.interimResults=false;
+  recog.onresult=e=>{const tr=e.results[0][0].transcript,cf=e.results[0][0].confidence;stopRec(k,btn);scoreSpeak(k,tr,cf);};
+  recog.onerror=()=>simScore(k,btn);
+  recog.onend=()=>{if(isRec)stopRec(k,btn);};
+  try{recog.start();}catch(e){simRec(k,btn);}
+  recTo=setTimeout(()=>{if(isRec)stopRec(k,btn);},30000);
+}
+function stopRec(k,btn){
+  isRec=false;
+  if(recog)try{recog.stop();}catch(e){}
+  if(waveIv){clearInterval(waveIv);waveIv=null;}
+  if(recTo){clearTimeout(recTo);recTo=null;}
+  if(btn){btn.className='bsp';btn.textContent='🔴 Record Again';}
+  for(let j=0;j<10;j++){const b=document.getElementById(`wb-${(recK||k)}-${j}`);if(b)b.style.height=(6+Math.random()*12)+'px';}
+}
+function simRec(k,btn){
+  isRec=true;btn.className='bsp rec';btn.textContent='⏹️ Stop';
+  waveIv=setInterval(()=>{for(let j=0;j<10;j++){const b=document.getElementById(`wb-${k}-${j}`);if(b)b.style.height=(6+Math.random()*28)+'px';}},100);
+  setTimeout(()=>{stopRec(k,btn);simScore(k,btn);},3500);
+}
+function simScore(k,btn){
+  const s=3+Math.floor(Math.random()*3);
+  const ls=['Good','Very Good','Excellent'];
+  const fs=['Good effort! Keep practising your fluency.','Great work! Try to use more vocabulary.','Excellent! Perfect pronunciation and fluency!'];
+  saveSpk(k,s,ls[s-3],fs[s-3]);
+}
+function scoreSpeak(k,tr,cf){
+  let s=2;
+  if(cf>0.75)s=5;else if(cf>0.55)s=4;else if(tr.split(' ').length>8)s=3;
+  const ls={2:'Needs Practice',3:'Good',4:'Very Good',5:'Excellent'};
+  const fs={2:'Try to speak louder and more clearly.',3:'Good try! Aim for longer answers.',4:'Well done! Great pronunciation.',5:'Excellent speaking! Perfect!'};
+  saveSpk(k,s,ls[s],fs[s]);
+}
+function saveSpk(k,s,l,f){
+  S.spk[k]={s,l,f};S.pts+=s*2;save();
+  toast(`🎤 Score: ${s}/5 ⭐ +${s*2} pts`);
+  if(s>=4)cfi();
+  renderSPK(cSPK);
+}
+
+// ====================================================
+// GRAMMAR RENDER
+// ====================================================
+function renderG(){
+  let h='';
+  GD.forEach((t,i)=>{
+    h+=`<div style="border:1px solid var(--bdr);border-radius:var(--rs);margin-bottom:7px;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 13px;cursor:pointer;background:#fff" onclick="const c=this.nextElementSibling;c.style.display=c.style.display==='block'?'none':'block';this.querySelector('.arr').style.transform=c.style.display==='block'?'rotate(90deg)':'rotate(0deg)'">
+      <span style="font-weight:700;font-size:.88em;color:var(--cb);display:flex;align-items:center;gap:7px">${t.icon} ${t.t}</span>
+      <span class="arr" style="transition:transform .2s;color:var(--muted)">▶</span>
+    </div>
+    <div style="display:none;padding:13px;background:#FAFBFD;border-top:1px solid var(--bdr)">
+      ${t.c}
+      <div style="margin-top:11px;padding:11px;background:#FFF3CD;border-radius:8px;border:1px solid #FFD966">
+        <strong style="font-size:.8em;color:#7B5800">🏋️ Practice:</strong>
+        ${t.prac.map((p,j)=>`
+        <div style="margin-top:7px">
+          <p style="font-size:.81em;margin-bottom:3px">${j+1}. ${p.q}</p>
+          <div style="display:flex;gap:5px;align-items:center">
+            <input class="bi" style="min-width:110px" id="gp-${i}-${j}" placeholder="Your answer...">
+            <button class="btn bg2 bsm" onclick="chkGP(${i},${j},'${esc(p.a)}')">✓</button>
+          </div>
+          <div class="fb" id="gfb-${i}-${j}"></div>
+        </div>`).join('')}
+      </div>
+    </div></div>`;
+  });
+  document.getElementById('gcont').innerHTML=h;
+}
+function chkGP(ti,qi,ans){
+  const inp=document.getElementById(`gp-${ti}-${qi}`);
+  const fb=document.getElementById(`gfb-${ti}-${qi}`);
+  if(!inp||!fb)return;
+  const v=inp.value.trim().toLowerCase();
+  const ok=ans.toLowerCase().split('/').map(x=>x.trim()).some(x=>v.includes(x)||x.includes(v));
+  if(ok){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! Answer: <em>${ans}</em>`;S.pts+=2;toast('✅ +2 pts');cfi();}
+  else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ Model: <em>${ans}</em>`;toast('❌ Try again!');}
+  save();
+}
+
+// ====================================================
+// GAMES
+// ====================================================
+function startGame(gid){
+  document.getElementById('ggrid').style.display='none';
+  const a=document.getElementById('gplay');a.innerHTML='';
+  if(gid==='wordmatch')gWordMatch(a);
+  else if(gid==='sentbuild')gSentBuild(a);
+  else if(gid==='spellbee')gSpellBee(a);
+  else if(gid==='transform')gTransform(a);
+  else if(gid==='signreader')gSignReader(a);
+  else if(gid==='vocabflash')gVocabFlash(a);
+  else if(gid==='trufalse')gTrueFalse(a);
+  else if(gid==='scramble')gScramble(a);
+}
+function backGames(){
+  document.getElementById('ggrid').style.display='';
+  document.getElementById('gplay').innerHTML='';
+  if(gTmr){clearInterval(gTmr);gTmr=null;}
+}
+
+// Game: Word Match
+function gWordMatch(a){
+  const D=GAMESD.wordmatch,matched=new Set();let sel=null,score=0;
+  const ws=[...D.pairs].map(p=>p.w).sort(()=>Math.random()-.5);
+  const ds=[...D.pairs].map(p=>({w:p.w,d:p.d})).sort(()=>Math.random()-.5);
+  const rend=()=>{
+    let h=`<div class="garea"><div class="gsbar"><span>${D.title}</span><span>⭐ ${score}/${D.pairs.length}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <p style="font-size:.79em;color:var(--muted);margin-bottom:10px">${D.inst}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+    <div>`;
+    ws.forEach(w=>{
+      const done=matched.has(w),issel=sel&&sel.type==='word'&&sel.v===w;
+      h+=`<button onclick="wmSel('word','${w}')" style="display:block;width:100%;margin-bottom:5px;padding:9px 11px;border-radius:8px;border:2px solid ${done?'var(--ok)':issel?'var(--cm)':'var(--bdr)'};background:${done?'#E8F5EE':issel?'#D6EEFA':'#fff'};font-size:.8em;font-weight:600;cursor:${done?'default':'pointer'};color:${done?'var(--ok)':'var(--txt)'};text-align:left" ${done?'disabled':''}>${w} ${done?'✓':''}</button>`;
+    });
+    h+='</div><div>';
+    ds.forEach(d=>{
+      const done=matched.has(d.w);
+      h+=`<button onclick="wmSel('def','${esc(d.d)}','${d.w}')" style="display:block;width:100%;margin-bottom:5px;padding:9px 11px;border-radius:8px;border:2px solid ${done?'var(--ok)':'var(--bdr)'};background:${done?'#E8F5EE':'#fff'};font-size:.76em;cursor:${done?'default':'pointer'};color:${done?'var(--ok)':'var(--txt)'};text-align:left" ${done?'disabled':''}>${d.d} ${done?'✓':''}</button>`;
+    });
+    h+='</div></div>';
+    if(matched.size===D.pairs.length){h+=`<div class="fb on fb-ok" style="text-align:center;font-size:.95em;margin-top:12px">🎉 All matched! +${D.pairs.length*3} pts</div>`;S.pts+=D.pairs.length*3;save();cfi();cfi();}
+    h+='</div>';a.innerHTML=h;
+  };
+  window.wmSel=(type,val,wfd)=>{
+    if(type==='word'){sel={type:'word',v:val};toast(`Selected: "${val}"`);rend();}
+    else if(sel&&sel.type==='word'){
+      if(sel.v===wfd){matched.add(sel.v);score++;S.pts+=3;save();toast('✅ Match! +3 pts');cfi();}
+      else toast('❌ No match, try again!');
+      sel=null;rend();
+    }
+  };
+  rend();
+}
+
+// Game: Sentence Builder
+function gSentBuild(a){
+  const D=GAMESD.sentbuild;let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=D.sents.length){
+      a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${D.sents.length}</div><div class="rband">${score===D.sents.length?'Perfect! 🎉':score>=4?'Great! ⭐':'Keep trying! 💪'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back to Games</button></div>`;
+      S.pts+=score*3;save();if(score>=D.sents.length)cfi();return;
+    }
+    const s=D.sents[ci];
+    const shuf=[...s.ws].sort(()=>Math.random()-.5);
+    let arr=[],rem=[...shuf];
+    const sub=()=>{
+      let h=`<div class="garea"><div class="gsbar"><span>🏗️ Sentence Builder</span><span>${ci+1}/${D.sents.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+      <p style="font-size:.8em;color:var(--muted);margin-bottom:9px">Tap words to build the sentence in order:</p>
+      <div style="min-height:46px;background:#EEF6FC;border-radius:8px;padding:9px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px;align-items:center">
+        ${arr.length===0?'<span style="color:var(--muted);font-size:.82em">Tap words below...</span>':''}
+        ${arr.map((w,i)=>`<span onclick="sbRem(${i})" style="background:var(--cm);color:#fff;padding:4px 9px;border-radius:16px;cursor:pointer;font-size:.82em">${w} ×</span>`).join('')}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+        ${rem.map((w,i)=>`<button onclick="sbAdd('${esc(w)}',${i})" class="wchip">${w}</button>`).join('')}
+      </div>
+      <div class="brow">
+        <button class="btn bp" onclick="sbCheck()">✓ Check</button>
+        <button class="btn bo" onclick="sbClear()">🔄 Clear</button>
+      </div>
+      <div class="fb" id="sbfb"></div></div>`;
+      a.innerHTML=h;
+    };
+    window.sbAdd=(w,i)=>{arr.push(w);rem.splice(rem.indexOf(w),1);sub();};
+    window.sbRem=(i)=>{rem.push(arr[i]);arr.splice(i,1);sub();};
+    window.sbClear=()=>{rem=[...shuf];arr=[];sub();};
+    window.sbCheck=()=>{
+      const fb=document.getElementById('sbfb');
+      if(arr.join(' ')===s.a){fb.className='fb on fb-ok';fb.innerHTML='✅ Correct!';score++;cfi();setTimeout(()=>{ci++;rend();},1400);}
+      else{fb.className='fb on fb-bad';fb.innerHTML='❌ Try again! Check the word order.';}
+    };
+    sub();
+  };
+  rend();
+}
+
+// Game: Spelling Bee
+function gSpellBee(a){
+  const D=GAMESD.spellbee,ws=[...D.words].sort(()=>Math.random()-.5);let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=ws.length){a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${ws.length}</div><div class="rband">${score===ws.length?'Perfect Speller! 🐝':score>=7?'Great Spelling! ⭐':'Keep Practising! 📖'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*2;save();return;}
+    const w=ws[ci];
+    a.innerHTML=`<div class="garea"><div class="gsbar"><span>🐝 Spelling Bee</span><span>${ci+1}/${ws.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <div style="text-align:center;padding:18px 0">
+      <p style="font-size:.82em;color:var(--muted);margin-bottom:10px">Hint: ${w.h}</p>
+      <button class="blis" style="margin-bottom:14px" onclick="spk('${w.w}')">🔊 Hear the word</button>
+      <p style="font-size:.8em;color:var(--muted);margin-bottom:7px">Type the correct spelling:</p>
+      <input type="text" id="spi" class="bi" style="font-size:1.1em;min-width:180px;text-transform:uppercase" placeholder="Type here..." oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')spbChk('${w.w}')">
+      <div class="brow" style="justify-content:center;margin-top:10px">
+        <button class="btn bp" onclick="spbChk('${w.w}')">✓ Check</button>
+        <button class="btn bo" onclick="spk('${w.w}')">🔊 Again</button>
+      </div>
+      <div class="fb" id="spbfb"></div>
+    </div></div>`;
+  };
+  window.spbChk=w=>{
+    const inp=document.getElementById('spi'),fb=document.getElementById('spbfb');if(!inp)return;
+    if(inp.value.trim().toUpperCase()===w.toUpperCase()){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! "${w}"`;score++;cfi();setTimeout(()=>{ci++;rend();},1400);}
+    else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ Correct spelling: <strong>${w}</strong>`;setTimeout(()=>{ci++;rend();},2200);}
+  };
+  rend();
+}
+
+// Game: Transformations
+function gTransform(a){
+  const D=GAMESD.transform,qs=[...D.qs].sort(()=>Math.random()-.5);let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=qs.length){a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${qs.length}</div><div class="rband">${score>=5?'Grammar Master! 🎓':'Keep Practising!'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*3;save();return;}
+    const q=qs[ci];
+    a.innerHTML=`<div class="garea"><div class="gsbar"><span>🔄 Transformations</span><span>${ci+1}/${qs.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <div class="qblock">
+      <p style="font-size:.86em;margin-bottom:7px">Original:</p>
+      <p class="pbox" style="font-style:italic">${q.s1}</p>
+      <p style="font-size:.86em;font-weight:600;margin-top:10px">Complete the sentence (missing words only):</p>
+      <p style="font-size:.86em;margin:7px 0">${q.s2.replace('___','<input id="tri" class="bi" placeholder="..." onkeydown="if(event.key===\'Enter\')trChk(\''+esc(q.a)+'\')">')}</p>
+      <button class="btn bp" style="margin-top:9px" onclick="trChk('${esc(q.a)}')">✓ Check</button>
+      <div class="fb" id="trfb"></div>
+    </div></div>`;
+  };
+  window.trChk=ans=>{
+    const inp=document.getElementById('tri'),fb=document.getElementById('trfb');if(!inp)return;
+    const v=inp.value.trim().toLowerCase();
+    if(v===ans.toLowerCase()){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! Answer: "${ans}"`;score++;cfi();setTimeout(()=>{ci++;rend();},1400);}
+    else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ Answer: <strong>${ans}</strong>`;setTimeout(()=>{ci++;rend();},2200);}
+  };
+  rend();
+}
+
+// Game: Sign Reader
+function gSignReader(a){
+  const D=GAMESD.signreader,qs=[...D.qs].sort(()=>Math.random()-.5);let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=qs.length){a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${qs.length}</div><div class="rband">${score>=4?'Sign Expert! 🪧':'Keep Reading!'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*2;save();return;}
+    const q=qs[ci];
+    a.innerHTML=`<div class="garea"><div class="gsbar"><span>🪧 Sign Reader</span><span>${ci+1}/${qs.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <div class="sbox" style="margin:14px 0;font-size:.95em">${q.sign.replace(/\n/g,'<br>')}</div>
+    <p style="font-weight:600;margin-bottom:9px;font-size:.86em">What does this sign mean?</p>
+    <div class="olist">${q.opts.map((o,j)=>`<button class="obtn" onclick="srChk(${j},${q.a})"><span class="olet">${'ABC'[j]}</span>${o}</button>`).join('')}</div>
+    <div class="fb" id="srfb"></div></div>`;
+  };
+  window.srChk=(ch,cor)=>{
+    const btns=document.querySelectorAll('#gplay .obtn'),fb=document.getElementById('srfb');
+    btns.forEach((b,j)=>{if(j===cor)b.classList.add('ok');else if(j===ch)b.classList.add('bad');b.disabled=true;});
+    if(ch===cor){fb.className='fb on fb-ok';fb.innerHTML='✅ Correct!';score++;cfi();}
+    else{fb.className='fb on fb-bad';fb.innerHTML=`❌ Answer: ${'ABC'[cor]}`;}
+    setTimeout(()=>{ci++;rend();},1700);
+  };
+  rend();
+}
+
+// Game: Vocab Flash
+function gVocabFlash(a){
+  const D=GAMESD.vocabflash,cs=[...D.cards].sort(()=>Math.random()-.5);let ci=0,score=0,tl=15;
+  const rend=()=>{
+    if(ci>=cs.length){if(gTmr)clearInterval(gTmr);a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${cs.length}</div><div class="rband">${score>=6?'Vocab Champion! ⚡':'Keep Learning!'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*2;save();return;}
+    const c=cs[ci];tl=15;if(gTmr)clearInterval(gTmr);
+    const sub=()=>{
+      a.innerHTML=`<div class="garea"><div class="gsbar"><span>⚡ Vocab Flash</span><span>${ci+1}/${cs.length} · ⭐${score}</span><span class="gtmr" id="gtmr">${tl}s</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+      <div style="text-align:center;padding:18px 0">
+        <div style="font-size:1.9em;font-weight:900;color:var(--cb);margin-bottom:18px">${c.w}</div>
+        <p style="font-size:.8em;color:var(--muted);margin-bottom:12px">What does this word mean?</p>
+        <div class="olist">${c.opts.map((o,j)=>`<button class="obtn" onclick="vfChk(${j},${c.a})"><span class="olet">${'ABC'[j]}</span>${o}</button>`).join('')}</div>
+      </div></div>`;
+    };
+    sub();
+    gTmr=setInterval(()=>{tl--;const el=document.getElementById('gtmr');if(el){el.textContent=tl+'s';el.style.color=tl<=5?'#FF6B6B':'var(--cg)';}if(tl<=0){clearInterval(gTmr);toast('⏰ Time up!');ci++;rend();}},1000);
+  };
+  window.vfChk=(ch,cor)=>{if(gTmr)clearInterval(gTmr);const btns=document.querySelectorAll('#gplay .obtn');btns.forEach((b,j)=>{if(j===cor)b.classList.add('ok');else if(j===ch)b.classList.add('bad');b.disabled=true;});if(ch===cor){score++;cfi();toast('✅ +1 pt');}else toast('❌ Wrong!');setTimeout(()=>{ci++;rend();},1500);};
+  rend();
+}
+
+// Game: True or False
+function gTrueFalse(a){
+  const D=GAMESD.trufalse,qs=[...D.qs].sort(()=>Math.random()-.5);let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=qs.length){a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${qs.length}</div><div class="rband">${score>=6?'PET Expert! 🏆':'Keep Studying!'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*2;save();return;}
+    const q=qs[ci];
+    a.innerHTML=`<div class="garea"><div class="gsbar"><span>✅ True or False</span><span>${ci+1}/${qs.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <div class="qblock"><p style="font-size:.93em;font-weight:600;margin-bottom:14px;line-height:1.6">"${q.s}"</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <button class="obtn" onclick="tfChk(true,${q.a})" style="text-align:center;padding:16px;font-size:.95em">✅<br><strong>TRUE</strong></button>
+      <button class="obtn" onclick="tfChk(false,${q.a})" style="text-align:center;padding:16px;font-size:.95em">❌<br><strong>FALSE</strong></button>
+    </div>
+    <div class="fb" id="tffb"></div></div></div>`;
+  };
+  window.tfChk=(ch,cor)=>{
+    const btns=document.querySelectorAll('#gplay .obtn'),fb=document.getElementById('tffb');
+    btns.forEach(b=>b.disabled=true);
+    if(ch===cor){btns[cor?0:1].classList.add('ok');fb.className='fb on fb-ok';fb.innerHTML='✅ Correct!';score++;cfi();}
+    else{btns[ch?0:1].classList.add('bad');btns[cor?0:1].classList.add('ok');const ex=q&&q.ex?q.ex:'';fb.className='fb on fb-bad';fb.innerHTML=`❌ Incorrect. ${qs[ci].ex||''}`;}
+    setTimeout(()=>{ci++;rend();},2000);
+  };
+  rend();
+}
+
+// Game: Scramble
+function gScramble(a){
+  const D=GAMESD.scramble,ws=[...D.ws].sort(()=>Math.random()-.5);let ci=0,score=0;
+  const rend=()=>{
+    if(ci>=ws.length){a.innerHTML=`<div class="garea"><div class="rcrd"><div class="rbig">${score}</div><div class="rlbl">out of ${ws.length}</div><div class="rband">${score>=6?'Unscramble Master! 🔤':'Keep Practising!'}</div></div><button class="btn bp bfw" onclick="backGames()">← Back</button></div>`;S.pts+=score*2;save();return;}
+    const w=ws[ci];
+    a.innerHTML=`<div class="garea"><div class="gsbar"><span>🔤 Letter Scramble</span><span>${ci+1}/${ws.length} · ⭐${score}</span><button class="btn bsm" style="background:rgba(255,255,255,.18);color:#fff;border:none;cursor:pointer" onclick="backGames()">← Back</button></div>
+    <div style="text-align:center;padding:14px 0">
+      <p style="font-size:.8em;color:var(--muted);margin-bottom:7px">Hint: ${w.h}</p>
+      <div style="font-size:1.7em;font-weight:900;letter-spacing:4px;color:var(--cm);margin-bottom:18px;font-family:monospace">${w.sc}</div>
+      <p style="font-size:.8em;color:var(--muted);margin-bottom:7px">Unscramble the letters:</p>
+      <input type="text" id="sci" class="bi" style="font-size:1.1em;min-width:170px;text-transform:uppercase" placeholder="Type the word..." oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scChk('${w.w}')">
+      <div class="brow" style="justify-content:center;margin-top:10px">
+        <button class="btn bp" onclick="scChk('${w.w}')">✓ Check</button>
+        <button class="btn bo" onclick="toast('💡 First letter: ${w.w[0]}, ${w.w.length} letters')">💡 Hint</button>
+      </div>
+      <div class="fb" id="scfb"></div>
+    </div></div>`;
+  };
+  window.scChk=word=>{
+    const inp=document.getElementById('sci'),fb=document.getElementById('scfb');if(!inp)return;
+    if(inp.value.trim().toUpperCase()===word){inp.className='bi ok';fb.className='fb on fb-ok';fb.innerHTML=`✅ Correct! The word is: <strong>${word}</strong>`;score++;cfi();setTimeout(()=>{ci++;rend();},1400);}
+    else{inp.className='bi bad';fb.className='fb on fb-bad';fb.innerHTML=`❌ The answer is: <strong>${word}</strong>`;setTimeout(()=>{ci++;rend();},2200);}
+  };
+  rend();
+}
+
+// ====================================================
+// PROGRESS
+// ====================================================
+function renderProg(){
+  document.getElementById('bigpts').textContent=S.pts;
+  const band=S.pts>=200?'Excellent! A Grade 🏆':S.pts>=100?'Good! B Grade ⭐':S.pts>=50?'Progressing! C 📈':'Keep Going! 💪';
+  document.getElementById('bndbadge').textContent=band;
+  const rn=Object.keys(S.ra).length,ln=Object.keys(S.la).length,wn=Object.keys(S.wa).length;
+  document.getElementById('pr-r').textContent=rn+' answered';
+  document.getElementById('pr-w').textContent=wn+' saved';
+  document.getElementById('pr-l').textContent=ln+' answered';
+  const spk=Object.values(S.spk),avg=spk.length?Math.round(spk.reduce((a,b)=>a+b.s,0)/spk.length*10)/10:0;
+  document.getElementById('pr-s').textContent=`${avg}/5 avg ⭐`;
+  ['r','w','l','s'].forEach(x=>{const el=document.getElementById('hp-'+x);if(el)el.style.width=Math.min(100,S.pts/2)+'%';});
+  const ach=[];
+  if(S.pts>=10)ach.push({i:'⭐',l:'First Stars'});
+  if(S.pts>=50)ach.push({i:'🥉',l:'Bronze Learner'});
+  if(S.pts>=100)ach.push({i:'🥈',l:'Silver Scholar'});
+  if(S.pts>=200)ach.push({i:'🥇',l:'Gold Student'});
+  if(rn>=10)ach.push({i:'📖',l:'Keen Reader'});
+  if(spk.length>=5)ach.push({i:'🎤',l:'Public Speaker'});
+  if(wn>=4)ach.push({i:'✍️',l:'Good Writer'});
+  if(Object.values(S.ga).length&&S.ga.played>=10)ach.push({i:'🎮',l:'Game Player'});
+  document.getElementById('achiev').innerHTML=ach.length?ach.map(a=>`<div style="background:#EEF6FC;border-radius:8px;padding:9px 12px;text-align:center;min-width:75px"><div style="font-size:1.4em">${a.i}</div><div style="font-size:.7em;font-weight:700;color:var(--cb);margin-top:3px">${a.l}</div></div>`).join(''):'<p style="font-size:.82em;color:var(--muted)">Complete activities to earn achievements!</p>';
+  const acts=[...S.log].reverse().slice(0,10);
+  document.getElementById('actlog').innerHTML=acts.length?acts.map(x=>`<div style="padding:7px 0;border-bottom:1px solid var(--bdr);font-size:.81em;color:var(--muted)">${x}</div>`).join(''):'<p style="font-size:.82em;color:var(--muted)">No activity yet. Start practising!</p>';
+}
+
+// ====================================================
+// UTILITIES
+// ====================================================
+function spk(txt){
+  if(!synth)return;synth.cancel();
+  const u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=0.85;u.pitch=1;
+  const vs=synth.getVoices();const v=vs.find(x=>x.lang.startsWith('en-GB'))||vs.find(x=>x.lang.startsWith('en'));
+  if(v)u.voice=v;synth.speak(u);
+}
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2400);
+}
+function cfi(){
+  const cols=['#E8A020','#003865','#009FD4','#2E8B57','#C0392B','#F5C842'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');p.className='cf';
+    p.style.cssText=`left:${Math.random()*100}vw;background:${cols[~~(Math.random()*cols.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${2+Math.random()*2}s;transform:rotate(${Math.random()*360}deg);width:${6+Math.random()*7}px;height:${6+Math.random()*7}px`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),4000);
+  }
+}
+function esc(s){return s?s.replace(/'/g,"\\'").replace(/"/g,'&quot;'):''}
+
+// INIT
+document.getElementById('pts').textContent=S.pts;
+if(synth)synth.onvoiceschanged=()=>{};
+</script>
+</body>
+</html>
