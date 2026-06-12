@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's Go 1 - English Learning Adventure</title>
+<style>
+:root{--red:#E8233A;--yellow:#FFD600;--blue:#1565C0;--green:#2E7D32;--orange:#E65100;--purple:#6A1B9A;--sky:#0288D1;--pink:#AD1457;--bg:#FFF9F0;--card:#FFFFFF;--text:#1A1A2E;--shadow:0 4px 15px rgba(0,0,0,0.12);--radius:16px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Comic Sans MS',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.app-header{background:linear-gradient(135deg,var(--red) 0%,#FF6B35 50%,var(--yellow) 100%);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(0,0,0,0.2);position:sticky;top:0;z-index:100;}
+.logo-text{font-size:1.4em;font-weight:900;color:white;text-shadow:2px 2px 4px rgba(0,0,0,0.3);}
+.logo-badge{background:var(--blue);color:white;font-size:0.5em;padding:3px 8px;border-radius:20px;font-weight:700;vertical-align:middle;}
+.header-score{background:rgba(255,255,255,0.25);border-radius:20px;padding:5px 12px;color:white;font-weight:700;font-size:1em;}
+.nav-bar{display:flex;overflow-x:auto;gap:5px;padding:8px 12px;background:white;border-bottom:2px solid #F0E0D0;scrollbar-width:none;}
+.nav-bar::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:6px 13px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:0.78em;font-weight:700;transition:all 0.2s;background:#F5F0FF;color:var(--text);}
+.nav-btn.active{background:var(--red);color:white;border-color:var(--red);}
+.nav-btn:hover:not(.active){background:#FFE0E5;border-color:var(--red);}
+.main{padding:12px;max-width:880px;margin:0 auto;}
+.section{display:none;}.section.active{display:block;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px;}
+.card-title{font-size:1.1em;font-weight:800;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.unit-badge{display:inline-block;color:white;font-size:0.72em;padding:3px 10px;border-radius:12px;font-weight:700;margin-right:6px;}
+.tabs{display:flex;gap:4px;margin-bottom:12px;border-bottom:2px solid #eee;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:7px 12px;cursor:pointer;font-size:0.78em;font-weight:700;color:#888;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.tab.active{color:var(--red);border-bottom-color:var(--red);}
+.tab-content{display:none;}.tab-content.active{display:block;}
+/* HOME */
+.welcome-hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:24px 18px;text-align:center;color:white;margin-bottom:18px;}
+.welcome-hero h1{font-size:1.8em;font-weight:900;margin-bottom:6px;}
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+.unit-card{background:var(--card);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;border:3px solid #ddd;box-shadow:0 3px 8px rgba(0,0,0,0.1);transition:all 0.2s;}
+.unit-card:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,0.15);}
+.unit-icon{font-size:2em;margin-bottom:5px;}
+.unit-card h3{font-size:0.82em;font-weight:800;}
+.unit-card p{font-size:0.68em;color:#666;margin-top:2px;}
+.unit-progress{height:4px;background:#eee;border-radius:4px;margin-top:7px;overflow:hidden;}
+.unit-progress-bar{height:100%;background:var(--green);border-radius:4px;transition:width 0.5s;}
+/* VOCAB */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:9px;}
+.vocab-item{background:linear-gradient(135deg,#f8f9ff,#e8f0fe);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;border:2px solid #D0D8FF;transition:all 0.2s;position:relative;}
+.vocab-item:hover{transform:scale(1.05);border-color:var(--blue);}
+.vocab-item.learned{border-color:var(--green);background:linear-gradient(135deg,#f0fff4,#e0f5e8);}
+.vocab-emoji{font-size:2em;display:block;margin-bottom:4px;}
+.vocab-word{font-size:0.8em;font-weight:700;}
+.vocab-article{font-size:0.65em;color:var(--blue);font-style:italic;}
+.vl-badge{position:absolute;top:-4px;right:-4px;background:var(--green);color:white;border-radius:50%;width:18px;height:18px;font-size:0.6em;display:none;align-items:center;justify-content:center;}
+.vocab-item.learned .vl-badge{display:flex;}
+/* GRAMMAR */
+.grammar-box{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid #FFD600;border-radius:14px;padding:14px;margin-bottom:10px;}
+.grammar-title{font-weight:800;color:#B8860B;font-size:0.95em;margin-bottom:7px;}
+.grammar-pattern{background:white;border-radius:8px;padding:8px 12px;border-left:4px solid var(--yellow);margin:5px 0;font-size:0.85em;}
+.hl{color:var(--red);font-weight:700;}
+.grammar-example{font-size:0.78em;color:#555;margin-top:4px;font-style:italic;}
+.contraction{display:inline-flex;align-items:center;gap:6px;background:#EEF2FF;border-radius:8px;padding:3px 9px;margin:3px;font-size:0.78em;font-weight:600;}
+.carr{color:var(--blue);font-weight:900;}
+/* SPEAKING */
+.speak-card{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);border:2px solid var(--sky);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px;}
+.speak-text{font-size:1.05em;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.speak-btns{display:flex;gap:8px;justify-content:center;}
+.speak-btn{border:none;border-radius:50%;width:56px;height:56px;font-size:1.4em;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.speak-btn.listen{background:var(--sky);color:white;}
+.speak-btn.speak{background:var(--green);color:white;}
+.speak-btn.recording{background:var(--red);animation:pulse 0.8s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.speak-result{font-size:0.88em;font-weight:700;margin-top:8px;}
+.s-ex{color:var(--green)}.s-go{color:var(--orange)}.s-try{color:var(--red)}
+/* SONGS */
+.song-box{background:linear-gradient(135deg,#FCE4EC,#F8BBD9);border:2px solid #EC407A;border-radius:14px;padding:16px;text-align:center;}
+.song-title{font-size:1.1em;font-weight:800;color:#AD1457;margin-bottom:10px;}
+.song-lyrics{background:white;border-radius:10px;padding:10px 14px;line-height:2.1;font-size:0.88em;text-align:left;margin-bottom:10px;}
+.song-btn{background:#AD1457;color:white;border:none;border-radius:20px;padding:8px 20px;font-size:0.9em;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.song-btn:hover{background:#880E4F;transform:scale(1.05);}
+/* STORIES */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.story-grid{grid-template-columns:1fr;}}
+.story-panel{background:#F9F9FF;border-radius:12px;padding:12px;border:2px solid #E0E0FF;}
+.story-num{font-size:0.7em;font-weight:700;color:var(--blue);margin-bottom:5px;}
+.story-emoji{font-size:2.5em;text-align:center;margin-bottom:6px;}
+.story-text{font-size:0.82em;font-weight:600;}
+/* CONVO */
+.bubble{padding:10px 14px;border-radius:14px;margin-bottom:8px;max-width:86%;}
+.bubble.teacher{background:#E3F2FD;border-bottom-left-radius:4px;margin-right:auto;}
+.bubble.student{background:#E8F5E9;border-bottom-right-radius:4px;margin-left:auto;}
+.bubble-name{font-size:0.68em;font-weight:700;color:#888;margin-bottom:3px;}
+.bubble-text{font-size:0.88em;font-weight:600;}
+/* PHONICS */
+.phonics-letter{font-size:3.5em;font-weight:900;color:var(--red);text-align:center;padding:8px;}
+.phonics-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0;}
+.pw-card{background:white;border:2px solid var(--red);border-radius:10px;padding:7px 12px;cursor:pointer;font-weight:700;font-size:0.85em;transition:all 0.2s;}
+.pw-card:hover{background:var(--red);color:white;}
+.pw-hl{color:var(--red);font-size:1.05em;}
+.chant-box{background:linear-gradient(135deg,#F3E5F5,#EDE7F6);border:2px solid var(--purple);border-radius:12px;padding:14px;font-family:'Courier New',monospace;line-height:2;font-size:0.85em;white-space:pre-line;}
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.game-card{background:var(--card);border-radius:16px;padding:16px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:all 0.25s;border:3px solid #ddd;}
+.game-card:hover{transform:translateY(-5px);box-shadow:0 10px 24px rgba(0,0,0,0.15);}
+.game-icon{font-size:2.3em;margin-bottom:7px;}
+.game-name{font-weight:800;font-size:0.88em;}
+.game-desc{font-size:0.68em;color:#666;margin-top:3px;}
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:14px;}
+.modal.show{display:flex;}
+.modal-panel{background:white;border-radius:20px;padding:22px;width:100%;max-width:490px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-title{font-size:1.2em;font-weight:800;color:var(--red);margin-bottom:14px;text-align:center;}
+.close-btn{position:absolute;top:10px;right:12px;background:#eee;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9em;}
+/* GAME ELEMENTS */
+.flashcard-wrap{perspective:700px;}
+.fc{width:100%;height:165px;position:relative;transform-style:preserve-3d;transition:transform 0.5s;cursor:pointer;}
+.fc.flipped{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;box-shadow:var(--shadow);}
+.fc-front{background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+.fc-back{background:linear-gradient(135deg,#f093fb,#f5576c);color:white;transform:rotateY(180deg);}
+.fc-emoji{font-size:3em;margin-bottom:6px;}
+.fc-word{font-size:1.3em;font-weight:800;}
+.fc-controls{display:flex;gap:8px;margin-top:12px;}
+.fc-btn{flex:1;padding:9px;border:none;border-radius:10px;font-size:0.85em;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.fc-know{background:var(--green);color:white;}
+.fc-more{background:var(--orange);color:white;}
+/* QUIZ */
+.quiz-q{font-size:1.05em;font-weight:700;text-align:center;color:var(--blue);margin-bottom:12px;}
+.quiz-emoji{font-size:3em;text-align:center;margin-bottom:8px;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.quiz-opt{padding:11px 8px;border-radius:11px;border:2px solid #ddd;cursor:pointer;font-size:0.85em;font-weight:600;text-align:center;transition:all 0.2s;}
+.quiz-opt:hover:not(.answered){border-color:var(--blue);background:#EEF2FF;}
+.quiz-opt.correct{border-color:var(--green);background:#E8F5E9;color:var(--green);}
+.quiz-opt.wrong{border-color:var(--red);background:#FFEBEE;color:var(--red);}
+.quiz-fb{text-align:center;font-size:0.95em;font-weight:700;margin:10px 0;}
+.quiz-next{width:100%;padding:10px;background:var(--blue);color:white;border:none;border-radius:11px;font-size:0.9em;font-weight:700;cursor:pointer;margin-top:6px;display:none;}
+/* MEMORY */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+@media(max-width:380px){.mem-grid{grid-template-columns:repeat(3,1fr);}}
+.mc{aspect-ratio:1;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#667eea;border:2px solid transparent;transition:all 0.3s;overflow:hidden;}
+.mc .mc-content{display:none;font-size:1.1em;font-weight:700;}
+.mc.revealed{background:white;border-color:var(--blue);}
+.mc.revealed .mc-content{display:block;}
+.mc.matched{background:var(--green);border-color:var(--green);}
+.mc.matched .mc-content{display:block;color:white;}
+/* SPELLING */
+.sp-slots{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+.sp-slot{min-width:34px;height:40px;border-radius:8px;border:2px solid #ddd;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:1em;font-weight:800;}
+.sp-slot.filled{border-color:var(--green);background:#E8F5E9;}
+.letter-btns{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0;}
+.lb{width:38px;height:38px;border-radius:9px;border:2px solid var(--blue);background:white;color:var(--blue);font-size:0.95em;font-weight:800;cursor:pointer;transition:all 0.2s;}
+.lb:hover:not(:disabled){background:var(--blue);color:white;}
+.lb:disabled{opacity:0.3;cursor:default;}
+/* SENTENCE */
+.sent-display{background:#EEF2FF;border-radius:11px;padding:12px;min-height:55px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.word-pool{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.wchip{padding:6px 11px;border-radius:18px;border:2px solid var(--blue);cursor:pointer;font-size:0.82em;font-weight:700;color:var(--blue);background:white;transition:all 0.2s;}
+.wchip:hover:not(.used){background:var(--blue);color:white;}
+.wchip.used{opacity:0.3;cursor:default;}
+.schip{padding:6px 11px;border-radius:18px;background:var(--blue);color:white;font-size:0.82em;font-weight:700;cursor:pointer;}
+/* MATCHING */
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.match-item{padding:9px 7px;border-radius:9px;text-align:center;cursor:pointer;border:2px solid #ddd;font-size:0.82em;font-weight:600;min-height:46px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.match-item:hover:not(.matched){border-color:var(--blue);background:#EEF2FF;}
+.match-item.selected{border-color:var(--blue);background:#BBDEFB;}
+.match-item.matched{border-color:var(--green);background:#E8F5E9;color:var(--green);}
+.match-item.wrong{border-color:var(--red);background:#FFEBEE;animation:shake 0.4s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+/* WHACK */
+.whack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.whack-item{border-radius:11px;padding:9px 5px;text-align:center;cursor:pointer;border:2px solid #ddd;font-size:0.78em;font-weight:700;min-height:46px;display:flex;align-items:center;justify-content:center;background:white;transition:all 0.15s;}
+.whack-item:hover{background:#EEF2FF;border-color:var(--blue);}
+.whack-item.hit{background:var(--green);color:white;border-color:var(--green);}
+.whack-item.miss{background:#FFEBEE;border-color:var(--red);}
+/* PROGRESS */
+.prog-bar-wrap{background:#eee;border-radius:20px;height:9px;overflow:hidden;margin:6px 0;}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--green),#66BB6A);border-radius:20px;transition:width 0.5s;}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;}
+.ach{text-align:center;padding:10px 6px;border-radius:11px;background:#F5F5F5;border:2px solid #E0E0E0;}
+.ach.earned{background:#FFF9C4;border-color:var(--yellow);}
+.ach-icon{font-size:1.8em;margin-bottom:4px;}
+.ach-name{font-size:0.65em;font-weight:700;}
+/* CELEBRATION */
+.celebration{display:none;position:fixed;inset:0;z-index:300;pointer-events:none;}
+.celebration.show{display:block;}
+.confetti{position:absolute;animation:fall 2s linear forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+/* UTILS */
+.btn{padding:9px 18px;border:none;border-radius:22px;font-size:0.88em;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-r{background:var(--red);color:white;}
+.btn-b{background:var(--blue);color:white;}
+.btn-g{background:var(--green);color:white;}
+.btn-o{background:white;color:var(--blue);border:2px solid var(--blue);}
+.btn-sm{padding:6px 13px;font-size:0.78em;}
+.mt1{margin-top:8px;}.mt2{margin-top:15px;}
+.sec-hdr{font-size:1.2em;font-weight:800;margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+/* REVIEW */
+.review-box{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--yellow);border-radius:14px;padding:13px;margin-bottom:12px;}
+.rv-title{font-weight:800;color:#B8860B;margin-bottom:8px;}
+/* RESPONSIVE */
+@media(max-width:600px){
+  .unit-grid{grid-template-columns:repeat(3,1fr);}
+  .unit-card{padding:10px 5px;}
+  .unit-icon{font-size:1.7em;}
+  .games-grid{grid-template-columns:repeat(2,1fr);}
+  .vocab-grid{grid-template-columns:repeat(auto-fill,minmax(95px,1fr));}
+  .quiz-opts{grid-template-columns:1fr;}
+}
+@media(orientation:landscape) and (max-height:480px){
+  .app-header{padding:5px 14px;}
+  .main{padding:8px;}
+  .card{padding:12px;}
+}
+</style>
+</head>
+<body>
+<div id="cel" class="celebration"></div>
+<header class="app-header">
+  <span class="logo-text">LET'S GO <span class="logo-badge">1</span></span>
+  <div class="header-score">⭐ <span id="hScore">0</span> pts</div>
+</header>
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="showSection('home')">🏠 Home</button>
+  <button class="nav-btn" onclick="showSection('remember')">📚 Remember</button>
+  <button class="nav-btn" onclick="showSection('unit1')">✏️ Unit 1</button>
+  <button class="nav-btn" onclick="showSection('unit2')">🎨 Unit 2</button>
+  <button class="nav-btn" onclick="showSection('unit3')">🛒 Unit 3</button>
+  <button class="nav-btn" onclick="showSection('unit4')">👨‍👩‍👧 Unit 4</button>
+  <button class="nav-btn" onclick="showSection('unit5')">🎂 Unit 5</button>
+  <button class="nav-btn" onclick="showSection('unit6')">🌤️ Unit 6</button>
+  <button class="nav-btn" onclick="showSection('unit7')">🍎 Unit 7</button>
+  <button class="nav-btn" onclick="showSection('unit8')">🐾 Unit 8</button>
+  <button class="nav-btn" onclick="showSection('phonics')">🔤 Phonics</button>
+  <button class="nav-btn" onclick="showSection('games')">🎮 Games</button>
+  <button class="nav-btn" onclick="showSection('progress')">🏆 Progress</button>
+</nav>
+<main class="main">
+<!-- HOME -->
+<section id="home" class="section active">
+  <div class="welcome-hero">
+    <h1>🌟 Let's Go! 🌟</h1>
+    <p>Oxford Let's Go 1 · 5th Edition · Complete Learning App</p>
+    <div style="margin-top:10px;font-size:0.85em;opacity:0.85">8 Units · Vocabulary · Grammar · Phonics · Songs · 8 Games · Speaking Scores</div>
+  </div>
+  <div class="card-title" style="margin-bottom:10px">📖 Choose Your Unit</div>
+  <div class="unit-grid">
+    <div class="unit-card" style="border-color:#F9A825" onclick="showSection('remember')">
+      <div class="unit-icon">🔡</div><h3>Let's Remember</h3><p>ABC &amp; Numbers</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-rem" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--red)" onclick="showSection('unit1')">
+      <div class="unit-icon">✏️</div><h3>Unit 1</h3><p>Things for School</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u1" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--blue)" onclick="showSection('unit2')">
+      <div class="unit-icon">🎨</div><h3>Unit 2</h3><p>Colors &amp; Shapes</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u2" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--green)" onclick="showSection('unit3')">
+      <div class="unit-icon">🛒</div><h3>Unit 3</h3><p>At the Store</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u3" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--orange)" onclick="showSection('unit4')">
+      <div class="unit-icon">👨‍👩‍👧</div><h3>Unit 4</h3><p>People at Home</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u4" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--purple)" onclick="showSection('unit5')">
+      <div class="unit-icon">🎂</div><h3>Unit 5</h3><p>Happy Birthday!</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u5" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--sky)" onclick="showSection('unit6')">
+      <div class="unit-icon">🌤️</div><h3>Unit 6</h3><p>Outdoors</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u6" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:var(--pink)" onclick="showSection('unit7')">
+      <div class="unit-icon">🍎</div><h3>Unit 7</h3><p>Food</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u7" style="width:0%"></div></div>
+    </div>
+    <div class="unit-card" style="border-color:#558B2F" onclick="showSection('unit8')">
+      <div class="unit-icon">🐾</div><h3>Unit 8</h3><p>Animals</p>
+      <div class="unit-progress"><div class="unit-progress-bar" id="pb-u8" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="card mt2">
+    <div class="card-title">🎮 Quick Play</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-r" onclick="openGame('fc')">⚡ Flash Cards</button>
+      <button class="btn btn-b" onclick="openGame('quiz')">❓ Word Quiz</button>
+      <button class="btn btn-g" onclick="openGame('mem')">🧠 Memory</button>
+      <button class="btn" style="background:var(--purple);color:white" onclick="openGame('spell')">✍️ Spelling</button>
+      <button class="btn" style="background:var(--orange);color:white" onclick="openGame('sent')">📝 Sentences</button>
+    </div>
+  </div>
+</section>
+<!-- REMEMBER -->
+<section id="remember" class="section">
+  <div class="sec-hdr">📚 Let's Remember</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'rem-abc')">🔡 Alphabet</div>
+    <div class="tab" onclick="swTab(this,'rem-num')">🔢 Numbers</div>
+    <div class="tab" onclick="swTab(this,'rem-act')">🏃 Actions</div>
+    <div class="tab" onclick="swTab(this,'rem-spk')">🎤 Speak</div>
+  </div>
+  <div id="rem-abc" class="tab-content active">
+    <div class="card">
+      <div class="card-title">🔡 The English Alphabet A–Z</div>
+      <div id="abc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(65px,1fr));gap:7px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Articles: "a" vs "an"</div>
+      <div class="grammar-box">
+        <div class="grammar-title">Rule: Use "a" or "an"?</div>
+        <div class="grammar-pattern">Use <span class="hl">a</span> before consonant sounds: <span class="hl">a</span> pencil · <span class="hl">a</span> book · <span class="hl">a</span> bag</div>
+        <div class="grammar-pattern">Use <span class="hl">an</span> before vowel sounds (A,E,I,O,U): <span class="hl">an</span> eraser · <span class="hl">an</span> apple</div>
+        <div class="grammar-example">💡 Vowels = A E I O U → use "an" before these sounds!</div>
+      </div>
+    </div>
+  </div>
+  <div id="rem-num" class="tab-content">
+    <div class="card">
+      <div class="card-title">🔢 Numbers 1–10</div>
+      <div id="num-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px"></div>
+    </div>
+  </div>
+  <div id="rem-act" class="tab-content">
+    <div class="card">
+      <div class="card-title">🏃 What can you do?</div>
+      <div class="grammar-box">
+        <div class="grammar-title">Grammar: "I can ___"</div>
+        <div class="grammar-pattern"><span class="hl">I can</span> + verb = I am able to do something</div>
+        <div class="grammar-example">I can walk. / I can run. / I can jump. / I can dance.</div>
+      </div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Question: "What can you do?"</div>
+        <div class="grammar-pattern"><span class="hl">What can you do?</span> → I can ___.</div>
+        <div class="grammar-example">Structure: What + can + subject + do?</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;margin-top:10px">
+        <div class="vocab-item" onclick="tts('I can walk')"><span class="vocab-emoji">🚶</span><span class="vocab-word">I can walk</span></div>
+        <div class="vocab-item" onclick="tts('I can run')"><span class="vocab-emoji">🏃</span><span class="vocab-word">I can run</span></div>
+        <div class="vocab-item" onclick="tts('I can jump')"><span class="vocab-emoji">🦘</span><span class="vocab-word">I can jump</span></div>
+        <div class="vocab-item" onclick="tts('I can dance')"><span class="vocab-emoji">💃</span><span class="vocab-word">I can dance</span></div>
+        <div class="vocab-item" onclick="tts('I can swim')"><span class="vocab-emoji">🏊</span><span class="vocab-word">I can swim</span></div>
+        <div class="vocab-item" onclick="tts('I can sing')"><span class="vocab-emoji">🎵</span><span class="vocab-word">I can sing</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="rem-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Practice Speaking</div><div id="spk-rem"></div></div></div>
+</section>
+<!-- UNIT 1 -->
+<section id="unit1" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--red)">UNIT 1</span>Things for School</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u1-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u1-voc')">📖 Vocabulary</div>
+    <div class="tab" onclick="swTab(this,'u1-more')">📚 More</div>
+    <div class="tab" onclick="swTab(this,'u1-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u1-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u1-spk')">🎤 Speak</div>
+  </div>
+  <div id="u1-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Greetings &amp; Names</div>
+      <div class="bubble teacher"><div class="bubble-name">🙋 Scott</div><div class="bubble-text">Hello. I'm Scott. What's your name?</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Kate</div><div class="bubble-text">My name is Kate.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">What's your name?</div></div>
+      <div class="bubble student"><div class="bubble-name">🙋 Andy</div><div class="bubble-text">My name is Andy.</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Key Phrases</div>
+        <div class="grammar-pattern"><span class="hl">Hello.</span> / <span class="hl">Hi.</span> — Greeting</div>
+        <div class="grammar-pattern"><span class="hl">What's your name?</span> — Asking for someone's name</div>
+        <div class="grammar-pattern"><span class="hl">My name is Kate.</span> / <span class="hl">I'm Kate.</span> — Answering</div>
+        <div style="margin-top:6px">
+          <span class="contraction">What is <span class="carr">→</span> What's</span>
+          <span class="contraction">I am <span class="carr">→</span> I'm</span>
+        </div>
+      </div>
+      <button class="btn btn-r mt1" onclick="readLines(['Hello. My name is Scott. What is your name?','My name is Kate.','What is your name?','My name is Andy.'])">▶️ Listen &amp; Repeat</button>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 The Hello Song</div>
+      <div class="song-box">
+        <div class="song-title">🎵 The Hello Song 🎵</div>
+        <div class="song-lyrics">Hello, hello, hello!<br>What's your name?<br>Hello, hello, hello!<br>My name is Scott.<br>My name is Scott.<br>Hello, Scott!<br>Hello, Scott!<br>Hello!</div>
+        <button class="song-btn mt1" onclick="tts('Hello hello hello! What is your name? Hello hello hello! My name is Scott. My name is Scott. Hello Scott! Hello Scott! Hello!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u1-voc" class="tab-content">
+    <div class="card">
+      <div class="card-title">📖 Let's Learn: School Supplies</div>
+      <div class="vocab-grid" id="voc-u1a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "What's this?" / "It's a/an ___."</div>
+        <div class="grammar-pattern"><span class="hl">What's this?</span> — Asking about an object</div>
+        <div class="grammar-pattern">→ <span class="hl">It's a pencil.</span> / <span class="hl">It's an eraser.</span></div>
+        <span class="contraction">It is <span class="carr">→</span> It's</span>
+        <span class="contraction">is not <span class="carr">→</span> isn't</span>
+      </div>
+    </div>
+  </div>
+  <div id="u1-more" class="tab-content">
+    <div class="card">
+      <div class="card-title">📚 Let's Learn More: Classroom Objects</div>
+      <div class="vocab-grid" id="voc-u1b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "This is a ___." / Yes/No Questions</div>
+        <div class="grammar-pattern"><span class="hl">This is a map.</span> — Introducing objects</div>
+        <div class="grammar-pattern"><span class="hl">Is this a poster?</span> — Yes/No question</div>
+        <div class="grammar-pattern"><span class="hl">Yes, it is.</span> / <span class="hl">No, it isn't. It's a pen.</span></div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">Classroom Commands (Imperatives)</div>
+        <div class="grammar-pattern">Take out your book. / Open your book.</div>
+        <div class="grammar-pattern">Close your book. / Put away your book.</div>
+        <div class="grammar-example">Commands = verb + object (no subject needed!)</div>
+      </div>
+    </div>
+  </div>
+  <div id="u1-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 1</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. Articles: a / an</div>
+        <div class="grammar-pattern"><span class="hl">a</span> + consonant: a pencil · a pen · a bag · a book · a desk</div>
+        <div class="grammar-pattern"><span class="hl">an</span> + vowel (A,E,I,O,U): an eraser · an apple</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. "What's this?" Questions</div>
+        <div class="grammar-pattern"><span class="hl">What's this?</span> → It's <span class="hl">a</span> pencil. / It's <span class="hl">an</span> eraser.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Yes/No Questions: "Is this a ___?"</div>
+        <div class="grammar-pattern"><span class="hl">Is this a</span> book? → Yes, it is. / No, it isn't.</div>
+        <div class="grammar-example">No, it isn't. It's a ruler. (add the correct answer!)</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. All Contractions in Unit 1</div>
+        <span class="contraction">What is → What's</span>
+        <span class="contraction">It is → It's</span>
+        <span class="contraction">I am → I'm</span>
+        <span class="contraction">is not → isn't</span>
+      </div>
+    </div>
+  </div>
+  <div id="u1-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Phonics Story: "At the Park"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-num">Panel 1</div><div class="story-emoji">🎒❓</div><div class="story-text">What's this?</div></div>
+        <div class="story-panel"><div class="story-num">Panel 2</div><div class="story-emoji">⚽✅</div><div class="story-text">It's a ball.</div></div>
+        <div class="story-panel"><div class="story-num">Panel 3</div><div class="story-emoji">🍑❓</div><div class="story-text">Is this a ball?</div></div>
+        <div class="story-panel"><div class="story-num">Panel 4</div><div class="story-emoji">🍑✅</div><div class="story-text">No, it isn't. It's a peach.</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['What is this?','It is a ball.','Is this a ball?','No it is not. It is a peach.'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u1-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u1"></div></div></div>
+</section>
+<!-- UNIT 2 -->
+<section id="unit2" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--blue)">UNIT 2</span>Colors and Shapes</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u2-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u2-col')">🎨 Colors</div>
+    <div class="tab" onclick="swTab(this,'u2-shp')">🔷 Shapes</div>
+    <div class="tab" onclick="swTab(this,'u2-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u2-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u2-spk')">🎤 Speak</div>
+  </div>
+  <div id="u2-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: How Are You?</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">Hi, Andy. How are you?</div></div>
+      <div class="bubble student"><div class="bubble-name">🙋 Andy</div><div class="bubble-text">I'm fine. How are you?</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">I'm fine. Thank you.</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Key Phrases</div>
+        <div class="grammar-pattern"><span class="hl">How are you?</span> — Asking how someone feels</div>
+        <div class="grammar-pattern"><span class="hl">I'm fine. Thank you.</span> — Standard polite answer</div>
+        <div class="grammar-pattern"><span class="hl">I'm great. Thank you!</span> — Enthusiastic answer</div>
+        <div class="grammar-example">Feelings: fine · great · okay · not bad · tired</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: Hi, How Are You?</div>
+      <div class="song-box">
+        <div class="song-title">🎵 Hi, How Are You? 🎵</div>
+        <div class="song-lyrics">Hi, how are you?<br>I'm fine.<br>Hi, how are you?<br>I'm fine.<br>Hi, how are you?<br>I'm fine. How are you?<br>I'm fine, I'm fine, I'm fine.</div>
+        <button class="song-btn mt1" onclick="tts('Hi how are you? I am fine. Hi how are you? I am fine. Hi how are you? I am fine. How are you? I am fine I am fine I am fine.',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u2-col" class="tab-content">
+    <div class="card">
+      <div class="card-title">🎨 Colors</div>
+      <div class="vocab-grid" id="voc-u2a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "What color is this?"</div>
+        <div class="grammar-pattern"><span class="hl">What color is this?</span> → It's orange. / It's blue.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u2-shp" class="tab-content">
+    <div class="card">
+      <div class="card-title">🔷 Shapes</div>
+      <div class="vocab-grid" id="voc-u2b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: Adjective + Noun (Color + Shape)</div>
+        <div class="grammar-pattern">Separate: <span class="hl">This is a star. It's blue.</span></div>
+        <div class="grammar-pattern">Combined: <span class="hl">It's a blue star.</span></div>
+        <div class="grammar-example">In English, adjectives come BEFORE the noun!</div>
+        <div class="grammar-pattern"><span class="hl">Is this a red square?</span> → Yes, it is. / No, it isn't.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u2-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 2</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. Adjective Order: Color + Shape</div>
+        <div class="grammar-pattern">Color + Shape: <span class="hl">a blue star</span> · <span class="hl">a red square</span> · <span class="hl">a yellow circle</span></div>
+        <div class="grammar-example">⚠️ WRONG: "a star blue" | ✅ RIGHT: "a blue star"</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Combining Two Sentences</div>
+        <div class="grammar-pattern">This is a star. It's blue. → <span class="hl">It's a blue star.</span></div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Commands</div>
+        <div class="grammar-pattern"><span class="hl">Pick up</span> the pencil. / <span class="hl">Draw</span> a circle.</div>
+        <div class="grammar-example">Imperatives: verb only, no subject needed</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Song vocabulary: The Black Cat Song</div>
+        <div class="grammar-pattern">This is a black cat. This is a yellow and pink pencil.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u2-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "Good Friends!"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">🖍️💛</div><div class="story-text">This is a crayon. It's yellow.</div></div>
+        <div class="story-panel"><div class="story-emoji">⭐🔵</div><div class="story-text">It's a blue star!</div></div>
+        <div class="story-panel"><div class="story-emoji">🟥❓</div><div class="story-text">Is this a red square?</div></div>
+        <div class="story-panel"><div class="story-emoji">✅🤝</div><div class="story-text">Yes, it is. We are good friends!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['This is a crayon. It is yellow.','It is a blue star!','Is this a red square?','Yes it is. We are good friends!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u2-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u2"></div></div></div>
+</section>
+<!-- UNIT 3 -->
+<section id="unit3" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--green)">UNIT 3</span>At the Store</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u3-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u3-wrt')">✏️ Writing</div>
+    <div class="tab" onclick="swTab(this,'u3-elec')">💻 Electronics</div>
+    <div class="tab" onclick="swTab(this,'u3-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u3-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u3-spk')">🎤 Speak</div>
+  </div>
+  <div id="u3-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Introducing Friends</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">Hi, Scott. This is my friend, Sarah.</div></div>
+      <div class="bubble student"><div class="bubble-name">🙋 Scott</div><div class="bubble-text">Hello, Sarah.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">Let's play!</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Key Phrases</div>
+        <div class="grammar-pattern"><span class="hl">This is my friend, Sarah.</span> — Introducing someone</div>
+        <div class="grammar-pattern"><span class="hl">Hello, Sarah.</span> / <span class="hl">Hi, Sarah.</span> — Greeting</div>
+        <div class="grammar-pattern"><span class="hl">Let's play!</span> — Suggestion to do something together</div>
+        <div class="grammar-example">Let's = Let us (informal suggestion)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: This Is My Friend</div>
+      <div class="song-box">
+        <div class="song-title">🎵 This Is My Friend 🎵</div>
+        <div class="song-lyrics">This is my friend, Sam!<br>Hello, Sam! Hello, Sam!<br>This is my friend, Sam!<br>Hello! Hello! Hello!</div>
+        <button class="song-btn mt1" onclick="tts('This is my friend Sam! Hello Sam! Hello Sam! This is my friend Sam! Hello! Hello! Hello!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u3-wrt" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Writing Supplies (Singular &amp; Plural)</div>
+      <div class="vocab-grid" id="voc-u3a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: Singular → Plural (add -s)</div>
+        <div class="grammar-pattern">a crayon → crayons · a notebook → notebooks</div>
+        <div class="grammar-pattern"><span class="hl">How many crayons?</span> → One crayon. / Three crayons.</div>
+        <div class="grammar-example">Most nouns: add -s for plural. Easy!</div>
+      </div>
+    </div>
+  </div>
+  <div id="u3-elec" class="tab-content">
+    <div class="card">
+      <div class="card-title">💻 Electronics</div>
+      <div class="vocab-grid" id="voc-u3b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "What are these?" / "They're ___."</div>
+        <div class="grammar-pattern">Singular: <span class="hl">What's this?</span> → It's a cell phone.</div>
+        <div class="grammar-pattern">Plural: <span class="hl">What are these?</span> → They're CDs.</div>
+        <span class="contraction">They are <span class="carr">→</span> They're</span>
+      </div>
+    </div>
+  </div>
+  <div id="u3-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 3</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. Singular → Plural</div>
+        <div class="grammar-pattern">crayon→crayons · marker→markers · notebook→notebooks</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. "How many ___?" Counting</div>
+        <div class="grammar-pattern"><span class="hl">How many</span> crayons? → One crayon. / Three crayons.</div>
+        <div class="grammar-example">Use "How many" for countable plural nouns.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. This / These → It / They</div>
+        <div class="grammar-pattern">This is a CD. → <span class="hl">It's</span> a CD. (singular)</div>
+        <div class="grammar-pattern">These are CDs. → <span class="hl">They're</span> CDs. (plural)</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Commands: point to, find, count</div>
+        <div class="grammar-pattern">Point to the duck. / Find the cat. / Count the stars.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u3-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "Ducks and Tigers"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">🦆</div><div class="story-text">Point to the duck!</div></div>
+        <div class="story-panel"><div class="story-emoji">🐯</div><div class="story-text">This is a tiger. Tigers are big!</div></div>
+        <div class="story-panel"><div class="story-emoji">🦆🦆🦆</div><div class="story-text">How many ducks? Three ducks!</div></div>
+        <div class="story-panel"><div class="story-emoji">🐯🦆🎉</div><div class="story-text">Ducks and tigers are friends!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['Point to the duck!','This is a tiger. Tigers are big!','How many ducks? Three ducks!','Ducks and tigers are friends!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u3-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u3"></div></div></div>
+</section>
+<!-- UNIT 4 -->
+<section id="unit4" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--orange)">UNIT 4</span>People at Home</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u4-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u4-fam')">👨‍👩‍👧 Family</div>
+    <div class="tab" onclick="swTab(this,'u4-dsc')">👀 Describe</div>
+    <div class="tab" onclick="swTab(this,'u4-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u4-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u4-spk')">🎤 Speak</div>
+  </div>
+  <div id="u4-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Nice to Meet You</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">Hi, Mom! This is my friend, Scott.</div></div>
+      <div class="bubble student"><div class="bubble-name">👩 Mom</div><div class="bubble-text">It's nice to meet you, Scott.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">🙋 Scott</div><div class="bubble-text">It's nice to meet you, too.</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Polite Phrases: Meeting Someone New</div>
+        <div class="grammar-pattern"><span class="hl">It's nice to meet you.</span> — Meeting for the first time</div>
+        <div class="grammar-pattern"><span class="hl">It's nice to meet you, too.</span> — Polite response</div>
+        <div class="grammar-example">Always say "too" to be polite and friendly!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: The Family Song</div>
+      <div class="song-box">
+        <div class="song-title">🎵 The Family Song 🎵</div>
+        <div class="song-lyrics">Mother, father, sister, brother,<br>Grandmother and grandfather, too.<br>All my family, all together,<br>In our home, me and you!</div>
+        <button class="song-btn mt1" onclick="tts('Mother father sister brother grandmother and grandfather too. All my family all together in our home me and you!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u4-fam" class="tab-content">
+    <div class="card">
+      <div class="card-title">👨‍👩‍👧 Family Members</div>
+      <div class="vocab-grid" id="voc-u4a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: Who's she/he? She's/He's my ___.</div>
+        <div class="grammar-pattern"><span class="hl">Who's she?</span> → She's my grandmother.</div>
+        <div class="grammar-pattern"><span class="hl">Who's he?</span> → He's my grandfather.</div>
+        <span class="contraction">Who is <span class="carr">→</span> Who's</span>
+        <span class="contraction">She is <span class="carr">→</span> She's</span>
+        <span class="contraction">He is <span class="carr">→</span> He's</span>
+      </div>
+    </div>
+  </div>
+  <div id="u4-dsc" class="tab-content">
+    <div class="card">
+      <div class="card-title">👀 Describing People</div>
+      <div class="vocab-grid" id="voc-u4b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: He's/She's + adjective</div>
+        <div class="grammar-pattern"><span class="hl">She's my mother. She's pretty.</span></div>
+        <div class="grammar-pattern"><span class="hl">He's my father. He's handsome.</span></div>
+        <div class="grammar-example">Song: "Is He Short? Is He Tall?"</div>
+      </div>
+    </div>
+  </div>
+  <div id="u4-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 4</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. Subject Pronouns (He / She)</div>
+        <div class="grammar-pattern"><span class="hl">He</span> = male: grandfather, father, brother</div>
+        <div class="grammar-pattern"><span class="hl">She</span> = female: grandmother, mother, sister</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Possessive "my"</div>
+        <div class="grammar-pattern"><span class="hl">my</span> + family: my grandmother · my father · my sister</div>
+        <div class="grammar-example">"my" = belonging to me</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Who questions</div>
+        <div class="grammar-pattern"><span class="hl">Who's</span> she? → She's my grandmother. She's old.</div>
+        <div class="grammar-pattern"><span class="hl">Who's</span> he? → He's my grandfather. He's tall.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Describing adjectives (opposites)</div>
+        <div class="grammar-pattern">tall ↔ short · young ↔ old · pretty · handsome</div>
+        <div class="grammar-example">Commands: say, count, read, write</div>
+      </div>
+    </div>
+  </div>
+  <div id="u4-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "Let's Go to the Park"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">👩🌸</div><div class="story-text">She's my mother. She's pretty.</div></div>
+        <div class="story-panel"><div class="story-emoji">👴🧓</div><div class="story-text">Who's he? He's my grandfather. He's old.</div></div>
+        <div class="story-panel"><div class="story-emoji">👧📏</div><div class="story-text">Who's she? She's my sister. She's short.</div></div>
+        <div class="story-panel"><div class="story-emoji">🌳🎉</div><div class="story-text">Let's go to the park!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines([\"She is my mother. She is pretty.\",\"Who is he? He is my grandfather. He is old.\",\"Who is she? She is my sister. She is short.\",\"Let's go to the park!\"])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u4-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u4"></div></div></div>
+</section>
+<!-- UNIT 5 -->
+<section id="unit5" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--purple)">UNIT 5</span>Happy Birthday!</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u5-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u5-toy')">🎁 Toys</div>
+    <div class="tab" onclick="swTab(this,'u5-dsc')">📦 Describe</div>
+    <div class="tab" onclick="swTab(this,'u5-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u5-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u5-spk')">🎤 Speak</div>
+  </div>
+  <div id="u5-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Birthday!</div>
+      <div class="bubble teacher"><div class="bubble-name">🙋 Andy</div><div class="bubble-text">Happy birthday, Jenny! How old are you?</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">I'm seven years old.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">🙋 Andy</div><div class="bubble-text">This is for you.</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">Thank you!</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Birthday Phrases</div>
+        <div class="grammar-pattern"><span class="hl">Happy birthday!</span> — Birthday greeting</div>
+        <div class="grammar-pattern"><span class="hl">How old are you?</span> → I'm seven years old.</div>
+        <div class="grammar-pattern"><span class="hl">This is for you.</span> — Giving a gift</div>
+        <div class="grammar-pattern"><span class="hl">Thank you!</span> — Saying thanks</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: The Happy Birthday Song</div>
+      <div class="song-box">
+        <div class="song-title">🎵 The Happy Birthday Song 🎵</div>
+        <div class="song-lyrics">Happy birthday to you!<br>Happy birthday to you!<br>Happy birthday, happy birthday!<br>Happy birthday to you!</div>
+        <button class="song-btn mt1" onclick="tts('Happy birthday to you! Happy birthday to you! Happy birthday happy birthday! Happy birthday to you!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u5-toy" class="tab-content">
+    <div class="card">
+      <div class="card-title">🎁 Toys</div>
+      <div class="vocab-grid" id="voc-u5a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "What is it?" / "I don't know."</div>
+        <div class="grammar-pattern"><span class="hl">What is it?</span> — Asking about an unknown object</div>
+        <div class="grammar-pattern"><span class="hl">I don't know.</span> — Saying you're not sure</div>
+        <div class="grammar-pattern"><span class="hl">It's a yo-yo!</span> — Identifying it</div>
+        <span class="contraction">do not <span class="carr">→</span> don't</span>
+      </div>
+    </div>
+  </div>
+  <div id="u5-dsc" class="tab-content">
+    <div class="card">
+      <div class="card-title">📦 Describing Things (Adjectives)</div>
+      <div class="vocab-grid" id="voc-u5b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: Adjective Sentences</div>
+        <div class="grammar-pattern"><span class="hl">It's little.</span> → <span class="hl">It's a little box.</span></div>
+        <div class="grammar-pattern"><span class="hl">It's big.</span> → <span class="hl">It's a big robot.</span></div>
+        <div class="grammar-example">Chant: "Is It a Big Box?" — big/little, long/short, round/square</div>
+      </div>
+    </div>
+  </div>
+  <div id="u5-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 5</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. Asking Age</div>
+        <div class="grammar-pattern"><span class="hl">How old are you?</span> → I'm <span class="hl">seven</span> years old.</div>
+        <div class="grammar-example">Numbers 1-10 + "years old"</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Adjective Opposites (Antonyms)</div>
+        <div class="grammar-pattern">big ↔ little · new ↔ old · long ↔ short · round ↔ square</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Negative: "don't"</div>
+        <div class="grammar-pattern"><span class="hl">I don't know.</span> = I do not know.</div>
+        <div class="grammar-example">do + not = don't (with I / you / we / they)</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Commands</div>
+        <div class="grammar-pattern">ride · jump · throw · catch</div>
+        <div class="grammar-example">Ride your bicycle! / Catch the ball!</div>
+      </div>
+    </div>
+  </div>
+  <div id="u5-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "Look at the Birds!"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">🐦👀</div><div class="story-text">Look at the birds!</div></div>
+        <div class="story-panel"><div class="story-emoji">🐦🐦🐦</div><div class="story-text">How many birds? There are three!</div></div>
+        <div class="story-panel"><div class="story-emoji">🐦🐥</div><div class="story-text">It's a big bird. It's a little bird.</div></div>
+        <div class="story-panel"><div class="story-emoji">🐦❤️</div><div class="story-text">I like birds!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['Look at the birds!','How many birds? There are three!','It is a big bird. It is a little bird.','I like birds!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u5-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u5"></div></div></div>
+</section>
+<!-- UNIT 6 -->
+<section id="unit6" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--sky)">UNIT 6</span>Outdoors</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u6-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u6-nat')">🌸 Nature</div>
+    <div class="tab" onclick="swTab(this,'u6-loc')">📍 Location</div>
+    <div class="tab" onclick="swTab(this,'u6-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u6-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u6-spk')">🎤 Speak</div>
+  </div>
+  <div id="u6-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Weather</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">How's the weather?</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">It's sunny!</div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0">
+        <div class="vocab-item" onclick="tts('It is sunny')"><span class="vocab-emoji">☀️</span><span class="vocab-word">sunny</span></div>
+        <div class="vocab-item" onclick="tts('It is rainy')"><span class="vocab-emoji">🌧️</span><span class="vocab-word">rainy</span></div>
+        <div class="vocab-item" onclick="tts('It is windy')"><span class="vocab-emoji">💨</span><span class="vocab-word">windy</span></div>
+        <div class="vocab-item" onclick="tts('It is cloudy')"><span class="vocab-emoji">☁️</span><span class="vocab-word">cloudy</span></div>
+        <div class="vocab-item" onclick="tts('It is snowy')"><span class="vocab-emoji">❄️</span><span class="vocab-word">snowy</span></div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-pattern"><span class="hl">How's the weather?</span> → It's sunny. / It's rainy.</div>
+        <span class="contraction">How is <span class="carr">→</span> How's</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: How's the Weather?</div>
+      <div class="song-box">
+        <div class="song-title">🎵 How's the Weather? 🎵</div>
+        <div class="song-lyrics">How's the weather? How's the weather?<br>How's the weather today?<br>It's sunny! It's sunny!<br>It's a sunny day!</div>
+        <button class="song-btn mt1" onclick="tts('How is the weather? How is the weather? How is the weather today? It is sunny! It is sunny! It is a sunny day!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u6-nat" class="tab-content">
+    <div class="card">
+      <div class="card-title">🌸 Nature (There is / There are)</div>
+      <div class="vocab-grid" id="voc-u6a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "How many ___ are there?"</div>
+        <div class="grammar-pattern"><span class="hl">How many flowers are there?</span></div>
+        <div class="grammar-pattern">→ <span class="hl">There's</span> one flower. (singular)</div>
+        <div class="grammar-pattern">→ <span class="hl">There are</span> four trees. (plural)</div>
+        <span class="contraction">There is <span class="carr">→</span> There's</span>
+      </div>
+    </div>
+  </div>
+  <div id="u6-loc" class="tab-content">
+    <div class="card">
+      <div class="card-title">📍 Location Words (Prepositions)</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px">
+        <div class="vocab-item" onclick="tts('in')"><span class="vocab-emoji">📦</span><span class="vocab-word">in</span><span class="vocab-article">inside something</span></div>
+        <div class="vocab-item" onclick="tts('on')"><span class="vocab-emoji">📤</span><span class="vocab-word">on</span><span class="vocab-article">on top of something</span></div>
+        <div class="vocab-item" onclick="tts('under')"><span class="vocab-emoji">📥</span><span class="vocab-word">under</span><span class="vocab-article">below something</span></div>
+        <div class="vocab-item" onclick="tts('by')"><span class="vocab-emoji">↔️</span><span class="vocab-word">by</span><span class="vocab-article">next to something</span></div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">Grammar: "Where's the ___?"</div>
+        <div class="grammar-pattern"><span class="hl">Where's the bat?</span> → It's <span class="hl">on</span> the table.</div>
+        <div class="grammar-pattern"><span class="hl">Where are the balls?</span> → They're <span class="hl">under</span> the table.</div>
+        <span class="contraction">Where is <span class="carr">→</span> Where's</span>
+      </div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Song: "Where Are the Bugs?"</div>
+        <div class="grammar-pattern">Commands: put on, put by, put in, put under</div>
+      </div>
+    </div>
+  </div>
+  <div id="u6-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 6</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. There is / There are</div>
+        <div class="grammar-pattern">Singular: <span class="hl">There's</span> a flower. / <span class="hl">There is</span> a cloud.</div>
+        <div class="grammar-pattern">Plural: <span class="hl">There are</span> four trees.</div>
+        <div class="grammar-example">1 thing = "there is" · 2+ things = "there are"</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Prepositions of Place</div>
+        <div class="grammar-pattern">in · on · under · by (next to)</div>
+        <div class="grammar-example">The bat is ON the table. The ball is UNDER the bench.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Where questions (singular/plural)</div>
+        <div class="grammar-pattern">Singular: <span class="hl">Where's</span> the bat? → It's on the table.</div>
+        <div class="grammar-pattern">Plural: <span class="hl">Where are</span> the balls? → They're under the table.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u6-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "In the Snow"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">❄️🌨️</div><div class="story-text">It's snowy today!</div></div>
+        <div class="story-panel"><div class="story-emoji">⛄🌳</div><div class="story-text">There's a snowman under the tree.</div></div>
+        <div class="story-panel"><div class="story-emoji">🧣⛄</div><div class="story-text">Where's my scarf? It's on the snowman!</div></div>
+        <div class="story-panel"><div class="story-emoji">🤣❄️</div><div class="story-text">Ha ha! Snow is fun!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['It is snowy today!','There is a snowman under the tree.','Where is my scarf? It is on the snowman!','Ha ha! Snow is fun!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u6-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u6"></div></div></div>
+</section>
+<!-- UNIT 7 -->
+<section id="unit7" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:var(--pink)">UNIT 7</span>Food</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u7-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u7-fd')">🍱 Foods</div>
+    <div class="tab" onclick="swTab(this,'u7-mor')">🍽️ More Food</div>
+    <div class="tab" onclick="swTab(this,'u7-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u7-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u7-spk')">🎤 Speak</div>
+  </div>
+  <div id="u7-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Hungry &amp; Thirsty</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">I'm hungry. I want an apple.</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Kate</div><div class="bubble-text">I'm thirsty. I want juice.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">Here you are.</div></div>
+      <div class="bubble student"><div class="bubble-name">👧 Kate</div><div class="bubble-text">Thank you.</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Jenny</div><div class="bubble-text">You're welcome.</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Food &amp; Manners Phrases</div>
+        <div class="grammar-pattern"><span class="hl">I'm hungry.</span> / <span class="hl">I'm thirsty.</span></div>
+        <div class="grammar-pattern"><span class="hl">I want an apple.</span> — Requesting with "want"</div>
+        <div class="grammar-pattern"><span class="hl">Here you are.</span> — Giving something</div>
+        <div class="grammar-pattern"><span class="hl">Thank you.</span> / <span class="hl">You're welcome.</span></div>
+        <span class="contraction">You are <span class="carr">→</span> You're</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: I Want an Apple</div>
+      <div class="song-box">
+        <div class="song-title">🎵 I Want an Apple 🎵</div>
+        <div class="song-lyrics">I want an apple, an apple, an apple.<br>I want an apple. Here you are!<br>Thank you! Thank you!<br>You're welcome. You're welcome!</div>
+        <button class="song-btn mt1" onclick="tts('I want an apple an apple an apple. I want an apple. Here you are! Thank you! Thank you! You are welcome. You are welcome!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u7-fd" class="tab-content">
+    <div class="card">
+      <div class="card-title">🍱 Foods — What do you want?</div>
+      <div class="vocab-grid" id="voc-u7a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "What do you want?"</div>
+        <div class="grammar-pattern"><span class="hl">What do you want?</span> → I want a banana. / I want an orange.</div>
+        <div class="grammar-example">Song: "What Do You Want?"</div>
+      </div>
+    </div>
+  </div>
+  <div id="u7-mor" class="tab-content">
+    <div class="card">
+      <div class="card-title">🍽️ More Foods — I want / I don't want</div>
+      <div class="vocab-grid" id="voc-u7b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: Positive &amp; Negative Wants</div>
+        <div class="grammar-pattern"><span class="hl">I want</span> chicken. <span class="hl">I don't want</span> fish.</div>
+        <div class="grammar-pattern"><span class="hl">Do you want pizza?</span> → Yes, I do. / No, I don't.</div>
+        <span class="contraction">do not <span class="carr">→</span> don't</span>
+      </div>
+    </div>
+  </div>
+  <div id="u7-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 7</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. "I want ___" (expressing desires)</div>
+        <div class="grammar-pattern">I want + a/an + noun: <span class="hl">I want a sandwich.</span></div>
+        <div class="grammar-pattern">I want + noun: <span class="hl">I want chicken.</span> (uncountable)</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Negative: "I don't want ___"</div>
+        <div class="grammar-pattern"><span class="hl">I don't want</span> fish. = I do not want fish.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. Do Questions</div>
+        <div class="grammar-pattern"><span class="hl">Do you want</span> pizza? → Yes, I <span class="hl">do</span>. / No, I <span class="hl">don't</span>.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Mealtime Commands</div>
+        <div class="grammar-pattern">wash · eat · drink · brush</div>
+        <div class="grammar-example">Wash your hands! / Drink your milk! / Brush your teeth!</div>
+      </div>
+    </div>
+  </div>
+  <div id="u7-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "On the Beach"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">🏖️☀️</div><div class="story-text">It's sunny on the beach!</div></div>
+        <div class="story-panel"><div class="story-emoji">🧃🍦</div><div class="story-text">I'm thirsty. I want juice and ice cream!</div></div>
+        <div class="story-panel"><div class="story-emoji">🍦😊</div><div class="story-text">Here you are! Thank you!</div></div>
+        <div class="story-panel"><div class="story-emoji">🌊🎉</div><div class="story-text">The beach is fun!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['It is sunny on the beach!','I am thirsty. I want juice and ice cream!','Here you are! Thank you!','The beach is fun!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u7-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u7"></div></div></div>
+</section>
+<!-- UNIT 8 -->
+<section id="unit8" class="section">
+  <div class="sec-hdr"><span class="unit-badge" style="background:#558B2F">UNIT 8</span>Animals</div>
+  <div class="tabs">
+    <div class="tab active" onclick="swTab(this,'u8-tk')">💬 Talk</div>
+    <div class="tab" onclick="swTab(this,'u8-pet')">🐾 Pets</div>
+    <div class="tab" onclick="swTab(this,'u8-zoo')">🦁 Zoo</div>
+    <div class="tab" onclick="swTab(this,'u8-gram')">✏️ Grammar</div>
+    <div class="tab" onclick="swTab(this,'u8-rd')">📜 Story</div>
+    <div class="tab" onclick="swTab(this,'u8-spk')">🎤 Speak</div>
+  </div>
+  <div id="u8-tk" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💬 Let's Talk: Favorite Color</div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">What's your favorite color?</div></div>
+      <div class="bubble student"><div class="bubble-name">🙋 Andy</div><div class="bubble-text">Red. What about you?</div></div>
+      <div class="bubble teacher"><div class="bubble-name">👧 Kate</div><div class="bubble-text">I like blue.</div></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Preference Phrases</div>
+        <div class="grammar-pattern"><span class="hl">What's your favorite ___?</span> — Asking preference</div>
+        <div class="grammar-pattern"><span class="hl">Red. What about you?</span> — Answering &amp; returning question</div>
+        <div class="grammar-pattern"><span class="hl">I like blue.</span> — Expressing what you like</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎵 Song: I Like Turtles</div>
+      <div class="song-box">
+        <div class="song-title">🎵 I Like Turtles 🎵</div>
+        <div class="song-lyrics">I like turtles! I like turtles!<br>I like turtles today!<br>I like cats and I like dogs,<br>And I like turtles too!</div>
+        <button class="song-btn mt1" onclick="tts('I like turtles! I like turtles! I like turtles today! I like cats and I like dogs and I like turtles too!',0.75)">🎵 Sing Along!</button>
+      </div>
+    </div>
+  </div>
+  <div id="u8-pet" class="tab-content">
+    <div class="card">
+      <div class="card-title">🐾 Pets &amp; Small Animals</div>
+      <div class="vocab-grid" id="voc-u8a"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "There's a ___!" / "I like ___."</div>
+        <div class="grammar-pattern"><span class="hl">There's a rabbit!</span> — Spotting an animal</div>
+        <div class="grammar-pattern"><span class="hl">I like rabbits.</span> — Expressing preference (plural!)</div>
+        <div class="grammar-pattern"><span class="hl">What do you like?</span> → I like cats.</div>
+        <div class="grammar-example">Song: "I Like Turtles"</div>
+      </div>
+    </div>
+  </div>
+  <div id="u8-zoo" class="tab-content">
+    <div class="card">
+      <div class="card-title">🦁 Zoo Animals</div>
+      <div class="vocab-grid" id="voc-u8b"></div>
+      <div class="grammar-box mt1">
+        <div class="grammar-title">Grammar: "I like / I don't like ___."</div>
+        <div class="grammar-pattern"><span class="hl">I like monkeys.</span> / <span class="hl">I don't like lions.</span></div>
+        <div class="grammar-example">Zoo actions: hear · see · feed · pet</div>
+      </div>
+    </div>
+  </div>
+  <div id="u8-gram" class="tab-content">
+    <div class="card">
+      <div class="card-title">✏️ Grammar Focus — Unit 8</div>
+      <div class="grammar-box">
+        <div class="grammar-title">1. I like / I don't like + plural</div>
+        <div class="grammar-pattern"><span class="hl">I like</span> cats. / <span class="hl">I don't like</span> lions.</div>
+        <div class="grammar-example">Always use plural after "I like": I like dogs (not "a dog")</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">2. Favorite Questions</div>
+        <div class="grammar-pattern"><span class="hl">What's your favorite</span> color/animal?</div>
+        <div class="grammar-pattern">Short: Red. / Blue. OR Full: <span class="hl">My favorite color is</span> red.</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">3. "What about you?" — Returning the question</div>
+        <div class="grammar-pattern">A: Red. <span class="hl">What about you?</span> B: I like blue.</div>
+        <div class="grammar-example">A polite way to ask the same question back!</div>
+      </div>
+      <div class="grammar-box">
+        <div class="grammar-title">4. Animal Action Verbs</div>
+        <div class="grammar-pattern">hear · see · feed · pet</div>
+        <div class="grammar-example">I can hear the lion. / I can pet the rabbit.</div>
+      </div>
+    </div>
+  </div>
+  <div id="u8-rd" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Story: "On the Playground"</div>
+      <div class="story-grid">
+        <div class="story-panel"><div class="story-emoji">🐱🐶</div><div class="story-text">There's a cat. There are two dogs.</div></div>
+        <div class="story-panel"><div class="story-emoji">🐱❤️</div><div class="story-text">I like cats! Do you like cats?</div></div>
+        <div class="story-panel"><div class="story-emoji">🐶👍</div><div class="story-text">No, I don't. I like dogs!</div></div>
+        <div class="story-panel"><div class="story-emoji">🐱🐶🤝</div><div class="story-text">Cats and dogs are friends!</div></div>
+      </div>
+      <button class="btn btn-b mt1" onclick="readLines(['There is a cat. There are two dogs.','I like cats! Do you like cats?','No I do not. I like dogs!','Cats and dogs are friends!'])">🔊 Read Aloud</button>
+    </div>
+  </div>
+  <div id="u8-spk" class="tab-content"><div class="card"><div class="card-title">🎤 Speaking Practice</div><div id="spk-u8"></div></div></div>
+</section>
+<!-- PHONICS -->
+<section id="phonics" class="section">
+  <div class="sec-hdr">🔤 Phonics — All Units</div>
+  <div class="card"><div class="card-title">Select a Unit to Study Phonics</div><div id="phonics-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px"></div></div>
+  <div id="phonics-detail"></div>
+</section>
+<!-- GAMES -->
+<section id="games" class="section">
+  <div class="sec-hdr">🎮 Learning Games — 8 Games</div>
+  <div class="games-grid">
+    <div class="game-card" style="border-color:var(--red)" onclick="openGame('fc')"><div class="game-icon">⚡</div><div class="game-name">Flash Cards</div><div class="game-desc">Flip &amp; learn all vocabulary</div></div>
+    <div class="game-card" style="border-color:var(--blue)" onclick="openGame('quiz')"><div class="game-icon">❓</div><div class="game-name">Word Quiz</div><div class="game-desc">4 choices — pick the right word</div></div>
+    <div class="game-card" style="border-color:var(--green)" onclick="openGame('mem')"><div class="game-icon">🧠</div><div class="game-name">Memory Match</div><div class="game-desc">Find emoji + word pairs</div></div>
+    <div class="game-card" style="border-color:var(--orange)" onclick="openGame('spell')"><div class="game-icon">✍️</div><div class="game-name">Spelling Bee</div><div class="game-desc">Tap letters to spell words</div></div>
+    <div class="game-card" style="border-color:var(--purple)" onclick="openGame('sent')"><div class="game-icon">📝</div><div class="game-name">Build Sentences</div><div class="game-desc">Put words in correct order</div></div>
+    <div class="game-card" style="border-color:var(--sky)" onclick="openGame('conv')"><div class="game-icon">🗣️</div><div class="game-name">Conversations</div><div class="game-desc">Practice dialogues from book</div></div>
+    <div class="game-card" style="border-color:var(--pink)" onclick="openGame('match')"><div class="game-icon">🔗</div><div class="game-name">Word Matching</div><div class="game-desc">Match words with pictures</div></div>
+    <div class="game-card" style="border-color:#558B2F" onclick="openGame('whack')"><div class="game-icon">🔨</div><div class="game-name">Whack-a-Word!</div><div class="game-desc">Tap the right word fast!</div></div>
+  </div>
+</section>
+<!-- PROGRESS -->
+<section id="progress" class="section">
+  <div class="sec-hdr">🏆 My Progress</div>
+  <div class="card"><div class="card-title">⭐ Total Score: <span id="pg-score">0</span> pts</div><div class="prog-bar-wrap"><div class="prog-bar" id="pg-bar" style="width:0%"></div></div></div>
+  <div class="card"><div class="card-title">📊 Unit Progress</div><div id="pg-units"></div></div>
+  <div class="card"><div class="card-title">🏅 Achievements</div><div class="ach-grid" id="pg-ach"></div></div>
+  <div class="card" style="text-align:center"><button class="btn btn-o" onclick="if(confirm('Reset all progress?')){APP.score=0;APP.learned={};APP.ach=[];save();updateUI();}">🔄 Reset Progress</button></div>
+</section>
+</main>
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-panel">
+    <button class="close-btn" onclick="document.getElementById('modal').classList.remove('show');clearInterval(APP.wtimer)">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+<script>
+// ===== DATA =====
+const ABC=[{l:'Aa',e:'🍎',w:'apple'},{l:'Bb',e:'🐦',w:'bird'},{l:'Cc',e:'🐱',w:'cat'},{l:'Dd',e:'🐶',w:'dog'},{l:'Ee',e:'🥚',w:'egg'},{l:'Ff',e:'🐟',w:'fish'},{l:'Gg',e:'🦍',w:'gorilla'},{l:'Hh',e:'❤️',w:'heart'},{l:'Ii',e:'🏠',w:'igloo'},{l:'Jj',e:'🪢',w:'jump rope'},{l:'Kk',e:'🦘',w:'kangaroo'},{l:'Ll',e:'🦁',w:'lion'},{l:'Mm',e:'🌕',w:'moon'},{l:'Nn',e:'🐦',w:'nest'},{l:'Oo',e:'🐙',w:'octopus'},{l:'Pp',e:'🍑',w:'peach'},{l:'Qq',e:'🛏️',w:'quilt'},{l:'Rr',e:'🐰',w:'rabbit'},{l:'Ss',e:'☀️',w:'sun'},{l:'Tt',e:'🐯',w:'tiger'},{l:'Uu',e:'☂️',w:'umbrella'},{l:'Vv',e:'🎻',w:'violin'},{l:'Ww',e:'⌚',w:'watch'},{l:'Xx',e:'🦊',w:'fox'},{l:'Yy',e:'🧶',w:'yarn'},{l:'Zz',e:'🦓',w:'zebra'}];
+const NUMS=[{n:1,w:'one',e:'1️⃣'},{n:2,w:'two',e:'2️⃣'},{n:3,w:'three',e:'3️⃣'},{n:4,w:'four',e:'4️⃣'},{n:5,w:'five',e:'5️⃣'},{n:6,w:'six',e:'6️⃣'},{n:7,w:'seven',e:'7️⃣'},{n:8,w:'eight',e:'8️⃣'},{n:9,w:'nine',e:'9️⃣'},{n:10,w:'ten',e:'🔟'}];
+const VOC={
+u1a:[{e:'✏️',w:'pencil',a:'a'},{e:'🖊️',w:'pen',a:'a'},{e:'🎒',w:'bag',a:'a'},{e:'📕',w:'book',a:'a'},{e:'🪑',w:'desk',a:'a'},{e:'💺',w:'chair',a:'a'},{e:'📏',w:'ruler',a:'a'},{e:'🧹',w:'eraser',a:'an'}],
+u1b:[{e:'🗺️',w:'map',a:'a'},{e:'🖊️',w:'marker',a:'a'},{e:'🌍',w:'globe',a:'a'},{e:'🪵',w:'table',a:'a'},{e:'📋',w:'board',a:'a'},{e:'🗑️',w:'wastebasket',a:'a'},{e:'🖼️',w:'poster',a:'a'},{e:'🖍️',w:'crayon',a:'a'}],
+u2a:[{e:'🟡',w:'yellow',a:''},{e:'🔵',w:'blue',a:''},{e:'🔴',w:'red',a:''},{e:'🟢',w:'green',a:''},{e:'🟣',w:'purple',a:''},{e:'🟠',w:'orange',a:''},{e:'🟤',w:'brown',a:''},{e:'🩷',w:'pink',a:''},{e:'⬛',w:'black',a:''},{e:'⬜',w:'white',a:''}],
+u2b:[{e:'🔺',w:'triangle',a:'a'},{e:'🟥',w:'square',a:'a'},{e:'⭕',w:'circle',a:'a'},{e:'⭐',w:'star',a:'a'},{e:'🔷',w:'diamond',a:'a'},{e:'🩷',w:'heart',a:'a'},{e:'🥚',w:'oval',a:'an'},{e:'▬',w:'rectangle',a:'a'}],
+u3a:[{e:'🖍️',w:'crayon',a:'a'},{e:'🖊️',w:'marker',a:'a'},{e:'📓',w:'notebook',a:'a'},{e:'🎒',w:'pencil case',a:'a'},{e:'🖍️',w:'crayons',a:''},{e:'🖊️',w:'markers',a:''},{e:'📓',w:'notebooks',a:''},{e:'🎒',w:'pencil cases',a:''}],
+u3b:[{e:'💿',w:'CD',a:'a'},{e:'🎮',w:'video game',a:'a'},{e:'📱',w:'cell phone',a:'a'},{e:'💻',w:'computer',a:'a'},{e:'💿',w:'CDs',a:''},{e:'🎮',w:'video games',a:''},{e:'📱',w:'cell phones',a:''},{e:'💻',w:'computers',a:''}],
+u4a:[{e:'👵',w:'grandmother',a:''},{e:'👴',w:'grandfather',a:''},{e:'👩',w:'mother',a:''},{e:'👨',w:'father',a:''},{e:'👧',w:'sister',a:''},{e:'👦',w:'brother',a:''},{e:'👶',w:'baby sister',a:''},{e:'👶',w:'baby brother',a:''}],
+u4b:[{e:'🧍',w:'tall',a:''},{e:'🧍',w:'short',a:''},{e:'🧒',w:'young',a:''},{e:'👴',w:'old',a:''},{e:'💁‍♀️',w:'pretty',a:''},{e:'🤵',w:'handsome',a:''}],
+u5a:[{e:'🪀',w:'yo-yo',a:'a'},{e:'⚾',w:'baseball',a:'a'},{e:'🪁',w:'kite',a:'a'},{e:'🪆',w:'doll',a:'a'},{e:'🚗',w:'car',a:'a'},{e:'🤖',w:'robot',a:'a'},{e:'🚲',w:'bicycle',a:'a'},{e:'🪢',w:'jump rope',a:'a'},{e:'🧩',w:'puzzle',a:'a'},{e:'🏏',w:'bat',a:'a'}],
+u5b:[{e:'🦣',w:'big',a:''},{e:'🐜',w:'little',a:''},{e:'✨',w:'new',a:''},{e:'👴',w:'old',a:''},{e:'📏',w:'long',a:''},{e:'📏',w:'short',a:''},{e:'⭕',w:'round',a:''},{e:'🟥',w:'square',a:''}],
+u6a:[{e:'🌸',w:'flower',a:'a'},{e:'🌳',w:'tree',a:'a'},{e:'☁️',w:'cloud',a:'a'},{e:'💧',w:'puddle',a:'a'},{e:'🌺',w:'flowers',a:''},{e:'🌲',w:'trees',a:''},{e:'☁️',w:'clouds',a:''},{e:'💧',w:'puddles',a:''}],
+u7a:[{e:'🍌',w:'banana',a:'a'},{e:'🥤',w:'soda',a:'a'},{e:'🥤',w:'milkshake',a:'a'},{e:'🍪',w:'cookie',a:'a'},{e:'🥪',w:'sandwich',a:'a'},{e:'🥗',w:'salad',a:'a'},{e:'🥚',w:'egg',a:'an'},{e:'🍊',w:'orange',a:'an'}],
+u7b:[{e:'🍗',w:'chicken',a:''},{e:'🐟',w:'fish',a:''},{e:'🍕',w:'pizza',a:''},{e:'🍞',w:'bread',a:''},{e:'🍚',w:'rice',a:''},{e:'🥛',w:'milk',a:''},{e:'🎂',w:'cake',a:''},{e:'🍦',w:'ice cream',a:''}],
+u8a:[{e:'🐱',w:'cat',a:'a'},{e:'🐶',w:'dog',a:'a'},{e:'🐦',w:'bird',a:'a'},{e:'🐰',w:'rabbit',a:'a'},{e:'🐸',w:'frog',a:'a'},{e:'🐱',w:'cats',a:''},{e:'🐶',w:'dogs',a:''},{e:'🐦',w:'birds',a:''},{e:'🐰',w:'rabbits',a:''},{e:'🐸',w:'frogs',a:''}],
+u8b:[{e:'🐒',w:'monkey',a:'a'},{e:'🦁',w:'lion',a:'a'},{e:'🐻',w:'bear',a:'a'},{e:'🦒',w:'giraffe',a:'a'},{e:'🐘',w:'elephant',a:'an'},{e:'🐒',w:'monkeys',a:''},{e:'🦁',w:'lions',a:''},{e:'🐻',w:'bears',a:''},{e:'🦒',w:'giraffes',a:''},{e:'🐘',w:'elephants',a:''}]
+};
+const PHONICS=[
+{unit:'Unit 1',bg:'var(--red)',lts:['Bb','Pp'],wds:{Bb:['bird','ball','boy'],Pp:['peach','pencil','pink']},chant:'The B P Phonics Chant\nBb ball   Bb boy\nPp pencil  Pp peach\nPp pencil  Bb ball\nPencil ball peach YES!'},
+{unit:'Unit 2',bg:'var(--blue)',lts:['Cc','Gg'],wds:{Cc:['cat','coat','cow'],Gg:['girl','gate','goat']},chant:'The C G Phonics Chant\nCc cat   Cc cow\nGg girl  Gg goat\nCc cat   Gg gate\nCat goat girl YES!'},
+{unit:'Unit 3',bg:'var(--green)',lts:['Dd','Tt'],wds:{Dd:['desk','duck','door'],Tt:['tiger','two','toys']},chant:'The D T Phonics Chant\nDd desk  Dd duck\nTt tiger  Tt toys\nDd duck  Tt two\nDuck tiger toys YES!'},
+{unit:'Unit 4',bg:'var(--orange)',lts:['Aa'],wds:{Aa:['apple','cat','cap','bag']},chant:'The A Phonics Chant\nAa apple  Aa cat\nAa cap   Aa bag\nApple cat cap bag YES!'},
+{unit:'Unit 5',bg:'var(--purple)',lts:['Ee'],wds:{Ee:['egg','bed','pet','peg']},chant:'The E Phonics Chant\nEe egg  Ee bed\nEe pet  Ee peg\nEgg bed pet peg YES!'},
+{unit:'Unit 6',bg:'var(--sky)',lts:['Ii'],wds:{Ii:['igloo','bib','big','pit']},chant:'The I Phonics Chant\nIi igloo  Ii bib\nIi big   Ii pit\nIgloo bib big pit YES!'},
+{unit:'Unit 7',bg:'var(--pink)',lts:['Oo'],wds:{Oo:['octopus','dot','pot','top']},chant:'The O Phonics Chant\nOo octopus  Oo dot\nOo pot    Oo top\nOctopus dot pot top YES!'},
+{unit:'Unit 8',bg:'#558B2F',lts:['Uu'],wds:{Uu:['umbrella','tub','bug','cup']},chant:'The U Phonics Chant\nUu umbrella  Uu tub\nUu bug    Uu cup\nUmbrella tub bug cup YES!'}
+];
+const SPEAK={
+rem:["What can you do?","I can walk.","I can run.","I can jump.","I can dance.","Hello! What's your name?","My name is Kate."],
+u1:["Hello. I'm Scott. What's your name?","My name is Kate.","What's this?","It's a pencil.","It's an eraser.","Is this a book? Yes, it is.","No, it isn't. It's a ruler.","Take out your book!"],
+u2:["How are you?","I'm fine. Thank you.","I'm great. Thank you!","What color is this?","It's orange.","This is a star. It's blue.","It's a blue star.","Is this a red square? No, it isn't."],
+u3:["This is my friend, Sarah.","Hello, Sarah. Let's play!","How many crayons? One crayon.","How many crayons? Three crayons.","What are these? They're CDs.","What's this? It's a cell phone."],
+u4:["It's nice to meet you.","It's nice to meet you, too.","Who's she? She's my grandmother.","Who's he? He's my grandfather.","She's my mother. She's pretty.","He's my father. He's tall and handsome."],
+u5:["Happy birthday! How old are you?","I'm seven years old.","This is for you. Thank you!","What is it? I don't know.","It's a yo-yo! It's a little yo-yo.","It's big. It's a big robot."],
+u6:["How's the weather? It's sunny.","How's the weather? It's rainy.","How many flowers are there? There's one flower.","How many trees are there? There are four trees.","Where's the bat? It's on the table.","Where are the balls? They're under the table."],
+u7:["I'm hungry. I want an apple.","I'm thirsty. I want juice.","Here you are. Thank you! You're welcome.","What do you want? I want a banana.","I want chicken. I don't want fish.","Do you want pizza? Yes, I do. No, I don't."],
+u8:["What's your favorite color? Red.","What about you? I like blue.","There's a rabbit! I like rabbits.","What do you like? I like cats.","I like monkeys. I don't like lions.","What's your favorite animal? I like dogs."]
+};
+const SENTS=[
+  {ws:["What's","this?"],ans:"What's this?",hint:"Asking about an object"},
+  {ws:["It's","a","pencil."],ans:"It's a pencil.",hint:"Identifying an object"},
+  {ws:["My","name","is","Kate."],ans:"My name is Kate.",hint:"Saying your name"},
+  {ws:["How","are","you?"],ans:"How are you?",hint:"Asking how someone feels"},
+  {ws:["I'm","fine.","Thank","you."],ans:"I'm fine. Thank you.",hint:"Polite response"},
+  {ws:["What","color","is","this?"],ans:"What color is this?",hint:"Asking about color"},
+  {ws:["It's","a","blue","star."],ans:"It's a blue star.",hint:"Color + shape"},
+  {ws:["How","many","crayons?"],ans:"How many crayons?",hint:"Asking quantity"},
+  {ws:["Who's","she?"],ans:"Who's she?",hint:"Asking about a person"},
+  {ws:["She's","my","grandmother."],ans:"She's my grandmother.",hint:"Family member"},
+  {ws:["How","old","are","you?"],ans:"How old are you?",hint:"Asking age"},
+  {ws:["I'm","seven","years","old."],ans:"I'm seven years old.",hint:"Telling your age"},
+  {ws:["How's","the","weather?"],ans:"How's the weather?",hint:"Asking weather"},
+  {ws:["It's","sunny","today."],ans:"It's sunny today.",hint:"Weather answer"},
+  {ws:["There's","one","flower."],ans:"There's one flower.",hint:"Counting nature"},
+  {ws:["Where's","the","bat?"],ans:"Where's the bat?",hint:"Location question"},
+  {ws:["It's","on","the","table."],ans:"It's on the table.",hint:"Using preposition"},
+  {ws:["What","do","you","want?"],ans:"What do you want?",hint:"Asking food preference"},
+  {ws:["I","want","a","banana."],ans:"I want a banana.",hint:"Requesting food"},
+  {ws:["I","don't","want","fish."],ans:"I don't want fish.",hint:"Negative food"},
+  {ws:["What's","your","favorite","color?"],ans:"What's your favorite color?",hint:"Asking preference"},
+  {ws:["I","like","rabbits."],ans:"I like rabbits.",hint:"Expressing likes"},
+  {ws:["I","don't","like","lions."],ans:"I don't like lions.",hint:"Expressing dislikes"},
+  {ws:["This","is","my","friend,","Sarah."],ans:"This is my friend, Sarah.",hint:"Introducing a friend"},
+  {ws:["It's","nice","to","meet","you."],ans:"It's nice to meet you.",hint:"Meeting someone new"}
+];
+const CONVOS=[
+  {title:"Greetings",lines:[{s:'t',t:"Hello! What's your name?"},{s:'s',t:"My name is Kate."},{s:'t',t:"Nice to meet you, Kate!"},{s:'s',t:"Nice to meet you, too."}]},
+  {title:"How Are You?",lines:[{s:'t',t:"Hi! How are you?"},{s:'s',t:"I'm fine. Thank you. How are you?"},{s:'t',t:"I'm great. Thank you!"}]},
+  {title:"What's This?",lines:[{s:'t',t:"What's this?"},{s:'s',t:"It's a pencil."},{s:'t',t:"Is this a book?"},{s:'s',t:"Yes, it is!"}]},
+  {title:"At the Store",lines:[{s:'t',t:"How many crayons?"},{s:'s',t:"Three crayons."},{s:'t',t:"What are these?"},{s:'s',t:"They're notebooks."}]},
+  {title:"Food Time!",lines:[{s:'t',t:"I'm hungry. What do you want?"},{s:'s',t:"I want a banana."},{s:'t',t:"Here you are!"},{s:'s',t:"Thank you. You're welcome!"}]},
+  {title:"Weather",lines:[{s:'t',t:"How's the weather today?"},{s:'s',t:"It's sunny and nice!"},{s:'t',t:"Where's the umbrella?"},{s:'s',t:"It's under the table."}]},
+  {title:"Family",lines:[{s:'t',t:"Who's she?"},{s:'s',t:"She's my mother. She's pretty."},{s:'t',t:"Who's he?"},{s:'s',t:"He's my grandfather. He's tall."}]},
+  {title:"Animals",lines:[{s:'t',t:"What's your favorite animal?"},{s:'s',t:"I like rabbits!"},{s:'t',t:"Do you like lions?"},{s:'s',t:"No, I don't. I like cats."}]}
+];
+// ===== APP STATE =====
+const APP = (()=>{
+  let d = JSON.parse(localStorage.getItem('lg1') || '{"score":0,"learned":{},"ach":[]}');
+  return {
+    get score(){return d.score;},set score(v){d.score=v;save();},
+    get learned(){return d.learned;},
+    get ach(){return d.ach;},
+    learn(w){if(!d.learned[w]){d.learned[w]=1;d.score+=5;save();}},
+    save(){localStorage.setItem('lg1',JSON.stringify(d));},
+    reset(){d={score:0,learned:{},ach:[]};save();}
+  };
+})();
+function save(){APP.save();}
+// ===== NAVIGATION =====
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const sec=document.getElementById(id);
+  if(sec) sec.classList.add('active');
+  event&&event.currentTarget&&event.currentTarget.classList.add('active');
+  window.scrollTo(0,0);
+  updateUI();
+}
+function swTab(el,cid){
+  const par=el.closest('.section')||document.body;
+  par.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  par.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const c=document.getElementById(cid);
+  if(c) c.classList.add('active');
+}
+// ===== TTS =====
+function tts(txt,rate=0.88){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='en-US';u.rate=rate;u.pitch=1.1;
+  window.speechSynthesis.speak(u);
+}
+function readLines(lines,i=0){
+  if(i>=lines.length) return;
+  tts(lines[i]);
+  setTimeout(()=>readLines(lines,i+1), lines[i].length*80+900);
+}
+// ===== BUILD VOCAB GRID =====
+function buildVoc(id,items){
+  const c=document.getElementById(id);
+  if(!c) return;
+  c.innerHTML=items.map(it=>`<div class="vocab-item${APP.learned[it.w]?' learned':''}" onclick="learnIt(this,'${it.w.replace(/'/g,"\\'")}','${(it.a?it.a+' ':'')+it.w.replace(/'/g,"\\'")}')">
+    <div class="vl-badge">✓</div>
+    <span class="vocab-emoji">${it.e}</span>
+    <span class="vocab-word">${it.w}</span>
+    ${it.a?`<span class="vocab-article">${it.a} ${it.w}</span>`:''}
+  </div>`).join('');
+}
+function learnIt(el,w,spk){
+  tts(spk);
+  if(!APP.learned[w]){APP.learn(w);el.classList.add('learned');updateUI();}
+}
+// ===== BUILD ABC + NUMBERS =====
+function buildABC(){
+  const g=document.getElementById('abc-grid');
+  if(!g) return;
+  g.innerHTML=ABC.map(a=>`<div class="vocab-item" style="padding:6px 4px;text-align:center" onclick="tts('${a.l[0]} says ${a.w[0].toUpperCase()} like in ${a.w}')">
+    <div style="font-size:1.4em;font-weight:900;color:var(--red)">${a.l}</div>
+    <div style="font-size:1.1em">${a.e}</div>
+    <div style="font-size:0.68em;font-weight:600;margin-top:2px">${a.w}</div>
+  </div>`).join('');
+}
+function buildNums(){
+  const g=document.getElementById('num-grid');
+  if(!g) return;
+  g.innerHTML=NUMS.map(n=>`<div class="vocab-item" onclick="tts('${n.w}')">
+    <div style="font-size:1.8em;font-weight:900;color:var(--blue)">${n.n}</div>
+    <div>${n.e}</div>
+    <div style="font-size:0.78em;font-weight:700;margin-top:2px">${n.w}</div>
+  </div>`).join('');
+}
+// ===== BUILD SPEAK LISTS =====
+let recog=null;
+function buildSpeak(id,phrases){
+  const c=document.getElementById(id);
+  if(!c) return;
+  c.innerHTML=phrases.map((p,i)=>`<div class="speak-card" id="sc-${id}-${i}">
+    <div class="speak-text">"${p}"</div>
+    <div class="speak-btns">
+      <button class="speak-btn listen" onclick="tts('${p.replace(/'/g,"\\'")}')">🔊</button>
+      <button class="speak-btn speak" id="sb-${id}-${i}" onclick="startRec(this,'${p.replace(/'/g,"\\'")}','sr-${id}-${i}')">🎤</button>
+    </div>
+    <div class="speak-result" id="sr-${id}-${i}"></div>
+    <div style="font-size:0.72em;color:#888;margin-top:5px">🔊 Listen first, then 🎤 speak!</div>
+  </div>`).join('');
+}
+function startRec(btn,target,resId){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById(resId).innerHTML='<span class="s-go">⚠️ Use Chrome for speech!</span>';return;}
+  if(recog){try{recog.stop();}catch(e){}}
+  const r=new SR();recog=r;
+  r.lang='en-US';r.interimResults=false;r.maxAlternatives=3;
+  btn.classList.add('recording');btn.textContent='⏹';
+  document.getElementById(resId).innerHTML='<span style="color:var(--blue)">🎙️ Listening...</span>';
+  r.onresult=e=>{
+    btn.classList.remove('recording');btn.textContent='🎤';
+    const results=Array.from(e.results[0]).map(x=>x.transcript.toLowerCase().trim());
+    const t=target.toLowerCase().replace(/[^a-z\s]/g,'');
+    let best=0;
+    results.forEach(res=>{const s=simScore(res.replace(/[^a-z\s]/g,''),t);if(s>best)best=s;});
+    const pct=Math.round(best*100);
+    const el=document.getElementById(resId);
+    if(pct>=78){el.innerHTML=`<span class="s-ex">🌟 Excellent! ${pct}% — Perfect!</span>`;addScore(15);celebrate();}
+    else if(pct>=52){el.innerHTML=`<span class="s-go">👍 Good! ${pct}% — Try again!</span>`;addScore(8);}
+    else{el.innerHTML=`<span class="s-try">💪 Keep going! You said: "${results[0]}"</span>`;tts(target,0.75);}
+  };
+  r.onerror=()=>{btn.classList.remove('recording');btn.textContent='🎤';document.getElementById(resId).innerHTML='<span class="s-try">❌ Try again!</span>';};
+  r.onend=()=>{btn.classList.remove('recording');btn.textContent='🎤';recog=null;};
+  r.start();
+}
+function simScore(a,b){
+  if(!a||!b) return 0;
+  const aw=a.split(/\s+/),bw=b.split(/\s+/);
+  let m=0;aw.forEach(w=>{if(bw.some(x=>x.includes(w)||w.includes(x)))m++;});
+  const ws=aw.length?m/Math.max(aw.length,bw.length):0;
+  const ed=editDist(a,b);
+  const es=1-ed/Math.max(a.length,b.length,1);
+  return Math.max(ws,es);
+}
+function editDist(a,b){
+  const m=a.length,n=b.length;
+  if(!m)return n;if(!n)return m;
+  const d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++)d[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
+    d[i][j]=a[i-1]===b[j-1]?d[i-1][j-1]:1+Math.min(d[i-1][j],d[i][j-1],d[i-1][j-1]);
+  return d[m][n];
+}
+function addScore(pts){APP.score+=pts;updateUI();}
+// ===== PHONICS =====
+function buildPhonics(){
+  const c=document.getElementById('phonics-btns');
+  if(!c) return;
+  c.innerHTML=PHONICS.map((p,i)=>`<div class="game-card" style="border-color:${p.bg};cursor:pointer" onclick="showPhonics(${i})">
+    <div style="font-size:1.5em;font-weight:900;color:${p.bg}">${p.lts.join(' ')}</div>
+    <div class="game-name">${p.unit}</div>
+    <div class="game-desc">${p.lts.join(', ')}</div>
+  </div>`).join('');
+}
+function showPhonics(idx){
+  const p=PHONICS[idx],det=document.getElementById('phonics-detail');
+  let html=`<div class="card"><div class="card-title" style="color:${p.bg}">🔤 ${p.unit}: ${p.lts.join(' & ')}</div>`;
+  p.lts.forEach(l=>{
+    html+=`<div class="phonics-letter" style="color:${p.bg}">${l}</div><div class="phonics-words">`;
+    (p.wds[l]||[]).forEach(w=>{
+      html+=`<div class="pw-card" onclick="tts('${w}')"><span class="pw-hl">${w[0]}</span>${w.slice(1)}</div>`;
+    });
+    html+=`</div>`;
+  });
+  html+=`<div class="chant-box mt1">${p.chant}</div>
+  <button class="btn btn-r mt1" onclick="tts('${p.chant.replace(/\n/g,' ').replace(/'/g,"\\'")}',0.75)">🎵 Sing the Chant!</button></div>`;
+  det.innerHTML=html;
+  det.scrollIntoView({behavior:'smooth',block:'start'});
+}
+// ===== GAMES =====
+let GS={};
+function openGame(type){
+  document.getElementById('modal').classList.add('show');
+  GS={type};
+  buildGame(type);
+}
+function buildGame(type){
+  const c=document.getElementById('modal-content');
+  if(type==='fc') buildFC(c);
+  else if(type==='quiz') buildQuiz(c);
+  else if(type==='mem') buildMem(c);
+  else if(type==='spell') buildSpell(c);
+  else if(type==='sent') buildSent(c);
+  else if(type==='conv') buildConv(c);
+  else if(type==='match') buildMatch(c);
+  else if(type==='whack') buildWhack(c);
+}
+function allVoc(){
+  return Object.values(VOC).reduce((acc,arr)=>acc.concat(arr),[]);
+}
+// FC GAME
+function buildFC(c){
+  const all=allVoc();
+  if(!GS.fc) GS.fc={idx:0,know:0,total:all.length};
+  const i=GS.fc.idx;
+  if(i>=all.length){
+    c.innerHTML=`<div class="modal-title">⚡ Done! You know ${GS.fc.know}/${all.length} words! 🌟</div>
+    <button class="btn btn-r" style="width:100%" onclick="GS.fc=null;buildGame('fc')">Play Again</button>`;
+    addScore(GS.fc.know*3);return;
+  }
+  const it=all[i];
+  c.innerHTML=`<div class="modal-title">⚡ Flash Cards (${i+1}/${all.length})</div>
+  <div class="flashcard-wrap"><div class="fc" id="fc-card" onclick="this.classList.toggle('flipped')">
+    <div class="fc-face fc-front"><div class="fc-emoji">${it.e}</div><div style="font-size:0.8em;opacity:0.7">Tap to reveal!</div></div>
+    <div class="fc-face fc-back">
+      <div class="fc-word">${it.a?it.a+' ':''} ${it.w}</div>
+      <button onclick="event.stopPropagation();tts('${(it.a?it.a+' ':'')+it.w}')" style="background:rgba(255,255,255,0.3);border:none;color:white;font-size:1.1em;margin-top:8px;border-radius:8px;padding:5px 10px;cursor:pointer">🔊</button>
+    </div>
+  </div></div>
+  <div class="fc-controls">
+    <button class="fc-btn fc-know" onclick="GS.fc.know++;GS.fc.idx++;buildGame('fc')">✅ I know!</button>
+    <button class="fc-btn fc-more" onclick="GS.fc.idx++;buildGame('fc')">🔄 Review</button>
+  </div>`;
+}
+// QUIZ GAME
+function buildQuiz(c){
+  if(!GS.quiz) GS.quiz={sc:0,tot:0};
+  const pool=allVoc();
+  const cor=pool[Math.floor(Math.random()*pool.length)];
+  const wrongs=pool.filter(v=>v.w!==cor.w).sort(()=>Math.random()-0.5).slice(0,3);
+  const opts=[...wrongs,cor].sort(()=>Math.random()-0.5);
+  c.innerHTML=`<div class="modal-title">❓ Word Quiz (${GS.quiz.sc}/${GS.quiz.tot})</div>
+  <div class="quiz-emoji">${cor.e}</div>
+  <div class="quiz-q">What is this?</div>
+  <div class="quiz-opts">${opts.map(o=>`<div class="quiz-opt" onclick="checkQ(this,'${o.w}','${cor.w}')">${o.a?o.a+' ':''} ${o.w}</div>`).join('')}</div>
+  <div class="quiz-fb" id="qfb"></div>
+  <button class="quiz-next" id="qnxt" onclick="buildGame('quiz')">Next ➡️</button>`;
+}
+function checkQ(el,chosen,correct){
+  document.querySelectorAll('.quiz-opt').forEach(o=>{o.classList.add('answered');if(o.textContent.trim().replace(/^(a|an)\s/,'')===correct)o.classList.add('correct');});
+  GS.quiz.tot++;
+  const fb=document.getElementById('qfb'),nx=document.getElementById('qnxt');
+  if(chosen===correct){el.classList.add('correct');fb.innerHTML='<span class="s-ex">🌟 Correct! Great job!</span>';GS.quiz.sc++;addScore(10);}
+  else{el.classList.add('wrong');fb.innerHTML=`<span class="s-try">❌ Answer: ${correct}</span>`;tts(correct);}
+  nx.style.display='block';
+}
+// MEMORY GAME
+function buildMem(c){
+  const pool=allVoc().sort(()=>Math.random()-0.5).slice(0,8);
+  const pairs=[...pool.map((v,i)=>({...v,id:i,type:'w'})),...pool.map((v,i)=>({...v,id:i,type:'e'}))].sort(()=>Math.random()-0.5);
+  GS.mem={rev:[],matched:0,tot:pool.length};
+  c.innerHTML=`<div class="modal-title">🧠 Memory Match</div>
+  <div style="text-align:center;margin-bottom:8px">Matches: <strong id="ms">${0}</strong>/${pool.length}</div>
+  <div class="mem-grid">${pairs.map((it,i)=>`<div class="mc" id="mc${i}" data-id="${it.id}" data-side="${it.type}" onclick="flipMem(this)">
+    <div class="mc-content">${it.type==='w'?`<span style="font-size:0.7em;font-weight:800;text-align:center;padding:2px">${it.w}</span>`:it.e}</div>
+  </div>`).join('')}</div>`;
+}
+function flipMem(card){
+  if(card.classList.contains('revealed')||card.classList.contains('matched')) return;
+  if(GS.mem.rev.length>=2) return;
+  card.classList.add('revealed');GS.mem.rev.push(card);
+  if(GS.mem.rev.length===2){
+    const [a,b]=GS.mem.rev;
+    setTimeout(()=>{
+      if(a.dataset.id===b.dataset.id&&a.dataset.side!==b.dataset.side){
+        a.classList.add('matched');b.classList.add('matched');
+        GS.mem.matched++;document.getElementById('ms').textContent=GS.mem.matched;
+        addScore(15);
+        if(GS.mem.matched===GS.mem.tot){celebrate();setTimeout(()=>buildGame('mem'),1000);}
+      } else {a.classList.remove('revealed');b.classList.remove('revealed');}
+      GS.mem.rev=[];
+    },700);
+  }
+}
+// SPELLING GAME
+function buildSpell(c){
+  const pool=allVoc().filter(v=>v.w.length<=8&&!v.w.includes(' '));
+  const it=pool[Math.floor(Math.random()*pool.length)];
+  const w=it.w;
+  const lts=[...w.toUpperCase().split('')].sort(()=>Math.random()-0.5);
+  const ex='AEIOURSTLN'.split('').filter(l=>!w.toUpperCase().includes(l)).slice(0,3);
+  const all=[...lts,...ex].sort(()=>Math.random()-0.5);
+  GS.spell={w,typed:[],it};
+  c.innerHTML=`<div class="modal-title">✍️ Spelling Bee</div>
+  <div style="text-align:center;font-size:2em;margin:8px">${it.e}</div>
+  <div style="text-align:center;font-size:0.85em;color:#666;margin-bottom:8px">Spell this word:</div>
+  <div class="sp-slots" id="sp-ans">${'_'.repeat(w.length).split('').map(()=>`<div class="sp-slot"></div>`).join('')}</div>
+  <div class="letter-btns">${all.map((l,i)=>`<button class="lb" id="lb${i}" onclick="typeLet('${l}',${i})">${l}</button>`).join('')}</div>
+  <button class="btn btn-o btn-sm" style="margin:0 auto;display:block" onclick="clearSpell()">⌫ Clear</button>
+  <div id="sp-res" style="text-align:center;margin-top:8px"></div>`;
+}
+function typeLet(l,idx){
+  const gs=GS.spell;if(gs.typed.length>=gs.w.length) return;
+  gs.typed.push({l,idx});document.getElementById('lb'+idx).disabled=true;
+  const slots=document.querySelectorAll('.sp-slot');
+  slots[gs.typed.length-1].textContent=l;slots[gs.typed.length-1].classList.add('filled');
+  if(gs.typed.length===gs.w.length){
+    const spelled=gs.typed.map(t=>t.l).join('').toLowerCase();
+    const res=document.getElementById('sp-res');
+    if(spelled===gs.w){res.innerHTML='<span class="s-ex">🌟 Correct! Perfect spelling!</span>';addScore(20);celebrate();setTimeout(()=>buildGame('spell'),1500);}
+    else{res.innerHTML=`<span class="s-try">❌ Try again! Word: ${gs.w}</span>`;tts(gs.w);}
+  }
+}
+function clearSpell(){
+  GS.spell.typed=[];
+  document.querySelectorAll('.sp-slot').forEach(s=>{s.textContent='';s.classList.remove('filled');});
+  document.querySelectorAll('.lb').forEach(b=>b.disabled=false);
+  document.getElementById('sp-res').innerHTML='';
+}
+// SENTENCE BUILDER
+function buildSent(c){
+  const s=SENTS[Math.floor(Math.random()*SENTS.length)];
+  const shuf=[...s.ws].sort(()=>Math.random()-0.5);
+  GS.sentAns=s.ans;
+  c.innerHTML=`<div class="modal-title">📝 Build a Sentence</div>
+  <div style="font-size:0.8em;color:#666;margin-bottom:8px">💡 Hint: ${s.hint}</div>
+  <div class="sent-display" id="sd"><span style="color:#aaa;font-size:0.82em">Tap words below...</span></div>
+  <div class="word-pool" id="wp">${shuf.map((w,i)=>`<span class="wchip" id="wc${i}" onclick="addW('${w.replace(/'/g,"\\'")}',${i})">${w}</span>`).join('')}</div>
+  <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+    <button class="btn btn-o btn-sm" onclick="clearSent()">⌫ Clear</button>
+    <button class="btn btn-r btn-sm" onclick="checkSent()">✅ Check</button>
+  </div>
+  <div id="sr" style="margin-top:8px;text-align:center"></div>`;
+}
+function addW(w,idx){
+  const chip=document.getElementById('wc'+idx);
+  if(chip.classList.contains('used')) return;
+  chip.classList.add('used');
+  const sd=document.getElementById('sd');
+  if(sd.querySelector('span')) sd.innerHTML='';
+  const sc=document.createElement('span');
+  sc.className='schip';sc.dataset.idx=idx;sc.textContent=w;
+  sc.onclick=()=>{sc.remove();document.getElementById('wc'+idx).classList.remove('used');if(!sd.children.length)sd.innerHTML='<span style="color:#aaa;font-size:0.82em">Tap words below...</span>';};
+  sd.appendChild(sc);
+}
+function clearSent(){
+  document.querySelectorAll('.wchip').forEach(c=>c.classList.remove('used'));
+  document.getElementById('sd').innerHTML='<span style="color:#aaa;font-size:0.82em">Tap words below...</span>';
+  document.getElementById('sr').innerHTML='';
+}
+function checkSent(){
+  const chips=document.querySelectorAll('.schip');
+  const built=Array.from(chips).map(c=>c.textContent).join(' ');
+  const res=document.getElementById('sr');
+  if(built.trim()===GS.sentAns.trim()){res.innerHTML='<span class="s-ex">🌟 Perfect!</span>';addScore(20);celebrate();tts(GS.sentAns);setTimeout(()=>buildGame('sent'),2000);}
+  else{res.innerHTML=`<span class="s-try">❌ Answer: "${GS.sentAns}"</span>`;tts(GS.sentAns);}
+}
+// CONVERSATION PRACTICE
+function buildConv(c){
+  if(!GS.ci) GS.ci=0;
+  const cv=CONVOS[GS.ci%CONVOS.length];
+  c.innerHTML=`<div class="modal-title">🗣️ Conversation: ${cv.title}</div>
+  ${cv.lines.map(l=>`<div class="bubble ${l.s==='t'?'teacher':'student'}" onclick="tts('${l.t.replace(/'/g,"\\'")}')" style="cursor:pointer">
+    <div class="bubble-name">${l.s==='t'?'👩‍🏫 Teacher':'🙋 You'}</div>
+    <div class="bubble-text">${l.t} <span style="opacity:0.5;font-size:0.8em">🔊</span></div>
+  </div>`).join('')}
+  <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+    <button class="btn btn-r btn-sm" onclick="readLines([${cv.lines.map(l=>`'${l.t.replace(/'/g,"\\'")}'`).join(',')}])">▶️ Play All</button>
+    <button class="btn btn-b btn-sm" onclick="GS.ci=(GS.ci||0)+1;buildGame('conv')">Next ➡️</button>
+  </div>`;
+}
+// MATCHING GAME
+function buildMatch(c){
+  const pool=allVoc().filter(v=>v.e&&v.e!=='▬').sort(()=>Math.random()-0.5).slice(0,6);
+  const left=pool.map(v=>({type:'word',val:v.w,key:v.w})).sort(()=>Math.random()-0.5);
+  const right=pool.map(v=>({type:'emoji',val:v.e,key:v.w})).sort(()=>Math.random()-0.5);
+  GS.mat={sel:null,matched:0,tot:pool.length};
+  c.innerHTML=`<div class="modal-title">🔗 Word Match (0/${pool.length})</div>
+  <div style="text-align:center;margin-bottom:8px">Matched: <strong id="mm">0</strong>/${pool.length}</div>
+  <div class="match-cols">
+    <div>${left.map((it,i)=>`<div class="match-item" id="ml${i}" data-key="${it.key}" data-side="L" onclick="selMatch(this)">${it.val}</div>`).join('')}</div>
+    <div>${right.map((it,i)=>`<div class="match-item" id="mr${i}" data-key="${it.key}" data-side="R" onclick="selMatch(this)">${it.val}</div>`).join('')}</div>
+  </div>`;
+}
+function selMatch(el){
+  if(el.classList.contains('matched')) return;
+  const gs=GS.mat;
+  if(!gs.sel){document.querySelectorAll('.match-item').forEach(m=>m.classList.remove('selected'));el.classList.add('selected');gs.sel=el;return;}
+  if(gs.sel===el){el.classList.remove('selected');gs.sel=null;return;}
+  if(gs.sel.dataset.key===el.dataset.key&&gs.sel.dataset.side!==el.dataset.side){
+    gs.sel.classList.add('matched');el.classList.add('matched');
+    gs.matched++;document.getElementById('mm').textContent=gs.matched;
+    tts(el.dataset.key);addScore(10);
+    if(gs.matched===gs.tot){celebrate();setTimeout(()=>buildGame('match'),1200);}
+  } else {
+    gs.sel.classList.add('wrong');el.classList.add('wrong');
+    setTimeout(()=>{gs.sel.classList.remove('wrong','selected');el.classList.remove('wrong');},600);
+  }
+  gs.sel=null;
+}
+// WHACK-A-WORD
+function buildWhack(c){
+  const pool=allVoc().filter(v=>v.e).sort(()=>Math.random()-0.5).slice(0,20);
+  if(!GS.whack) GS.whack={sc:0,time:30,pool};
+  else GS.whack.sc=0,GS.whack.time=30;
+  clearInterval(APP.wtimer);
+  let target=pool[Math.floor(Math.random()*pool.length)];
+  GS.whack.target=target;
+  function render(){
+    const sh=pool.sort(()=>Math.random()-0.5).slice(0,8);
+    if(!sh.find(v=>v.w===target.w)) sh[Math.floor(Math.random()*8)]=target;
+    c.innerHTML=`<div class="modal-title">🔨 Whack-a-Word!</div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <div>Score: <strong id="ws">${GS.whack.sc}</strong></div>
+      <div>Time: <strong id="wt">${GS.whack.time}s</strong></div>
+    </div>
+    <div style="text-align:center;font-size:1.2em;font-weight:800;color:var(--red);margin-bottom:10px">
+      Find: ${target.e}
+    </div>
+    <div class="whack-grid">${sh.map(v=>`<div class="whack-item" onclick="whackIt('${v.w}','${target.w}',this)">${v.w}</div>`).join('')}</div>
+    <div style="font-size:0.78em;color:#666;text-align:center;margin-top:8px">Tap the word that matches the picture above!</div>`;
+    APP.wtimer=setInterval(()=>{
+      GS.whack.time--;
+      const te=document.getElementById('wt');if(te) te.textContent=GS.whack.time+'s';
+      if(GS.whack.time<=0){
+        clearInterval(APP.wtimer);
+        c.innerHTML=`<div class="modal-title">🔨 Time's Up!</div><div style="text-align:center;font-size:1.3em;font-weight:800;color:var(--green);margin:16px 0">Score: ${GS.whack.sc} 🌟</div><button class="btn btn-r" style="width:100%" onclick="GS.whack=null;buildGame('whack')">Play Again</button>`;
+        addScore(GS.whack.sc);
+      }
+    },1000);
+  }
+  window.whackIt=(w,correct,el)=>{
+    clearInterval(APP.wtimer);
+    if(w===correct){el.classList.add('hit');GS.whack.sc+=5;tts(correct);addScore(3);}
+    else{el.classList.add('miss');GS.whack.sc=Math.max(0,GS.whack.sc-2);}
+    target=pool[Math.floor(Math.random()*pool.length)];GS.whack.target=target;
+    setTimeout(()=>render(),300);
+  };
+  render();
+}
+// ===== CELEBRATE =====
+function celebrate(){
+  const el=document.getElementById('cel');el.innerHTML='';el.classList.add('show');
+  const colors=['#E8233A','#FFD600','#1565C0','#2E7D32','#E65100','#6A1B9A'];
+  for(let i=0;i<45;i++){
+    const d=document.createElement('div');d.className='confetti';
+    d.style.cssText=`left:${Math.random()*100}%;background:${colors[i%colors.length]};border-radius:${Math.random()>0.5?'50%':'2px'};width:${7+Math.random()*7}px;height:${7+Math.random()*7}px;animation-delay:${Math.random()*0.4}s;animation-duration:${1.5+Math.random()}s`;
+    el.appendChild(d);
+  }
+  setTimeout(()=>{el.classList.remove('show');el.innerHTML='';},2500);
+}
+// ===== UI UPDATE =====
+function updateUI(){
+  const sc=APP.score;
+  document.getElementById('hScore').textContent=sc;
+  const pgs=document.getElementById('pg-score');if(pgs) pgs.textContent=sc;
+  const pgb=document.getElementById('pg-bar');if(pgb) pgb.style.width=Math.min(100,sc/5)+'%';
+  // Unit progress bars
+  const map={u1:'u1a',u2:'u2a',u3:'u3a',u4:'u4a',u5:'u5a',u6:'u6a',u7:'u7a',u8:'u8a'};
+  Object.entries(map).forEach(([uid,vk])=>{
+    const bar=document.getElementById('pb-'+uid);
+    if(bar&&VOC[vk]){
+      const tot=VOC[vk].length,lrn=VOC[vk].filter(v=>APP.learned[v.w]).length;
+      bar.style.width=(lrn/tot*100)+'%';
+    }
+  });
+  // Progress page units
+  const pgu=document.getElementById('pg-units');
+  if(pgu){
+    const units=[
+      {name:"Let's Remember",vk:null},{name:"Unit 1: School",vk:'u1a'},{name:"Unit 2: Colors",vk:'u2a'},
+      {name:"Unit 3: Store",vk:'u3a'},{name:"Unit 4: Family",vk:'u4a'},{name:"Unit 5: Birthday",vk:'u5a'},
+      {name:"Unit 6: Outdoors",vk:'u6a'},{name:"Unit 7: Food",vk:'u7a'},{name:"Unit 8: Animals",vk:'u8a'}
+    ];
+    pgu.innerHTML=units.map(u=>{
+      const tot=u.vk?VOC[u.vk].length:5,lrn=u.vk?VOC[u.vk].filter(v=>APP.learned[v.w]).length:0,pct=tot?Math.round(lrn/tot*100):0;
+      return `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:0.82em;font-weight:600"><span>${u.name}</span><span>${lrn}/${tot}</span></div><div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%"></div></div></div>`;
+    }).join('');
+  }
+  // Achievements
+  const pga=document.getElementById('pg-ach');
+  if(pga){
+    const achs=[
+      {id:'a1',ico:'🌱',name:'First Step',cond:()=>sc>=5},
+      {id:'a2',ico:'📚',name:'Learner',cond:()=>Object.keys(APP.learned).length>=10},
+      {id:'a3',ico:'🎤',name:'Speaker',cond:()=>sc>=50},
+      {id:'a4',ico:'⭐',name:'Star',cond:()=>sc>=100},
+      {id:'a5',ico:'🏆',name:'Champion',cond:()=>sc>=200},
+      {id:'a6',ico:'🌍',name:'Explorer',cond:()=>Object.keys(APP.learned).length>=30},
+      {id:'a7',ico:'🎮',name:'Gamer',cond:()=>sc>=150},
+      {id:'a8',ico:'🎂',name:'Birthday Pro',cond:()=>sc>=80},
+    ];
+    pga.innerHTML=achs.map(a=>{
+      const earned=a.cond();
+      return `<div class="ach${earned?' earned':''}"><div class="ach-icon">${a.ico}</div><div class="ach-name">${a.name}</div></div>`;
+    }).join('');
+  }
+}
+// ===== INIT =====
+function init(){
+  buildABC();buildNums();
+  const vmap={
+    'voc-u1a':VOC.u1a,'voc-u1b':VOC.u1b,'voc-u2a':VOC.u2a,'voc-u2b':VOC.u2b,
+    'voc-u3a':VOC.u3a,'voc-u3b':VOC.u3b,'voc-u4a':VOC.u4a,'voc-u4b':VOC.u4b,
+    'voc-u5a':VOC.u5a,'voc-u5b':VOC.u5b,'voc-u6a':VOC.u6a,
+    'voc-u7a':VOC.u7a,'voc-u7b':VOC.u7b,'voc-u8a':VOC.u8a,'voc-u8b':VOC.u8b
+  };
+  Object.entries(vmap).forEach(([id,data])=>buildVoc(id,data));
+  Object.entries(SPEAK).forEach(([k,phrases])=>{
+    const id=k==='rem'?'spk-rem':`spk-${k}`;
+    buildSpeak(id,phrases);
+  });
+  buildPhonics();
+  updateUI();
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body></html>
