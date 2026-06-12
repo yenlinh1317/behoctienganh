@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Tim Kho Bau So Hoc</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;overflow-x:hidden;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#0f4c81 0%,#1a6ba8 40%,#0d3d6b 100%);min-height:100vh;}
+#app{max-width:700px;margin:0 auto;padding:10px 12px 90px;}
+.hdr{text-align:center;padding:10px 0 4px;}
+.hdr h1{font-size:clamp(1.3rem,5vw,1.9rem);font-weight:900;color:#FFD700;text-shadow:2px 2px 0 #7a5500;}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;margin-top:7px;gap:8px;flex-wrap:wrap;}
+.badge{background:rgba(255,255,255,.15);border:2px solid rgba(255,215,0,.3);border-radius:20px;padding:4px 12px;color:#FFE082;font-weight:800;font-size:.85rem;}
+.pbar-wrap{background:rgba(255,255,255,.15);border-radius:20px;height:11px;margin:6px 0 2px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#FFD700,#FF8C00);transition:width .5s;}
+.scr{display:none;}.scr.on{display:block;}
+.map-title{text-align:center;color:#FFE082;font-size:1.05rem;font-weight:800;margin:10px 0 12px;}
+.islands{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:360px){.islands{grid-template-columns:repeat(2,1fr);}}
+.icard{border-radius:18px;padding:13px 8px 11px;text-align:center;cursor:pointer;border:3px solid rgba(255,255,255,.25);box-shadow:0 5px 16px rgba(0,0,0,.28);transition:transform .18s;position:relative;}
+.icard:hover{transform:translateY(-4px);}
+.icard.locked{filter:saturate(.12);cursor:not-allowed;}
+.icard.done{border-color:#FFD700!important;}
+.ie{font-size:clamp(1.9rem,7vw,2.6rem);display:block;margin-bottom:4px;}
+.iname{color:#fff;font-weight:800;font-size:clamp(.72rem,2.4vw,.88rem);}
+.idesc{color:rgba(255,255,255,.7);font-size:clamp(.62rem,1.8vw,.72rem);margin-top:2px;}
+.istars{margin-top:5px;font-size:.85rem;}
+.lk-ico{position:absolute;top:6px;right:8px;font-size:1.2rem;}
+.nav-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.back-btn{background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.25);color:#fff;border-radius:12px;padding:7px 13px;cursor:pointer;font-size:.9rem;font-family:'Nunito',sans-serif;font-weight:700;white-space:nowrap;}
+.nav-title{color:#FFE082;font-size:1.05rem;font-weight:800;}
+.llist{display:flex;flex-direction:column;gap:8px;}
+.litem{background:rgba(255,255,255,.1);border-radius:15px;padding:12px 14px;cursor:pointer;border:2px solid rgba(255,255,255,.12);transition:.15s;display:flex;align-items:center;gap:11px;}
+.litem:hover{background:rgba(255,255,255,.2);}
+.litem.done{border-color:#FFD700;}
+.li-ico{font-size:1.7rem;}
+.li-name{color:#fff;font-weight:800;font-size:.92rem;}
+.li-sub{color:rgba(255,255,255,.6);font-size:.73rem;}
+.li-chk{font-size:1.2rem;margin-left:auto;}
+.guide-fab{position:fixed;bottom:80px;right:14px;width:42px;height:42px;border-radius:50%;background:#FFD700;border:none;font-size:1.2rem;font-weight:900;color:#5D2D00;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.3);z-index:50;display:none;}
+.guide-fab.show{display:flex;align-items:center;justify-content:center;}
+#guide-overlay{display:none;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center;}
+#guide-overlay.on{display:flex;}
+.guide-sheet{background:linear-gradient(145deg,#1a5fa0,#0d3d6b);border-radius:20px 20px 0 0;padding:18px 18px 28px;width:100%;max-width:700px;border-top:3px solid rgba(255,215,0,.4);}
+.guide-sheet-title{color:#FFD700;font-weight:900;font-size:1rem;margin-bottom:8px;}
+.guide-sheet-text{color:rgba(255,255,255,.9);font-size:.85rem;line-height:1.6;}
+.guide-sheet-text b{color:#FFE082;}
+.guide-close{float:right;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:1rem;cursor:pointer;margin-top:-4px;}
+.qdots{display:flex;gap:5px;justify-content:center;margin:6px 0 8px;}
+.qd{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.2);transition:.3s;}
+.qd.done{background:#FFD700;}
+.qd.cur{background:#fff;transform:scale(1.2);}
+.q-wrap{display:flex;flex-direction:column;gap:10px;}
+.story-box{background:linear-gradient(135deg,#1a5fa0,#0d3d6b);border-radius:15px;padding:12px 14px;color:#fff;font-size:clamp(.9rem,3.2vw,1.05rem);line-height:1.5;border:2px solid rgba(255,255,255,.15);}
+.story-box b{color:#FFE082;}
+.tts-btn{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:'Nunito',sans-serif;}
+.vis-area{background:rgba(255,255,255,.95);border-radius:16px;padding:18px 14px;box-shadow:0 4px 18px rgba(0,0,0,.2);min-height:80px;display:flex;align-items:center;justify-content:center;}
+.tf-wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:100%;max-width:420px;margin:0 auto;}
+.tf-cell{aspect-ratio:1;border-radius:10px;border:3px solid #bbb;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:clamp(1.4rem,6vw,2rem);}
+.tf-cell.on{background:#FFE066;border-color:#cc9900;box-shadow:inset 0 2px 6px rgba(0,0,0,.08);}
+.bond-diag{display:flex;flex-direction:column;align-items:center;}
+.bond-circ{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;border:3px solid;}
+.bc-whole{width:clamp(56px,15vw,70px);height:clamp(56px,15vw,70px);font-size:clamp(1.5rem,5vw,2rem);background:#FFD700;border-color:#8B6914;color:#7a5500;}
+.bc-part{width:clamp(50px,13vw,62px);height:clamp(50px,13vw,62px);font-size:clamp(1.3rem,4.5vw,1.7rem);}
+.bc-p1{background:#FF6B6B;border-color:#c62828;color:#fff;}
+.bc-p2{background:#42A5F5;border-color:#1565C0;color:#fff;}
+.bond-v{width:3px;height:22px;background:#666;margin:0 auto;}
+.bond-row{display:flex;gap:20px;justify-content:center;}
+.blk{width:clamp(30px,8vw,40px);height:clamp(30px,8vw,40px);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:clamp(.9rem,3.5vw,1.15rem);box-shadow:2px 3px 0 rgba(0,0,0,.15);}
+.blk.c1{background:#FF6B6B;border-bottom:3px solid #c62828;}
+.blk.c2{background:#FFD93D;border-bottom:3px solid #cc9900;}
+.blk.c3{background:#6BCB77;border-bottom:3px solid #2e8b57;}
+.blk.gone{opacity:.2;transform:scale(.7);}
+.b-grp{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:8px;border-radius:12px;background:rgba(0,0,0,.06);}
+.blocks-group{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;}
+.seq-row{display:flex;gap:5px;justify-content:center;align-items:center;flex-wrap:wrap;}
+.sn-box{width:clamp(38px,10vw,50px);height:clamp(38px,10vw,50px);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:clamp(1.1rem,4vw,1.5rem);font-weight:900;}
+.sn-val{background:#FFE066;border:3px solid #cc9900;color:#5D4037;}
+.sn-miss{background:#EDE7F6;border:3px solid #9B59B6;color:#9B59B6;}
+.sarr{color:#aaa;font-size:1rem;}
+.expr-display{display:flex;align-items:center;justify-content:center;gap:12px;font-size:clamp(2.4rem,10vw,4rem);font-weight:900;color:#2c3e50;}
+.expr-op{color:#9B59B6;}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ch{border-radius:16px;padding:clamp(16px,5vw,24px) 8px;text-align:center;cursor:pointer;border:3px solid transparent;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(2rem,9vw,3rem);transition:transform .12s,box-shadow .12s;box-shadow:0 5px 14px rgba(0,0,0,.15);}
+.ch:active{transform:scale(.94);}
+.ch.ca{background:linear-gradient(135deg,#FF6B6B,#FF3030);color:#fff;}
+.ch.cb{background:linear-gradient(135deg,#43E97B,#1DB954);color:#0a4020;}
+.ch.cc{background:linear-gradient(135deg,#40C4FF,#0091EA);color:#fff;}
+.ch.cd{background:linear-gradient(135deg,#FFD740,#FF8F00);color:#5D2D00;}
+.ch.correct{outline:5px solid #2e8b57;animation:pulse .35s ease;}
+.ch.wrong{animation:shake .35s ease;opacity:.5;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.fb{text-align:center;font-size:1rem;font-weight:800;padding:9px;border-radius:13px;}
+.fb.ok{background:#E8F5E9;color:#1b7a35;}
+.fb.no{background:#FFEBEE;color:#c62828;}
+.nxt-btn{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;padding:16px 14px;background:linear-gradient(135deg,#FFD700,#FF8C00);border:none;border-radius:0;font-size:1.2rem;font-weight:900;color:#5D2D00;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 -3px 16px rgba(255,140,0,.4);z-index:40;}
+.sdot{width:clamp(30px,8vw,42px);height:clamp(30px,8vw,42px);border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF8C69,#FF4500);box-shadow:2px 2px 5px rgba(0,0,0,.2);}
+#modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.65);align-items:center;justify-content:center;}
+#modal.on{display:flex;}
+.mbox{background:linear-gradient(145deg,#1a6ba8,#0d3d6b);border:4px solid #FFD700;border-radius:26px;padding:26px 22px;text-align:center;max-width:330px;width:90%;animation:popIn .4s ease;box-shadow:0 0 40px rgba(255,215,0,.35);}
+.mbox h2{color:#FFD700;font-size:1.6rem;font-weight:900;margin:8px 0;}
+.mbox p{color:#e0f0ff;font-size:.95rem;margin:5px 0;}
+.m-big{font-size:3.2rem;}
+.m-stars{font-size:1.7rem;margin:7px 0;letter-spacing:3px;}
+.m-btn{margin-top:13px;padding:11px 26px;background:linear-gradient(135deg,#FFD700,#FF8C00);border:none;border-radius:13px;font-size:1.05rem;font-weight:900;color:#5D2D00;cursor:pointer;font-family:'Nunito',sans-serif;}
+.cf{position:fixed;width:9px;height:13px;border-radius:2px;animation:cfall 2.4s ease-in forwards;pointer-events:none;z-index:200;}
+@keyframes cfall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="hdr">
+  <h1>&#127869;&#65039; Tim Kho Bau So Hoc</h1>
+  <div class="hdr-row">
+    <div class="badge">&#11088; <span id="ts">0</span> sao</div>
+    <div class="badge">&#128506;&#65039; <span id="td">0</span>/<span id="ta">0</span> bai</div>
+  </div>
+  <div class="pbar-wrap"><div class="pbar-fill" id="hbar" style="width:0%"></div></div>
+</div>
+<div id="s-map" class="scr on">
+  <div class="map-title">Chon dao de kham pha!</div>
+  <div class="islands" id="islands"></div>
+</div>
+<div id="s-isl" class="scr">
+  <div class="nav-hdr">
+    <button class="back-btn" onclick="goMap()">&#8592; Ban do</button>
+    <div class="nav-title" id="isl-ttl"></div>
+  </div>
+  <div class="llist" id="llist"></div>
+</div>
+<div id="s-les" class="scr">
+  <div class="nav-hdr">
+    <button class="back-btn" id="back-les">&#8592; Dao</button>
+    <div class="nav-title" id="les-ttl"></div>
+  </div>
+  <button class="guide-fab" id="guide-fab" onclick="openGuide()">?</button>
+  <div id="guide-overlay" onclick="closeGuide()">
+    <div class="guide-sheet" onclick="event.stopPropagation()">
+      <button class="guide-close" onclick="closeGuide()">&#10005;</button>
+      <div class="guide-sheet-title">&#128218; Huong dan day be</div>
+      <div class="guide-sheet-text" id="guide-text"></div>
+    </div>
+  </div>
+  <div class="qdots" id="qdots"></div>
+  <div id="qwrap"></div>
+</div>
+</div>
+<div id="modal">
+  <div class="mbox">
+    <div class="m-big" id="m-ico">&#127881;</div>
+    <h2 id="m-ttl">Tuyet voi!</h2>
+    <div class="m-stars" id="m-stars">&#11088;&#11088;&#11088;</div>
+    <p id="m-msg">Be lam gioi lam!</p>
+    <button class="m-btn" onclick="closeModal()">Tiep tuc &#8594;</button>
+  </div>
+</div>
+<script>
+// ===== TTS =====
+function speak(t){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(t);
+  u.lang='vi-VN';u.rate=0.85;u.pitch=1.1;
+  var vs=speechSynthesis.getVoices();
+  var vi=vs.find(function(v){return v.lang.startsWith('vi');});
+  if(vi)u.voice=vi;
+  window.speechSynthesis.speak(u);
+}
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=function(){speechSynthesis.getVoices();};
+
+function stripHtml(h){return h.replace(/<[^>]*>/g,'');}
+
+// ===== ISLANDS =====
+var ISLANDS=[
+  {id:'i1',name:'Dao So Ky Dieu',emoji:'&#127965;&#65039;',desc:'Nhan so, dem, so sanh',bg:'linear-gradient(145deg,#2e8b57,#3cb371)',lessons:['L1a','L1b','L1c']},
+  {id:'i2',name:'Rung Cong Them',emoji:'&#127796;',desc:'Phep cong khong dem',bg:'linear-gradient(145deg,#e67e22,#f39c12)',lessons:['L2a','L2b','L2c'],req:'i1'},
+  {id:'i3',name:'Hang Tru Di',emoji:'&#129412;',desc:'Phep tru sinh dong',bg:'linear-gradient(145deg,#8e44ad,#9b59b6)',lessons:['L3a','L3b','L3c'],req:'i2'},
+  {id:'i4',name:'Bo Bien Bond',emoji:'&#9875;',desc:'Phan tach so bond',bg:'linear-gradient(145deg,#1a6ba8,#2980b9)',lessons:['L4a','L4b','L4c'],req:'i3'},
+  {id:'i5',name:'Nui Lua Thu Tu',emoji:'&#127755;',desc:'Day so va so sanh',bg:'linear-gradient(145deg,#c0392b,#e74c3c)',lessons:['L5a','L5b','L5c'],req:'i4'},
+  {id:'i6',name:'Kho Bau!',emoji:'&#128142;',desc:'Thu thach tong hop',bg:'linear-gradient(145deg,#8B6914,#c9960c)',lessons:['L6a','L6b','L6c'],req:'i5'},
+];
+
+// ===== GUIDES =====
+var GUIDES={
+  L1a:'<b>Subitize:</b> Dua vai do vat len ban (1-5 cai). Hoi be co may cai? <b>Khong cho dem</b>, chi nhin va noi ngay. Bat dau 1-3, sau tang len 4-5.',
+  L1b:'<b>Ten Frame:</b> Ve 2 hang 5 o tren giay. Dat do vat vao tung o. Hoi co may o co do? Giup be thay so nhu hinh anh.',
+  L1c:'<b>So sanh:</b> Dat 2 hang do vat song song. Be nhin hang nao dai hon la biet nhieu hon. Day nhieu hon / it hon / bang nhau.',
+  L2a:'<b>Neo so lon, nhay tiep:</b> Day be giu so lon trong dau, dem tiep phan nho. VD: 5+3 - Giu 5 trong dau... 6, 7, 8. Dap an 8! Dung ngon tay chi dem tiep phan nho (3 ngon).',
+  L2b:'<b>So Bond:</b> Day be nho cac cap so: 5=1+4=2+3. Khi thay 3+? nho ngay 3 va 2 tao thanh 5. Luyen hang ngay.',
+  L2c:'<b>Nhin nhom:</b> Xep do vat thanh 2 nhom rieng. Nhin tong so nhu mot hinh anh. Muc tieu: be thay 4+3=7 nhu mot buc anh trong dau.',
+  L3a:'<b>Dem lui:</b> Day be noi to 8 bot 3... 7, 6, 5 - con 5! Dung ngon tay dem lui phan bi tru.',
+  L3b:'<b>Bond tru:</b> Biet 8=5+3, tu nhien biet 8-3=5 va 8-5=3. Day be nho gia dinh phep tinh.',
+  L3c:'<b>Tru truc quan:</b> Lay thuc te 7 vien bi, boc di 3 vien. Dem so con lai. Be can thay hanh dong lay di bang tay.',
+  L4a:'<b>Gia dinh so 5:</b> Dung 5 hat chia thanh cac cap. Moi ngay hoi 5 gom 2 va may? Muc tieu be nho thuoc long.',
+  L4b:'<b>Gia dinh so 10:</b> Nen tang quan trong nhat! Hoc thuoc: 1+9, 2+8, 3+7, 4+6, 5+5.',
+  L4c:'<b>Bond hon hop:</b> On lai tat ca bond da hoc. Muc tieu tra loi trong 3 giay.',
+  L5a:'<b>Day so:</b> Doc day to 1,2,3,?,5. Hoi so nao dang tron? Dung do vat xep hang de be thay ro cho trong.',
+  L5b:'<b>Tim so thieu:</b> Che mot so bang tay, hoi be so nao dang bi che. Luyen doc day so xuoi va nguoc 1-20.',
+  L5c:'<b>Ky hieu so sanh:</b> Dau > nhu mieng ca sau luon ha ve phia so lon hon. Ca sau tham lam, luon an so lon hon!',
+  L6a:'<b>Cong va tru hon hop:</b> On lai tat ca phuong phap. Be tu quyet dinh dung cach nao.',
+  L6b:'<b>Toan tu duy:</b> Khong voi cho dap an. Dat cau hoi goi mo. Khuyen khich be giai thich cach nghi.',
+  L6c:'<b>Thu thach tong hop:</b> Be lam tu tin - do la dau hieu be da thuc su hieu, khong chi thuoc long.',
+};
+
+// ===== HELPERS =====
+function sh(a){return[].concat(a).sort(function(){return Math.random()-.5;});}
+function make4(ans,mn,mx){
+  var pool=[];
+  for(var v=mn;v<=mx;v++)if(v!==ans)pool.push(v);
+  pool=sh(pool).slice(0,3);
+  var opts=sh([ans].concat(pool));
+  return{choices:opts,ai:opts.indexOf(ans)};
+}
+function visBlocks(n,col,gone){
+  gone=gone||0;
+  var h='';
+  for(var i=0;i<n;i++)h+='<div class="blk '+col+(i>=n-gone?' gone':'')+'">&#11088;</div>';
+  return h;
+}
+function visBond(w,p1,p2){
+  return '<div class="bond-diag"><div class="bond-circ bc-whole">'+w+'</div><div class="bond-v"></div><div class="bond-row"><div class="bond-circ bc-part bc-p1">'+(p1!==null?p1:'?')+'</div><div class="bond-circ bc-part bc-p2">'+(p2!==null?p2:'?')+'</div></div></div>';
+}
+function visTF(n){
+  var h='<div class="tf-wrap">';
+  for(var i=0;i<10;i++)h+='<div class="tf-cell'+(i<n?' on':'')+'"></div>';
+  return h+'</div>';
+}
+function visSub(d){
+  var h='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">';
+  for(var i=0;i<9;i++)h+='<div style="width:clamp(30px,8vw,42px);height:clamp(30px,8vw,42px);display:flex;align-items:center;justify-content:center;">'+(d[i]?'<div class="sdot"></div>':'')+'</div>';
+  return h+'</div>';
+}
+function visSeq(seq){
+  var h='<div class="seq-row">';
+  for(var i=0;i<seq.length;i++){
+    h+=(seq[i]===null?'<div class="sn-box sn-miss">?</div>':'<div class="sn-box sn-val">'+seq[i]+'</div>');
+    if(i<seq.length-1)h+='<div class="sarr">&#8594;</div>';
+  }
+  return h+'</div>';
+}
+function visExpr(a,op,b){
+  return '<div class="expr-display"><span>'+a+'</span><span class="expr-op">'+op+'</span><span>'+b+'</span><span class="expr-op">=</span><span class="expr-op">?</span></div>';
+}
+function visBlocks2(a,b){
+  var h='<div class="blocks-group"><div class="b-grp">'+visBlocks(a,'c1')+'</div><div style="font-size:1.6rem;font-weight:900;color:#9B59B6;">+</div><div class="b-grp">'+visBlocks(b,'c2')+'</div></div>';
+  h+='<div style="text-align:center;font-size:.85rem;color:#888;margin-top:6px;">'+a+' + '+b+' = ?</div>';
+  return h;
+}
+function visCmp(a,b){
+  function row(n,c){
+    var ds='';
+    for(var i=0;i<Math.min(n,8);i++)ds+='<div class="sdot" style="width:26px;height:26px;'+c+'"></div>';
+    return '<div style="text-align:center;"><div style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center;max-width:90px;">'+ds+'</div><div style="font-size:1.6rem;font-weight:900;margin-top:4px;">'+n+'</div></div>';
+  }
+  return '<div style="display:flex;gap:16px;justify-content:center;align-items:flex-end;flex-wrap:wrap;">'+row(a,'background:radial-gradient(circle at 35% 35%,#FF8C69,#FF4500);')+'<div style="font-size:2rem;color:#888;padding-bottom:8px;">?</div>'+row(b,'background:radial-gradient(circle at 35% 35%,#64B5F6,#1565C0);')+'</div>';
+}
+
+// ===== BUILD LESSONS =====
+var LESSONS={};
+
+// L1a Subitize
+(function(){
+  var pats=[
+    {n:1,d:[0,0,0,0,1,0,0,0,0],lv:1},{n:2,d:[1,0,0,0,0,0,0,0,1],lv:1},{n:3,d:[1,0,0,0,1,0,0,0,1],lv:1},
+    {n:4,d:[1,0,1,0,0,0,1,0,1],lv:2},{n:5,d:[1,0,1,0,1,0,1,0,1],lv:2},{n:5,d:[1,0,0,1,1,1,0,0,1],lv:2},
+    {n:6,d:[1,0,1,1,0,1,1,0,1],lv:3},{n:7,d:[1,1,1,0,1,0,1,1,1],lv:3},{n:8,d:[1,1,1,1,0,1,1,1,1],lv:3}
+  ];
+  LESSONS.L1a={name:'Nhin Ngay Biet So',icon:'&#128065;',method:'Subitize',
+    qs:pats.map(function(p){var r=make4(p.n,1,9);return{story:'Nhin NHANH - co may cham? Khong duoc dem!',vis:'<div class="vis-area">'+visSub(p.d)+'</div>',choices:r.choices,ans:r.ai,tts:'Nhin nhanh co may cham? Khong duoc dem tung cai!',lv:p.lv};})};
+})();
+
+// L1b Ten Frame
+(function(){
+  var qs=[];
+  for(var n=1;n<=10;n++){var r=make4(n,1,10);qs.push({story:'Dem cac o co sao. Co bao nhieu o sang?',vis:'<div class="vis-area">'+visTF(n)+'</div>',choices:r.choices,ans:r.ai,tts:'Dem cac o co ngoi sao. Co bao nhieu o sang?',lv:n<=5?1:2});}
+  LESSONS.L1b={name:'Khung 10 O Than Ky',icon:'&#128306;',method:'Ten Frame',qs:sh(qs)};
+})();
+
+// L1c Compare
+(function(){
+  var pairs=[[2,5],[7,3],[4,4],[8,6],[1,9],[5,5],[6,3],[9,7],[3,8],[4,7]];
+  LESSONS.L1c={name:'So Sanh Hai So',icon:'&#9878;',method:'So sanh truc quan',
+    qs:pairs.map(function(p,i){
+      var a=p[0],b=p[1];
+      var ca=a<b?'<':a>b?'>':'=';
+      var opts=sh(['<','>','=','?']);
+      return{story:'So '+a+' va so '+b+' - chon dau dung!',vis:'<div class="vis-area">'+visCmp(a,b)+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'So '+a+' va so '+b+'. Chon dau dung!',lv:i<3?1:i<7?2:3};
+    })};
+})();
+
+// L2a Story Add
+(function(){
+  var data=[
+    {a:2,b:1,lv:1,s:'Vit co 2 con ca, bat them 1 con. Duoc may con?'},
+    {a:3,b:2,lv:1,s:'Cay co 3 qua dua, moc them 2 qua. Co may qua?'},
+    {a:2,b:3,lv:1,s:'Tim duoc 2 ngoi sao, them 3 ngoi. Co may ngoi?'},
+    {a:4,b:3,lv:2,s:'Bai bien co 4 con cua, den them 3 con. Co may con?'},
+    {a:5,b:2,lv:2,s:'Nhat 5 vo so, nhat them 2 vo. Co may vo?'},
+    {a:4,b:4,lv:2,s:'Tim 4 vien ngoc, tim them 4 vien. Co may vien?'},
+    {a:6,b:3,lv:3,s:'Co 6 ngoi sao vang, them 3 ngoi. Duoc may?'},
+    {a:7,b:2,lv:3,s:'Trong chau 7 con ca, them vao 2 con. Co may?'},
+    {a:5,b:5,lv:3,s:'Cay 1 co 5 qua, cay 2 co 5 qua. Ca hai co may?'},
+  ];
+  LESSONS.L2a={name:'Cau Chuyen Cong',icon:'&#128214;',method:'Cong - neo so lon roi dem tiep',
+    qs:data.map(function(d){var r=make4(d.a+d.b,1,10);return{story:d.s,vis:'<div class="vis-area">'+visExpr(d.a,'+',d.b)+'</div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
+})();
+
+// L2b Bond Add
+(function(){
+  var data=[[5,2,3,1],[5,3,2,1],[7,4,3,2],[7,3,4,2],[8,5,3,2],[8,3,5,2],[10,6,4,3],[10,4,6,3],[6,4,2,2],[9,5,4,3]];
+  LESSONS.L2b={name:'So Bond Cong',icon:'&#128279;',method:'Number Bond',
+    qs:data.map(function(d){var r=make4(d[2],0,10);return{story:'So '+d[0]+' gom '+d[1]+' va may?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'So '+d[0]+' gom '+d[1]+' va may?',lv:d[3]};})};
+})();
+
+// L2c Blocks Add
+(function(){
+  var data=[[2,1,1],[3,2,1],[4,2,2],[3,3,2],[5,3,2],[4,4,2],[5,4,3],[6,3,3],[5,5,3],[7,2,3]];
+  LESSONS.L2c={name:'Gop Nhom Khoi Mau',icon:'&#127922;',method:'Montessori Blocks',
+    qs:data.map(function(d){var r=make4(d[0]+d[1],1,10);return{story:'Gop '+d[0]+' khoi do va '+d[1]+' khoi vang. Tat ca duoc may?',vis:'<div class="vis-area">'+visBlocks2(d[0],d[1])+'</div>',choices:r.choices,ans:r.ai,tts:'Gop '+d[0]+' khoi do va '+d[1]+' khoi vang. Tat ca duoc may?',lv:d[2]};})};
+})();
+
+// L3a Sub story
+(function(){
+  var data=[
+    {a:4,b:1,lv:1,s:'Co 4 con ca. Ca map an 1 con. Con may con?'},
+    {a:5,b:2,lv:1,s:'Co 5 chu chim. Bay di 2 chu. Con may chu?'},
+    {a:5,b:3,lv:1,s:'Co 5 qua dua. An mat 3 qua. Con may qua?'},
+    {a:7,b:3,lv:2,s:'Tim duoc 7 vien ngoc. Danh roi 3 vien. Con may?'},
+    {a:8,b:5,lv:2,s:'Co 8 vo so. Tang di 5 vo. Con may vo?'},
+    {a:8,b:6,lv:2,s:'Co 8 ngoi sao. Mat 6 ngoi. Con may ngoi?'},
+    {a:9,b:4,lv:3,s:'Co 9 con cua. Boi di 4 con. Con may con?'},
+    {a:10,b:3,lv:3,s:'Cau duoc 10 con ca. Tha ve 3 con. Con may?'},
+    {a:10,b:7,lv:3,s:'Co 10 ngoi sao. Tat mat 7 ngoi. Con may?'},
+  ];
+  LESSONS.L3a={name:'Cau Chuyen Tru',icon:'&#9986;',method:'Dem lui tu so lon',
+    qs:data.map(function(d){var r=make4(d.a-d.b,0,9);return{story:d.s,vis:'<div class="vis-area">'+visExpr(d.a,'-',d.b)+'</div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
+})();
+
+// L3b Bond Sub
+(function(){
+  var data=[[5,2,3,1],[7,4,3,2],[8,5,3,2],[6,4,2,2],[9,6,3,2],[10,3,7,3],[10,8,2,3],[8,3,5,3]];
+  LESSONS.L3b={name:'So Bond Tru',icon:'&#128279;',method:'Bond - mot cong tao hai tru',
+    qs:data.map(function(d){var r=make4(d[2],0,9);return{story:'Co '+d[0]+', lay di '+d[1]+'. Con lai may?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'Co '+d[0]+' lay di '+d[1]+'. Con lai may?',lv:d[3]};})};
+})();
+
+// L3c Blocks Sub
+(function(){
+  var data=[[4,1,1],[5,2,1],[6,3,2],[7,3,2],[8,5,2],[9,3,3],[10,4,3],[9,7,3]];
+  LESSONS.L3c={name:'Lay Bot Khoi',icon:'&#128465;',method:'Nhin thay phan bi lay di',
+    qs:data.map(function(d){var r=make4(d[0]-d[1],0,9);return{story:'Co '+d[0]+' ngoi sao, lay di '+d[1]+'. Con lai may?',vis:'<div class="vis-area"><div class="b-grp">'+visBlocks(d[0],'c3',d[1])+'</div></div>',choices:r.choices,ans:r.ai,tts:'Co '+d[0]+' ngoi sao lay di '+d[1]+'. Con lai may?',lv:d[2]};})};
+})();
+
+// L4a Bond family 5
+(function(){
+  var pairs=[[0,5],[1,4],[2,3],[3,2],[4,1],[5,0],[1,4],[2,3],[0,5],[3,2]];
+  LESSONS.L4a={name:'Gia Dinh So 5',icon:'&#128106;',method:'Number Bond Family 5',
+    qs:sh(pairs).slice(0,8).map(function(p){var r=make4(p[1],0,5);return{story:p[0]+' + ? = 5',vis:'<div class="vis-area">'+visBond(5,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cong may bang 5?',lv:1};})};
+})();
+
+// L4b Bond family 10
+(function(){
+  var pairs=[];for(var i=0;i<=10;i++)pairs.push([i,10-i]);
+  LESSONS.L4b={name:'Gia Dinh So 10',icon:'&#128306;',method:'Number Bond Family 10',
+    qs:sh(pairs).slice(0,9).map(function(p){var r=make4(p[1],0,10);return{story:p[0]+' + ? = 10',vis:'<div class="vis-area">'+visBond(10,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cong may bang 10?',lv:2};})};
+})();
+
+// L4c Bond mix
+(function(){
+  var data=[[6,4,2],[7,3,4],[8,2,6],[9,1,8],[5,4,1],[6,3,3],[7,2,5],[8,1,7],[9,2,7],[6,2,4]];
+  LESSONS.L4c={name:'Bond Hon Hop',icon:'&#127917;',method:'Number Bond Mixed',
+    qs:sh(data).slice(0,8).map(function(d){var r=make4(d[2],0,10);return{story:d[1]+' + ? = '+d[0],vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:d[1]+' cong may bang '+d[0]+'?',lv:2};})};
+})();
+
+// L5a Order
+(function(){
+  var sets=[[3,1,4,2,1],[5,2,8,3,2],[7,4,9,1,2],[6,2,5,9,3],[8,3,6,1,3],[4,10,2,7,3]];
+  LESSONS.L5a={name:'Xep Thu Tu',icon:'&#128202;',method:'Ordering',
+    qs:sets.map(function(s){
+      var lv=s[4];var nums=s.slice(0,4);
+      var sorted=[].concat(nums).sort(function(a,b){return a-b;});
+      var ca=sorted.join('>');
+      var opts=sh([ca,nums.sort(function(a,b){return b-a;}).join('>'),sorted[1]+'>'+sorted[0]+'>'+sorted[2]+'>'+sorted[3],sorted[0]+'>'+sorted[2]+'>'+sorted[1]+'>'+sorted[3]]);
+      return{story:'Xep cac so '+nums.join(', ')+' tu nho den lon',vis:'<div class="vis-area"><div class="seq-row">'+nums.map(function(n){return'<div class="sn-box sn-val">'+n+'</div>';}).join('<div class="sarr">,</div>')+'</div></div>',choices:opts,ans:opts.indexOf(ca),tts:'Xep cac so '+nums.join(' ')+' tu nho den lon',lv:lv};
+    })};
+})();
+
+// L5b Missing
+(function(){
+  var seqs=[[1,2,null,4,5,1],[3,4,5,null,7,1],[6,null,8,9,10,2],[1,null,3,4,5,2],[5,6,null,8,9,2],[2,3,4,5,null,3],[null,2,3,4,5,3],[7,8,null,10,11,3]];
+  LESSONS.L5b={name:'Tim So Mat Tich',icon:'&#128269;',method:'Number Sequence',
+    qs:seqs.map(function(s){
+      var lv=s[5];var seq=s.slice(0,5);
+      var idx=seq.indexOf(null);
+      var ans=idx===0?seq[1]-1:seq[idx-1]+1;
+      var r=make4(ans,1,12);
+      return{story:'So nao dang tron trong day?',vis:'<div class="vis-area">'+visSeq(seq)+'</div>',choices:r.choices,ans:r.ai,tts:'So nao dang tron trong day so nay?',lv:lv};
+    })};
+})();
+
+// L5c Compare symbol
+(function(){
+  var data=[[5,8,1],[9,3,1],[6,6,2],[7,4,2],[2,10,2],[8,8,3],[4,7,3],[10,9,3]];
+  LESSONS.L5c={name:'Dau So Sanh',icon:'&#127942;',method:'>,<,= Symbols',
+    qs:data.map(function(d){
+      var ca=d[0]<d[1]?'<':d[0]>d[1]?'>':'=';
+      var opts=sh(['<','>','=','?']);
+      return{story:'Dien dau dung: '+d[0]+' __ '+d[1],vis:'<div class="vis-area">'+visExpr(d[0],'___',d[1])+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'Dien dau dung. '+d[0]+' so voi '+d[1],lv:d[2]};
+    })};
+})();
+
+// L6a Mixed
+(function(){
+  var ops=[[3,'+',4,7,2],[8,'-',5,3,2],[2,'+',7,9,2],[6,'-',2,4,2],[5,'+',5,10,3],[9,'-',6,3,3],[4,'+',3,7,2],[10,'-',4,6,3],[7,'-',3,4,3],[3,'+',6,9,3]];
+  LESSONS.L6a={name:'Cong & Tru Tong Hop',icon:'&#9876;',method:'Mixed Ops',
+    qs:ops.map(function(d){var r=make4(d[3],0,10);return{story:'Tinh nhanh: '+d[0]+' '+d[1]+' '+d[2]+' = ?',vis:'<div class="vis-area">'+visExpr(d[0],d[1],d[2])+'</div>',choices:r.choices,ans:r.ai,tts:'Tinh nhanh '+d[0]+' '+d[1]+' '+d[2]+' bang may?',lv:d[4]};})};
+})();
+
+// L6b Logic
+(function(){
+  var data=[
+    {s:'Me co 3 con ca. Bo co nhieu hon me 2 con. Bo co may con?',a:5,lv:2},
+    {s:'Co 4 vo do va 4 vo vang. Co may vo tat ca?',a:8,lv:2},
+    {s:'Co 10 ngoi sao. Da tim 6 ngoi. Con phai tim may ngoi?',a:4,lv:2},
+    {s:'Cay 1 co 3 qua, cay 2 co 5 qua. Ca hai cay co may qua?',a:8,lv:3},
+    {s:'Co 9 con cua. Da bat 5 con. Con may con chua bat?',a:4,lv:3},
+    {s:'Tim 6 vien ngoc nhung mat 2 vien. Con may vien?',a:4,lv:3},
+    {s:'Sang cau 4 con, chieu cau them 3 con. Duoc may con ca ngay?',a:7,lv:3},
+    {s:'Day 2, 4, 6, __. So tiep theo la may?',a:8,lv:3},
+  ];
+  LESSONS.L6b={name:'Toan Tu Duy',icon:'&#129504;',method:'Logic & Thinking',
+    qs:data.map(function(d){var r=make4(d.a,0,10);return{story:d.s,vis:'<div class="vis-area"><div style="font-size:3rem;">&#129300;</div></div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
+})();
+
+// L6c Grand
+(function(){
+  var mix=[];
+  for(var i=0;i<8;i++){var a=Math.floor(Math.random()*6)+1;var b=Math.floor(Math.random()*(10-a))+1;var op=Math.random()<.5?'+':'-';var x=op==='-'&&a<b?b:a;var y=op==='-'&&a<b?a:b;var ans=op==='+'?x+y:x-y;var r=make4(ans,0,10);mix.push({story:'Tinh nhanh: '+x+' '+op+' '+y+' = ?',vis:'<div class="vis-area">'+visExpr(x,op,y)+'</div>',choices:r.choices,ans:r.ai,tts:'Tinh nhanh '+x+' '+(op==='+'?'cong':'tru')+' '+y+' bang may?',lv:3});}
+  LESSONS.L6c={name:'Mo Kho Bau!',icon:'&#128176;',method:'Grand Challenge',qs:mix};
+})();
+
+// ===== STATE =====
+var ST=JSON.parse(localStorage.getItem('kb4')||'null')||{stars:0,comp:{}};
+function save(){localStorage.setItem('kb4',JSON.stringify(ST));}
+var TOTAL=Object.keys(LESSONS).length;
+document.getElementById('ta').textContent=TOTAL;
+
+var CUR={island:null,lid:null,qs:[],qi:0,score:0,answered:false};
+
+// ===== UTIL =====
+function show(id){document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});document.getElementById(id).classList.add('on');}
+function starStr(e,m){var s='';for(var i=0;i<m;i++)s+=e>i?'&#11088;':'&#9734;';return s;}
+function isIslDone(id){var isl=ISLANDS.find(function(i){return i.id===id;});return isl&&isl.lessons.every(function(l){return ST.comp[l];});}
+function updateHdr(){var done=Object.keys(ST.comp).length;document.getElementById('ts').textContent=ST.stars;document.getElementById('td').textContent=done;document.getElementById('hbar').style.width=(done/TOTAL*100)+'%';}
+function spawnConf(n){var cols=['#FFD700','#FF6B6B','#64B5F6','#6BCB77','#C77DFF'];for(var i=0;i<n;i++)(function(delay){setTimeout(function(){var el=document.createElement('div');el.className='cf';el.style.cssText='left:'+Math.random()*100+'%;background:'+cols[~~(Math.random()*cols.length)]+';animation-duration:'+(1.5+Math.random())+'s;animation-delay:'+Math.random()*.3+'s';document.body.appendChild(el);setTimeout(function(){el.remove();},3000);},delay*60);})(i);}
+
+// ===== MAP =====
+function renderMap(){
+  var el=document.getElementById('islands');
+  el.innerHTML='';
+  ISLANDS.forEach(function(isl){
+    var locked=isl.req&&!isIslDone(isl.req);
+    var done=isl.lessons.every(function(l){return ST.comp[l];});
+    var earned=isl.lessons.reduce(function(t,l){return t+(ST.comp[l]||0);},0);
+    var d=document.createElement('div');
+    d.className='icard'+(locked?' locked':'')+(done?' done':'');
+    d.style.background=isl.bg;
+    d.innerHTML='<span class="ie">'+isl.emoji+'</span><div class="iname">'+isl.name+'</div><div class="idesc">'+isl.desc+'</div><div class="istars">'+starStr(earned,isl.lessons.length*3)+'</div>'+(locked?'<div class="lk-ico">&#128274;</div>':'');
+    if(!locked)d.onclick=(function(x){return function(){openIsland(x);};})(isl);
+    el.appendChild(d);
+  });
+}
+function goMap(){
+  var fab=document.getElementById('guide-fab');if(fab)fab.className='guide-fab';
+  document.getElementById('guide-overlay').classList.remove('on');
+  show('s-map');renderMap();updateHdr();
+}
+
+// ===== ISLAND =====
+function openIsland(isl){
+  var fab=document.getElementById('guide-fab');if(fab)fab.className='guide-fab';
+  document.getElementById('guide-overlay').classList.remove('on');
+  CUR.island=isl;
+  document.getElementById('isl-ttl').textContent=isl.name;
+  var list=document.getElementById('llist');
+  list.innerHTML='';
+  isl.lessons.forEach(function(lid,idx){
+    var les=LESSONS[lid];
+    var unlocked=idx===0||ST.comp[isl.lessons[idx-1]];
+    var s=ST.comp[lid]||0;
+    var d=document.createElement('div');
+    d.className='litem'+(s?' done':'');
+    d.innerHTML='<div class="li-ico">'+les.icon+'</div><div style="flex:1"><div class="li-name">'+les.name+'</div><div class="li-sub">'+les.method+'</div>'+(s?'<div style="color:#FFD700;font-size:.85rem">'+Array(s+1).join('&#11088;')+'</div>':'')+'</div><div class="li-chk">'+(unlocked?(s?'&#9989;':'&#9654;&#65039;'):'&#128274;')+'</div>';
+    if(unlocked)d.onclick=(function(x){return function(){startLesson(x);};})(lid);
+    list.appendChild(d);
+  });
+  show('s-isl');
+}
+
+// ===== LESSON =====
+function openGuide(){document.getElementById('guide-overlay').classList.add('on');}
+function closeGuide(){document.getElementById('guide-overlay').classList.remove('on');}
+
+function startLesson(lid){
+  CUR.lid=lid;
+  var les=LESSONS[lid];
+  CUR.qs=sh(les.qs.slice()).slice(0,8);
+  CUR.qi=0;CUR.score=0;CUR.answered=false;
+  guideOpen=false;
+  document.getElementById('les-ttl').textContent=les.name;
+  document.getElementById('back-les').onclick=function(){openIsland(CUR.island);};
+  document.getElementById('guide-text').innerHTML=GUIDES[lid]||'';
+  document.getElementById('guide-overlay').classList.remove('on');
+  var fab=document.getElementById('guide-fab');
+  if(fab)fab.className='guide-fab show';
+  renderDots();
+  renderQ();
+  show('s-les');
+  window.scrollTo(0,0);
+}
+
+function renderDots(){
+  document.getElementById('qdots').innerHTML=CUR.qs.map(function(_,i){return'<div class="qd '+(i<CUR.qi?'done':i===CUR.qi?'cur':'')+'" id="qd'+i+'"></div>';}).join('');
+}
+function updDots(){CUR.qs.forEach(function(_,i){var d=document.getElementById('qd'+i);if(d)d.className='qd '+(i<CUR.qi?'done':i===CUR.qi?'cur':'');});}
+
+// ===== RENDER QUESTION — pure DOM, no template literals =====
+function renderQ(){
+  CUR.answered=false;
+  var q=CUR.qs[CUR.qi];
+  var wrap=document.getElementById('qwrap');
+
+  // clear previous
+  while(wrap.firstChild)wrap.removeChild(wrap.firstChild);
+
+  // story box
+  var sb=document.createElement('div');
+  sb.className='story-box';
+  sb.innerHTML=q.story;
+  var br=document.createElement('br');
+  sb.appendChild(br);
+  var ttsB=document.createElement('button');
+  ttsB.className='tts-btn';
+  ttsB.textContent='&#128266; Nghe doc de bai';
+  ttsB.onclick=(function(t){return function(){speak(t);};})(q.tts);
+  sb.appendChild(ttsB);
+  wrap.appendChild(sb);
+
+  // visual
+  var vd=document.createElement('div');
+  vd.innerHTML=q.vis;
+  wrap.appendChild(vd);
+
+  // choices
+  var cd=document.createElement('div');
+  cd.className='choices';
+  var cls=['ca','cb','cc','cd'];
+  for(var i=0;i<q.choices.length;i++){
+    var btn=document.createElement('div');
+    btn.className='ch '+cls[i];
+    btn.id='ch'+i;
+    btn.textContent=String(q.choices[i]);
+    btn.onclick=(function(idx){return function(){checkAns(idx);};})(i);
+    cd.appendChild(btn);
+  }
+  wrap.appendChild(cd);
+
+  // feedback div
+  var fb=document.createElement('div');
+  fb.id='fb';
+  wrap.appendChild(fb);
+
+  // next button
+  var nxt=document.createElement('button');
+  nxt.className='nxt-btn';
+  nxt.id='nxt';
+  nxt.textContent=CUR.qi+1<CUR.qs.length?'Cau tiep theo >>>':'Hoan thanh bai!';
+  nxt.style.display='none';
+  nxt.onclick=function(){nextQ();};
+  wrap.appendChild(nxt);
+
+  // speak after short delay
+  setTimeout(function(){speak(q.tts);},400);
+}
+
+// ===== CHECK ANSWER =====
+var PRAISE=['Xuat sac!','Tuyet voi!','Gioi qua!','Hoan hao!','WOW!','Thong minh qua!'];
+var WRONG=['Co gang nao!','Gan dung roi!','Khong sao, tiep tuc!'];
+
+function checkAns(idx){
+  if(CUR.answered)return;
+  CUR.answered=true;
+
+  var q=CUR.qs[CUR.qi];
+  var correct=q.ans;
+
+  // mark buttons
+  var chBtn=document.getElementById('ch'+idx);
+  if(chBtn)chBtn.classList.add(idx===correct?'correct':'wrong');
+  if(idx!==correct){
+    var cBtn=document.getElementById('ch'+correct);
+    if(cBtn)cBtn.classList.add('correct');
+  }
+
+  // feedback text
+  var fb=document.getElementById('fb');
+  if(fb){
+    if(idx===correct){
+      fb.innerHTML='<div class="fb ok">'+PRAISE[~~(Math.random()*PRAISE.length)]+'</div>';
+      CUR.score++;
+      spawnConf(7);
+    } else {
+      fb.innerHTML='<div class="fb no">'+WRONG[~~(Math.random()*WRONG.length)]+' Dap an dung la <b>'+q.choices[correct]+'</b>!</div>';
+    }
+  }
+
+  // show next button
+  var nxt=document.getElementById('nxt');
+  if(nxt)nxt.style.display='block';
+}
+
+function nextQ(){
+  CUR.qi++;
+  updDots();
+  if(CUR.qi>=CUR.qs.length)finishLesson();
+  else{renderQ();window.scrollTo(0,0);}
+}
+
+// ===== FINISH =====
+function finishLesson(){
+  var r=CUR.score/CUR.qs.length;
+  var s=r>=.85?3:r>=.6?2:1;
+  var prev=ST.comp[CUR.lid]||0;
+  if(s>prev){ST.stars+=(s-prev);ST.comp[CUR.lid]=s;save();}
+  var e3=['&#127882;','&#128081;','&#128176;','&#127942;'],e2=['&#128522;','&#127775;'],e1=['&#128170;'];
+  document.getElementById('m-ico').textContent=s===3?e3[~~(Math.random()*e3.length)]:s===2?e2[0]:e1[0];
+  document.getElementById('m-ttl').textContent=s===3?'Hoan hao!':s===2?'Gioi lam!':'Co gang them!';
+  document.getElementById('m-stars').textContent=Array(s+1).join('&#11088;')+Array(4-s).join('&#9734;');
+  document.getElementById('m-msg').textContent='Dung '+CUR.score+'/'+CUR.qs.length+' cau! +'+s+' sao';
+  document.getElementById('modal').classList.add('on');
+  if(s===3)spawnConf(25);
+  updateHdr();
+}
+function closeModal(){document.getElementById('modal').classList.remove('on');openIsland(CUR.island);}
+
+// ===== INIT =====
+renderMap();updateHdr();
+</script>
+</body>
+</html>
