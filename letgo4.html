@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Let's Go 4 — English Learning</title>
+<style>
+:root{--g:#2d7a3a;--gl:#4caf50;--gp:#e8f5e9;--y:#f9a825;--yp:#fff9e6;--b:#1565c0;--bp:#e3f2fd;--o:#e65100;--op:#fff3e0;--pu:#6a1b9a;--pp:#f3e5f5;--r:#c62828;--rp:#ffebee;--t:#00695c;--tp:#e0f2f1;--bg:#f7fbf7;--card:#fff;--tx:#1a2e1a;--sh:0 2px 12px rgba(0,0,0,.1);--rad:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+#topbar{background:linear-gradient(135deg,#2d7a3a,#1b5e20);padding:10px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#topbar h1{color:#fff;font-size:1.15rem;font-weight:800;flex:1}
+#topbar .st{color:#f9a825;font-size:.95rem;font-weight:700}
+#backbtn{display:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;font-size:1.1rem;color:#fff;align-items:center;justify-content:center;flex-shrink:0}
+.screen{display:none;padding:14px;max-width:860px;margin:0 auto}
+.screen.active{display:block}
+.card{background:var(--card);border-radius:var(--rad);padding:14px;box-shadow:var(--sh);margin-bottom:12px}
+.hero{background:linear-gradient(135deg,#2d7a3a,#1565c0);border-radius:var(--rad);padding:20px;margin-bottom:16px;color:#fff;text-align:center}
+.hero h2{font-size:1.5rem;font-weight:900;margin-bottom:4px}
+.hero p{font-size:.9rem;opacity:.9}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.unitcard{background:var(--card);border-radius:var(--rad);padding:14px;text-align:center;cursor:pointer;box-shadow:var(--sh);transition:transform .15s;border:2px solid transparent}
+.unitcard:hover{transform:translateY(-2px);border-color:var(--gl)}
+.unitcard:active{transform:scale(.97)}
+.unum{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 8px;color:#fff;font-weight:900}
+.unitcard h4{font-size:.82rem;font-weight:700;line-height:1.3}
+.unitcard .up{font-size:.72rem;color:#888;margin-top:3px}
+.pb{height:7px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-top:3px}
+.pbf{height:100%;background:linear-gradient(90deg,var(--gl),var(--y));border-radius:4px;transition:width .5s}
+.sh2{font-size:.95rem;font-weight:800;color:var(--g);margin-bottom:10px}
+.stabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.stab{padding:7px 13px;border-radius:18px;border:2px solid #ddd;background:var(--card);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.stab.on{background:var(--g);color:#fff;border-color:var(--g)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}
+.vcard{background:var(--card);border-radius:11px;padding:11px;text-align:center;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;border:2px solid transparent}
+.vcard:hover{transform:scale(1.04);border-color:var(--gl)}
+.vcard.ok{border-color:var(--gl);background:var(--gp)}
+.vemoji{font-size:2rem;margin-bottom:5px;display:block}
+.vword{font-size:.85rem;font-weight:700}
+.dlg{margin-bottom:10px}
+.dbbl{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px}
+.davt{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:#fff;flex-shrink:0}
+.dtxt{border-radius:11px;padding:7px 11px;font-size:.88rem;line-height:1.4;cursor:pointer;max-width:75%}
+.dtxt.left{background:var(--gp)}
+.dtxt.right{background:var(--bp)}
+.gbox{background:var(--yp);border-radius:var(--rad);padding:14px;margin-bottom:14px;border-left:4px solid var(--y)}
+.gbox h3{color:var(--o);font-size:.92rem;font-weight:800;margin-bottom:10px}
+.gpat{background:#fff;border-radius:8px;padding:9px 13px;margin-bottom:7px;font-size:.88rem;border:1px solid #ffe082}
+.gpat strong{color:var(--b)}
+.gex{font-size:.82rem;color:#555;margin-top:4px;padding-left:8px;border-left:2px solid var(--gl)}
+.gtip{background:var(--bp);border-radius:7px;padding:9px;font-size:.8rem;color:var(--b);margin-top:8px}
+.chant{background:linear-gradient(135deg,#fff3e0,#e8f5e9);border-radius:var(--rad);padding:14px;margin-bottom:14px}
+.chant h4{color:var(--o);font-size:.9rem;font-weight:800;margin-bottom:8px}
+.chant p{font-size:.87rem;line-height:1.8;color:#333}
+.pbox{background:var(--card);border-radius:var(--rad);padding:14px;margin-bottom:11px;box-shadow:var(--sh)}
+.psound{font-size:2.2rem;font-weight:900;color:var(--r);text-align:center;padding:8px}
+.pwords{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:7px}
+.pw{background:var(--rp);border-radius:7px;padding:5px 11px;font-size:.88rem;font-weight:600;color:var(--r);cursor:pointer}
+.pw em{font-style:normal;text-decoration:underline;font-weight:900}
+.spk{text-align:center;padding:16px}
+.spktxt{font-size:.95rem;background:var(--gp);border-radius:9px;padding:9px 14px;margin:9px 0;font-style:italic;color:#333}
+.micbtn{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--gl));border:none;cursor:pointer;font-size:1.6rem;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto;transition:transform .15s;box-shadow:0 4px 12px rgba(45,122,58,.35)}
+.micbtn:hover{transform:scale(1.08)}
+.micbtn.rec{background:linear-gradient(135deg,var(--r),#e53935);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.4)}50%{box-shadow:0 0 0 10px rgba(198,40,40,0)}}
+.sbar{height:9px;background:#e0e0e0;border-radius:5px;overflow:hidden;margin:7px 0}
+.sbf{height:100%;border-radius:5px;transition:width 1s}
+.btn{padding:10px 20px;border-radius:11px;border:none;cursor:pointer;font-size:.88rem;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.bg{background:linear-gradient(135deg,var(--g),var(--gl));color:#fff;box-shadow:0 3px 9px rgba(45,122,58,.3)}
+.by{background:linear-gradient(135deg,var(--y),#ffca28);color:#5d4037}
+.bb{background:linear-gradient(135deg,var(--b),#1976d2);color:#fff}
+.br{background:linear-gradient(135deg,var(--r),#e53935);color:#fff}
+.sm{padding:7px 13px;font-size:.78rem;border-radius:8px}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qcard{background:var(--card);border-radius:var(--rad);padding:18px;box-shadow:var(--sh);margin-bottom:14px}
+.qq{font-size:.97rem;font-weight:700;margin-bottom:12px;line-height:1.4}
+.qopts{display:grid;gap:7px}
+.qo{background:var(--bg);border:2px solid #e0e0e0;border-radius:9px;padding:10px 13px;font-size:.88rem;cursor:pointer;transition:all .15s;text-align:left;font-weight:500}
+.qo:hover{border-color:var(--g);background:var(--gp)}
+.qo.ok{background:var(--gp);border-color:var(--g);color:var(--g);pointer-events:none}
+.qo.no{background:var(--rp);border-color:var(--r);color:var(--r);pointer-events:none}
+.qo.show{background:var(--yp);border-color:var(--y);pointer-events:none}
+.gcard{background:var(--card);border-radius:var(--rad);padding:14px;text-align:center;cursor:pointer;box-shadow:var(--sh);transition:transform .15s}
+.gcard:hover{transform:translateY(-2px)}
+.gico{font-size:2.2rem;margin-bottom:7px}
+.gcard h4{font-size:.82rem;font-weight:700}
+.gcard p{font-size:.7rem;color:#777;margin-top:2px}
+.story{font-size:.9rem;line-height:1.85;color:#333}
+.nw{color:var(--o);font-weight:700;cursor:pointer;border-bottom:1px dotted var(--o)}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:9px;font-size:.72rem;font-weight:700}
+.bdgg{background:var(--gp);color:var(--g)}
+.bdgb{background:var(--bp);color:var(--b)}
+.bdgy{background:var(--yp);color:#795548}
+.match-item{background:var(--card);border:2px solid #e0e0e0;border-radius:9px;padding:9px;text-align:center;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .15s;min-height:40px;display:flex;align-items:center;justify-content:center}
+.match-item.sel{border-color:var(--b);background:var(--bp)}
+.match-item.hit{border-color:var(--g);background:var(--gp);cursor:default;pointer-events:none}
+.match-item.miss{border-color:var(--r);background:var(--rp)}
+.ltile{width:36px;height:36px;border-radius:7px;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;cursor:pointer;user-select:none;transition:.1s}
+.ltile:hover{transform:scale(1.1)}
+.ltile.used{background:#ccc;cursor:default;pointer-events:none}
+.aslot{width:36px;height:36px;border:2px dashed #ccc;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;cursor:pointer}
+.aslot.fill{background:var(--yp);border-color:var(--y)}
+.memcard{aspect-ratio:1;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;position:relative;perspective:600px}
+.minner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .4s;border-radius:9px}
+.memcard.flip .minner{transform:rotateY(180deg)}
+.mfront,.mback{position:absolute;inset:0;border-radius:9px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;padding:4px;text-align:center}
+.mfront{background:linear-gradient(135deg,var(--g),var(--gl));color:#fff;font-size:1.3rem}
+.mback{background:var(--yp);color:var(--tx);transform:rotateY(180deg);font-size:.78rem;font-weight:700}
+.memcard.done .mback{background:var(--gp);border:2px solid var(--gl)}
+.chip{background:var(--b);color:#fff;border-radius:18px;padding:5px 12px;font-size:.87rem;font-weight:600;cursor:pointer;transition:.15s;border:none;display:inline-block}
+.chip:hover{background:var(--g)}
+.chip.placed{background:#bbb;cursor:default;pointer-events:none}
+.builts{min-height:40px;border:2px dashed var(--b);border-radius:9px;padding:7px 11px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:9px 0}
+.bchip{background:var(--bp);border-radius:18px;padding:5px 10px;font-size:.87rem;font-weight:600;cursor:pointer;color:var(--b)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:14px}
+.modal.on{display:flex}
+.mbox{background:var(--card);border-radius:var(--rad);padding:22px;max-width:380px;width:100%;text-align:center;animation:pop .2s}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.starpu{position:fixed;top:58px;right:14px;background:#fff9e6;border:2px solid var(--y);border-radius:11px;padding:8px 14px;font-weight:800;font-size:.95rem;z-index:300;animation:slideIn .3s}
+@keyframes slideIn{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}
+@media(max-width:480px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:repeat(2,1fr)}
+  .vgrid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <button id="backbtn" onclick="goHome()">&#8592;</button>
+  <h1 id="navtitle">&#x1F408; Let's Go 4</h1>
+  <span class="st">&#11088; <span id="starcount">0</span></span>
+</div>
+<div class="modal" id="modal">
+  <div class="mbox" id="mbox">
+    <button onclick="closeMod()" style="float:right;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#999">&#x2715;</button>
+    <div id="mcontent"></div>
+  </div>
+</div>
+
+<div id="s-home" class="screen active">
+  <div class="hero">
+    <div style="font-size:2rem;margin-bottom:6px">&#x1F408; &#x1F4DA; &#x2B50;</div>
+    <h2>Let's Go 4 &mdash; 5th Edition</h2>
+    <p>8 Units &bull; Vocabulary &bull; Grammar &bull; Phonics &bull; Speaking &bull; 10 Games</p>
+  </div>
+  <div class="card">
+    <div class="sh2">&#x1F4CA; Progress</div>
+    <div id="progbars"></div>
+  </div>
+  <div class="sh2">&#x1F4D6; Units</div>
+  <div class="grid4" id="unitgrid" style="margin-bottom:16px"></div>
+  <div class="sh2" style="margin-bottom:10px">&#x1F3AE; Games &amp; Activities</div>
+  <div class="grid4">
+    <div class="gcard" onclick="showScreen('s-games')"><div class="gico">&#x1F3AE;</div><h4>All Games</h4><p>10 fun games</p></div>
+    <div class="gcard" onclick="showScreen('s-speak')"><div class="gico">&#x1F3A4;</div><h4>Speaking</h4><p>Record &amp; score</p></div>
+    <div class="gcard" onclick="showScreen('s-phonics')"><div class="gico">&#x1F524;</div><h4>Phonics</h4><p>Sounds &amp; chants</p></div>
+    <div class="gcard" onclick="showScreen('s-review')"><div class="gico">&#x1F3C6;</div><h4>Review</h4><p>All units quiz</p></div>
+  </div>
+</div>
+
+<div id="s-unit" class="screen">
+  <div class="stabs" id="utabs"></div>
+  <div id="ucontent"></div>
+</div>
+<div id="s-speak" class="screen">
+  <div id="spcontent"></div>
+</div>
+<div id="s-phonics" class="screen">
+  <div id="phcontent"></div>
+</div>
+<div id="s-games" class="screen">
+  <div id="gmcontent"></div>
+</div>
+<div id="s-review" class="screen">
+  <div id="rvcontent"></div>
+</div>
+<script>
+"use strict";
+
+// ==================== SAFE STORAGE ====================
+var ST = (function(){
+  var mem = {};
+  return {
+    get: function(k,d){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+    set: function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){ mem[k]=v; } }
+  };
+})();
+
+// ==================== CURRICULUM DATA ====================
+var CUR = {
+ units:[
+  {id:1,title:"The Great Outdoors",col:"#2e7d32",em:"&#x26FA;",
+   dlg:[
+    {sp:"Jenny",c:"#2e7d32",t:"We're going to go camping tomorrow. I'm really excited!"},
+    {sp:"Kate",c:"#1565c0",t:"Me, too! How's the weather going to be?"},
+    {sp:"Jenny",c:"#2e7d32",t:"It's going to be cold."},
+    {sp:"Kate",c:"#1565c0",t:"Is it going to rain?"},
+    {sp:"Jenny",c:"#2e7d32",t:"I'm not sure. I hope not."}
+   ],
+   kp:["Is it going to rain?","I'm not sure.","I hope not.","How's the weather going to be?","It's going to be cold."],
+   v1:[{w:"a mitt",e:"&#x1F94A;"},{w:"a bat",e:"&#x26BE;"},{w:"a skateboard",e:"&#x1F6F9;"},{w:"a helmet",e:"&#x26D1;"},{w:"a tennis ball",e:"&#x1F3BE;"},{w:"a tennis racket",e:"&#x1F3BE;"},{w:"a fishing rod",e:"&#x1F3A3;"},{w:"a bucket",e:"&#x1FAA3;"}],
+   v2:[{w:"a towel",e:"&#x1F3CA;"},{w:"a hat",e:"&#x1F3A9;"},{w:"a swimsuit",e:"&#x1FA71;"},{w:"a tent",e:"&#x26FA;"},{w:"a flashlight",e:"&#x1F526;"},{w:"a sleeping bag",e:"&#x1F6CF;"},{w:"sunglasses",e:"&#x1F576;"},{w:"sunscreen",e:"&#x1F9F4;"}],
+   wx:[{w:"cool",e:"&#x1F343;"},{w:"cold",e:"&#x2744;"},{w:"warm",e:"&#x2600;"},{w:"hot",e:"&#x1F321;"},{w:"humid",e:"&#x1F4A7;"},{w:"foggy",e:"&#x1F32B;"}],
+   gram:[
+    {t:"Going to — Future Plans",ps:[{f:"What are you going to do?",x:"I'm going to go skateboarding."},
+     {f:"What's he/she going to do?",x:"He's going to play baseball."},
+     {f:"I have a [bat] and a [mitt].",x:"She needs a towel and sunscreen."}],
+     tip:"Use 'going to' to talk about future plans. It shows you already decided."},
+    {t:"Needs — What do I need?",ps:[{f:"What do I need?",x:"You need a flashlight."},
+     {f:"What does she need?",x:"She needs a hat."},
+     {f:"Does he need an umbrella?",x:"Yes, he does. / No, he doesn't."}],
+     tip:"Add -s for he/she/it: She needs..."}
+   ],
+   ph:[{s:"ch",ws:[["ch","icken"],["ch","eese"],["ch","ocolate"]]},
+       {s:"sh",ws:[["sh","eep"],["sh","orts"],["sh","irt"]]}],
+   chant:{t:"The Weather Chant",ls:["How's the weather going to be tomorrow?","The newspaper says it's going to snow.","Do you think we need our umbrellas?","Ask the weatherman. I don't know."]},
+   chant2:{t:"What Are You Going to Do After School?",ls:["What are you going to do after school today?","Are you going to play tennis with Gus?","I'm not going to play after school today.","I'm going to eat pizza with you."]},
+   story:{t:"Meet Chad from Chile",tx:"Hi! My name is Chad. I live in Chile. I like empanadas with chicken and cheese. Tomorrow I'm going to visit my cousins. They live on a sheep farm. It's going to be hot. I need shorts and a T-shirt. I'm going to play soccer with my cousins.",nw:["Chile","empanadas","cousins","soccer"],qs:[{q:"Where does Chad live?",os:["Chile","Brazil","Mexico"],a:0},{q:"What does Chad need?",os:["shorts","a jacket","an umbrella"],a:0},{q:"What will Chad do?",os:["Play soccer","Go shopping","Stay home"],a:0}]}
+  },
+  {id:2,title:"Hopes and Dreams",col:"#1565c0",em:"&#x1F31F;",
+   dlg:[
+    {sp:"Scott",c:"#1565c0",t:"What do you want to be?"},
+    {sp:"Jenny",c:"#2e7d32",t:"I want to be a singer."},
+    {sp:"Scott",c:"#1565c0",t:"What about you?"},
+    {sp:"Jenny",c:"#2e7d32",t:"I want to be a dancer."},
+    {sp:"Scott",c:"#1565c0",t:"I have a great idea! In the school show! Fantastic!"}
+   ],
+   kp:["What do you want to be?","I want to be a singer.","I have a great idea!","Fantastic!"],
+   v1:[{w:"an engineer",e:"&#x1F477;"},{w:"a movie star",e:"&#x1F3AC;"},{w:"a truck driver",e:"&#x1F69B;"},{w:"an architect",e:"&#x1F3D7;"},{w:"a tour guide",e:"&#x1F5FA;"},{w:"a delivery person",e:"&#x1F4E6;"}],
+   v2:[{w:"an astronaut",e:"&#x1F680;"},{w:"a singer",e:"&#x1F3A4;"},{w:"a musician",e:"&#x1F3B8;"},{w:"a news reporter",e:"&#x1F4F0;"},{w:"a writer",e:"&#x270D;"},{w:"a scientist",e:"&#x1F52C;"}],
+   wx:[{w:"climb a mountain",e:"&#x26F0;"},{w:"build a house",e:"&#x1F3E0;"},{w:"sail a boat",e:"&#x26F5;"},{w:"travel the world",e:"&#x2708;"},{w:"design a video game",e:"&#x1F3AE;"},{w:"drive a car",e:"&#x1F697;"}],
+   gram:[
+    {t:"Want to be — Jobs",ps:[{f:"What do you want to be?",x:"I want to be a singer."},
+     {f:"What does he/she want to be?",x:"He wants to be a tour guide."},
+     {f:"Does she want to be a movie star?",x:"Yes, she does. / No, she doesn't."}],
+     tip:"He/she/it uses 'wants' (add -s). I/you/we/they use 'want'."},
+    {t:"Want to do — Activities",ps:[{f:"What does he want to do?",x:"He wants to drive a car."},
+     {f:"Does she want to climb a mountain?",x:"Yes, she does."}],
+     tip:"'Want to do' = want + to + verb. He wants to climb."}
+   ],
+   ph:[{s:"ph",ws:[["ph","oto"],["ph","one"],["dol","ph","in"]]},
+       {s:"wh",ws:[["wh","ale"],["wh","ite"],["wh","istle"]]}],
+   chant:{t:"What Do You Want to Be?",ls:["What do you want to be?","I want to be an astronaut.","An astronaut? Not me!","I don't want to be an astronaut. Oh, no. Not me!"]},
+   chant2:{t:"She Wants to Be an Engineer",ls:["She wants to be an engineer.","She wants to build things every day.","She has a dream, she has a plan."]},
+   story:{t:"Meet Anna from Hawaii",tx:"Aloha! My name is Anna. I live in Hawaii. I want to be a singer. I like to sing Hawaiian songs. My sister wants to be a dancer. She likes to dance hula. We want to perform in the school show together!",nw:["Hawaii","hula","perform"],qs:[{q:"What does Anna want to be?",os:["A singer","A dancer","A scientist"],a:0},{q:"What does her sister want to be?",os:["A dancer","A singer","An astronaut"],a:0},{q:"Where do they live?",os:["Hawaii","Chile","Egypt"],a:0}]}
+  },
+  {id:3,title:"Birthdays",col:"#6a1b9a",em:"&#x1F382;",
+   dlg:[
+    {sp:"Scott",c:"#6a1b9a",t:"What's the date today?"},
+    {sp:"Jenny",c:"#2e7d32",t:"It's the 1st. Yesterday was my birthday."},
+    {sp:"Scott",c:"#6a1b9a",t:"Really? Oh, I'm sorry. I forgot!"},
+    {sp:"Jenny",c:"#2e7d32",t:"That's OK."},
+    {sp:"Scott",c:"#6a1b9a",t:"When's your birthday? Let's have a party!"}
+   ],
+   kp:["What's the date today?","I'm sorry. I forgot!","That's OK.","When's your birthday?","Let's have a party!"],
+   v1:[{w:"had a party",e:"&#x1F389;"},{w:"went to the mall",e:"&#x1F6CD;"},{w:"slept late",e:"&#x1F634;"},{w:"took a test",e:"&#x1F4DD;"},{w:"flew a kite",e:"&#x1FA81;"},{w:"won a race",e:"&#x1F3C6;"}],
+   v2:[{w:"met a rock star",e:"&#x1F3B8;"},{w:"broke a window",e:"&#x1FA9F;"},{w:"got a present",e:"&#x1F381;"},{w:"found some money",e:"&#x1F4B0;"},{w:"lost his cell phone",e:"&#x1F4F1;"},{w:"ate too much chocolate",e:"&#x1F36B;"}],
+   wx:[{w:"January",e:"1"},{w:"February",e:"2"},{w:"March",e:"3"},{w:"April",e:"4"},{w:"May",e:"5"},{w:"June",e:"6"},{w:"July",e:"7"},{w:"August",e:"8"},{w:"September",e:"9"},{w:"October",e:"10"},{w:"November",e:"11"},{w:"December",e:"12"}],
+   gram:[
+    {t:"Simple Past — Irregular Verbs",ps:[{f:"What did you do yesterday?",x:"I flew a kite. / I had a party."},
+     {f:"have&#8594;had, go&#8594;went, sleep&#8594;slept, fly&#8594;flew, win&#8594;won",x:"She went to the mall."}],
+     tip:"Irregular verbs change their form completely. Memorize them: go&#8594;went, fly&#8594;flew, win&#8594;won."},
+    {t:"Ordinal Numbers &amp; Dates",ps:[{f:"What's the date today?",x:"It's the 1st (first)."},
+     {f:"When's your birthday?",x:"It's on September 9th."}],
+     tip:"1st, 2nd, 3rd, then add -th: 4th, 5th... Exceptions: 21st, 22nd, 31st."}
+   ],
+   ph:[{s:"th (thin)",ws:[["th","in"],["th","irteen"],["Th","ursday"]]},
+       {s:"th (this)",ws:[["f","a","th","er"],["mo","th","er"],["th","ey"]]}],
+   chant:{t:"January First",ls:["January, February, March,","April, May, June,","July, August, September,","October, November, December.","January first is a holiday!"]},
+   chant2:{t:"When's Your Birthday?",ls:["When's your birthday? When's your birthday?","It's on September ninth.","Let's celebrate together!"]},
+   story:{t:"Meet Soma from Egypt",tx:"My name is Soma. I live in Egypt. My birthday is on July 14th. Last year I went to see the Great Pyramid. It was fantastic! I took lots of photos. Then we had a party at home. I got many presents. I ate too much birthday cake!",nw:["Egypt","Great Pyramid","presents"],qs:[{q:"When is Soma's birthday?",os:["July 14th","July 4th","June 14th"],a:0},{q:"What did Soma see?",os:["The Great Pyramid","Eiffel Tower","Big Ben"],a:0},{q:"What did Soma eat too much of?",os:["Birthday cake","Chocolate","Pizza"],a:0}]}
+  },
+  {id:4,title:"School",col:"#e65100",em:"&#x1F4DA;",
+   dlg:[
+    {sp:"Scott",c:"#e65100",t:"What's your favorite subject?"},
+    {sp:"Andy",c:"#795548",t:"I like science best."},
+    {sp:"Scott",c:"#e65100",t:"Really? Why do you like science?"},
+    {sp:"Andy",c:"#795548",t:"I think it's easy."},
+    {sp:"Scott",c:"#e65100",t:"I don't think so. I think it's hard. I like English. It's easier than science."}
+   ],
+   kp:["What's your favorite subject?","I think it's easy.","I don't think so.","It's easier than science."],
+   v1:[{w:"spring",e:"&#x1F338;"},{w:"summer",e:"&#x2600;"},{w:"fall",e:"&#x1F342;"},{w:"winter",e:"&#x2744;"}],
+   v2:[{w:"history",e:"&#x1F4DC;"},{w:"science",e:"&#x1F52C;"},{w:"English",e:"&#x1F4D6;"},{w:"literature",e:"&#x1F4DA;"},{w:"geography",e:"&#x1F5FA;"},{w:"P.E.",e:"&#x26BD;"}],
+   wx:[{w:"big",e:"&#x1F418;"},{w:"small",e:"&#x1F401;"},{w:"heavy",e:"&#x2696;"},{w:"light",e:"&#x1FAB6;"},{w:"long",e:"&#x1F4CF;"},{w:"short",e:"&#x2702;"},{w:"old",e:"&#x1F3DB;"},{w:"new",e:"&#x2728;"}],
+   gram:[
+    {t:"Comparatives — -er than",ps:[{f:"Which book is heavier?",x:"The red book is heavier."},
+     {f:"[Adj]-er than",x:"English is easier than science."},
+     {f:"big&#8594;bigger, heavy&#8594;heavier",x:"This pencil is longer than that one."}],
+     tip:"Add -er to compare 2 things. If ends in -y, change to -ier: heavy&#8594;heavier."},
+    {t:"Seasons &amp; Subjects",ps:[{f:"Which season do you like best?",x:"I like fall. It's cool in the fall."},
+     {f:"What's your favorite subject?",x:"I like science best."}],
+     tip:"'Which...do you like best?' asks for your favorite among all options."}
+   ],
+   ph:[{s:"ck",ws:[["du","ck"],["so","ck"],["bla","ck"]]},
+       {s:"nk",ws:[["thi","nk"],["sti","nk"],["dri","nk"]]}],
+   chant:{t:"History Is Easier than Math",ls:["History is easier than math.","Math is harder than history.","Science is more interesting than P.E.","P.E. is more fun than science for me!"]},
+   chant2:{t:"Winter, Spring, Summer, Fall",ls:["Winter, spring, summer, fall,","Which season do you like best of all?","I like summer — the sun shines bright!"]},
+   story:{t:"Ducks and Skunks Stay Safe",tx:"Ducks and skunks are very different animals. Ducks have thick black and white feathers. A duck can swim and fly. A skunk cannot fly, but it can run. A duck can swim away from danger. A skunk sprays a very bad smell to stay safe! Which animal do you think is smarter?",nw:["feathers","danger","spray"],qs:[{q:"What color are skunks?",os:["Black and white","Brown","Gray"],a:0},{q:"What can ducks do?",os:["Swim and fly","Run fast","Spray"],a:0},{q:"How does a skunk stay safe?",os:["Sprays a bad smell","Swims away","Runs fast"],a:0}]}
+  },
+  {id:5,title:"Outdoors and Indoors",col:"#00695c",em:"&#x1F3A1;",
+   dlg:[
+    {sp:"Kate",c:"#1565c0",t:"Hi, Scott. Where are you?"},
+    {sp:"Scott",c:"#00695c",t:"We're at the roller coaster."},
+    {sp:"Kate",c:"#1565c0",t:"Can you wait for us?"},
+    {sp:"Scott",c:"#00695c",t:"Sure, but hurry!"},
+    {sp:"Kate",c:"#1565c0",t:"Thanks for waiting for us. No problem! I'm so excited!"}
+   ],
+   kp:["Where are you?","Can you wait for us?","Sure, but hurry!","Thanks for waiting for us.","No problem!"],
+   v1:[{w:"around",e:"&#x1F504;"},{w:"through",e:"&#x1F687;"},{w:"over",e:"&#x1F309;"},{w:"under",e:"&#x1F303;"},{w:"into",e:"&#x27A1;"},{w:"out of",e:"&#x2B05;"}],
+   v2:[{w:"downloaded pictures",e:"&#x1F4F8;"},{w:"practiced the violin",e:"&#x1F3BB;"},{w:"watched a baseball game",e:"&#x26BE;"},{w:"listened to music",e:"&#x1F3B5;"},{w:"played a board game",e:"&#x1F3B2;"},{w:"visited my grandparents",e:"&#x1F474;"}],
+   wx:[{w:"excited",e:"&#x1F603;"},{w:"worried",e:"&#x1F61F;"},{w:"interested",e:"&#x1F914;"},{w:"surprised",e:"&#x1F632;"},{w:"bored",e:"&#x1F611;"},{w:"embarrassed",e:"&#x1F633;"}],
+   gram:[
+    {t:"Past — Direction Verbs",ps:[{f:"Kate went under a bridge and up a hill.",x:"Scott went into the woods and out of the woods."},
+     {f:"Where did she go?",x:"She went through the tunnel."}],
+     tip:"Use past tense 'went' with direction words: around, through, over, under, into, out of."},
+    {t:"Past — Weekend Activities",ps:[{f:"What did you do on Sunday?",x:"I watched a baseball game."},
+     {f:"Did you download pictures?",x:"Yes, I did. / No, I didn't."}],
+     tip:"For questions use 'did'. The verb stays in base form after 'did'."}
+   ],
+   ph:[{s:"lk",ws:[["mi","lk"],["ta","lk"],["wa","lk"]]},
+       {s:"st",ws:[["fi","rst"],["la","st"],["toa","st"]]}],
+   chant:{t:"He's Very Worried",ls:["He's very worried. He's very worried.","Why is he so worried today?","He's worried because it's going to rain.","She's very excited because we can play!"]},
+   chant2:{t:"Jogging Up and Down",ls:["Jogging up and down the hill,","Over the bridge and through the trees.","Under the tunnel, into the park. What a breeze!"]},
+   story:{t:"Happy French Toast Day!",tx:"Every Sunday, my family makes French toast. First, we mix eggs and milk in a bowl. Then we dip the bread into the mixture. My dad fries the toast until it's golden brown. We eat it with syrup and fruit. It's delicious! Last Sunday, we invited our grandparents.",nw:["French toast","syrup","mixture","golden brown"],qs:[{q:"When do they make French toast?",os:["Every Sunday","Saturday","Friday"],a:0},{q:"What do they add to the bread?",os:["Eggs and milk","Cheese","Syrup"],a:0},{q:"Who came last Sunday?",os:["Grandparents","Friends","Cousins"],a:0}]}
+  },
+  {id:6,title:"People",col:"#880e4f",em:"&#x1F46A;",
+   dlg:[
+    {sp:"Officer",c:"#880e4f",t:"Can I help you?"},
+    {sp:"Kate",c:"#1565c0",t:"Yes, thanks. I'm looking for my aunt."},
+    {sp:"Officer",c:"#880e4f",t:"What does she look like?"},
+    {sp:"Kate",c:"#1565c0",t:"She has short red hair."},
+    {sp:"Officer",c:"#880e4f",t:"Is that her over there? Yes, it is. Thanks!"}
+   ],
+   kp:["Can I help you?","I'm looking for my aunt.","What does she look like?","She has short red hair.","Is that her over there?"],
+   v1:[{w:"long",e:"&#x1F9B0;"},{w:"short",e:"&#x2702;"},{w:"curly",e:"&#x3030;"},{w:"straight",e:"&#x2014;"},{w:"a ponytail",e:"&#x1F38A;"},{w:"bangs",e:"&#x2702;"},{w:"a beard",e:"&#x1F9D4;"},{w:"a moustache",e:"&#x1F473;"}],
+   v2:[{w:"blond",e:"&#x1F471;"},{w:"red",e:"&#x1F534;"},{w:"brown",e:"&#x1F7E4;"},{w:"gray",e:"&#x2B1C;"},{w:"black",e:"&#x2B1B;"},{w:"blue eyes",e:"&#x1F499;"},{w:"green eyes",e:"&#x1F49A;"},{w:"brown eyes",e:"&#x1F410;"}],
+   wx:[{w:"a vest",e:"&#x1F9BA;"},{w:"a baseball cap",e:"&#x1F9E2;"},{w:"a blouse",e:"&#x1F457;"},{w:"a tie",e:"&#x1F454;"},{w:"a suit",e:"&#x1F575;"},{w:"sandals",e:"&#x1F461;"},{w:"sneakers",e:"&#x1F45F;"},{w:"glasses",e:"&#x1F453;"}],
+   gram:[
+    {t:"Describing Appearance",ps:[{f:"What does he/she look like?",x:"He has curly brown hair. She has blue eyes."},
+     {f:"He/She has [style + color] hair.",x:"She has long blond hair."},
+     {f:"She's the one in [clothing].",x:"She's the one in the red dress."}],
+     tip:"Use 'have/has' for features: He has brown eyes. Use 'is' for clothing: She's in the blue blouse."},
+    {t:"Identifying People",ps:[{f:"Which one is [name]?",x:"She's the one with short curly hair."},
+     {f:"He's the one in a [clothing].",x:"He's the one in a suit and a tie."}],
+     tip:"'Which one is...?' identifies someone. Answer with 'He's/She's the one with/in...'"}
+   ],
+   ph:[{s:"nd",ws:[["blo","nd"],["ha","nd"],["ba","nd"]]},
+       {s:"ng",ws:[["ba","ng","s"],["si","ng"],["ri","ng"]]}],
+   chant:{t:"Can I Help You?",ls:["Can I help you? Can I help you?","Yes, thanks. I need some help today.","I'm looking for my grandma!","She has long curly hair and brown eyes."]},
+   chant2:{t:"The Ponytail Song",ls:["She has a ponytail, long and straight and shiny.","He has blond hair, short and neat and tidy.","What do you look like? Tell me, can you say?"]},
+   story:{t:"Emily Goes to France",tx:"Emily visited France last summer. Her cousin lives in Paris. Her cousin has long brown hair and blue eyes. They went shopping together. Emily bought a blouse and a scarf. Her uncle in Mumbai has short black hair and a beard. They visited temples and ate delicious food.",nw:["France","Paris","Mumbai","temples"],qs:[{q:"Where is Emily's cousin?",os:["Paris","London","Mumbai"],a:0},{q:"What does Emily's cousin look like?",os:["Long brown hair, blue eyes","Short black hair","Curly red hair"],a:0},{q:"What did Emily buy?",os:["A blouse and a scarf","A tie and a suit","Sneakers"],a:0}]}
+  },
+  {id:7,title:"Future Plans",col:"#827717",em:"&#x1F4C5;",
+   dlg:[
+    {sp:"Andy",c:"#827717",t:"What are you going to do this weekend?"},
+    {sp:"Jenny",c:"#2e7d32",t:"I'm going to stay home."},
+    {sp:"Andy",c:"#827717",t:"I'm going to play in a tournament. Wow, that sounds exciting!"},
+    {sp:"Jenny",c:"#2e7d32",t:"Good luck! I hope you win."},
+    {sp:"Andy",c:"#827717",t:"Thanks!"}
+   ],
+   kp:["What are you going to do this weekend?","I'm going to stay home.","That sounds exciting!","Good luck! I hope you win."],
+   v1:[{w:"rent a DVD",e:"&#x1F4C0;"},{w:"borrow some books",e:"&#x1F4DA;"},{w:"go backpacking",e:"&#x1F392;"},{w:"go on vacation",e:"&#x2708;"},{w:"mail a letter",e:"&#x1F4EC;"},{w:"read a novel",e:"&#x1F4D6;"}],
+   v2:[{w:"see a play",e:"&#x1F3AD;"},{w:"plant flowers",e:"&#x1F338;"},{w:"go shopping",e:"&#x1F6CD;"},{w:"go skateboarding",e:"&#x1F6F9;"},{w:"play softball",e:"&#x26BE;"},{w:"go horseback riding",e:"&#x1F40E;"}],
+   wx:[{w:"department store",e:"&#x1F3EC;"},{w:"barber shop",e:"&#x1F488;"},{w:"beauty salon",e:"&#x1F485;"},{w:"supermarket",e:"&#x1F6D2;"},{w:"drugstore",e:"&#x1F48A;"},{w:"gift shop",e:"&#x1F381;"}],
+   gram:[
+    {t:"Going to — Weekend Plans",ps:[{f:"What are you going to do this weekend?",x:"I'm going to go backpacking."},
+     {f:"Are you going to read a novel tonight?",x:"Yes, I am. / No, I'm not."},
+     {f:"When is he going to go backpacking?",x:"He's going to go this summer."}],
+     tip:"Time words: tonight, tomorrow, this weekend, next Sunday, after school, in July."},
+    {t:"Asking About Destinations",ps:[{f:"Where are you going to go?",x:"We're going to the gift shop."},
+     {f:"Where's he going to go?",x:"He's going to the supermarket."}],
+     tip:"'Going to go to + place' tells where someone is heading."}
+   ],
+   ph:[{s:"qu",ws:[["qu","ilt"],["qu","estion"],["qu","een"]]},
+       {s:"tw",ws:[["tw","ins"],["tw","elve"],["tw","enty"]]}],
+   chant:{t:"What Are You Going to Do This Weekend?",ls:["What are you going to do this weekend?","Are you going to stay at home?","I'm going to rent a movie and borrow some books!"]},
+   chant2:{t:"Is He Going to Go?",ls:["Is he going to go backpacking? Yes, he is.","Is she going to read a novel? Yes, she is.","Are they going to go on vacation? Yes, they are!"]},
+   story:{t:"Meet Astrid from Denmark",tx:"Hi! My name is Astrid. I live in Denmark. This weekend, I'm going to visit Copenhagen with my family. We're going to go to the royal palace. I want to see the queen! After that, I'm going to buy presents for my cousins. Then we're going to eat Danish pastries. They're my favorite!",nw:["Denmark","Copenhagen","royal palace","Danish pastries"],qs:[{q:"Where is Astrid going?",os:["Copenhagen","Paris","London"],a:0},{q:"What does Astrid want to see?",os:["The queen","A museum","The beach"],a:0},{q:"What will Astrid buy?",os:["Presents","Books","Clothes"],a:0}]}
+  },
+  {id:8,title:"Work and Play",col:"#37474f",em:"&#x26BD;",
+   dlg:[
+    {sp:"Kate",c:"#1565c0",t:"Hi, Andy. Do you want to come to the park?"},
+    {sp:"Andy",c:"#37474f",t:"I can't. Because I'm sick."},
+    {sp:"Kate",c:"#1565c0",t:"Why not? What's the matter?"},
+    {sp:"Andy",c:"#37474f",t:"I have a stomachache."},
+    {sp:"Kate",c:"#1565c0",t:"That's too bad. I hope you feel better!"}
+   ],
+   kp:["Do you want to come?","I can't. Because I'm sick.","What's the matter?","I have a stomachache.","I hope you feel better!"],
+   v1:[{w:"send messages",e:"&#x1F4AC;"},{w:"surf the Internet",e:"&#x1F310;"},{w:"watch DVDs",e:"&#x1F4C0;"},{w:"collect baseball cards",e:"&#x26BE;"},{w:"play soccer",e:"&#x26BD;"},{w:"play badminton",e:"&#x1F3F8;"}],
+   v2:[{w:"clear the table",e:"&#x1F37D;"},{w:"wash the dishes",e:"&#x1FAE7;"},{w:"dry the dishes",e:"&#x1F9BA;"},{w:"vacuum the carpet",e:"&#x1F9F9;"},{w:"take out the trash",e:"&#x1F5D1;"},{w:"sweep the floor",e:"&#x1F9F9;"}],
+   wx:[{w:"a cold",e:"&#x1F927;"},{w:"a fever",e:"&#x1F321;"},{w:"a headache",e:"&#x1F915;"},{w:"a sore throat",e:"&#x1F92E;"},{w:"an earache",e:"&#x1F442;"},{w:"a stomachache",e:"&#x1F628;"},{w:"a toothache",e:"&#x1F9B7;"},{w:"a cough",e:"&#x1F92E;"}],
+   gram:[
+    {t:"Like to do / He likes to do",ps:[{f:"What do you like to do?",x:"I like to send messages."},
+     {f:"What does he like to do?",x:"He likes to surf the Internet."}],
+     tip:"Add -s for he/she/it: He likes to... (not 'He like to')."},
+    {t:"Have to do — Chores",ps:[{f:"What do you have to do?",x:"I have to wash the dishes."},
+     {f:"What does she have to do?",x:"She has to sweep the floor."}],
+     tip:"'Have to' = must / need to. He has to (not have to) for he/she/it."}
+   ],
+   ph:[{s:"nt",ws:[["te","nt"],["pai","nt"],["pla","nt"]]},
+       {s:"rt",ws:[["ca","rt"],["di","rt"],["sma","rt"]]}],
+   chant:{t:"What's the Matter?",ls:["What's the matter? What's the matter?","I have a bad stomachache.","I have a headache and a toothache!","I hope you feel better — at ease!"]},
+   chant2:{t:"Do You Like to Go Camping?",ls:["Do you like to go camping?","Do you like to hike?","I like to go camping! I like to hike!"]},
+   story:{t:"Bart's Farm",tx:"Bart lives on a farm. Every day he has a lot of work to do. In the morning, he has to feed the chickens and collect the eggs. Then he has to water the plants. After lunch, he has to clean the barn. In the evening, he has to sweep the floor and take out the trash. In his free time, he likes to collect baseball cards and watch DVDs. On weekends, he plays soccer with his friends.",nw:["farm","barn","collect","feed"],qs:[{q:"What does Bart do in the morning?",os:["Feed chickens","Sweep floor","Play soccer"],a:0},{q:"What does Bart like to collect?",os:["Baseball cards","Stamps","Coins"],a:0},{q:"When does Bart play soccer?",os:["On weekends","Every morning","In the evening"],a:0}]}
+  }
+ ]
+};
+
+// ==================== STATE ====================
+var stars = ST.get('lg4_stars', 0);
+var prog = ST.get('lg4_prog', {});
+var learned = ST.get('lg4_lrn', {});
+var curUnit = null;
+
+function addStars(n, lbl) {
+  stars += n;
+  document.getElementById('starcount').textContent = stars;
+  ST.set('lg4_stars', stars);
+  var d = document.createElement('div');
+  d.className = 'starpu';
+  d.textContent = '+' + n + ' \u2B50 ' + (lbl || '');
+  document.body.appendChild(d);
+  setTimeout(function(){ d.remove(); }, 1800);
+}
+
+// ==================== NAVIGATION ====================
+function showScreen(id, unit) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  var bb = document.getElementById('backbtn');
+  var nt = document.getElementById('navtitle');
+  if (id === 's-home') {
+    bb.style.display = 'none';
+    nt.innerHTML = '&#x1F408; Let\'s Go 4';
+    buildHome();
+  } else {
+    bb.style.display = 'flex';
+    if (unit) {
+      curUnit = unit;
+      nt.textContent = 'Unit ' + unit.id + ': ' + unit.title;
+      buildUnit(unit);
+    } else if (id === 's-speak') { nt.textContent = 'Speaking'; buildSpeak(); }
+    else if (id === 's-phonics') { nt.textContent = 'Phonics'; buildPhonics(); }
+    else if (id === 's-games') { nt.textContent = 'Games'; buildGames(); }
+    else if (id === 's-review') { nt.textContent = 'Review'; buildReview(); }
+  }
+}
+function goHome() { showScreen('s-home'); }
+document.getElementById('modal').addEventListener('click', function(e){ if(e.target===this) closeMod(); });
+function showMod(html) { document.getElementById('mcontent').innerHTML = html; document.getElementById('modal').classList.add('on'); }
+function closeMod() { document.getElementById('modal').classList.remove('on'); }
+
+// ==================== TTS ====================
+function say(txt) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'en-US'; u.rate = 0.85; u.pitch = 1.1;
+  window.speechSynthesis.speak(u);
+}
+
+// ==================== HOME ====================
+function buildHome() {
+  stars = ST.get('lg4_stars', stars);
+  prog = ST.get('lg4_prog', prog);
+  document.getElementById('starcount').textContent = stars;
+  // Progress bars
+  var pb = '';
+  CUR.units.forEach(function(u) {
+    var p = prog[u.id] || 0;
+    pb += '<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;font-size:.78rem;color:#555"><span>Unit ' + u.id + ': ' + u.title + '</span><span>' + p + '%</span></div><div class="pb"><div class="pbf" style="width:' + p + '%"></div></div></div>';
+  });
+  document.getElementById('progbars').innerHTML = pb;
+  // Unit grid
+  var ug = '';
+  CUR.units.forEach(function(u) {
+    var p = prog[u.id] || 0;
+    ug += '<div class="unitcard" onclick="showScreen(\'s-unit\', CUR.units[' + (u.id-1) + '])">'
+      + '<div class="unum" style="background:' + u.col + '">' + u.em + '</div>'
+      + '<h4>Unit ' + u.id + '<br>' + u.title + '</h4>'
+      + '<div class="up">' + p + '% done</div>'
+      + '<div class="pb"><div class="pbf" style="width:' + p + '%"></div></div>'
+      + '</div>';
+  });
+  document.getElementById('unitgrid').innerHTML = ug;
+}
+
+// ==================== UNIT ====================
+var TABS = ['Talk','Learn','Learn More','Phonics','Story','Grammar','Quiz'];
+var TAB_IDS = ['tk','l1','l2','ph','st','gr','qz'];
+function buildUnit(u) {
+  var tabs = '';
+  TABS.forEach(function(t, i) {
+    tabs += '<button class="stab' + (i===0?' on':'') + '" onclick="switchTab(' + i + ',this)">' + t + '</button>';
+  });
+  document.getElementById('utabs').innerHTML = tabs;
+  showTab(0, u);
+}
+function switchTab(i, btn) {
+  var btns = document.querySelectorAll('.stab');
+  for (var b=0;b<btns.length;b++) btns[b].classList.remove('on');
+  btn.classList.add('on');
+  showTab(i, curUnit);
+}
+function showTab(i, u) {
+  var html = '';
+  if (i===0) html = tabTalk(u);
+  else if (i===1) html = tabLearn(u, 1);
+  else if (i===2) html = tabLearn(u, 2);
+  else if (i===3) html = tabPhonics(u);
+  else if (i===4) html = tabStory(u);
+  else if (i===5) html = tabGrammar(u);
+  else if (i===6) { html = '<div id="qzarea"></div>'; }
+  document.getElementById('ucontent').innerHTML = html;
+  if (i===6) initQuiz(u);
+}
+
+// --- TAB: TALK ---
+function tabTalk(u) {
+  var h = '<div class="card dlg">';
+  u.dlg.forEach(function(d, i) {
+    var right = i%2===1;
+    h += '<div class="dbbl" style="' + (right?'flex-direction:row-reverse':'') + '">'
+      + '<div class="davt" style="background:' + d.c + '">' + d.sp[0] + '</div>'
+      + '<div class="dtxt ' + (right?'right':'left') + '" onclick="say(\'' + esc(d.t) + '\')">'
+      + '<small style="color:#888;display:block;font-size:.65rem">' + d.sp + '</small>'
+      + d.t + ' <span style="font-size:.7rem">&#x1F508;</span></div></div>';
+  });
+  h += '</div>';
+  // Key phrases
+  h += '<div class="gbox"><h3>&#x1F4AC; Key Phrases</h3>';
+  u.kp.forEach(function(p) {
+    h += '<div class="gpat" onclick="say(\'' + esc(p) + '\')" style="cursor:pointer">' + p + ' <span style="font-size:.72rem;color:#aaa">&#x1F508;</span></div>';
+  });
+  h += '</div>';
+  // Chant
+  if (u.chant) {
+    h += '<div class="chant"><h4>&#x1F3B5; ' + u.chant.t + '</h4>'
+      + '<p>' + u.chant.ls.join('<br>') + '</p>'
+      + '<div class="brow"><button class="btn by sm" onclick="say(\'' + esc(u.chant.ls.join('. ')) + '\')">&#x1F508; Listen</button></div></div>';
+  }
+  // Speaking practice
+  h += '<div class="card spk">'
+    + '<div style="font-weight:700;color:var(--g);margin-bottom:6px">&#x1F3A4; Practice Speaking!</div>'
+    + '<div class="spktxt">' + u.kp[0] + '</div>'
+    + '<button class="micbtn" id="mic0" onclick="doSpeak(\'' + esc(u.kp[0]) + '\',\'mic0\',\'sc0\')">&#x1F3A4;</button>'
+    + '<div id="sc0"></div>'
+    + '<div style="font-size:.75rem;color:#888;margin-top:5px">Tap mic &#x2192; speak &#x2192; get score!</div></div>';
+  return h;
+}
+
+// --- TAB: LEARN ---
+function tabLearn(u, part) {
+  var vocab = part===1 ? (u.v1||[]) : (u.v2||[]);
+  var extra = u.wx || [];
+  var h = '<div class="sh2">&#x1F4DD; Vocabulary</div><div class="vgrid">';
+  var all = part===1 ? vocab : vocab.concat(extra);
+  all.forEach(function(v) {
+    var key = u.id + '_' + v.w;
+    var ok = learned[key] ? ' ok' : '';
+    h += '<div class="vcard' + ok + '" onclick="learnW(\'' + key + '\',\'' + esc(v.w) + '\')">'
+      + '<span class="vemoji">' + v.e + '</span>'
+      + '<div class="vword">' + v.w + '</div>'
+      + (learned[key] ? '<div style="font-size:.65rem;color:var(--g)">&#x2713; Learned</div>' : '<div style="font-size:.65rem;color:#bbb">tap to learn</div>')
+      + '</div>';
+  });
+  h += '</div>';
+  if (part===1 && u.chant2) {
+    h += '<div class="chant" style="margin-top:12px"><h4>&#x1F3B5; ' + u.chant2.t + '</h4>'
+      + '<p>' + u.chant2.ls.join('<br>') + '</p>'
+      + '<div class="brow"><button class="btn by sm" onclick="say(\'' + esc(u.chant2.ls.join('. ')) + '\')">&#x1F508; Listen</button></div></div>';
+  }
+  return h;
+}
+function learnW(key, word) {
+  learned[key] = true;
+  ST.set('lg4_lrn', learned);
+  say(word);
+  addStars(1, 'Word!');
+  // Update card
+  var cards = document.querySelectorAll('.vcard');
+  cards.forEach(function(c) {
+    if (c.querySelector('.vword') && c.querySelector('.vword').textContent === word) {
+      c.classList.add('ok');
+      var sub = c.querySelectorAll('div');
+      if (sub.length) sub[sub.length-1].innerHTML = '<span style="font-size:.65rem;color:var(--g)">&#x2713; Learned</span>';
+    }
+  });
+}
+
+// --- TAB: PHONICS ---
+function tabPhonics(u) {
+  if (!u.ph || !u.ph.length) return '<p style="color:#888;padding:20px;text-align:center">No phonics for this unit.</p>';
+  var h = '';
+  u.ph.forEach(function(ph) {
+    h += '<div class="pbox"><div class="psound">' + ph.s + '</div><div class="pwords">';
+    ph.ws.forEach(function(parts) {
+      var full = parts.join('');
+      var display = '<em>' + parts[0] + '</em>' + parts.slice(1).join('');
+      h += '<div class="pw" onclick="say(\'' + esc(full) + '\')">' + display + ' &#x1F508;</div>';
+    });
+    h += '</div></div>';
+  });
+  if (u.chant) {
+    h += '<div class="chant"><h4>&#x1F3B5; ' + u.chant.t + '</h4>'
+      + '<p>' + u.chant.ls.join('<br>') + '</p>'
+      + '<div class="brow"><button class="btn by sm" onclick="say(\'' + esc(u.chant.ls.join('. ')) + '\')">&#x1F508; Listen &amp; Chant</button></div></div>';
+  }
+  return h;
+}
+
+// --- TAB: STORY ---
+function tabStory(u) {
+  if (!u.story) return '<p style="color:#888;padding:20px;text-align:center">No story for this unit.</p>';
+  var s = u.story;
+  var tx = s.tx;
+  (s.nw || []).forEach(function(w) {
+    tx = tx.split(w).join('<span class="nw" onclick="say(\'' + esc(w) + '\')">' + w + '</span>');
+  });
+  var h = '<div class="card"><h3 style="color:var(--g);margin-bottom:10px">&#x1F4D6; ' + s.t + '</h3>'
+    + '<p class="story">' + tx + '</p>'
+    + '<div class="brow"><button class="btn bg sm" onclick="say(\'' + esc(s.tx) + '\')">&#x1F508; Listen</button></div>';
+  if (s.nw && s.nw.length) {
+    h += '<div style="margin-top:8px"><strong style="font-size:.8rem;color:var(--o)">New Words:</strong> ';
+    s.nw.forEach(function(w){ h += '<span class="bdg bdgy" onclick="say(\'' + esc(w) + '\')" style="cursor:pointer;margin:2px">'+w+'</span>'; });
+    h += '</div>';
+  }
+  h += '</div>';
+  if (s.qs && s.qs.length) {
+    h += '<div class="card"><div class="sh2">&#x1F4DD; Comprehension</div>';
+    s.qs.forEach(function(q, qi) {
+      h += '<div style="margin-bottom:12px"><div class="qq">' + (qi+1) + '. ' + q.q + '</div><div class="qopts">';
+      q.os.forEach(function(o, oi) {
+        h += '<button class="qo" onclick="chkStory(this,' + (oi===q.a) + ')">' + o + '</button>';
+      });
+      h += '</div></div>';
+    });
+    h += '</div>';
+  }
+  return h;
+}
+function chkStory(btn, correct) {
+  var opts = btn.closest('.qopts').querySelectorAll('.qo');
+  opts.forEach(function(b){ b.disabled=true; });
+  if (correct) { btn.classList.add('ok'); btn.textContent = '✅ ' + btn.textContent; addStars(2, 'Correct!'); }
+  else { btn.classList.add('no'); btn.textContent = '❌ ' + btn.textContent; opts.forEach(function(b){ if(b!==btn) b.classList.add('show'); }); }
+}
+
+// --- TAB: GRAMMAR ---
+function tabGrammar(u) {
+  var h = '';
+  u.gram.forEach(function(g) {
+    h += '<div class="gbox"><h3>&#x1F4D0; ' + g.t + '</h3>';
+    g.ps.forEach(function(p) {
+      h += '<div class="gpat" onclick="say(\'' + esc(p.x) + '\')" style="cursor:pointer">'
+        + '<strong>' + p.f + '</strong>'
+        + '<div class="gex">' + p.x + ' &#x1F508;</div></div>';
+    });
+    h += '<div class="gtip">&#x1F4A1; ' + g.tip + '</div></div>';
+  });
+  // Fill in the blank
+  var exs = gramExercises(u);
+  if (exs.length) {
+    h += '<div class="gbox" style="background:var(--bp);border-color:var(--b)"><h3 style="color:var(--b)">&#x270F; Fill in the Blank</h3>';
+    exs.forEach(function(ex, i) {
+      h += '<div style="margin-bottom:12px">'
+        + '<div style="font-size:.9rem;font-weight:600;line-height:2;margin-bottom:3px">' + ex.q.replace('___', '<input id="fi' + i + '" style="border:none;border-bottom:2px solid var(--b);background:transparent;font-size:.9rem;font-weight:700;color:var(--b);width:100px;text-align:center;outline:none" placeholder="___" autocomplete="off">') + '</div>'
+        + '<div style="font-size:.72rem;color:#888">&#x1F4A1; ' + ex.hint + '</div>'
+        + '<div class="brow"><button class="btn bg sm" onclick="chkFill(' + i + ',\'' + esc(ex.a) + '\')">Check</button><span id="fr' + i + '" style="font-weight:700;margin-left:8px"></span></div></div>';
+    });
+    h += '</div>';
+  }
+  return h;
+}
+function gramExercises(u) {
+  var e = [];
+  var id = u.id;
+  if(id===1){e=[{q:"What ___ you going to do?",a:"are",hint:"are/is/do"},{q:"I'm going to go ___.",a:"camping",hint:"camping/swim/ran"},{q:"It's going to be ___.",a:"cold",hint:"cold/hot/warm"}];}
+  else if(id===2){e=[{q:"What do you want to ___?",a:"be",hint:"be/do/go"},{q:"He ___ to be a tour guide.",a:"wants",hint:"want/wants/is"}];}
+  else if(id===3){e=[{q:"I ___ a kite yesterday.",a:"flew",hint:"flew/fly/flies"},{q:"She ___ to the mall.",a:"went",hint:"went/go/goes"}];}
+  else if(id===4){e=[{q:"English is ___ than science.",a:"easier",hint:"easier/easy/easiest"},{q:"Which season do you like ___?",a:"best",hint:"best/better/good"}];}
+  else if(id===5){e=[{q:"Kate went ___ a bridge.",a:"under",hint:"under/over/through"},{q:"What did you ___ on Sunday?",a:"do",hint:"do/did/does"}];}
+  else if(id===6){e=[{q:"What does she ___ like?",a:"look",hint:"look/see/be"},{q:"She has curly ___ hair.",a:"brown",hint:"brown/blond/red"}];}
+  else if(id===7){e=[{q:"Are you going to read a novel ___?",a:"tonight",hint:"tonight/yesterday/now"},{q:"Where ___ you going to go?",a:"are",hint:"are/is/do"}];}
+  else if(id===8){e=[{q:"What do you ___ to do?",a:"like",hint:"like/likes/liked"},{q:"I have to ___ the dishes.",a:"wash",hint:"wash/washes/washing"}];}
+  return e;
+}
+function chkFill(i, ans) {
+  var inp = document.getElementById('fi'+i);
+  var res = document.getElementById('fr'+i);
+  if (!inp||!res) return;
+  var val = inp.value.trim().toLowerCase();
+  if (val === ans.toLowerCase()) {
+    res.textContent = '✅ Correct!'; res.style.color='var(--g)';
+    inp.style.borderColor='var(--g)'; addStars(2,'Grammar!');
+  } else {
+    res.textContent = '❌ Answer: ' + ans; res.style.color='var(--r)';
+    inp.style.borderColor='var(--r)';
+  }
+}
+
+// --- TAB: QUIZ ---
+var QZ = {q:[],cur:0,score:0,unit:null};
+function initQuiz(u) {
+  QZ.q = makeQuestions(u);
+  QZ.cur = 0; QZ.score = 0; QZ.unit = u;
+  showQ();
+}
+function makeQuestions(u) {
+  var qs = [];
+  var vocab = (u.v1||[]).concat(u.v2||[]).concat(u.wx||[]);
+  // Vocab questions
+  vocab.slice(0,5).forEach(function(v) {
+    var others = vocab.filter(function(x){return x.w!==v.w;}).sort(function(){return Math.random()-.5;}).slice(0,3);
+    var opts = others.map(function(x){return x.e + ' ' + x.w;});
+    var correct = v.e + ' ' + v.w;
+    opts.push(correct);
+    opts.sort(function(){return Math.random()-.5;});
+    qs.push({q:'What is "' + v.w + '"?', opts:opts, a:opts.indexOf(correct)});
+  });
+  // Key phrase questions
+  u.kp.slice(0,3).forEach(function(p) {
+    var others = ["Yes, please!","I don't know.","That's great!","No, thanks."].sort(function(){return Math.random()-.5;}).slice(0,3);
+    var opts = [p].concat(others);
+    opts.sort(function(){return Math.random()-.5;});
+    qs.push({q:'Choose the key phrase for Unit ' + u.id + ':', opts:opts, a:opts.indexOf(p)});
+  });
+  // Story questions
+  if (u.story && u.story.qs) {
+    u.story.qs.forEach(function(sq) {
+      var opts = sq.os.slice();
+      var correct = opts[sq.a];
+      opts.sort(function(){return Math.random()-.5;});
+      qs.push({q:sq.q, opts:opts, a:opts.indexOf(correct)});
+    });
+  }
+  return qs.filter(function(q){return q.a>=0;}).slice(0,10);
+}
+function showQ() {
+  var el = document.getElementById('qzarea');
+  if (!el) return;
+  if (QZ.cur >= QZ.q.length) { showQResult(); return; }
+  var q = QZ.q[QZ.cur];
+  var pct = Math.round(QZ.cur/QZ.q.length*100);
+  var html = '<div style="margin-bottom:10px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:.82rem;color:#777;margin-bottom:4px"><span>Q' + (QZ.cur+1) + '/' + QZ.q.length + '</span><span>Score: ' + QZ.score + '</span></div>'
+    + '<div class="pb"><div class="pbf" style="width:'+pct+'%"></div></div></div>'
+    + '<div class="qcard"><div class="qq">' + q.q + '</div><div class="qopts">';
+  q.opts.forEach(function(o, i) {
+    html += '<button class="qo" onclick="ansQ(this,' + i + ',' + q.a + ')">' + o + '</button>';
+  });
+  html += '</div></div>';
+  el.innerHTML = html;
+}
+function ansQ(btn, chosen, ans) {
+  var opts = btn.closest('.qopts').querySelectorAll('.qo');
+  opts.forEach(function(b){b.disabled=true;});
+  if (chosen === ans) {
+    btn.classList.add('ok'); btn.innerHTML = '&#x2705; ' + btn.textContent;
+    QZ.score += 10; addStars(3,'Quiz!');
+  } else {
+    btn.classList.add('no'); btn.innerHTML = '&#x274C; ' + btn.textContent;
+    opts[ans].classList.add('ok');
+  }
+  QZ.cur++;
+  setTimeout(showQ, 900);
+}
+function showQResult() {
+  var u = QZ.unit;
+  var max = QZ.q.length * 10;
+  var pct = max > 0 ? Math.round(QZ.score/max*100) : 0;
+  prog[u.id] = Math.max(prog[u.id]||0, pct);
+  ST.set('lg4_prog', prog);
+  var stars_str = pct>=80?'&#x2B50;&#x2B50;&#x2B50;':pct>=60?'&#x2B50;&#x2B50;':'&#x2B50;';
+  document.getElementById('qzarea').innerHTML =
+    '<div style="text-align:center;padding:20px">'
+    + '<div style="font-size:2.5rem">&#x1F389;</div>'
+    + '<h3 style="margin:8px 0">Quiz Complete!</h3>'
+    + '<div style="font-size:1.4rem">' + stars_str + '</div>'
+    + '<div style="font-size:1.1rem;font-weight:900;color:var(--g);margin:8px 0">' + QZ.score + '/' + max + ' pts (' + pct + '%)</div>'
+    + '<div class="brow" style="justify-content:center;margin-top:12px">'
+    + '<button class="btn bg" onclick="initQuiz(curUnit)">&#x1F504; Try Again</button>'
+    + '<button class="btn by" onclick="goHome()">&#x1F3E0; Home</button></div></div>';
+  addStars(Math.round(pct/10), 'Quiz done!');
+}
+
+// ==================== SPEAKING SCREEN ====================
+function buildSpeak() {
+  var phrases = [];
+  CUR.units.forEach(function(u) {
+    u.kp.forEach(function(p){ phrases.push({t:p, uid:u.id}); });
+    u.dlg.forEach(function(d){ phrases.push({t:d.t, uid:u.id}); });
+  });
+  var h = '<div class="card" style="background:var(--bp);margin-bottom:12px;font-size:.85rem;color:var(--b)">&#x1F3A4; Tap mic &rarr; say the phrase &rarr; get scored! Practice for 80%+.</div>';
+  var shown = {};
+  phrases.forEach(function(p, i) {
+    if (shown[p.t]) return;
+    shown[p.t] = true;
+    h += '<div class="card spk">'
+      + '<span class="bdg bdgb">Unit ' + p.uid + '</span>'
+      + '<div class="spktxt" style="margin-top:6px">' + p.t + '</div>'
+      + '<div class="brow" style="justify-content:center">'
+      + '<button class="btn by sm" onclick="say(\'' + esc(p.t) + '\')">&#x1F508; Listen</button>'
+      + '<button class="micbtn" id="sm' + i + '" style="width:46px;height:46px;font-size:1.2rem" onclick="doSpeak(\'' + esc(p.t) + '\',\'sm' + i + '\',\'ss' + i + '\')">&#x1F3A4;</button>'
+      + '</div><div id="ss' + i + '"></div></div>';
+  });
+  document.getElementById('spcontent').innerHTML = h;
+}
+
+// ==================== SPEECH RECOGNITION ====================
+function doSpeak(target, btnId, scoreId) {
+  var btn = document.getElementById(btnId);
+  var scoreEl = document.getElementById(scoreId);
+  if (!btn || !scoreEl) return;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    scoreEl.innerHTML = '<span style="color:var(--o);font-size:.82rem">&#x26A0; Speech recognition not available. Use Chrome browser.</span>';
+    return;
+  }
+  var rec = new SR();
+  rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 3;
+  btn.classList.add('rec'); btn.innerHTML = '&#x1F534;';
+  scoreEl.innerHTML = '<div style="font-size:.8rem;color:#888;text-align:center">Listening...</div>';
+  rec.onresult = function(e) {
+    var spoken = e.results[0][0].transcript.toLowerCase().trim();
+    var score = calcScore(spoken, target.toLowerCase().trim());
+    showScore(scoreEl, score, spoken);
+    btn.classList.remove('rec'); btn.innerHTML = '&#x1F3A4;';
+    if (score>=70) addStars(3,'Speaking!');
+    else if (score>=50) addStars(1,'Good try!');
+  };
+  rec.onerror = function() {
+    scoreEl.innerHTML = '<span style="color:var(--r);font-size:.82rem">Could not hear. Try again!</span>';
+    btn.classList.remove('rec'); btn.innerHTML = '&#x1F3A4;';
+  };
+  rec.onend = function() { btn.classList.remove('rec'); btn.innerHTML = '&#x1F3A4;'; };
+  rec.start();
+}
+function calcScore(spoken, target) {
+  var sp = spoken.replace(/[^a-z ]/g,'').split(' ').filter(Boolean);
+  var tg = target.replace(/[^a-z ]/g,'').split(' ').filter(Boolean);
+  var matches = 0;
+  sp.forEach(function(w){ if(tg.indexOf(w)>=0) matches++; });
+  var p = sp.length>0 ? matches/sp.length : 0;
+  var r = tg.length>0 ? matches/tg.length : 0;
+  if(p+r===0) return 0;
+  return Math.round(2*p*r/(p+r)*100);
+}
+function showScore(el, score, spoken) {
+  var col = score>=80?'var(--g)':score>=60?'var(--y)':score>=40?'var(--o)':'var(--r)';
+  var lbl = score>=80?'Excellent! &#x1F31F;':score>=60?'Good! &#x1F44D;':score>=40?'Keep trying! &#x1F4AA;':'Try again! &#x1F504;';
+  el.innerHTML = '<div style="font-weight:900;font-size:1.1rem;color:'+col+';text-align:center">'+score+'% &mdash; '+lbl+'</div>'
+    + '<div class="sbar"><div class="sbf" style="width:'+score+'%;background:'+col+'"></div></div>'
+    + '<div style="font-size:.72rem;color:#888;text-align:center">You said: &ldquo;'+spoken+'&rdquo;</div>';
+}
+
+// ==================== PHONICS SCREEN ====================
+var PHONICS_ALL = [
+  {u:1,s:"ch / sh",sounds:[{s:"ch",ws:[["ch","icken"],["ch","eese"],["ch","ocolate"]]},{s:"sh",ws:[["sh","eep"],["sh","orts"],["sh","irt"]]}],chant:{t:"My Sheep Wears Shorts",ls:["My sheep wears shorts and a jacket.","My chicken wears a shirt and a tie.","I shop for my sheep and my chicken."]}},
+  {u:2,s:"ph / wh",sounds:[{s:"ph",ws:[["ph","oto"],["ph","one"],["dol","ph","in"]]},{s:"wh",ws:[["wh","ale"],["wh","ite"],["wh","istle"]]}],chant:{t:"Whales and Dolphins",ls:["A whale, a white whale, a whistle and a phone.","A dolphin, a photo dolphin, a whistle on his own."]}},
+  {u:3,s:"th",sounds:[{s:"th (thin)",ws:[["th","in"],["th","irteen"],["Th","ursday"]]},{s:"th (this)",ws:[["f","a","th","er"],["mo","th","er"],["th","ey"]]}],chant:{t:"Birthday Thursday",ls:["When's your birthday party?","Is it on a Thursday? Is it the thirteenth?"]}},
+  {u:4,s:"ck / nk",sounds:[{s:"ck",ws:[["du","ck"],["so","ck"],["bla","ck"]]},{s:"nk",ws:[["thi","nk"],["sti","nk"],["dri","nk"]]}],chant:{t:"My Duck and My Skunk",ls:["My duck wears black socks.","My skunk thinks and thinks.","My duck has a thick neck."]}},
+  {u:5,s:"lk / st",sounds:[{s:"lk",ws:[["mi","lk"],["ta","lk"],["wa","lk"]]},{s:"st",ws:[["fi","rst"],["la","st"],["toa","st"]]}],chant:{t:"Walk and Talk",ls:["Walk to school, talk with friends.","Drink your milk from start to end."]}},
+  {u:6,s:"nd / ng",sounds:[{s:"nd",ws:[["blo","nd"],["ha","nd"],["ba","nd"]]},{s:"ng",ws:[["ba","ng","s"],["si","ng"],["ri","ng"]]}],chant:{t:"Clap Your Hands for Wanda!",ls:["Clap your hands! Clap your hands!","Clap your hands for Wanda!","She sings and she rings the best."]}},
+  {u:7,s:"qu / tw",sounds:[{s:"qu",ws:[["qu","ilt"],["qu","estion"],["qu","een"]]},{s:"tw",ws:[["tw","ins"],["tw","elve"],["tw","enty"]]}],chant:{t:"The Twirling Twins",ls:["The twins are twirling, twirling.","Twelve times around the square.","The queen asks a question."]}},
+  {u:8,s:"nt / rt",sounds:[{s:"nt",ws:[["te","nt"],["pai","nt"],["pla","nt"]]},{s:"rt",ws:[["ca","rt"],["di","rt"],["sma","rt"]]}],chant:{t:"Get Smart! Find a Cart!",ls:["Get smart! Find a cart!","Paint the cart from start to end.","Plant a plant beside the cart."]}}
+];
+function buildPhonics() {
+  var h = '';
+  PHONICS_ALL.forEach(function(p) {
+    h += '<div class="card" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="bdg bdgg">Unit ' + p.u + '</span><strong style="color:var(--r);font-size:1.1rem">' + p.s + '</strong></div>';
+    p.sounds.forEach(function(s) {
+      h += '<div style="margin-bottom:8px"><strong style="color:var(--r)">' + s.s + ':</strong> <div class="pwords" style="margin-top:5px">';
+      s.ws.forEach(function(parts) {
+        var full = parts.join('');
+        h += '<div class="pw" onclick="say(\'' + esc(full) + '\')" style="cursor:pointer"><em>' + parts[0] + '</em>' + parts.slice(1).join('') + ' &#x1F508;</div>';
+      });
+      h += '</div></div>';
+    });
+    if (p.chant) {
+      h += '<div class="chant" style="margin-top:6px"><h4>&#x1F3B5; ' + p.chant.t + '</h4>'
+        + '<p>' + p.chant.ls.join('<br>') + '</p>'
+        + '<div class="brow"><button class="btn by sm" onclick="say(\'' + esc(p.chant.ls.join('. ')) + '\')">&#x1F508; Listen</button></div></div>';
+    }
+    h += '</div>';
+  });
+  document.getElementById('phcontent').innerHTML = h;
+}
+
+// ==================== GAMES SCREEN ====================
+var GAME_LIST = [
+  {id:'mem',ico:'&#x1F0CF;',n:'Memory Match',d:'Match words & pictures'},
+  {id:'scr',ico:'&#x1F524;',n:'Word Scramble',d:'Unscramble letters'},
+  {id:'sent',ico:'&#x1F4DD;',n:'Sentence Builder',d:'Build correct sentences'},
+  {id:'flash',ico:'&#x26A1;',n:'Flash Cards',d:'Quick vocab review'},
+  {id:'tf',ico:'&#x2714;&#x2718;',n:'True or False',d:'Grammar check'},
+  {id:'miss',ico:'&#x2753;',n:"What's Missing",d:'Fill the blank'},
+  {id:'speed',ico:'&#x23F1;',n:'Speed Quiz',d:'Answer fast!'},
+  {id:'sort',ico:'&#x1F4E6;',n:'Sort It Out',d:'Put words in groups'},
+  {id:'pron',ico:'&#x1F3A4;',n:'Pronunciation',d:'Say it right'},
+  {id:'chain',ico:'&#x1F517;',n:'Word Chain',d:'Vocabulary challenge'}
+];
+function buildGames() {
+  var sel = '<div style="margin-bottom:12px"><label style="font-size:.85rem;font-weight:700;color:#555">Unit: </label><select id="gunit" style="padding:6px 10px;border-radius:8px;border:2px solid var(--g);font-size:.88rem"><option value="0">All Units</option>';
+  CUR.units.forEach(function(u){ sel += '<option value="' + u.id + '">Unit ' + u.id + ': ' + u.title + '</option>'; });
+  sel += '</select></div>';
+  var grid = '<div class="grid4">';
+  GAME_LIST.forEach(function(g){
+    grid += '<div class="gcard" onclick="startGame(\'' + g.id + '\')">'
+      + '<div class="gico">' + g.ico + '</div><h4>' + g.n + '</h4><p>' + g.d + '</p></div>';
+  });
+  grid += '</div><div id="garea" style="margin-top:14px"></div>';
+  document.getElementById('gmcontent').innerHTML = sel + grid;
+}
+function getGVocab() {
+  var uid = parseInt((document.getElementById('gunit')||{value:'0'}).value)||0;
+  var v = [];
+  CUR.units.forEach(function(u) {
+    if (uid===0||uid===u.id) {
+      (u.v1||[]).concat(u.v2||[]).forEach(function(x){ if(x.e&&x.w) v.push({w:x.w,e:x.e,uid:u.id}); });
+    }
+  });
+  return v.sort(function(){return Math.random()-.5;});
+}
+function startGame(id) {
+  var a = document.getElementById('garea');
+  if (!a) return;
+  a.scrollIntoView({behavior:'smooth',block:'start'});
+  var v = getGVocab();
+  if (id==='mem') gameMem(a,v);
+  else if (id==='scr') gameScramble(a,v);
+  else if (id==='sent') gameSent(a);
+  else if (id==='flash') gameFlash(a,v);
+  else if (id==='tf') gameTF(a);
+  else if (id==='miss') gameMiss(a);
+  else if (id==='speed') gameSpeed(a,v);
+  else if (id==='sort') gameSort(a);
+  else if (id==='pron') gamePron(a);
+  else if (id==='chain') gameChain(a,v);
+}
+
+// MEMORY GAME
+function gameMem(a, v) {
+  var items = v.slice(0,8);
+  var pairs = items.map(function(x){return {val:x.w,show:x.w,type:'w'};}).concat(items.map(function(x){return {val:x.w,show:x.e,type:'e'};}));
+  pairs.sort(function(){return Math.random()-.5;});
+  var mem = {pairs:pairs,fl:[],matched:[],moves:0};
+  window._mem = mem;
+  var cols = 4;
+  var h = '<div class="card"><h3 style="margin-bottom:8px">&#x1F0CF; Memory Match</h3>'
+    + '<div id="memstat" style="font-size:.82rem;color:#777;margin-bottom:8px">Moves: 0 | Pairs: 0/' + items.length + '</div>'
+    + '<div style="display:grid;grid-template-columns:repeat(' + cols + ',1fr);gap:7px" id="memgrid">';
+  pairs.forEach(function(p,i){
+    h += '<div class="memcard" id="mc' + i + '" onclick="mflip(' + i + ')">'
+      + '<div class="minner"><div class="mfront">?</div><div class="mback">' + p.show + '</div></div></div>';
+  });
+  h += '</div><button class="btn bg sm" onclick="gameMem(document.getElementById(\'garea\'),getGVocab())" style="margin-top:10px">&#x1F504; New Game</button></div>';
+  a.innerHTML = h;
+}
+function mflip(i) {
+  var m = window._mem;
+  if (!m||m.matched.indexOf(i)>=0||m.fl.indexOf(i)>=0||m.fl.length>=2) return;
+  document.getElementById('mc'+i).classList.add('flip');
+  m.fl.push(i);
+  if (m.fl.length===2) {
+    m.moves++;
+    var stat = document.getElementById('memstat');
+    var ab = m.fl[0], bb = m.fl[1];
+    if (stat) stat.textContent = 'Moves: '+m.moves+' | Pairs: '+(m.matched.length/2|0)+'/'+Math.floor(m.pairs.length/2);
+    if (m.pairs[ab].val===m.pairs[bb].val && m.pairs[ab].type!==m.pairs[bb].type) {
+      m.matched.push(ab,bb);
+      document.getElementById('mc'+ab).classList.add('done');
+      document.getElementById('mc'+bb).classList.add('done');
+      m.fl=[];
+      addStars(2,'Match!');
+      if (m.matched.length===m.pairs.length) {
+        setTimeout(function(){ showMod('<h3>&#x1F389; All matched!</h3><p>'+m.moves+' moves! &#x2B50;&#x2B50;&#x2B50;</p>'); addStars(10,'Memory!'); },400);
+      }
+    } else {
+      setTimeout(function(){
+        [ab,bb].forEach(function(x){ var c=document.getElementById('mc'+x); if(c&&m.matched.indexOf(x)<0) c.classList.remove('flip'); });
+        m.fl=[];
+      },900);
+    }
+  }
+}
+
+// SCRAMBLE
+var _scr = {};
+function gameScramble(a, v) {
+  var item = v[Math.floor(Math.random()*v.length)];
+  var letters = item.w.split('').sort(function(){return Math.random()-.5;});
+  _scr = {word:item.w,ans:[],src:letters.slice()};
+  var h = '<div class="card"><h3 style="margin-bottom:8px">&#x1F524; Word Scramble</h3>'
+    + '<div style="font-size:2.5rem;text-align:center;margin:8px 0">' + item.e + '</div>'
+    + '<div style="font-size:.82rem;color:#777;text-align:center;margin-bottom:8px">Unscramble the letters!</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0" id="scrslots">'
+    + item.w.split('').map(function(_,i){return '<div class="aslot" id="as'+i+'" onclick="scrRem('+i+')"></div>';}).join('')
+    + '</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0" id="scrtiles">'
+    + letters.map(function(l,i){return '<div class="ltile" id="lt'+i+'" onclick="scrAdd(\''+l+'\','+i+')">'+l+'</div>';}).join('')
+    + '</div>'
+    + '<div class="brow"><button class="btn bg sm" onclick="scrCheck()">Check &#x2713;</button><button class="btn by sm" onclick="say(\''+esc(item.w)+'\')">&#x1F508; Hint</button><button class="btn sm" onclick="gameScramble(document.getElementById(\'garea\'),getGVocab())" style="background:var(--bp);color:var(--b)">&#x1F504; New</button></div>'
+    + '<div id="scrres" style="text-align:center;font-weight:700;margin-top:8px"></div></div>';
+  a.innerHTML = h;
+}
+function scrAdd(l,idx) {
+  var t = document.getElementById('lt'+idx);
+  if (!t||t.classList.contains('used')) return;
+  t.classList.add('used');
+  var pos = _scr.ans.length;
+  if (pos >= _scr.word.length) return;
+  _scr.ans.push({l:l,idx:idx});
+  var sl = document.getElementById('as'+pos);
+  if (sl) { sl.textContent=l; sl.classList.add('fill'); sl.dataset.idx=idx; }
+}
+function scrRem(pos) {
+  var sl = document.getElementById('as'+pos);
+  if (!sl||!sl.classList.contains('fill')) return;
+  var idx = parseInt(sl.dataset.idx);
+  var t = document.getElementById('lt'+idx);
+  if (t) t.classList.remove('used');
+  _scr.ans.splice(pos,1);
+  for (var i=0;i<_scr.word.length;i++) {
+    var s=document.getElementById('as'+i);
+    if (!s) continue;
+    if (i<_scr.ans.length){s.textContent=_scr.ans[i].l;s.classList.add('fill');s.dataset.idx=_scr.ans[i].idx;}
+    else{s.textContent='';s.classList.remove('fill');delete s.dataset.idx;}
+  }
+}
+function scrCheck() {
+  var ans = _scr.ans.map(function(x){return x.l;}).join('');
+  var r = document.getElementById('scrres');
+  if (ans.toLowerCase()===_scr.word.toLowerCase()) {
+    r.innerHTML='&#x2705; Correct!'; r.style.color='var(--g)';
+    addStars(5,'Scramble!'); say(_scr.word);
+  } else {
+    r.innerHTML='&#x274C; Answer: <strong>'+_scr.word+'</strong>'; r.style.color='var(--r)';
+  }
+}
+
+// FLASHCARD
+var _fl={cards:[],idx:0,flipped:false};
+function gameFlash(a,v) {
+  _fl.cards=v.slice(0,20); _fl.idx=0; _fl.flipped=false; showFlash(a);
+}
+function showFlash(a) {
+  if(!a)a=document.getElementById('garea');
+  var v=_fl.cards[_fl.idx];
+  if(!v)return;
+  a.innerHTML='<div class="card" style="text-align:center">'
+    +'<h3 style="margin-bottom:8px">&#x26A1; Flash Cards ('+(_fl.idx+1)+'/'+_fl.cards.length+')</h3>'
+    +'<div onclick="flFlip()" style="cursor:pointer;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:'+(_fl.flipped?'var(--gp)':'var(--bp)')+';border-radius:12px;padding:16px;border:2px solid '+(_fl.flipped?'var(--g)':'var(--b)')+';margin:8px 0">'
+    +(_fl.flipped?'<div style="font-size:2.5rem">'+v.e+'</div><div style="font-size:1.2rem;font-weight:900;margin-top:6px">'+v.w+'</div>':'<div style="font-size:2.5rem">'+v.e+'</div><div style="font-size:.85rem;color:#888;margin-top:5px">Tap to reveal</div>')
+    +'</div>'
+    +'<div class="brow" style="justify-content:center">'
+    +'<button class="btn bg sm" onclick="flNext(true)" '+(! _fl.flipped?'disabled':'')+'>&#x2705; Got it</button>'
+    +'<button class="btn br sm" onclick="flNext(false)" '+(!_fl.flipped?'disabled':'')+'>&#x274C; Again</button>'
+    +'<button class="btn by sm" onclick="say(\''+esc(v.w)+'\')">&#x1F508;</button>'
+    +'</div></div>';
+}
+function flFlip(){_fl.flipped=true;showFlash();}
+function flNext(ok){if(ok)addStars(1,'Flash!');_fl.idx=(_fl.idx+1)%_fl.cards.length;_fl.flipped=false;showFlash();}
+
+// SENTENCES
+var SENTS=[
+  {ws:["What","are","you","going","to","do?"],ans:"What are you going to do?"},
+  {ws:["I'm","going","to","go","skateboarding."],ans:"I'm going to go skateboarding."},
+  {ws:["What","do","you","want","to","be?"],ans:"What do you want to be?"},
+  {ws:["I","want","to","be","a","singer."],ans:"I want to be a singer."},
+  {ws:["What","did","you","do","yesterday?"],ans:"What did you do yesterday?"},
+  {ws:["I","flew","a","kite."],ans:"I flew a kite."},
+  {ws:["She","has","curly","brown","hair."],ans:"She has curly brown hair."},
+  {ws:["I","have","to","wash","the","dishes."],ans:"I have to wash the dishes."},
+  {ws:["What","does","she","look","like?"],ans:"What does she look like?"},
+  {ws:["It's","going","to","be","cold."],ans:"It's going to be cold."}
+];
+var _sent={cur:null,placed:[],chips:[]};
+function gameSent(a) {
+  var s=SENTS[Math.floor(Math.random()*SENTS.length)];
+  var ws=s.ws.slice().sort(function(){return Math.random()-.5;});
+  _sent={cur:s,placed:[],chips:ws};
+  var h='<div class="card"><h3 style="margin-bottom:8px">&#x1F4DD; Sentence Builder</h3>'
+    +'<p style="font-size:.82rem;color:#777;margin-bottom:8px">Tap words to build the correct sentence:</p>'
+    +'<div class="builts" id="bsent"><span style="color:#ccc">tap words below...</span></div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:7px;margin:8px 0" id="wchips">'
+    +ws.map(function(w,i){return '<button class="chip" id="ch'+i+'" onclick="sentAdd(\''+esc(w)+'\','+i+')">'+w+'</button>';}).join('')
+    +'</div>'
+    +'<div class="brow"><button class="btn bg sm" onclick="sentCheck()">Check &#x2713;</button>'
+    +'<button class="btn by sm" onclick="gameSent(document.getElementById(\'garea\'))">&#x1F504; New</button>'
+    +'<button class="btn sm" onclick="sentClear()" style="background:var(--rp);color:var(--r)">Clear</button></div>'
+    +'<div id="sres" style="font-weight:700;text-align:center;margin-top:8px"></div></div>';
+  a.innerHTML=h;
+}
+function sentAdd(w,idx){
+  var c=document.getElementById('ch'+idx);
+  if(c&&c.classList.contains('placed'))return;
+  if(c)c.classList.add('placed');
+  _sent.placed.push({w:w,idx:idx});
+  updateSent();
+}
+function updateSent(){
+  var el=document.getElementById('bsent');
+  if(!el)return;
+  if(!_sent.placed.length){el.innerHTML='<span style="color:#ccc">tap words below...</span>';return;}
+  el.innerHTML=_sent.placed.map(function(p,i){return '<div class="bchip" onclick="sentRem('+i+')">'+p.w+' &times;</div>';}).join('');
+}
+function sentRem(pos){
+  var c=document.getElementById('ch'+_sent.placed[pos].idx);
+  if(c)c.classList.remove('placed');
+  _sent.placed.splice(pos,1);
+  updateSent();
+}
+function sentClear(){
+  _sent.placed=[];
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('placed');});
+  updateSent();
+  document.getElementById('sres').textContent='';
+}
+function sentCheck(){
+  var ans=_sent.placed.map(function(p){return p.w;}).join(' ');
+  var r=document.getElementById('sres');
+  if(ans===_sent.cur.ans){r.innerHTML='&#x2705; Perfect!';r.style.color='var(--g)';addStars(5,'Sentence!');say(ans);}
+  else{r.innerHTML='&#x274C; Answer: <em>'+_sent.cur.ans+'</em>';r.style.color='var(--r)';}
+}
+
+// TRUE/FALSE
+var TF=[
+  {q:"'Going to' is used for future plans.",a:true},
+  {q:"We say: He want to be a singer.",a:false},
+  {q:"The past of 'fly' is 'flied'.",a:false},
+  {q:"'She has short red hair' describes appearance.",a:true},
+  {q:"The past of 'go' is 'went'.",a:true},
+  {q:"Add -er to make comparatives: tall-taller.",a:true},
+  {q:"'What does she look like?' asks about personality.",a:false},
+  {q:"'Have to' means it is necessary to do something.",a:true},
+  {q:"He likes to surf the Internet. (correct)",a:true},
+  {q:"The past of 'win' is 'winned'.",a:false},
+  {q:"'ch' in 'chicken' sounds like the letter K.",a:false},
+  {q:"Ordinal numbers: 1st, 2nd, 3rd, 4th.",a:true}
+];
+var _tf={q:[],i:0,sc:0};
+function gameTF(a){
+  _tf.q=[...TF].sort(function(){return Math.random()-.5;});
+  _tf.i=0;_tf.sc=0;showTF(a);
+}
+function showTF(a){
+  if(!a)a=document.getElementById('garea');
+  if(_tf.i>=_tf.q.length){a.innerHTML='<div class="card" style="text-align:center"><h3>&#x2714;&#x2718; Done!</h3><div style="font-size:1.5rem;font-weight:900;color:var(--g);margin:10px">'+_tf.sc+'/'+_tf.q.length+'</div><button class="btn bg" onclick="gameTF(document.getElementById(\'garea\'))">&#x1F504; Play Again</button></div>';return;}
+  var q=_tf.q[_tf.i];
+  a.innerHTML='<div class="card" style="text-align:center"><h3>&#x2714;&#x2718; True or False? ('+(_tf.i+1)+'/'+_tf.q.length+')</h3>'
+    +'<div style="background:var(--bp);border-radius:11px;padding:14px;margin:12px 0;font-size:1rem;font-weight:600">&ldquo;'+q.q+'&rdquo;</div>'
+    +'<div style="display:flex;gap:10px;justify-content:center">'
+    +'<button class="btn bg" onclick="ansTF(true)">&#x2705; True</button>'
+    +'<button class="btn br" onclick="ansTF(false)">&#x274C; False</button>'
+    +'</div><div id="tfr" style="margin-top:10px;font-size:.95rem;font-weight:700"></div>'
+    +'<div style="font-size:.82rem;color:#888;margin-top:6px">Score: '+_tf.sc+'</div></div>';
+}
+function ansTF(ans){
+  var q=_tf.q[_tf.i];
+  var r=document.getElementById('tfr');
+  if(ans===q.a){r.innerHTML='&#x2705; Correct!';r.style.color='var(--g)';_tf.sc++;addStars(2,'T/F!');}
+  else{r.innerHTML='&#x274C; Answer: '+(q.a?'TRUE':'FALSE');r.style.color='var(--r)';}
+  _tf.i++;
+  setTimeout(function(){showTF(document.getElementById('garea'));},1100);
+}
+
+// MISSING WORD
+var MISS=[
+  {q:"What ___ you going to do?",a:"are",os:["are","is","do","was"]},
+  {q:"I'm going to go ___.",a:"camping",os:["camping","swim","ran","flying"]},
+  {q:"She ___ to be a dancer.",a:"wants",os:["wants","want","is","like"]},
+  {q:"I ___ a kite yesterday.",a:"flew",os:["flew","fly","flied","flying"]},
+  {q:"English is easier ___ science.",a:"than",os:["than","then","that","to"]},
+  {q:"What does she ___ like?",a:"look",os:["look","see","be","have"]},
+  {q:"He ___ curly brown hair.",a:"has",os:["has","have","is","are"]},
+  {q:"I have to ___ the dishes.",a:"wash",os:["wash","washes","washed","washing"]},
+  {q:"Which season do you like ___?",a:"best",os:["best","better","good","well"]},
+  {q:"Are you going to read a novel ___?",a:"tonight",os:["tonight","yesterday","now","always"]}
+];
+var _miss={q:[],i:0,sc:0};
+function gameMiss(a){
+  _miss.q=[...MISS].sort(function(){return Math.random()-.5;});
+  _miss.i=0;_miss.sc=0;showMiss(a);
+}
+function showMiss(a){
+  if(!a)a=document.getElementById('garea');
+  if(_miss.i>=_miss.q.length){a.innerHTML='<div class="card" style="text-align:center"><h3>&#x2753; Done!</h3><div style="font-size:1.5rem;font-weight:900;color:var(--g);margin:10px">'+_miss.sc+'/'+_miss.q.length+'</div><button class="btn bg" onclick="gameMiss(document.getElementById(\'garea\'))">&#x1F504; Again</button></div>';return;}
+  var q=_miss.q[_miss.i];
+  var opts=q.os.slice().sort(function(){return Math.random()-.5;});
+  a.innerHTML='<div class="qcard"><h3>&#x2753; What\'s Missing? ('+(_miss.i+1)+'/'+_miss.q.length+')</h3>'
+    +'<div class="qq" style="background:var(--yp);padding:10px;border-radius:9px;margin:10px 0">'+q.q+'</div>'
+    +'<div class="qopts">'+opts.map(function(o){return '<button class="qo" onclick="ansMiss(this,\''+esc(o)+'\',\''+esc(q.a)+'\')">'+o+'</button>';}).join('')+'</div>'
+    +'<div style="font-size:.82rem;color:#888;margin-top:8px">Score: '+_miss.sc+'</div></div>';
+}
+function ansMiss(btn,chosen,ans){
+  var opts=btn.closest('.qopts').querySelectorAll('.qo');
+  opts.forEach(function(b){b.disabled=true;});
+  opts.forEach(function(b){if(b.textContent.trim()===ans)b.classList.add('ok');});
+  if(chosen===ans){_miss.sc++;addStars(2,'Missing!');}
+  else btn.classList.add('no');
+  _miss.i++;
+  setTimeout(function(){showMiss(document.getElementById('garea'));},1000);
+}
+
+// SPEED QUIZ
+var _sp={v:[],timer:null,sc:0,time:30};
+function gameSpeed(a,v){
+  _sp.v=v;_sp.sc=0;_sp.time=30;
+  if(_sp.timer)clearInterval(_sp.timer);
+  a.innerHTML='<div class="card" style="text-align:center"><h3>&#x23F1; Speed Quiz!</h3><p style="margin:8px 0;font-size:.85rem;color:#777">Answer as many as you can in 30 seconds!</p><button class="btn bg" onclick="startSpeed()">&#x25B6; Start!</button></div>';
+}
+function startSpeed(){
+  _sp.sc=0;_sp.time=30;
+  if(_sp.timer)clearInterval(_sp.timer);
+  _sp.timer=setInterval(function(){
+    _sp.time--;
+    var t=document.getElementById('sptimer');
+    if(t)t.textContent=_sp.time+'s';
+    if(_sp.time<=0){clearInterval(_sp.timer);endSpeed();}
+  },1000);
+  nextSpeed();
+}
+function nextSpeed(){
+  var a=document.getElementById('garea');if(!a)return;
+  var v=_sp.v;if(!v.length)return;
+  var item=v[Math.floor(Math.random()*v.length)];
+  var others=v.filter(function(x){return x.w!==item.w;}).sort(function(){return Math.random()-.5;}).slice(0,3);
+  var opts=[item].concat(others).sort(function(){return Math.random()-.5;});
+  a.innerHTML='<div class="qcard"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="bdg bdgb">&#x26A1; Speed</span><span id="sptimer" style="font-size:1.1rem;font-weight:900;color:var(--r)">'+_sp.time+'s</span><span style="font-weight:800">Score: '+_sp.sc+'</span></div>'
+    +'<div style="font-size:2.8rem;text-align:center;margin:10px 0">'+item.e+'</div>'
+    +'<div class="qopts">'+opts.map(function(o){return '<button class="qo" onclick="ansSpeed(this,'+(o.w===item.w)+')">'+o.w+'</button>';}).join('')+'</div></div>';
+}
+function ansSpeed(btn,correct){
+  btn.closest('.qopts').querySelectorAll('.qo').forEach(function(b){b.disabled=true;});
+  if(correct){btn.classList.add('ok');_sp.sc++;addStars(1,'Speed!');}
+  else btn.classList.add('no');
+  setTimeout(nextSpeed,350);
+}
+function endSpeed(){
+  var a=document.getElementById('garea');
+  if(!a)return;
+  a.innerHTML='<div class="card" style="text-align:center"><div style="font-size:2rem">&#x26A1;</div><h3>Time\'s Up!</h3><div style="font-size:2rem;font-weight:900;color:var(--g);margin:10px">'+_sp.sc+' points!</div><button class="btn bg" onclick="gameSpeed(document.getElementById(\'garea\'),getGVocab())">&#x1F504; Play Again</button></div>';
+  addStars(_sp.sc,'Speed done!');
+}
+
+// SORT IT OUT
+var SORT_CATS=[
+  {n:"Sports Equipment",ws:["a mitt","a bat","a tennis racket","a fishing rod","a bucket"]},
+  {n:"Camping Gear",ws:["a tent","a sleeping bag","a flashlight","sunscreen","sunglasses"]},
+  {n:"Jobs / Occupations",ws:["an engineer","a singer","a scientist","a truck driver","a tour guide"]},
+  {n:"Feelings",ws:["excited","worried","bored","surprised","embarrassed"]},
+  {n:"School Subjects",ws:["history","science","English","geography","P.E."]},
+  {n:"Illnesses",ws:["a cold","a headache","a stomachache","a fever","a cough"]}
+];
+var _sort={cats:[],placed:{}};
+function gameSort(a){
+  var cats=SORT_CATS.slice().sort(function(){return Math.random()-.5;}).slice(0,2);
+  var all=cats[0].ws.slice(0,3).concat(cats[1].ws.slice(0,3)).sort(function(){return Math.random()-.5;});
+  _sort={cats:cats,placed:{0:[],1:[]}};
+  var h='<div class="card"><h3 style="margin-bottom:8px">&#x1F4E6; Sort It Out!</h3>'
+    +'<p style="font-size:.82rem;color:#777;margin-bottom:8px">Tap a word, then choose a category:</p>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px" id="sortwords">'
+    +all.map(function(w,i){return '<button class="chip" id="sw'+i+'" onclick="sortPick(\''+esc(w)+'\','+i+')">'+w+'</button>';}).join('')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+    +cats.map(function(c,ci){return '<div style="background:var(--bg);border:2px dashed #ccc;border-radius:11px;padding:10px;min-height:70px"><div style="font-size:.78rem;font-weight:700;color:#555;margin-bottom:6px">'+c.n+'</div><div id="sc'+ci+'" style="display:flex;flex-wrap:wrap;gap:5px"></div></div>';}).join('')
+    +'</div>'
+    +'<div class="brow"><button class="btn bg sm" onclick="sortCheck()">Check &#x2713;</button><button class="btn by sm" onclick="gameSort(document.getElementById(\'garea\'))">&#x1F504; New</button></div>'
+    +'<div id="srtres" style="font-weight:700;text-align:center;margin-top:8px"></div></div>';
+  a.innerHTML=h;
+}
+function sortPick(word,idx){
+  var cats=_sort.cats;
+  showMod('<h3>Place "'+word+'" in:</h3><div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">'
+    +cats.map(function(c,ci){return '<button class="btn bg" onclick="sortAssign(\''+esc(word)+'\','+idx+','+ci+');closeMod()">'+c.n+'</button>';}).join('')
+    +'<button class="btn" onclick="closeMod()" style="background:var(--bg)">Cancel</button></div>');
+}
+function sortAssign(word,idx,ci){
+  var c=document.getElementById('sw'+idx);
+  if(c)c.classList.add('placed');
+  _sort.placed[ci].push(word);
+  var cont=document.getElementById('sc'+ci);
+  if(cont)cont.innerHTML+='<span class="bdg bdgg">'+word+'</span>';
+}
+function sortCheck(){
+  var cats=_sort.cats,pl=_sort.placed,sc=0,tot=0;
+  [0,1].forEach(function(ci){pl[ci].forEach(function(w){tot++;if(cats[ci].ws.indexOf(w)>=0)sc++;});});
+  var r=document.getElementById('srtres');
+  if(!tot){r.textContent='Place some words first!';return;}
+  r.innerHTML=(sc===tot?'&#x2705;':'&#x26A0;')+' '+sc+'/'+tot+' correct!';
+  if(sc>0)addStars(sc*2,'Sort!');
+}
+
+// PRONUNCIATION
+var PRONS=[
+  {t:"I'm going to go camping tomorrow.",tip:"Blend 'going to' naturally"},
+  {t:"How's the weather going to be?",tip:"Falling tone at end"},
+  {t:"What do you want to be?",tip:"Stress the job name"},
+  {t:"I want to be an astronaut.",tip:"Stress 'astronaut'"},
+  {t:"What did you do yesterday?",tip:"Stress 'yesterday'"},
+  {t:"She has short curly red hair.",tip:"List adjectives: size, type, color"},
+  {t:"I have to wash the dishes.",tip:"Blend 'have to' = hafta"},
+  {t:"Which season do you like best?",tip:"Rising-falling question tone"},
+  {t:"I'm going to go backpacking this summer.",tip:"Link words smoothly"},
+  {t:"He likes to surf the Internet.",tip:"Add -s to 'like' for he/she/it"}
+];
+function gamePron(a){
+  var items=PRONS.sort(function(){return Math.random()-.5;}).slice(0,5);
+  var h='<div class="card"><h3>&#x1F3A4; Pronunciation Challenge</h3><p style="font-size:.82rem;color:#777;margin-bottom:10px">Listen first, then record yourself. Aim for 80%+!</p>';
+  items.forEach(function(item,i){
+    h+='<div class="card spk" style="margin-bottom:10px">'
+      +'<div class="spktxt">'+item.t+'</div>'
+      +'<div style="font-size:.75rem;color:var(--b);background:var(--bp);border-radius:6px;padding:3px 8px;margin-bottom:7px">&#x1F4A1; '+item.tip+'</div>'
+      +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
+      +'<button class="btn by sm" onclick="say(\''+esc(item.t)+'\')">&#x1F508; Listen</button>'
+      +'<button class="micbtn" id="pm'+i+'" style="width:44px;height:44px;font-size:1.1rem" onclick="doSpeak(\''+esc(item.t)+'\',\'pm'+i+'\',\'ps'+i+'\')">&#x1F3A4;</button>'
+      +'</div><div id="ps'+i+'"></div></div>';
+  });
+  h+='</div>';
+  a.innerHTML=h;
+}
+
+// WORD CHAIN
+function gameChain(a,v){
+  var items=v.slice(0,12);
+  var shuf=items.slice().sort(function(){return Math.random()-.5;});
+  var h='<div class="card"><h3>&#x1F517; Word Chain</h3>'
+    +'<p style="font-size:.82rem;color:#777;margin-bottom:10px">Tap each word to hear it, then match them to their pictures!</p>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    +'<div>';
+  items.forEach(function(v,i){ h+='<div class="match-item" id="cw'+i+'" onclick="chainSel(\'w\',\''+esc(v.w)+'\','+i+')">'+v.w+'</div>'; });
+  h+='</div><div>';
+  shuf.forEach(function(v,i){ h+='<div class="match-item" id="ce'+i+'" onclick="chainSel(\'e\',\''+esc(v.w)+'\','+i+',\''+esc(shuf[i].w)+'\')">'+v.e+'</div>'; });
+  h+='</div></div>'
+    +'<div id="chainres" style="text-align:center;font-weight:700;margin-top:10px"></div>'
+    +'<button class="btn bg sm" onclick="gameChain(document.getElementById(\'garea\'),getGVocab())" style="margin-top:8px">&#x1F504; New Game</button></div>';
+  a.innerHTML=h;
+  window._chain={sel:null,items:items,shuf:shuf,score:0};
+}
+function chainSel(type,word,idx,emword){
+  var ch=window._chain;
+  if(!ch)return;
+  say(word);
+  if(type==='w'){
+    if(ch.sel&&ch.sel.type==='w'){var old=document.getElementById('cw'+ch.sel.idx);if(old)old.classList.remove('sel');}
+    ch.sel={type:'w',word:word,idx:idx};
+    document.getElementById('cw'+idx).classList.add('sel');
+  } else {
+    if(ch.sel&&ch.sel.type==='w'){
+      var match=(emword===ch.sel.word);
+      var wi=document.getElementById('cw'+ch.sel.idx);
+      var ei=document.getElementById('ce'+idx);
+      if(match){
+        if(wi){wi.classList.remove('sel');wi.classList.add('hit');}
+        if(ei)ei.classList.add('hit');
+        ch.score++;addStars(2,'Match!');
+      } else {
+        if(wi){wi.classList.add('miss');setTimeout(function(){wi.classList.remove('miss','sel');},500);}
+        if(ei){ei.classList.add('miss');setTimeout(function(){ei.classList.remove('miss');},500);}
+      }
+      ch.sel=null;
+      if(ch.score>=ch.items.length){setTimeout(function(){showMod('<h3>&#x1F389; All matched!</h3><p>Great job!</p>');addStars(10,'Chain!');},300);}
+    }
+  }
+}
+
+// ==================== REVIEW SCREEN ====================
+var REVIEW_STORIES=[
+  {u:"1 & 2",col:"var(--b)",t:"Chris and Cindy's Treasure Hunt — Part 1",tx:"Chris and Cindy are going on a treasure hunt! Chris wants to find the treasure first. He's going to go through the forest and over the bridge. Cindy is going to go around the lake and into the cave. They need a flashlight, a sleeping bag, and sunscreen. Chris wants to be an explorer when he grows up. Cindy wants to be a scientist. I hope they find the treasure!"},
+  {u:"3 & 4",col:"var(--o)",t:"Chris and Cindy's Treasure Hunt — Part 2",tx:"Yesterday, Chris and Cindy went to the forest. Chris flew a kite near the bridge. Cindy took a test about seasons and she got all the answers right! She thinks fall is the most beautiful season because it's cooler. It was Chris's birthday last week. He got a new science book as a present. They ate too much birthday cake!"},
+  {u:"5 & 6",col:"var(--pu)",t:"Chris and Cindy's Treasure Hunt — Part 3",tx:"Chris is looking for Cindy. She went under the bridge and through the tunnel. What does Cindy look like? She has long brown hair and green eyes. She's the one in the red jacket. Chris went over the hill and into the woods. He was very excited to find the next clue! Their grandma is waiting at the entrance."},
+  {u:"7 & 8",col:"var(--t)",t:"Chris and Cindy's Treasure Hunt — Part 4",tx:"Next weekend, Chris and Cindy are going to go back to the treasure hunt. Chris is going to go to the gift shop to buy supplies. He has to clear the table and vacuum the carpet before he goes. Cindy likes to read novels and borrow books. She's going to borrow a treasure map book from the library. Chris has a stomachache but he hopes he feels better soon!"}
+];
+function buildReview() {
+  var h = '';
+  REVIEW_STORIES.forEach(function(rs,i) {
+    h += '<div class="card" style="margin-bottom:12px">'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+      + '<span class="bdg bdgb">Units ' + rs.u + '</span>'
+      + '<strong style="font-size:.9rem">' + rs.t + '</strong></div>'
+      + '<p class="story">' + rs.tx + '</p>'
+      + '<div class="brow"><button class="btn by sm" onclick="say(\'' + esc(rs.tx) + '\')">&#x1F508; Listen</button>'
+      + '<button class="btn bg sm" onclick="startRevQuiz(' + i + ')">&#x1F4DD; Quiz This Section</button></div></div>';
+  });
+  // Full word list
+  h += '<div class="card"><div class="sh2">&#x1F4CB; Complete Word List</div>';
+  CUR.units.forEach(function(u) {
+    var all=(u.v1||[]).concat(u.v2||[]).concat(u.wx||[]).filter(function(v){return v&&v.w;});
+    h += '<div style="margin-bottom:8px"><strong style="color:var(--g);font-size:.85rem">Unit ' + u.id + ': ' + u.title + '</strong><br>';
+    all.forEach(function(v) {
+      h += '<span class="bdg bdgg" style="margin:2px;cursor:pointer" onclick="say(\'' + esc(v.w) + '\')">' + v.e + ' ' + v.w + '</span>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+  document.getElementById('rvcontent').innerHTML = h;
+}
+function startRevQuiz(sectionIdx) {
+  var unitIds = [[1,2],[3,4],[5,6],[7,8]][sectionIdx];
+  var qs = [];
+  unitIds.forEach(function(uid) {
+    var u = CUR.units[uid-1];
+    if (u) qs = qs.concat(makeQuestions(u));
+  });
+  qs = qs.sort(function(){return Math.random()-.5;}).slice(0,10);
+  QZ.q = qs; QZ.cur = 0; QZ.score = 0; QZ.unit = {id:'R'+sectionIdx,title:'Review'};
+  document.getElementById('rvcontent').innerHTML = '<div class="brow"><button class="btn by sm" onclick="buildReview()">&#x2190; Back to Review</button></div><div id="qzarea"></div>';
+  showQ();
+}
+
+// ==================== HELPERS ====================
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ');
+}
+
+// ==================== INIT ====================
+buildHome();
+</script>
+</body>
+</html>
