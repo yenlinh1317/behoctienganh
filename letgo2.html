@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Let's Go 2 - English Learning App</title>
+<style>
+:root {
+  --orange: #FF8C00;
+  --yellow: #FFD700;
+  --blue: #1E90FF;
+  --green: #32CD32;
+  --red: #FF4444;
+  --purple: #9B59B6;
+  --pink: #FF69B4;
+  --teal: #20B2AA;
+  --bg: #FFF9F0;
+  --card: #FFFFFF;
+  --shadow: 0 4px 15px rgba(0,0,0,0.1);
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); min-height: 100vh; }
+/* HEADER */
+.app-header {
+  background: linear-gradient(135deg, #FF8C00, #FFD700);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 3px 10px rgba(255,140,0,0.4);
+}
+.app-logo { font-size: 1.4rem; font-weight: 900; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+.header-stars { color: white; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+.star-count { background: rgba(255,255,255,0.3); border-radius: 20px; padding: 3px 10px; font-weight: bold; }
+/* NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 2px solid #FFD700;
+  display: flex; z-index: 100;
+  box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
+}
+.nav-btn {
+  flex: 1; padding: 8px 4px; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-size: 0.65rem; font-weight: 600; color: #999;
+  transition: all 0.2s;
+}
+.nav-btn.active { color: var(--orange); }
+.nav-btn .nav-icon { font-size: 1.4rem; }
+/* SCREENS */
+.screen { display: none; padding: 16px; padding-bottom: 80px; min-height: 100vh; }
+.screen.active { display: block; }
+/* HOME SCREEN */
+.home-banner {
+  background: linear-gradient(135deg, #FF8C00, #FF6347);
+  border-radius: 20px; padding: 20px; margin-bottom: 20px;
+  color: white; text-align: center;
+  box-shadow: 0 6px 20px rgba(255,140,0,0.3);
+}
+.home-banner h2 { font-size: 1.5rem; margin-bottom: 6px; }
+.home-banner p { opacity: 0.9; font-size: 0.9rem; }
+.progress-bar-wrap { background: rgba(255,255,255,0.3); border-radius: 10px; height: 10px; margin-top: 10px; }
+.progress-bar-fill { background: white; border-radius: 10px; height: 100%; transition: width 0.5s; }
+.section-title { font-size: 1.1rem; font-weight: 800; color: #333; margin: 18px 0 10px; display: flex; align-items: center; gap: 8px; }
+.units-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.unit-card {
+  background: white; border-radius: 16px; padding: 14px;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 5px solid var(--orange); position: relative; overflow: hidden;
+}
+.unit-card:hover, .unit-card:active { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.unit-card .unit-num { font-size: 0.75rem; color: #999; font-weight: 600; }
+.unit-card .unit-name { font-size: 0.95rem; font-weight: 800; color: #333; margin: 4px 0; }
+.unit-card .unit-progress { font-size: 0.75rem; color: var(--orange); }
+.unit-emoji { position: absolute; right: 10px; top: 10px; font-size: 1.8rem; opacity: 0.3; }
+/* LESSONS */
+.lesson-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+.lesson-tab {
+  padding: 8px 14px; border-radius: 20px; border: 2px solid #ddd;
+  background: white; cursor: pointer; font-weight: 700; font-size: 0.8rem;
+  white-space: nowrap; transition: all 0.2s; color: #666;
+}
+.lesson-tab.active { background: var(--orange); border-color: var(--orange); color: white; }
+.lesson-content { display: none; }
+.lesson-content.active { display: block; }
+/* VOCAB CARDS */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.vocab-card {
+  background: white; border-radius: 14px; padding: 14px;
+  box-shadow: var(--shadow); text-align: center; cursor: pointer;
+  transition: transform 0.2s; border: 3px solid transparent;
+}
+.vocab-card:hover { transform: scale(1.05); border-color: var(--orange); }
+.vocab-emoji { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+.vocab-word { font-size: 1rem; font-weight: 800; color: #333; }
+.vocab-hint { font-size: 0.75rem; color: #999; margin-top: 4px; }
+/* GRAMMAR BOX */
+.grammar-box {
+  background: linear-gradient(135deg, #E8F4FD, #D5E8F8);
+  border-radius: 16px; padding: 16px; margin-bottom: 16px;
+  border-left: 5px solid var(--blue);
+}
+.grammar-title { font-size: 1rem; font-weight: 800; color: var(--blue); margin-bottom: 10px; }
+.grammar-pattern {
+  background: white; border-radius: 10px; padding: 10px 14px;
+  margin: 8px 0; font-size: 0.95rem; display: flex; gap: 8px; align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.grammar-pattern .pattern-text { flex: 1; font-family: monospace; color: #333; font-size: 0.9rem; line-height: 1.5; }
+.grammar-pattern .pattern-color { color: var(--orange); font-weight: bold; }
+.grammar-example { color: #555; font-size: 0.85rem; margin-top: 8px; padding: 8px 12px; background: rgba(255,255,255,0.7); border-radius: 8px; line-height: 1.5; }
+/* PHONICS */
+.phonics-box { background: linear-gradient(135deg, #FFF0F5, #FFE4EE); border-radius: 16px; padding: 16px; border-left: 5px solid var(--pink); }
+.phonics-letter { font-size: 3rem; font-weight: 900; color: var(--pink); text-align: center; padding: 10px; }
+.phonics-words { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+.phonics-word-card {
+  background: white; border-radius: 12px; padding: 10px 14px; text-align: center;
+  box-shadow: var(--shadow); cursor: pointer; min-width: 80px;
+}
+.phonics-word-card span { display: block; font-size: 0.9rem; font-weight: 700; }
+.phonics-word-card .ph-highlight { color: var(--pink); }
+/* CONVERSATION */
+.dialog-box { margin-bottom: 16px; }
+.dialog-bubble {
+  display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
+}
+.dialog-bubble.right { flex-direction: row-reverse; }
+.dialog-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.dialog-bubble.right .dialog-avatar { background: var(--blue); }
+.bubble-text {
+  background: white; border-radius: 16px; padding: 10px 14px;
+  box-shadow: var(--shadow); max-width: 75%; font-size: 0.9rem; line-height: 1.4; font-weight: 600;
+}
+.dialog-bubble.right .bubble-text { background: var(--blue); color: white; }
+/* SPEAKING */
+.speak-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(135deg, var(--green), #00A86B);
+  color: white; border: none; border-radius: 30px; padding: 14px 24px;
+  font-size: 1rem; font-weight: 800; cursor: pointer; width: 100%;
+  margin: 10px 0; transition: all 0.2s; box-shadow: 0 4px 15px rgba(50,205,50,0.4);
+}
+.speak-btn:active { transform: scale(0.97); }
+.speak-btn.listening { background: linear-gradient(135deg, var(--red), #FF2222); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { box-shadow: 0 4px 15px rgba(255,68,68,0.4); } 50% { box-shadow: 0 4px 30px rgba(255,68,68,0.8); } }
+.score-display { text-align: center; padding: 16px; background: white; border-radius: 16px; box-shadow: var(--shadow); margin: 10px 0; }
+.score-num { font-size: 2.5rem; font-weight: 900; color: var(--orange); }
+.score-label { font-size: 0.85rem; color: #999; }
+/* GAMES */
+.games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.game-card {
+  background: white; border-radius: 16px; padding: 16px; text-align: center;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s;
+  border-top: 5px solid var(--orange);
+}
+.game-card:hover { transform: translateY(-4px); }
+.game-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+.game-name { font-size: 0.9rem; font-weight: 800; color: #333; }
+.game-desc { font-size: 0.75rem; color: #999; margin-top: 4px; }
+/* QUIZ GAME */
+.quiz-container { max-width: 600px; margin: 0 auto; }
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.quiz-score { font-weight: 800; color: var(--orange); font-size: 1rem; }
+.quiz-progress-bar { background: #eee; border-radius: 10px; height: 8px; margin-bottom: 16px; }
+.quiz-progress-fill { background: var(--green); border-radius: 10px; height: 100%; transition: width 0.4s; }
+.quiz-question {
+  background: white; border-radius: 20px; padding: 24px; text-align: center;
+  box-shadow: var(--shadow); margin-bottom: 16px;
+}
+.quiz-emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
+.quiz-text { font-size: 1.1rem; font-weight: 700; color: #333; }
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quiz-opt {
+  background: white; border: 3px solid #ddd; border-radius: 14px; padding: 14px;
+  font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  text-align: center;
+}
+.quiz-opt:hover { border-color: var(--orange); background: #FFF5E6; }
+.quiz-opt.correct { border-color: var(--green); background: #F0FFF0; color: var(--green); }
+.quiz-opt.wrong { border-color: var(--red); background: #FFF0F0; color: var(--red); }
+/* MATCH GAME */
+.match-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 500px; margin: 0 auto; }
+.match-card {
+  aspect-ratio: 1; background: var(--orange); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  font-size: 1.5rem; transition: all 0.3s; color: white; font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.match-card.flipped { background: white; color: #333; border: 3px solid var(--orange); }
+.match-card.matched { background: var(--green); color: white; pointer-events: none; }
+/* WORD BUILD */
+.word-build { padding: 10px; }
+.letter-slots { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+.letter-slot { width: 44px; height: 44px; border: 3px dashed #ccc; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: #333; }
+.letter-slot.filled { border-color: var(--orange); background: #FFF5E6; }
+.letter-choices { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 12px 0; }
+.letter-btn { width: 40px; height: 40px; background: var(--blue); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+.letter-btn:disabled { background: #ccc; }
+/* FILL BLANKS */
+.fill-sentence { font-size: 1.1rem; font-weight: 700; color: #333; text-align: center; margin: 16px 0; line-height: 1.8; }
+.blank-input { display: inline-block; border: none; border-bottom: 3px solid var(--orange); width: 100px; text-align: center; font-size: 1.1rem; font-weight: 700; background: transparent; outline: none; color: var(--orange); }
+.word-bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0; }
+.word-chip { background: white; border: 2px solid var(--blue); border-radius: 20px; padding: 6px 14px; cursor: pointer; font-weight: 700; font-size: 0.9rem; color: var(--blue); transition: all 0.2s; }
+.word-chip:hover { background: var(--blue); color: white; }
+.word-chip.used { background: #eee; color: #ccc; border-color: #ccc; pointer-events: none; }
+/* SNAKE & LADDER */
+.board-game { position: relative; }
+.board-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; max-width: 350px; margin: 0 auto; }
+.board-cell { aspect-ratio: 1; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; border: 2px solid #eee; position: relative; cursor: pointer; }
+.board-cell.special { background: #FFF5E6; border-color: var(--orange); }
+.board-player { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: var(--red); border-radius: 50%; border: 2px solid white; z-index: 5; }
+/* SING ALONG */
+.song-lyrics { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); line-height: 2; }
+.lyric-line { font-size: 1rem; color: #555; transition: all 0.3s; padding: 3px 0; }
+.lyric-line.highlight { color: var(--orange); font-weight: 800; font-size: 1.05rem; background: #FFF5E6; border-radius: 6px; padding: 3px 8px; }
+/* BUTTONS */
+.btn { padding: 12px 24px; border-radius: 30px; border: none; cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: all 0.2s; }
+.btn-primary { background: linear-gradient(135deg, var(--orange), #FF6347); color: white; box-shadow: 0 4px 15px rgba(255,140,0,0.4); }
+.btn-secondary { background: white; color: var(--orange); border: 2px solid var(--orange); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+/* UTILS */
+.text-center { text-align: center; }
+.mt-12 { margin-top: 12px; }
+.gap-row { display: flex; gap: 10px; }
+.full-w { width: 100%; }
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: #333; color: white; padding: 10px 20px; border-radius: 20px;
+  font-weight: 700; opacity: 0; transition: all 0.3s; z-index: 999; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.back-btn {
+  background: none; border: none; cursor: pointer; font-size: 1.5rem; padding: 8px;
+  color: #555; display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--orange);
+}
+.screen-title { font-size: 1.3rem; font-weight: 900; color: #333; margin: 10px 0 16px; }
+/* REVIEW / PROGRESS */
+.progress-screen {}
+.progress-ring { width: 120px; height: 120px; margin: 0 auto; }
+.skill-bars { margin-top: 16px; }
+.skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.skill-name { width: 80px; font-size: 0.85rem; font-weight: 700; color: #555; flex-shrink: 0; }
+.skill-track { flex: 1; background: #eee; border-radius: 10px; height: 12px; }
+.skill-fill { height: 100%; border-radius: 10px; transition: width 0.8s; }
+.badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+.badge { text-align: center; padding: 10px; background: white; border-radius: 12px; box-shadow: var(--shadow); }
+.badge-icon { font-size: 2rem; display: block; }
+.badge-name { font-size: 0.65rem; color: #999; margin-top: 4px; }
+.badge.earned .badge-icon { filter: none; }
+.badge:not(.earned) .badge-icon { filter: grayscale(1); opacity: 0.4; }
+/* RESPONSIVE */
+@media (min-width: 600px) {
+  .units-grid { grid-template-columns: repeat(3, 1fr); }
+  .games-grid { grid-template-columns: repeat(3, 1fr); }
+  .match-board { grid-template-columns: repeat(4, 1fr); }
+  .vocab-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 360px) {
+  .units-grid { grid-template-columns: 1fr; }
+  .quiz-options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app-header">
+  <div class="app-logo">🌟 Let's Go 2</div>
+  <div class="header-stars">
+    <span>⭐</span><span class="star-count" id="totalStars">0</span>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SCREENS -->
+<div class="screen active" id="homeScreen">
+  <div class="home-banner">
+    <h2>Welcome to Let's Go 2! 🎉</h2>
+    <p>Learn English with fun activities!</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="overallProgress" style="width:5%"></div>
+    </div>
+    <div style="color:rgba(255,255,255,0.8); font-size:0.8rem; margin-top:4px;">Overall Progress: <span id="progressPct">5</span>%</div>
+  </div>
+  <div class="section-title">📚 Choose a Unit</div>
+  <div class="units-grid" id="unitsGrid"></div>
+</div>
+
+<!-- UNIT DETAIL SCREEN -->
+<div class="screen" id="unitScreen">
+  <button class="back-btn" onclick="showScreen('homeScreen')">← Back</button>
+  <div class="screen-title" id="unitTitle"></div>
+  <div class="lesson-tabs" id="lessonTabs"></div>
+  <div id="lessonContents"></div>
+</div>
+
+<!-- GAMES SCREEN -->
+<div class="screen" id="gamesScreen">
+  <div class="screen-title">🎮 Fun Games</div>
+  <div class="games-grid" id="gamesGrid"></div>
+  <div id="gameArea" style="margin-top:16px;"></div>
+</div>
+
+<!-- PROGRESS SCREEN -->
+<div class="screen" id="progressScreen">
+  <div class="screen-title">📊 My Progress</div>
+  <div class="score-display">
+    <div class="score-num" id="totalScore">0</div>
+    <div class="score-label">Total Stars Earned</div>
+  </div>
+  <div class="section-title">📈 Skills</div>
+  <div class="skill-bars" id="skillBars"></div>
+  <div class="section-title">🏅 Badges</div>
+  <div class="badge-grid" id="badgeGrid"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('homeScreen');setActiveNav(this)">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" onclick="showScreen('gamesScreen');setActiveNav(this)">
+    <span class="nav-icon">🎮</span>Games
+  </button>
+  <button class="nav-btn" onclick="showSpeakScreen();setActiveNav(this)">
+    <span class="nav-icon">🎤</span>Speak
+  </button>
+  <button class="nav-btn" onclick="showScreen('progressScreen');setActiveNav(this);updateProgress()">
+    <span class="nav-icon">⭐</span>Progress
+  </button>
+</nav>
+<script>
+// ============ CURRICULUM DATA ============
+const CURRICULUM = {
+  remember: {
+    title: "Let's Remember",
+    emoji: "🌟",
+    color: "#FF8C00",
+    conversation: {
+      title: "Conversations",
+      dialogs: [
+        {left: "I like pizza.", right: null},
+        {left: "I want chicken.", right: null},
+        {left: "I have three balls.", right: null},
+        {left: "There are two cats!", right: null},
+        {left: "They're in the tree.", right: null},
+        {left: "This is a flower.", right: null},
+        {left: "These are flowers, too.", right: null},
+        {left: "Here you are.", right: "Thank you."},
+        {left: "You're welcome.", right: null},
+        {left: "I can fly a kite.", right: null}
+      ],
+      phrases: ["I like pizza.","I want chicken.","I have three balls.","This is a flower.","Here you are.","Thank you.","You're welcome.","I can fly a kite."]
+    },
+    vocabulary: [
+      {word:"pizza",emoji:"🍕",hint:"food"},
+      {word:"chicken",emoji:"🍗",hint:"food"},
+      {word:"ball",emoji:"⚽",hint:"toy"},
+      {word:"cat",emoji:"🐱",hint:"animal"},
+      {word:"tree",emoji:"🌳",hint:"nature"},
+      {word:"flower",emoji:"🌸",hint:"plant"},
+      {word:"kite",emoji:"🪁",hint:"toy"}
+    ],
+    grammar: {
+      title: "Grammar Review",
+      patterns: [
+        { text: "I like ___.", example: "I like pizza. / I like cats." },
+        { text: "I want ___.", example: "I want chicken. / I want juice." },
+        { text: "I have ___ [things].", example: "I have three balls." },
+        { text: "There are ___ [things].", example: "There are two cats." },
+        { text: "This is a ___.", example: "This is a flower." },
+        { text: "These are ___, too.", example: "These are flowers, too." },
+        { text: "I can ___.", example: "I can fly a kite." }
+      ]
+    },
+    phonics: {
+      letter1: "Aa Bb", words1: [{w:"apple",emoji:"🍎"},{w:"ant",emoji:"🐜"},{w:"ball",emoji:"⚽"},{w:"bat",emoji:"🦇"}],
+      letter2: "Cc Dd", words2: [{w:"cat",emoji:"🐱"},{w:"cap",emoji:"🧢"},{w:"dog",emoji:"🐶"},{w:"duck",emoji:"🦆"}],
+      chant: "Review Phonics Chant",
+      chantLines: ["An apple, an ant, a ball!","A cat, a cap, a call!","Dog and duck, duck and dog!","Let's go, let's go, let's talk!"],
+      story: "Review Story"
+    },
+    song: { title: "Let's Remember Song", lines: [
+      "I like pizza!","I want chicken!",
+      "I have three balls.","There are two cats!",
+      "This is a flower.","These are flowers, too.",
+      "Here you are.","Thank you!",
+      "You're welcome!","I can fly a kite!"
+    ]}
+  },
+  unit1: {
+    title: "Unit 1: At School",
+    emoji: "🏫",
+    color: "#1E90FF",
+    conversation: {
+      title: "Let's Talk: Greetings",
+      dialogs: [
+        {left: "Hi, Scott. How are you?", right: "I'm OK, thanks. How about you?", leftName:"Kate", rightName:"Scott"},
+        {left: "Pretty good!", right: null},
+        {left: "Goodbye, Scott!", right: "See you later!", leftName:"Jenny", rightName:"Scott"}
+      ],
+      phrases: ["How about you?","I'm OK.","Pretty good!","Goodbye!","See you later!"],
+      contraction: "I am = I'm"
+    },
+    vocabulary: [
+      {word:"a picture",emoji:"🖼️",hint:"school item"},
+      {word:"a window",emoji:"🪟",hint:"school item"},
+      {word:"a pencil sharpener",emoji:"✏️",hint:"school item"},
+      {word:"a workbook",emoji:"📒",hint:"school item"},
+      {word:"a paper clip",emoji:"📎",hint:"school item"},
+      {word:"a clock",emoji:"🕐",hint:"school item"},
+      {word:"a door",emoji:"🚪",hint:"school item"},
+      {word:"a calendar",emoji:"📅",hint:"school item"},
+      {word:"paper clips",emoji:"📎",hint:"plural"},
+      {word:"pictures",emoji:"🖼️",hint:"plural"},
+      {word:"clocks",emoji:"🕐",hint:"plural"},
+      {word:"workbooks",emoji:"📒",hint:"plural"},
+      {word:"calendars",emoji:"📅",hint:"plural"},
+      {word:"pencil sharpeners",emoji:"✏️",hint:"plural"},
+      {word:"windows",emoji:"🪟",hint:"plural"},
+      {word:"doors",emoji:"🚪",hint:"plural"}
+    ],
+    grammar: {
+      title: "What's this/that? Singular & Plural",
+      patterns: [
+        { text: "What's this? → It's a [picture].", example: "What's this? It's a clock." },
+        { text: "What's that? → It's a [window].", example: "What's that? It's a door." },
+        { text: "Is this/that a [calendar]? → Yes, it is. / No, it isn't.", example: "Is that a clock? Yes, it is!" },
+        { text: "What are these/those? → They're [paper clips].", example: "What are those? They're pictures." },
+        { text: "Are these/those [doors]? → Yes, they are. / No, they aren't.", example: "Are those workbooks? No, they aren't." }
+      ],
+      contractions: ["It is = It's","What is = What's","They are = They're","is not = isn't","are not = aren't"]
+    },
+    phonics: {
+      letter1: "Mm", words1: [{w:"mop",emoji:"🧹"},{w:"map",emoji:"🗺️"},{w:"mug",emoji:"☕"}],
+      letter2: "Nn", words2: [{w:"notebook",emoji:"📓"},{w:"nine",emoji:"9️⃣"},{w:"nut",emoji:"🥜"}],
+      chant: "The M N Phonics Chant",
+      chantLines: ["Hop on the mop,","Not the broom.","I need the name","Of the man in the moon."],
+      story: "The Moon Map"
+    },
+    song: { title: "The Hello and Goodbye Song", lines: [
+      "Hi, Scott. How are you?","I'm fine, thank you.",
+      "Hi, Jenny. How are you?","Pretty good, thank you.",
+      "Hi, Andy. How are you?","OK, thank you.",
+      "Hi, Kate. How are you?","I'm fine.",
+      "Goodbye, Scott.","See you later, alligator!",
+      "Goodbye, Jenny.","See you later, alligator!",
+      "Goodbye, Andy.","See you later, See you later.",
+      "See you later, alligator!","Goodbye, Kate!"
+    ]}
+  },
+  unit2: {
+    title: "Unit 2: My Things",
+    emoji: "🎒",
+    color: "#9B59B6",
+    conversation: {
+      title: "Let's Talk: Whose bag?",
+      dialogs: [
+        {left:"Whose bag is that?",right:"I don't know.",leftName:"Kate",rightName:"Andy"},
+        {left:"Is it Scott's bag?",right:"No, it isn't his bag.",leftName:"Kate",rightName:"Andy"},
+        {left:"Is it Jenny's bag?",right:"Yes, it's her bag.",leftName:"Kate",rightName:"Andy"}
+      ],
+      phrases: ["Whose bag is that?","I don't know.","It's Jenny's bag.","It's his bag.","It's her bag."],
+      contraction: "Jenny's = her | Scott's = his"
+    },
+    vocabulary: [
+      {word:"a key",emoji:"🔑",hint:"my thing"},
+      {word:"a candy bar",emoji:"🍫",hint:"my thing"},
+      {word:"a comic book",emoji:"📚",hint:"my thing"},
+      {word:"a comb",emoji:"💈",hint:"my thing"},
+      {word:"a coin",emoji:"🪙",hint:"my thing"},
+      {word:"a brush",emoji:"🖌️",hint:"my thing"},
+      {word:"a tissue",emoji:"🧻",hint:"my thing"},
+      {word:"a watch",emoji:"⌚",hint:"my thing"},
+      {word:"a camera",emoji:"📷",hint:"more things"},
+      {word:"a key chain",emoji:"🔑",hint:"more things"},
+      {word:"a music player",emoji:"🎵",hint:"more things"},
+      {word:"a calculator",emoji:"🔢",hint:"more things"},
+      {word:"a train pass",emoji:"🎫",hint:"more things"},
+      {word:"an umbrella",emoji:"☂️",hint:"more things"},
+      {word:"a lunch box",emoji:"🍱",hint:"more things"},
+      {word:"a wallet",emoji:"👛",hint:"more things"}
+    ],
+    grammar: {
+      title: "Have/Has, Possessive Pronouns",
+      patterns: [
+        { text: "What do you have? → I have a [key].", example: "What do you have? I have a candy bar." },
+        { text: "Do you have a [tissue]? → Yes, I do. / No, I don't.", example: "Do you have a coin? Yes, I do." },
+        { text: "What does he/she have? → He/She has a [wallet].", example: "What does she have? She has a camera." },
+        { text: "Does he/she have a [key chain]? → Yes, he/she does. / No, he/she doesn't.", example: "Does he have an umbrella? No, he doesn't." }
+      ],
+      contractions: ["do not = don't","does not = doesn't"]
+    },
+    phonics: {
+      letter1: "Ff", words1: [{w:"fan",emoji:"🌀"},{w:"five",emoji:"5️⃣"},{w:"fork",emoji:"🍴"}],
+      letter2: "Vv", words2: [{w:"van",emoji:"🚐"},{w:"vest",emoji:"🦺"},{w:"violin",emoji:"🎻"}],
+      chant: "The FV Phonics Chant",
+      chantLines: ["Five vans are very fine,","A van for every vine.","Fans and forks and fiddles,","Violins in a line!"],
+      story: "Five Is Fine!"
+    },
+    song: { title: "Whose Bag Is That?", lines: [
+      "Whose bag is that?","Whose bag is that?",
+      "Is it Scott's bag?","No, it isn't his bag.",
+      "Is it Jenny's bag?","Yes, it's her bag!",
+      "It's Jenny's bag.","It's her bag!"
+    ]}
+  },
+  unit3: {
+    title: "Unit 3: Things I Can Do",
+    emoji: "⭐",
+    color: "#32CD32",
+    conversation: {
+      title: "Let's Talk: What's Wrong?",
+      dialogs: [
+        {left:"What's wrong, Andy?",right:"I can't find my book.",leftName:"Kate",rightName:"Andy"},
+        {left:"Is it in your desk?",right:"No, it isn't.",leftName:"Kate",rightName:"Andy"},
+        {left:"It's under your chair!",right:"Oh! Thank you!",leftName:"Kate",rightName:"Andy"}
+      ],
+      phrases: ["What's wrong?","I can't find my book.","Is it in your desk?","It's under your chair."],
+      contraction: "can not = can't"
+    },
+    vocabulary: [
+      {word:"ride a pony",emoji:"🐎",hint:"action"},
+      {word:"play the piano",emoji:"🎹",hint:"action"},
+      {word:"do a magic trick",emoji:"🎩",hint:"action"},
+      {word:"play hopscotch",emoji:"🎮",hint:"action"},
+      {word:"play with a yo-yo",emoji:"🪀",hint:"action"},
+      {word:"do a cartwheel",emoji:"🤸",hint:"action"},
+      {word:"do a somersault",emoji:"🤼",hint:"action"},
+      {word:"jump rope",emoji:"🪢",hint:"action"},
+      {word:"dance",emoji:"💃",hint:"more action"},
+      {word:"swim",emoji:"🏊",hint:"more action"},
+      {word:"run",emoji:"🏃",hint:"more action"},
+      {word:"sing",emoji:"🎤",hint:"more action"},
+      {word:"skip",emoji:"🦘",hint:"more action"},
+      {word:"read",emoji:"📖",hint:"more action"},
+      {word:"paint",emoji:"🎨",hint:"more action"},
+      {word:"color",emoji:"🖍️",hint:"more action"}
+    ],
+    grammar: {
+      title: "Can/Can't, Prepositions",
+      patterns: [
+        { text: "Look at him/her. He/She can do a magic trick.", example: "Look at her! She can ride a pony." },
+        { text: "What can he/she do? → He/She can [dance].", example: "What can he do? He can swim." },
+        { text: "They can [read]. Can they [skip]? → Yes, they can. / No, they can't.", example: "Can they paint? Yes, they can!" },
+        { text: "Prepositions: in, on, under, in front of, behind, next to", example: "It's under your chair. / It's in your desk." }
+      ],
+      contractions: ["can not = can't"]
+    },
+    phonics: {
+      letter1: "Ll", words1: [{w:"long",emoji:"📏"},{w:"little",emoji:"🐜"},{w:"like",emoji:"❤️"}],
+      letter2: "Rr", words2: [{w:"run",emoji:"🏃"},{w:"race",emoji:"🏁"},{w:"ride",emoji:"🚂"}],
+      chant: "The LR Phonics Chant",
+      chantLines: ["Look at the little rabbit run,","Running in the race.","Little rabbit loves to leap,","Leaping all over the place!"],
+      story: "Me, Too!"
+    },
+    song: { title: "What's Wrong?", lines: [
+      "What's wrong?","What's wrong?",
+      "I can't find my book.","I can't find my book.",
+      "Is it in your desk?","No, it isn't.",
+      "It's under your chair!","Oh! Thank you!"
+    ]}
+  },
+  unit4: {
+    title: "Unit 4: Occupations",
+    emoji: "👷",
+    color: "#FF8C00",
+    conversation: {
+      title: "Let's Talk: What's the Matter?",
+      dialogs: [
+        {left:"What's the matter, Scott?",right:"I'm sick.",leftName:"Kate",rightName:"Scott"},
+        {left:"Are you OK?",right:"I am sick today.",leftName:"Kate",rightName:"Scott"},
+        {left:"That's too bad.","right":"I hope you feel better soon!",leftName:"Kate",rightName:"Scott"},
+        {left:"Thanks.",right:null}
+      ],
+      phrases: ["What's the matter?","I'm sick.","Are you OK?","That's too bad.","I hope you feel better soon!"],
+      feelings: [{w:"hot",emoji:"🥵"},{w:"cold",emoji:"🥶"},{w:"tired",emoji:"😴"},{w:"sad",emoji:"😢"}]
+    },
+    vocabulary: [
+      {word:"a cook",emoji:"👨‍🍳",hint:"job"},
+      {word:"a nurse",emoji:"👩‍⚕️",hint:"job"},
+      {word:"a taxi driver",emoji:"🚕",hint:"job"},
+      {word:"a doctor",emoji:"👨‍⚕️",hint:"job"},
+      {word:"a police officer",emoji:"👮",hint:"job"},
+      {word:"a teacher",emoji:"👩‍🏫",hint:"job"},
+      {word:"a student",emoji:"👦",hint:"job"},
+      {word:"a farmer",emoji:"👨‍🌾",hint:"job"},
+      {word:"pilots",emoji:"✈️",hint:"more jobs"},
+      {word:"salesclerks",emoji:"🛍️",hint:"more jobs"},
+      {word:"office workers",emoji:"💼",hint:"more jobs"},
+      {word:"engineers",emoji:"⚙️",hint:"more jobs"},
+      {word:"dentists",emoji:"🦷",hint:"more jobs"},
+      {word:"teachers",emoji:"📚",hint:"more jobs"},
+      {word:"students",emoji:"🎒",hint:"more jobs"},
+      {word:"firefighters",emoji:"🚒",hint:"more jobs"}
+    ],
+    grammar: {
+      title: "He's/She's, Who, Are they?",
+      patterns: [
+        { text: "He's/She's a [cook]. Who's he/she? → He's/She's a [teacher].", example: "She's a nurse. Who's she? She's a doctor." },
+        { text: "Is he/she a [teacher]? → Yes, he/she is. / No, he/she isn't.", example: "Is he a farmer? No, he isn't." },
+        { text: "Who are they? → They're [office workers].", example: "Who are they? They're firefighters." },
+        { text: "Are they [dentists]? → Yes, they are. / No, they aren't.", example: "Are they pilots? Yes, they are!" }
+      ]
+    },
+    phonics: {
+      letter1: "a_e ai", words1: [{w:"game",emoji:"🎮"},{w:"make",emoji:"🛠️"},{w:"paint",emoji:"🎨"},{w:"rain",emoji:"🌧️"}],
+      letter2: "ay", words2: [{w:"play",emoji:"⚽"},{w:"today",emoji:"📅"}],
+      chant: "Long A Phonics Chant",
+      chantLines: ["Rain, rain, go away,","Come again another day.","We want to play, play, play!","Play all day, hooray!"],
+      story: "A Rainy Day"
+    },
+    song: { title: "What's the Matter?", lines: [
+      "What's the matter?","What's the matter?",
+      "What's the matter?","I am sick.",
+      "What's the matter?","What's the matter?",
+      "Are you OK?","I am sick today.",
+      "Oh, no!"
+    ]}
+  },
+  unit5: {
+    title: "Unit 5: Things to Eat",
+    emoji: "🍽️",
+    color: "#FF69B4",
+    conversation: {
+      title: "Let's Talk: What's for Lunch?",
+      dialogs: [
+        {left:"What's for lunch, Mom?",right:"Spaghetti.",leftName:"Scott",rightName:"Mom"},
+        {left:"I like spaghetti. I do, too.",right:null},
+        {left:"Do you want spaghetti?",right:"Yes, please.",leftName:"Mom",rightName:"Scott"},
+        {left:"No, thank you.",right:null}
+      ],
+      phrases: ["What's for lunch?","I like spaghetti.","Do you want...?","Yes, please.","No, thank you."]
+    },
+    vocabulary: [
+      {word:"an omelet",emoji:"🍳",hint:"food"},
+      {word:"a peach",emoji:"🍑",hint:"food"},
+      {word:"a pear",emoji:"🍐",hint:"food"},
+      {word:"a pancake",emoji:"🥞",hint:"food"},
+      {word:"yogurt",emoji:"🥛",hint:"food"},
+      {word:"cereal",emoji:"🥣",hint:"food"},
+      {word:"tea",emoji:"🍵",hint:"drink"},
+      {word:"hot chocolate",emoji:"☕",hint:"drink"},
+      {word:"grapes",emoji:"🍇",hint:"more food"},
+      {word:"pancakes",emoji:"🥞",hint:"more food"},
+      {word:"peaches",emoji:"🍑",hint:"more food"},
+      {word:"hamburgers",emoji:"🍔",hint:"more food"},
+      {word:"stew",emoji:"🍲",hint:"more food"},
+      {word:"cheese",emoji:"🧀",hint:"more food"},
+      {word:"pasta",emoji:"🍝",hint:"more food"},
+      {word:"steak",emoji:"🥩",hint:"more food"}
+    ],
+    grammar: {
+      title: "Want/Like - He/She/Does",
+      patterns: [
+        { text: "What does she want? → She wants a [peach].", example: "What does he want? He wants cereal." },
+        { text: "Does he want [cereal]? → Yes, he does. / No, he doesn't.", example: "Does she want yogurt? No, she doesn't." },
+        { text: "What does she like? → She likes [pancakes].", example: "What does he like? He likes steak." },
+        { text: "Does he like [steak]? → Yes, he does. / No, he doesn't.", example: "Does she like pasta? Yes, she does!" }
+      ],
+      contractions: ["does not = doesn't"]
+    },
+    phonics: {
+      letter1: "e ee ea", words1: [{w:"me",emoji:"👤"},{w:"we",emoji:"👥"},{w:"tree",emoji:"🌳"},{w:"weed",emoji:"🌿"},{w:"clean",emoji:"🧹"},{w:"leaf",emoji:"🍃"}],
+      letter2: "", words2: [],
+      chant: "Long E Phonics Chant",
+      chantLines: ["I see a tree by the sea,","Clean and green for you and me.","Eat a peach, eat a pear,","Sweet and sweet, beyond compare!"],
+      story: "Weeds and Trees"
+    },
+    song: { title: "The Spaghetti Song", lines: [
+      "What's for lunch?","What's for lunch?",
+      "I like spaghetti!","I do, too!",
+      "Do you want spaghetti?","Yes, please!",
+      "No, thank you.","Spaghetti, spaghetti!"
+    ]}
+  },
+  unit6: {
+    title: "Unit 6: My House",
+    emoji: "🏠",
+    color: "#20B2AA",
+    conversation: {
+      title: "Let's Talk: Where do you live?",
+      dialogs: [
+        {left:"Where do you live?",right:"I live in Hillsdale.",leftName:"Scott",rightName:"Jenny"},
+        {left:"What's your address?",right:"It's 6 North Street.",leftName:"Scott",rightName:"Jenny"},
+        {left:"What's your cell phone number?",right:"It's (798) 555-2143.",leftName:"Scott",rightName:"Jenny"}
+      ],
+      phrases: ["Where do you live?","What's your address?","What's your cell phone number?","It's 6 North Street."]
+    },
+    vocabulary: [
+      {word:"a bed",emoji:"🛏️",hint:"household"},
+      {word:"a bathtub",emoji:"🛁",hint:"household"},
+      {word:"a sofa",emoji:"🛋️",hint:"household"},
+      {word:"a stove",emoji:"🍳",hint:"household"},
+      {word:"a lamp",emoji:"💡",hint:"household"},
+      {word:"a sink",emoji:"🚰",hint:"household"},
+      {word:"a TV",emoji:"📺",hint:"household"},
+      {word:"a refrigerator",emoji:"🧊",hint:"household"},
+      {word:"next to",emoji:"↔️",hint:"location"},
+      {word:"in front of",emoji:"⬆️",hint:"location"},
+      {word:"behind",emoji:"⬇️",hint:"location"},
+      {word:"a table",emoji:"🪑",hint:"furniture"},
+      {word:"a line",emoji:"📏",hint:"position"}
+    ],
+    grammar: {
+      title: "There is/are, Prepositions of Place",
+      patterns: [
+        { text: "Where's the [workbook]? → It's under/by/in/on the [bed].", example: "Where's the lamp? It's on the table." },
+        { text: "There's a [table] in front of the sofa.", example: "There's a table in front of the sofa." },
+        { text: "Is there a [stove] next to the sink? → Yes, there is. / No, there isn't.", example: "Is there a TV in the room? Yes, there is!" }
+      ],
+      contractions: ["There is = There's"]
+    },
+    phonics: {
+      letter1: "i_e", words1: [{w:"kite",emoji:"🪁"},{w:"ride",emoji:"🚂"}],
+      letter2: "y i", words2: [{w:"fly",emoji:"🪁"},{w:"my",emoji:"👤"},{w:"climb",emoji:"🧗"},{w:"find",emoji:"🔍"}],
+      chant: "Long I Phonics Chant",
+      chantLines: ["I like to fly my kite so high,","High up in the bright blue sky.","Find a vine and start to climb,","Life is fine in summertime!"],
+      story: "Save that Kite!"
+    },
+    song: { title: "Hillsdale", lines: [
+      "I live in Hillsdale,","Beautiful Hillsdale.",
+      "The address is 6 North Street,","6 North Street.",
+      "What's your phone number?","(798) 555-2143!",
+      "Hillsdale, Hillsdale,","I love Hillsdale!"
+    ]}
+  },
+  unit7: {
+    title: "Unit 7: Routines",
+    emoji: "⏰",
+    color: "#FF8C00",
+    conversation: {
+      title: "Let's Talk: What time is it?",
+      dialogs: [
+        {left:"What time is it?",right:"It's six o'clock.",leftName:"Scott",rightName:"Mom"},
+        {left:"It's time for dinner.",right:null},
+        {left:"It's seven o'clock. It's time for your bath.",right:null},
+        {left:"Is it time for bed?",right:"Yes, it is.",leftName:"Scott",rightName:"Mom"},
+        {left:"Good night, Mom.",right:"Good night!",leftName:"Scott",rightName:"Mom"}
+      ],
+      phrases: ["What time is it?","It's six o'clock.","It's time for dinner.","Good night!","Is it time for bed?"]
+    },
+    vocabulary: [
+      {word:"get up",emoji:"⏰",hint:"morning routine"},
+      {word:"brush my teeth",emoji:"🪥",hint:"morning routine"},
+      {word:"wash my face",emoji:"🧴",hint:"morning routine"},
+      {word:"comb my hair",emoji:"💈",hint:"morning routine"},
+      {word:"get dressed",emoji:"👕",hint:"morning routine"},
+      {word:"eat breakfast",emoji:"🍳",hint:"morning routine"},
+      {word:"eat dinner",emoji:"🍽️",hint:"evening"},
+      {word:"talk on the phone",emoji:"📱",hint:"evening"},
+      {word:"do homework",emoji:"📝",hint:"evening"},
+      {word:"take a bath",emoji:"🛁",hint:"evening"},
+      {word:"watch TV",emoji:"📺",hint:"evening"},
+      {word:"study English",emoji:"📚",hint:"evening"},
+      {word:"afternoon",emoji:"☀️",hint:"time of day"},
+      {word:"morning",emoji:"🌅",hint:"time of day"},
+      {word:"evening",emoji:"🌆",hint:"time of day"},
+      {word:"night",emoji:"🌙",hint:"time of day"}
+    ],
+    grammar: {
+      title: "Daily Routines - Do/Does",
+      patterns: [
+        { text: "What do you do in the morning? → I [eat breakfast].", example: "What do you do in the morning? I brush my teeth." },
+        { text: "Do you [wash your face] in the afternoon? → Yes, I do. / No, I don't.", example: "Do you study English? Yes, I do!" },
+        { text: "What does he/she do in the evening? → He/She [watches TV].", example: "What does she do? She takes a bath." },
+        { text: "Does she [watch TV] at night? → Yes, she does. / No, she doesn't.", example: "Does he do homework? Yes, he does." }
+      ]
+    },
+    phonics: {
+      letter1: "o_e oa", words1: [{w:"home",emoji:"🏠"},{w:"rope",emoji:"🪢"},{w:"goat",emoji:"🐐"},{w:"oats",emoji:"🌾"}],
+      letter2: "ow", words2: [{w:"bowl",emoji:"🥣"},{w:"grow",emoji:"🌱"}],
+      chant: "Long O Phonics Chant",
+      chantLines: ["Oh no! The goat is home.","The goat on the road alone.","Goes down low, doesn't grow,","Rows his boat real slow!"],
+      story: "A Day on the Farm"
+    },
+    song: { title: "What Time Is It?", lines: [
+      "What time is it?","What time is it?",
+      "It's six o'clock.","It's time for dinner!",
+      "What time is it?","It's seven o'clock.",
+      "It's time for your bath.","Is it time for bed?",
+      "Yes, it is!","Good night!"
+    ]}
+  },
+  unit8: {
+    title: "Unit 8: Doing Things",
+    emoji: "🏃",
+    color: "#9B59B6",
+    conversation: {
+      title: "Let's Talk: What are you doing?",
+      dialogs: [
+        {left:"Let's play a game!",right:"What are you doing?",leftName:"Kate",rightName:"Andy"},
+        {left:"I'm riding a bicycle.",right:"We're swimming.",leftName:"Scott",rightName:"Jenny & Andy"}
+      ],
+      phrases: ["Let's play a game!","What are you doing?","I'm riding a bicycle.","We're swimming."]
+    },
+    vocabulary: [
+      {word:"dancing",emoji:"💃",hint:"-ing action"},
+      {word:"swimming",emoji:"🏊",hint:"-ing action"},
+      {word:"sleeping",emoji:"😴",hint:"-ing action"},
+      {word:"drawing",emoji:"✏️",hint:"-ing action"},
+      {word:"singing",emoji:"🎤",hint:"-ing action"},
+      {word:"running",emoji:"🏃",hint:"-ing action"},
+      {word:"walking",emoji:"🚶",hint:"-ing action"},
+      {word:"reading",emoji:"📖",hint:"-ing action"},
+      {word:"at home",emoji:"🏠",hint:"place"},
+      {word:"at school",emoji:"🏫",hint:"place"},
+      {word:"at the park",emoji:"🌳",hint:"place"},
+      {word:"at the store",emoji:"🏪",hint:"place"},
+      {word:"at the library",emoji:"📚",hint:"place"},
+      {word:"at the zoo",emoji:"🦁",hint:"place"}
+    ],
+    grammar: {
+      title: "Present Continuous - Is/Are + -ing",
+      patterns: [
+        { text: "What's he/she doing? → He's/She's [drawing].", example: "What's he doing? He's singing." },
+        { text: "Is he/she [swimming]? → Yes, he/she is. / No, he/she isn't.", example: "Is she dancing? No, she isn't." },
+        { text: "Where is she/he? → She's/He's at the [library].", example: "Where is he? He's at the park." },
+        { text: "He's/She's at the [library]. What's he/she doing? → He's/She's playing baseball.", example: "She's at the zoo. What's she doing? She's watching the animals." },
+        { text: "-ing rules: jump→jumping, skip→skipping, do→doing, watch→watching", example: "swim→swimming, run→running, dance→dancing, ride→riding" }
+      ]
+    },
+    phonics: {
+      letter1: "u_e ue", words1: [{w:"huge",emoji:"🐘"},{w:"tube",emoji:"🧴"},{w:"blue",emoji:"💙"},{w:"glue",emoji:"🔵"}],
+      letter2: "ew", words2: [{w:"few",emoji:"🔢"},{w:"new",emoji:"🆕"}],
+      chant: "Long U Phonics Chant",
+      chantLines: ["A few new rules to use,","True blue clues to choose.","Huge tube of glue,","For me and you!"],
+      story: "Making Art"
+    },
+    song: { title: "What Are You Doing?", lines: [
+      "What are you doing?","What are you doing?",
+      "I'm dancing!","I'm swimming!",
+      "What are you doing?","We're singing!",
+      "We're reading books!","What are you doing?",
+      "She's drawing!","He's sleeping!"
+    ]}
+  }
+};
+
+const UNIT_KEYS = ['remember','unit1','unit2','unit3','unit4','unit5','unit6','unit7','unit8'];
+let appState = JSON.parse(localStorage.getItem('letsgo2_state') || '{}');
+if (!appState.stars) appState.stars = 0;
+if (!appState.unitProgress) appState.unitProgress = {};
+if (!appState.skillScores) appState.skillScores = { vocab:0, grammar:0, speaking:0, phonics:0, games:0 };
+
+function saveState() { localStorage.setItem('letsgo2_state', JSON.stringify(appState)); }
+
+// ============ SCREENS ============
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function setActiveNav(btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showToast(msg, color='#FF8C00') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function addStars(n) {
+  appState.stars += n;
+  document.getElementById('totalStars').textContent = appState.stars;
+  document.getElementById('totalScore').textContent = appState.stars;
+  saveState();
+  showToast(`+${n} ⭐ stars!`, '#32CD32');
+}
+
+// ============ HOME - BUILD UNITS ============
+function buildHome() {
+  const grid = document.getElementById('unitsGrid');
+  grid.innerHTML = '';
+  const unitList = [
+    {key:'remember', name:"Let's Remember", emoji:'🌟'},
+    {key:'unit1', name:'Unit 1: At School', emoji:'🏫'},
+    {key:'unit2', name:'Unit 2: My Things', emoji:'🎒'},
+    {key:'unit3', name:'Unit 3: Things I Can Do', emoji:'⭐'},
+    {key:'unit4', name:'Unit 4: Occupations', emoji:'👷'},
+    {key:'unit5', name:'Unit 5: Things to Eat', emoji:'🍽️'},
+    {key:'unit6', name:'Unit 6: My House', emoji:'🏠'},
+    {key:'unit7', name:'Unit 7: Routines', emoji:'⏰'},
+    {key:'unit8', name:'Unit 8: Doing Things', emoji:'🏃'},
+  ];
+  const colors = ['#FF8C00','#1E90FF','#9B59B6','#32CD32','#FF8C00','#FF69B4','#20B2AA','#FF8C00','#9B59B6'];
+  unitList.forEach((u,i) => {
+    const prog = appState.unitProgress[u.key] || 0;
+    const div = document.createElement('div');
+    div.className = 'unit-card';
+    div.style.borderColor = colors[i];
+    div.innerHTML = `
+      <div class="unit-num">${i===0?'Intro':'Unit '+i}</div>
+      <div class="unit-name">${u.name.split(':')[1]||u.name}</div>
+      <div class="unit-progress">${prog}% done</div>
+      <div class="unit-emoji">${u.emoji}</div>
+    `;
+    div.onclick = () => openUnit(u.key);
+    grid.appendChild(div);
+  });
+}
+
+// ============ UNIT SCREEN ============
+function openUnit(unitKey) {
+  const unit = CURRICULUM[unitKey];
+  document.getElementById('unitTitle').textContent = unit.title;
+  const tabs = document.getElementById('lessonTabs');
+  const contents = document.getElementById('lessonContents');
+  tabs.innerHTML = '';
+  contents.innerHTML = '';
+
+  const lessons = [
+    { id:'talk', label:"🗣️ Talk", build: () => buildConversation(unit) },
+    { id:'vocab', label:"📝 Words", build: () => buildVocab(unit, unitKey) },
+    { id:'grammar', label:"📖 Grammar", build: () => buildGrammar(unit) },
+    { id:'phonics', label:"🔤 Phonics", build: () => buildPhonics(unit), skip: !unit.phonics },
+    { id:'song', label:"🎵 Song", build: () => buildSong(unit), skip: !unit.song },
+    { id:'quiz', label:"✏️ Quiz", build: () => buildUnitQuiz(unit, unitKey) }
+  ].filter(l => !l.skip);
+
+  lessons.forEach((l,i) => {
+    const tab = document.createElement('button');
+    tab.className = 'lesson-tab' + (i===0?' active':'');
+    tab.textContent = l.label;
+    tab.onclick = () => {
+      document.querySelectorAll('.lesson-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.lesson-content').forEach(c=>c.classList.remove('active'));
+      tab.classList.add('active');
+      const c = document.getElementById('lc_'+l.id);
+      if(c) c.classList.add('active');
+    };
+    tabs.appendChild(tab);
+
+    const content = document.createElement('div');
+    content.id = 'lc_'+l.id;
+    content.className = 'lesson-content' + (i===0?' active':'');
+    content.innerHTML = l.build();
+    contents.appendChild(content);
+
+    // Attach event listeners
+    if(l.id==='vocab') attachVocabListeners(content, unit, unitKey);
+    if(l.id==='phonics') attachPhonicsListeners(content, unit);
+    if(l.id==='song') attachSongListeners(content, unit);
+    if(l.id==='quiz') attachQuizListeners(content, unit, unitKey);
+    if(l.id==='talk') attachTalkListeners(content, unit, unitKey);
+  });
+
+  showScreen('unitScreen');
+}
+
+// ============ CONVERSATION ============
+function buildConversation(unit) {
+  const conv = unit.conversation;
+  if(!conv) return '<p>No conversation data.</p>';
+  if(!conv.phrases) conv.phrases = [];
+  let html = `<div class="dialog-box">`;
+  if(conv.dialogs) {
+    conv.dialogs.forEach(d => {
+      if(d.left) html += `<div class="dialog-bubble"><div class="dialog-avatar">😊</div><div class="bubble-text">${d.left}</div></div>`;
+      if(d.right) html += `<div class="dialog-bubble right"><div class="dialog-avatar">😄</div><div class="bubble-text">${d.right}</div></div>`;
+    });
+  }
+  html += `</div>`;
+  if(conv.phrases && conv.phrases.length) {
+    html += `<div class="grammar-box"><div class="grammar-title">Key Phrases</div>`;
+    conv.phrases.forEach(p => {
+      html += `<div class="grammar-pattern"><span style="font-size:1.2rem">💬</span><span class="pattern-text">${p}</span><button class="btn btn-secondary" style="padding:6px 10px;font-size:0.75rem;" onclick="speakText('${p}')">🔊</button></div>`;
+    });
+    html += `</div>`;
+  }
+  if(conv.contraction) {
+    html += `<div class="grammar-box" style="background:linear-gradient(135deg,#FFF9E0,#FFF3CC);border-color:#FFD700"><div class="grammar-title" style="color:#B8860B">💡 Contraction</div><div class="grammar-pattern">${conv.contraction}</div></div>`;
+  }
+  if(conv.feelings) {
+    html += `<div class="grammar-box"><div class="grammar-title">Feelings</div><div class="vocab-grid">`;
+    conv.feelings.forEach(f => {
+      html += `<div class="vocab-card" onclick="speakText('${f.w}')"><span class="vocab-emoji">${f.emoji}</span><div class="vocab-word">${f.w}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  html += `<button class="speak-btn" id="practiceConvBtn" style="margin-top:12px;">🎤 Practice Speaking</button>
+  <div id="convSpeakArea" style="display:none;margin-top:12px;">
+    <div class="grammar-box"><div class="grammar-title">Say this phrase:</div><div id="convPrompt" style="font-size:1.2rem;font-weight:800;text-align:center;padding:10px;"></div></div>
+    <button class="speak-btn" id="convRecordBtn">🎤 Tap to Speak</button>
+    <div class="score-display" id="convScore" style="display:none;">
+      <div class="score-num" id="convScoreNum">-</div>
+      <div class="score-label">Speaking Score</div>
+    </div>
+  </div>`;
+  return html;
+}
+
+function attachTalkListeners(content, unit, unitKey) {
+  const practiceBtn = content.querySelector('#practiceConvBtn');
+  if(!practiceBtn) return;
+  const phrases = (unit.conversation && unit.conversation.phrases) || [];
+  if(!phrases.length) { practiceBtn.style.display='none'; return; }
+  let phraseIdx = 0;
+  let isRecording = false;
+
+  practiceBtn.onclick = () => {
+    content.querySelector('#convSpeakArea').style.display = 'block';
+    const prompt = content.querySelector('#convPrompt');
+    prompt.textContent = phrases[phraseIdx % phrases.length];
+    speakText(phrases[phraseIdx % phrases.length]);
+  };
+
+  const recordBtn = content.querySelector('#convRecordBtn');
+  if(recordBtn) {
+    recordBtn.onclick = () => {
+      if(isRecording) return;
+      isRecording = true;
+      recordBtn.classList.add('listening');
+      recordBtn.textContent = '🔴 Listening...';
+      const target = phrases[phraseIdx % phrases.length];
+      startSpeechRecognition(target, (score, transcript) => {
+        isRecording = false;
+        recordBtn.classList.remove('listening');
+        recordBtn.textContent = '🎤 Tap to Speak Again';
+        const scoreDiv = content.querySelector('#convScore');
+        const scoreNum = content.querySelector('#convScoreNum');
+        scoreDiv.style.display = 'block';
+        scoreNum.textContent = score + '%';
+        scoreNum.style.color = score>=70?'#32CD32':score>=50?'#FF8C00':'#FF4444';
+        if(score >= 60) {
+          addStars(1);
+          phraseIdx++;
+          if(phraseIdx < phrases.length) {
+            setTimeout(() => {
+              const prompt = content.querySelector('#convPrompt');
+              prompt.textContent = phrases[phraseIdx];
+              speakText(phrases[phraseIdx]);
+              scoreDiv.style.display = 'none';
+              recordBtn.textContent = '🎤 Tap to Speak';
+            }, 2000);
+          }
+        }
+      });
+    };
+  }
+}
+
+// ============ VOCABULARY ============
+function buildVocab(unit, unitKey) {
+  const words = unit.vocabulary;
+  if(!words) return '<p>No vocabulary.</p>';
+  let html = `<div class="vocab-grid" id="vocabGrid_${unitKey}">`;
+  words.forEach((w,i) => {
+    html += `<div class="vocab-card" data-word="${w.word}" data-idx="${i}">
+      <span class="vocab-emoji">${w.emoji}</span>
+      <div class="vocab-word">${w.word}</div>
+      <div class="vocab-hint">${w.hint}</div>
+    </div>`;
+  });
+  html += `</div><div style="text-align:center;margin-top:16px;">
+    <button class="btn btn-primary" onclick="this.closest('.lesson-content').querySelector('#vocabQuizArea').style.display='block'">🎯 Test Yourself</button>
+  </div>
+  <div id="vocabQuizArea" style="display:none;margin-top:16px;">
+    <div class="quiz-container" id="vocabQuizContainer_${unitKey}"></div>
+  </div>`;
+  return html;
+}
+
+function attachVocabListeners(content, unit, unitKey) {
+  content.querySelectorAll('.vocab-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const word = card.dataset.word;
+      speakText(word);
+      card.style.transform = 'scale(1.1)';
+      card.style.borderColor = '#FF8C00';
+      setTimeout(() => {
+        card.style.transform = '';
+        card.style.borderColor = '';
+      }, 500);
+    });
+  });
+  // Build vocab quiz
+  const quizContainer = content.querySelector(`#vocabQuizContainer_${unitKey}`);
+  if(quizContainer) {
+    buildMiniQuiz(unit.vocabulary, quizContainer);
+  }
+}
+
+function buildMiniQuiz(words, container) {
+  let qIdx = 0, score = 0, total = Math.min(10, words.length);
+  function renderQ() {
+    if(qIdx >= total) {
+      container.innerHTML = `<div class="quiz-question"><span class="quiz-emoji">🎉</span><div class="quiz-text">Score: ${score}/${total}</div></div>
+      <button class="btn btn-primary full-w mt-12" onclick="">Try Again</button>`;
+      const pct = Math.round(score/total*100);
+      if(pct>=70) addStars(2);
+      return;
+    }
+    const correct = words[qIdx];
+    const others = words.filter((_,i)=>i!==qIdx).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts = [...others, correct].sort(()=>Math.random()-0.5);
+    container.innerHTML = `
+      <div class="quiz-header"><span>Question ${qIdx+1}/${total}</span><span class="quiz-score">⭐ ${score}</span></div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${(qIdx/total)*100}%"></div></div>
+      <div class="quiz-question"><span class="quiz-emoji">${correct.emoji}</span><div class="quiz-text">What is this?</div></div>
+      <div class="quiz-options">
+        ${opts.map(o=>`<button class="quiz-opt" onclick="checkVocabAnswer(this,'${o.word}','${correct.word}')">${o.word}</button>`).join('')}
+      </div>`;
+    speakText(correct.word);
+  }
+  window.checkVocabAnswer = function(btn, chosen, correct) {
+    document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+    if(chosen===correct) { btn.classList.add('correct'); score++; speakText('Correct!'); }
+    else { btn.classList.add('wrong'); speakText('Try again!'); document.querySelectorAll('.quiz-opt').forEach(b=>{ if(b.textContent===correct) b.classList.add('correct'); }); }
+    qIdx++;
+    setTimeout(renderQ, 1500);
+  };
+  renderQ();
+}
+
+// ============ GRAMMAR ============
+function buildGrammar(unit) {
+  const g = unit.grammar;
+  if(!g) return '<p>No grammar data.</p>';
+  let html = `<div class="grammar-box"><div class="grammar-title">📖 ${g.title}</div>`;
+  if(g.patterns) g.patterns.forEach(p => {
+    html += `<div class="grammar-pattern">
+      <div><div class="pattern-text">${p.text}</div>
+      <div class="grammar-example">Example: ${p.example}</div></div>
+      <button style="background:none;border:none;cursor:pointer;font-size:1.3rem;" onclick="speakText('${p.example.replace(/'/g,"\\'")}')">🔊</button>
+    </div>`;
+  });
+  if(g.contractions) {
+    html += `<div style="margin-top:12px;"><div class="grammar-title">💡 Contractions</div>`;
+    g.contractions.forEach(c => html += `<div class="grammar-pattern"><span>📌</span><span class="pattern-text">${c}</span></div>`);
+    html += `</div>`;
+  }
+  html += `</div>`;
+  // Grammar exercise
+  html += buildGrammarExercise(g);
+  return html;
+}
+
+function buildGrammarExercise(g) {
+  if(!g.patterns || !g.patterns.length) return '';
+  const exercises = [
+    { q:"What do you say when you meet a friend?", a:"Hi! How are you?", opts:["Hi! How are you?","Goodbye!","Yes, it is.","They're nice."] },
+    { q:"How do you answer 'What's this?'", a:"It's a clock.", opts:["It's a clock.","They're clocks.","I have a clock.","Are those clocks?"] },
+    { q:"How do you ask about plural objects?", a:"What are these?", opts:["What are these?","What's this?","Is this a pen?","Do you have a pen?"] },
+    { q:"How do you say you cannot do something?", a:"I can't swim.", opts:["I can't swim.","I swim.","I don't swim.","Swimming!"] },
+    { q:"How do you ask about someone's job?", a:"Who's she?", opts:["Who's she?","What's she?","Where's she?","How's she?"] }
+  ];
+  let html = `<div class="grammar-box" style="background:linear-gradient(135deg,#F0FFF4,#DCFFE4);border-color:#32CD32;margin-top:16px;">
+    <div class="grammar-title" style="color:#32CD32">✏️ Practice Exercise</div>
+    <div id="gramExArea">`;
+  exercises.slice(0,3).forEach((ex,i) => {
+    html += `<div class="grammar-pattern" style="flex-direction:column;gap:8px;">
+      <div style="font-weight:700">${i+1}. ${ex.q}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${ex.opts.map(o=>`<button class="word-chip" onclick="checkGramOpt(this,'${o.replace(/'/g,"\\'")}','${ex.a.replace(/'/g,"\\'")}','gramFb${i}')">${o}</button>`).join('')}
+      </div>
+      <div id="gramFb${i}" style="font-size:0.85rem;margin-top:4px;"></div>
+    </div>`;
+  });
+  html += `</div></div>`;
+  return html;
+}
+window.checkGramOpt = function(btn, chosen, correct, fbId) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.style.pointerEvents='none');
+  const fb = document.getElementById(fbId);
+  if(chosen===correct) { btn.style.background='#32CD32'; btn.style.color='white'; btn.style.borderColor='#32CD32'; fb.textContent='✅ Correct!'; fb.style.color='#32CD32'; addStars(1); }
+  else { btn.style.background='#FF4444'; btn.style.color='white'; btn.style.borderColor='#FF4444'; fb.textContent=`❌ Answer: ${correct}`; fb.style.color='#FF4444'; }
+};
+
+// ============ PHONICS ============
+function buildPhonics(unit) {
+  const p = unit.phonics;
+  if(!p) return '<p>No phonics data.</p>';
+  let html = `<div class="phonics-box">
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">`;
+  if(p.letter1) {
+    html += `<div style="text-align:center"><div class="phonics-letter">${p.letter1}</div>
+    <div class="phonics-words">`;
+    p.words1.forEach(w => {
+      const highlighted = w.w.replace(new RegExp(p.letter1.charAt(0).toLowerCase(),'i'), m=>`<span class="ph-highlight">${m}</span>`);
+      html += `<div class="phonics-word-card" onclick="speakText('${w.w}')"><span style="font-size:1.8rem">${w.emoji}</span><span>${highlighted}</span></div>`;
+    });
+    html += `</div></div>`;
+  }
+  if(p.letter2) {
+    html += `<div style="text-align:center"><div class="phonics-letter" style="color:#1E90FF">${p.letter2}</div>
+    <div class="phonics-words">`;
+    p.words2.forEach(w => {
+      html += `<div class="phonics-word-card" onclick="speakText('${w.w}')"><span style="font-size:1.8rem">${w.emoji}</span><span>${w.w}</span></div>`;
+    });
+    html += `</div></div>`;
+  }
+  html += `</div></div>`;
+  if(p.chant) {
+    html += `<div class="phonics-box" style="margin-top:12px;background:linear-gradient(135deg,#FFF0F5,#F8E8FF);border-color:#9B59B6">
+    <div style="font-weight:800;color:#9B59B6;margin-bottom:8px;">🎵 ${p.chant}</div>`;
+    p.chantLines.forEach(l => html += `<div style="line-height:2;font-size:0.95rem">${l}</div>`);
+    html += `<button class="btn btn-primary" style="margin-top:10px;background:linear-gradient(135deg,#9B59B6,#6C3483);" onclick="speakChant(${JSON.stringify(p.chantLines)})">🔊 Hear Chant</button></div>`;
+  }
+  if(p.story) {
+    html += `<div class="grammar-box" style="text-align:center;margin-top:12px;"><div class="grammar-title">📖 Story: ${p.story}</div>
+    <p style="color:#555;font-size:0.9rem;margin-top:8px;">Read the phonics story and practice the sounds!</p>
+    <button class="speak-btn" id="phonicsReadBtn" style="margin-top:10px;">🎤 Practice Phonics</button>
+    <div id="phonicsPracticeArea" style="display:none;margin-top:10px;"></div></div>`;
+  }
+  return html;
+}
+function attachPhonicsListeners(content, unit) {
+  const btn = content.querySelector('#phonicsReadBtn');
+  if(!btn) return;
+  const allWords = [...(unit.phonics.words1||[]),...(unit.phonics.words2||[])];
+  let wIdx=0;
+  btn.onclick = () => {
+    const area = content.querySelector('#phonicsPracticeArea');
+    area.style.display='block';
+    if(allWords.length===0) return;
+    const target = allWords[wIdx%allWords.length].w;
+    area.innerHTML = `<div class="quiz-question"><span class="quiz-emoji">${allWords[wIdx%allWords.length].emoji}</span><div class="quiz-text">Say: "${target}"</div></div>
+    <button class="speak-btn" id="phRecBtn">🎤 Speak Now</button>
+    <div id="phScore" style="display:none;text-align:center;padding:10px;"></div>`;
+    area.querySelector('#phRecBtn').onclick = function() {
+      this.classList.add('listening');
+      this.textContent='🔴 Listening...';
+      const self=this;
+      startSpeechRecognition(target,(score,transcript)=>{
+        self.classList.remove('listening');
+        self.textContent='🎤 Speak Now';
+        area.querySelector('#phScore').style.display='block';
+        area.querySelector('#phScore').innerHTML=`<span style="font-size:2rem;font-weight:900;color:${score>=70?'#32CD32':'#FF8C00'}">${score}%</span>`;
+        if(score>=60){addStars(1);wIdx++;}
+      });
+    };
+  };
+}
+function speakChant(lines) {
+  let i=0;
+  function next(){
+    if(i>=lines.length) return;
+    speakText(lines[i++], next);
+  }
+  next();
+}
+
+// ============ SONG ============
+function buildSong(unit) {
+  const s = unit.song;
+  if(!s) return '<p>No song data.</p>';
+  let html = `<div class="song-lyrics"><div style="font-weight:900;font-size:1.2rem;color:#FF8C00;margin-bottom:12px;text-align:center">🎵 ${s.title}</div>`;
+  s.lines.forEach((l,i) => html += `<div class="lyric-line" id="lyric_${i}">${l}</div>`);
+  html += `</div>
+  <div style="display:flex;gap:10px;margin-top:12px;">
+    <button class="btn btn-primary" style="flex:1" id="playSongBtn">▶️ Listen</button>
+    <button class="btn btn-secondary" style="flex:1" id="singBtn">🎤 Sing Along</button>
+  </div>`;
+  return html;
+}
+function attachSongListeners(content, unit) {
+  const playBtn = content.querySelector('#playSongBtn');
+  const singBtn = content.querySelector('#singBtn');
+  const lines = unit.song.lines;
+  if(playBtn) {
+    playBtn.onclick = () => {
+      let i=0;
+      function next(){
+        if(i>0) content.querySelector(`#lyric_${i-1}`)?.classList.remove('highlight');
+        if(i>=lines.length){ addStars(1); return; }
+        content.querySelector(`#lyric_${i}`)?.classList.add('highlight');
+        speakText(lines[i++], next);
+      }
+      next();
+    };
+  }
+  if(singBtn) {
+    singBtn.onclick = () => {
+      let i=0;
+      function next(){
+        if(i>=lines.length){addStars(2);return;}
+        const line=lines[i];
+        content.querySelector(`#lyric_${i}`)?.classList.add('highlight');
+        speakText(line, ()=>{
+          startSpeechRecognition(line,(score)=>{
+            content.querySelector(`#lyric_${i}`)?.classList.remove('highlight');
+            i++;
+            next();
+          });
+        });
+      }
+      next();
+    };
+  }
+}
+
+// ============ UNIT QUIZ ============
+function buildUnitQuiz(unit, unitKey) {
+  return `<div class="quiz-container" id="unitQuizInner_${unitKey}">
+    <button class="btn btn-primary full-w" onclick="startUnitQuiz('${unitKey}')">🚀 Start Quiz</button>
+    <div id="unitQuizContent_${unitKey}"></div>
+  </div>`;
+}
+function attachQuizListeners(content, unit, unitKey) {
+  window['startUnitQuiz'] = function(key) {
+    const u = CURRICULUM[key];
+    const container = document.getElementById(`unitQuizContent_${key}`);
+    if(!container) return;
+    const words = u.vocabulary || [];
+    if(words.length < 4) { container.innerHTML='<p>Not enough words for quiz.</p>'; return; }
+    let qIdx=0, score=0, total=Math.min(8,words.length);
+    function renderQ(){
+      if(qIdx>=total){
+        container.innerHTML=`<div class="quiz-question"><span class="quiz-emoji">🎉</span><div class="quiz-text">Quiz Done! ${score}/${total}</div></div>
+        <div class="score-display"><div class="score-num">${Math.round(score/total*100)}%</div><div class="score-label">Score</div></div>`;
+        if(score>=total*0.7) { addStars(5); appState.unitProgress[key]=100; saveState(); showToast('Unit Complete! 🎉','#32CD32'); }
+        return;
+      }
+      const correct=words[Math.floor(Math.random()*words.length)];
+      const others=words.filter(w=>w.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+      const opts=[...others,correct].sort(()=>Math.random()-0.5);
+      container.innerHTML=`
+        <div class="quiz-header"><span>${qIdx+1}/${total}</span><span class="quiz-score">⭐${score}</span></div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${qIdx/total*100}%"></div></div>
+        <div class="quiz-question"><span class="quiz-emoji">${correct.emoji}</span><div class="quiz-text">What is this?</div></div>
+        <div class="quiz-options">${opts.map(o=>`<button class="quiz-opt" onclick="checkUQ(this,'${o.word.replace(/'/g,"\\'")}','${correct.word.replace(/'/g,"\\'")}',${qIdx})">${o.word}</button>`).join('')}</div>`;
+      speakText(correct.word);
+    }
+    window.checkUQ=(btn,chosen,correct,idx)=>{
+      document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      if(chosen===correct){btn.classList.add('correct');score++;}
+      else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});}
+      qIdx++;
+      setTimeout(renderQ,1500);
+    };
+    renderQ();
+  };
+}
+
+// ============ SPEECH ============
+function speakText(text, callback) {
+  if(!window.speechSynthesis) return callback&&callback();
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=0.85; u.pitch=1.1;
+  if(callback) u.onend=callback;
+  window.speechSynthesis.speak(u);
+}
+
+function startSpeechRecognition(target, callback) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) {
+    const simScore = Math.floor(Math.random()*40)+50;
+    setTimeout(()=>callback(simScore,'simulated'),1500);
+    return;
+  }
+  const rec = new SR();
+  rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
+  rec.onresult=(e)=>{
+    const transcript=e.results[0][0].transcript.toLowerCase();
+    const score=calcScore(transcript, target.toLowerCase());
+    callback(score, transcript);
+  };
+  rec.onerror=()=>callback(30,'error');
+  rec.start();
+  setTimeout(()=>{try{rec.stop();}catch(e){}},5000);
+}
+
+function calcScore(spoken, target) {
+  target=target.replace(/[^a-z\s]/g,'');
+  spoken=spoken.replace(/[^a-z\s]/g,'');
+  if(spoken===target) return 100;
+  const tWords=target.split(' '), sWords=spoken.split(' ');
+  let matches=0;
+  tWords.forEach(tw=>{if(sWords.some(sw=>sw===tw||sw.includes(tw)||tw.includes(sw)))matches++;});
+  const wordScore=matches/tWords.length*100;
+  const lenRatio=Math.min(spoken.length,target.length)/Math.max(spoken.length,target.length||1)*100;
+  return Math.round((wordScore*0.7+lenRatio*0.3));
+}
+
+// ============ SPEAK SCREEN ============
+function showSpeakScreen() {
+  const screen = document.getElementById('unitScreen');
+  // Build a dedicated speak practice
+  let html = `<div class="screen active" id="speakScreen">
+    <button class="back-btn" onclick="showScreen('homeScreen')">← Back</button>
+    <div class="screen-title">🎤 Speaking Practice</div>
+    <div class="lesson-tabs">
+      <button class="lesson-tab active" onclick="showSpeakTab('phrases',this)">💬 Phrases</button>
+      <button class="lesson-tab" onclick="showSpeakTab('sentences',this)">📝 Sentences</button>
+      <button class="lesson-tab" onclick="showSpeakTab('stories',this)">📖 Stories</button>
+    </div>
+    <div id="speakTabContent"></div>
+  </div>`;
+  let existing = document.getElementById('speakScreen');
+  if(existing) existing.remove();
+  document.body.insertAdjacentHTML('beforeend', html.replace('<div class="screen active"','<div class="screen"'));
+  const el = document.getElementById('speakScreen');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  window.scrollTo(0,0);
+  showSpeakTab('phrases', null);
+}
+
+const SPEAK_PHRASES = [
+  "Hi, how are you?","I'm fine, thank you.","See you later!",
+  "What's this?","It's a picture.","What are those?","They're doors.",
+  "I have a key.","She has a wallet.","What do you have?",
+  "He can swim.","They can dance.","What can she do?",
+  "I'm sick.","What's the matter?","I hope you feel better.",
+  "What's for lunch?","I like spaghetti.","Yes, please!",
+  "Where do you live?","What's your address?",
+  "What time is it?","It's six o'clock.","Good night!",
+  "What are you doing?","I'm riding a bicycle.","We're swimming."
+];
+const SPEAK_SENTENCES = [
+  "What's this? It's a pencil sharpener.","Is that a calendar? Yes, it is.",
+  "What are these? They're paper clips.","Are those workbooks? No, they aren't.",
+  "Whose bag is that? It's her bag.","Does he have a watch? Yes, he does.",
+  "She can ride a pony.","What can he do? He can play the piano.",
+  "Who's she? She's a teacher.","Are they dentists? No, they aren't.",
+  "What does she want? She wants a peach.","Does he like steak? Yes, he does.",
+  "Where's the workbook? It's under the bed.","Is there a TV in the room?",
+  "What do you do in the morning? I brush my teeth.",
+  "What does she do in the evening? She watches TV.",
+  "What's he doing? He's drawing.","Is she swimming? No, she isn't.",
+  "Where is he? He's at the library."
+];
+
+window.showSpeakTab = function(tab, btn) {
+  if(btn){document.querySelectorAll('.lesson-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');}
+  const area = document.getElementById('speakTabContent');
+  if(!area) return;
+  if(tab==='phrases') {
+    let pIdx=Math.floor(Math.random()*SPEAK_PHRASES.length);
+    area.innerHTML = `<div class="quiz-question" id="speakTarget">
+      <span class="quiz-emoji">🗣️</span>
+      <div class="quiz-text" id="speakTargetText">${SPEAK_PHRASES[pIdx]}</div>
+    </div>
+    <button class="btn btn-secondary full-w mt-12" onclick="speakText(document.getElementById('speakTargetText').textContent)">🔊 Hear it First</button>
+    <button class="speak-btn" id="mainSpeakBtn">🎤 Tap to Speak</button>
+    <div class="score-display" id="mainSpeakScore" style="display:none;">
+      <div class="score-num" id="mainScoreNum">0%</div>
+      <div class="score-label">Speaking Accuracy</div>
+    </div>
+    <button class="btn btn-secondary full-w mt-12" onclick="nextSpeakPhrase()">Next Phrase ▶</button>`;
+    window.nextSpeakPhrase=()=>{
+      pIdx=(pIdx+1)%SPEAK_PHRASES.length;
+      document.getElementById('speakTargetText').textContent=SPEAK_PHRASES[pIdx];
+      document.getElementById('mainSpeakScore').style.display='none';
+    };
+    document.getElementById('mainSpeakBtn').onclick=function(){
+      const target=document.getElementById('speakTargetText').textContent;
+      this.classList.add('listening');this.textContent='🔴 Listening...';
+      const self=this;
+      startSpeechRecognition(target,(score)=>{
+        self.classList.remove('listening');self.textContent='🎤 Tap to Speak';
+        document.getElementById('mainSpeakScore').style.display='block';
+        document.getElementById('mainScoreNum').textContent=score+'%';
+        document.getElementById('mainScoreNum').style.color=score>=70?'#32CD32':score>=50?'#FF8C00':'#FF4444';
+        if(score>=60){addStars(1);appState.skillScores.speaking=Math.min(100,(appState.skillScores.speaking||0)+2);saveState();}
+      });
+    };
+  } else if(tab==='sentences') {
+    let sIdx=0;
+    area.innerHTML=`<div id="sentArea"></div>`;
+    function renderSent(){
+      const s=SPEAK_SENTENCES[sIdx%SPEAK_SENTENCES.length];
+      document.getElementById('sentArea').innerHTML=`
+        <div class="quiz-question"><span class="quiz-emoji">📝</span><div class="quiz-text">${s}</div></div>
+        <button class="btn btn-secondary full-w mt-12" onclick="speakText('${s.replace(/'/g,"\\'")}')">🔊 Hear it</button>
+        <button class="speak-btn" id="sentSpeakBtn">🎤 Say it</button>
+        <div id="sentScore" style="display:none;text-align:center;padding:10px;background:white;border-radius:16px;margin-top:10px;box-shadow:0 4px 15px rgba(0,0,0,0.1)">
+          <div id="sentScoreNum" style="font-size:2.5rem;font-weight:900"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button class="btn btn-secondary" style="flex:1" onclick="${sIdx}>0?sIdx--:null;renderSent()">◀ Prev</button>
+          <button class="btn btn-primary" style="flex:1" onclick="sIdx++;renderSent()">Next ▶</button>
+        </div>`;
+      document.getElementById('sentSpeakBtn').onclick=function(){
+        this.classList.add('listening');this.textContent='🔴 Listening...';
+        const self=this;
+        startSpeechRecognition(s,(score)=>{
+          self.classList.remove('listening');self.textContent='🎤 Say it';
+          document.getElementById('sentScore').style.display='block';
+          document.getElementById('sentScoreNum').textContent=score+'%';
+          document.getElementById('sentScoreNum').style.color=score>=70?'#32CD32':'#FF8C00';
+          if(score>=60) addStars(1);
+        });
+      };
+    }
+    renderSent();
+  } else {
+    area.innerHTML=`<div class="grammar-box">
+      <div class="grammar-title">📖 Reading & Speaking Stories</div>
+      ${[{t:"The Moon Map",lines:["The moon is big and round.","I see the moon at night.","The moon is up in the sky.","I like the moon!"]},
+         {t:"Five Is Fine!",lines:["Five fans are fine.","Five vests are fine too.","Five violins play music.","Everything is fine!"]},
+         {t:"Me, Too!",lines:["I can run fast.","I can ride a bike.","I can read books.","Me, too!"]},
+         {t:"A Rainy Day",lines:["It rains today.","I can't play outside.","But I can paint!","I paint a rainbow."]},
+         {t:"Weeds and Trees",lines:["I see trees and weeds.","The leaves are green.","Clean and neat the garden looks.","I love my garden!"]},
+         {t:"Save that Kite!",lines:["My kite is in the tree.","I ride my bike to find it.","I climb the vine.","I save my kite!"]},
+         {t:"A Day on the Farm",lines:["I get up in the morning.","I eat oats for breakfast.","I grow food on the farm.","Good night!"]},
+         {t:"Making Art",lines:["I use a blue tube of glue.","I glue a few new stars.","My art is huge and beautiful!","Art is fun!"]}
+      ].map(story=>`<div style="background:white;border-radius:12px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+        <div style="font-weight:800;color:#FF8C00;margin-bottom:8px">${story.t}</div>
+        ${story.lines.map(l=>`<div style="line-height:2;color:#555">${l}</div>`).join('')}
+        <button class="speak-btn" style="margin-top:8px" onclick='speakChant(${JSON.stringify(story.lines)})'>🔊 Listen</button>
+      </div>`).join('')}
+    </div>`;
+  }
+};
+
+// ============ GAMES ============
+const GAMES = [
+  {id:'flashcard',name:'Flash Cards',icon:'🃏',desc:'Flip cards to learn words',color:'#1E90FF'},
+  {id:'matchpairs',name:'Match Pairs',icon:'🎴',desc:'Match word to picture',color:'#32CD32'},
+  {id:'wordbuild',name:'Word Builder',icon:'🔡',desc:'Spell the word',color:'#9B59B6'},
+  {id:'fillblank',name:'Fill the Blank',icon:'✏️',desc:'Complete the sentence',color:'#FF69B4'},
+  {id:'truefalse',name:'True or False',icon:'✅',desc:'Is the sentence correct?',color:'#FF8C00'},
+  {id:'scramble',name:'Word Scramble',icon:'🌀',desc:'Unscramble the letters',color:'#20B2AA'},
+  {id:'listentype',name:'Listen & Choose',icon:'👂',desc:'Hear and pick the word',color:'#FF4444'},
+  {id:'grammar_game',name:'Grammar Chase',icon:'📖',desc:'Grammar quick fire',color:'#9B59B6'},
+  {id:'spellingbee',name:'Spelling Bee',icon:'🐝',desc:'Spell it out!',color:'#FFD700'},
+  {id:'sentence_builder',name:'Sentence Builder',icon:'🧩',desc:'Build sentences',color:'#32CD32'}
+];
+
+function buildGamesScreen() {
+  const grid = document.getElementById('gamesGrid');
+  grid.innerHTML = '';
+  GAMES.forEach(g => {
+    const div = document.createElement('div');
+    div.className='game-card';
+    div.style.borderColor=g.color;
+    div.innerHTML=`<span class="game-icon">${g.icon}</span><div class="game-name">${g.name}</div><div class="game-desc">${g.desc}</div>`;
+    div.onclick = () => launchGame(g.id);
+    grid.appendChild(div);
+  });
+}
+
+// All vocabulary pool
+const ALL_WORDS = [];
+UNIT_KEYS.forEach(k=>{ if(CURRICULUM[k].vocabulary) ALL_WORDS.push(...CURRICULUM[k].vocabulary); });
+
+function launchGame(id) {
+  const area = document.getElementById('gameArea');
+  area.innerHTML='';
+  area.scrollIntoView({behavior:'smooth'});
+  if(id==='flashcard') buildFlashCard(area);
+  else if(id==='matchpairs') buildMatchPairs(area);
+  else if(id==='wordbuild') buildWordBuild(area);
+  else if(id==='fillblank') buildFillBlank(area);
+  else if(id==='truefalse') buildTrueFalse(area);
+  else if(id==='scramble') buildScramble(area);
+  else if(id==='listentype') buildListenChoose(area);
+  else if(id==='grammar_game') buildGrammarGame(area);
+  else if(id==='spellingbee') buildSpellingBee(area);
+  else if(id==='sentence_builder') buildSentenceBuilder(area);
+}
+
+// --- FLASHCARD ---
+function buildFlashCard(area) {
+  let idx=0, flipped=false;
+  const words=ALL_WORDS.sort(()=>Math.random()-0.5);
+  function render(){
+    const w=words[idx%words.length];
+    area.innerHTML=`
+      <div style="text-align:center"><div style="font-weight:800;margin-bottom:8px">🃏 Flash Cards (${idx+1}/${words.length})</div>
+      <div id="fc" style="background:white;border-radius:20px;padding:40px 20px;margin:10px 0;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.15);min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s;" onclick="flipCard()">
+        <span style="font-size:4rem">${w.emoji}</span>
+        <div id="fcBack" style="display:none;font-size:1.5rem;font-weight:900;margin-top:10px;color:#FF8C00">${w.word}</div>
+        <div style="font-size:0.8rem;color:#999;margin-top:8px">Tap to reveal</div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+        <button class="btn btn-secondary" onclick="idx=Math.max(0,idx-1);flipped=false;render()">◀ Prev</button>
+        <button class="btn btn-primary" onclick="speakText('${w.word}')">🔊 Say it</button>
+        <button class="btn btn-primary" onclick="idx++;flipped=false;render()">Next ▶</button>
+      </div></div>`;
+    window.flipCard=()=>{
+      flipped=!flipped;
+      document.getElementById('fcBack').style.display=flipped?'block':'none';
+      document.getElementById('fc').style.background=flipped?'#FFF5E6':'white';
+      if(flipped){speakText(w.word);addStars(1);}
+    };
+  }
+  render();
+}
+
+// --- MATCH PAIRS ---
+function buildMatchPairs(area) {
+  const words=ALL_WORDS.sort(()=>Math.random()-0.5).slice(0,6);
+  const pairs=[...words.map(w=>({type:'emoji',val:w.emoji,match:w.word})),...words.map(w=>({type:'word',val:w.word,match:w.word}))];
+  pairs.sort(()=>Math.random()-0.5);
+  let selected=null, matched=0, score=0;
+  area.innerHTML=`<div style="font-weight:800;margin-bottom:12px;text-align:center">🎴 Match Pairs — Score: <span id="mpScore">0</span></div>
+  <div class="match-board" id="mpBoard"></div>
+  <div id="mpResult" style="text-align:center;margin-top:12px;"></div>`;
+  const board=document.getElementById('mpBoard');
+  pairs.forEach((p,i)=>{
+    const c=document.createElement('div');
+    c.className='match-card';
+    c.dataset.idx=i;
+    c.dataset.match=p.match;
+    c.innerHTML=p.val;
+    c.onclick=()=>{
+      if(c.classList.contains('matched')) return;
+      if(!selected){selected=c;c.classList.add('flipped');return;}
+      if(selected===c){selected=null;c.classList.remove('flipped');return;}
+      c.classList.add('flipped');
+      if(selected.dataset.match===c.dataset.match && selected!==c){
+        selected.classList.add('matched');c.classList.add('matched');
+        matched+=2;score+=10;document.getElementById('mpScore').textContent=score;
+        addStars(1);
+        if(matched===pairs.length){ document.getElementById('mpResult').innerHTML=`<div class="score-display"><div class="score-num">🎉</div><div class="score-label">All matched! +5 stars!</div></div>`;addStars(5);}
+        selected=null;
+      } else {
+        setTimeout(()=>{selected.classList.remove('flipped');c.classList.remove('flipped');selected=null;},800);
+      }
+    };
+    board.appendChild(c);
+  });
+}
+
+// --- WORD BUILD ---
+function buildWordBuild(area) {
+  const words=ALL_WORDS.filter(w=>w.word.length<=8&&!w.word.includes(' ')).sort(()=>Math.random()-0.5);
+  let wIdx=0, built=[], score=0;
+  function render(){
+    const w=words[wIdx%words.length];
+    const target=w.word;
+    const letters=[...target].sort(()=>Math.random()-0.5);
+    // add decoys
+    const decoys=['x','z','q','j'].slice(0,2);
+    const allLetters=[...letters,...decoys].sort(()=>Math.random()-0.5);
+    built=[];
+    area.innerHTML=`<div class="word-build">
+      <div style="font-weight:800;text-align:center;margin-bottom:8px">🔡 Word Builder — Score: ${score}</div>
+      <div style="text-align:center;font-size:3rem">${w.emoji}</div>
+      <div class="letter-slots" id="wbSlots">${target.split('').map(()=>'<div class="letter-slot"></div>').join('')}</div>
+      <div class="letter-choices" id="wbChoices">${allLetters.map(l=>`<button class="letter-btn" onclick="addLetter('${l}',this)">${l.toUpperCase()}</button>`).join('')}</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+        <button class="btn btn-secondary" onclick="built=[];document.querySelectorAll('.letter-slot').forEach(s=>{s.textContent='';s.classList.remove('filled');});document.querySelectorAll('.letter-btn').forEach(b=>b.disabled=false);">Clear</button>
+        <button class="btn btn-primary" onclick="checkWord('${target}')">Check ✓</button>
+        <button class="btn btn-secondary" onclick="wIdx++;render()">Skip</button>
+      </div>
+      <div id="wbFeedback" style="text-align:center;font-weight:700;margin-top:10px;font-size:1.2rem"></div>
+    </div>`;
+    window.addLetter=(l,btn)=>{
+      if(built.length>=target.length) return;
+      built.push(l);
+      btn.disabled=true;
+      const slots=document.querySelectorAll('.letter-slot');
+      slots[built.length-1].textContent=l.toUpperCase();
+      slots[built.length-1].classList.add('filled');
+    };
+    window.checkWord=(target)=>{
+      const attempt=built.join('');
+      const fb=document.getElementById('wbFeedback');
+      if(attempt===target){fb.textContent='✅ Correct! Well done!';fb.style.color='#32CD32';score+=10;addStars(2);setTimeout(()=>{wIdx++;render();},1500);}
+      else{fb.textContent=`❌ Try again! Hint: ${target[0]}...`;fb.style.color='#FF4444';}
+    };
+  }
+  render();
+}
+
+// --- FILL BLANK ---
+const FILL_SENTENCES = [
+  {sentence:"What's ___ ? It's a clock.",blank:"this",opts:["this","that","these","those"]},
+  {sentence:"___ are those? They're paper clips.",blank:"What",opts:["What","Where","Who","How"]},
+  {sentence:"I can't find my ___.",blank:"book",opts:["book","pen","bag","key"]},
+  {sentence:"She's a ___. She helps sick people.",blank:"nurse",opts:["nurse","teacher","farmer","cook"]},
+  {sentence:"What does she ___? She wants a peach.",blank:"want",opts:["want","like","have","do"]},
+  {sentence:"___ 's the workbook? It's under the bed.",blank:"Where",opts:["Where","What","Who","When"]},
+  {sentence:"___ time is it? It's six o'clock.",blank:"What",opts:["What","Which","Where","How"]},
+  {sentence:"She's ___ a bicycle.",blank:"riding",opts:["riding","ridden","ride","rides"]},
+  {sentence:"Is ___ a calendar? Yes, it is.",blank:"that",opts:["that","this","those","these"]},
+  {sentence:"Does he have ___ umbrella? Yes, he does.",blank:"an",opts:["an","a","the","some"]}
+];
+function buildFillBlank(area) {
+  let idx=0,score=0;
+  function render(){
+    const q=FILL_SENTENCES[idx%FILL_SENTENCES.length];
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">✏️ Fill the Blank — Score: ${score}</div>
+    <div class="fill-sentence">${q.sentence.replace('___',`<span id="blankShow" style="color:#FF8C00;border-bottom:3px solid #FF8C00;padding:0 20px;cursor:pointer">____</span>`)}</div>
+    <div class="word-bank" id="wBank">${q.opts.map(o=>`<button class="word-chip" onclick="checkFill('${o}','${q.blank}')">${o}</button>`).join('')}</div>
+    <div id="fbFb" style="text-align:center;font-weight:700;font-size:1.1rem;margin-top:10px"></div>
+    <button class="btn btn-secondary full-w mt-12" onclick="idx++;render()">Next Question ▶</button>`;
+    window.checkFill=(chosen,correct)=>{
+      document.querySelectorAll('.word-chip').forEach(b=>b.style.pointerEvents='none');
+      const fb=document.getElementById('fbFb');
+      if(chosen===correct){
+        document.getElementById('blankShow').textContent=chosen;
+        fb.textContent='✅ Correct!';fb.style.color='#32CD32';
+        score+=10;addStars(1);
+        setTimeout(()=>{idx++;render();},1500);
+      } else {
+        fb.textContent=`❌ The answer is: ${correct}`;fb.style.color='#FF4444';
+      }
+    };
+  }
+  render();
+}
+
+// --- TRUE OR FALSE ---
+const TF_QUESTIONS = [
+  {stmt:"'It's' is a contraction for 'It is'.",answer:true},
+  {stmt:"'They're' means 'They is'.",answer:false},
+  {stmt:"We use 'can' to talk about ability.",answer:true},
+  {stmt:"'What are these?' asks about one thing.",answer:false},
+  {stmt:"'She's a cook' uses a possessive pronoun.",answer:false},
+  {stmt:"'I'm' is the contraction of 'I am'.",answer:true},
+  {stmt:"We use 'does' with he, she, it.",answer:true},
+  {stmt:"'Are not' = 'aren't'",answer:true},
+  {stmt:"'Riding' is the -ing form of 'ride'.",answer:true},
+  {stmt:"We say 'What's that?' for plural things.",answer:false}
+];
+function buildTrueFalse(area) {
+  let idx=0,score=0;
+  function render(){
+    const q=TF_QUESTIONS[idx%TF_QUESTIONS.length];
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">✅ True or False — Score: ${score}</div>
+    <div class="quiz-question"><span class="quiz-emoji">🤔</span><div class="quiz-text">${q.stmt}</div></div>
+    <div style="display:flex;gap:12px;margin-top:16px">
+      <button class="btn full-w" style="background:#32CD32;color:white;border:none;padding:16px;font-size:1.1rem;border-radius:16px;flex:1" onclick="checkTF(true,${q.answer})">✅ TRUE</button>
+      <button class="btn full-w" style="background:#FF4444;color:white;border:none;padding:16px;font-size:1.1rem;border-radius:16px;flex:1" onclick="checkTF(false,${q.answer})">❌ FALSE</button>
+    </div>
+    <div id="tfFb" style="text-align:center;font-weight:700;font-size:1.2rem;margin-top:12px"></div>`;
+    window.checkTF=(chosen,correct)=>{
+      const fb=document.getElementById('tfFb');
+      if(chosen===correct){fb.textContent='🎉 Correct!';fb.style.color='#32CD32';score+=10;addStars(1);}
+      else{fb.textContent='❌ Wrong! Think again.';fb.style.color='#FF4444';}
+      setTimeout(()=>{idx++;render();},1500);
+    };
+  }
+  render();
+}
+
+// --- SCRAMBLE ---
+function buildScramble(area) {
+  const words=ALL_WORDS.filter(w=>!w.word.includes(' ') && w.word.length>=3).sort(()=>Math.random()-0.5);
+  let idx=0,score=0;
+  function render(){
+    const w=words[idx%words.length];
+    const scrambled=[...w.word].sort(()=>Math.random()-0.5).join('');
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">🌀 Word Scramble — Score: ${score}</div>
+    <div class="quiz-question"><span class="quiz-emoji">${w.emoji}</span>
+    <div class="quiz-text">Unscramble: <span style="color:#FF8C00;font-size:1.5rem;letter-spacing:4px">${scrambled.toUpperCase()}</span></div></div>
+    <input id="scrambleInput" type="text" placeholder="Type your answer..." style="width:100%;padding:14px;border:3px solid #ddd;border-radius:14px;font-size:1.1rem;margin-top:10px;outline:none;text-align:center;font-weight:700">
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn btn-primary" style="flex:1" onclick="checkScramble('${w.word}')">Check ✓</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="speakText('${w.word}')">🔊 Hint</button>
+    </div>
+    <div id="scFb" style="text-align:center;font-weight:700;font-size:1.1rem;margin-top:10px"></div>`;
+    window.checkScramble=(correct)=>{
+      const inp=document.getElementById('scrambleInput');
+      const fb=document.getElementById('scFb');
+      if(inp.value.toLowerCase()===correct){fb.textContent='🎉 Correct!';fb.style.color='#32CD32';score+=10;addStars(2);setTimeout(()=>{idx++;render();},1500);}
+      else{fb.textContent=`❌ Try again!`;fb.style.color='#FF4444';}
+    };
+    document.getElementById('scrambleInput').addEventListener('keyup',e=>{if(e.key==='Enter')window.checkScramble(w.word);});
+  }
+  render();
+}
+
+// --- LISTEN & CHOOSE ---
+function buildListenChoose(area) {
+  let idx=0,score=0;
+  const words=ALL_WORDS.sort(()=>Math.random()-0.5);
+  function render(){
+    const correct=words[idx%words.length];
+    const others=words.filter(w=>w.word!==correct.word).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts=[...others,correct].sort(()=>Math.random()-0.5);
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">👂 Listen & Choose — Score: ${score}</div>
+    <div class="quiz-question"><span class="quiz-emoji">🔊</span><div class="quiz-text">Listen and choose the word!</div></div>
+    <button class="btn btn-primary full-w mt-12" onclick="speakText('${correct.word}')">🔊 Play Sound</button>
+    <div class="quiz-options" style="margin-top:12px">
+      ${opts.map(o=>`<button class="quiz-opt" onclick="checkLC(this,'${o.word}','${correct.word}')">${o.emoji} ${o.word}</button>`).join('')}
+    </div>
+    <div id="lcFb" style="text-align:center;font-weight:700;margin-top:10px"></div>`;
+    speakText(correct.word);
+    window.checkLC=(btn,chosen,correct)=>{
+      document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      const fb=document.getElementById('lcFb');
+      if(chosen===correct){btn.classList.add('correct');fb.textContent='✅ Correct!';fb.style.color='#32CD32';score+=10;addStars(1);setTimeout(()=>{idx++;render();},1500);}
+      else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent.includes(correct))b.classList.add('correct');});fb.textContent='❌ Try again!';fb.style.color='#FF4444';setTimeout(()=>{idx++;render();},2000);}
+    };
+  }
+  render();
+}
+
+// --- GRAMMAR GAME ---
+const GRAMMAR_QUESTIONS=[
+  {q:"She ___ a teacher.",opts:["is","are","am","be"],a:"is"},
+  {q:"What ___ this?",opts:["is","are","am","do"],a:"is"},
+  {q:"They ___ paper clips.",opts:["are","is","am","be"],a:"are"},
+  {q:"He ___ fly a kite.",opts:["can","cans","could be","is"],a:"can"},
+  {q:"I ___ find my book.",opts:["can't","isn't","aren't","doesn't"],a:"can't"},
+  {q:"What does ___ have?",opts:["she","they","I","we"],a:"she"},
+  {q:"Does he have __ umbrella?",opts:["an","a","the","some"],a:"an"},
+  {q:"___ are those? They're doors.",opts:["What","Where","Who","Which"],a:"What"},
+  {q:"She ___ a peach.",opts:["wants","want","wanting","wanted"],a:"wants"},
+  {q:"He's ___ a bicycle.",opts:["riding","ride","rides","rode"],a:"riding"},
+  {q:"Are ___ dentists?",opts:["they","he","she","I"],a:"they"},
+  {q:"It ___ six o'clock.",opts:["is","are","am","be"],a:"is"}
+];
+function buildGrammarGame(area) {
+  let idx=0,score=0,streak=0;
+  function render(){
+    const q=GRAMMAR_QUESTIONS[idx%GRAMMAR_QUESTIONS.length];
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">📖 Grammar Chase 🔥${streak} — Score: ${score}</div>
+    <div class="quiz-question"><div class="quiz-text" style="font-size:1.3rem">${q.q}</div></div>
+    <div class="quiz-options" style="margin-top:12px">
+      ${q.opts.map(o=>`<button class="quiz-opt" onclick="checkGG(this,'${o}','${q.a}')">${o}</button>`).join('')}
+    </div>
+    <div id="ggFb" style="text-align:center;font-weight:700;margin-top:10px"></div>`;
+    window.checkGG=(btn,chosen,correct)=>{
+      document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      const fb=document.getElementById('ggFb');
+      if(chosen===correct){btn.classList.add('correct');score+=10+streak*2;streak++;fb.textContent=`✅ Correct! 🔥${streak} streak!`;fb.style.color='#32CD32';addStars(1);setTimeout(()=>{idx++;render();},1200);}
+      else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});fb.textContent=`❌ Answer: ${correct}`;fb.style.color='#FF4444';streak=0;setTimeout(()=>{idx++;render();},1500);}
+    };
+  }
+  render();
+}
+
+// --- SPELLING BEE ---
+function buildSpellingBee(area) {
+  const words=ALL_WORDS.filter(w=>!w.word.includes(' ')).sort(()=>Math.random()-0.5);
+  let idx=0,score=0;
+  function render(){
+    const w=words[idx%words.length];
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">🐝 Spelling Bee — Score: ${score}</div>
+    <div class="quiz-question"><span class="quiz-emoji">${w.emoji}</span><div class="quiz-text">Listen and spell the word!</div></div>
+    <button class="btn btn-primary full-w mt-12" onclick="speakText('${w.word}')">🔊 Hear the Word</button>
+    <input id="spellingInput" type="text" placeholder="Type the spelling..." style="width:100%;padding:14px;border:3px solid #ddd;border-radius:14px;font-size:1.2rem;margin-top:12px;outline:none;text-align:center;font-weight:700;text-transform:lowercase">
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn btn-primary" style="flex:1" onclick="checkSpelling('${w.word}')">Check ✓</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="idx++;render()">Skip ▶</button>
+    </div>
+    <div id="sbFb" style="text-align:center;font-weight:700;font-size:1.2rem;margin-top:10px"></div>`;
+    speakText(w.word);
+    window.checkSpelling=(correct)=>{
+      const inp=document.getElementById('spellingInput');
+      const fb=document.getElementById('sbFb');
+      if(inp.value.toLowerCase()===correct){fb.textContent='🎉 Perfect spelling!';fb.style.color='#32CD32';score+=15;addStars(2);speakText('Excellent!');setTimeout(()=>{idx++;render();},1500);}
+      else{fb.textContent=`❌ It's "${correct}". Try again!`;fb.style.color='#FF4444';speakText(correct);}
+    };
+    document.getElementById('spellingInput').addEventListener('keyup',e=>{if(e.key==='Enter')window.checkSpelling(w.word);});
+  }
+  render();
+}
+
+// --- SENTENCE BUILDER ---
+const SENTENCE_BUILD=[
+  {words:["It's","a","clock","."],scrambled:["clock","a","It's","."]},
+  {words:["What","are","those","?"],scrambled:["those","are","?","What"]},
+  {words:["She","can","swim","."],scrambled:["swim","She","can","."]},
+  {words:["He","is","a","teacher","."],scrambled:["a","He","teacher",".","is"]},
+  {words:["I","can't","find","my","book","."],scrambled:["book","find","I","my","can't","."]},
+  {words:["What's","for","lunch","?"],scrambled:["lunch","for","?","What's"]},
+  {words:["She","wants","a","peach","."],scrambled:["peach","wants","a","She","."]},
+  {words:["He's","at","the","library","."],scrambled:["library","at","He's","the","."]}
+];
+function buildSentenceBuilder(area) {
+  let idx=0,score=0,chosen=[];
+  function render(){
+    const q=SENTENCE_BUILD[idx%SENTENCE_BUILD.length];
+    chosen=[];
+    area.innerHTML=`<div style="font-weight:800;text-align:center;margin-bottom:12px">🧩 Sentence Builder — Score: ${score}</div>
+    <div style="background:white;border-radius:14px;padding:14px;min-height:50px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;flex-wrap:wrap;gap:6px;align-items:center" id="sbResult">
+      <span style="color:#ccc">Build the sentence here...</span>
+    </div>
+    <div class="word-bank" id="sbWords">${q.scrambled.map((w,i)=>`<button class="word-chip" id="sbw${i}" onclick="addToSentence('${w}',${i})">${w}</button>`).join('')}</div>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn btn-secondary" style="flex:1" onclick="chosen=[];document.querySelectorAll('[id^=sbw]').forEach(b=>b.classList.remove('used'));document.getElementById('sbResult').innerHTML='<span style=\\'color:#ccc\\'>Build the sentence here...</span>'">Clear</button>
+      <button class="btn btn-primary" style="flex:1" onclick="checkSentence('${q.words.join(' ')}')">Check ✓</button>
+    </div>
+    <div id="sbFb" style="text-align:center;font-weight:700;margin-top:10px;font-size:1.1rem"></div>`;
+    window.addToSentence=(word,btnIdx)=>{
+      chosen.push(word);
+      document.getElementById(`sbw${btnIdx}`).classList.add('used');
+      const result=document.getElementById('sbResult');
+      result.innerHTML=chosen.map(w=>`<span style="background:#FFF5E6;border:2px solid #FF8C00;border-radius:8px;padding:4px 10px;font-weight:700">${w}</span>`).join(' ');
+    };
+    window.checkSentence=(correct)=>{
+      const attempt=chosen.join(' ');
+      const fb=document.getElementById('sbFb');
+      if(attempt===correct){fb.textContent='✅ Perfect sentence!';fb.style.color='#32CD32';score+=15;addStars(2);speakText(correct.replace('?','').replace('.',''));setTimeout(()=>{idx++;render();},2000);}
+      else{fb.textContent=`❌ Try again! Correct: ${correct}`;fb.style.color='#FF4444';}
+    };
+  }
+  render();
+}
+
+// ============ PROGRESS ============
+function updateProgress() {
+  document.getElementById('totalScore').textContent = appState.stars;
+  const skills = [
+    {name:'Vocabulary', val: Math.min(100, (appState.skillScores.vocab||0)*2), color:'#1E90FF'},
+    {name:'Grammar', val: Math.min(100, (appState.skillScores.grammar||0)*3), color:'#9B59B6'},
+    {name:'Speaking', val: Math.min(100, (appState.skillScores.speaking||0)*2), color:'#32CD32'},
+    {name:'Phonics', val: Math.min(100, (appState.skillScores.phonics||0)*3), color:'#FF69B4'},
+    {name:'Games', val: Math.min(100, appState.stars*2), color:'#FF8C00'}
+  ];
+  document.getElementById('skillBars').innerHTML = skills.map(s=>`
+    <div class="skill-row">
+      <div class="skill-name">${s.name}</div>
+      <div class="skill-track"><div class="skill-fill" style="width:${s.val}%;background:${s.color}"></div></div>
+      <div style="font-weight:700;width:40px;text-align:right;font-size:0.85rem;color:#555">${s.val}%</div>
+    </div>`).join('');
+  const stars=appState.stars;
+  const badges=[
+    {icon:'⭐',name:'First Star',earned:stars>=1},
+    {icon:'🏅',name:'10 Stars',earned:stars>=10},
+    {icon:'🥇',name:'50 Stars',earned:stars>=50},
+    {icon:'👑',name:'100 Stars',earned:stars>=100},
+    {icon:'🌟',name:'Speaker',earned:(appState.skillScores.speaking||0)>=10},
+    {icon:'📚',name:'Reader',earned:false},
+    {icon:'🎯',name:'Quiz Pro',earned:stars>=30},
+    {icon:'🎮',name:'Gamer',earned:stars>=20}
+  ];
+  document.getElementById('badgeGrid').innerHTML = badges.map(b=>`
+    <div class="badge ${b.earned?'earned':''}">
+      <span class="badge-icon">${b.icon}</span>
+      <div class="badge-name">${b.name}</div>
+    </div>`).join('');
+}
+
+// ============ INIT ============
+buildHome();
+buildGamesScreen();
+document.getElementById('totalStars').textContent = appState.stars;
+document.getElementById('totalScore').textContent = appState.stars;
+</script>
+</body>
+</html>
