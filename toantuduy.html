@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Tim Kho Bau So Hoc</title>
+<title>Tìm Kho Báu Số Học</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -115,34 +115,34 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#0f4c81 0
 <body>
 <div id="app">
 <div class="hdr">
-  <h1>&#127869;&#65039; Tim Kho Bau So Hoc</h1>
+  <h1>&#127869;&#65039; Tìm Kho Báu Số Học</h1>
   <div class="hdr-row">
     <div class="badge">&#11088; <span id="ts">0</span> sao</div>
-    <div class="badge">&#128506;&#65039; <span id="td">0</span>/<span id="ta">0</span> bai</div>
+    <div class="badge">&#128506;&#65039; <span id="td">0</span>/<span id="ta">0</span> bài</div>
   </div>
   <div class="pbar-wrap"><div class="pbar-fill" id="hbar" style="width:0%"></div></div>
 </div>
 <div id="s-map" class="scr on">
-  <div class="map-title">Chon dao de kham pha!</div>
+  <div class="map-title">Chọn đảo để khám phá!</div>
   <div class="islands" id="islands"></div>
 </div>
 <div id="s-isl" class="scr">
   <div class="nav-hdr">
-    <button class="back-btn" onclick="goMap()">&#8592; Ban do</button>
+    <button class="back-btn" onclick="goMap()">&#8592; Bản đồ</button>
     <div class="nav-title" id="isl-ttl"></div>
   </div>
   <div class="llist" id="llist"></div>
 </div>
 <div id="s-les" class="scr">
   <div class="nav-hdr">
-    <button class="back-btn" id="back-les">&#8592; Dao</button>
+    <button class="back-btn" id="back-les">&#8592; Đảo</button>
     <div class="nav-title" id="les-ttl"></div>
   </div>
   <button class="guide-fab" id="guide-fab" onclick="openGuide()">?</button>
   <div id="guide-overlay" onclick="closeGuide()">
     <div class="guide-sheet" onclick="event.stopPropagation()">
       <button class="guide-close" onclick="closeGuide()">&#10005;</button>
-      <div class="guide-sheet-title">&#128218; Huong dan day be</div>
+      <div class="guide-sheet-title">&#128218; Hướng dẫn dạy bé</div>
       <div class="guide-sheet-text" id="guide-text"></div>
     </div>
   </div>
@@ -153,10 +153,10 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#0f4c81 0
 <div id="modal">
   <div class="mbox">
     <div class="m-big" id="m-ico">&#127881;</div>
-    <h2 id="m-ttl">Tuyet voi!</h2>
+    <h2 id="m-ttl">Tuyệt vời!</h2>
     <div class="m-stars" id="m-stars">&#11088;&#11088;&#11088;</div>
-    <p id="m-msg">Be lam gioi lam!</p>
-    <button class="m-btn" onclick="closeModal()">Tiep tuc &#8594;</button>
+    <p id="m-msg">Bé làm giỏi lắm!</p>
+    <button class="m-btn" onclick="closeModal()">Tiếp tục &#8594;</button>
   </div>
 </div>
 <script>
@@ -177,12 +177,12 @@ function stripHtml(h){return h.replace(/<[^>]*>/g,'');}
 
 // ===== ISLANDS =====
 var ISLANDS=[
-  {id:'i1',name:'Dao So Ky Dieu',emoji:'&#127965;&#65039;',desc:'Nhan so, dem, so sanh',bg:'linear-gradient(145deg,#2e8b57,#3cb371)',lessons:['L1a','L1b','L1c']},
-  {id:'i2',name:'Rung Cong Them',emoji:'&#127796;',desc:'Phep cong khong dem',bg:'linear-gradient(145deg,#e67e22,#f39c12)',lessons:['L2a','L2b','L2c'],req:'i1'},
-  {id:'i3',name:'Hang Tru Di',emoji:'&#129412;',desc:'Phep tru sinh dong',bg:'linear-gradient(145deg,#8e44ad,#9b59b6)',lessons:['L3a','L3b','L3c'],req:'i2'},
-  {id:'i4',name:'Bo Bien Bond',emoji:'&#9875;',desc:'Phan tach so bond',bg:'linear-gradient(145deg,#1a6ba8,#2980b9)',lessons:['L4a','L4b','L4c'],req:'i3'},
-  {id:'i5',name:'Nui Lua Thu Tu',emoji:'&#127755;',desc:'Day so va so sanh',bg:'linear-gradient(145deg,#c0392b,#e74c3c)',lessons:['L5a','L5b','L5c'],req:'i4'},
-  {id:'i6',name:'Kho Bau!',emoji:'&#128142;',desc:'Thu thach tong hop',bg:'linear-gradient(145deg,#8B6914,#c9960c)',lessons:['L6a','L6b','L6c'],req:'i5'},
+  {id:'i1',name:'Đảo Số Kỳ Diệu',emoji:'&#127965;&#65039;',desc:'Nhận số, đếm, so sánh',bg:'linear-gradient(145deg,#2e8b57,#3cb371)',lessons:['L1a','L1b','L1c']},
+  {id:'i2',name:'Rừng Cộng Thêm',emoji:'&#127796;',desc:'Phép cộng không đếm',bg:'linear-gradient(145deg,#e67e22,#f39c12)',lessons:['L2a','L2b','L2c'],req:'i1'},
+  {id:'i3',name:'Hang Trừ Đi',emoji:'&#129412;',desc:'Phép trừ sinh động',bg:'linear-gradient(145deg,#8e44ad,#9b59b6)',lessons:['L3a','L3b','L3c'],req:'i2'},
+  {id:'i4',name:'Bờ Biển Bond',emoji:'&#9875;',desc:'Phân tách số bond',bg:'linear-gradient(145deg,#1a6ba8,#2980b9)',lessons:['L4a','L4b','L4c'],req:'i3'},
+  {id:'i5',name:'Núi Lửa Thứ Tự',emoji:'&#127755;',desc:'Dãy số và so sánh',bg:'linear-gradient(145deg,#c0392b,#e74c3c)',lessons:['L5a','L5b','L5c'],req:'i4'},
+  {id:'i6',name:'Kho Báu!',emoji:'&#128142;',desc:'Thử thách tổng hợp',bg:'linear-gradient(145deg,#8B6914,#c9960c)',lessons:['L6a','L6b','L6c'],req:'i5'},
 ];
 
 // ===== GUIDES =====
@@ -270,177 +270,177 @@ var LESSONS={};
     {n:4,d:[1,0,1,0,0,0,1,0,1],lv:2},{n:5,d:[1,0,1,0,1,0,1,0,1],lv:2},{n:5,d:[1,0,0,1,1,1,0,0,1],lv:2},
     {n:6,d:[1,0,1,1,0,1,1,0,1],lv:3},{n:7,d:[1,1,1,0,1,0,1,1,1],lv:3},{n:8,d:[1,1,1,1,0,1,1,1,1],lv:3}
   ];
-  LESSONS.L1a={name:'Nhin Ngay Biet So',icon:'&#128065;',method:'Subitize',
-    qs:pats.map(function(p){var r=make4(p.n,1,9);return{story:'Nhin NHANH - co may cham? Khong duoc dem!',vis:'<div class="vis-area">'+visSub(p.d)+'</div>',choices:r.choices,ans:r.ai,tts:'Nhin nhanh co may cham? Khong duoc dem tung cai!',lv:p.lv};})};
+  LESSONS.L1a={name:'Nhìn Ngay Biết Số',icon:'&#128065;',method:'Subitize',
+    qs:pats.map(function(p){var r=make4(p.n,1,9);return{story:'Nhìn NHANH - có mấy chấm? Không được đếm!',vis:'<div class="vis-area">'+visSub(p.d)+'</div>',choices:r.choices,ans:r.ai,tts:'Nhìn nhanh! Có mấy chấm? Không được đếm từng cái!',lv:p.lv};})};
 })();
 
 // L1b Ten Frame
 (function(){
   var qs=[];
-  for(var n=1;n<=10;n++){var r=make4(n,1,10);qs.push({story:'Dem cac o co sao. Co bao nhieu o sang?',vis:'<div class="vis-area">'+visTF(n)+'</div>',choices:r.choices,ans:r.ai,tts:'Dem cac o co ngoi sao. Co bao nhieu o sang?',lv:n<=5?1:2});}
-  LESSONS.L1b={name:'Khung 10 O Than Ky',icon:'&#128306;',method:'Ten Frame',qs:sh(qs)};
+  for(var n=1;n<=10;n++){var r=make4(n,1,10);qs.push({story:'Đếm các ô có sao. Có bao nhiêu ô sáng?',vis:'<div class="vis-area">'+visTF(n)+'</div>',choices:r.choices,ans:r.ai,tts:'Đếm các ô có ngôi sao. Có bao nhiêu ô sáng?',lv:n<=5?1:2});}
+  LESSONS.L1b={name:'Khung 10 Ô Thần Kỳ',icon:'&#128306;',method:'Ten Frame',qs:sh(qs)};
 })();
 
 // L1c Compare
 (function(){
   var pairs=[[2,5],[7,3],[4,4],[8,6],[1,9],[5,5],[6,3],[9,7],[3,8],[4,7]];
-  LESSONS.L1c={name:'So Sanh Hai So',icon:'&#9878;',method:'So sanh truc quan',
+  LESSONS.L1c={name:'So Sánh Hai Số',icon:'&#9878;',method:'So sánh trực quan',
     qs:pairs.map(function(p,i){
       var a=p[0],b=p[1];
       var ca=a<b?'<':a>b?'>':'=';
       var opts=sh(['<','>','=','?']);
-      return{story:'So '+a+' va so '+b+' - chon dau dung!',vis:'<div class="vis-area">'+visCmp(a,b)+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'So '+a+' va so '+b+'. Chon dau dung!',lv:i<3?1:i<7?2:3};
+      return{story:'Số '+a+' và số '+b+' - chọn dấu đúng!',vis:'<div class="vis-area">'+visCmp(a,b)+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'Số '+a+' và số '+b+'. Chọn dấu đúng!',lv:i<3?1:i<7?2:3};
     })};
 })();
 
 // L2a Story Add
 (function(){
   var data=[
-    {a:2,b:1,lv:1,s:'Vit co 2 con ca, bat them 1 con. Duoc may con?'},
-    {a:3,b:2,lv:1,s:'Cay co 3 qua dua, moc them 2 qua. Co may qua?'},
-    {a:2,b:3,lv:1,s:'Tim duoc 2 ngoi sao, them 3 ngoi. Co may ngoi?'},
-    {a:4,b:3,lv:2,s:'Bai bien co 4 con cua, den them 3 con. Co may con?'},
-    {a:5,b:2,lv:2,s:'Nhat 5 vo so, nhat them 2 vo. Co may vo?'},
-    {a:4,b:4,lv:2,s:'Tim 4 vien ngoc, tim them 4 vien. Co may vien?'},
-    {a:6,b:3,lv:3,s:'Co 6 ngoi sao vang, them 3 ngoi. Duoc may?'},
-    {a:7,b:2,lv:3,s:'Trong chau 7 con ca, them vao 2 con. Co may?'},
-    {a:5,b:5,lv:3,s:'Cay 1 co 5 qua, cay 2 co 5 qua. Ca hai co may?'},
+    {a:2,b:1,lv:1,s:'Vịt có 2 con cá, bắt thêm 1 con. Được mấy con?'},
+    {a:3,b:2,lv:1,s:'Cây có 3 quả dừa, mọc thêm 2 quả. Có mấy quả?'},
+    {a:2,b:3,lv:1,s:'Tìm được 2 ngôi sao, thêm 3 ngôi. Có mấy ngôi?'},
+    {a:4,b:3,lv:2,s:'Bãi biển có 4 con cua, đến thêm 3 con. Có mấy con?'},
+    {a:5,b:2,lv:2,s:'Nhặt 5 vỏ sò, nhặt thêm 2 vỏ. Có mấy vỏ?'},
+    {a:4,b:4,lv:2,s:'Tìm 4 viên ngọc, tìm thêm 4 viên. Có mấy viên?'},
+    {a:6,b:3,lv:3,s:'Có 6 ngôi sao vàng, thêm 3 ngôi. Được mấy?'},
+    {a:7,b:2,lv:3,s:'Trong chậu 7 con cá, thêm vào 2 con. Có mấy?'},
+    {a:5,b:5,lv:3,s:'Cây 1 có 5 quả, cây 2 có 5 quả. Cả hai có mấy?'},
   ];
-  LESSONS.L2a={name:'Cau Chuyen Cong',icon:'&#128214;',method:'Cong - neo so lon roi dem tiep',
+  LESSONS.L2a={name:'Câu Chuyện Cộng',icon:'&#128214;',method:'Cộng - neo số lớn rồi đếm tiếp',
     qs:data.map(function(d){var r=make4(d.a+d.b,1,10);return{story:d.s,vis:'<div class="vis-area">'+visExpr(d.a,'+',d.b)+'</div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
 })();
 
 // L2b Bond Add
 (function(){
   var data=[[5,2,3,1],[5,3,2,1],[7,4,3,2],[7,3,4,2],[8,5,3,2],[8,3,5,2],[10,6,4,3],[10,4,6,3],[6,4,2,2],[9,5,4,3]];
-  LESSONS.L2b={name:'So Bond Cong',icon:'&#128279;',method:'Number Bond',
-    qs:data.map(function(d){var r=make4(d[2],0,10);return{story:'So '+d[0]+' gom '+d[1]+' va may?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'So '+d[0]+' gom '+d[1]+' va may?',lv:d[3]};})};
+  LESSONS.L2b={name:'Số Bond Cộng',icon:'&#128279;',method:'Number Bond',
+    qs:data.map(function(d){var r=make4(d[2],0,10);return{story:'Số '+d[0]+' gồm '+d[1]+' và mấy?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'Số '+d[0]+' gồm '+d[1]+' và mấy?',lv:d[3]};})};
 })();
 
 // L2c Blocks Add
 (function(){
   var data=[[2,1,1],[3,2,1],[4,2,2],[3,3,2],[5,3,2],[4,4,2],[5,4,3],[6,3,3],[5,5,3],[7,2,3]];
-  LESSONS.L2c={name:'Gop Nhom Khoi Mau',icon:'&#127922;',method:'Montessori Blocks',
-    qs:data.map(function(d){var r=make4(d[0]+d[1],1,10);return{story:'Gop '+d[0]+' khoi do va '+d[1]+' khoi vang. Tat ca duoc may?',vis:'<div class="vis-area">'+visBlocks2(d[0],d[1])+'</div>',choices:r.choices,ans:r.ai,tts:'Gop '+d[0]+' khoi do va '+d[1]+' khoi vang. Tat ca duoc may?',lv:d[2]};})};
+  LESSONS.L2c={name:'Gộp Nhóm Khối Màu',icon:'&#127922;',method:'Montessori Blocks',
+    qs:data.map(function(d){var r=make4(d[0]+d[1],1,10);return{story:'Gộp '+d[0]+' khối đỏ và '+d[1]+' khối vàng. Tất cả được mấy?',vis:'<div class="vis-area">'+visBlocks2(d[0],d[1])+'</div>',choices:r.choices,ans:r.ai,tts:'Gộp '+d[0]+' khối đỏ và '+d[1]+' khối vàng. Tất cả được mấy?',lv:d[2]};})};
 })();
 
 // L3a Sub story
 (function(){
   var data=[
-    {a:4,b:1,lv:1,s:'Co 4 con ca. Ca map an 1 con. Con may con?'},
-    {a:5,b:2,lv:1,s:'Co 5 chu chim. Bay di 2 chu. Con may chu?'},
-    {a:5,b:3,lv:1,s:'Co 5 qua dua. An mat 3 qua. Con may qua?'},
-    {a:7,b:3,lv:2,s:'Tim duoc 7 vien ngoc. Danh roi 3 vien. Con may?'},
-    {a:8,b:5,lv:2,s:'Co 8 vo so. Tang di 5 vo. Con may vo?'},
-    {a:8,b:6,lv:2,s:'Co 8 ngoi sao. Mat 6 ngoi. Con may ngoi?'},
-    {a:9,b:4,lv:3,s:'Co 9 con cua. Boi di 4 con. Con may con?'},
-    {a:10,b:3,lv:3,s:'Cau duoc 10 con ca. Tha ve 3 con. Con may?'},
-    {a:10,b:7,lv:3,s:'Co 10 ngoi sao. Tat mat 7 ngoi. Con may?'},
+    {a:4,b:1,lv:1,s:'Có 4 con cá. Cá mập ăn 1 con. Còn mấy con?'},
+    {a:5,b:2,lv:1,s:'Có 5 chú chim. Bay đi 2 chú. Còn mấy chú?'},
+    {a:5,b:3,lv:1,s:'Có 5 quả dừa. Ăn mất 3 quả. Còn mấy quả?'},
+    {a:7,b:3,lv:2,s:'Tìm được 7 viên ngọc. Đánh rơi 3 viên. Còn mấy?'},
+    {a:8,b:5,lv:2,s:'Có 8 vỏ sò. Tặng đi 5 vỏ. Còn mấy vỏ?'},
+    {a:8,b:6,lv:2,s:'Có 8 ngôi sao. Mất 6 ngôi. Còn mấy ngôi?'},
+    {a:9,b:4,lv:3,s:'Có 9 con cua. Bơi đi 4 con. Còn mấy con?'},
+    {a:10,b:3,lv:3,s:'Câu được 10 con cá. Thả về 3 con. Còn mấy?'},
+    {a:10,b:7,lv:3,s:'Có 10 ngôi sao. Tắt mất 7 ngôi. Còn mấy?'},
   ];
-  LESSONS.L3a={name:'Cau Chuyen Tru',icon:'&#9986;',method:'Dem lui tu so lon',
+  LESSONS.L3a={name:'Câu Chuyện Trừ',icon:'&#9986;',method:'Đếm lui từ số lớn',
     qs:data.map(function(d){var r=make4(d.a-d.b,0,9);return{story:d.s,vis:'<div class="vis-area">'+visExpr(d.a,'-',d.b)+'</div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
 })();
 
 // L3b Bond Sub
 (function(){
   var data=[[5,2,3,1],[7,4,3,2],[8,5,3,2],[6,4,2,2],[9,6,3,2],[10,3,7,3],[10,8,2,3],[8,3,5,3]];
-  LESSONS.L3b={name:'So Bond Tru',icon:'&#128279;',method:'Bond - mot cong tao hai tru',
-    qs:data.map(function(d){var r=make4(d[2],0,9);return{story:'Co '+d[0]+', lay di '+d[1]+'. Con lai may?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'Co '+d[0]+' lay di '+d[1]+'. Con lai may?',lv:d[3]};})};
+  LESSONS.L3b={name:'Số Bond Trừ',icon:'&#128279;',method:'Bond - một cộng tạo hai trừ',
+    qs:data.map(function(d){var r=make4(d[2],0,9);return{story:'Có '+d[0]+', lấy đi '+d[1]+'. Còn lại mấy?',vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:'Có '+d[0]+' lấy đi '+d[1]+'. Còn lại mấy?',lv:d[3]};})};
 })();
 
 // L3c Blocks Sub
 (function(){
   var data=[[4,1,1],[5,2,1],[6,3,2],[7,3,2],[8,5,2],[9,3,3],[10,4,3],[9,7,3]];
-  LESSONS.L3c={name:'Lay Bot Khoi',icon:'&#128465;',method:'Nhin thay phan bi lay di',
-    qs:data.map(function(d){var r=make4(d[0]-d[1],0,9);return{story:'Co '+d[0]+' ngoi sao, lay di '+d[1]+'. Con lai may?',vis:'<div class="vis-area"><div class="b-grp">'+visBlocks(d[0],'c3',d[1])+'</div></div>',choices:r.choices,ans:r.ai,tts:'Co '+d[0]+' ngoi sao lay di '+d[1]+'. Con lai may?',lv:d[2]};})};
+  LESSONS.L3c={name:'Lấy Bớt Khối',icon:'&#128465;',method:'Nhìn thấy phần bị lấy đi',
+    qs:data.map(function(d){var r=make4(d[0]-d[1],0,9);return{story:'Có '+d[0]+' ngôi sao, lấy đi '+d[1]+'. Còn lại mấy?',vis:'<div class="vis-area"><div class="b-grp">'+visBlocks(d[0],'c3',d[1])+'</div></div>',choices:r.choices,ans:r.ai,tts:'Có '+d[0]+' ngôi sao, lấy đi '+d[1]+'. Còn lại mấy?',lv:d[2]};})};
 })();
 
 // L4a Bond family 5
 (function(){
   var pairs=[[0,5],[1,4],[2,3],[3,2],[4,1],[5,0],[1,4],[2,3],[0,5],[3,2]];
-  LESSONS.L4a={name:'Gia Dinh So 5',icon:'&#128106;',method:'Number Bond Family 5',
-    qs:sh(pairs).slice(0,8).map(function(p){var r=make4(p[1],0,5);return{story:p[0]+' + ? = 5',vis:'<div class="vis-area">'+visBond(5,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cong may bang 5?',lv:1};})};
+  LESSONS.L4a={name:'Gia Đình Số 5',icon:'&#128106;',method:'Number Bond Family 5',
+    qs:sh(pairs).slice(0,8).map(function(p){var r=make4(p[1],0,5);return{story:p[0]+' + ? = 5',vis:'<div class="vis-area">'+visBond(5,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cộng mấy bằng 5?',lv:1};})};
 })();
 
 // L4b Bond family 10
 (function(){
   var pairs=[];for(var i=0;i<=10;i++)pairs.push([i,10-i]);
-  LESSONS.L4b={name:'Gia Dinh So 10',icon:'&#128306;',method:'Number Bond Family 10',
-    qs:sh(pairs).slice(0,9).map(function(p){var r=make4(p[1],0,10);return{story:p[0]+' + ? = 10',vis:'<div class="vis-area">'+visBond(10,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cong may bang 10?',lv:2};})};
+  LESSONS.L4b={name:'Gia Đình Số 10',icon:'&#128306;',method:'Number Bond Family 10',
+    qs:sh(pairs).slice(0,9).map(function(p){var r=make4(p[1],0,10);return{story:p[0]+' + ? = 10',vis:'<div class="vis-area">'+visBond(10,p[0],null)+'</div>',choices:r.choices,ans:r.ai,tts:p[0]+' cộng mấy bằng 10?',lv:2};})};
 })();
 
 // L4c Bond mix
 (function(){
   var data=[[6,4,2],[7,3,4],[8,2,6],[9,1,8],[5,4,1],[6,3,3],[7,2,5],[8,1,7],[9,2,7],[6,2,4]];
-  LESSONS.L4c={name:'Bond Hon Hop',icon:'&#127917;',method:'Number Bond Mixed',
-    qs:sh(data).slice(0,8).map(function(d){var r=make4(d[2],0,10);return{story:d[1]+' + ? = '+d[0],vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:d[1]+' cong may bang '+d[0]+'?',lv:2};})};
+  LESSONS.L4c={name:'Bond Hỗn Hợp',icon:'&#127917;',method:'Number Bond Mixed',
+    qs:sh(data).slice(0,8).map(function(d){var r=make4(d[2],0,10);return{story:d[1]+' + ? = '+d[0],vis:'<div class="vis-area">'+visBond(d[0],d[1],null)+'</div>',choices:r.choices,ans:r.ai,tts:d[1]+' cộng mấy bằng '+d[0]+'?',lv:2};})};
 })();
 
 // L5a Order
 (function(){
   var sets=[[3,1,4,2,1],[5,2,8,3,2],[7,4,9,1,2],[6,2,5,9,3],[8,3,6,1,3],[4,10,2,7,3]];
-  LESSONS.L5a={name:'Xep Thu Tu',icon:'&#128202;',method:'Ordering',
+  LESSONS.L5a={name:'Xếp Thứ Tự',icon:'&#128202;',method:'Ordering',
     qs:sets.map(function(s){
       var lv=s[4];var nums=s.slice(0,4);
       var sorted=[].concat(nums).sort(function(a,b){return a-b;});
       var ca=sorted.join('>');
       var opts=sh([ca,nums.sort(function(a,b){return b-a;}).join('>'),sorted[1]+'>'+sorted[0]+'>'+sorted[2]+'>'+sorted[3],sorted[0]+'>'+sorted[2]+'>'+sorted[1]+'>'+sorted[3]]);
-      return{story:'Xep cac so '+nums.join(', ')+' tu nho den lon',vis:'<div class="vis-area"><div class="seq-row">'+nums.map(function(n){return'<div class="sn-box sn-val">'+n+'</div>';}).join('<div class="sarr">,</div>')+'</div></div>',choices:opts,ans:opts.indexOf(ca),tts:'Xep cac so '+nums.join(' ')+' tu nho den lon',lv:lv};
+      return{story:'Xếp các số '+nums.join(', ')+' từ nhỏ đến lớn',vis:'<div class="vis-area"><div class="seq-row">'+nums.map(function(n){return'<div class="sn-box sn-val">'+n+'</div>';}).join('<div class="sarr">,</div>')+'</div></div>',choices:opts,ans:opts.indexOf(ca),tts:'Xếp các số '+nums.join(' ')+' từ nhỏ đến lớn',lv:lv};
     })};
 })();
 
 // L5b Missing
 (function(){
   var seqs=[[1,2,null,4,5,1],[3,4,5,null,7,1],[6,null,8,9,10,2],[1,null,3,4,5,2],[5,6,null,8,9,2],[2,3,4,5,null,3],[null,2,3,4,5,3],[7,8,null,10,11,3]];
-  LESSONS.L5b={name:'Tim So Mat Tich',icon:'&#128269;',method:'Number Sequence',
+  LESSONS.L5b={name:'Tìm Số Mất Tích',icon:'&#128269;',method:'Number Sequence',
     qs:seqs.map(function(s){
       var lv=s[5];var seq=s.slice(0,5);
       var idx=seq.indexOf(null);
       var ans=idx===0?seq[1]-1:seq[idx-1]+1;
       var r=make4(ans,1,12);
-      return{story:'So nao dang tron trong day?',vis:'<div class="vis-area">'+visSeq(seq)+'</div>',choices:r.choices,ans:r.ai,tts:'So nao dang tron trong day so nay?',lv:lv};
+      return{story:'Số nào đang trốn trong dãy?',vis:'<div class="vis-area">'+visSeq(seq)+'</div>',choices:r.choices,ans:r.ai,tts:'Số nào đang trốn trong dãy số này?',lv:lv};
     })};
 })();
 
 // L5c Compare symbol
 (function(){
   var data=[[5,8,1],[9,3,1],[6,6,2],[7,4,2],[2,10,2],[8,8,3],[4,7,3],[10,9,3]];
-  LESSONS.L5c={name:'Dau So Sanh',icon:'&#127942;',method:'>,<,= Symbols',
+  LESSONS.L5c={name:'Dấu So Sánh',icon:'&#127942;',method:'>,<,= Symbols',
     qs:data.map(function(d){
       var ca=d[0]<d[1]?'<':d[0]>d[1]?'>':'=';
       var opts=sh(['<','>','=','?']);
-      return{story:'Dien dau dung: '+d[0]+' __ '+d[1],vis:'<div class="vis-area">'+visExpr(d[0],'___',d[1])+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'Dien dau dung. '+d[0]+' so voi '+d[1],lv:d[2]};
+      return{story:'Điền dấu đúng: '+d[0]+' __ '+d[1],vis:'<div class="vis-area">'+visExpr(d[0],'___',d[1])+'</div>',choices:opts,ans:opts.indexOf(ca),tts:'Điền dấu đúng. '+d[0]+' so với '+d[1],lv:d[2]};
     })};
 })();
 
 // L6a Mixed
 (function(){
   var ops=[[3,'+',4,7,2],[8,'-',5,3,2],[2,'+',7,9,2],[6,'-',2,4,2],[5,'+',5,10,3],[9,'-',6,3,3],[4,'+',3,7,2],[10,'-',4,6,3],[7,'-',3,4,3],[3,'+',6,9,3]];
-  LESSONS.L6a={name:'Cong & Tru Tong Hop',icon:'&#9876;',method:'Mixed Ops',
-    qs:ops.map(function(d){var r=make4(d[3],0,10);return{story:'Tinh nhanh: '+d[0]+' '+d[1]+' '+d[2]+' = ?',vis:'<div class="vis-area">'+visExpr(d[0],d[1],d[2])+'</div>',choices:r.choices,ans:r.ai,tts:'Tinh nhanh '+d[0]+' '+d[1]+' '+d[2]+' bang may?',lv:d[4]};})};
+  LESSONS.L6a={name:'Cộng & Trừ Tổng Hợp',icon:'&#9876;',method:'Mixed Ops',
+    qs:ops.map(function(d){var r=make4(d[3],0,10);return{story:'Tính nhanh: '+d[0]+' '+d[1]+' '+d[2]+' = ?',vis:'<div class="vis-area">'+visExpr(d[0],d[1],d[2])+'</div>',choices:r.choices,ans:r.ai,tts:'Tính nhanh '+d[0]+' '+d[1]+' '+d[2]+' bằng mấy?',lv:d[4]};})};
 })();
 
 // L6b Logic
 (function(){
   var data=[
-    {s:'Me co 3 con ca. Bo co nhieu hon me 2 con. Bo co may con?',a:5,lv:2},
-    {s:'Co 4 vo do va 4 vo vang. Co may vo tat ca?',a:8,lv:2},
-    {s:'Co 10 ngoi sao. Da tim 6 ngoi. Con phai tim may ngoi?',a:4,lv:2},
-    {s:'Cay 1 co 3 qua, cay 2 co 5 qua. Ca hai cay co may qua?',a:8,lv:3},
-    {s:'Co 9 con cua. Da bat 5 con. Con may con chua bat?',a:4,lv:3},
-    {s:'Tim 6 vien ngoc nhung mat 2 vien. Con may vien?',a:4,lv:3},
-    {s:'Sang cau 4 con, chieu cau them 3 con. Duoc may con ca ngay?',a:7,lv:3},
-    {s:'Day 2, 4, 6, __. So tiep theo la may?',a:8,lv:3},
+    {s:'Mẹ có 3 con cá. Bố có nhiều hơn mẹ 2 con. Bố có mấy con?',a:5,lv:2},
+    {s:'Có 4 vỏ đỏ và 4 vỏ vàng. Có mấy vỏ tất cả?',a:8,lv:2},
+    {s:'Có 10 ngôi sao. Đã tìm 6 ngôi. Còn phải tìm mấy ngôi?',a:4,lv:2},
+    {s:'Cây 1 có 3 quả, cây 2 có 5 quả. Cả hai cây có mấy quả?',a:8,lv:3},
+    {s:'Có 9 con cua. Đã bắt 5 con. Còn mấy con chưa bắt?',a:4,lv:3},
+    {s:'Tìm 6 viên ngọc nhưng mất 2 viên. Còn mấy viên?',a:4,lv:3},
+    {s:'Sáng câu 4 con, chiều câu thêm 3 con. Được mấy con cả ngày?',a:7,lv:3},
+    {s:'Dãy 2, 4, 6, __. Số tiếp theo là mấy?',a:8,lv:3},
   ];
-  LESSONS.L6b={name:'Toan Tu Duy',icon:'&#129504;',method:'Logic & Thinking',
+  LESSONS.L6b={name:'Toán Tư Duy',icon:'&#129504;',method:'Logic & Thinking',
     qs:data.map(function(d){var r=make4(d.a,0,10);return{story:d.s,vis:'<div class="vis-area"><div style="font-size:3rem;">&#129300;</div></div>',choices:r.choices,ans:r.ai,tts:d.s,lv:d.lv};})};
 })();
 
 // L6c Grand
 (function(){
   var mix=[];
-  for(var i=0;i<8;i++){var a=Math.floor(Math.random()*6)+1;var b=Math.floor(Math.random()*(10-a))+1;var op=Math.random()<.5?'+':'-';var x=op==='-'&&a<b?b:a;var y=op==='-'&&a<b?a:b;var ans=op==='+'?x+y:x-y;var r=make4(ans,0,10);mix.push({story:'Tinh nhanh: '+x+' '+op+' '+y+' = ?',vis:'<div class="vis-area">'+visExpr(x,op,y)+'</div>',choices:r.choices,ans:r.ai,tts:'Tinh nhanh '+x+' '+(op==='+'?'cong':'tru')+' '+y+' bang may?',lv:3});}
-  LESSONS.L6c={name:'Mo Kho Bau!',icon:'&#128176;',method:'Grand Challenge',qs:mix};
+  for(var i=0;i<8;i++){var a=Math.floor(Math.random()*6)+1;var b=Math.floor(Math.random()*(10-a))+1;var op=Math.random()<.5?'+':'-';var x=op==='-'&&a<b?b:a;var y=op==='-'&&a<b?a:b;var ans=op==='+'?x+y:x-y;var r=make4(ans,0,10);mix.push({story:'Tính nhanh: '+x+' '+op+' '+y+' = ?',vis:'<div class="vis-area">'+visExpr(x,op,y)+'</div>',choices:r.choices,ans:r.ai,tts:'Tính nhanh '+x+' '+(op==='+'?'cộng':'trừ')+' '+y+' bằng mấy?',lv:3});}
+  LESSONS.L6c={name:'Mở Kho Báu!',icon:'&#128176;',method:'Grand Challenge',qs:mix};
 })();
 
 // ===== STATE =====
@@ -545,7 +545,7 @@ function renderQ(){
   sb.appendChild(br);
   var ttsB=document.createElement('button');
   ttsB.className='tts-btn';
-  ttsB.textContent='&#128266; Nghe doc de bai';
+  ttsB.innerHTML='🔊 Nghe đọc đề bài';
   ttsB.onclick=(function(t){return function(){speak(t);};})(q.tts);
   sb.appendChild(ttsB);
   wrap.appendChild(sb);
@@ -578,7 +578,7 @@ function renderQ(){
   var nxt=document.createElement('button');
   nxt.className='nxt-btn';
   nxt.id='nxt';
-  nxt.textContent=CUR.qi+1<CUR.qs.length?'Cau tiep theo >>>':'Hoan thanh bai!';
+  nxt.textContent=CUR.qi+1<CUR.qs.length?'Câu tiếp theo >>>':'Hoàn thành bài!';
   nxt.style.display='none';
   nxt.onclick=function(){nextQ();};
   wrap.appendChild(nxt);
@@ -588,8 +588,8 @@ function renderQ(){
 }
 
 // ===== CHECK ANSWER =====
-var PRAISE=['Xuat sac!','Tuyet voi!','Gioi qua!','Hoan hao!','WOW!','Thong minh qua!'];
-var WRONG=['Co gang nao!','Gan dung roi!','Khong sao, tiep tuc!'];
+var PRAISE=['Xuất sắc!','Tuyệt vời!','Giỏi quá!','Hoàn hảo!','WOW!','Thông minh quá!'];
+var WRONG=['Cố gắng nào!','Gần đúng rồi!','Không sao, tiếp tục!'];
 
 function checkAns(idx){
   if(CUR.answered)return;
@@ -614,7 +614,7 @@ function checkAns(idx){
       CUR.score++;
       spawnConf(7);
     } else {
-      fb.innerHTML='<div class="fb no">'+WRONG[~~(Math.random()*WRONG.length)]+' Dap an dung la <b>'+q.choices[correct]+'</b>!</div>';
+      fb.innerHTML='<div class="fb no">'+WRONG[~~(Math.random()*WRONG.length)]+' Đáp án đúng là <b>'+q.choices[correct]+'</b>!</div>';
     }
   }
 
@@ -638,9 +638,9 @@ function finishLesson(){
   if(s>prev){ST.stars+=(s-prev);ST.comp[CUR.lid]=s;save();}
   var e3=['&#127882;','&#128081;','&#128176;','&#127942;'],e2=['&#128522;','&#127775;'],e1=['&#128170;'];
   document.getElementById('m-ico').textContent=s===3?e3[~~(Math.random()*e3.length)]:s===2?e2[0]:e1[0];
-  document.getElementById('m-ttl').textContent=s===3?'Hoan hao!':s===2?'Gioi lam!':'Co gang them!';
+  document.getElementById('m-ttl').textContent=s===3?'Hoàn hảo!':s===2?'Giỏi lắm!':'Cố gắng thêm!';
   document.getElementById('m-stars').textContent=Array(s+1).join('&#11088;')+Array(4-s).join('&#9734;');
-  document.getElementById('m-msg').textContent='Dung '+CUR.score+'/'+CUR.qs.length+' cau! +'+s+' sao';
+  document.getElementById('m-msg').textContent='Đúng '+CUR.score+'/'+CUR.qs.length+' câu! +'+s+' sao';
   document.getElementById('modal').classList.add('on');
   if(s===3)spawnConf(25);
   updateHdr();
