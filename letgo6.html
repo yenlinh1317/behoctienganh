@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's Go 6 - English Learning Adventure</title>
+<style>
+:root{--purple:#6B21A8;--purple-light:#9333EA;--purple-dark:#4C1D95;--gold:#F59E0B;--gold-light:#FCD34D;--green:#10B981;--red:#EF4444;--blue:#3B82F6;--orange:#F97316;--bg:#F5F0FF;--shadow:0 4px 20px rgba(107,33,168,.15);--radius:16px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#1F1047;min-height:100vh}
+#topNav{background:linear-gradient(135deg,#4C1D95,#6B21A8);padding:12px 16px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100;box-shadow:0 4px 15px rgba(0,0,0,.3);flex-wrap:wrap}
+#topNav .logo{font-size:19px;font-weight:900;color:#FCD34D;text-shadow:2px 2px 4px rgba(0,0,0,.3);flex:1;min-width:100px}
+#topNav .logo span{color:#fff}
+.nav-btn{background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3);padding:6px 11px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.nav-btn:hover,.nav-btn.active{background:#F59E0B;color:#4C1D95;border-color:#F59E0B}
+#scoreDisplay{background:rgba(255,255,255,.2);color:#FCD34D;padding:6px 12px;border-radius:20px;font-weight:700;font-size:13px;border:2px solid rgba(255,255,255,.3)}
+.screen{display:none;padding:14px;max-width:900px;margin:0 auto}.screen.active{display:block}
+.hero{background:linear-gradient(135deg,#6B21A8,#9333EA);border-radius:var(--radius);padding:22px;color:#fff;text-align:center;margin-bottom:18px;box-shadow:var(--shadow)}
+.hero h1{font-size:clamp(20px,5vw,38px);font-weight:900;text-shadow:2px 2px 8px rgba(0,0,0,.3)}
+.hero p{font-size:clamp(12px,3vw,16px);opacity:.9;margin-top:5px}
+.prog-bar-wrap{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.prog-label{font-size:11px;color:#666;min-width:55px}
+.prog-bar{flex:1;height:9px;background:#E9E0FF;border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#9333EA,#F59E0B);border-radius:10px;transition:width .8s}
+.prog-pct{font-size:11px;color:#6B21A8;font-weight:700;min-width:32px}
+.units-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.unit-card{background:#fff;border-radius:var(--radius);padding:15px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:all .2s;border:3px solid transparent}
+.unit-card:hover{transform:translateY(-3px);border-color:#9333EA;box-shadow:0 8px 30px rgba(107,33,168,.25)}
+.unit-card.completed{border-color:#10B981;background:linear-gradient(135deg,#F0FFF8,#ECFDF5)}
+.unit-card .uicon{font-size:32px;margin-bottom:7px}.unit-card .unum{font-size:10px;color:#9333EA;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.unit-card .utitle{font-size:13px;font-weight:800;color:#4C1D95;margin:3px 0}.unit-card .uprog{font-size:10px;color:#888}
+.unit-header{background:linear-gradient(135deg,#6B21A8,#9333EA);border-radius:var(--radius);padding:16px;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:11px}
+.back-btn{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);color:#fff;padding:7px 12px;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px}
+.back-btn:hover{background:rgba(255,255,255,.35)}
+.unit-header h2{font-size:clamp(16px,4vw,24px);font-weight:900;flex:1}
+.tab-bar{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.tab-btn{background:#fff;border:2px solid #E9E0FF;color:#6B21A8;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:700;white-space:nowrap;transition:all .2s}
+.tab-btn:hover,.tab-btn.active{background:#6B21A8;color:#fff;border-color:#6B21A8}
+.lesson-content{background:#fff;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.section-title{font-size:17px;font-weight:900;color:#4C1D95;margin-bottom:13px}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;margin-bottom:16px}
+.vocab-card{background:linear-gradient(135deg,#F5F0FF,#EDE9FE);border-radius:12px;padding:11px;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.vocab-card:hover{border-color:#6B21A8;transform:translateY(-2px)}
+.vemoji{font-size:28px;margin-bottom:5px}.vword{font-size:13px;font-weight:800;color:#4C1D95}
+.vtype{font-size:9px;color:#9333EA;margin-top:2px}.vmeaning{font-size:11px;color:#555;margin-top:3px;line-height:1.3}
+.speak-btn{display:inline-flex;align-items:center;gap:5px;background:#6B21A8;color:#fff;border:none;padding:8px 16px;border-radius:25px;cursor:pointer;font-size:12px;font-weight:700;transition:all .2s;margin:3px}
+.speak-btn:hover{background:#4C1D95;transform:scale(1.03)}.speak-btn.record{background:#EF4444}
+.speak-btn.recording{animation:pr 1s infinite}
+@keyframes pr{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(239,68,68,.5)}50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+.conv-box{background:#F8F4FF;border-radius:12px;padding:14px;margin-bottom:14px;border-left:4px solid #6B21A8}
+.dial-line{display:flex;gap:9px;margin-bottom:10px;align-items:flex-start}
+.dial-spk{font-weight:800;color:#6B21A8;min-width:52px;font-size:12px;padding-top:4px}
+.dial-txt{background:#fff;border-radius:12px;padding:8px 12px;font-size:13px;flex:1;box-shadow:0 2px 8px rgba(0,0,0,.07);line-height:1.5;cursor:pointer}
+.gram-box{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:12px;padding:14px;margin-bottom:14px;border-left:4px solid #F59E0B}
+.gram-box h4{color:#92400E;font-size:14px;margin-bottom:9px}
+.gram-pat{background:#fff;border-radius:10px;padding:10px;margin:7px 0;font-size:12px;border:2px dashed #FCD34D}
+.gram-pat strong{color:#6B21A8;font-size:14px}.gram-ex{font-size:11px;color:#555;margin-top:4px;font-style:italic}
+.gram-tip{background:#fff;border-radius:8px;padding:9px;margin-top:9px;font-size:12px;color:#444;border-left:3px solid #10B981}
+.read-txt{background:#F8F4FF;border-radius:12px;padding:16px;margin-bottom:14px;line-height:1.9;font-size:14px}
+.read-title{font-size:20px;font-weight:900;color:#4C1D95;margin-bottom:11px;text-align:center}
+.new-words{background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border-radius:10px;padding:12px;margin-top:12px}
+.new-words h5{color:#F97316;font-size:13px;margin-bottom:7px;font-weight:800}
+.new-words ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.new-words ul li{background:#fff;padding:3px 11px;border-radius:20px;font-size:12px;font-weight:600;color:#F97316;cursor:pointer}
+.ph-box{background:linear-gradient(135deg,#F0F9FF,#E0F2FE);border-radius:12px;padding:14px;margin-bottom:14px}
+.ph-box h4{color:#0369A1;font-size:14px;margin-bottom:9px;font-weight:800}
+.ph-pat{font-size:20px;font-weight:900;color:#0369A1;text-align:center;margin-bottom:11px}
+.ph-words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ph-word{background:#fff;border:2px solid #BAE6FD;border-radius:10px;padding:7px 14px;font-size:15px;font-weight:700;color:#0369A1;cursor:pointer;transition:all .2s}
+.ph-word:hover{background:#0369A1;color:#fff;border-color:#0369A1}
+.ph-word .hl{color:#EF4444}.ph-word:hover .hl{color:#FCD34D}
+.action-row{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.abtn{flex:1;min-width:110px;background:linear-gradient(135deg,#6B21A8,#9333EA);color:#fff;border:none;padding:11px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:800;transition:all .2s;text-align:center;box-shadow:0 4px 15px rgba(107,33,168,.3)}
+.abtn:hover{transform:translateY(-2px)}.abtn.gold{background:linear-gradient(135deg,#F59E0B,#F97316)}.abtn.red{background:linear-gradient(135deg,#EF4444,#B91C1C)}.abtn.green{background:linear-gradient(135deg,#10B981,#059669)}
+.qwrap{max-width:580px;margin:0 auto}
+.qhd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.qpbar{height:8px;background:#E9E0FF;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.qpfill{height:100%;background:linear-gradient(90deg,#6B21A8,#F59E0B);border-radius:10px;transition:width .4s}
+.quiz-q{background:linear-gradient(135deg,#6B21A8,#9333EA);color:#fff;border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:16px;box-shadow:var(--shadow)}
+.qtype{font-size:10px;text-transform:uppercase;letter-spacing:2px;opacity:.8;margin-bottom:6px}
+.qtext{font-size:clamp(14px,3.5vw,21px);font-weight:800;line-height:1.4}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
+@media(max-width:440px){.quiz-opts{grid-template-columns:1fr}}
+.qopt{background:#fff;border:3px solid #E9E0FF;border-radius:12px;padding:12px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;text-align:center}
+.qopt:hover:not(.disabled){border-color:#6B21A8;transform:translateY(-2px)}.qopt.correct{background:linear-gradient(135deg,#F0FFF8,#DCFCE7);border-color:#10B981;color:#10B981}.qopt.wrong{background:linear-gradient(135deg,#FFF5F5,#FEE2E2);border-color:#EF4444;color:#EF4444}.qopt.disabled{cursor:not-allowed}
+.qfb{text-align:center;padding:13px;border-radius:12px;font-size:16px;font-weight:800;margin-bottom:13px}
+.qfb.correct{background:linear-gradient(135deg,#F0FFF8,#DCFCE7);color:#10B981}.qfb.wrong{background:linear-gradient(135deg,#FFF5F5,#FEE2E2);color:#EF4444}
+.spk-box{background:linear-gradient(135deg,#F0F9FF,#E0F2FE);border-radius:12px;padding:16px;margin-bottom:12px}
+.spk-tgt{font-size:18px;font-weight:800;color:#3B82F6;text-align:center;margin-bottom:12px}
+.spk-ctrl{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:11px}
+.wave{display:flex;align-items:center;justify-content:center;gap:4px;height:34px}
+.wave .bar{width:4px;background:#3B82F6;border-radius:4px}
+.wave.active .bar{animation:wa .8s ease-in-out infinite}
+.wave .bar:nth-child(1){height:10px;animation-delay:0s}.wave .bar:nth-child(2){height:20px;animation-delay:.1s}.wave .bar:nth-child(3){height:30px;animation-delay:.2s}.wave .bar:nth-child(4){height:20px;animation-delay:.15s}.wave .bar:nth-child(5){height:15px;animation-delay:.05s}
+@keyframes wa{0%,100%{transform:scaleY(1)}50%{transform:scaleY(2)}}
+.sdisp{text-align:center;font-size:44px;font-weight:900}
+.sdisp.excellent{color:#10B981}.sdisp.good{color:#F59E0B}.sdisp.tryagain{color:#EF4444}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.game-card{background:#fff;border-radius:var(--radius);padding:16px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:all .2s;border:3px solid transparent}
+.game-card:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(107,33,168,.25);border-color:#9333EA}
+.gicon{font-size:42px;margin-bottom:7px}.gname{font-size:13px;font-weight:900;color:#4C1D95;margin-bottom:3px}.gdesc{font-size:11px;color:#666}.gstars{color:#F59E0B;font-size:12px;margin-top:4px}
+.game-area{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.gtb{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.gtb h3{font-size:16px;font-weight:900;color:#4C1D95}
+.gsc{background:#FCD34D;color:#92400E;padding:5px 13px;border-radius:20px;font-weight:800;font-size:12px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mc h4{text-align:center;color:#6B21A8;font-size:12px;margin-bottom:8px}
+.mi{background:#F5F0FF;border:2px solid #E9E0FF;border-radius:10px;padding:8px 11px;cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:all .2s;margin-bottom:6px}
+.mi:hover{border-color:#6B21A8}.mi.selected{background:#6B21A8;color:#fff;border-color:#6B21A8}.mi.matched{background:#10B981;color:#fff;border-color:#10B981;cursor:default}
+.mi.wf{animation:wf .5s}@keyframes wf{0%,100%{background:#F5F0FF}50%{background:#FEE2E2;border-color:#EF4444}}
+.scl,.sca{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0}
+.ltile{width:40px;height:40px;background:#6B21A8;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;user-select:none}
+.ltile:hover{background:#4C1D95;transform:scale(1.1)}.ltile.used{background:#ccc;cursor:default}
+.abox{width:40px;height:40px;border:3px solid #9333EA;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#6B21A8;cursor:pointer;transition:all .2s}
+.abox.filled{background:#F5F0FF}
+.mem-grid{display:grid;gap:8px}
+.mem-card{aspect-ratio:1;background:#6B21A8;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .3s;min-height:56px}
+.mem-card.flipped,.mem-card.matched{background:#fff;border:3px solid #9333EA}.mem-card.matched{background:#10B981;border-color:#10B981;cursor:default}
+.mem-ci{font-size:11px;font-weight:800;color:#4C1D95;text-align:center;padding:3px;line-height:1.3}
+.wb{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:40px}
+.wchip{background:#6B21A8;color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:700;transition:all .2s}
+.wchip:hover{background:#4C1D95;transform:scale(1.05)}.wchip.used{background:#ccc;cursor:default}
+.bsent{display:flex;flex-wrap:wrap;gap:6px;min-height:40px;background:#F8F4FF;border-radius:10px;padding:9px;border:2px dashed #9333EA;margin-bottom:12px}
+.bword{background:#fff;border:2px solid #9333EA;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:700;color:#4C1D95;cursor:pointer}
+.bword:hover{border-color:#EF4444}
+.wc{display:flex;flex-direction:column;align-items:center}
+.wwrap{position:relative;width:min(260px,78vw);height:min(260px,78vw);margin:14px auto}
+#spinCanvas{border-radius:50%;box-shadow:0 8px 30px rgba(107,33,168,.3)}
+.warr{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(2px 2px 4px rgba(0,0,0,.3));z-index:10}
+.spnbtn{background:linear-gradient(135deg,#F59E0B,#F97316);color:#fff;border:none;padding:11px 26px;border-radius:25px;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(249,115,22,.4);transition:all .2s}
+.spnbtn:hover:not(:disabled){transform:translateY(-2px)}.spnbtn:disabled{opacity:.5;cursor:not-allowed}
+.rew{text-align:center;padding:22px}
+.rew h2{font-size:26px;font-weight:900;color:#4C1D95;margin-bottom:9px}
+.rstars{font-size:46px;animation:bs .6s ease infinite alternate}
+@keyframes bs{from{transform:scale(1)}to{transform:scale(1.1)}}
+.confetti-shower{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+.cp{position:absolute;width:10px;height:10px;border-radius:2px;animation:cf 3s linear forwards}
+@keyframes cf{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.cww{overflow-x:auto;margin-bottom:12px}
+.cwg{display:inline-grid;gap:3px}
+.cwc{width:33px;height:33px;border:2px solid #9333EA;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;border-radius:4px}
+.cwc input{width:100%;height:100%;border:none;background:transparent;text-align:center;font-size:16px;font-weight:800;color:#4C1D95;text-transform:uppercase;padding:0;outline:none}
+.cwc input:focus{outline:2px solid #F59E0B;border-radius:3px}.cwc.black{background:#4C1D95;border-color:#4C1D95}.cwc.ok input{color:#10B981;background:#DCFCE7}
+.cwcl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:480px){.cwcl{grid-template-columns:1fr}}
+.cwcl h4{color:#6B21A8;margin-bottom:6px;font-size:13px}.cwcl li{font-size:12px;margin-bottom:5px;line-height:1.4;color:#444}
+.prog-ov{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:16px;box-shadow:var(--shadow)}
+.prog-ov h3{color:#6B21A8;font-size:14px;margin-bottom:10px}
+.hidden{display:none!important}
+@media(max-width:580px){.units-grid{grid-template-columns:repeat(2,1fr)}.vocab-grid{grid-template-columns:repeat(2,1fr)}.games-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:340px){.units-grid,.vocab-grid,.games-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="topNav">
+  <div class="logo">🐱 <span>Let's</span> Go <span>6</span></div>
+  <button class="nav-btn active" onclick="showScreen('home')">🏠 Home</button>
+  <button class="nav-btn" onclick="showScreen('games')">🎮 Games</button>
+  <button class="nav-btn" onclick="showScreen('progress')">📊 Progress</button>
+  <div id="scoreDisplay">⭐ <span id="totalScore">0</span></div>
+</div>
+<div class="confetti-shower hidden" id="conf"></div>
+
+<div class="screen active" id="homeScreen">
+  <div class="hero"><div style="font-size:24px;margin-bottom:5px;">⭐🐱⭐</div><h1>Let's Go 6!</h1><p>English Learning Adventure — 5th Edition</p><p style="font-size:11px;opacity:.8;margin-top:4px;">8 Units · 4 Skills Per Unit · 8 Games · Full Curriculum</p></div>
+  <div class="prog-ov" id="hp"><h3>📈 My Learning Progress</h3><div id="pbars"></div></div>
+  <div class="section-title">📚 Choose Your Unit</div>
+  <div class="units-grid" id="ugrid"></div>
+</div>
+
+<div class="screen" id="unitScreen">
+  <div class="unit-header" id="uh">
+    <button class="back-btn" onclick="showScreen('home')">← Back</button>
+    <div><div style="font-size:10px;opacity:.8;text-transform:uppercase;letter-spacing:1px;">Unit <span id="unum"></span></div><h2 id="utitle"></h2></div>
+    <div style="font-size:36px;" id="ubadge"></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('talk')">💬 Talk</button>
+    <button class="tab-btn" onclick="showTab('learn')">📖 Learn</button>
+    <button class="tab-btn" onclick="showTab('more')">📚 More</button>
+    <button class="tab-btn" onclick="showTab('grammar')">🔤 Grammar</button>
+    <button class="tab-btn" onclick="showTab('read')">📰 Read</button>
+    <button class="tab-btn" onclick="showTab('phonics')">🔊 Phonics</button>
+    <button class="tab-btn" onclick="showTab('quiz')">✏️ Quiz</button>
+    <button class="tab-btn" onclick="showTab('speak')">🎤 Speak</button>
+  </div>
+  <div id="ucontent"></div>
+</div>
+
+<div class="screen" id="gamesScreen">
+  <div class="hero" style="margin-bottom:16px;"><h1>🎮 Game Zone</h1><p>Play games to master your English!</p></div>
+  <div class="games-grid" id="ggrid"></div>
+  <div id="agame" style="margin-top:16px;"></div>
+</div>
+
+<div class="screen" id="progressScreen">
+  <div class="hero" style="margin-bottom:16px;"><h1>📊 My Progress</h1><p>Track your learning journey!</p></div>
+  <div id="pdet"></div>
+</div>
+<script>
+const UNITS=[
+{num:1,title:"School Days",icon:"🏫",
+vt:[{w:"scarf",e:"🧣",t:"noun",m:"cloth worn around the neck"},{w:"mittens",e:"🧤",t:"noun",m:"gloves without separate fingers"},{w:"gloves",e:"🧤",t:"noun",m:"hand covers with separate fingers"},{w:"glasses",e:"👓",t:"noun",m:"lenses worn on the face"},{w:"belt",e:"🪢",t:"noun",m:"strap worn around the waist"},{w:"watch",e:"⌚",t:"noun",m:"timepiece worn on the wrist"}],
+vl:[{w:"watering the plants",e:"🌱",t:"activity",m:"giving water to plants"},{w:"feeding the fish",e:"🐟",t:"activity",m:"giving food to fish"},{w:"writing on the board",e:"✏️",t:"activity",m:"writing on a blackboard"},{w:"talking to the teacher",e:"👨‍🏫",t:"activity",m:"speaking with a teacher"},{w:"reading a textbook",e:"📚",t:"activity",m:"reading a school book"},{w:"writing an essay",e:"📝",t:"activity",m:"writing a long piece of writing"}],
+vm:[{w:"talking on his cell phone",e:"📱",t:"activity",m:"speaking on a mobile phone"},{w:"reading a magazine",e:"📰",t:"activity",m:"reading a magazine"},{w:"walking in the park",e:"🚶",t:"activity",m:"walking in a park"},{w:"drinking some water",e:"💧",t:"activity",m:"drinking water"},{w:"playing a game",e:"🎲",t:"activity",m:"playing a game"},{w:"sitting on a bench",e:"🪑",t:"activity",m:"sitting on a park bench"}],
+gram:{name:"Relative Clauses (Who) + Past Continuous + Possessive Pronouns",
+pats:[{p:"He's the boy who is [verb+ing].",ex:"He's the boy who is watering the plants."},{p:"She's the girl who is [verb+ing].",ex:"She's the girl who is writing an essay."},{p:"Subject was [verb+ing] when it started to [verb].",ex:"Jenny was sitting on a bench when it started to rain."},{p:"Whose [item]? It's [Name]'s. It's [hers/his/mine/yours].",ex:"Whose scarf is that? It's Anna's scarf. It's hers."}],
+tip:"WHO describes a person. Possessives: my→mine, her→hers, his→his, your→yours. Past continuous = was/were + verb-ing."},
+dial:[{s:"Kate",t:"Whose scarf is that?"},{s:"Jenny",t:"It's Anna's scarf."},{s:"Kate",t:"Whose mittens are those?"},{s:"Jenny",t:"They're hers, too."},{s:"Kate",t:"Is that her glove, too?"},{s:"Jenny",t:"No, it isn't. I think it's Jim's glove."},{s:"Kate",t:"Which boy is Jim?"},{s:"Jenny",t:"He's the boy over there."},{s:"Jenny",t:"Jim, I think this is yours."},{s:"Jim",t:"Oh! Thanks for finding it."},{s:"Jenny",t:"You're welcome."}],
+read:{title:"The First Ice Pop",text:"Do you like ice pops? A young boy made the first ice pop in 1905. One cold night, Frank was making soda water outside. He mixed soda powder and water in a cup. He was mixing the soda with a straw when he heard his mother say come inside. Frank forgot to take his cup with him. In the morning, he saw the cup. The soda water was frozen. He pulled the frozen soda out of the cup. It was an ice pop!",nw:["ice pop","soda","mix","soda powder","straw","freeze→frozen"],type:"Historical Story"},
+ph:{pat:"ow, aw",words:["cow","saw","how","jaw","bow","caw","now","law","paw","glow"],v:"ow = /aʊ/ as in cow | aw = /ɔː/ as in saw"},
+song:"Whose Boots Are These?"},
+
+{num:2,title:"At the Aquarium",icon:"🐠",
+vt:[{w:"aquarium",e:"🏛️",t:"noun",m:"a place where sea animals are on display"},{w:"tour",e:"🗺️",t:"noun",m:"a journey to visit interesting places"},{w:"lecture",e:"🎓",t:"noun",m:"an educational talk given to a group"},{w:"exhibit",e:"🖼️",t:"noun",m:"a public display of interesting things"},{w:"shark",e:"🦈",t:"noun",m:"a large, dangerous fish"},{w:"octopus",e:"🐙",t:"noun",m:"a sea creature with eight arms"}],
+vl:[{w:"amazing",e:"😮",t:"adj(thing)",m:"very surprising and impressive"},{w:"amazed",e:"🤩",t:"adj(feeling)",m:"feeling very surprised"},{w:"boring",e:"😴",t:"adj(thing)",m:"not at all interesting"},{w:"bored",e:"🥱",t:"adj(feeling)",m:"feeling uninterested"},{w:"exciting",e:"🎉",t:"adj(thing)",m:"causing strong enthusiasm"},{w:"excited",e:"😃",t:"adj(feeling)",m:"feeling very enthusiastic"},{w:"scary",e:"👻",t:"adj(thing)",m:"causing fear"},{w:"scared",e:"😱",t:"adj(feeling)",m:"feeling afraid"}],
+vm:[{w:"jellyfish",e:"🪼",t:"noun",m:"a soft, transparent sea animal"},{w:"sea turtle",e:"🐢",t:"noun",m:"a turtle that lives in the ocean"},{w:"squid",e:"🦑",t:"noun",m:"a sea creature with ten arms"},{w:"video",e:"📹",t:"noun",m:"recorded moving images"},{w:"ride",e:"🎡",t:"noun",m:"a journey in a vehicle for fun"},{w:"pedal boat",e:"⛵",t:"noun",m:"a boat moved by pedaling"}],
+gram:{name:"Participial Adjectives (-ed/-ing) + Reported Speech",
+pats:[{p:"-ED adjective = how a person FEELS.",ex:"She was amazed. He was scared. They were bored."},{p:"-ING adjective = describing a THING.",ex:"The shark was scary. The exhibit was amazing."},{p:"Subject + said + subject + was + adj.",ex:"Kate said the sea turtles were amazing."},{p:"What did you like best? I liked the [noun].",ex:"I liked the penguins best. They were cute."}],
+tip:"-ED = FEEL (I was bored). -ING = DESCRIBE (movie was boring). The boring movie made me bored."},
+dial:[{s:"Kate",t:"What a great day! But I'm tired now."},{s:"Andy",t:"What did you like best?"},{s:"Kate",t:"I think I liked the penguins best. They were cute."},{s:"Jenny",t:"I liked the sharks. They were scary!"},{s:"Andy",t:"The exhibit was amazing."},{s:"Jenny",t:"She was amazed."}],
+read:{title:"Waves in a Bottle",text:"Do you like to look at waves when you go to the beach? You can look at waves in a bottle, too! First, wash a bottle so you can reuse it. Put some water and a little blue color into the bottle. Next, put oil into the bottle. You can put in some glitter, too. Put some glue around the bottle cap and close the bottle. Close it tight! When you move the bottle, you will see waves!",nw:["waves","reuse","oil","glitter"],type:"How-to Article"},
+ph:{pat:"oi, oo",words:["coin","book","oil","cook","join","look","foil","foot","void","wood"],v:"oi = /ɔɪ/ as in coin | oo = /ʊ/ as in book"},
+song:"Aquarium Chant"},
+
+{num:3,title:"Going Shopping",icon:"🛍️",
+vt:[{w:"video camera",e:"📷",t:"noun",m:"a camera that records moving images"},{w:"necklace",e:"📿",t:"noun",m:"jewelry worn around the neck"},{w:"ring",e:"💍",t:"noun",m:"a circular band worn on a finger"},{w:"novel",e:"📖",t:"noun",m:"a long fiction book"},{w:"stuffed toy",e:"🧸",t:"noun",m:"a soft toy filled with stuffing"},{w:"earrings",e:"💎",t:"noun",m:"jewelry worn on the ears"},{w:"golf clubs",e:"⛳",t:"noun",m:"sticks used to play golf"},{w:"model",e:"✈️",t:"noun",m:"a small copy of something real"}],
+vl:[{w:"bracelet",e:"📿",t:"noun",m:"a band worn around the wrist"},{w:"cookbook",e:"📗",t:"noun",m:"a book with cooking recipes"},{w:"box of chocolates",e:"🍫",t:"noun",m:"a collection of chocolates in a box"},{w:"DVD",e:"💿",t:"noun",m:"a disc for watching movies"},{w:"a scarf",e:"🧣",t:"noun",m:"a cloth worn around the neck"},{w:"a book",e:"📚",t:"noun",m:"a printed work to read"}],
+vm:[{w:"bought a drink",e:"🥤",t:"past",m:"purchased a drink"},{w:"made a bracelet",e:"📿",t:"past",m:"created a bracelet"},{w:"sent a picture",e:"📸",t:"past",m:"sent a photo to someone"},{w:"gave a present",e:"🎁",t:"past",m:"gave a gift to someone"},{w:"showed a T-shirt",e:"👕",t:"past",m:"showed someone a T-shirt"},{w:"told a story",e:"📚",t:"past",m:"narrated a story to someone"}],
+gram:{name:"Should/Could + Indirect Object Pronouns (him/her)",
+pats:[{p:"Should I get [person] a [gift]?",ex:"Should I get my sister a necklace or a ring?"},{p:"You should get [him/her] a [gift].",ex:"You should get her a ring. They should get him a novel."},{p:"Subject + showed/gave/made/sent + [him/her] + [object].",ex:"She showed him a T-shirt. She made her a bracelet."},{p:"What did she make her? She made her a [gift].",ex:"What did she make her? She made her a bracelet."}],
+tip:"HER = female, HIM = male (indirect object). SHOULD = advice. COULD = polite suggestion."},
+dial:[{s:"Kate",t:"I need a present for my mother. What should I get her?"},{s:"Jenny",t:"You could get her a teapot. Or you could get her a cookbook."},{s:"Kate",t:"She doesn't like tea, and she already has a lot of cookbooks. How about a scarf?"},{s:"Jenny",t:"That's a great idea!"}],
+read:{title:"Happiness Is a Clean Park",text:"Kim was walking in the park when she saw some trash. She picked it up and put it in the trash can. Other people saw Kim cleaning and started cleaning, too. Soon the whole park was clean. Everyone was happy! The park was beautiful. Kim learned that one person can make a big difference. Small acts of kindness can make the world a better place.",nw:["trash","happiness","kindness","difference","action","clean"],type:"Story"},
+ph:{pat:"oo, au",words:["broom","August","moon","autumn","room","sauce","food","pause","soon","haul"],v:"oo = /uː/ as in broom | au = /ɔː/ as in August"},
+song:"Today's My Brother's Birthday"},
+
+{num:4,title:"Around Town",icon:"🏙️",
+vt:[{w:"ice cream shop",e:"🍦",t:"place",m:"a shop selling ice cream"},{w:"bakery",e:"🥐",t:"place",m:"a shop selling bread and cakes"},{w:"sports store",e:"⚽",t:"place",m:"a store selling sports equipment"},{w:"clothing store",e:"👗",t:"place",m:"a store selling clothes"},{w:"food court",e:"🍜",t:"place",m:"an area with many food stalls"},{w:"bookstore",e:"📚",t:"place",m:"a store where books are sold"},{w:"game store",e:"🎮",t:"place",m:"a store selling games"}],
+vl:[{w:"on the corner",e:"📍",t:"location",m:"where two streets meet"},{w:"around the corner from",e:"↩️",t:"location",m:"very near, just past a corner"},{w:"on the right",e:"➡️",t:"location",m:"on the right side"},{w:"on the left",e:"⬅️",t:"location",m:"on the left side"},{w:"across the street from",e:"🔄",t:"location",m:"directly opposite"},{w:"next to",e:"↔️",t:"location",m:"right beside something"}],
+vm:[{w:"Go straight",e:"⬆️",t:"direction",m:"continue going forward"},{w:"Turn left",e:"⬅️",t:"direction",m:"change direction to the left"},{w:"Turn right",e:"➡️",t:"direction",m:"change direction to the right"},{w:"Go two blocks",e:"🏘️",t:"direction",m:"travel two city blocks"},{w:"Cross the street",e:"🚶",t:"direction",m:"walk to the other side of the road"},{w:"clockwise",e:"🔄",t:"direction",m:"same direction as clock hands"},{w:"counterclockwise",e:"↩️",t:"direction",m:"opposite direction to clock hands"}],
+gram:{name:"Prepositions of Location + Giving Directions",
+pats:[{p:"It's [preposition] the [place].",ex:"It's across the street from the bank. It's on the corner."},{p:"Where's the [place]? It's [location].",ex:"Where's the ice cream shop? It's across the street from the bank."},{p:"Go straight. Turn left or right. Go two blocks.",ex:"Go to the corner and turn right. Go two blocks and turn right."},{p:"I'm at [location]. How do I get to [place]?",ex:"I'm at the bookstore. How do I get to the park?"}],
+tip:"ON the corner (not IN). ACROSS FROM = directly opposite. NEXT TO = right beside. AT the intersection of two streets."},
+dial:[{s:"Kate",t:"Where's the food court?"},{s:"Andy",t:"Let's look at the map. It's across from the music store."},{s:"Kate",t:"We should go this way. There's the food court."},{s:"Andy",t:"Where are the boys? They're over there, next to the ice cream shop."}],
+read:{title:"The Blue Planet",text:"Did you know that most of Earth is covered in water? Earth is called the Blue Planet because so much of it is ocean. The oceans are very important. They give us food like fish and seafood. The oceans also control the weather. Warm and cold water in the oceans affects the air and makes wind and rain. We must take care of our oceans!",nw:["clockwise","planet","ocean","affect","earthquake","ancient"],type:"Article"},
+ph:{pat:"ow, or",words:["blow","storm","snow","born","flow","corn","know","horn","grow","sort"],v:"ow = /oʊ/ as in blow | or = /ɔːr/ as in storm"},
+song:"Where's the Bookstore?"},
+
+{num:5,title:"Explore the World",icon:"🌍",
+vt:[{w:"Australia/Australian",e:"🇦🇺",t:"country",m:"country in Oceania"},{w:"Vietnam/Vietnamese",e:"🇻🇳",t:"country",m:"country in Southeast Asia"},{w:"Thailand/Thai",e:"🇹🇭",t:"country",m:"country in Southeast Asia"},{w:"Mexico/Mexican",e:"🇲🇽",t:"country",m:"country in North America"},{w:"Brazil/Brazilian",e:"🇧🇷",t:"country",m:"country in South America"},{w:"France/French",e:"🇫🇷",t:"country",m:"country in Western Europe"},{w:"Italy/Italian",e:"🇮🇹",t:"country",m:"country in Southern Europe"},{w:"Korea/Korean",e:"🇰🇷",t:"country",m:"country in East Asia"},{w:"Japan/Japanese",e:"🇯🇵",t:"country",m:"island country in East Asia"}],
+vl:[{w:"black beans",e:"🫘",t:"food",m:"small black beans used in cooking"},{w:"croissants",e:"🥐",t:"food",m:"buttery flaky pastry from France"},{w:"spaghetti",e:"🍝",t:"food",m:"long thin pasta from Italy"},{w:"rice noodles",e:"🍜",t:"food",m:"noodles made from rice flour"},{w:"burritos",e:"🌯",t:"food",m:"Mexican food wrapped in a tortilla"},{w:"meat pies",e:"🥧",t:"food",m:"pies with a meat filling"}],
+vm:[{w:"cacao seeds",e:"🍫",t:"noun",m:"seeds from the cacao tree"},{w:"discover",e:"🔍",t:"verb",m:"to find something for the first time"},{w:"homestay",e:"🏠",t:"noun",m:"staying in someone's home while travelling"},{w:"language",e:"🗣️",t:"noun",m:"a system of communication"},{w:"nationality",e:"🌐",t:"noun",m:"the country you belong to"},{w:"international",e:"✈️",t:"adj",m:"involving many countries"}],
+gram:{name:"Passive Voice – Present Simple + Countries & Languages",
+pats:[{p:"People in [country] speak [language].",ex:"People in Mexico speak Spanish."},{p:"[Language] is spoken in [country].",ex:"Spanish is spoken in Mexico. Vietnamese is spoken in Vietnam."},{p:"What language is spoken in [country]?",ex:"What language is spoken in Vietnam? Vietnamese is spoken in Vietnam."},{p:"Where are [food] eaten? [Food] is/are eaten in [country].",ex:"Where are black beans eaten? Black beans are eaten in Brazil."}],
+tip:"Passive = IS/ARE + past participle. Focus on WHAT happens, not WHO does it. spoken/eaten/made are past participles."},
+dial:[{s:"Jenny",t:"Have you met Anh? No, I haven't."},{s:"Kate",t:"Where's she from? She's from Vietnam."},{s:"Jenny",t:"Does Anh speak English? Yes, she does."},{s:"Kate",t:"She speaks Vietnamese and English, too."},{s:"Jenny",t:"I'd like to meet her. Have you ever been on a homestay?"}],
+read:{title:"Chocolate",text:"Chocolate comes from cacao seeds. Cacao trees grow in warm, rainy places. The seeds are taken out of the fruit and dried. Then they are roasted and ground into a powder. This powder is used to make chocolate. Chocolate was first made by ancient people in Mexico and Central America. Today, people all over the world love chocolate!",nw:["cacao seeds","discover","roast","ancient","powder","delicious"],type:"Informational Story"},
+ph:{pat:"ea, ou",words:["bread","count","head","found","dead","sound","spread","loud","dread","cloud"],v:"ea = /ɛ/ as in bread | ou = /aʊ/ as in count"},
+song:"Have You Met Alice?"},
+
+{num:6,title:"Doing Things",icon:"⚽",
+vt:[{w:"cleaned his desk",e:"🧹",t:"done",m:"tidied up his desk"},{w:"washed her hands",e:"🧼",t:"done",m:"cleaned hands with soap"},{w:"watched the movie",e:"🎬",t:"done",m:"viewed a film"},{w:"walked the dog",e:"🐕",t:"done",m:"took a dog for a walk"},{w:"gone to the store",e:"🏪",t:"done",m:"traveled to a shop"},{w:"eaten dinner",e:"🍽️",t:"done",m:"had the evening meal"},{w:"fed the cat",e:"🐈",t:"done",m:"given food to the cat"},{w:"done his homework",e:"📝",t:"done",m:"completed school homework"}],
+vl:[{w:"studied English",e:"📚",t:"experience",m:"studied the English language"},{w:"lived in New York",e:"🗽",t:"experience",m:"resided in New York City"},{w:"taught French",e:"🇫🇷",t:"experience",m:"taught the French language"},{w:"played soccer",e:"⚽",t:"experience",m:"played the sport of soccer"},{w:"had a cat",e:"🐱",t:"experience",m:"owned a cat as a pet"},{w:"been at the hotel",e:"🏨",t:"experience",m:"stayed in a hotel"}],
+vm:[{w:"talking on the phone",e:"📞",t:"ongoing",m:"speaking by telephone"},{w:"visiting Bangkok",e:"🏛️",t:"ongoing",m:"touring Bangkok city"},{w:"riding her bicycle",e:"🚲",t:"ongoing",m:"going by bicycle"},{w:"cleaning his room",e:"🧽",t:"ongoing",m:"tidying a bedroom"},{w:"waiting",e:"⏳",t:"ongoing",m:"staying until something happens"},{w:"playing baseball",e:"⚾",t:"ongoing",m:"playing the game of baseball"}],
+gram:{name:"Present Perfect + For/Since + How Long + Present Perfect Continuous",
+pats:[{p:"How long have you [past participle]?",ex:"How long have you taught French?"},{p:"I've [past participle] for [time].",ex:"I've taught French for five years."},{p:"I've [past participle] since [year].",ex:"I've taught French since 2007."},{p:"How long has she been [verb+ing]?",ex:"How long has she been riding her bicycle?"},{p:"She's been [verb+ing] for [time] / since [time].",ex:"She's been riding it for 45 minutes since ten o'clock."}],
+tip:"FOR = duration (for 3 years). SINCE = starting point (since 2007). Present perfect = HAVE/HAS + past participle."},
+dial:[{s:"Andy",t:"I'm sorry I'm late. That's OK."},{s:"Kate",t:"How long have you been waiting? Not long. A few minutes."},{s:"Jenny",t:"Have you already bought your ticket? Yes, and I bought your ticket, too!"},{s:"Andy",t:"I'm excited to see this movie! I've heard it's funny. I've heard it's scary."}],
+read:{title:"Coding Is Fun!",text:"Have you ever written computer code? Coding means writing instructions for a computer. Coders use special coding languages to create apps, games, and websites. When you write code, you tell a computer what to do. You can use coding to create all kinds of amazing things! Many schools now teach coding as an important skill for the future. Learning to code helps you think logically and solve problems.",nw:["coding","write code","develop","create","developer","coding language"],type:"Article"},
+ph:{pat:"ar, ir",words:["arm","thirteen","art","girl","hard","bird","start","shirt","park","first"],v:"ar = /ɑːr/ as in arm | ir = /ɜːr/ as in thirteen"},
+song:"How Long Has She Known Him?"},
+
+{num:7,title:"About Me",icon:"🌟",
+vt:[{w:"outgoing",e:"🤝",t:"personality",m:"friendly and sociable with people"},{w:"shy",e:"😊",t:"personality",m:"nervous or uncomfortable with strangers"},{w:"friendly",e:"😄",t:"personality",m:"kind and pleasant to other people"},{w:"studious",e:"📖",t:"personality",m:"spending a lot of time studying"},{w:"cheerful",e:"😁",t:"personality",m:"noticeably happy and optimistic"},{w:"generous",e:"💝",t:"personality",m:"freely giving to others"}],
+vl:[{w:"learn how to walk",e:"🚶",t:"milestone",m:"develop the ability to walk"},{w:"write my name",e:"✍️",t:"milestone",m:"be able to write your own name"},{w:"learn how to read",e:"📖",t:"milestone",m:"develop the ability to read"},{w:"ride a bike",e:"🚲",t:"milestone",m:"learn to ride a bicycle"},{w:"learn how to ice skate",e:"⛸️",t:"milestone",m:"learn to glide on ice with skates"},{w:"tie my shoes",e:"👟",t:"milestone",m:"learn to tie shoelaces"}],
+vm:[{w:"fly a helicopter",e:"🚁",t:"wish",m:"pilot a helicopter"},{w:"run a marathon",e:"🏃",t:"wish",m:"run a 26-mile race"},{w:"visit London",e:"🇬🇧",t:"wish",m:"travel to London, UK"},{w:"speak more languages",e:"🗣️",t:"wish",m:"be able to speak other languages"},{w:"play golf",e:"⛳",t:"wish",m:"play the sport of golf"},{w:"drive a car",e:"🚗",t:"wish",m:"operate an automobile"},{w:"act in a play",e:"🎭",t:"wish",m:"perform in a theater production"},{w:"conduct an orchestra",e:"🎼",t:"wish",m:"direct a musical orchestra"}],
+gram:{name:"When did you learn… + I Wish I Could (Unreal Conditionals)",
+pats:[{p:"When did you learn how to [verb]?",ex:"When did you learn how to do karate?"},{p:"I learned how to [verb] when I was [age].",ex:"I learned how to write my name when I was five."},{p:"I wish I could [verb].",ex:"I wish I could conduct an orchestra."},{p:"She wishes she could [verb]. What does she wish she could do?",ex:"She wishes she could speak more languages."}],
+tip:"WISH + COULD = unreal desire (can't do it now). I wish I could fly = I can't fly but I want to. Different from: I can fly (real ability)."},
+dial:[{s:"Andy",t:"Is that you? Yes, it is."},{s:"Kate",t:"Why were you hiding behind your dad? I was shy. Really?"},{s:"Jenny",t:"I don't believe it! It's true. I'm shy when I meet new people."},{s:"Scott",t:"How old were you in this photo? I was five."},{s:"Andy",t:"When did you learn how to do karate? When I was four."}],
+read:{title:"Six Dots",text:"Louis Braille was born in France in 1809. When he was three, he hurt his eyes and became blind. He could not see, but he wanted to read. When he was twelve, he created a writing system for blind people. His system uses six raised dots. Blind people read by touching the dots with their fingers. This writing system is called Braille. Today, millions of blind people around the world use Braille.",nw:["sight","sightless","braille","writing system","blind","dots"],type:"Article"},
+ph:{pat:"air, er",words:["pair","flower","hair","teacher","fair","water","chair","driver","care","ever"],v:"air = /ɛr/ as in pair | er = /ər/ as in flower"},
+song:"What's She Like?"},
+
+{num:8,title:"In the Future",icon:"🚀",
+vt:[{w:"Amazon jungle",e:"🌳",t:"place",m:"vast tropical rainforest in South America"},{w:"Mt. Everest",e:"⛰️",t:"place",m:"the highest mountain in the world"},{w:"bottom of the ocean",e:"🌊",t:"place",m:"the deepest part of the sea"},{w:"pyramids of Egypt",e:"🏛️",t:"place",m:"ancient triangular structures in Egypt"},{w:"the moon",e:"🌙",t:"place",m:"Earth's natural satellite"},{w:"the equator",e:"🌐",t:"place",m:"imaginary line around the middle of Earth"}],
+vl:[{w:"go to Antarctica",e:"🧊",t:"future",m:"travel to the icy southernmost continent"},{w:"go to Mars",e:"🔴",t:"future",m:"travel to the planet Mars"},{w:"meet a TV star",e:"⭐",t:"future",m:"meet a famous television personality"},{w:"buy a pony",e:"🐴",t:"future",m:"purchase a small horse"},{w:"buy a motorbike",e:"🏍️",t:"future",m:"purchase a motorcycle"},{w:"go kayaking",e:"🛶",t:"future",m:"paddle in a small boat called a kayak"},{w:"go skydiving",e:"🪂",t:"future",m:"jump from an airplane with a parachute"}],
+vm:[{w:"French horn",e:"🎺",t:"noun",m:"a musical brass instrument"},{w:"everywhere",e:"🌐",t:"adverb",m:"in every place"},{w:"everything",e:"✨",t:"pronoun",m:"all things"},{w:"suitcase",e:"🧳",t:"noun",m:"a large bag used for traveling"},{w:"surf",e:"🏄",t:"verb",m:"to ride waves on a surfboard"},{w:"travel",e:"✈️",t:"verb",m:"to go from one place to another"}],
+gram:{name:"Second Conditional – If I could… / I would…",
+pats:[{p:"If I could [verb], I would [verb].",ex:"If I could do anything, I would buy a pony."},{p:"If I could go anywhere, I would go to [place].",ex:"If I could go anywhere, I would go to Antarctica."},{p:"What would you do if you could [verb]?",ex:"What would you do if you could go anywhere?"},{p:"I'd [verb] if I could.",ex:"I'd buy a motorbike if I could."}],
+tip:"Second conditional = IF + past simple, WOULD + base verb. For IMAGINARY situations. I would = I'd. If I COULD = something impossible or unlikely now."},
+dial:[{s:"Jenny",t:"If you could go anywhere, where would you go?"},{s:"Andy",t:"I would go to Egypt. Why? I'd like to see the pyramids."},{s:"Kate",t:"What about you? I'd go to Antarctica. I'd like to see the penguins."},{s:"Jenny",t:"I'd go to the Amazon jungle!"}],
+read:{title:"Future Wishes",text:"Sofia is 13 from Denmark. If I could do anything, I'd go surfing. I live in the mountains, but I love the beach. Peter is 13 from Germany. I love playing music. I've played piano since I was six. Now I want to learn how to play the French horn. If I could buy anything, I'd buy a French horn. Maria is 15 from Colombia. I'd travel around the world! I want to go everywhere and see everything.",nw:["French horn","everywhere","everything","suitcase","surf","travel"],type:"Article"},
+ph:{pat:"or, ur",words:["horn","surf","corn","turn","born","hurt","sport","burst","fort","curl"],v:"or = /ɔːr/ as in horn | ur = /ɜːr/ as in surf"},
+song:"If You Could Go Anywhere"}
+];
+
+const GAMES=[{id:"wordmatch",name:"Word Match",icon:"🔗",desc:"Match words to meanings",stars:"⭐⭐"},{id:"scramble",name:"Word Scramble",icon:"🔀",desc:"Unscramble mixed letters",stars:"⭐⭐⭐"},{id:"memory",name:"Memory Flip",icon:"🃏",desc:"Find matching word pairs",stars:"⭐⭐"},{id:"fillblank",name:"Fill the Blank",icon:"✍️",desc:"Complete the sentence",stars:"⭐⭐⭐"},{id:"buildsentence",name:"Build a Sentence",icon:"🏗️",desc:"Put words in order",stars:"⭐⭐⭐"},{id:"spinwheel",name:"Spin & Say",icon:"🎡",desc:"Spin wheel, say the word!",stars:"⭐⭐"},{id:"crossword",name:"Mini Crossword",icon:"📰",desc:"Fill in the crossword",stars:"⭐⭐⭐"},{id:"typerace",name:"Type Race",icon:"⌨️",desc:"Type words as fast as you can!",stars:"⭐⭐"}];
+
+let ST={score:0,unit:null,tab:"talk",qs:{qs:[],i:0,s:0},rec:false,recObj:null,prog:{}};
+try{const s=JSON.parse(localStorage.getItem("lg6")||"{}");ST.score=s.score||0;ST.prog=s.prog||{};}catch(e){}
+function save(){try{localStorage.setItem("lg6",JSON.stringify({score:ST.score,prog:ST.prog}));}catch(e){}document.getElementById("totalScore").textContent=ST.score;}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id+"Screen").classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  ({home:0,games:1,progress:2}[id]!==undefined)&&document.querySelectorAll(".nav-btn")[{home:0,games:1,progress:2}[id]].classList.add("active");
+  if(id==="home")renderHome();
+  if(id==="games")renderGames();
+  if(id==="progress")renderProg();
+  window.scrollTo(0,0);
+}
+
+function renderHome(){
+  const grid=document.getElementById("ugrid");grid.innerHTML="";
+  const bars=document.getElementById("pbars");bars.innerHTML="";
+  UNITS.forEach(u=>{
+    const p=ST.prog[u.num]||{};const done=Object.keys(p).length;
+    const pct=Math.round(done/8*100);
+    bars.innerHTML+=`<div class="prog-bar-wrap"><div class="prog-label">${u.icon} U${u.num}</div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><div class="prog-pct">${pct}%</div></div>`;
+    const c=document.createElement("div");c.className="unit-card"+(done>=7?" completed":"");
+    c.innerHTML=`<div class="uicon">${u.icon}</div><div class="unum">Unit ${u.num}</div><div class="utitle">${u.title}</div><div class="uprog">${done>=7?"✅ Complete":done+"/8 done"}</div>`;
+    c.onclick=()=>openUnit(u.num);grid.appendChild(c);
+  });
+}
+
+function openUnit(num){
+  ST.unit=num;const u=UNITS[num-1];
+  document.getElementById("unum").textContent=num;document.getElementById("utitle").textContent=u.title;document.getElementById("ubadge").textContent=u.icon;
+  showTab("talk");showScreen("unit");
+}
+
+function showTab(tab){
+  ST.tab=tab;
+  const tabs=["talk","learn","more","grammar","read","phonics","quiz","speak"];
+  document.querySelectorAll(".tab-btn").forEach((b,i)=>b.classList.toggle("active",tabs[i]===tab));
+  const u=UNITS[ST.unit-1];const c=document.getElementById("ucontent");
+  if(tab==="talk")c.innerHTML=makeTalk(u);
+  else if(tab==="learn")c.innerHTML=makeVocab(u,"l");
+  else if(tab==="more")c.innerHTML=makeVocab(u,"m");
+  else if(tab==="grammar")c.innerHTML=makeGram(u);
+  else if(tab==="read")c.innerHTML=makeRead(u);
+  else if(tab==="phonics")c.innerHTML=makePh(u);
+  else if(tab==="quiz"){startQuiz(u);return;}
+  else if(tab==="speak")c.innerHTML=makeSpeak(u);
+  markP(ST.unit,tab);
+}
+
+function markP(n,t){if(!ST.prog[n])ST.prog[n]={};ST.prog[n][t]=true;save();}
+
+function makeTalk(u){
+  let h=`<div class="lesson-content"><div class="section-title">💬 Let's Talk — ${u.title}</div>
+  <div class="conv-box"><div style="font-size:11px;color:#9333EA;margin-bottom:9px;font-weight:700;">🎭 Tap any line to hear it!</div>`;
+  u.dial.forEach(d=>{h+=`<div class="dial-line"><div class="dial-spk">${d.s}:</div><div class="dial-txt" onclick="say('${esc(d.t)}')">${d.t} <span style="font-size:10px;color:#aaa;">🔊</span></div></div>`;});
+  h+=`</div><div class="action-row"><button class="abtn" onclick="sayAll(${u.num})">🔊 Hear All</button><button class="abtn gold" onclick="showTab('speak')">🎤 Practice!</button></div>
+  <div class="section-title" style="margin-top:16px;">📝 Key Items</div><div class="vocab-grid">`;
+  u.vt.forEach(v=>{h+=`<div class="vocab-card" onclick="say('${esc(v.w)}')"><div class="vemoji">${v.e}</div><div class="vword">${v.w}</div><div class="vtype">${v.t}</div><div class="vmeaning">${v.m}</div></div>`;});
+  h+=`</div><div style="margin-top:13px;background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border-radius:12px;padding:12px;border-left:4px solid #F59E0B;"><div style="font-weight:800;color:#F97316;">🎵 Song / Chant: ${u.song}</div><button class="speak-btn" style="margin-top:7px;" onclick="say('${esc(u.song)}')">🔊 Hear Title</button></div></div>`;
+  return h;
+}
+
+function makeVocab(u,type){
+  const vocab=type==="l"?u.vl:u.vm;const title=type==="l"?"Let's Learn":"Let's Learn More";
+  let h=`<div class="lesson-content"><div class="section-title">📖 ${title}</div><div class="vocab-grid">`;
+  vocab.forEach(v=>{h+=`<div class="vocab-card" onclick="say('${esc(v.w)}')"><div class="vemoji">${v.e}</div><div class="vword">${v.w}</div><div class="vtype">${v.t}</div><div class="vmeaning">${v.m}</div></div>`;});
+  h+=`</div><div class="action-row"><button class="abtn" onclick="sayVocab(${u.num},'${type}')">🔊 Hear All</button><button class="abtn gold" onclick="showTab('quiz')">✏️ Quiz</button></div></div>`;
+  return h;
+}
+
+function makeGram(u){
+  let h=`<div class="lesson-content"><div class="section-title">🔤 Grammar — ${u.gram.name}</div><div class="gram-box"><h4>📚 Grammar Focus</h4>`;
+  u.gram.pats.forEach(p=>{h+=`<div class="gram-pat"><strong>${p.p}</strong><div class="gram-ex">✏️ ${p.ex}</div></div>`;});
+  h+=`<div class="gram-tip">💡 <strong>Tip:</strong> ${u.gram.tip}</div></div>
+  <div class="action-row"><button class="abtn" onclick="sayGram(${u.num})">🔊 Hear Examples</button><button class="abtn gold" onclick="showTab('quiz')">✏️ Quiz</button></div></div>`;
+  return h;
+}
+
+function makeRead(u){
+  return`<div class="lesson-content"><div class="section-title">📰 Let's Read — ${u.read.type}</div>
+  <div class="action-row"><button class="abtn" onclick="say('${esc(u.read.text.substring(0,180))}')">🔊 Listen to Story</button></div>
+  <div class="read-txt"><div class="read-title">${u.read.title}</div><p>${u.read.text}</p>
+  <div class="new-words"><h5>📌 New Words</h5><ul>${u.read.nw.map(w=>`<li onclick="say('${esc(w)}')">${w} 🔊</li>`).join("")}</ul></div></div>
+  <div class="gram-box"><h4>❓ Comprehension Questions</h4><ol style="padding-left:16px;font-size:13px;line-height:2;">
+  <li>What is the story about?</li><li>What new words did you learn?</li><li>Can you retell the story in your own words?</li></ol></div></div>`;
+}
+
+function makePh(u){
+  const p=u.ph;const pts=p.pat.split(", ");
+  return`<div class="lesson-content"><div class="section-title">🔊 Phonics — ${p.pat}</div>
+  <div class="ph-box"><h4>Sound Pattern: <em>${p.pat}</em></h4>
+  <div class="ph-pat">${p.v}</div>
+  <div class="ph-words">${p.words.map(w=>{let hw=w;pts.forEach(pt=>{hw=hw.replace(new RegExp(pt,"g"),`<span class="hl">${pt}</span>`);});return`<div class="ph-word" onclick="say('${w}')">${hw}</div>`;}).join("")}</div></div>
+  <div class="action-row"><button class="abtn" onclick="say('${esc(p.v)}. '+UNITS[ST.unit-1].ph.words.join(', '))">🔊 Hear All Sounds</button><button class="abtn gold" onclick="showTab('quiz')">✏️ Quiz</button></div></div>`;
+}
+
+function makeSpeak(u){
+  const sents=[...u.dial.slice(0,3).map(d=>d.t),...u.gram.pats.slice(0,3).map(p=>p.ex)];
+  let h=`<div class="lesson-content"><div class="section-title">🎤 Speaking Practice</div>
+  <p style="font-size:12px;color:#666;margin-bottom:12px;">Listen → Say → Get scored! Speak clearly into your microphone.</p>`;
+  sents.forEach((s,i)=>{h+=`<div class="spk-box">
+  <div class="spk-tgt">${s}</div>
+  <div class="spk-ctrl"><button class="speak-btn" onclick="say('${esc(s.substring(0,120))}')">🔊 Listen</button>
+  <button class="speak-btn record" id="rb_${i}" onclick="startRec(${i},'${esc(s.substring(0,120))}')">🎤 Speak</button></div>
+  <div class="wave" id="wv_${i}"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+  <div id="sr_${i}" style="text-align:center;min-height:36px;"></div></div>`;});
+  return h+`</div>`;
+}
+
+function esc(s){return(s||"").replace(/'/g,"\\'").replace(/"/g,"").replace(/`/g,"");}
+
+// TTS
+function say(text,cb){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g,"").replace(/[→]/g," to "));
+  u.lang="en-US";u.rate=0.83;u.pitch=1.1;if(cb)u.onend=cb;
+  window.speechSynthesis.speak(u);
+}
+function sayAll(n){const u=UNITS[n-1];let i=0;function nx(){if(i>=u.dial.length)return;say(u.dial[i++].t,()=>setTimeout(nx,300));}nx();}
+function sayVocab(n,type){const u=UNITS[n-1];const v=type==="l"?u.vl:u.vm;let i=0;function nx(){if(i>=v.length)return;say(v[i++].w,()=>setTimeout(nx,400));}nx();}
+function sayGram(n){const u=UNITS[n-1];let i=0;function nx(){if(i>=u.gram.pats.length)return;say(u.gram.pats[i++].ex,()=>setTimeout(nx,600));}nx();}
+
+// SPEECH RECOGNITION
+function startRec(idx,target){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById("sr_"+idx).innerHTML=`<p style="color:#EF4444">🎤 Use Chrome for speech recognition!</p>`;return;}
+  if(ST.rec){if(ST.recObj)ST.recObj.stop();return;}
+  const btn=document.getElementById("rb_"+idx),wave=document.getElementById("wv_"+idx),res=document.getElementById("sr_"+idx);
+  const rec=new SR();rec.lang="en-US";rec.interimResults=false;
+  ST.recObj=rec;ST.rec=true;btn.classList.add("recording");btn.textContent="⏹ Stop";wave.classList.add("active");
+  res.innerHTML=`<p style="color:#3B82F6">🎙️ Listening...</p>`;rec.start();
+  rec.onresult=function(e){
+    const spoken=e.results[0][0].transcript.toLowerCase().trim();
+    const tgt=target.toLowerCase().trim();
+    const sc=calcSim(spoken,tgt);const pts=Math.max(0,Math.round(sc*25));
+    ST.score+=pts;save();
+    const cls=sc>0.7?"excellent":sc>0.4?"good":"tryagain";
+    const msg=sc>0.7?"🌟 Excellent!":sc>0.4?"👍 Good try!":"🔄 Try again!";
+    res.innerHTML=`<div class="sdisp ${cls}">${Math.round(sc*100)}%</div><p style="font-size:11px;color:#555;">You said: <em>"${spoken}"</em></p><p style="font-size:11px;color:#6B21A8;font-weight:700;">${msg} +${pts} pts</p>`;
+    say(sc>0.7?"Excellent!":"Good try!");
+  };
+  rec.onerror=function(){res.innerHTML=`<p style="color:#EF4444">Could not hear. Try again!</p>`;};
+  rec.onend=function(){ST.rec=false;btn.classList.remove("recording");btn.textContent="🎤 Speak";wave.classList.remove("active");};
+}
+function calcSim(a,b){
+  a=a.replace(/[^a-z0-9 ]/g,"");b=b.replace(/[^a-z0-9 ]/g,"");
+  const wa=a.split(" "),wb=b.split(" ");let m=0;wa.forEach(w=>{if(wb.includes(w))m++;});return m/Math.max(wa.length,wb.length);
+}
+
+// QUIZ
+function sf(a){return[...a].sort(()=>Math.random()-.5);}
+function buildQs(u){
+  const qs=[];const all=[...u.vt,...u.vl,...u.vm];
+  all.slice(0,8).forEach(v=>{
+    const w=all.filter(x=>x.w!==v.w).sort(()=>Math.random()-.5).slice(0,3);
+    qs.push({type:"Vocabulary",q:`What word means: "${v.m}" ${v.e}?`,ans:v.w,opts:sf([v.w,...w.map(x=>x.w)])});
+  });
+  u.gram.pats.forEach(p=>{
+    const ws=p.ex.split(" ");const tgt=ws[ws.length-1].replace(/[.!?]/g,"");
+    const di=sf(["him","her","have","was","been","could","spoke","made"]).filter(x=>x!==tgt).slice(0,3);
+    qs.push({type:"Grammar",q:`Complete:\n"${ws.slice(0,-1).join(" ")} ___ "`,ans:tgt,opts:sf([tgt,...di])});
+  });
+  if(u.read.nw.length>=4){const c=u.read.nw[0];qs.push({type:"Reading",q:`Which new word is from "${u.read.title}"?`,ans:c,opts:sf([c,...u.read.nw.slice(1,4)])});}
+  qs.push({type:"Phonics",q:`Which word has the sound: ${u.ph.pat}?`,ans:u.ph.words[0],opts:sf([u.ph.words[0],u.ph.words[1],"bread","corn"]).slice(0,4)});
+  return sf(qs).slice(0,10);
+}
+function startQuiz(u){ST.qs={qs:buildQs(u),i:0,s:0,u};renderQ();}
+function renderQ(){
+  const{qs,i,s,u}=ST.qs;const c=document.getElementById("ucontent");
+  if(i>=qs.length){
+    const pct=Math.round(s/qs.length*100);const stars=pct>=80?"⭐⭐⭐":pct>=60?"⭐⭐":"⭐";
+    const earned=s*10;ST.score+=earned;save();if(pct>=70)confetti();
+    c.innerHTML=`<div class="lesson-content rew"><h2>Quiz Complete! ${u.icon}</h2><div class="rstars">${stars}</div>
+    <div style="font-size:24px;font-weight:900;color:#6B21A8;margin:12px 0;">${s}/${qs.length} Correct</div>
+    <div style="font-size:16px;color:#F59E0B;font-weight:700;">+${earned} Points!</div>
+    <div style="margin-top:13px;font-size:13px;color:#666;">${pct>=80?"Excellent! You know this unit very well!":pct>=60?"Good job! Keep practicing!":"Keep studying and try again!"}</div>
+    <div class="action-row" style="margin-top:16px;"><button class="abtn" onclick="startQuiz(UNITS[${u.num-1}])">🔄 Try Again</button><button class="abtn gold" onclick="showTab('talk')">📚 Back to Unit</button></div></div>`;return;
+  }
+  const q=qs[i];const pct=Math.round(i/qs.length*100);
+  c.innerHTML=`<div class="qwrap"><div class="qhd"><span style="font-weight:700;color:#6B21A8;">Q${i+1}/${qs.length}</span><span style="font-weight:700;color:#F59E0B;">⭐ ${s}</span></div>
+  <div class="qpbar"><div class="qpfill" style="width:${pct}%"></div></div>
+  <div class="quiz-q"><div class="qtype">${q.type} Question</div><div class="qtext">${q.q}</div></div>
+  <div class="quiz-opts" id="qo">${q.opts.map((o,idx)=>`<div class="qopt" onclick="ansQ('${esc(o)}','${esc(q.ans)}',${idx})">${o}</div>`).join("")}</div>
+  <div id="qfb"></div></div>`;
+}
+function ansQ(sel,ans,idx){
+  document.querySelectorAll(".qopt").forEach(o=>o.classList.add("disabled"));
+  const ok=sel===ans;
+  document.querySelectorAll(".qopt")[idx].classList.add(ok?"correct":"wrong");
+  if(!ok)document.querySelectorAll(".qopt").forEach(o=>{if(o.textContent===ans)o.classList.add("correct");});
+  if(ok)ST.qs.s++;
+  const fb=document.getElementById("qfb");fb.className="qfb "+(ok?"correct":"wrong");
+  fb.textContent=ok?"✅ Correct! Well done!":"❌ Answer: "+ans;
+  say(ok?"Correct! Well done!":"The answer is "+ans);
+  setTimeout(()=>{ST.qs.i++;renderQ();},1800);
+}
+
+// GAMES
+function renderGames(){
+  document.getElementById("ggrid").innerHTML=GAMES.map(g=>`<div class="game-card" onclick="openGame('${g.id}')"><div class="gicon">${g.icon}</div><div class="gname">${g.name}</div><div class="gdesc">${g.desc}</div><div class="gstars">${g.stars}</div></div>`).join("");
+  document.getElementById("agame").innerHTML="";
+}
+function openGame(id){
+  const ag=document.getElementById("agame");ag.scrollIntoView({behavior:"smooth"});
+  const all=UNITS.flatMap(u=>[...u.vt,...u.vl,...u.vm]);const pool=sf(all).slice(0,20);
+  if(id==="wordmatch")ag.innerHTML=gMatch(pool.slice(0,8));
+  else if(id==="scramble")ag.innerHTML=gScramble(pool);
+  else if(id==="memory")ag.innerHTML=gMemory(pool.slice(0,6));
+  else if(id==="fillblank")ag.innerHTML=gFill();
+  else if(id==="buildsentence")ag.innerHTML=gBuild();
+  else if(id==="spinwheel"){ag.innerHTML=gSpin(pool.slice(0,8));setTimeout(initSpin,100);}
+  else if(id==="crossword")ag.innerHTML=gCross();
+  else if(id==="typerace")ag.innerHTML=gType(pool);
+}
+
+// WORD MATCH
+function gMatch(v){
+  window.GM={v,s1:null,s2:null,done:0};
+  const ws=sf(v.map(x=>x.w));const ms=sf(v.map(x=>({w:x.w,m:x.m})));
+  return`<div class="game-area"><div class="gtb"><h3>🔗 Word Match</h3><div class="gsc" id="gmsc">Pairs: 0/${v.length}</div></div>
+  <p style="font-size:11px;color:#666;margin-bottom:9px;">Tap a word, then tap its matching meaning!</p>
+  <div class="match-grid"><div class="mc"><h4>Words</h4>${ws.map(w=>`<div class="mi" id="mw_${w.replace(/ /g,"_")}" onclick="selM('w','${esc(w)}')">${w}</div>`).join("")}</div>
+  <div class="mc"><h4>Meanings</h4>${ms.map(m=>`<div class="mi" id="mm_${m.w.replace(/ /g,"_")}" onclick="selM('m','${esc(m.w)}','${esc(m.m)}')"><em>${m.m}</em></div>`).join("")}</div></div>
+  <div id="gmfb" style="text-align:center;margin-top:9px;font-size:16px;font-weight:800;"></div></div>`;
+}
+function selM(type,word){
+  const G=window.GM;const wid=word.replace(/ /g,"_");
+  if(type==="w"){if(G.s1)document.getElementById("mw_"+G.s1.replace(/ /g,"_"))?.classList.remove("selected");G.s1=word;document.getElementById("mw_"+wid).classList.add("selected");}
+  else{G.s2=word;
+    if(G.s1===G.s2){
+      document.getElementById("mw_"+G.s1.replace(/ /g,"_")).classList.replace("selected","matched");
+      document.getElementById("mm_"+wid).classList.replace("selected","matched");
+      G.done++;ST.score+=15;save();document.getElementById("gmsc").textContent=`Pairs: ${G.done}/${G.v.length}`;
+      document.getElementById("gmfb").innerHTML=`<span style="color:#10B981">✅ Match! +15</span>`;say("Match!");
+      if(G.done===G.v.length){confetti();say("All matched! Excellent!");}G.s1=null;G.s2=null;
+    }else{
+      document.getElementById("mw_"+G.s1.replace(/ /g,"_"))?.classList.add("wf");
+      document.getElementById("mm_"+wid)?.classList.add("wf");
+      setTimeout(()=>{document.getElementById("mw_"+G.s1?.replace(/ /g,"_"))?.classList.remove("selected","wf");},600);
+      document.getElementById("gmfb").innerHTML=`<span style="color:#EF4444">❌ Try again!</span>`;G.s1=null;G.s2=null;
+    }
+  }
+}
+
+// SCRAMBLE
+function gScramble(vocab){
+  const v=sf(vocab)[0];const letters=sf(v.w.split(""));
+  window.GSC={word:v.w,letters,chosen:[]};
+  return`<div class="game-area"><div class="gtb"><h3>🔀 Word Scramble</h3><div class="gsc" id="gscsc">Score: 0</div></div>
+  <p style="font-size:12px;color:#555;margin-bottom:5px;">Hint: ${v.e} ${v.m}</p>
+  <div class="scl" id="scl">${letters.map((l,i)=>`<div class="ltile" id="lt_${i}" onclick="addL(${i},'${l}')">${l.toUpperCase()}</div>`).join("")}</div>
+  <div class="sca" id="sca">${v.w.split("").map((_,i)=>`<div class="abox" id="ab_${i}" onclick="remL(${i})"></div>`).join("")}</div>
+  <div class="action-row"><button class="abtn" onclick="checkScr()">✅ Check</button><button class="abtn gold" onclick="openGame('scramble')">⏭ Next</button><button class="abtn red" onclick="clearScr()">🗑 Clear</button></div>
+  <div id="gscfb" style="text-align:center;margin-top:9px;font-size:19px;font-weight:800;"></div></div>`;
+}
+function addL(i,l){const sc=window.GSC;if(document.getElementById("lt_"+i)?.classList.contains("used"))return;if(sc.chosen.length>=sc.word.length)return;const p=sc.chosen.length;sc.chosen.push({i,l});document.getElementById("lt_"+i).classList.add("used");const b=document.getElementById("ab_"+p);b.textContent=l.toUpperCase();b.classList.add("filled");}
+function remL(p){const sc=window.GSC;if(sc.chosen.length<=p)return;const{i}=sc.chosen[p];document.getElementById("lt_"+i)?.classList.remove("used");sc.chosen.splice(p,1);for(let j=0;j<sc.word.length;j++){const b=document.getElementById("ab_"+j);if(j<sc.chosen.length){b.textContent=sc.chosen[j].l.toUpperCase();b.classList.add("filled");}else{b.textContent="";b.classList.remove("filled");}}}
+function clearScr(){const sc=window.GSC;sc.chosen=[];sc.letters.forEach((_,i)=>document.getElementById("lt_"+i)?.classList.remove("used"));for(let j=0;j<sc.word.length;j++){const b=document.getElementById("ab_"+j);b.textContent="";b.classList.remove("filled");}}
+function checkScr(){const sc=window.GSC;const ans=sc.chosen.map(c=>c.l).join("");if(ans.toLowerCase()===sc.word.toLowerCase()){document.getElementById("gscfb").innerHTML=`<span style="color:#10B981">🌟 "${sc.word}"! +20pts</span>`;ST.score+=20;save();say("Correct! "+sc.word);confetti();}else{document.getElementById("gscfb").innerHTML=`<span style="color:#EF4444">❌ Keep trying!</span>`;}}
+
+// MEMORY
+function gMemory(vocab){
+  const pairs=vocab.slice(0,6);
+  const cards=sf([...pairs.map(v=>({id:v.w,face:v.e,lbl:v.w})),...pairs.map(v=>({id:v.w,face:"📝",lbl:v.m.substring(0,20)}))]);
+  window.GME={cards,fl:[],ma:[],score:0};
+  const cols=Math.min(4,Math.ceil(Math.sqrt(cards.length)));
+  return`<div class="game-area"><div class="gtb"><h3>🃏 Memory Flip</h3><div class="gsc" id="gmesc">Pairs: 0/${pairs.length}</div></div>
+  <p style="font-size:11px;color:#666;margin-bottom:9px;">Find matching word + meaning pairs!</p>
+  <div class="mem-grid" id="mg" style="grid-template-columns:repeat(${cols},1fr);">
+  ${cards.map((_,i)=>`<div class="mem-card" id="mc_${i}" onclick="flipM(${i})">❓</div>`).join("")}</div>
+  <div id="gmefb" style="text-align:center;margin-top:9px;font-size:14px;font-weight:800;"></div></div>`;
+}
+function flipM(i){
+  const M=window.GME;const card=document.getElementById("mc_"+i);
+  if(M.fl.length>=2||M.fl.includes(i)||M.ma.includes(i))return;
+  M.fl.push(i);card.classList.add("flipped");card.innerHTML=`<div class="mem-ci">${M.cards[i].face}<br>${M.cards[i].lbl}</div>`;
+  if(M.fl.length===2){const[a,b]=M.fl;
+    if(M.cards[a].id===M.cards[b].id){
+      M.ma.push(a,b);document.getElementById("mc_"+a).classList.add("matched");document.getElementById("mc_"+b).classList.add("matched");
+      M.score+=20;ST.score+=20;save();document.getElementById("gmesc").textContent=`Pairs: ${M.ma.length/2}/${M.cards.length/2}`;
+      document.getElementById("gmefb").innerHTML=`<span style="color:#10B981">✅ Match! +20</span>`;say(M.cards[a].lbl);M.fl=[];
+      if(M.ma.length===M.cards.length){confetti();say("Excellent! All matched!");}
+    }else{
+      setTimeout(()=>{document.getElementById("mc_"+a).classList.remove("flipped");document.getElementById("mc_"+a).textContent="❓";document.getElementById("mc_"+b).classList.remove("flipped");document.getElementById("mc_"+b).textContent="❓";M.fl=[];},1200);
+      document.getElementById("gmefb").innerHTML=`<span style="color:#EF4444">❌ Not a match</span>`;
+    }
+  }
+}
+
+// FILL BLANK
+function gFill(){
+  const ss=UNITS.flatMap(u=>u.gram.pats.map(p=>p.ex)).filter(e=>e.split(" ").length>=5);
+  window.GF={ss:sf(ss).slice(0,8),i:0,s:0};return renderFQ();
+}
+function renderFQ(){
+  const{ss,i,s}=window.GF;const ag=document.getElementById("agame");
+  if(i>=ss.length){ag.innerHTML=`<div class="game-area"><div style="text-align:center;padding:18px;"><h3 style="color:#6B21A8">🎉 Complete! ${s}/${ss.length}</h3><button class="abtn" onclick="openGame('fillblank')">Play Again</button></div></div>`;return;}
+  const ws=ss[i].split(" ");const bi=Math.floor(ws.length/2);const ans=ws[bi].replace(/[.!?]/g,"");
+  const opts=sf([ans,...sf(["was","have","could","the","is","been","spoke","made","if","would"]).filter(w=>w!==ans).slice(0,3)]);
+  window.GF.cur=ans;
+  const disp=ws.map((w,j)=>j===bi?"<u>______</u>":w).join(" ");
+  ag.innerHTML=`<div class="game-area"><div class="gtb"><h3>✍️ Fill the Blank</h3><div class="gsc">Q${i+1}/${ss.length} | ⭐${s}</div></div>
+  <div style="font-size:17px;text-align:center;margin:14px 0;line-height:2;">${disp}</div>
+  <div class="quiz-opts">${opts.map(o=>`<div class="qopt" onclick="checkFQ('${esc(o)}','${esc(ans)}')">${o}</div>`).join("")}</div>
+  <div id="gffb" style="text-align:center;min-height:34px;"></div></div>`;
+}
+function checkFQ(sel,ans){
+  const ok=sel===ans;if(ok){window.GF.s++;ST.score+=15;save();}
+  document.getElementById("gffb").innerHTML=ok?`<div style="color:#10B981;font-weight:800;font-size:16px;">✅ Correct!</div>`:`<div style="color:#EF4444;font-weight:800;font-size:16px;">❌ Answer: "${ans}"</div>`;
+  say(ok?"Correct!":"The answer is "+ans);
+  setTimeout(()=>{window.GF.i++;renderFQ();},1600);
+}
+
+// BUILD SENTENCE
+function gBuild(){
+  const exs=UNITS.flatMap(u=>u.gram.pats.map(p=>p.ex)).filter(e=>e.split(" ").length>=5);
+  const tgt=sf(exs)[0];const words=sf(tgt.replace(/[.!?]/g,"").split(" "));
+  window.GB={tgt,words,chosen:[]};
+  return`<div class="game-area"><div class="gtb"><h3>🏗️ Build a Sentence</h3></div>
+  <div style="background:#F5F0FF;border-radius:10px;padding:11px;text-align:center;margin-bottom:11px;font-size:14px;color:#888;font-style:italic;">Build: <strong style="color:#6B21A8">${tgt}</strong></div>
+  <div class="bsent" id="bsb"></div>
+  <div class="wb" id="bswb">${words.map((w,i)=>`<div class="wchip" id="bsc_${i}" onclick="addBW(${i},'${esc(w)}')">${w}</div>`).join("")}</div>
+  <div class="action-row"><button class="abtn" onclick="checkBS()">✅ Check</button><button class="abtn red" onclick="clearBS()">🗑 Clear</button><button class="abtn gold" onclick="openGame('buildsentence')">🔄 New</button></div>
+  <div id="gbfb" style="text-align:center;font-size:14px;font-weight:800;margin-top:7px;"></div></div>`;
+}
+function addBW(i,w){const c=document.getElementById("bsc_"+i);if(c.classList.contains("used")){remBW(i);return;}c.classList.add("used");window.GB.chosen.push({i,w});const el=document.createElement("div");el.className="bword";el.textContent=w;el.dataset.idx=i;el.onclick=()=>remBW(i);document.getElementById("bsb").appendChild(el);}
+function remBW(i){window.GB.chosen=window.GB.chosen.filter(c=>c.i!==i);document.getElementById("bsc_"+i).classList.remove("used");document.querySelectorAll(".bword").forEach(el=>{if(el.dataset.idx==i)el.remove();});}
+function clearBS(){window.GB.chosen=[];document.querySelectorAll(".wchip").forEach(c=>c.classList.remove("used"));document.getElementById("bsb").innerHTML="";}
+function checkBS(){const built=window.GB.chosen.map(c=>c.w).join(" ").toLowerCase().replace(/[.!?]/g,"");const tgt=window.GB.tgt.toLowerCase().replace(/[.!?]/g,"");const ok=built===tgt;document.getElementById("gbfb").innerHTML=ok?`<span style="color:#10B981">🌟 Perfect! +25pts</span>`:`<span style="color:#F97316">💡 Try: "${window.GB.tgt}"</span>`;if(ok){ST.score+=25;save();confetti();say("Perfect sentence!");}}
+
+// SPIN WHEEL
+function gSpin(vocab){window.GSW={vocab,angle:0,spinning:false};return`<div class="game-area"><div class="gtb"><h3>🎡 Spin & Say</h3><div class="gsc" id="gswsc">Spin the wheel!</div></div><p style="font-size:11px;color:#666;margin-bottom:7px;">Spin the wheel, say the word you land on!</p><div class="wc"><div class="wwrap"><div class="warr">▼</div><canvas id="spinCanvas" width="250" height="250"></canvas></div><button class="spnbtn" id="spnbtn" onclick="doSpin()">🎡 SPIN!</button></div><div id="gswres" style="text-align:center;margin-top:12px;font-size:18px;font-weight:800;"></div><div id="gswspk" class="hidden" style="margin-top:9px;text-align:center;"><button class="abtn" onclick="say(window.curSW||'hello')">🔊 Hear Word</button><button class="abtn gold" onclick="startRec(99,window.curSW||'hello')">🎤 Say It! +10pts</button><div id="sr_99" style="margin-top:7px;"></div></div></div>`;}
+function initSpin(){
+  const canvas=document.getElementById("spinCanvas");if(!canvas)return;
+  const ctx=canvas.getContext("2d");const vocab=window.GSW.vocab;const n=vocab.length;
+  const cols=["#6B21A8","#0369A1","#059669","#DC2626","#D97706","#7C3AED","#BE185D","#0891B2"];
+  window.drawW=function(angle){
+    ctx.clearRect(0,0,250,250);const cx=125,cy=125,r=115;
+    for(let i=0;i<n;i++){const s=angle+(i/n)*Math.PI*2,e=angle+((i+1)/n)*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e);ctx.fillStyle=cols[i%cols.length];ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke();ctx.save();ctx.translate(cx,cy);ctx.rotate(angle+(i+.5)/n*Math.PI*2);ctx.textAlign="right";ctx.fillStyle="#fff";ctx.font="bold 11px Arial";const lbl=vocab[i].w.length>10?vocab[i].w.substring(0,10)+"…":vocab[i].w;ctx.fillText(lbl,r-7,4);ctx.restore();}
+    ctx.beginPath();ctx.arc(cx,cy,16,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle="#6B21A8";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#6B21A8";ctx.font="bold 10px Arial";ctx.textAlign="center";ctx.fillText("GO",cx,cy+4);
+  };window.drawW(0);
+}
+function doSpin(){
+  if(window.GSW.spinning)return;window.GSW.spinning=true;document.getElementById("spnbtn").disabled=true;document.getElementById("gswspk").classList.add("hidden");
+  const vocab=window.GSW.vocab;const total=(4+Math.random()*4)*Math.PI*2;let cur=0;const dur=3000,start=Date.now();
+  function frame(){const el=Date.now()-start,prog=Math.min(el/dur,1);const ease=1-(1-prog)*(1-prog)*(1-prog);cur=ease*total;if(window.drawW)window.drawW(window.GSW.angle+cur);
+    if(prog<1){requestAnimationFrame(frame);}
+    else{window.GSW.angle=(window.GSW.angle+cur)%(Math.PI*2);const idx=Math.floor((vocab.length-Math.floor(window.GSW.angle/(Math.PI*2)*vocab.length)%vocab.length)%vocab.length);const word=vocab[idx];window.curSW=word.w;document.getElementById("gswres").innerHTML=`<span style="color:#6B21A8">🎯 <strong>${word.e} ${word.w}</strong></span><br><span style="font-size:12px;color:#555;">${word.m}</span>`;document.getElementById("gswsc").textContent=word.w;document.getElementById("gswspk").classList.remove("hidden");say(word.w);window.GSW.spinning=false;document.getElementById("spnbtn").disabled=false;}}
+  requestAnimationFrame(frame);
+}
+
+// CROSSWORD
+function gCross(){
+  const G=Array(6).fill(null).map(()=>Array(6).fill({l:"",b:true}));
+  const words=[{w:"SCARF",r:0,c:0,d:"a",clue:"1A: Cloth worn around the neck"},{w:"SHARK",r:0,c:0,d:"d",clue:"1D: Large dangerous sea fish"},{w:"WATCH",r:2,c:0,d:"a",clue:"3A: Worn on the wrist to tell time"},{w:"WAVES",r:4,c:0,d:"a",clue:"5A: Moving water at the beach"},{w:"SCREW",r:0,c:4,d:"d",clue:"2D: A metal fastener"}];
+  words.forEach(wdef=>{for(let i=0;i<wdef.w.length;i++){const r=wdef.d==="a"?wdef.r:wdef.r+i;const c=wdef.d==="a"?wdef.c+i:wdef.c;if(r<6&&c<6)G[r][c]={l:wdef.w[i],b:false};}});
+  let html=`<div class="game-area"><div class="gtb"><h3>📰 Mini Crossword</h3><div class="gsc" id="cwsc">Fill it in!</div></div>
+  <div class="cww"><div class="cwg" style="grid-template-columns:repeat(6,33px);">`;
+  for(let r=0;r<6;r++)for(let c=0;c<6;c++){const cell=G[r][c];if(cell.b)html+=`<div class="cwc black"></div>`;else html+=`<div class="cwc"><input maxlength="1" id="cw_${r}_${c}" oninput="this.value=this.value.toUpperCase();checkCW()" data-a="${cell.l}"></div>`;}
+  html+=`</div></div><div class="cwcl"><div><h4>Across →</h4><ul>${words.filter(w=>w.d==="a").map(w=>`<li>${w.clue}</li>`).join("")}</ul></div><div><h4>Down ↓</h4><ul>${words.filter(w=>w.d==="d").map(w=>`<li>${w.clue}</li>`).join("")}</ul></div></div>
+  <div class="action-row"><button class="abtn" onclick="revCW()">💡 Reveal All</button><button class="abtn gold" onclick="openGame('crossword')">🔄 New Puzzle</button></div></div>`;
+  return html;
+}
+function checkCW(){let tot=0,cor=0;document.querySelectorAll(".cwc input").forEach(inp=>{if(!inp.dataset.a)return;tot++;if(inp.value===inp.dataset.a){inp.parentElement.classList.add("ok");cor++;}else inp.parentElement.classList.remove("ok");});document.getElementById("cwsc").textContent=`${cor}/${tot}`;if(cor===tot&&tot>0){confetti();ST.score+=50;save();say("Crossword complete! Excellent!");}}
+function revCW(){document.querySelectorAll(".cwc input").forEach(inp=>{if(inp.dataset.a){inp.value=inp.dataset.a;inp.parentElement.classList.add("ok");}});document.getElementById("cwsc").textContent="Revealed!";}
+
+// TYPE RACE
+function gType(vocab){window.GT={v:sf(vocab).slice(0,10),i:0,s:0,ts:null};return renderTQ();}
+function renderTQ(){const{v,i,s}=window.GT;const ag=document.getElementById("agame");if(i>=v.length){ag.innerHTML=`<div class="game-area"><div style="text-align:center;padding:18px;"><h3 style="color:#6B21A8">🏁 Race Done! Score: ${s}</h3><button class="abtn" onclick="openGame('typerace')">Race Again</button></div></div>`;return;}const vv=v[i];window.GT.ts=Date.now();ag.innerHTML=`<div class="game-area"><div class="gtb"><h3>⌨️ Type Race</h3><div class="gsc">Word ${i+1}/${v.length}</div></div><div style="text-align:center;padding:16px;"><div style="font-size:52px;margin-bottom:9px;">${vv.e}</div><div style="font-size:13px;color:#666;margin-bottom:12px;">${vv.m}</div><input type="text" id="trin" placeholder="Type the word..." style="font-size:20px;padding:9px;border:3px solid #9333EA;border-radius:12px;text-align:center;width:100%;max-width:320px;outline:none;" oninput="checkTR(this.value,'${esc(vv.w)}')" autofocus><div id="trfb" style="margin-top:9px;font-size:16px;font-weight:800;"></div></div></div>`;}
+function checkTR(typed,word){if(typed.toLowerCase().trim()===word.toLowerCase()){const t=((Date.now()-window.GT.ts)/1000).toFixed(1);const pts=Math.max(5,30-Math.round(parseFloat(t)*2));window.GT.s+=pts;ST.score+=pts;save();document.getElementById("trfb").innerHTML=`<span style="color:#10B981">✅ "${word}" in ${t}s! +${pts}pts</span>`;say(word);setTimeout(()=>{window.GT.i++;renderTQ();},1200);}}
+
+// PROGRESS
+function renderProg(){
+  const pd=document.getElementById("pdet");
+  const tabs=["talk","learn","more","grammar","read","phonics","quiz","speak"];
+  const icons=["💬","📖","📚","🔤","📰","🔊","✏️","🎤"];
+  let h=`<div class="lesson-content"><div class="section-title">🏆 My Learning Journey</div>
+  <div style="text-align:center;background:linear-gradient(135deg,#6B21A8,#9333EA);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:16px;">
+  <div style="font-size:44px;font-weight:900;">${ST.score}</div><div style="font-size:14px;opacity:.9;">Total Points Earned</div>
+  <div style="font-size:24px;margin-top:5px;">${ST.score>=1000?"🥇":ST.score>=500?"🥈":ST.score>=200?"🥉":"🎖️"}</div></div>`;
+  UNITS.forEach(u=>{const p=ST.prog[u.num]||{};h+=`<div style="background:#fff;border-radius:12px;padding:13px;margin-bottom:10px;box-shadow:var(--shadow);"><div style="font-weight:800;color:#4C1D95;margin-bottom:8px;">${u.icon} Unit ${u.num}: ${u.title}</div><div style="display:flex;flex-wrap:wrap;gap:4px;">${tabs.map((t,i)=>`<div style="padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:${p[t]?"#10B981":"#E9E0FF"};color:${p[t]?"#fff":"#6B21A8"}">${icons[i]} ${t}</div>`).join("")}</div></div>`;});
+  h+=`<div class="action-row"><button class="abtn red" onclick="if(confirm('Reset all progress?')){ST.score=0;ST.prog={};save();renderProg();}">🗑 Reset</button></div></div>`;
+  pd.innerHTML=h;
+}
+
+// CONFETTI
+function confetti(){
+  const cf=document.getElementById("conf");cf.classList.remove("hidden");cf.innerHTML="";
+  const cols=["#6B21A8","#F59E0B","#10B981","#EF4444","#3B82F6","#EC4899"];
+  for(let i=0;i<60;i++){const p=document.createElement("div");p.className="cp";p.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${cols[i%cols.length]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;transform:rotate(${Math.random()*360}deg)`;cf.appendChild(p);}
+  setTimeout(()=>{cf.classList.add("hidden");cf.innerHTML="";},4000);
+}
+
+// INIT
+document.getElementById("totalScore").textContent=ST.score;
+renderHome();showScreen("home");
+</script>
+</body>
+</html>
