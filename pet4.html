@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambridge PET 4</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4ff;color:#1e2840;min-height:100vh}
+:root{--navy:#0a1628;--blue:#1a3a6b;--mid:#2563b8;--green:#16a34a;--red:#dc2626;--accent:#f4a500;--border:#d1d9f0;--gray:#6b7280}
+#hdr{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.h-top{display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap}
+.logo{font-size:1.15rem;font-weight:800}.logo span{color:var(--accent)}
+.stats{margin-left:auto;display:flex;gap:14px}
+.stat .v{font-size:1rem;font-weight:800;color:var(--accent)}
+.stat .l{font-size:.6rem;opacity:.8;text-transform:uppercase}
+nav{background:rgba(0,0,0,.2);display:flex;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nb{background:none;border:none;color:rgba(255,255,255,.75);padding:10px 15px;cursor:pointer;font-size:.8rem;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;font-family:inherit;transition:.15s}
+.nb:hover{color:#fff}.nb.on{color:var(--accent);border-bottom-color:var(--accent)}
+#main{padding:18px 14px;max-width:860px;margin:0 auto}
+.sec{display:none}.sec.on{display:block}
+.card{background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(10,22,40,.1);padding:20px;margin-bottom:16px;border:1px solid var(--border)}
+.ct{font-size:1rem;font-weight:700;color:var(--blue);margin-bottom:14px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tb{background:none;border:none;padding:8px 13px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--gray);font-family:inherit;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s}
+.tb.on{color:var(--mid);border-bottom-color:var(--mid)}
+
+/* CHOICE BUTTONS */
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.opt{display:block;width:100%;text-align:left;background:#f8faff;border:2px solid var(--border);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:.88rem;font-family:inherit;transition:.12s;color:var(--navy);font-weight:500;line-height:1.4}
+.opt:hover:not(:disabled){border-color:var(--mid);background:#e8eeff}
+.opt.C{border-color:var(--green)!important;background:#dcfce7!important;color:var(--green)!important;font-weight:700}
+.opt.W{border-color:var(--red)!important;background:#fee2e2!important;color:var(--red)!important}
+.opt:disabled{cursor:default}
+
+/* TRUE/FALSE */
+.tf{border:2px solid var(--border);border-radius:8px;padding:7px 16px;cursor:pointer;font-size:.84rem;font-weight:700;font-family:inherit;background:#f8faff;transition:.12s;color:var(--navy)}
+.tf:hover:not(:disabled){border-color:var(--mid);background:#e8eeff}
+.tf.C{border-color:var(--green)!important;background:var(--green)!important;color:#fff!important}
+.tf.W{border-color:var(--red)!important;background:var(--red)!important;color:#fff!important}
+.tf.dim{opacity:.35}.tf:disabled{cursor:default}
+
+.btn{display:inline-flex;align-items:center;gap:5px;background:var(--mid);color:#fff;border:none;border-radius:10px;padding:9px 18px;cursor:pointer;font-size:.86rem;font-weight:600;font-family:inherit;transition:.15s}
+.btn:hover{background:var(--blue)}.btn.g{background:var(--green)}.btn.g:hover{background:#15803d}
+.btn-o{background:none;color:var(--mid);border:2px solid var(--mid);border-radius:10px;padding:7px 16px;cursor:pointer;font-size:.84rem;font-weight:600;font-family:inherit;transition:.15s}
+.btn-o:hover{background:var(--mid);color:#fff}
+.sm{padding:5px 12px!important;font-size:.78rem!important;border-radius:7px!important}
+
+.fb{border-radius:10px;padding:11px 14px;margin-top:10px;font-size:.86rem;line-height:1.5;display:none}
+.fb.on{display:block}.fb.ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
+.fb.ng{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
+.fb.info{background:#dbeafe;border:1px solid #93c5fd;color:#1e40af}
+
+.rt{background:#fafbff;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.86rem;line-height:1.7;margin-bottom:12px}
+.rt h3{font-size:.9rem;color:var(--blue);margin-bottom:8px;text-align:center;font-weight:700}
+.qn{min-width:24px;height:24px;background:var(--mid);color:#fff;border-radius:50%;font-size:.74rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.fi{border:2px solid var(--border);border-radius:8px;padding:7px 11px;font-size:.88rem;font-family:inherit;width:100%;transition:.15s;background:#fff}
+.fi:focus{outline:none;border-color:var(--mid)}.fi.ok{border-color:var(--green);background:#dcfce7}.fi.ng{border-color:var(--red);background:#fee2e2}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:700}
+.pb{background:#dbeafe;color:var(--blue)}.pg{background:#dcfce7;color:var(--green)}.po{background:#fffbeb;color:#b45309}
+.pb2{width:100%;background:#e2e8f0;border-radius:99px;height:7px;overflow:hidden;margin:6px 0}
+.pb2f{height:100%;background:linear-gradient(90deg,var(--mid),var(--accent));border-radius:99px;transition:width .4s}
+.hero{background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:14px;color:#fff;padding:26px;text-align:center;margin-bottom:18px}
+.hero h1{font-size:clamp(1.2rem,4vw,1.7rem);font-weight:800;margin-bottom:7px}
+.hero p{opacity:.85;font-size:.88rem;line-height:1.6;max-width:500px;margin:0 auto 14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:11px}
+.fc{background:#fff;border-radius:12px;padding:14px;border:2px solid var(--border);cursor:pointer;transition:.2s;text-align:center}
+.fc:hover{border-color:var(--mid);box-shadow:0 5px 15px rgba(37,99,184,.15);transform:translateY(-2px)}
+.fc i{font-size:1.7rem;display:block;margin-bottom:5px}
+.fc t{display:block;font-weight:700;color:var(--blue);margin-bottom:3px;font-size:.88rem}
+.fc d{display:block;font-size:.73rem;color:var(--gray);line-height:1.4}
+.ta{width:100%;min-height:125px;border:2px solid var(--border);border-radius:10px;padding:11px;font-size:.88rem;font-family:inherit;resize:vertical;transition:.15s}
+.ta:focus{outline:none;border-color:var(--mid)}
+.wc{font-size:.76rem;color:var(--gray);margin-top:3px}
+.flip-card{perspective:1000px;height:145px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:.5s}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:12px;text-align:center}
+.flip-f{background:linear-gradient(135deg,var(--mid),var(--blue));color:#fff;font-size:1rem;font-weight:700}
+.flip-b{background:linear-gradient(135deg,var(--accent),#e69500);color:var(--navy);transform:rotateY(180deg);font-size:.84rem;font-weight:600}
+.ai-box{background:#f0f4ff;border:1px solid var(--border);border-radius:10px;padding:13px;margin-top:10px;font-size:.84rem;line-height:1.6;display:none}
+.ai-box.on{display:block}
+.mic-btn{width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--navy);border:none;font-size:1.6rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;margin:10px auto}
+.mic-btn:hover{transform:scale(1.08)}.mic-btn.rec{background:var(--red);color:#fff;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.sc-w{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.sc{width:76px;height:76px;border-radius:50%;border:4px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff}
+.sc .v{font-size:1.3rem;font-weight:800;color:var(--blue)}.sc .l{font-size:.58rem;color:var(--gray);font-weight:600;text-transform:uppercase}
+.ak-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.ak-pill{padding:3px 8px;border-radius:5px;font-size:.76rem;font-weight:700;border:1px solid var(--border)}
+.ak-A{background:#dbeafe;color:#1e40af}.ak-B{background:#dcfce7;color:#15803d}.ak-C{background:#fff3cd;color:#92400e}.ak-D{background:#f3e8ff;color:#6b21a8}
+.ak-fill{background:#f8faff;border-radius:7px;padding:6px 10px;margin-bottom:3px;font-size:.81rem;display:flex;gap:8px}
+.ak-fill .an{color:var(--green);font-weight:700}
+@media(max-width:480px){#main{padding:12px 10px}.card{padding:14px}.hero{padding:18px 12px}}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <div class="h-top">
+    <div class="logo">Cambridge <span>PET 4</span></div>
+    <span class="pill pb" style="font-size:.68rem">B1 LEVEL</span>
+    <div class="stats">
+      <div class="stat"><div class="v" id="s-pts">0</div><div class="l">Points</div></div>
+      <div class="stat"><div class="v" id="s-str">🔥0</div><div class="l">Streak</div></div>
+    </div>
+  </div>
+  <nav>
+    <button class="nb on" onclick="go('home')">🏠 Home</button>
+    <button class="nb" onclick="go('reading')">📖 Reading</button>
+    <button class="nb" onclick="go('writing')">✍️ Writing</button>
+    <button class="nb" onclick="go('listening')">🎧 Listening</button>
+    <button class="nb" onclick="go('speaking')">🎤 Speaking</button>
+    <button class="nb" onclick="go('vocab')">📚 Vocab</button>
+    <button class="nb" onclick="go('tests')">📋 Mock Test</button>
+    <button class="nb" onclick="go('answers')">🔑 Answer Key</button>
+  </nav>
+</header>
+<main id="main">
+<!-- HOME -->
+<div id="home" class="sec on">
+  <div class="hero">
+    <h1>Cambridge PET 4 Learning App</h1>
+    <p>Luyện thi PET đầy đủ 4 kỹ năng — tick vào đáp án biết ngay đúng/sai!</p>
+    <button class="btn" style="background:var(--accent);color:var(--navy)" onclick="go('tests')">▶ Start Mock Test</button>
+  </div>
+  <div class="g3">
+    <div class="fc" onclick="go('reading')"><i>📖</i><t>Reading</t><d>Signs·Matching·T/F·Long text·Cloze</d></div>
+    <div class="fc" onclick="go('writing')"><i>✍️</i><t>Writing</t><d>Transform·Email·Story + AI chấm</d></div>
+    <div class="fc" onclick="go('listening')"><i>🎧</i><t>Listening</t><d>4 Parts·TTS·Tick ngay đúng sai</d></div>
+    <div class="fc" onclick="go('speaking')"><i>🎤</i><t>Speaking</t><d>Ghi âm + AI Feedback PET</d></div>
+    <div class="fc" onclick="go('vocab')"><i>📚</i><t>Vocabulary</t><d>Flashcard 8 chủ đề·Quiz</d></div>
+    <div class="fc" onclick="go('answers')"><i>🔑</i><t>Answer Key</t><d>Đáp án chính xác từ sách</d></div>
+  </div>
+</div>
+
+<!-- READING -->
+<div id="reading" class="sec">
+  <div class="card">
+    <div class="ct">📖 Reading Practice</div>
+    <div class="tabs">
+      <button class="tb on" onclick="rTab('r1')">Part 1: Signs</button>
+      <button class="tb" onclick="rTab('r2')">Part 2: Matching</button>
+      <button class="tb" onclick="rTab('r3')">Part 3: True/False</button>
+      <button class="tb" onclick="rTab('r4')">Part 4: Long Text</button>
+      <button class="tb" onclick="rTab('r5')">Part 5: Cloze</button>
+    </div>
+    <div id="r1-p"><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm t-sel" id="r1-t1" onclick="r1i=0;rR1()">Test 1</button>
+    <button class="btn-o sm t-sel" id="r1-t2" onclick="r1i=1;rR1()">Test 2</button>
+    <button class="btn-o sm t-sel" id="r1-t3" onclick="r1i=2;rR1()">Test 3</button>
+    <button class="btn-o sm t-sel" id="r1-t4" onclick="r1i=3;rR1()">Test 4</button>
+  </div>
+  <div id="r1-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextR(1)">Next Set ▶</button></div></div>
+    <div id="r2-p" style="display:none"><div id="r2-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextR(2)">Next Set ▶</button></div></div>
+    <div id="r3-p" style="display:none"><div style="background:#fff3cd;border:1px solid #fbbf24;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.8rem">
+    📌 <b>Test 1 Part 3</b> — full text available. Other tests: use <b>🔑 Answer Key</b> tab to check answers.
+  </div>
+  <div id="r3-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextR(3)">Next Set ▶</button></div></div>
+    <div id="r4-p" style="display:none"><div id="r4-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextR(4)">Next Set ▶</button></div></div>
+    <div id="r5-p" style="display:none"><div id="r5-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextR(5)">Next Set ▶</button></div></div>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div id="writing" class="sec">
+  <div class="card">
+    <div class="ct">✍️ Writing Practice</div>
+    <div class="tabs">
+      <button class="tb on" onclick="wTab('w1')">Part 1: Transform</button>
+      <button class="tb" onclick="wTab('w2')">Part 2: Email</button>
+      <button class="tb" onclick="wTab('w3')">Part 3: Letter/Story</button>
+    </div>
+    <div id="w1-p">
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm" onclick="w1i=0;rW1()">Test 1</button>
+    <button class="btn-o sm" onclick="w1i=1;rW1()">Test 2</button>
+  </div>
+  <div id="w1-b"></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn sm" onclick="checkW1()">✓ Check Answers</button>
+        <button class="btn-o sm" onclick="nextW(1)">Next ▶</button>
+      </div>
+      <div class="fb" id="w1-fb"></div>
+    </div>
+    <div id="w2-p" style="display:none">
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm" onclick="w2i=0;rW2()">Test 1</button>
+    <button class="btn-o sm" onclick="w2i=1;rW2()">Test 2</button>
+    <button class="btn-o sm" onclick="w2i=2;rW2()">Test 3</button>
+    <button class="btn-o sm" onclick="w2i=3;rW2()">Test 4</button>
+  </div>
+  <div id="w2-b"></div>
+      <textarea class="ta" id="w2-ta" placeholder="Write your email here (35-45 words)..." onkeyup="wc('w2-ta','w2-wc')"></textarea>
+      <div class="wc" id="w2-wc">0 words</div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn g sm" onclick="aiF('w2')">🤖 AI Feedback</button>
+        <button class="btn-o sm" onclick="nextW(2)">Next ▶</button>
+      </div>
+      <div class="ai-box" id="w2-ai"></div>
+    </div>
+    <div id="w3-p" style="display:none">
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <button class="btn sm" id="w3-lb" onclick="w3t('L')">✉️ Letter</button>
+        <button class="btn-o sm" id="w3-sb" onclick="w3t('S')">📖 Story</button>
+      </div>
+      <div id="w3-b"></div>
+      <textarea class="ta" id="w3-ta" placeholder="Write about 100 words..." onkeyup="wc('w3-ta','w3-wc')" style="min-height:170px"></textarea>
+      <div class="wc" id="w3-wc">0 words</div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn g sm" onclick="aiF('w3')">🤖 AI Feedback</button>
+        <button class="btn-o sm" onclick="nextW(3)">Next ▶</button>
+      </div>
+      <div class="ai-box" id="w3-ai"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LISTENING -->
+<div id="listening" class="sec">
+  <div class="card">
+    <div class="ct">🎧 Listening Practice</div>
+    <div class="fb info on" style="margin-bottom:12px">💡 Bấm <b>🔊</b> để nghe transcript. Tick đáp án — biết ngay đúng/sai.</div>
+    <div class="tabs">
+      <button class="tb on" onclick="lTab('l1')">Part 1: Pictures</button>
+      <button class="tb" onclick="lTab('l2')">Part 2: Multi Choice</button>
+      <button class="tb" onclick="lTab('l3')">Part 3: Fill In</button>
+      <button class="tb" onclick="lTab('l4')">Part 4: True/False</button>
+    </div>
+    <div id="l1-p"><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm" id="l1-t1" onclick="l1i=0;rL1()">Test 1</button>
+    <button class="btn-o sm" id="l1-t2" onclick="l1i=1;rL1()">Test 2</button>
+    <button class="btn-o sm" id="l1-t3" onclick="l1i=2;rL1()">Test 3</button>
+    <button class="btn-o sm" id="l1-t4" onclick="l1i=3;rL1()">Test 4</button>
+  </div>
+  <div id="l1-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextL(1)">Next Set ▶</button></div></div>
+    <div id="l2-p" style="display:none"><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm" id="l2-t1" onclick="l2i=0;rL2()">Test 1</button>
+    <button class="btn-o sm" id="l2-t2" onclick="l2i=1;rL2()">Test 2</button>
+  </div>
+  <div id="l2-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextL(2)">Next Set ▶</button></div></div>
+    <div id="l3-p" style="display:none">
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+        <button class="btn sm" onclick="l3i=0;rL3()">Test 1</button>
+        <button class="btn-o sm" onclick="l3i=1;rL3()">Test 4</button>
+      </div>
+      <div id="l3-b"></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn sm" onclick="checkL3()">✓ Check</button>
+        <button class="btn-o sm" onclick="nextL(3)">Next ▶</button>
+      </div>
+      <div class="fb" id="l3-fb"></div>
+    </div>
+    <div id="l4-p" style="display:none"><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>
+    <button class="btn sm" id="l4-t1" onclick="l4i=0;rL4()">Test 1</button>
+    <button class="btn-o sm" id="l4-t4" onclick="l4i=1;rL4()">Test 4</button>
+  </div>
+  <div id="l4-b"></div><div style="margin-top:10px"><button class="btn-o sm" onclick="nextL(4)">Next Set ▶</button></div></div>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div id="speaking" class="sec">
+  <div class="card">
+    <div class="ct">🎤 Speaking Practice</div>
+    <div class="tabs">
+      <button class="tb on" onclick="spTab(1)">Part 1: Interview</button>
+      <button class="tb" onclick="spTab(2)">Part 2: Discussion</button>
+      <button class="tb" onclick="spTab(3)">Part 3: Photo</button>
+      <button class="tb" onclick="spTab(4)">Part 4: Opinion</button>
+    </div>
+    <div id="sp1-p">
+      <div style="background:linear-gradient(135deg,var(--blue),var(--mid));color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px">
+        <div style="font-size:.76rem;opacity:.7;margin-bottom:5px">🎙️ Examiner asks:</div>
+        <div style="font-size:.96rem;font-weight:600" id="sp1-q">What is your name and where are you from?</div>
+      </div>
+      <div style="text-align:center">
+        <button class="mic-btn" id="sp1-mic" onclick="toggleMic(1)">🎙️</button>
+        <div id="sp1-st" style="font-size:.8rem;color:var(--gray);margin:5px 0"></div>
+        <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+          <button class="btn sm" onclick="tts(SP1[sp1i%SP1.length])">🔊 Hear Q</button>
+          <button class="btn-o sm" onclick="nSp(1)">Next ▶</button>
+          <button class="btn g sm" onclick="aiF('sp1')">🤖 AI</button>
+        </div>
+      </div>
+      <div class="ai-box" id="sp1-ai"></div>
+    </div>
+    <div id="sp2-p" style="display:none">
+      <div style="background:linear-gradient(135deg,var(--blue),var(--mid));color:#fff;border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="color:var(--accent);font-weight:700;margin-bottom:6px">🤝 Collaborative Task</div>
+        <div id="sp2-q" style="font-size:.88rem;line-height:1.5"></div>
+        <div id="sp2-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px"></div>
+      </div>
+      <div style="text-align:center">
+        <button class="mic-btn" id="sp2-mic" onclick="toggleMic(2)">🎙️</button>
+        <div id="sp2-st" style="font-size:.8rem;color:var(--gray);margin:5px 0"></div>
+        <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-o sm" onclick="nSp(2)">Next ▶</button>
+          <button class="btn g sm" onclick="aiF('sp2')">🤖 AI</button>
+        </div>
+      </div>
+      <div class="ai-box" id="sp2-ai"></div>
+    </div>
+    <div id="sp3-p" style="display:none">
+      <div style="background:linear-gradient(135deg,var(--blue),var(--mid));color:#fff;border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="color:var(--accent);font-weight:700;margin-bottom:6px">📷 Describe the Photo</div>
+        <div id="sp3-d" style="font-size:.88rem;line-height:1.5"></div>
+      </div>
+      <div style="text-align:center">
+        <button class="mic-btn" id="sp3-mic" onclick="toggleMic(3)">🎙️</button>
+        <div id="sp3-st" style="font-size:.8rem;color:var(--gray);margin:5px 0"></div>
+        <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-o sm" onclick="nSp(3)">Next ▶</button>
+          <button class="btn g sm" onclick="aiF('sp3')">🤖 AI</button>
+        </div>
+      </div>
+      <div class="ai-box" id="sp3-ai"></div>
+    </div>
+    <div id="sp4-p" style="display:none">
+      <div style="background:linear-gradient(135deg,var(--blue),var(--mid));color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px">
+        <div style="font-size:.76rem;opacity:.7;margin-bottom:5px">💬 Your Opinion:</div>
+        <div style="font-size:.96rem;font-weight:600" id="sp4-q"></div>
+      </div>
+      <div style="text-align:center">
+        <button class="mic-btn" id="sp4-mic" onclick="toggleMic(4)">🎙️</button>
+        <div id="sp4-st" style="font-size:.8rem;color:var(--gray);margin:5px 0"></div>
+        <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap">
+          <button class="btn sm" onclick="tts(SP4[sp4i%SP4.length])">🔊 Hear Q</button>
+          <button class="btn-o sm" onclick="nSp(4)">Next ▶</button>
+          <button class="btn g sm" onclick="aiF('sp4')">🤖 AI</button>
+        </div>
+      </div>
+      <div class="ai-box" id="sp4-ai"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VOCAB -->
+<div id="vocab" class="sec">
+  <div class="card">
+    <div class="ct">📚 Vocabulary Builder</div>
+    <div class="tabs">
+      <button class="tb on" onclick="vTab(1)">Flashcards</button>
+      <button class="tb" onclick="vTab(2)">Quiz</button>
+    </div>
+    <div id="vf-p">
+      <select id="v-sel" class="fi" style="width:auto;margin-bottom:10px" onchange="loadFlash()">
+        <option value="travel">Travel & Transport</option>
+        <option value="work">Work & Study</option>
+        <option value="health">Health & Body</option>
+        <option value="home">Home & Family</option>
+        <option value="leisure">Leisure & Sport</option>
+        <option value="food">Food & Drink</option>
+        <option value="env">Environment</option>
+        <option value="tech">Technology</option>
+      </select>
+      <div id="flash-g" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px"></div>
+      <button class="btn-o sm" style="margin-top:10px" onclick="loadFlash()">🔄 Shuffle</button>
+    </div>
+    <div id="vq-p" style="display:none">
+      <div id="vq-b"></div>
+      <div class="fb" id="vq-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MOCK TEST -->
+<div id="tests" class="sec">
+  <div class="card">
+    <div class="ct">📋 Mock Practice Tests</div>
+    <div id="t-menu" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:11px">
+      <div class="fc" onclick="startTest(1)"><i>📝</i><t>Test 1</t><d>Reading + Listening · 90 min</d></div>
+      <div class="fc" onclick="startTest(2)"><i>📝</i><t>Test 2</t><d>Reading + Listening · 90 min</d></div>
+      <div class="fc" onclick="startTest(3)"><i>📝</i><t>Test 3</t><d>Reading + Listening · 90 min</d></div>
+      <div class="fc" onclick="startTest(4)"><i>📝</i><t>Test 4</t><d>Reading + Listening · 90 min</d></div>
+    </div>
+    <div id="t-run" style="display:none">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn-o sm" onclick="exitTest()">← Exit</button>
+        <b id="t-title" style="color:var(--blue)"></b>
+        <span class="pill pg" id="t-timer">⏱ 90:00</span>
+        <span class="pill pb" id="t-prg">Q1</span>
+      </div>
+      <div class="pb2"><div class="pb2f" id="t-bar" style="width:0%"></div></div>
+      <div id="t-qb" style="margin-top:12px"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn sm" onclick="nextTQ()">Next →</button>
+        <button class="btn-o sm" onclick="finishTest()">Finish Test</button>
+      </div>
+    </div>
+    <div id="t-res" style="display:none">
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:2.2rem;margin-bottom:9px">🎓</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--blue);margin-bottom:12px">Test Complete!</div>
+        <div class="sc-w">
+          <div class="sc"><div class="v" id="rs-r">-</div><div class="l">Reading</div></div>
+          <div class="sc"><div class="v" id="rs-l">-</div><div class="l">Listening</div></div>
+          <div class="sc" style="border-color:var(--green)"><div class="v" id="rs-p" style="color:var(--green)">-%</div><div class="l">Total</div></div>
+        </div>
+        <div class="fb info on" id="rs-fb" style="max-width:460px;margin:0 auto 14px"></div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button class="btn sm" style="background:var(--accent);color:var(--navy)" onclick="retryTest()">🔄 Retry</button>
+          <button class="btn sm" onclick="reviewTest()">📋 Review</button>
+          <button class="btn-o sm" onclick="exitTest()">← Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANSWER KEY -->
+<div id="answers" class="sec">
+  <div class="card">
+    <div class="ct">🔑 Official Answer Key — Đáp Án Chính Thức</div>
+    <div style="background:#fffbeb;border:1px solid var(--accent);border-radius:9px;padding:9px 13px;margin-bottom:12px;font-size:.82rem">
+      📖 Nguồn: <b>Cambridge PET 4</b> Key — trang 86–139
+    </div>
+    <div class="tabs">
+      <button class="tb on" onclick="akTab(1)">Test 1</button>
+      <button class="tb" onclick="akTab(2)">Test 2</button>
+      <button class="tb" onclick="akTab(3)">Test 3</button>
+      <button class="tb" onclick="akTab(4)">Test 4</button>
+    </div>
+    <div id="ak-b"></div>
+  </div>
+</div>
+</main><script>
+
+// ── ALL DATA (JSON - zero apostrophe issues) ───────────────
+const _D = JSON.parse(`{"AK":{"1":{"r":{"p1":{"1":"A","2":"C","3":"B","4":"A","5":"C"},"p2":{"6":"D","7":"B","8":"G","9":"H","10":"E"},"p3":{"11":"B","12":"B","13":"A","14":"A","15":"A","16":"B","17":"A","18":"B","19":"A","20":"A"},"p4":{"21":"C","22":"D","23":"B","24":"C","25":"B"},"p5":{"26":"B","27":"C","28":"D","29":"B","30":"A","31":"C","32":"B","33":"D","34":"C","35":"A"}},"l":{"p1":{"1":"B","2":"A","3":"C","4":"B","5":"C","6":"C","7":"A"},"p2":{"8":"B","9":"B","10":"C","11":"A","12":"C","13":"B"},"p3":{"14":"Monday p.m.","15":"America/USA","16":"1.75 pounds","17":"tourist office","18":"beach","19":"computer"},"p4":{"20":"B","21":"A","22":"A","23":"B","24":"A","25":"A"}}},"2":{"r":{"p1":{"1":"B","2":"A","3":"B","4":"C","5":"C"},"p2":{"6":"D","7":"B","8":"A","9":"E","10":"F"},"p3":{"11":"A","12":"A","13":"B","14":"A","15":"B","16":"A","17":"B","18":"A","19":"B","20":"A"},"p4":{"21":"D","22":"D","23":"C","24":"B","25":"C"},"p5":{"26":"B","27":"C","28":"D","29":"A","30":"B","31":"C","32":"B","33":"D","34":"B","35":"A"}},"l":{"p1":{"1":"B","2":"B","3":"A","4":"A","5":"B","6":"C","7":"C"},"p2":{"8":"A","9":"C","10":"C","11":"A","12":"A","13":"C"},"p3":{"14":"expensive/not cheap","15":"Square/Sq","16":"bus driver","17":"map","18":"jewellery","19":"4:45"},"p4":{"20":"B","21":"B","22":"B","23":"A","24":"A","25":"B"}}},"3":{"r":{"p1":{"1":"C","2":"B","3":"B","4":"A","5":"C"},"p2":{"6":"E","7":"A","8":"C","9":"F","10":"G"},"p3":{"11":"A","12":"B","13":"A","14":"A","15":"A","16":"A","17":"A","18":"B","19":"B","20":"B"},"p4":{"21":"A","22":"C","23":"D","24":"B","25":"C"},"p5":{"26":"C","27":"D","28":"B","29":"A","30":"A","31":"D","32":"C","33":"B","34":"C","35":"C"}},"l":{"p1":{"1":"B","2":"C","3":"C","4":"B","5":"A","6":"A","7":"A"},"p2":{"8":"C","9":"B","10":"A","11":"C","12":"B","13":"C"},"p3":{"14":"07:45","15":"sleeping bag","16":"swimming","17":"drink(s)","18":"Post Office","19":"entrance hall"},"p4":{"20":"A","21":"B","22":"A","23":"B","24":"B","25":"B"}}},"4":{"r":{"p1":{"1":"C","2":"A","3":"B","4":"C","5":"B"},"p2":{"6":"C","7":"E","8":"D","9":"H","10":"B"},"p3":{"11":"A","12":"B","13":"B","14":"B","15":"A","16":"A","17":"B","18":"A","19":"B","20":"A"},"p4":{"21":"B","22":"C","23":"A","24":"B","25":"D"},"p5":{"26":"A","27":"B","28":"C","29":"D","30":"B","31":"B","32":"D","33":"C","34":"A","35":"A"}},"l":{"p1":{"1":"B","2":"B","3":"C","4":"A","5":"C","6":"B","7":"C"},"p2":{"8":"C","9":"C","10":"B","11":"A","12":"A","13":"B"},"p3":{"14":"cakes","15":"fresh fish","16":"vegetables","17":"15 minutes","18":"Canada","19":"23 March"},"p4":{"20":"B","21":"B","22":"A","23":"B","24":"B","25":"A"}}}},"R1":[{"t":1,"qs":[{"n":1,"sign":"NO BICYCLES AGAINST GLASS PLEASE","q":"What does this sign mean?","opts":["A  Do not leave your bicycle touching the window","B  Broken glass may damage your bicycle tyres","C  Your bicycle may not be safe here"],"a":0},{"n":2,"sign":"Feeling any better? When you're back at college, remember to register for the film course. Email me if you want any information about it.","q":"Why has Kim emailed Sally?","opts":["A  To give her some details","B  To let her know he is ill","C  To remind her to do something"],"a":2},{"n":3,"sign":"HOSPITAL WAITING ROOM PLEASE PUT ALL CHILDREN'S TOYS BACK IN THIS ROOM BEFORE YOU LEAVE","q":"What does this sign say?","opts":["A  We leave some toys at the back of this room for children","B  Please don't leave any toys outside this room when you go","C  Remember to take your children's toys with you when you leave"],"a":1},{"n":4,"sign":"Ed, Dennis rang: DON'T take the main road to Madingley - there's been an accident and you won't get to the match on time. Go through Drayton instead. Lynn","q":"What is Lynn message to Ed?","opts":["A  To arrive on time, Ed should use a different route","B  Dennis suggests that it's quicker to go on the main road","C  If there's enough time, Lynn would like to see the match"],"a":0},{"n":5,"sign":"Not as big a city as we expected, but that's okay. Limited nightlife, though there's plenty to see every day and travelling around is painless! Martyna","q":"According to Martyna, the city disadvantage is:","opts":["A  its actual size","B  its transport system","C  its evening entertainment"],"a":2}]},{"t":2,"qs":[{"n":1,"sign":"CYCLISTS - When this entrance is locked use side gate","q":"What does this sign tell cyclists?","opts":["A  Lock your cycle near this gate before entering","B  Cyclists should use a different entrance when this one is locked","C  If the side gate is locked, go through the cycle entrance"],"a":1},{"n":2,"sign":"Maria, Your sister phoned - arriving Saturday, not Sunday as planned. Can you ring her back?","q":"Why did the sister phone?","opts":["A  To tell Maria she has changed her plans","B  To ask Maria to book somewhere to stay","C  To find out if Saturday is convenient"],"a":0},{"n":3,"sign":"PARK CAFE - Cold drinks: machine in foyer. Hot drinks: counter 10am-4pm only","q":"What does this notice say?","opts":["A  Hot drinks are available all day","B  You can get cold drinks at the counter","C  Hot drinks are only served at certain times"],"a":2},{"n":4,"sign":"Rob, Tomorrow football practice is cancelled - pitch is flooded. Gym session at 3pm instead. Coach Davis","q":"What does Coach Davis tell Rob?","opts":["A  Football practice will be moved indoors","B  Football training cannot take place tomorrow","C  He should arrive at 3pm for football practice"],"a":1},{"n":5,"sign":"The food here is excellent - try the fish! However, the service is slow and the portions are not very big.","q":"What does the writer say about this restaurant?","opts":["A  The fish dishes are particularly good","B  The staff bring food quickly","C  You will definitely feel full after eating"],"a":0}]},{"t":3,"qs":[{"n":1,"sign":"Phil - Gary has phoned twice about the team list for Friday match. Could you email it to him? Beth","q":"What must Phil do on his return?","opts":["A  phone Gary about the team list for Friday's match","B  get Gary to play in the football match on Friday","C  let Gary know who's playing football on Friday"],"a":2},{"n":2,"sign":"Keiko, It was nice to see you yesterday. I forgot to ask about your new job. Well done! You must be pleased. Let's meet for lunch soon. Jane","q":"What is Jane doing in this card?","opts":["A  Thanking Keiko for lunch","B  Offering Keiko congratulations","C  Giving Keiko some information"],"a":1},{"n":3,"sign":"STUDENT CANTEEN - Please show your meal ticket or you must pay the full amount","q":"What does the sign tell students?","opts":["A  Students can buy meal tickets at a discount","B  Students without a meal ticket pay full price","C  Students can buy food up to the amount on their ticket"],"a":1},{"n":4,"sign":"SILVER MOUNTAIN BIKE, IN GOOD CONDITION AND NOT EVEN TWO YEARS OLD! QUICK SALE NEEDED. OFFERS WELCOME (NOT LESS THAN 80 POUNDS PLEASE) RICK 0798 453 668","q":"What does Rick advertisement say?","opts":["A  Rick would accept 80 pounds for it","B  The bike only needs a few repairs","C  Rick bought his bike two years ago"],"a":0},{"n":5,"sign":"NO TURNING BY VEHICLES AT ANY TIME - Factory entrance always in use","q":"What does this sign mean?","opts":["A  Do not use this entrance to return vehicles","B  Factory vehicles are turning here all the time","C  Do not turn here as this entrance is always in use"],"a":2}]},{"t":4,"qs":[{"n":1,"sign":"If red light shows, your drink is unavailable - please make another choice","q":"What does this sign mean?","opts":["A  The red light goes on if the machine is out of order","B  If the red light shows, you must wait before choosing","C  If the red light is on, you must choose a different drink"],"a":2},{"n":2,"sign":"Do not use this medicine for more than seven days without your doctor advice","q":"What does the label say?","opts":["A  Contact your doctor if you wish to continue after one week","B  Doctors can only supply enough medicine for one week at a time","C  You cannot keep this medicine for more than seven days"],"a":0},{"n":3,"sign":"Sunflowers Health Club - Introduce a friend and receive free exercise equipment! Your friend must pay full 12-month fee.","q":"What does the special offer say?","opts":["A  Sunflowers is selling exercise equipment at a special price","B  You will get a gift if you persuade a friend to join Sunflowers","C  Your annual fee must be paid now"],"a":1},{"n":4,"sign":"Please do not park within 3 metres of this vehicle - space needed for unloading","q":"What does this sign mean?","opts":["A  You should not park near here as it is an exit for vehicles","B  This parking space is reserved for the vehicle owner","C  Please do not park any closer than 3 metres to this vehicle"],"a":2},{"n":5,"sign":"This tower is in wonderful green stone, with 497 steps. Stupidly, I climbed to the top! The view is supposed to be brilliant but yesterday was cloudy. Kenny","q":"What did Kenny like about the tower?","opts":["A  the view it gave from the top","B  the material used to build it","C  the number of steps it has"],"a":1}]}],"R2":[{"t":1,"title":"Courses to Choose From","people":[{"n":6,"d":"Anna is 18 and she wants to do computer studies so that she can work in an office. She would like to study in London but is worried about finding accommodation."},{"n":7,"d":"Peter is 19 and wants to be a sports teacher. He is very good at sport, especially running. He wants to go to a college outside London."},{"n":8,"d":"Maria used to teach in a secondary school but now wants to teach at primary level. She wants to do a part-time course in London."},{"n":9,"d":"Stephen works in the computer industry and wants to go back to college for a year to do a diploma in advanced computer studies. He lives in London and wants to study there."},{"n":10,"d":"Ali wants to do computer studies in London. He would like to do a full-time course which includes some time working in industry. In his spare time he plays football."}],"places":[{"l":"A","n":"Hillman College","d":"Hillman College is a London college with up-to-date facilities. We offer both primary and secondary full-time teacher training courses. This year there will be special two-year courses available on maths and computers in the primary classroom. All students are expected to spend two terms working in local schools."},{"l":"B","n":"Kirby College","d":"Kirby College has over fifty years' experience of teacher training. We offer both full-time and part-time courses for all levels of teaching. Large college in lovely countryside, with excellent sports facilities, especially for football and athletics. There is a new course this year called 'Computers in the Classroom'."},{"l":"C","n":"Kemp College","d":"Kemp College offers a wide range of both full-time and part-time diploma courses in arts and science subjects, lasting from one to three years. The college is about two hours away from London by train. It has a new library and good student accommodation. Grants are available for students wanting to return to studying."},{"l":"D","n":"MacKintosh College","d":"MacKintosh College offers a range of courses from modern languages to computer studies, in a quiet and pleasant part of London. All students are offered accommodation in college flats and we have excellent sports facilities. Full-time and part-time courses of either three or four years are available."},{"l":"E","n":"Pemberley College","d":"Pemberley College in central London offers full-time courses in science and computer studies. Our four-year courses allow you to spend a term every year getting work experience in different firms. There are good social and sports facilities. No college accommodation is available at present."},{"l":"F","n":"Treeholme College","d":"If you want to be a teacher, join one of our courses. Places are available on our full-time courses in science and maths this October. Ours is a small teacher training department in a large London college, so we can offer good facilities such as a new computer centre."},{"l":"G","n":"Dene College","d":"Dene College was built in 1990 in an attractive part of north London. Spaces are still available on our popular part-time course in primary teaching for teachers who want to retrain. Beginning in October we will also have new four-year courses in law, economics, mathematics and sports science."},{"l":"H","n":"Westgate College","d":"Westgate College in south London has a range of courses, from maths and physics to computer studies and sports science. We offer both lower and advanced diplomas. All our courses are from one to three years in length and are particularly suitable for people with some work experience."}]},{"t":2,"title":"Looking for a New Home?","people":[{"n":6,"d":"Chris and Sarah want to rent a flat as soon as possible. They prefer a quiet part of town with views over gardens and water."},{"n":7,"d":"George wants to rent a small home near the centre of town with somewhere safe to keep his car. Has only a little time for gardening."},{"n":8,"d":"Graham and Suzie have four children. They want to buy a house in the countryside which is big enough for each child to have their own room. The children enjoy playing outdoors."},{"n":9,"d":"Mary is a lawyer who works mainly in London. She is hoping to buy a home in the country where she can work sometimes. She needs to be able to catch a train to London easily."},{"n":10,"d":"James and Miranda have always lived in town, but as their two teenage daughters love riding they now want to buy a house in the country. They need enough space to have two horses."}],"places":[{"l":"A","n":"Tidmarsh","d":"This six-bedroom, nineteenth-century house, just outside the village of Tidmarsh, is a very pleasant family home with two sitting rooms and a dining room. There is a garage and a garden with a swimming pool. Quick sale wanted."},{"l":"B","n":"Brettisham","d":"This elegant one-bedroom house near the river consists of an unusually large living room, bright kitchen and bathroom. It has gas central heating, a small garden which is easy to look after, and a garage. Reasonable monthly rent for a town centre property."},{"l":"C","n":"Lower Farleigh","d":"For sale: this newly-built one-bedroom town house has a large lounge, kitchen, bathroom, garage and a private garden at the back that needs some work. It is very close to the shopping centre and within five minutes' walk of the bus station with connections to London and Birmingham."},{"l":"D","n":"Corbridge","d":"A lovely, furnished apartment away from the noise of the city centre, with a balcony looking down on beautiful lawns, flowers and, beyond them, the River Thames. The accommodation includes two bedrooms, a living room and a kitchen/dining room. Cars may be parked in the road. Available to rent immediately."},{"l":"E","n":"Dinton","d":"A beautiful small cottage for sale in a pretty village with lovely views over farms and hills. The accommodation includes two bedrooms, kitchen, living room and study/office. Enjoy the quiet of the countryside and still benefit from good connections with all major cities as the railway station is very close."},{"l":"F","n":"Winchcombe","d":"For sale: an interesting old country farmhouse with two reception rooms, comfortable kitchen and three bedrooms. Next to the house there are some old buildings which could be used to store equipment or keep animals, and a field which could be turned into a garden with tennis court or swimming pool."},{"l":"G","n":"Saxford","d":"A spacious new two-bedroom apartment will become available for rent when the owner moves abroad in three months' time. It has views of the park and canal although it is only one street away from the main shopping area. No private parking facilities are included but there is usually space to park in the street outside."},{"l":"H","n":"Beckington","d":"For immediate rent: an attractive, large nineteenth-century town house with ten bedrooms. At the end of the garden, there is an old building, originally used for horses, which could be used as a garage or turned into office accommodation."}]},{"t":3,"title":"Cities to Visit","people":[{"n":6,"d":"Ryana has just finished her business degree. She would like to relax in a clean, quiet city which has a long history."},{"n":7,"d":"Kevin has just finished his economics degree. He would like to visit a city that has a big business centre and also offers traditional goods for the tourist to buy."},{"n":8,"d":"Mandy and her seventy-year-old aunt share an interest in painting and buying valuable, old objects. They would like to go to a city where they can shop easily and look at art."},{"n":9,"d":"Dhillon is studying international business. He would like to go to a city where the inhabitants come from many different countries, which will give him the opportunity to try a variety of food."},{"n":10,"d":"Jenny and Mavis want to escape from modern life and go somewhere more traditional. They would like to go on some long trips outside the city as well."}],"places":[{"l":"A","n":"Kadia","d":"This busy city has developed beside the main river which divides the central commercial district into two parts. Although you will find the main offices of many international companies, you can still ride on a water taxi and visit the side streets which sell colourful locally-made clothes and crafts."},{"l":"B","n":"Drummore","d":"This is one of the world's cleanest and most modern cities. There are lots of top-class hotels offering a range of international dishes. It is sunny all year round. Traffic is not a problem on the roads in and around the city, but travel is limited outside the main city area as it is mainly desert."},{"l":"C","n":"Noien","d":"This is a cultural centre with 33 museums and galleries, many attached to colleges and universities. It is not a historical city but it contains some interesting buildings, including the Post Office, which has a silver roof. It has noisy markets selling everything from antiques to plants."},{"l":"D","n":"Polatika","d":"The streets of this city are full both day and night. It is built on a river and the best way to see it is on a tourist boat which passes the beautiful old buildings. The city is starting to grow and has just opened its first department stores."},{"l":"E","n":"Haristor","d":"This famous city has been on the same site for over a thousand years. Old and new exist together and there isn't the fast pace of most cities. The streets are wide and well-kept with plenty of trees. Search carefully and you will find some outdoor markets and food stalls in this peaceful environment."},{"l":"F","n":"Lotten","d":"This is a regional centre for trade and tourism and is completely 'up-to-date'. People who live in this city come from many different parts of the world and so there is an excellent choice of restaurants. There is a wonderful transport system, and modern department stores."},{"l":"G","n":"Foforon","d":"There are plenty of tours to take from the city and visitors can go to mountains, farms and villages. This small city has changed little over time and its streets and markets are still crowded and noisy."},{"l":"H","n":"Quinter","d":"There is a lot of modern painting and sculpture in this relatively new city where many nationalities have come together. The galleries are well hidden, and not easy to get to by public transport. This is mainly used for getting people in and out of the business centre, where there are many office blocks."}]},{"t":4,"title":"Walks for Everyone","people":[{"n":6,"d":"David enjoys walking but he has injured his knee and cannot climb up hills. He would like to spend a couple of hours on a quiet walk with well-marked paths."},{"n":7,"d":"Luigi likes to get as much exercise as possible and particularly likes climbing steep hills to get a good view. He wants to do a walk that is difficult and offers a range of scenery."},{"n":8,"d":"Yannis has two sons aged 8 and 10. He would like to take them to see some animals in the countryside. He wants to be able to buy some refreshments."},{"n":9,"d":"Amanda has had an operation and needs plenty of fresh air to help her recover. She wants to find a short, quiet walk with a beautiful place to visit on the route."},{"n":10,"d":"Claudia's grandparents are staying with her. They are very fit and enjoy walking. They would like to visit some of the local villages and need a clearly-marked route so they don't lose their way."}],"places":[{"l":"A","n":"Mill Lane","d":"You'll see lots of animals on this walk, because there is nothing to disturb them. Walkers often say they meet no-one. There are places where you can join or finish the walk but these are not well signposted and it is easy to get lost."},{"l":"B","n":"Sea Path","d":"This walk starts at the village of Nye Flats and the excellent signposts lead you through local streets, fields and pretty neighbouring villages. Although it will take you half a day, there are no hills at all. You can breathe the sea air and enjoy watching traditional life in busy villages."},{"l":"C","n":"Cutters Way","d":"This walk can take anything from 30 minutes to two hours. It's not a good walk for hill-lovers as the ground is completely flat, but it has good signposts and simple facilities for the hungry or thirsty walker. A few places or things to see would improve this walk, which can be a little dull."},{"l":"D","n":"Paddock Way","d":"This is really a short track across a working farm. There are plenty of chickens and sheep to see, and the farmer has turned some of the buildings into an educational centre with a café. Not a walk for those who like peace and quiet, but good fun."},{"l":"E","n":"Hurdles","d":"This is a route for the experienced walker. It crosses two rivers and includes hills of up to 500 metres, from which you can see the sea. There are several rocky paths that are unsuitable for children or older people and there are no shops so take plenty of water."},{"l":"F","n":"Neverland","d":"This is a walk to take if you have a whole day to spare and want to escape from other people. It follows a narrow track which is clearly marked and has different routes for different types of walker. There are hills to climb but views are limited because of thick forest."},{"l":"G","n":"Overhill","d":"This sounds like a difficult walk but it's really easy, although it could be better signposted. If you're a local person, you're almost certain to meet someone you know on the walk. It's a couple of kilometres outside the village of Overhill, with fields full of rabbits!"},{"l":"H","n":"Gold-Diggers End","d":"You won't find any gold on this peaceful walk, but you will find plenty of other things to see including a lovely garden which is open to the public. It's a half-hour walk with a couple of small cafés on the way."}]}],"R3":[{"t":1,"title":"EUROPEAN CITIES FLIGHT OFFER","text":"Our basic offer price of £10 allows you to take an Express Airlines flight to Brussels from Heathrow Airport in London. At Brussels Airport there are connections to Nice, Milan, Madrid or Copenhagen for only an extra £25 return.\\n\\nThis offer is available from November to February, apart from the period December 18 - January 6. There are up to five flights during the day between Heathrow and Brussels. If you plan to travel further than Brussels, you will need to get the early morning flight from Heathrow. A charge of £10 is added to the ticket price for travel between Friday and Sunday.\\n\\nWhy not treat yourself and your partner or friend to a few days in Belgium? There is also the opportunity for our readers to stay at the Crown Inn Hotel in Brussels and enjoy luxury accommodation and friendly service for an amazing price starting from £15 per person per night. The Crown Inn Hotel is in a perfect position for you to see the sights and look round the city shops.\\n\\nWe will only consider bookings made on the special application form printed in our newspaper, and sent to us with a cheque for the fare. One week before departure, please contact our office by phone to check your booking. We recommend that you get travel insurance for your trip. Please note that the prices do not include airport tax. Once bookings are made, no changes are allowed, and your money cannot be returned if you cancel. Any flight may be changed or cancelled by the airline company without notice.","qs":[{"n":11,"s":"The Daily News is offering free flights to a number of European cities.","a":"B"},{"n":12,"s":"These tickets allow passengers to fly directly from Heathrow to Nice.","a":"B"},{"n":13,"s":"To go to Copenhagen you must leave early in the morning.","a":"A"},{"n":14,"s":"Travelling on Saturday costs extra.","a":"A"},{"n":15,"s":"The Crown Inn Hotel is convenient for shopping.","a":"A"},{"n":16,"s":"You must write to the newspaper for a special application form.","a":"B"},{"n":17,"s":"You should ring the newspaper about your reservation seven days before you leave.","a":"A"},{"n":18,"s":"Passengers must buy insurance for the trip.","a":"B"},{"n":19,"s":"You must pay extra for airport tax.","a":"A"},{"n":20,"s":"The airline company has the right to change a flight without notice.","a":"A"}]},{"t":2,"title":"THE ISLAND OF PETULIA","text":"Petulia Island is only 5.5 kilometres long and 1.5 kilometres at its widest point. It lies in the middle of Lake Donika, and is 3,900 metres above sea level. Petulia has had a small number of inhabitants for over four centuries. It now has a population of 1,500 people. It has no roads, no cars or bicycles, and no electricity. The sun is extremely hot during the day but temperatures at night regularly fall well below freezing. The water of Lake Donika is 10 degrees Celsius all year round.\\n\\nUntil recently, the island was separate from the outside world. Before the introduction of motorboats in the 1970s, travelling from Petulia to the nearest port could take over 20 hours. This journey was therefore made only once a year in order to buy salt. Motorboats have now cut the journey time to three hours, bringing new trade and tourists to Petulia.\\n\\nPetulia is divided into six farming areas. Each farmer owns one piece of land in each of the six areas and grows vegetables, potatoes and cereal. Every year, farmers leave a different piece of land unplanted to allow the earth to rest. Cows and sheep are kept here during this time to improve the soil. The food grown by each farmer is shared by everyone: none is for sale. Men knit traditional clothes from wool that is prepared by the women.\\n\\nPetulia has a tourist industry but the people have kept their traditional customs. They recently voted against a hotel development plan, so there will be no hotels on the island. Instead, tourists are placed with a family as guests. The money earned by each family is, like all money on the island, equally divided.","qs":[{"n":11,"s":"People have lived on the island for more than 400 years.","a":"A"},{"n":12,"s":"There is a big difference between day-time and night-time temperatures.","a":"A"},{"n":13,"s":"The islanders have sold their salt to other countries since the 1970s.","a":"B"},{"n":14,"s":"It takes three hours to reach Petulia from the nearest port.","a":"A"},{"n":15,"s":"Some farmers have more pieces of land to look after than others.","a":"B"},{"n":16,"s":"The animals are moved onto different land every year.","a":"A"},{"n":17,"s":"Boys often play football on the school field.","a":"B"},{"n":18,"s":"Both adults and children help to make the islanders clothes.","a":"A"},{"n":19,"s":"It is likely that there will be a tourist hotel on the island soon.","a":"B"},{"n":20,"s":"Tourists pay to stay with families.","a":"A"}]},{"t":3,"title":"HIGHFIELD HOUSE","text":"Come and enjoy three hundred years of history in a single day! Highfield House is one of Britain's finest old buildings, with attractive, well-kept gardens and good views of the beautiful North Norfolk coast.\\n\\nUntil recently, it was the home of members of the Highfield family. Now, however, this classic 18th-century hall is a living museum full of art and history, where many objects belonging to its past inhabitants can be seen and enjoyed by the public.\\n\\nHighfield House really does have something for everyone. There are so many attractions, from the beautiful state rooms to the peaceful picnic places by the lake. You can even have a trip on the water if the weather is suitable.\\n\\nEnjoy a guided tour of the House, starting with the grandeur of the entrance, and carry on through the various rooms. Highfield also has a large collection of objects which were once used on the farm, such as early planting and harvesting machines and steam engines. These can be seen in a separate building near the House.\\n\\nYou will also find many wonderful examples of the work of local painters for sale in the shop. And don't miss the beautiful Garden Centre on the site of what used to be the old 18th-century walled garden. The Centre has a good range of trees, shrubs and plants for sale and is open the whole year.\\n\\nHOUSE OPENING TIMES: Daily 2.00 p.m. to 5.00 p.m. from the beginning of June to the end of September (except Sundays and Mondays - 11.30 a.m. to 5.00 p.m.). Last admission on any day 4.40 p.m.\\nADMISSION: Adults £5, Children £2.50. 10% discount on tickets if over 20 people.","qs":[{"n":11,"s":"Highfield House is near the seaside.","a":"A"},{"n":12,"s":"The current inhabitants belong to the Highfield family.","a":"B"},{"n":13,"s":"Things which used to be used in the House are part of the exhibition.","a":"A"},{"n":14,"s":"It is sometimes possible to have a boat ride.","a":"A"},{"n":15,"s":"Highfield House has an exhibition of old farming equipment.","a":"A"},{"n":16,"s":"The shop sells paintings by artists who work in the area.","a":"A"},{"n":17,"s":"You can buy plants in what was formerly the walled garden.","a":"A"},{"n":18,"s":"The tea room can supply picnics.","a":"B"},{"n":19,"s":"The House is closed on Sundays in July.","a":"B"},{"n":20,"s":"If you have between 10 and 20 people, cheaper tickets are available.","a":"B"}]},{"t":4,"title":"GODDINGTON THEATRE","text":"The Goddington Theatre Ticket Office is open from 12 noon until 4 p.m. Monday to Friday, and for half an hour in the evening before the advertised start time of each performance.\\n\\nTelephone bookings: Your tickets are held at the Ticket Office for you to collect or, if you prefer, a charge of 35p is made to post them to you. No extra charge is made for bookings by credit card. Reservations are held for up to four days, allowing time to call in to pay for the tickets or to send payments in the post.\\n\\nInformation for the disabled: The theatre has space for up to five wheelchairs at a performance, as the seats in positions 12-16 of row A can be removed. If you have difficulty with stairs, please let us know when booking.\\n\\nWhere to find Goddington Theatre: Goddington Theatre can be found within the Goddington University site, next to the car park, which is available for public use after 5 p.m. on weekdays and all day at weekends.\\n\\nIf travelling by car: Coming from the south end of Princes Street, you will see the library on your right. The next building on your right is Goddington University. Drive up to the car park gate straight ahead of you. Put a £1 coin in the machine and the gate will rise.\\n\\nIf travelling by train: You will need to allow 30 minutes to walk from the station. Taxis are available from the front of the station.\\nBy bus/coach: The University is a 5 to 10-minute walk from the main bus station.\\nTaxis: When ordering a taxi from the theatre, ask to be picked up at the bottom of North Street. Taxis will not come into the car park because of the entrance charge.","qs":[{"n":11,"s":"If a performance begins at 8pm, the Ticket Office re-opens at 7:30 that evening.","a":"A"},{"n":12,"s":"Bookings by credit card cost more.","a":"B"},{"n":13,"s":"You must pay for tickets when you reserve them.","a":"B"},{"n":14,"s":"Wheelchairs are allowed in front of row A.","a":"B"},{"n":15,"s":"The public can use the university car park at certain times only.","a":"A"},{"n":16,"s":"The university is on the same side of the road as the library.","a":"A"},{"n":17,"s":"The car park is in front of the university building.","a":"B"},{"n":18,"s":"You need to drive away quickly after putting your money in the car park machine.","a":"A"},{"n":19,"s":"The railway station is nearer the university than the bus station.","a":"B"},{"n":20,"s":"Taxi drivers refuse to pick up customers inside the car park.","a":"A"}]}],"R4":[{"t":1,"title":"Life in a Castle Tower","text":"John Fisher, a builder, and his wife Elizabeth left their small flat for an old 40-metre-high castle tower. They have spent five years turning it into a beautiful home with six floors, winning three architectural prizes.\\n\\nElizabeth says: I love the space, and being private. You feel separated from the world. If I am in the kitchen, which is 25 metres above the ground floor, and the doorbell rings, I do not have to answer it because visitors cannot see I am in!\\n\\nThere are 142 steps to the top, so if I go up and down five or six times a day, it is very good exercise! But having to carry heavy things to the top is terrible, so I never buy more than two bags of shopping at a time. Apart from that, it is a brilliant place to live.\\n\\nWhen we first saw the place, I asked my father's advice about buying it, because we couldn't decide. After paying for it, we were a bit worried because it looked awful. But we really loved it, and knew how we wanted it to look.\\n\\nLiving here can be difficult – yesterday I climbed a four-metre ladder to clean the windows. But when you stand on the roof you can see all the way out to sea on a clear day, and that's a wonderful experience. I'm really glad we moved.","qs":[{"n":21,"q":"What is the writer trying to do in the text?","opts":["A  Describe how to turn a tower into a house","B  Recommend a particular builder","C  Describe what it is like to live in a tower","D  Explain how to win prizes for building work"],"a":2},{"n":22,"q":"From this text, a reader can find out:","opts":["A  why visitors are not welcome","B  why Elizabeth exercises every day","C  why Elizabeth asked her father about buying the tower","D  why John and Elizabeth left their flat"],"a":3},{"n":23,"q":"Which best describes Elizabeth feelings about the tower?","opts":["A  She wanted it as soon as she saw it","B  She likes most things about it","C  She has been worried since they paid for it","D  She finds it unsuitable to live in"],"a":1},{"n":24,"q":"What problem does Elizabeth have living in such a tall building?","opts":["A  Visitors find it difficult to see if she is at home","B  She feels separated from other people","C  She cannot bring home lots of shopping at once","D  It is impossible to clean any windows"],"a":2},{"n":25,"q":"How will John and Elizabeth advertise their tower if they sell it?","opts":["A  Tall building, formerly a castle. Needs improvement.","B  Castle tower, turned into a lovely home. Wonderful view.","C  Prize-winning home, 5 years old. Six rooms, sea views.","D  Castle tower, 6 small flats, close to supermarket."],"a":1}]},{"t":2,"title":"The Shoemaker","text":"Bill Bird is a shoemaker who cannot make shoes fast enough for his growing number of customers - and he charges more than £300 for a pair! Customers travel hundreds of kilometres to his London shoe clinic or to his workshop in the countryside to have their feet measured. He makes shoes for people with feet of unusual sizes: very large, very small, very broad or very narrow. The shoes are at least as fashionable as those found in ordinary shops.\\n\\nMr Bird says: My problem is that I cannot find skilled workers. Young people all seem to prefer to work with computers these days. We will lose the necessary skills soon because there are fewer and fewer shoemakers nowadays. I am 45, and now I want to teach young people everything I know about making shoes. It is a good job, and a lot of people want to buy beautiful shoes specially made for them.\\n\\nHe started in the business 19 years ago and now he employs three other people. His customers pay about 500 pounds for their first pair of shoes. He says: Our customers come because they want comfortable shoes which are exactly the right size. Extra pairs cost between 320 and 450 pounds.","qs":[{"n":21,"q":"What is the writer trying to do in the text?","opts":["A  describe where Mr Bird finds his staff","B  encourage people to wear comfortable shoes","C  advertise a job selling expensive shoes","D  show Mr Bird worries about his trade"],"a":3},{"n":22,"q":"What can readers find out from this text?","opts":["A  how many customers Mr Bird has","B  how to make shoes like Mr Bird","C  how to get to Mr Bird London shop","D  how much Mr Bird shoes cost"],"a":3},{"n":23,"q":"What is Mr Bird opinion of young people?","opts":["A  They want too much money","B  They are difficult to train","C  They prefer other jobs","D  They do not work hard enough"],"a":2},{"n":24,"q":"Customers choose Mr Bird because his shoes","opts":["A  are the most fashionable","B  fit perfectly","C  look very unusual","D  are traditional in design"],"a":1},{"n":25,"q":"Which advertisement would Mr Bird put in a newspaper?","opts":["A  Wanted: experienced shoemakers, large shoe company, good rates of pay","B  Wanted: young people to train as shoemakers, must use a computer","C  Wanted: young people to train as shoemakers, good job, small company","D  Wanted: country workshop needs people for unskilled jobs with shoes"],"a":2}]},{"t":3,"title":"Greenwood Holiday Village","text":"I recently went with a group of friends to stay at the Greenwood Holiday Village, which is open from May until October.\\n\\nBuilt in the centre of a forest, Greenwood is a great place to stay whatever the weather. Its main attraction for families is the indoor World of Water, where young and old can have fun in the different pools. Some of these, however, are for serious swimmers only.\\n\\nFor sporty people, the Country Club offers tennis, squash and badminton. If your children are too young to join in these sports, there are activity clubs. Greenwood is a good place for families as it is traffic-free – you explore on foot or by bike. Some people complained that this was inconvenient, but I was pleased to be out in the fresh air. For evening entertainment, there are shows and cinemas.\\n\\nAccommodation is in a variety of apartments of different sizes. These have up to four bedrooms, a kitchen and a bathroom, as well as a dining area. Before going, I thought the apartments might not be big enough for all of us, but I was pleasantly surprised – it was not too crowded at all.\\n\\nI'll definitely go back to Greenwood next year. Why don't you give it a try? Visit their website for further information now!","qs":[{"n":21,"q":"What is the writer's main purpose in writing this text?","opts":["A  to give her opinion of the holiday village","B  to describe what her family did there","C  to give advice to a friend going there","D  to complain about the holiday village"],"a":0},{"n":22,"q":"From the text, the reader can find out","opts":["A  the best way to get to the village","B  the best time of year to visit","C  what activities are available at the holiday village","D  how to reserve accommodation"],"a":2},{"n":23,"q":"What does the writer think about the holiday village?","opts":["A  The apartments are not big enough","B  It is not convenient without a car","C  It can only be enjoyed in good weather","D  There is something there for all ages"],"a":3},{"n":24,"q":"What does the writer say about the apartments?","opts":["A  There is not much space between them","B  Each one has its own bathroom","C  They all have four bedrooms","D  Not all of them have dining areas"],"a":1},{"n":25,"q":"Which postcard would somebody send from the holiday village?","opts":["A  The children love the beach and activities. We have a lovely 4-bedroom apartment.","B  As it is April, the weather is not good, but there is a lovely swimming pool.","C  My parents love the swimming pool, and the children love riding around the forest on their bicycles.","D  We are a bit disappointed that we have to drive everywhere, but there is lots to see."],"a":2}]},{"t":4,"title":"Orbis - Helping Blind People","text":"Orbis is an organisation which helps blind people everywhere. It has built an eye hospital inside an aeroplane and flown it all over the world with an international medical team. Samantha Graham, a fourteen-year-old schoolgirl from England, went with the plane to Mongolia.\\n\\nSamantha tells the story of Eukhtuul, a young Mongolian girl. Last year, when Eukhtuul was walking home from school, she was attacked by boys with sticks and her eyes were badly damaged. Dr Duffey, an Orbis doctor, said that without an operation she would never see again. I thought about all the everyday things I do that she could not do, things like reading schoolbooks, watching television, seeing friends, and I realised how lucky I am.\\n\\nThe Orbis team agreed to operate on Eukhtuul and I was allowed to watch. The next day I waited nervously while Dr Duffey removed her bandages. In six months your sight will be back to normal, he said. Eukhtuul smiled, her mother cried, and I had to wipe away some tears, too!\\n\\nNow Eukhtuul wants to study hard to become a doctor. Her whole future has changed, thanks to a simple operation. We should all think more about how much our sight means to us.","qs":[{"n":21,"q":"What is the writer main purpose in writing this text?","opts":["A  to describe a dangerous trip","B  to report a patient cure","C  to explain how sight can be lost","D  to warn against playing with sticks"],"a":1},{"n":22,"q":"What can a reader learn about in this text?","opts":["A  the life of schoolchildren in Mongolia","B  the difficulties for blind travellers","C  the international work of some eye doctors","D  the best way of studying medicine"],"a":2},{"n":23,"q":"After meeting Eukhtuul, Samantha felt","opts":["A  grateful for her own sight","B  proud of the doctor skill","C  surprised by Eukhtuul courage","D  angry about Eukhtuul experience"],"a":0},{"n":24,"q":"What is the result of Eukhtuul operation?","opts":["A  She can already see perfectly again","B  After some time she will see as well as before","C  She can see better but will never have normal eyes","D  Before she recovers, she will need another operation"],"a":1},{"n":25,"q":"Which is the postcard Samantha wrote to an English friend?","opts":["A  I have visited a Mongolian hospital and watched local doctors do an operation.","B  You may have to fly a long way to have the operation you need, but the journey will be worth it.","C  I am staying with my friend Eukhtuul, while I am sightseeing in Mongolia.","D  Make sure you take care of your eyes because they are more valuable than you realise!"],"a":3}]}],"R5":[{"t":1,"title":"CAMPING","text":"Although (0)_some_ groups of people have always lived outdoors in tents, camping as we know it today only began to be (26)__ about 50 years ago. The increase in the use of cars and improvements in camping (27)__ have allowed more people to travel longer (28)__ into the countryside.\\n\\nMany campers like to be (29)__ themselves in quiet areas, so they (30)__ their tent and food and walk or cycle into the forests or the mountains. Others, preferring to be near people, drive to a public or privately-owned campsite (31)__ has up-to-date facilities, (32)__ hot showers and swimming pools.\\n\\nWhether campers are (33)__ in the mountains or on a busy site, they should remember to (34)__ the area clean and tidy. In the forests, they must keep food hidden to avoid attracting (35)__ animals.","qs":[{"n":26,"opts":["A  famous","B  popular","C  favourite","D  current"],"a":1},{"n":27,"opts":["A  tools","B  baggage","C  equipment","D  property"],"a":2},{"n":28,"opts":["A  ways","B  directions","C  voyages","D  distances"],"a":3},{"n":29,"opts":["A  on","B  by","C  at","D  of"],"a":1},{"n":30,"opts":["A  take","B  make","C  pick","D  do"],"a":0},{"n":31,"opts":["A  where","B  who","C  which","D  when"],"a":2},{"n":32,"opts":["A  such","B  like","C  as","D  just"],"a":1},{"n":33,"opts":["A  lonely","B  single","C  separate","D  alone"],"a":3},{"n":34,"opts":["A  remain","B  stay","C  leave","D  let"],"a":2},{"n":35,"opts":["A  wild","B  natural","C  loose","D  free"],"a":0}]},{"t":2,"title":"THE ESCALATOR","text":"An American, Charles D. Seeberger, invented moving stairs to transport people (0)_in_ the 1890s. He (26)__ this invention an escalator, (27)__ the name from the Latin word scala, (28)__ means ladder. Escalators move people up and down short (29)__. Lifts do the same, but only move (30)__ small number of people. If an escalator breaks down, it can still be (31)__ as ordinary stairs. An escalator can move (32)__ 8000 and 9600 people an hour, and it (33)__ not need a person to operate it.\\n\\nTowards the end of the nineteenth century, cities were (34)__ more crowded and the first escalators were built at railway stations and in big department (35)__.","qs":[{"n":26,"opts":["A  announced","B  called","C  translated","D  explained"],"a":1},{"n":27,"opts":["A  fetching","B  lending","C  taking","D  carrying"],"a":2},{"n":28,"opts":["A  what","B  whose","C  who","D  which"],"a":3},{"n":29,"opts":["A  distances","B  directions","C  measurements","D  lengths"],"a":0},{"n":30,"opts":["A  the","B  a","C  some","D  any"],"a":1},{"n":31,"opts":["A  walked","B  made","C  used","D  changed"],"a":2},{"n":32,"opts":["A  from","B  between","C  to","D  above"],"a":1},{"n":33,"opts":["A  is","B  has","C  did","D  does"],"a":3},{"n":34,"opts":["A  coming","B  becoming","C  continuing","D  developing"],"a":1},{"n":35,"opts":["A  stores","B  shops","C  places","D  houses"],"a":0}]},{"t":3,"title":"WILLIAM THE HERO","text":"Brave William Baldock, (0)_who_ is six years old, is a hero after helping his mother when she fell downstairs. William quickly rang (26)__ an ambulance when he discovered his mother had broken her leg. He (27)__ the emergency services what had happened and answered all the questions they asked him. He also telephoned his father (28)__ work, and then his grandmother, to explain what he had (29)__. While waiting for (30)__ people to come, William looked after his 18-month-old sister.\\n\\nWhen ambulance man Steve Lyn went to the house, he was amazed: It is (31)__ that a young boy of six knew the right number to (32)__, and was able to give us the correct information. (33)__ of William quick thinking, we were able to (34)__ there immediately.\\n\\nMrs Baldock left hospital yesterday, very (35)__ to both William and the ambulance service.","qs":[{"n":26,"opts":["A  to","B  off","C  for","D  with"],"a":2},{"n":27,"opts":["A  said","B  talked","C  spoke","D  told"],"a":3},{"n":28,"opts":["A  in","B  at","C  on","D  by"],"a":1},{"n":29,"opts":["A  done","B  made","C  acted","D  worked"],"a":0},{"n":30,"opts":["A  these","B  every","C  each","D  this"],"a":0},{"n":31,"opts":["A  pleased","B  fine","C  clever","D  great"],"a":3},{"n":32,"opts":["A  put","B  set","C  dial","D  hit"],"a":2},{"n":33,"opts":["A  Since","B  Because","C  As","D  Although"],"a":1},{"n":34,"opts":["A  manage","B  find","C  get","D  reach"],"a":2},{"n":35,"opts":["A  agreeable","B  happy","C  grateful","D  approving"],"a":2}]},{"t":4,"title":"THE HISTORY OF FILM","text":"The first film was shown in 1895 (0)_by_ two French brothers, Louis and Auguste Lumiere. Although it only (26)__ of short, simple scenes, people loved it and films have (27)__ popular ever since. The first films were silent, with titles on the screen to (28)__ the story.\\n\\nSoon the public had (29)__ favourite actors and actresses and, in this (30)__, the first film stars appeared. In 1927, the first talkie, a film with sound, was shown. The public (31)__ only accept this kind of film.\\n\\nFurther improvements continued, particularly in America, (32)__ produced 95 percent of all films. With the arrival of television in the 1950s, (33)__ people went to see films, but in (34)__ years cinema audiences have grown again. There are currently (35)__ national film industries.","qs":[{"n":26,"opts":["A  consisted","B  contained","C  belonged","D  held"],"a":0},{"n":27,"opts":["A  gone","B  been","C  made","D  kept"],"a":1},{"n":28,"opts":["A  join","B  read","C  explain","D  perform"],"a":2},{"n":29,"opts":["A  your","B  his","C  our","D  their"],"a":3},{"n":30,"opts":["A  reason","B  way","C  method","D  result"],"a":1},{"n":31,"opts":["A  should","B  would","C  might","D  will"],"a":1},{"n":32,"opts":["A  who","B  where","C  when","D  which"],"a":3},{"n":33,"opts":["A  other","B  each","C  fewer","D  any"],"a":2},{"n":34,"opts":["A  recent","B  now","C  modern","D  present"],"a":0},{"n":35,"opts":["A  many","B  lots","C  much","D  plenty"],"a":0}]}],"W1":[{"t":1,"ctx":"Here are some sentences about a student who is living in a flat.","items":[{"n":1,"orig":"My friend told me that I could stay in his flat.","b":"My friend said: You","e":"my flat.","a":["can stay in","can stay at"]},{"n":2,"orig":"I started living here two months ago.","b":"I have lived here","e":"two months ago.","a":["since","for"]},{"n":3,"orig":"This is the first time I have lived in a city.","b":"I have","e":"in a city before.","a":["never lived"]},{"n":4,"orig":"The flat has two bedrooms.","b":"There","e":"in the flat.","a":["are two bedrooms"]},{"n":5,"orig":"My bedroom is too small for all my books.","b":"My bedroom is not","e":"for all my books.","a":["big enough","large enough"]}]},{"t":2,"ctx":"Here are some sentences about daily travel.","items":[{"n":1,"orig":"Maria lives a long way from her office.","b":"Maria office is not","e":"her home.","a":["close to","near"]},{"n":2,"orig":"It is a forty-minute bus journey to her office.","b":"The bus journey to her office","e":"forty minutes.","a":["takes","lasts"]},{"n":3,"orig":"Driving a car in the town centre is not allowed.","b":"You are not allowed","e":"cars in the town centre.","a":["to drive"]},{"n":4,"orig":"Maria sometimes takes a taxi although it is expensive.","b":"Maria does not often take a taxi","e":"it is expensive.","a":["as","since","because"]},{"n":5,"orig":"Yesterday she got up too late to catch the bus.","b":"Yesterday she got up so late that she","e":"the bus.","a":["missed"]}]},{"t":3,"ctx":"Here are some sentences about cars.","items":[{"n":1,"orig":"Large cars use more petrol than small cars.","b":"Small cars do not use as","e":"large cars.","a":["much petrol as"]},{"n":2,"orig":"Check your tyres before a long journey.","b":"Before a long journey, remember","e":"your tyres.","a":["to check"]},{"n":3,"orig":"When I was young, I drove a small car.","b":"I used to","e":"a small car when I was young.","a":["drive"]},{"n":4,"orig":"My car windscreen was broken by a stone.","b":"A stone","e":"my car windscreen.","a":["broke"]},{"n":5,"orig":"I liked the elephants more than any other animal.","b":"The elephants were","e":"any other animal.","a":["my favourite","liked more than"]}]},{"t":4,"ctx":"Here are some sentences about a visit to the zoo.","items":[{"n":1,"orig":"We had a map but it was difficult to find the zoo.","b":"Although we had a map, we","e":"find the zoo easily.","a":["could not","couldn't","didn't"]},{"n":2,"orig":"The car park was outside the main entrance.","b":"There was somewhere","e":"outside the main entrance.","a":["to park"]},{"n":3,"orig":"We wore sun hats because it was very hot.","b":"It was so hot","e":"we wore sun hats.","a":["that"]},{"n":4,"orig":"Maria suggested going to see the monkeys.","b":"Maria said: Why do we not","e":"the monkeys?","a":["go and see","go to see"]},{"n":5,"orig":"The elephants were my favourite animals.","b":"I liked the elephants","e":"any other animal.","a":["more than","better than"]}]}],"W2":["Test 1\\nYou have just joined a club in your area and think your English friend Max would enjoy going there.\\n\\nWrite an email to Max:\\n- explain which club you joined\\n- suggest Max visits the club\\n- say what you could do there together\\n\\nWrite 35-45 words.","Test 2\\nYou recently bought something from a shop but it was damaged when you got home.\\n\\nWrite a note to the shop:\\n- explain what you bought and when\\n- describe the damage\\n- say what you would like the shop to do\\n\\nWrite 35-45 words.","Test 3\\nYour English friend Sandy is coming to visit you next month.\\n\\nWrite a card to Sandy:\\n- say how long Sandy can stay\\n- suggest some places to visit\\n- tell Sandy what the weather will be like\\n\\nWrite 35-45 words.","Test 4\\nSome English friends asked you to recommend a hotel in your capital city.\\n\\nWrite an email:\\n- say which hotel they should book\\n- explain why you recommend it\\n- suggest what they could do near the hotel\\n\\nWrite 35-45 words."],"W3L":[{"t":1,"p":"Test 1 - Letter\\nA friend from the USA asks: What is the most important traditional festival in your country? Why do people celebrate it?\\n\\nWrite a letter answering your friend questions.\\nWrite about 100 words."},{"t":2,"p":"Test 2 - Letter\\nA friend asks: What kind of pet would you recommend for a family? What are the advantages and disadvantages of keeping a pet?\\n\\nWrite a letter in reply.\\nWrite about 100 words."},{"t":3,"p":"Test 3 - Letter\\nA friend asks: My parents want me to get a holiday job this summer. Do you think this is a good idea? What kind of jobs are available for young people in your country?\\n\\nWrite a letter answering your friend questions.\\nWrite about 100 words."},{"t":4,"p":"Test 4 - Letter\\nA friend asks: I am going to visit your region next year. What would you recommend? What is the best time to visit? What should I make sure I see?\\n\\nWrite a letter answering your friend questions.\\nWrite about 100 words."}],"W3S":[{"t":1,"p":"Test 1 - Story\\nYour English teacher has asked you to write a story.\\nYour story must begin with this sentence:\\n\\nNobody knew what Adam had in his suitcase.\\n\\nWrite about 100 words."},{"t":2,"p":"Test 2 - Story\\nYour English teacher has asked you to write a story.\\nYour story must begin with this sentence:\\n\\nIt was the most unusual birthday party I had ever been to.\\n\\nWrite about 100 words."},{"t":3,"p":"Test 3 - Story\\nYour English teacher has asked you to write a story.\\nYour story must begin with this sentence:\\n\\nI was standing beside someone famous!\\n\\nWrite about 100 words."},{"t":4,"p":"Test 4 - Story\\nYour English teacher has asked you to write a story.\\nYour story must begin with this sentence:\\n\\nThe phone rang at midnight and my adventure began.\\n\\nWrite about 100 words."}],"L1":[{"t":1,"qs":[{"n":1,"q":"Which activity will the family do this year?","opts":["A  Sailing","B  Cycling","C  Walking"],"tr":"The children want to go cycling but their father wants water sports. I would like to go walking. We decided to let the children choose, so we will go walking."},{"n":2,"q":"Which is the house with flowers at the front gate?","opts":["A  House with white flowers at front gate","B  House with tall trees","C  Plain small house"],"tr":"Look out for a big tree. It is by the front gate and it is covered in lovely white flowers at the moment."},{"n":3,"q":"Why will drivers have problems this morning?","opts":["A  Fog","B  Rain","C  Roadworks"],"tr":"The police have warned drivers to expect delays because of repairs to Victoria Bridge. Advise lorries to find another route if possible."},{"n":4,"q":"What time will Robin leave the house?","opts":["A  8:00","B  6:30","C  6:00"],"tr":"He will pick you up at half past six instead of six o clock. The plane takes off at eight now."},{"n":5,"q":"What did Simon do this morning?","opts":["A  Shopping","B  Cleaned windows","C  Phone calls"],"tr":"I paid the window cleaner and I was going to put away all the shopping you bought yesterday but Pete rang and kept me talking for ages."},{"n":6,"q":"What has the girl NOT packed yet?","opts":["A  Towel","B  Toothbrush","C  Toothpaste"],"tr":"I have packed my soap and toothbrush but I cannot find my toothpaste anywhere."},{"n":7,"q":"What has the woman just bought?","opts":["A  Hat","B  Silk scarf","C  Coat"],"tr":"I looked for the walkman I had promised Tony. They had sold all of them, so I had enough money for a lovely silk scarf for myself."}]},{"t":2,"qs":[{"n":1,"q":"How much is the ticket for Macbeth?","opts":["A  16.50 pounds","B  15 pounds","C  12.50 pounds"],"tr":"The middle seats in the stalls cost 15 pounds. I will have one in the middle please. I am not a student."},{"n":2,"q":"What will they have for lunch?","opts":["A  Fish","B  Chicken","C  Sausages"],"tr":"Not fish again please, and we had chicken last night. Well, we have got plenty of sausages, but we have finished the eggs."},{"n":3,"q":"Why was the man late home?","opts":["A  Lorry accident","B  Train strike","C  Road flooding"],"tr":"We did not realise the motorway was closed because of a lorry accident, so it took much longer than normal."},{"n":4,"q":"What was the weather like on holiday?","opts":["A  Rainy","B  Sunny","C  Cold and cloudy"],"tr":"It never actually rained. It was just freezing cold and cloudy. We thought it might even snow."},{"n":5,"q":"What time was the hospital appointment?","opts":["A  10:10","B  10:30","C  9:00"],"tr":"I was supposed to see the doctor at 10 past 10, but I did not arrive until half past."},{"n":6,"q":"What did the woman buy at duty-free?","opts":["A  Perfume","B  Walkman","C  Silk scarf"],"tr":"They had sold all the walkmans, so I had enough money for a lovely silk scarf for myself."},{"n":7,"q":"Where are the man and woman talking?","opts":["A  At a lecture","B  In a cinema","C  In a library"],"tr":"As long as I can hear and get down the important points, it is OK."}]},{"t":3,"qs":[{"n":1,"q":"What must Phil do on his return?","opts":["A  Phone Gary about team list","B  Get Gary to play in match","C  Let Gary know who is playing"],"tr":"Gary has phoned twice about the team list for Friday match. Could you email it to him?"},{"n":2,"q":"What is Jane doing in this card to Keiko?","opts":["A  Thanking Keiko for lunch","B  Offering Keiko congratulations","C  Giving Keiko information"],"tr":"It was nice to see you yesterday. I forgot to ask about your new job. Well done! Let us meet for lunch soon."},{"n":3,"q":"What does the STUDENT CANTEEN sign tell students?","opts":["A  Buy meal tickets at a discount","B  Students without a meal ticket pay full price","C  Students can buy food up to the amount on their ticket"],"tr":"STUDENT CANTEEN - Please show your meal ticket or you must pay the full amount."},{"n":4,"q":"What does Rick advertisement say about his bike?","opts":["A  Rick would accept 80 pounds for it","B  The bike needs only a few repairs","C  Rick bought his bike two years ago"],"tr":"SILVER MOUNTAIN BIKE, good condition, not even two years old. Quick sale. Offers welcome, not less than 80 pounds."},{"n":5,"q":"What does the NO TURNING sign mean?","opts":["A  Do not use this entrance to return vehicles","B  Factory vehicles are turning here all the time","C  Do not turn here as this entrance is always in use"],"tr":"NO TURNING BY VEHICLES AT ANY TIME - Factory entrance always in use."},{"n":6,"q":"What does the man decide to take Tracy?","opts":["A  A book","B  Flowers","C  A walkman"],"tr":"What about something to listen to? What a good idea. It is better than taking sweets - she is on a special diet."},{"n":7,"q":"What does the woman choose for the wall?","opts":["A  Flowers","B  Boats","C  Horses"],"tr":"I do quite like the one of the horses. Actually it will have to be the one with the boats."}]},{"t":4,"qs":[{"n":1,"q":"What picture does the woman choose for the wall?","opts":["A  Flowers","B  Boats","C  Horses"],"tr":"I do quite like the one of the horses. So it will have to be the one with the boats. It will be a change from that bowl of fruit."},{"n":2,"q":"What is the man selling?","opts":["A  Dishwasher","B  Washing machine","C  Shower unit"],"tr":"This is the latest model by Macpoint. It is even quicker at doing your washing up and needs less water."},{"n":3,"q":"What is the weather forecast for tomorrow?","opts":["A  Sunny","B  Dry but cloudy","C  Windy"],"tr":"The next twenty-four hours should be dry but cloudy. Monday will be a fine sunny day and the following day mild but windy."},{"n":4,"q":"Where is the TV guide?","opts":["A  On the television","B  Under a cushion","C  By the telephone"],"tr":"Here it is. It is under the cushion where nobody can find it."},{"n":5,"q":"What does the man decide to take Tracy in hospital?","opts":["A  Flowers","B  A walkman","C  Sweets"],"tr":"What about something to listen to? What a good idea. It is better than taking sweets - she is on a special diet."},{"n":6,"q":"What does the woman buy?","opts":["A  Dishwasher","B  Walkman","C  Book"],"tr":"Test 4 Part 1 Question 6 - answer B."},{"n":7,"q":"What is the weather like today?","opts":["A  Raining","B  Sunshine and showers","C  Dry and cloudy"],"tr":"It has been typical spring weather today, sunshine and showers. The next twenty-four hours should be dry but cloudy."}]}],"L2":[{"t":1,"ctx":"Interview with Angela Morgan who flew around the world in a helicopter.","tr":"Why did you do it? Angela: I just wanted an adventure. Money did not come into it. Life now: I feel the same, just more confident. I love being busy and active. Lessons: I took a five-month course. My instructor was wonderful. Trip: Sightseeing was impossible, we were too busy flying. The weather - one terrible storm. Plans: I am going to write a book about the whole experience.","qs":[{"n":8,"q":"The main reason for Angela trip was to:","opts":["A  make money for her business","B  make money for other people","C  have an exciting adventure"],"a":2},{"n":9,"q":"What does Angela say about her life now?","opts":["A  She feels much older","B  She likes to be active and busy","C  She is lonely without her children"],"a":1},{"n":10,"q":"When Angela had flying lessons,","opts":["A  her course lasted five months","B  her husband took lessons as well","C  she got to know her teacher well"],"a":2},{"n":11,"q":"During the trip, Angela and her teacher","opts":["A  did very little sightseeing","B  carried all the water they needed","C  had engine problems several times"],"a":0},{"n":12,"q":"The worst moment during the flight was:","opts":["A  when she had to fly over mountains","B  when she nearly ran out of fuel","C  when the weather became dangerous"],"a":2},{"n":13,"q":"What does Angela plan to do in the future?","opts":["A  write a book about her experience","B  teach people to fly helicopters","C  go on another long flight"],"a":0}]},{"t":2,"ctx":"A woman called Sarah talking about her painting hobby.","tr":"Good evening everyone. I have come along to talk to you about my painting. It was just a hobby but it is really more than that now. I used to paint in the evenings after work, but now I work four days a week instead of five. That means I spend Friday, Saturday and Sunday on my painting. I have pictures in local exhibitions at least once a month.","qs":[{"n":8,"q":"Sarah painting started as:","opts":["A  a hobby","B  a full-time job","C  a school project"],"a":0},{"n":9,"q":"Sarah now works:","opts":["A  five days a week","B  in the evenings only","C  four days a week"],"a":2},{"n":10,"q":"How often does Sarah show paintings in exhibitions?","opts":["A  Once a week","B  Twice a month","C  At least once a month"],"a":2},{"n":11,"q":"What would Sarah like to do in the future?","opts":["A  Paint full time","B  Sell paintings to companies","C  Teach art to others"],"a":0},{"n":12,"q":"One of Sarah paintings was recently:","opts":["A  shown at an important exhibition","B  used in an advertisement","C  sold to a museum"],"a":1},{"n":13,"q":"Why does Sarah keep her job?","opts":["A  She enjoys meeting people","B  She wants to buy a studio","C  She needs the money"],"a":2}]},{"t":3,"ctx":"A man called John Dalin talking about the travel programmes he makes for TV.","tr":"I have been making travel programmes for TV for about ten years now. My job takes me all over the world. For each programme, I have to research the location, arrange the filming, and then write the script afterwards. The hardest part is always the research. I spend weeks reading about a place before I ever get there. I work with a team of about six people. The best thing about the job is meeting local people and hearing their stories.","qs":[{"n":8,"q":"John has been making travel programmes for:","opts":["A  six years","B  eight years","C  ten years"],"a":2},{"n":9,"q":"John says the hardest part of his job is:","opts":["A  arranging the filming","B  doing the research","C  writing the script"],"a":1},{"n":10,"q":"How many people does John work with on location?","opts":["A  about six","B  about ten","C  about fifteen"],"a":0},{"n":11,"q":"What does John enjoy most about his job?","opts":["A  Travelling to new places","B  Writing the scripts","C  Meeting local people"],"a":2},{"n":12,"q":"John says his job is:","opts":["A  easier than people think","B  harder than it looks on TV","C  as difficult as other TV jobs"],"a":1},{"n":13,"q":"What does John do after filming?","opts":["A  travels to the next location","B  writes the script","C  edits the film"],"a":1}]},{"t":4,"ctx":"A radio presenter talking about new books.","tr":"Welcome to this week book programme. My life, by Joe Wrigley, will keep all fans of Joe stories happy. It explains where his ideas come from. Some of it is difficult to understand if you have not read his other books. Goodbye to the fields, by Susan Marks, tells the sad story of John, a small boy who has to leave the countryside when the family moves to London because of his father job.","qs":[{"n":8,"q":"The book My Life would best be enjoyed by:","opts":["A  people who like biographies","B  fans of Joe Wrigley fiction","C  people interested in film"],"a":1},{"n":9,"q":"My Life might be difficult if you:","opts":["A  are not interested in writing","B  have not read the author other books","C  do not know much about Joe Wrigley"],"a":1},{"n":10,"q":"In Goodbye to the Fields, John moves to London because of:","opts":["A  his own choice","B  his father work","C  his mother wish"],"a":1},{"n":11,"q":"The cookery book is suitable for:","opts":["A  experienced cooks","B  professional chefs","C  beginners who want to cook"],"a":2},{"n":12,"q":"The book about holidays in Europe:","opts":["A  describes famous tourist spots","B  includes useful maps","C  mentions many small unknown places"],"a":2},{"n":13,"q":"Next week programme will focus on:","opts":["A  books for children","B  books as gifts","C  books about history"],"a":1}]}],"L3":[{"t":1,"ctx":"Listen to information about a holiday offer and complete the notes.","tr":"We have a fantastic holiday in America that is the USA leaving on Monday afternoon. You just need to pay one pound seventy-five for airport tax. We recommend you visit the local tourist office when you arrive. The hotel is right next to the beach so you can swim every day. And there is a computer in the lobby for guests to use free of charge.","form":[{"n":14,"l":"Day of departure:","a":"Monday (afternoon)"},{"n":15,"l":"Destination country:","a":"America / USA"},{"n":16,"l":"Airport tax:","a":"1.75 pounds"},{"n":17,"l":"Recommended to visit:","a":"tourist office"},{"n":18,"l":"Hotel is next to the:","a":"beach"},{"n":19,"l":"Available free in lobby:","a":"computer"}]},{"t":2,"ctx":"Listen to information about a town tour and complete the notes.","tr":"Welcome to our town tour. We will start in the main shopping area. People say it is too expensive, not cheap at all! We will walk through the main Square to the cathedral. Our guide today is a local bus driver. He has a map for each of you. We will stop for lunch at the jewellery market. And we will finish at quarter to five.","form":[{"n":14,"l":"Shopping area described as:","a":"expensive / not cheap"},{"n":15,"l":"Meeting point:","a":"Square / Sq"},{"n":16,"l":"Guide is a:","a":"(bus) driver"},{"n":17,"l":"Each person receives:","a":"map"},{"n":18,"l":"Famous market selling:","a":"jewellery"},{"n":19,"l":"Tour finishes at:","a":"4:45 / 16:45"}]},{"t":3,"ctx":"Listen to a teacher giving information about a camping trip.","tr":"Good morning everyone. I am going to give you the final details about our camping trip. The coach will be outside school on Monday morning at seven forty-five. You will need to bring a sleeping bag as it turns cold at night. We will be able to use the outdoor swimming pool on the site. Take something to drink on the coach journey. At the college, go straight to the entrance hall where we will meet the guides.","form":[{"n":14,"l":"Coach departs at:","a":"(0)7.45"},{"n":15,"l":"Students must bring:","a":"sleeping bag"},{"n":16,"l":"Activity available at site:","a":"swimming"},{"n":17,"l":"Bring on coach:","a":"drink(s)"},{"n":18,"l":"Buildings at:","a":"Post Office"},{"n":19,"l":"Meeting point at college:","a":"entrance hall"}]},{"t":4,"ctx":"Listen to information about a cookery course.","tr":"Welcome to the City Cookery School. Our new course starts on the twenty-third of March and runs every Tuesday. We will begin by teaching you to make cakes. Then we will move on to fish dishes. Later sessions will cover vegetables. Each session lasts just fifteen minutes. We are part of the Canada College group. Remember: twenty-third of March is when we start.","form":[{"n":14,"l":"First dish taught:","a":"cakes"},{"n":15,"l":"Second dish:","a":"(fresh) fish"},{"n":16,"l":"Other food covered:","a":"vegetables"},{"n":17,"l":"Length of each session:","a":"15 / fifteen minutes"},{"n":18,"l":"College group name:","a":"Canada"},{"n":19,"l":"Course start date:","a":"23 March"}]}],"L4":[{"t":1,"ctx":"Conversation between Tom and his sister Clare about school and swimming.","tr":"Boy: I have been chosen for the school swimming team! Girl: I am sure Dad will not say the same when he finds out. Boy: It will not make any difference. I can do my homework on the bus. Girl: Your teacher said you have got a good brain. Boy: Well I work hard at everything. Take maths for example. Girl: I would not depend on what one of your friends says if I were you. Boy: It was not a friend, it was a teacher at school. Boy: Yes, okay. I will have a chat with Dad tonight.","qs":[{"n":20,"s":"Clare thinks their father will be pleased by Tom news.","a":"B"},{"n":21,"s":"Tom believes he can manage both swimming and school work.","a":"A"},{"n":22,"s":"Tom teacher thinks Tom is clever.","a":"A"},{"n":23,"s":"Tom dislikes doing maths.","a":"B"},{"n":24,"s":"Clare thinks it is a bad idea to take a friend advice.","a":"A"},{"n":25,"s":"Tom finally realises he will need his father agreement to his plans.","a":"A"}]},{"t":2,"ctx":"Conversation between two students about an athletics competition.","tr":"Boy: Anna, did you hear about the regional athletics competition next month? Girl: Yes! I am thinking of entering the 800 metres. Boy: Really? I thought you preferred the long jump. Girl: My coach says I am better at middle-distance running now. Boy: Will you have enough time to train? Girl: My coach says I only need to train three times a week. Boy: Has he ever trained anyone who won at national level? Girl: Yes, two of his students won gold medals last year.","qs":[{"n":20,"s":"Anna is planning to enter the long jump.","a":"B"},{"n":21,"s":"Anna coach thinks she is better at running than jumping.","a":"B"},{"n":22,"s":"Anna needs to train three times a week.","a":"B"},{"n":23,"s":"Anna coach has experience training successful athletes.","a":"A"},{"n":24,"s":"Two of the coach students won gold medals last year.","a":"A"},{"n":25,"s":"The boy decides to ask Anna coach to train him.","a":"B"}]},{"t":3,"ctx":"Conversation between two friends about a concert.","tr":"Girl: What is that? Boy: There is a concert in the sports stadium next week, a new Irish band. Would you like to come? Girl: That sounds great. The last band you took me to see was awful! Boy: This one is different. I will go buy some tickets. Girl: All right. But you will have to come and get me. Boy: That is fine. I will pick you up at seven. Girl: Actually can we make it half past seven? I need to get ready. Boy: OK, half past seven then.","qs":[{"n":20,"s":"The girl immediately agrees to go to the concert.","a":"A"},{"n":21,"s":"The girl enjoyed the last concert the boy took her to.","a":"B"},{"n":22,"s":"The boy will buy the tickets.","a":"A"},{"n":23,"s":"The boy offers to collect the girl.","a":"B"},{"n":24,"s":"They agree to meet at seven o clock.","a":"B"},{"n":25,"s":"They will meet at half past seven.","a":"B"}]},{"t":4,"ctx":"Conversation between Anna and her father about a party.","tr":"Anna: Dad, my friend Tom is having a party on Saturday. Father: What time does it finish? Anna: About midnight. Father: That is very late. Anna: But it is Saturday! Father: Well, I will take you and collect you, but I want you home by eleven. Anna: Can it not be half past eleven? Father: No, eleven o clock. Take it or leave it. Anna: Oh alright. Tom cousins will be there too.","qs":[{"n":20,"s":"Anna begins by asking her father to collect her from the party.","a":"B"},{"n":21,"s":"The party is to celebrate Tom birthday.","a":"B"},{"n":22,"s":"Some of Tom relations will be at the party.","a":"A"},{"n":23,"s":"Anna father is worried about her attending the party.","a":"B"},{"n":24,"s":"Anna father will take them to the party before the film starts.","a":"B"},{"n":25,"s":"Anna father insists that she leaves the party at 12:00.","a":"A"}]}],"SP1":["What is your name and where are you from?","What do you do - are you a student or do you work?","What do you enjoy doing in your free time?","Tell me about your family.","What kind of music do you enjoy? Why?","Describe a typical day in your life.","What are your plans for the future?","Tell me about a place you would like to visit.","What is your favourite subject at school and why?","Do you prefer living in a city or the countryside? Why?"],"SP2":[{"q":"Your school wants to organise a trip for students. Talk about the different options and decide which would be most popular.","opts":["Museum","Beach","Theatre","Nature walk"]},{"q":"You and a friend are planning a birthday party. Talk about the different arrangements you need to make.","opts":["Choose venue","Plan food","Music","Invitations"]},{"q":"Your school wants to improve its sports facilities. Talk about what new facilities would be most useful.","opts":["Swimming pool","Football pitch","Badminton courts","Gym equipment"]},{"q":"You and a friend are planning a day out in a new city. Talk about what you would most like to do.","opts":["Visit museums","Go shopping","Explore parks","Try local food"]}],"SP3":["Imagine a photo of people at a busy outdoor market buying fruit and vegetables. Describe what you can see and what is happening.","Imagine a photo of friends playing football in a park on a sunny afternoon. Describe the scene in detail.","Imagine a photo of a family sitting around a table having a meal together. Describe who is there and what they are doing.","Imagine a photo of students in a library studying together. Describe the scene."],"SP4":["Is it better to travel abroad or explore your own country? Why?","How important is it to learn a foreign language? Why?","Is sport important for young people? Why or why not?","What are the advantages and disadvantages of living in a big city?","Would you rather have a job you love with low pay, or a high-paying job you do not enjoy?","How has technology changed the way young people spend their free time?"],"VC":{"travel":[{"w":"departure","d":"The act of leaving a place","e":"The departure time is 3pm."},{"w":"destination","d":"The place you are going to","e":"Paris was our final destination."},{"w":"accommodation","d":"A place to stay","e":"We booked accommodation in advance."},{"w":"luggage","d":"Bags and suitcases you travel with","e":"My luggage was very heavy."},{"w":"fare","d":"The cost of a ticket","e":"The bus fare has increased."},{"w":"reservation","d":"A booking made in advance","e":"I have a reservation at this hotel."},{"w":"itinerary","d":"A plan of a journey","e":"We planned our itinerary carefully."},{"w":"passport","d":"Official document for international travel","e":"Do not forget your passport!"}],"work":[{"w":"salary","d":"Fixed regular payment for work","e":"She earns a good salary."},{"w":"colleague","d":"A person you work with","e":"My colleagues are very supportive."},{"w":"promotion","d":"Moving to a higher job position","e":"He got a promotion last year."},{"w":"deadline","d":"The latest time to finish something","e":"The deadline is Friday at noon."},{"w":"resign","d":"To officially leave a job","e":"She decided to resign from her post."},{"w":"overtime","d":"Extra hours worked beyond normal","e":"He worked overtime to finish the report."},{"w":"qualification","d":"A certificate showing skill","e":"You need a degree for this job."},{"w":"interview","d":"A formal meeting to assess a job candidate","e":"I have a job interview tomorrow."}],"health":[{"w":"symptom","d":"A sign of illness","e":"Headache is a common symptom."},{"w":"prescription","d":"Doctor's written order for medicine","e":"He gave me a prescription."},{"w":"vaccination","d":"Injection to prevent disease","e":"Children need vaccination."},{"w":"diagnosis","d":"Identifying what illness someone has","e":"The diagnosis was pneumonia."},{"w":"recover","d":"To get better after illness","e":"She recovered quickly."},{"w":"treatment","d":"Medical care given for illness","e":"The treatment lasted six months."},{"w":"injury","d":"Physical harm to the body","e":"He suffered a knee injury."},{"w":"surgery","d":"Medical operation","e":"She had surgery on her back."}],"home":[{"w":"suburb","d":"Residential area outside city centre","e":"We live in a quiet suburb."},{"w":"renovate","d":"To repair and improve a building","e":"They renovated the old kitchen."},{"w":"landlord","d":"Person who owns rented property","e":"Our landlord fixed the heating."},{"w":"mortgage","d":"Loan to buy property","e":"They took out a mortgage."},{"w":"tenant","d":"Person who rents property","e":"The tenant pays monthly rent."},{"w":"maintenance","d":"Keeping something in good condition","e":"Car maintenance is expensive."},{"w":"furniture","d":"Movable objects in a room","e":"The furniture is quite modern."},{"w":"appliance","d":"Electrical device for the home","e":"Kitchen appliances cost a lot."}],"leisure":[{"w":"competitive","d":"Involving trying hard to win","e":"He is very competitive at tennis."},{"w":"spectator","d":"A person who watches an event","e":"Spectators cheered loudly."},{"w":"tournament","d":"A competition with many games","e":"She entered a chess tournament."},{"w":"rehearsal","d":"Practice before a performance","e":"We had a rehearsal yesterday."},{"w":"exhibition","d":"A public show of art","e":"The photo exhibition was amazing."},{"w":"champion","d":"Winner of a competition","e":"She became world champion."},{"w":"membership","d":"Belonging to a club","e":"I renewed my gym membership."},{"w":"performance","d":"Showing of a play or concert","e":"The performance was wonderful."}],"food":[{"w":"ingredient","d":"Food item used to make a dish","e":"Salt is an important ingredient."},{"w":"cuisine","d":"Style of cooking from a region","e":"I love Thai cuisine."},{"w":"recipe","d":"Instructions for making a dish","e":"I followed a recipe online."},{"w":"nutritious","d":"Good for your health","e":"Vegetables are very nutritious."},{"w":"flavour","d":"Taste of food or drink","e":"The sauce has a strong flavour."},{"w":"portion","d":"Amount of food served","e":"The portions were very generous."},{"w":"organic","d":"Grown without chemicals","e":"Organic food is more expensive."},{"w":"grill","d":"To cook food over direct heat","e":"We grilled the chicken outside."}],"env":[{"w":"pollution","d":"Harmful substances in the environment","e":"Air pollution is a serious problem."},{"w":"conservation","d":"Protecting nature","e":"Wildlife conservation is important."},{"w":"renewable","d":"Can be naturally replaced","e":"Solar is a renewable energy source."},{"w":"endangered","d":"At risk of dying out","e":"Polar bears are endangered."},{"w":"deforestation","d":"Cutting down forests","e":"Deforestation destroys habitats."},{"w":"recycling","d":"Processing waste to use again","e":"Recycling reduces landfill waste."},{"w":"emissions","d":"Gases released into the air","e":"Carbon emissions cause climate change."},{"w":"sustainable","d":"Can continue without harm","e":"We need sustainable farming."}],"tech":[{"w":"software","d":"Programs used by computers","e":"We need to update the software."},{"w":"wireless","d":"Working without cables","e":"The printer is wireless."},{"w":"download","d":"To copy data from internet","e":"I downloaded the app."},{"w":"upload","d":"To send data to the internet","e":"Please upload the document."},{"w":"database","d":"Organised collection of data","e":"The database stores customer info."},{"w":"encryption","d":"Coding data to keep it secure","e":"Encryption protects passwords."},{"w":"interface","d":"How you interact with a program","e":"The interface is user-friendly."},{"w":"bandwidth","d":"Amount of data that can be transferred","e":"We need more bandwidth for video."}]},"SAMPLES":{"w2":[{"band5":"Dear Max,\\nI have just joined a brilliant film club in our area. We meet every Friday evening to watch and discuss movies. I think you would enjoy it. Why do you not join me next time? We could watch a film and have dinner together afterwards!\\n(Band 5 - all 3 content points covered, 35-45 words)","band3":"Hi Max, I am in a club called Blue Club in Barking, so I like you to come this weekend. We are going to play pool and dancing.\\n(Band 3 - covers points but has language errors)"},{"band5":"Dear Manager,\\nI bought a blue sweater from your shop last Saturday. When I got home, I noticed a large hole in the sleeve. The sweater was clearly damaged. I would be grateful if you could replace it or give me a full refund.\\n(Band 5 - all 3 points, correct register)","band3":"Hi, I bought a sweater in your shop yesterday. It has a hole. I want my money back or a new one please.\\n(Band 3 - communicates but with language errors)"},{"band5":"Dear Sandy,\\nI am so excited about your visit! You are welcome to stay for the whole week. I would love to take you to our old castle and the local market. The weather in April is usually warm and sunny. I cannot wait to see you!\\n(Band 5 - all 3 points, friendly tone)","band3":"Hi Sandy, you can stay 5 days. We will visit the museum. The weather is quite hot.\\n(Band 3 - basic but covers the points)"},{"band5":"Dear friends,\\nI recommend the Grand Palace Hotel. It is comfortable, central and has excellent reviews. It is walking distance from all the main sights. Near the hotel there is a wonderful night market and several excellent restaurants to try!\\n(Band 5 - all 3 content points covered)","band3":"Dear friends, you should book the most famous hotel of my country, because the hotel has nice food and many famous places near by the hotel.\\n(Band 3 - attempts all points)"}],"w3letter":[{"band5":"Dear John,\\nThank you for your letter! The most important festival in my country is Lunar New Year, celebrated in January or February. People clean their houses, cook special food and visit relatives. Children receive red envelopes with money. Fireworks fill the sky at midnight. It is a magical time for families to celebrate together and wish each other good luck for the coming year. I hope you can visit during the festival one day!\\nYours, Name\\n(Band 5 - answers all questions, approximately 100 words)","band3":"Dear friend, I have received your letter and am very happy. It is a traditional festival in my city. It will start next week. It is a kind of traditional music. People are making an exhibition dance with many musical instruments. I suggest you to come with us in this special occasion.\\n(Band 3 - attempts the task with errors)"}],"w3story":[{"band5":"Nobody knew what Adam had in his suitcase. Every day he carried it to work, to restaurants, and even to the beach. His friends begged him to open it, but he always smiled and said nothing. One evening, at his birthday party, he finally placed it on the table. Everyone held their breath. He opened it slowly to reveal hundreds of handwritten letters. He was a secret pen pal who had been writing to lonely people for years. The room fell silent, then erupted in applause.\\n(Band 4/5 - imaginative, well-structured, approximately 100 words)","band3":"Nobody knew what Adam had in his suitcase. Adam always went to somewhere with his suitcase but nobody saw when he opened it. He took his suitcase to work. He was a secretary and he just answered the calls. The suitcase always stood under the table at his work.\\n(Band 4 - fairly accurate, 79 words)"}]}}`);
+const AK=_D.AK, R1=_D.R1, R2=_D.R2, R3DATA=_D.R3, R4DATA=_D.R4, R5DATA=_D.R5;
+const W1=_D.W1, W2=_D.W2, W3L=_D.W3L, W3S=_D.W3S;
+const L1=_D.L1, L2=_D.L2, L3=_D.L3, L4=_D.L4;
+const SP1=_D.SP1, SP2=_D.SP2, SP3=_D.SP3, SP4=_D.SP4;
+const VC=_D.VC, SAMPLES=_D.SAMPLES;
+
+// ── STATE ──────────────────────────────────────────────────
+let pts=0,streak=0;
+function addPts(n){pts+=n;streak++;document.getElementById('s-pts').textContent=pts;document.getElementById('s-str').textContent='🔥'+streak;}
+function miss(){streak=0;document.getElementById('s-str').textContent='🔥0';}
+
+// ── INDEXES ────────────────────────────────────────────────
+let r1i=0,r2i=0,r3i=0,r4i=0,r5i=0;
+let w1i=0,w2i=0,w3i=0,w3t_='L';
+let l1i=0,l2i=0,l3i=0,l4i=0;
+let sp1i=0,sp2i=0,sp3i=0,sp4i=0;
+const micR={},spRes={};
+const li=x=>x==='A'?0:x==='B'?1:x==='C'?2:3;
+
+// ── CORE: tick = show right/wrong immediately ──────────────
+function reveal(btns,correct,chosen){
+  btns.forEach((b,j)=>{b.disabled=true;if(j===correct)b.classList.add('C');else if(j===chosen&&j!==correct)b.classList.add('W');});
+  return chosen===correct;
+}
+function aMC(gid,j,correct){
+  const btns=[...document.querySelectorAll('#'+gid+' .opt')];
+  if(btns.some(b=>b.disabled))return;
+  if(reveal(btns,correct,j))addPts(10);else miss();
+}
+function aTF(pfx,i,choice,correct){
+  const bA=document.getElementById(pfx+'A-'+i), bB=document.getElementById(pfx+'B-'+i);
+  if(!bA||bA.disabled)return;
+  bA.disabled=bB.disabled=true;
+  if(correct==='A'){bA.classList.add('C');bB.classList.add('dim');}else{bB.classList.add('C');bA.classList.add('dim');}
+  if(choice!==correct){(choice==='A'?bA:bB).classList.add('W');miss();}else addPts(5);
+  const row=document.getElementById((pfx==='r3'?'r3r':'l4r')+'-'+i);
+  if(row){const t=document.createElement('span');t.style.cssText='font-size:.78rem;font-weight:700;margin-left:8px;color:'+(choice===correct?'var(--green)':'var(--red)');t.textContent=choice===correct?' ✅':' ❌ → '+correct;row.appendChild(t);}
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────
+function go(id){
+  ['home','reading','writing','listening','speaking','vocab','tests','answers'].forEach(s=>{const el=document.getElementById(s);if(el)el.className='sec'+(s===id?' on':'');});
+  const map={home:0,reading:1,writing:2,listening:3,speaking:4,vocab:5,tests:6,answers:7};
+  document.querySelectorAll('nav .nb').forEach((b,i)=>b.className='nb'+(map[id]===i?' on':''));
+  if(id==='reading')initR();if(id==='writing')initW();if(id==='listening')initL();
+  if(id==='speaking')initSp();if(id==='vocab')loadFlash();if(id==='answers')akTab(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── TTS ────────────────────────────────────────────────────
+function tts(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.88;const v=speechSynthesis.getVoices().find(x=>x.lang.startsWith('en'));if(v)u.voice=v;speechSynthesis.speak(u);}
+
+// ── TABS ───────────────────────────────────────────────────
+function rTab(id){['r1','r2','r3','r4','r5'].forEach(p=>{const el=document.getElementById(p+'-p');if(el)el.style.display=p===id?'block':'none';});document.querySelectorAll('#reading .tb').forEach((b,i)=>b.className='tb'+(['r1','r2','r3','r4','r5'][i]===id?' on':''));}
+function wTab(id){['w1','w2','w3'].forEach(p=>{const el=document.getElementById(p+'-p');if(el)el.style.display=p===id?'block':'none';});document.querySelectorAll('#writing .tb').forEach((b,i)=>b.className='tb'+(['w1','w2','w3'][i]===id?' on':''));}
+function lTab(id){['l1','l2','l3','l4'].forEach(p=>{const el=document.getElementById(p+'-p');if(el)el.style.display=p===id?'block':'none';});document.querySelectorAll('#listening .tb').forEach((b,i)=>b.className='tb'+(['l1','l2','l3','l4'][i]===id?' on':''));}
+function spTab(n){[1,2,3,4].forEach(i=>{const el=document.getElementById('sp'+i+'-p');if(el)el.style.display=i===n?'block':'none';});document.querySelectorAll('#speaking .tb').forEach((b,i)=>b.className='tb'+(i+1===n?' on':''));if(n===2)rSp2();if(n===3)rSp3();if(n===4)rSp4();}
+function vTab(n){document.getElementById('vf-p').style.display=n===1?'block':'none';document.getElementById('vq-p').style.display=n===2?'block':'none';document.querySelectorAll('#vocab .tb').forEach((b,i)=>b.className='tb'+(i+1===n?' on':''));if(n===2)nextVQ();}
+
+// ── READING ────────────────────────────────────────────────
+function initR(){rR1();rR2();rR3();rR4();rR5();}
+function selBtn(ids,cur){return ids.map((t,i)=>`<button onclick="${ids[i]}i=${i};${ids[i]===cur?'':''}r${ids[i].toUpperCase()}()" class="${cur===t?'btn':'btn-o'} sm">Test ${t}</button>`).join('');}
+
+function rR1(){
+  const set=R1[r1i%R1.length];const k=AK[String(set.t)].r.p1;
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="r1i=${i};rR1()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;}); h+='</div>';
+  set.qs.forEach((q,qi)=>{
+    const ca=li(k[String(q.n)]);
+    h+=`<div style="border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:10px">
+      <div style="display:flex;gap:9px;align-items:flex-start;margin-bottom:9px"><span class="qn">${q.n}</span>
+      <div style="background:#fff;border:2px solid var(--navy);border-radius:7px;padding:9px 13px;font-weight:700;font-size:.85rem;flex:1;box-shadow:2px 2px 0 var(--navy)">${q.sign.replace(/\n/g,'<br>')}</div></div>
+      <div style="font-weight:600;font-size:.87rem;margin-bottom:7px">${q.q}</div>
+      <div class="opts" id="r1o-${qi}">${q.opts.map((o,j)=>`<button class="opt" onclick="aMC('r1o-${qi}',${j},${ca})">${o}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('r1-b').innerHTML=h;
+}
+
+function rR2(){
+  const set=R2[r2i%R2.length];const k=AK[String(set.t)].r.p2;
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="r2i=${i};rR2()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;}); h+='</div>';
+  h+=`<div style="font-weight:700;color:var(--blue);margin-bottom:8px">${set.title}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <div><div style="font-weight:700;font-size:.82rem;margin-bottom:6px;color:var(--mid)">People:</div>
+    ${set.people.map(p=>`<div style="padding:8px;background:#f8faff;border-radius:7px;margin-bottom:5px;border-left:3px solid var(--mid);font-size:.82rem"><b style="color:var(--mid)">${p.n}.</b> ${p.d}</div>`).join('')}</div>
+    <div><div style="font-weight:700;font-size:.82rem;margin-bottom:6px;color:var(--mid)">Places A-H:</div>
+    ${set.places.map(c=>`<div style="padding:6px 8px;background:#f8faff;border-radius:7px;margin-bottom:4px;font-size:.78rem;border-left:3px solid var(--accent)"><b>${c.l}. ${c.n}</b> - ${c.d}</div>`).join('')}</div>
+  </div>
+  <div style="font-weight:700;margin-bottom:8px;font-size:.88rem">Match each person - click to reveal the answer:</div>`;
+  set.people.forEach(p=>{
+    const ans=k[String(p.n)];
+    h+=`<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;padding:8px;background:#f8faff;border-radius:8px;flex-wrap:wrap">
+      <span class="qn">${p.n}</span><span style="flex:1;font-size:.84rem;min-width:100px">${p.d.substring(0,60)}...</span>
+      <button onclick="revP2(this,'${ans}')" style="background:var(--light);border:2px solid var(--border);border-radius:7px;padding:5px 14px;cursor:pointer;font-weight:700;font-family:inherit;font-size:.84rem">Show Answer</button>
+    </div>`;
+  });
+  document.getElementById('r2-b').innerHTML=h;
+}
+function revP2(btn,a){btn.textContent='→ '+a;btn.style.background='var(--green)';btn.style.color='#fff';btn.style.borderColor='var(--green)';btn.disabled=true;addPts(10);}
+
+function rR3(){
+  const set=R3DATA[r3i%R3DATA.length];
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="r3i=${i};rR3()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;}); h+='</div>';
+  h+=`<div class="rt"><h3>${set.title}</h3>${set.text.replace(/\n\n/g,'<br><br>')}</div>
+  <div style="font-weight:700;margin-bottom:9px">Q11-20: True (A) or False (B) - Click to see answer:</div>`;
+  set.qs.forEach((q,i)=>{
+    h+=`<div id="r3r-${i}" style="display:flex;align-items:center;gap:9px;padding:9px;background:#f8faff;border-radius:9px;margin-bottom:7px;flex-wrap:wrap">
+      <span class="qn">${q.n}</span>
+      <span style="flex:1;font-size:.86rem;line-height:1.4;min-width:100px">${q.s}</span>
+      <div style="display:flex;gap:5px">
+        <button class="tf" id="r3A-${i}" onclick="aTF('r3',${i},'A','${q.a}')">A True</button>
+        <button class="tf" id="r3B-${i}" onclick="aTF('r3',${i},'B','${q.a}')">B False</button>
+      </div></div>`;
+  });
+  document.getElementById('r3-b').innerHTML=h;
+}
+
+function rR4(){
+  const set=R4DATA[r4i%R4DATA.length];
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="r4i=${i};rR4()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;}); h+='</div>';
+  h+=`<div class="rt"><h3>${set.title}</h3>${set.text.replace(/\n\n/g,'<br><br>')}</div>`;
+  set.qs.forEach((q,qi)=>{
+    h+=`<div style="border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:9px">
+      <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:7px"><span class="qn">${q.n}</span><span style="font-weight:600;font-size:.86rem;flex:1">${q.q}</span></div>
+      <div class="opts" id="r4o-${qi}">${q.opts.map((o,j)=>`<button class="opt" onclick="aMC('r4o-${qi}',${j},${q.a})">${o}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('r4-b').innerHTML=h;
+}
+
+function rR5(){
+  const set=R5DATA[r5i%R5DATA.length];
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="r5i=${i};rR5()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;}); h+='</div>';
+  h+=`<div class="rt"><h3>${set.title}</h3>${set.text.replace(/\n\n/g,'<br><br>')}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">`;
+  set.qs.forEach((q,qi)=>{
+    h+=`<div style="padding:9px;background:#f8faff;border-radius:8px;border:1px solid var(--border)">
+      <div style="font-weight:700;font-size:.8rem;margin-bottom:5px;color:var(--blue)">Q${q.n}</div>
+      <div class="opts" id="r5o-${qi}">${q.opts.map((o,j)=>`<button class="opt" style="padding:6px 10px;font-size:.82rem" onclick="aMC('r5o-${qi}',${j},${q.a})">${o}</button>`).join('')}</div></div>`;
+  });
+  h+='</div>';
+  document.getElementById('r5-b').innerHTML=h;
+}
+function nextR(p){if(p===1)r1i++;else if(p===2)r2i++;else if(p===3)r3i++;else if(p===4)r4i++;else r5i++;[rR1,rR2,rR3,rR4,rR5][p-1]();}
+
+// ── WRITING ────────────────────────────────────────────────
+function initW(){rW1();rW2();rW3();}
+function rW1(){
+  const s=W1[w1i%W1.length];
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  W1.forEach((x,i)=>{h+=`<button onclick="w1i=${i};rW1()" class="${w1i===i?'btn':'btn-o'} sm">Test ${x.t}</button>`;});
+  h+=`</div><div class="rt">${s.ctx}</div>`;
+  s.items.forEach((it,i)=>{
+    h+=`<div style="background:#f8faff;border-radius:9px;padding:11px;margin-bottom:9px;border:1px solid var(--border)">
+      <div style="display:flex;gap:8px;align-items:flex-start"><span class="qn" style="min-width:22px;height:22px;font-size:.72rem">${it.n}</span>
+      <div style="flex:1"><div style="font-size:.8rem;color:var(--gray);margin-bottom:5px">${it.orig}</div>
+      <div style="font-size:.88rem;font-weight:600;line-height:2">${it.b} <input type="text" id="w1i-${i}" class="fi" placeholder="..." style="width:150px;display:inline-block;margin:0 5px"> ${it.e}</div></div></div></div>`;
+  });
+  document.getElementById('w1-b').innerHTML=h;
+  document.getElementById('w1-fb').className='fb';
+}
+function checkW1(){
+  const s=W1[w1i%W1.length];let ok=0;
+  s.items.forEach((it,i)=>{
+    const inp=document.getElementById('w1i-'+i);if(!inp)return;
+    const val=inp.value.trim().toLowerCase();
+    const good=it.a.some(a=>val===a.toLowerCase().trim()||val.includes(a.toLowerCase().trim()));
+    inp.className='fi '+(good?'ok':'ng');inp.readOnly=true;
+    if(good)ok++;else{const d=document.createElement('div');d.style.cssText='font-size:.76rem;color:var(--red);margin-top:2px';d.textContent='Answer: '+it.a[0];inp.after(d);}
+  });
+  if(ok>0)addPts(ok*10);
+  const fb=document.getElementById('w1-fb');
+  fb.className='fb '+(ok===s.items.length?'ok':'info')+' on';
+  fb.textContent=ok+'/'+s.items.length+' correct'+(ok===s.items.length?' Excellent!':'');
+}
+function rW2(){
+  document.getElementById('w2-b').innerHTML=`<div class="rt" style="white-space:pre-line">${W2[w2i%W2.length]}</div>`;
+  document.getElementById('w2-ta').value='';document.getElementById('w2-wc').textContent='0 words';
+  document.getElementById('w2-ai').className='ai-box';
+}
+function rW3(){
+  const arr=w3t_==='S'?W3S:W3L;
+  document.getElementById('w3-b').innerHTML=`<div class="rt" style="white-space:pre-line">${arr[w3i%arr.length].p}</div>`;
+  document.getElementById('w3-ta').value='';document.getElementById('w3-wc').textContent='0 words';
+  document.getElementById('w3-ai').className='ai-box';
+}
+function w3t(t){w3t_=t;document.getElementById('w3-lb').className='btn sm'+(t==='L'?'':' btn-o');document.getElementById('w3-sb').className='btn sm'+(t==='S'?'':' btn-o');rW3();}
+function nextW(p){if(p===1){w1i++;rW1();}else if(p===2){w2i++;rW2();}else{w3i++;rW3();}}
+function wc(ta,wc){const w=document.getElementById(ta).value.trim().split(/\s+/).filter(x=>x).length;document.getElementById(wc).textContent=w+' words';}
+
+// ── LISTENING ──────────────────────────────────────────────
+function initL(){rL1();rL2();rL3();rL4();}
+function rL1(){
+  const set=L1[l1i%L1.length];const k=AK[String(set.t)].l.p1;
+  window._l1trs=set.qs.map(q=>q.tr).join(' ... ');
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="l1i=${i};rL1()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;});
+  h+=`<button class="btn sm" onclick="tts(window._l1trs)">🔊 Play All</button></div>`;
+  set.qs.forEach((q,qi)=>{
+    const ca=li(k[String(q.n)]);
+    h+=`<div style="border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:9px;background:#fafbff">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:7px;flex-wrap:wrap">
+        <span class="qn">${q.n}</span><span style="font-weight:600;font-size:.86rem;flex:1">${q.q}</span>
+        <button class="btn sm" onclick="tts(L1[l1i%L1.length].qs[${qi}].tr)">🔊</button></div>
+      <div class="opts" id="l1o-${qi}">${q.opts.map((o,j)=>`<button class="opt" onclick="aMC('l1o-${qi}',${j},${ca})">${o}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('l1-b').innerHTML=h;
+}
+function rL2(){
+  const set=L2[l2i%L2.length];const k=AK[String(set.t)].l.p2;
+  window._l2tr=set.tr;
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="l2i=${i};rL2()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;});
+  h+=`<button class="btn sm" onclick="tts(window._l2tr)">🔊 Play</button></div>
+  <div class="rt" style="font-size:.83rem;margin-bottom:10px">${set.ctx}</div>`;
+  set.qs.forEach((q,qi)=>{
+    const ca=li(k[String(q.n)]);
+    h+=`<div style="border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:8px">
+      <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:7px"><span class="qn">${q.n}</span><span style="font-weight:600;font-size:.86rem;flex:1">${q.q}</span></div>
+      <div class="opts" id="l2o-${qi}">${q.opts.map((o,j)=>`<button class="opt" onclick="aMC('l2o-${qi}',${j},${ca})">${o}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('l2-b').innerHTML=h;
+}
+function rL3(){
+  const set=L3[l3i%L3.length];
+  window._l3tr=set.tr;
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="l3i=${i};rL3()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;});
+  h+=`<button class="btn sm" onclick="tts(window._l3tr)">🔊 Play Audio</button></div>
+  <div class="rt" style="font-size:.83rem;margin-bottom:10px">${set.ctx}</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:9px;padding:13px">`;
+  set.form.forEach((f,i)=>{
+    h+=`<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap">
+      <label style="font-weight:600;font-size:.83rem;min-width:170px">${f.n}. ${f.l}</label>
+      <input type="text" class="fi" id="l3i-${i}" placeholder="Write answer..." style="flex:1;min-width:90px"></div>`;
+  });
+  h+='</div>';
+  document.getElementById('l3-b').innerHTML=h;
+  document.getElementById('l3-fb').className='fb';
+}
+function checkL3(){
+  const set=L3[l3i%L3.length];let ok=0;
+  set.form.forEach((f,i)=>{
+    const inp=document.getElementById('l3i-'+i);if(!inp)return;
+    const val=inp.value.trim().toLowerCase();
+    const good=f.a.toLowerCase().split('/').some(a=>val===a.trim()||val.includes(a.trim().replace(/[()]/g,'')));
+    inp.className='fi '+(good?'ok':'ng');inp.readOnly=true;
+    if(good)ok++;else{const d=document.createElement('div');d.style.cssText='font-size:.75rem;color:var(--red);margin-top:2px';d.textContent='Answer: '+f.a;inp.after(d);}
+  });
+  if(ok>0)addPts(ok*10);
+  const fb=document.getElementById('l3-fb');
+  fb.className='fb '+(ok===set.form.length?'ok':'info')+' on';
+  fb.textContent=ok+'/'+set.form.length+' correct';
+}
+function rL4(){
+  const set=L4[l4i%L4.length];
+  window._l4tr=set.tr;
+  let h=`<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><span style="font-size:.8rem;font-weight:700;color:var(--gray);align-self:center">Test:</span>`;
+  [1,2,3,4].forEach((t,i)=>{h+=`<button onclick="l4i=${i};rL4()" class="${set.t===t?'btn':'btn-o'} sm">Test ${t}</button>`;});
+  h+=`<button class="btn sm" onclick="tts(window._l4tr)">🔊 Play</button></div>
+  <div class="rt" style="font-size:.83rem;margin-bottom:10px">${set.ctx}</div>`;
+  set.qs.forEach((q,i)=>{
+    h+=`<div id="l4r-${i}" style="display:flex;align-items:center;gap:9px;padding:9px;background:#f8faff;border-radius:9px;margin-bottom:7px;flex-wrap:wrap">
+      <span class="qn">${q.n}</span>
+      <span style="flex:1;font-size:.85rem;line-height:1.4;min-width:100px">${q.s}</span>
+      <div style="display:flex;gap:5px">
+        <button class="tf" id="l4A-${i}" onclick="aTF('l4',${i},'A','${q.a}')">A Yes</button>
+        <button class="tf" id="l4B-${i}" onclick="aTF('l4',${i},'B','${q.a}')">B No</button>
+      </div></div>`;
+  });
+  document.getElementById('l4-b').innerHTML=h;
+}
+function nextL(p){if(p===1)l1i++;else if(p===2)l2i++;else if(p===3)l3i++;else l4i++;[rL1,rL2,rL3,rL4][p-1]();}
+
+// ── SPEAKING ───────────────────────────────────────────────
+function initSp(){document.getElementById('sp1-q').textContent=SP1[0];rSp2();rSp3();document.getElementById('sp4-q').textContent=SP4[0];}
+function rSp2(){const d=SP2[sp2i%SP2.length];document.getElementById('sp2-q').textContent=d.q;document.getElementById('sp2-opts').innerHTML=d.opts.map(o=>`<div style="background:rgba(255,255,255,.15);border-radius:7px;padding:9px;text-align:center;color:#fff;font-size:.83rem">${o}</div>`).join('');}
+function rSp3(){document.getElementById('sp3-d').textContent=SP3[sp3i%SP3.length];}
+function rSp4(){document.getElementById('sp4-q').textContent=SP4[sp4i%SP4.length];}
+function nSp(n){
+  if(n===1){sp1i++;document.getElementById('sp1-q').textContent=SP1[sp1i%SP1.length];document.getElementById('sp1-ai').className='ai-box';}
+  else if(n===2){sp2i++;rSp2();document.getElementById('sp2-ai').className='ai-box';}
+  else if(n===3){sp3i++;rSp3();document.getElementById('sp3-ai').className='ai-box';}
+  else{sp4i++;rSp4();document.getElementById('sp4-ai').className='ai-box';}
+}
+function toggleMic(n){
+  const btn=document.getElementById('sp'+n+'-mic'),st=document.getElementById('sp'+n+'-st');
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){st.textContent='Need Chrome browser for mic';return;}
+  const key='sp'+n;
+  if(micR[key]){micR[key].stop();micR[key]=null;btn.classList.remove('rec');btn.textContent='🎙️';return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const r=new SR();r.lang='en-US';r.interimResults=true;r.continuous=true;
+  r.onstart=()=>{btn.classList.add('rec');btn.textContent='⏹️';st.textContent='Recording...';}
+  r.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;spRes[key]=t;st.textContent='"'+t.slice(0,70)+'"';}
+  r.onerror=()=>{st.textContent='Mic error';btn.classList.remove('rec');btn.textContent='🎙️';}
+  r.onend=()=>{btn.classList.remove('rec');btn.textContent='🎙️';micR[key]=null;}
+  micR[key]=r;r.start();
+}
+
+// ── AI FEEDBACK ────────────────────────────────────────────
+function showSample(type,el){
+  let s=null;
+  if(type==='w2')s=SAMPLES.w2[w2i%SAMPLES.w2.length];
+  else if(type==='w3')s=w3t_==='S'?SAMPLES.w3story[0]:SAMPLES.w3letter[0];
+  let html='<div style="font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Sample Answers from Cambridge PET 4 Book</div>';
+  if(s){
+    html+=`<div style="margin-bottom:10px"><div style="font-size:.76rem;font-weight:700;color:var(--green);margin-bottom:4px">Band 5 Example:</div><div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px;font-size:.82rem;line-height:1.6;white-space:pre-line">${s.band5}</div></div>`;
+    if(s.band3)html+=`<div><div style="font-size:.76rem;font-weight:700;color:var(--accent);margin-bottom:4px">Band 3 Example:</div><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;font-size:.82rem;line-height:1.6;white-space:pre-line">${s.band3}</div></div>`;
+  }
+  el.innerHTML=html;el.className='ai-box on';
+}
+async function aiF(type){
+  const prompts={
+    w2:`Cambridge PET examiner. Feedback on this student email.\nTask: ${document.getElementById('w2-b').textContent.slice(0,300)}\nStudent wrote: "${document.getElementById('w2-ta').value}"\nGive: Band 1-5, one strength, one tip. Be encouraging. Max 4 sentences.`,
+    w3:`Cambridge PET examiner. Feedback on this response.\nTask: ${document.getElementById('w3-b').textContent.slice(0,300)}\nStudent wrote: "${document.getElementById('w3-ta').value}"\nGive: Band 1-5, one strength, one tip. Be encouraging. Max 4 sentences.`,
+    sp1:`Cambridge PET Speaking examiner.\nQuestion: "${SP1[sp1i%SP1.length]}"\nStudent said: "${spRes.sp1||'nothing recorded'}"\nRate Fluency/5 Grammar/5 Vocabulary/5. One brief tip.`,
+    sp2:`Cambridge PET Speaking examiner. Collaborative task.\nStudent said: "${spRes.sp2||'nothing recorded'}"\nRate Interaction/5 Task/5. One tip.`,
+    sp3:`Cambridge PET Speaking examiner. Photo description.\nScene: "${SP3[sp3i%SP3.length]}"\nStudent said: "${spRes.sp3||'nothing recorded'}"\nRate Vocabulary/5 Grammar/5 Coherence/5. One tip.`,
+    sp4:`Cambridge PET Speaking examiner.\nQuestion: "${SP4[sp4i%SP4.length]}"\nStudent said: "${spRes.sp4||'nothing recorded'}"\nRate Fluency/5 Ideas/5. One brief tip.`,
+  };
+  const elId=type+'-ai';const el=document.getElementById(elId);if(!el)return;
+  el.className='ai-box on';
+  el.innerHTML='<div style="font-size:.7rem;font-weight:700;color:var(--mid);text-transform:uppercase;margin-bottom:5px">AI Examiner Feedback</div><div style="color:var(--gray)">Analysing...</div>';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:prompts[type]}]})});
+    const data=await res.json();
+    const txt=data.content?.map(c=>c.text||'').join('')||'';
+    if(!txt){showSample(type,el);return;}
+    el.innerHTML='<div style="font-size:.7rem;font-weight:700;color:var(--mid);text-transform:uppercase;margin-bottom:5px">AI Examiner</div>'+txt.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+  }catch(e){showSample(type,el);}
+}
+
+// ── VOCAB ──────────────────────────────────────────────────
+function loadFlash(){
+  const topic=document.getElementById('v-sel').value;
+  const words=[...(VC[topic]||[])].sort(()=>Math.random()-.5);
+  document.getElementById('flash-g').innerHTML=words.map((w,i)=>`
+    <div class="flip-card" id="fc${i}" onclick="flipFC('fc${i}','${w.w}')">
+      <div class="flip-inner">
+        <div class="flip-f"><div>${w.w}</div><div style="font-size:.66rem;opacity:.7;margin-top:3px">Tap to see meaning</div></div>
+        <div class="flip-b"><div style="font-weight:800">${w.d}</div><div style="font-size:.78rem;font-style:italic;margin-top:5px">"${w.e}"</div></div>
+      </div></div>`).join('');
+}
+function flipFC(id,word){const el=document.getElementById(id);el.classList.toggle('flipped');if(el.classList.contains('flipped'))tts(word);}
+let vqW=null;
+function nextVQ(){
+  const topics=Object.keys(VC);
+  const topic=topics[Math.floor(Math.random()*topics.length)];
+  const words=VC[topic];
+  vqW=words[Math.floor(Math.random()*words.length)];
+  const others=words.filter(w=>w!==vqW).sort(()=>Math.random()-.5).slice(0,3);
+  const all=[...others,vqW].sort(()=>Math.random()-.5);
+  const isW2D=Math.random()>.5;
+  let h='';
+  if(isW2D){
+    h=`<div style="background:linear-gradient(135deg,var(--mid),var(--blue));color:#fff;border-radius:11px;padding:16px;text-align:center;margin-bottom:11px">
+      <div style="font-size:.74rem;opacity:.7;margin-bottom:4px">What does this word mean?</div>
+      <div style="font-size:1.3rem;font-weight:800">${vqW.w}</div>
+      <button class="btn sm" onclick="tts('${vqW.w}')" style="margin-top:7px;background:rgba(255,255,255,.2);border:none;color:#fff;cursor:pointer;padding:5px 12px;border-radius:5px">🔊 Hear</button></div>
+    <div class="opts" id="vqo">${all.map(w=>`<button class="opt" data-w="${w.w}" onclick="ansVQ(this,'${vqW.w}','${w.w}','d')">${w.d}</button>`).join('')}</div>`;
+  }else{
+    h=`<div style="background:linear-gradient(135deg,var(--accent),#e69500);color:var(--navy);border-radius:11px;padding:16px;text-align:center;margin-bottom:11px">
+      <div style="font-size:.74rem;opacity:.7;margin-bottom:4px">Which word matches this definition?</div>
+      <div style="font-size:.96rem;font-weight:700">${vqW.d}</div></div>
+    <div class="opts" id="vqo">${all.map(w=>`<button class="opt" data-w="${w.w}" onclick="ansVQ(this,'${vqW.w}','${w.w}','w')">${w.w}</button>`).join('')}</div>`;
+  }
+  document.getElementById('vq-b').innerHTML=h;
+  document.getElementById('vq-fb').className='fb';
+}
+function ansVQ(btn,correct,chosen,mode){
+  const btns=[...document.querySelectorAll('#vqo .opt')];
+  if(btns.some(b=>b.disabled))return;
+  btns.forEach(b=>{b.disabled=true;if(b.dataset.w===correct)b.classList.add('C');else if(b.dataset.w===chosen&&chosen!==correct)b.classList.add('W');});
+  const ok=chosen===correct;
+  const fb=document.getElementById('vq-fb');
+  fb.className='fb '+(ok?'ok':'ng')+' on';
+  fb.textContent=ok?'Correct! +15 points':'Wrong. Answer: '+correct;
+  if(ok)addPts(15);else miss();
+  setTimeout(nextVQ,1700);
+}
+
+// ── MOCK TEST ──────────────────────────────────────────────
+function buildQs(t){
+  const k=AK[String(t)];const qs=[];
+  const r1d=R1.find(x=>x.t===t)||R1[0];
+  r1d.qs.forEach(q=>{const ca=li(k.r.p1[String(q.n)]);qs.push({p:'Reading Part 1',n:q.n,q:q.sign.replace(/\n/g,' | ')+'\n'+q.q,opts:q.opts,a:ca,sk:'R',tr:null});});
+  const r3d=R3DATA.find(x=>x.t===t)||R3DATA[0];
+  r3d.qs.forEach(q=>{qs.push({p:'Reading Part 3',n:q.n,q:q.s,opts:['A  TRUE','B  FALSE'],a:q.a==='A'?0:1,sk:'R',tr:null});});
+  const r4d=R4DATA.find(x=>x.t===t)||R4DATA[0];
+  r4d.qs.forEach(q=>{qs.push({p:'Reading Part 4',n:q.n,q:q.q,opts:q.opts,a:q.a,sk:'R',tr:null});});
+  const r5d=R5DATA.find(x=>x.t===t)||R5DATA[0];
+  r5d.qs.forEach(q=>{qs.push({p:'Reading Part 5',n:q.n,q:'Q'+q.n+' - Choose the correct word:',opts:q.opts,a:q.a,sk:'R',tr:null});});
+  const l1d=L1.find(x=>x.t===t)||L1[0];
+  l1d.qs.forEach(q=>{const ca=li(k.l.p1[String(q.n)]);qs.push({p:'Listening Part 1',n:q.n,q:q.q,opts:q.opts,a:ca,sk:'L',tr:q.tr});});
+  const l2d=L2.find(x=>x.t===t)||L2[0];
+  l2d.qs.forEach(q=>{const ca=li(k.l.p2[String(q.n)]);qs.push({p:'Listening Part 2',n:q.n,q:q.q,opts:q.opts,a:ca,sk:'L',tr:l2d.tr});});
+  const l4d=L4.find(x=>x.t===t)||L4[0];
+  l4d.qs.forEach(q=>{const ca=q.a==='A'?0:1;qs.push({p:'Listening Part 4',n:q.n,q:q.s,opts:['A  YES / TRUE','B  NO / FALSE'],a:ca,sk:'L',tr:l4d.tr});});
+  return qs;
+}
+let curT=null,curQi=0,curAns={},curTimer=null,curSec=5400,curQs=[];
+function startTest(t){
+  curT=t;curQi=0;curAns={};curSec=5400;curQs=buildQs(t);
+  document.getElementById('t-menu').style.display='none';
+  document.getElementById('t-res').style.display='none';
+  document.getElementById('t-run').style.display='block';
+  document.getElementById('t-title').textContent='Test '+t;
+  if(curTimer)clearInterval(curTimer);
+  curTimer=setInterval(()=>{curSec--;const m=Math.floor(curSec/60),s=curSec%60;document.getElementById('t-timer').textContent='⏱ '+m+':'+(s<10?'0':'')+s;if(curSec<=0){clearInterval(curTimer);finishTest();}},1000);
+  renderTQ();
+}
+function renderTQ(){
+  const q=curQs[curQi];if(!q){finishTest();return;}
+  const pct=(curQi/curQs.length)*100;
+  document.getElementById('t-bar').style.width=pct+'%';
+  document.getElementById('t-prg').textContent=q.p+' Q'+(curQi+1)+'/'+curQs.length;
+  let h=`<div style="display:flex;gap:7px;align-items:center;margin-bottom:11px;flex-wrap:wrap">
+    <span class="pill ${q.sk==='R'?'pb':'pg'}">${q.p}</span>
+    ${q.tr?`<button class="btn sm" onclick="tts(curQs[curQi].tr)">🔊 Play</button>`:''}
+  </div>
+  <div style="font-weight:600;font-size:.9rem;margin-bottom:11px;line-height:1.5;white-space:pre-wrap">${q.n}. ${q.q}</div>
+  <div class="opts" id="tqo">${q.opts.map((o,j)=>`<button class="opt ${curAns[curQi]===j?'C':''}" onclick="ansTQ(${j})">${o}</button>`).join('')}</div>`;
+  document.getElementById('t-qb').innerHTML=h;
+}
+function ansTQ(j){
+  const q=curQs[curQi];if(curAns[curQi]!==undefined)return;
+  curAns[curQi]=j;
+  const btns=[...document.querySelectorAll('#tqo .opt')];
+  const ok=reveal(btns,q.a,j);
+  if(ok)addPts(10);else miss();
+  const tag=document.createElement('div');
+  tag.className='fb '+(ok?'ok':'ng')+' on';tag.style.marginTop='10px';
+  tag.innerHTML=ok?'Correct!':'Wrong. Answer: <b>'+String.fromCharCode(65+q.a)+' - '+q.opts[q.a]+'</b>';
+  document.getElementById('t-qb').appendChild(tag);
+}
+function nextTQ(){curQi++;if(curQi>=curQs.length)finishTest();else renderTQ();}
+function finishTest(){
+  clearInterval(curTimer);
+  let rOk=0,rT=0,lOk=0,lT=0;
+  curQs.forEach((q,i)=>{const a=curAns[i];if(q.sk==='R'){rT++;if(a===q.a)rOk++;}else{lT++;if(a===q.a)lOk++;}});
+  const tot=rOk+lOk,total=rT+lT,pct=Math.round((tot/total)*100);
+  document.getElementById('t-run').style.display='none';
+  document.getElementById('t-res').style.display='block';
+  document.getElementById('rs-r').textContent=rOk+'/'+rT;
+  document.getElementById('rs-l').textContent=lOk+'/'+lT;
+  document.getElementById('rs-p').textContent=pct+'%';
+  document.getElementById('rs-fb').innerHTML=`<b>${tot}/${total} (${pct}%)</b><br>${pct>=80?'Excellent! Ready for PET!':pct>=60?'Good progress! Keep practising.':'Keep studying!'}`;
+}
+function retryTest(){document.getElementById('t-res').style.display='none';startTest(curT);}
+function exitTest(){clearInterval(curTimer);document.getElementById('t-run').style.display='none';document.getElementById('t-res').style.display='none';document.getElementById('t-menu').style.display='grid';}
+function reviewTest(){
+  let h=`<div style="font-weight:800;font-size:.92rem;color:var(--blue);margin-bottom:12px">Test ${curT} - Review All Answers</div>`;
+  curQs.forEach((q,i)=>{
+    const a=curAns[i];const ok=a===q.a;
+    h+=`<div style="padding:9px;border-radius:8px;margin-bottom:5px;background:${ok?'#dcfce7':'#fee2e2'};border-left:4px solid ${ok?'var(--green)':'var(--red)'}">
+      <div style="font-size:.78rem;font-weight:700;color:${ok?'var(--green)':'var(--red)'}"><span>${ok?'✅':'❌'}</span> ${q.p} Q${q.n}</div>
+      <div style="font-size:.8rem;margin-top:3px">${q.q.split('\n')[0].substring(0,80)}...</div>
+      <div style="font-size:.78rem;margin-top:2px">${a!==undefined?'You: <b>'+String.fromCharCode(65+a)+'</b>':'Not answered'}${!ok?' | Answer: <b>'+String.fromCharCode(65+q.a)+' '+q.opts[q.a]+'</b>':''}</div></div>`;
+  });
+  document.getElementById('t-res').innerHTML=`<div style="padding:13px">${h}
+    <div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn sm" style="background:var(--accent);color:var(--navy)" onclick="retryTest()">Retry</button>
+      <button class="btn sm" onclick="go('answers')">Full Answer Key</button>
+      <button class="btn-o sm" onclick="exitTest()">Back</button></div></div>`;
+}
+
+// ── ANSWER KEY ─────────────────────────────────────────────
+function akTab(n){document.querySelectorAll('#answers .tb').forEach((b,i)=>b.className='tb'+(i+1===n?' on':''));renderAK(n);}
+function renderAK(n){
+  const k=AK[String(n)];
+  const clr={A:'ak-A',B:'ak-B',C:'ak-C',D:'ak-D'};
+  function sec(title,obj,fill){
+    if(fill)return`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:.8rem;color:#fff;background:var(--mid);padding:4px 9px;border-radius:5px;margin-bottom:6px">${title}</div>${Object.entries(obj).map(([n,a])=>`<div style="background:#f8faff;border-radius:6px;padding:5px 9px;margin-bottom:3px;font-size:.8rem;display:flex;gap:8px"><span style="color:var(--mid);font-weight:700;min-width:24px">${n}.</span><span style="color:var(--green);font-weight:700">${a}</span></div>`).join('')}</div>`;
+    return`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:.8rem;color:#fff;background:var(--mid);padding:4px 9px;border-radius:5px;margin-bottom:6px">${title}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${Object.entries(obj).map(([n,a])=>`<span style="padding:3px 8px;border-radius:5px;font-size:.76rem;font-weight:700;border:1px solid var(--border)" class="${clr[a]||''}"><span style="opacity:.55;font-size:.68rem">${n}.</span>${a}</span>`).join('')}</div></div>`;
+  }
+  document.getElementById('ak-b').innerHTML=`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+    <div>
+      <div style="font-weight:800;font-size:.88rem;color:var(--mid);margin-bottom:11px;padding:7px 11px;background:#dbeafe;border-radius:8px">READING</div>
+      ${sec('Part 1 - Signs (Q1-5)',k.r.p1)}${sec('Part 2 - Matching (Q6-10)',k.r.p2)}${sec('Part 3 - True/False (Q11-20)',k.r.p3)}${sec('Part 4 - Long Text (Q21-25)',k.r.p4)}${sec('Part 5 - Cloze (Q26-35)',k.r.p5)}
+    </div>
+    <div>
+      <div style="font-weight:800;font-size:.88rem;color:var(--green);margin-bottom:11px;padding:7px 11px;background:#dcfce7;border-radius:8px">LISTENING</div>
+      ${sec('Part 1 - Pictures (Q1-7)',k.l.p1)}${sec('Part 2 - Multi Choice (Q8-13)',k.l.p2)}${sec('Part 3 - Fill In (Q14-19)',k.l.p3,true)}${sec('Part 4 - True/False (Q20-25)',k.l.p4)}
+    </div>
+  </div>`;
+}
+
+// ── INIT ───────────────────────────────────────────────────
+window.addEventListener('load',()=>{speechSynthesis?.getVoices();go('home');});
+
+</script>
+</body>
+</html>
