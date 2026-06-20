@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chinh Phục Số Đến 100 🐰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF7ED; --bg2:#FFEFE0; --ink:#2D2A4A;
+  --coral:#FF6F61; --teal:#2EC4B6; --purple:#7B61FF;
+  --yellow:#FFD23F; --pink:#FF8FA3; --green:#06D6A0; --blue:#3FA7FF;
+  --card:#FFFFFF; --lock:#C9C3D6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;height:100%;}
+body{font-family:'Quicksand',sans-serif;background:radial-gradient(circle at 10% 10%, var(--bg2), var(--bg) 60%);
+  color:var(--ink);min-height:100vh;overflow-x:hidden;user-select:none;}
+h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+button{font-family:inherit;border:none;cursor:pointer;background:none;}
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center;padding:14px 14px 40px;position:relative;}
+.screen.active{display:flex;}
+
+.topbar{width:100%;max-width:760px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.starbox{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:999px;padding:8px 16px;font-weight:700;box-shadow:0 4px 0 #e8ddc9;font-size:1.1em;}
+.back-btn{background:var(--card);border-radius:999px;padding:8px 18px;font-weight:700;box-shadow:0 4px 0 #e8ddc9;color:var(--purple);}
+.back-btn:active{transform:translateY(3px);box-shadow:none;}
+.sound-btn{background:var(--card);border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.2em;box-shadow:0 4px 0 #e8ddc9;}
+
+/* ---- HUB / MAP ---- */
+#hub-screen{justify-content:flex-start;}
+.mascot-row{display:flex;align-items:center;gap:14px;margin:14px 0 10px;}
+.mascot{font-size:4em;animation:bounce 2.2s ease-in-out infinite;filter:drop-shadow(0 6px 4px rgba(0,0,0,.15));}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+.speech{background:var(--card);border-radius:20px;padding:12px 18px;font-weight:700;font-size:1.05em;max-width:320px;box-shadow:0 4px 0 #e8ddc9;position:relative;}
+.speech:after{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);border:10px solid transparent;border-right-color:var(--card);}
+h1.title{font-size:1.7em;color:var(--purple);margin:4px 0 14px;text-align:center;}
+
+.chapter{width:100%;max-width:520px;margin-bottom:22px;}
+.chapter-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.chapter-num{width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;font-family:'Baloo 2';font-weight:700;display:flex;align-items:center;justify-content:center;}
+.chapter-title{font-family:'Baloo 2';font-weight:700;font-size:1.15em;}
+.chapter-desc{font-size:.82em;color:#8a8499;margin-left:42px;margin-top:-6px;margin-bottom:8px;}
+.nodepath{display:flex;align-items:center;gap:6px;padding-left:6px;}
+.node{
+  width:70px;height:70px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.1);font-family:'Baloo 2';color:#fff;flex-shrink:0;position:relative;
+}
+.node .lv{font-size:1.3em;font-weight:700;}
+.node .stars{font-size:.65em;margin-top:1px;}
+.node.locked{background:var(--lock);color:#fff;}
+.node.locked .lv:before{content:'🔒';}
+.node.unlocked{cursor:pointer;}
+.node.unlocked:active{transform:translateY(3px);box-shadow:none;}
+.node.c1{background:linear-gradient(150deg,var(--teal),#1aa89b);}
+.node.c2{background:linear-gradient(150deg,var(--coral),#e8503f);}
+.node.c3{background:linear-gradient(150deg,var(--purple),#5b3fe0);}
+.connector{width:18px;height:4px;background:#e3ddcc;border-radius:2px;flex-shrink:0;}
+
+/* ---- LEVEL PLAY ---- */
+.progresswrap{width:100%;max-width:560px;margin:6px 0 18px;}
+.progressbar{height:14px;background:#fff;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.08);}
+.progressfill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s;}
+.progresslabel{display:flex;justify-content:space-between;font-size:.8em;font-weight:700;color:#8a8499;margin-top:4px;}
+
+.stage{width:100%;max-width:560px;background:var(--card);border-radius:28px;padding:22px 18px;box-shadow:0 8px 0 rgba(0,0,0,.06);
+  display:flex;flex-direction:column;align-items:center;gap:14px;min-height:340px;position:relative;}
+.prompt{font-family:'Baloo 2';font-size:1.25em;text-align:center;color:var(--ink);}
+.prompt .hl{color:var(--coral);}
+.steplabel{font-size:.85em;font-weight:700;color:var(--purple);background:#f1ecff;padding:4px 12px;border-radius:999px;}
+
+/* place value blocks */
+.pvrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;}
+.pvgroup{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.pvlabel{font-size:.72em;font-weight:700;color:#8a8499;}
+.tensbox{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:200px;}
+.tenbundle{
+  width:30px;height:46px;border-radius:6px;background:linear-gradient(180deg,var(--purple),#5b3fe0);
+  display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:2px;padding:4px;
+  box-shadow:0 3px 0 rgba(0,0,0,.15);
+}
+.tenbundle i{background:rgba(255,255,255,.85);border-radius:1px;}
+.onesbox{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:140px;}
+.onesq{width:18px;height:18px;border-radius:4px;background:var(--green);box-shadow:0 2px 0 rgba(0,0,0,.15);}
+.plus,.eq,.minus{font-family:'Baloo 2';font-size:1.7em;color:var(--purple);}
+.bignum{font-family:'Baloo 2';font-size:2.6em;color:var(--ink);}
+
+/* digit pad */
+.digitdisplay{
+  min-width:90px;height:54px;background:var(--bg2);border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2';font-size:1.7em;font-weight:700;color:var(--ink);padding:0 14px;box-shadow:inset 0 2px 4px rgba(0,0,0,.08);
+}
+.digitpad{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:300px;}
+.digitbtn{width:48px;height:48px;border-radius:14px;background:var(--bg2);font-family:'Baloo 2';font-size:1.25em;font-weight:700;color:var(--ink);box-shadow:0 4px 0 #e3ddcc;}
+.digitbtn:active{transform:translateY(3px);box-shadow:none;}
+.digitbtn.action{background:var(--purple);color:#fff;width:70px;}
+.digitbtn.clear{background:var(--coral);color:#fff;}
+
+/* two part selector (chuc / don vi) */
+.twopart{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%;}
+.tprow{display:flex;align-items:center;gap:8px;}
+.tplabel{font-weight:700;width:64px;text-align:right;font-size:.9em;color:#8a8499;}
+.tpnums{display:flex;gap:6px;flex-wrap:wrap;max-width:300px;}
+.tpbtn{width:34px;height:34px;border-radius:10px;background:var(--bg2);font-weight:700;font-size:.95em;box-shadow:0 3px 0 #e3ddcc;}
+.tpbtn.sel{background:var(--yellow);}
+.tpbtn:active{transform:translateY(2px);}
+
+/* compare boxes */
+.comparewrap{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+.comparebox{border:3px solid #e3ddcc;border-radius:18px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .15s;}
+.comparebox:active{transform:scale(0.96);}
+.comparebox.correctbox{border-color:var(--green);background:#eafff6;}
+.comparebox.wrongbox{border-color:var(--coral);background:#fff0ee;}
+.vstext{font-family:'Baloo 2';font-size:1.3em;color:var(--purple);}
+
+.feedback{font-family:'Baloo 2';font-size:1.15em;min-height:1.4em;font-weight:700;}
+.feedback.good{color:var(--green);}
+.feedback.bad{color:var(--coral);}
+.nextbtn{background:var(--purple);color:#fff;font-family:'Baloo 2';font-weight:700;padding:12px 30px;border-radius:999px;font-size:1.05em;box-shadow:0 5px 0 #5b3fe0;}
+.nextbtn:active{transform:translateY(4px);box-shadow:none;}
+.startbtn{background:var(--green);color:#fff;font-family:'Baloo 2';font-weight:700;padding:14px 36px;border-radius:999px;font-size:1.1em;box-shadow:0 5px 0 #04a87f;}
+.startbtn:active{transform:translateY(4px);box-shadow:none;}
+
+.confetti{position:fixed;top:-20px;font-size:1.6em;pointer-events:none;animation:fall linear forwards;z-index:50;}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.2;}}
+
+.endcard{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.endcard .big{font-size:3.5em;}
+.intro{max-width:400px;text-align:center;font-size:.95em;}
+.miniNote{font-size:.85em;color:#8a8499;background:#f6f3ff;padding:8px 14px;border-radius:12px;max-width:380px;text-align:center;}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ============ HUB / LEVEL MAP ============ -->
+<div id="hub-screen" class="screen active">
+  <div class="topbar">
+    <div class="starbox">⭐ <span id="totalStars">0</span></div>
+    <button class="sound-btn" id="soundToggle">🔊</button>
+  </div>
+  <div class="mascot-row">
+    <div class="mascot">🐰</div>
+    <div class="speech" id="hubSpeech">Bé giỏi cộng trừ trong 20 rồi! Giờ mình chinh phục số đến 100 nha!</div>
+  </div>
+  <h1 class="title">Chinh Phục Số Đến 100</h1>
+
+  <div class="chapter">
+    <div class="chapter-head"><div class="chapter-num">1</div><div class="chapter-title">Số Đến 100 - Chục &amp; Đơn Vị</div></div>
+    <div class="chapter-desc">Học cấu tạo số có 2 chữ số</div>
+    <div class="nodepath" id="path-c1"></div>
+  </div>
+  <div class="chapter">
+    <div class="chapter-head"><div class="chapter-num">2</div><div class="chapter-title">Cộng Trừ Phạm Vi 100 (Không Nhớ)</div></div>
+    <div class="chapter-desc">Cộng trừ riêng từng chục, từng đơn vị</div>
+    <div class="nodepath" id="path-c2"></div>
+  </div>
+  <div class="chapter">
+    <div class="chapter-head"><div class="chapter-num">3</div><div class="chapter-title">Cộng Trừ Phạm Vi 100 (Có Nhớ)</div></div>
+    <div class="chapter-desc">Kỹ thuật nhớ chục &amp; mượn chục</div>
+    <div class="nodepath" id="path-c3"></div>
+  </div>
+</div>
+
+<!-- ============ LEVEL INTRO + PLAY (shared shell) ============ -->
+<div id="level-screen" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHub()">← Bản đồ</button>
+    <div class="starbox">⭐ <span id="levelStars">0</span></div>
+  </div>
+  <div id="level-intro">
+    <h2 style="text-align:center;" id="introTitle"></h2>
+    <p class="intro" id="introDesc"></p>
+    <div style="text-align:center;margin-top:10px;"><button class="startbtn" onclick="beginCurrentLevel()">Bắt đầu 🚀</button></div>
+  </div>
+  <div id="level-play" style="display:none;width:100%;flex-direction:column;align-items:center;">
+    <div class="progresswrap">
+      <div class="progressbar"><div class="progressfill" id="lvProgressFill" style="width:0%"></div></div>
+      <div class="progresslabel"><span id="lvQNum">Câu 1/6</span><span id="lvScoreLabel">Đúng: 0</span></div>
+    </div>
+    <div class="stage" id="lvStage"></div>
+  </div>
+  <div id="level-end" style="display:none;"></div>
+</div>
+
+</div>
+
+<script>
+/* ================= SHARED UTILS ================= */
+let soundOn = JSON.parse(localStorage.getItem('ttd_sound') ?? 'true');
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=rand(0,i);[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function pick(arr){ return arr[rand(0,arr.length-1)]; }
+
+let viVoice=null;
+function loadVoice(){ const v=speechSynthesis.getVoices(); viVoice=v.find(x=>x.lang==='vi-VN')||v.find(x=>x.lang&&x.lang.startsWith('vi'))||null; }
+if('speechSynthesis' in window){ loadVoice(); speechSynthesis.onvoiceschanged=loadVoice; }
+function speak(text){
+  if(!soundOn || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text); u.lang='vi-VN'; if(viVoice) u.voice=viVoice; u.rate=0.95;
+  speechSynthesis.speak(u);
+}
+let audioCtx=null;
+function tone(freq,dur,type='sine'){
+  if(!soundOn) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=type;o.frequency.value=freq;g.gain.value=0.12;
+    o.connect(g);g.connect(audioCtx.destination);o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+dur);
+    o.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+function soundCorrect(){ tone(523,0.12); setTimeout(()=>tone(784,0.18),100); }
+function soundWrong(){ tone(180,0.25,'sawtooth'); }
+
+let totalStars = parseInt(localStorage.getItem('ttd2_stars')||'0');
+function addStars(n){ totalStars+=n; localStorage.setItem('ttd2_stars', totalStars); document.getElementById('totalStars').textContent=totalStars; }
+document.getElementById('totalStars').textContent = totalStars;
+document.getElementById('soundToggle').textContent = soundOn?'🔊':'🔇';
+document.getElementById('soundToggle').onclick=function(){
+  soundOn=!soundOn; localStorage.setItem('ttd_sound', JSON.stringify(soundOn)); this.textContent=soundOn?'🔊':'🔇';
+};
+
+function confettiBurst(){
+  const emojis=['🎉','⭐','✨','🎊','🏆'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div'); el.className='confetti'; el.textContent=pick(emojis);
+    el.style.left=rand(2,98)+'vw'; el.style.animationDuration=(rand(18,32)/10)+'s'; el.style.fontSize=rand(14,28)+'px';
+    document.body.appendChild(el); setTimeout(()=>el.remove(),3200);
+  }
+}
+
+/* ---------- place value visual renderer ---------- */
+function renderPlaceValue(container, tens, ones, label){
+  const wrap = document.createElement('div'); wrap.className='pvgroup';
+  if(label){ const l=document.createElement('div'); l.className='pvlabel'; l.textContent=label; wrap.appendChild(l); }
+  const tb = document.createElement('div'); tb.className='tensbox';
+  for(let i=0;i<tens;i++){
+    const bundle=document.createElement('div'); bundle.className='tenbundle';
+    for(let j=0;j<10;j++){ bundle.appendChild(document.createElement('i')); }
+    tb.appendChild(bundle);
+  }
+  wrap.appendChild(tb);
+  const ob = document.createElement('div'); ob.className='onesbox';
+  for(let i=0;i<ones;i++){ const sq=document.createElement('div'); sq.className='onesq'; ob.appendChild(sq); }
+  wrap.appendChild(ob);
+  container.appendChild(wrap);
+  return wrap;
+}
+
+/* ---------- digit pad (numeric entry, up to 2 digits) ---------- */
+function buildDigitPad(stage, onSubmit, opts){
+  opts = opts || {};
+  const maxLen = opts.maxLen || 2;
+  let buffer = '';
+  const wrap = document.createElement('div');
+  wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.alignItems='center'; wrap.style.gap='10px';
+  const disp = document.createElement('div'); disp.className='digitdisplay'; disp.textContent='0';
+  const pad = document.createElement('div'); pad.className='digitpad';
+  function render(){ disp.textContent = buffer.length? buffer : '0'; }
+  for(let n=0;n<=9;n++){
+    const b=document.createElement('button'); b.className='digitbtn'; b.textContent=n;
+    b.onclick=()=>{ if(buffer.length<maxLen){ buffer += n; render(); } };
+    pad.appendChild(b);
+  }
+  const clearBtn=document.createElement('button'); clearBtn.className='digitbtn clear'; clearBtn.textContent='Xóa';
+  clearBtn.onclick=()=>{ buffer=buffer.slice(0,-1); render(); };
+  pad.appendChild(clearBtn);
+  const okBtn=document.createElement('button'); okBtn.className='digitbtn action'; okBtn.textContent='OK';
+  okBtn.onclick=()=>{ if(buffer.length===0) return; onSubmit(parseInt(buffer), okBtn, ()=>{ pad.querySelectorAll('button').forEach(b=>b.disabled=true); }); };
+  pad.appendChild(okBtn);
+  wrap.appendChild(disp); wrap.appendChild(pad);
+  stage.appendChild(wrap);
+  return { setBuffer:(v)=>{buffer=String(v);render();}, getBuffer:()=>buffer };
+}
+
+/* ---------- two part selector (chục / đơn vị) ---------- */
+function buildTwoPartSelector(stage, onSubmit){
+  let selTens=null, selOnes=null;
+  const wrap=document.createElement('div'); wrap.className='twopart';
+  function row(label, onPick){
+    const r=document.createElement('div'); r.className='tprow';
+    const l=document.createElement('div'); l.className='tplabel'; l.textContent=label;
+    const nums=document.createElement('div'); nums.className='tpnums';
+    for(let n=0;n<=9;n++){
+      const b=document.createElement('button'); b.className='tpbtn'; b.textContent=n;
+      b.onclick=()=>{ nums.querySelectorAll('.tpbtn').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); onPick(n); };
+      nums.appendChild(b);
+    }
+    r.appendChild(l); r.appendChild(nums);
+    return r;
+  }
+  wrap.appendChild(row('Chục:', n=>selTens=n));
+  wrap.appendChild(row('Đơn vị:', n=>selOnes=n));
+  const confirmBtn=document.createElement('button'); confirmBtn.className='nextbtn'; confirmBtn.textContent='Xác nhận';
+  confirmBtn.style.marginTop='6px';
+  confirmBtn.onclick=()=>{
+    if(selTens===null||selOnes===null){ return; }
+    onSubmit(selTens, selOnes, confirmBtn, ()=>{ wrap.querySelectorAll('button').forEach(b=>b.disabled=true); });
+  };
+  wrap.appendChild(confirmBtn);
+  stage.appendChild(wrap);
+}
+
+/* ================= LEVEL DEFINITIONS ================= */
+const LEVELS = [
+  {id:1, chapter:1, name:'1A', icon:'c1', title:'Đếm Bó Chục', desc:'Đếm số bó chục và số lẻ rời để biết tổng có bao nhiêu.', gen:genCountTens, total:6},
+  {id:2, chapter:1, name:'1B', icon:'c1', title:'Số Này Có Mấy Chục Mấy Đơn Vị?', desc:'Nhìn một số có 2 chữ số, đoán xem có mấy chục và mấy đơn vị.', gen:genDecompose, total:6},
+  {id:3, chapter:1, name:'1C', icon:'c1', title:'So Sánh & Đếm Nhanh', desc:'So sánh hai số hoặc đếm tổng từ hình bó chục, độ khó cao hơn.', gen:genMixChapter1, total:6},
+
+  {id:4, chapter:2, name:'2A', icon:'c2', title:'Cộng Không Nhớ', desc:'Cộng riêng chục với chục, đơn vị với đơn vị - không có nhớ.', gen:genAddNoCarry, total:6},
+  {id:5, chapter:2, name:'2B', icon:'c2', title:'Trừ Không Nhớ', desc:'Trừ riêng chục với chục, đơn vị với đơn vị - không có nhớ.', gen:genSubNoCarry, total:6},
+  {id:6, chapter:2, name:'2C', icon:'c2', title:'Hỗn Hợp Không Nhớ', desc:'Trộn cả cộng và trừ không nhớ, số lớn hơn.', gen:genMixChapter2, total:6},
+
+  {id:7, chapter:3, name:'3A', icon:'c3', title:'Cộng Có Nhớ', desc:'Học kỹ thuật "nhớ 1 chục" khi đơn vị cộng vượt quá 10.', gen:genAddCarryScaffold, total:5},
+  {id:8, chapter:3, name:'3B', icon:'c3', title:'Trừ Có Nhớ', desc:'Học kỹ thuật "mượn 1 chục" khi đơn vị bị trừ không đủ.', gen:genSubCarryScaffold, total:5},
+  {id:9, chapter:3, name:'3C', icon:'c3', title:'Thử Thách Tổng Hợp', desc:'Tự tính cộng trừ có nhớ không cần gợi ý - bé đã sẵn sàng chưa?', gen:genMixChapter3, total:6},
+];
+
+/* ---------- progress ---------- */
+let unlocked = parseInt(localStorage.getItem('ttd2_unlocked')||'1');
+let starsByLevel = JSON.parse(localStorage.getItem('ttd2_starsByLevel')||'{}');
+
+function renderMap(){
+  [1,2,3].forEach(ch=>{
+    const wrap = document.getElementById('path-c'+ch);
+    wrap.innerHTML='';
+    const lvls = LEVELS.filter(l=>l.chapter===ch);
+    lvls.forEach((lv,idx)=>{
+      if(idx>0){ const c=document.createElement('div'); c.className='connector'; wrap.appendChild(c); }
+      const node=document.createElement('div');
+      const isLocked = lv.id>unlocked;
+      node.className='node '+lv.icon+' '+(isLocked?'locked':'unlocked');
+      const stars = starsByLevel[lv.id]||0;
+      node.innerHTML = isLocked ? '<div class="lv"></div>' : '<div class="lv">'+lv.id+'</div><div class="stars">'+('⭐'.repeat(stars)||'')+'</div>';
+      if(!isLocked){ node.onclick = ()=>openLevelIntro(lv.id); }
+      wrap.appendChild(node);
+    });
+  });
+}
+
+function goHub(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('hub-screen').classList.add('active');
+  renderMap();
+  speak('Bé chọn cấp độ tiếp theo nhé!');
+}
+
+let currentLevel = null;
+let lvState = {};
+
+function openLevelIntro(id){
+  currentLevel = LEVELS.find(l=>l.id===id);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('level-screen').classList.add('active');
+  document.getElementById('level-intro').style.display='block';
+  document.getElementById('level-play').style.display='none';
+  document.getElementById('level-end').style.display='none';
+  document.getElementById('introTitle').textContent = currentLevel.title;
+  document.getElementById('introDesc').textContent = currentLevel.desc;
+  document.getElementById('levelStars').textContent = starsByLevel[id]||0;
+  speak(currentLevel.title + '. ' + currentLevel.desc);
+}
+
+function beginCurrentLevel(){
+  document.getElementById('level-intro').style.display='none';
+  document.getElementById('level-play').style.display='flex';
+  lvState = { q:0, total:currentLevel.total, score:0, stars:0 };
+  document.getElementById('levelStars').textContent = 0;
+  nextQuestion();
+}
+
+function nextQuestion(){
+  if(lvState.q >= lvState.total){ return endLevel(); }
+  lvState.q++;
+  document.getElementById('lvQNum').textContent = 'Câu '+lvState.q+'/'+lvState.total;
+  document.getElementById('lvProgressFill').style.width = Math.round((lvState.q-1)/lvState.total*100)+'%';
+  document.getElementById('lvScoreLabel').textContent = 'Đúng: '+lvState.score;
+  const stage = document.getElementById('lvStage');
+  stage.innerHTML='';
+  currentLevel.gen(stage);
+}
+
+function onAnswerResult(correct, gainedStars){
+  if(correct){ lvState.score++; lvState.stars += gainedStars||1; document.getElementById('levelStars').textContent = lvState.stars; }
+  setTimeout(nextQuestion, 1500);
+}
+
+function endLevel(){
+  document.getElementById('level-play').style.display='none';
+  const end = document.getElementById('level-end');
+  end.style.display='flex';
+  addStars(lvState.stars);
+  const pct = lvState.score/lvState.total;
+  const passed = pct >= 0.5;
+  if(passed && currentLevel.id===unlocked && unlocked<LEVELS.length){
+    unlocked = currentLevel.id+1;
+    localStorage.setItem('ttd2_unlocked', unlocked);
+  }
+  starsByLevel[currentLevel.id] = Math.max(starsByLevel[currentLevel.id]||0, pct>=0.9?3:(pct>=0.7?2:(pct>=0.5?1:0)));
+  localStorage.setItem('ttd2_starsByLevel', JSON.stringify(starsByLevel));
+
+  let mood = pct>=0.8?'🥳':(pct>=0.5?'😊':'💪');
+  let msg = passed ? 'Bé đã mở khóa cấp độ tiếp theo!' : 'Cố lên, chơi lại để mở khóa cấp độ tiếp theo nha!';
+  end.innerHTML = '<div class="endcard">'+
+    '<div class="big">'+mood+'</div>'+
+    '<h2 style="color:var(--purple);">Bé làm đúng '+lvState.score+'/'+lvState.total+' câu!</h2>'+
+    '<div style="font-size:1.2em;">⭐ +'+lvState.stars+' sao</div>'+
+    '<div class="miniNote">'+msg+'</div>'+
+    '<div style="display:flex;gap:10px;margin-top:8px;">'+
+    '<button class="startbtn" onclick="beginCurrentLevel()">Chơi lại 🔁</button>'+
+    '<button class="back-btn" onclick="goHub()">Bản đồ</button>'+
+    '</div></div>';
+  confettiBurst();
+  speak(passed ? 'Bé làm đúng '+lvState.score+' trên '+lvState.total+' câu. Mở khóa cấp độ tiếp theo rồi!' : 'Bé làm đúng '+lvState.score+' trên '+lvState.total+' câu. Cố lên nha!');
+}
+
+/* ================= QUESTION GENERATORS ================= */
+
+/* Chapter 1A: đếm bó chục */
+function genCountTens(stage){
+  const tens = rand(1,9), ones = rand(0,9);
+  const answer = tens*10+ones;
+  const prompt = document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = 'Đếm xem có tất cả bao nhiêu que tính?';
+  stage.appendChild(prompt);
+  const row = document.createElement('div'); row.className='pvrow';
+  renderPlaceValue(row, tens, ones);
+  stage.appendChild(row);
+  speak('Đếm xem có tất cả bao nhiêu que tính?');
+  const fb = document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage, (val, btn, lockFn)=>{
+    lockFn();
+    if(val===answer){ fb.textContent='Đúng rồi! '+tens+' chục và '+ones+' que là '+answer+'.'; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi! Là '+answer); onAnswerResult(true,1); }
+    else{ fb.textContent='Chưa đúng, đáp án là '+answer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+answer); onAnswerResult(false); }
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 1B: phân tích chục - đơn vị */
+function genDecompose(stage){
+  const num = rand(10,99);
+  const tens = Math.floor(num/10), ones = num%10;
+  const prompt = document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = 'Số <span class="hl bignum">'+num+'</span><br>có mấy chục, mấy đơn vị?';
+  stage.appendChild(prompt);
+  speak('Số '+num+' có mấy chục, mấy đơn vị?');
+  const fb = document.createElement('div'); fb.className='feedback';
+  buildTwoPartSelector(stage, (selT, selO, btn, lockFn)=>{
+    lockFn();
+    if(selT===tens && selO===ones){ fb.textContent='Đúng rồi! '+num+' = '+tens+' chục '+ones+' đơn vị.'; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi!'); onAnswerResult(true,1); }
+    else{ fb.textContent='Chưa đúng. '+num+' = '+tens+' chục '+ones+' đơn vị.'; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+tens+' chục '+ones+' đơn vị'); onAnswerResult(false); }
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 1C: hỗn hợp - đếm khó hơn hoặc so sánh */
+function genMixChapter1(stage){
+  if(Math.random()<0.5){
+    const tens=rand(2,9), ones=rand(0,9);
+    const answer=tens*10+ones;
+    const prompt=document.createElement('div'); prompt.className='prompt';
+    prompt.textContent='Đếm xem có tất cả bao nhiêu?';
+    stage.appendChild(prompt);
+    const row=document.createElement('div'); row.className='pvrow';
+    renderPlaceValue(row, tens, ones);
+    stage.appendChild(row);
+    speak('Đếm xem có tất cả bao nhiêu?');
+    const fb=document.createElement('div'); fb.className='feedback';
+    buildDigitPad(stage,(val,btn,lockFn)=>{
+      lockFn();
+      if(val===answer){ fb.textContent='Đúng rồi! Là '+answer; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi'); onAnswerResult(true,1); }
+      else{ fb.textContent='Đáp án đúng là '+answer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+answer); onAnswerResult(false); }
+    });
+    stage.appendChild(fb);
+  } else {
+    let a=rand(10,99), b=rand(10,99);
+    while(b===a) b=rand(10,99);
+    const bigger = Math.max(a,b);
+    const prompt=document.createElement('div'); prompt.className='prompt';
+    prompt.textContent='Số nào lớn hơn? Chạm vào số đó!';
+    stage.appendChild(prompt);
+    speak('Số nào lớn hơn?');
+    const wrap=document.createElement('div'); wrap.className='comparewrap';
+    [a,b].forEach(num=>{
+      const box=document.createElement('div'); box.className='comparebox';
+      box.innerHTML = '<div class="bignum">'+num+'</div>';
+      box.onclick=()=>{
+        document.querySelectorAll('.comparebox').forEach(x=>x.onclick=null);
+        if(num===bigger){ box.classList.add('correctbox'); soundCorrect(); speak('Đúng rồi, '+bigger+' lớn hơn'); onAnswerResult(true,1); }
+        else{ box.classList.add('wrongbox'); soundWrong(); speak('Số lớn hơn là '+bigger); onAnswerResult(false); }
+      };
+      wrap.appendChild(box);
+    });
+    stage.appendChild(wrap);
+  }
+}
+
+/* Chapter 2A: cộng không nhớ */
+function genAddNoCarry(stage){
+  let a_tens=rand(1,8), a_ones=rand(0,9), b_tens=rand(0,9-a_tens), b_ones=rand(0,9-a_ones);
+  if(b_tens===0 && b_ones===0) b_ones=rand(1,9-a_ones)||1;
+  const a=a_tens*10+a_ones, b=b_tens*10+b_ones, answer=a+b;
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> + <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const row=document.createElement('div'); row.className='pvrow';
+  renderPlaceValue(row, a_tens, a_ones, a+'');
+  const plus=document.createElement('div'); plus.className='plus'; plus.textContent='+'; row.appendChild(plus);
+  renderPlaceValue(row, b_tens, b_ones, b+'');
+  stage.appendChild(row);
+  speak(a+' cộng '+b+' bằng mấy?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    if(val===answer){ fb.textContent='Chính xác! '+a+' + '+b+' = '+answer; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi'); onAnswerResult(true,1); }
+    else{ fb.textContent='Đáp án đúng là '+answer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+answer); onAnswerResult(false); }
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 2B: trừ không nhớ */
+function genSubNoCarry(stage){
+  let a_tens=rand(1,9), a_ones=rand(0,9), b_tens=rand(0,a_tens), b_ones=rand(0,a_ones);
+  if(b_tens===a_tens && b_ones===a_ones){ if(b_tens>0) b_tens--; else b_ones=Math.max(0,b_ones-1); }
+  const a=a_tens*10+a_ones, b=b_tens*10+b_ones, answer=a-b;
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> - <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const row=document.createElement('div'); row.className='pvrow';
+  renderPlaceValue(row, a_tens, a_ones, a+'');
+  const minus=document.createElement('div'); minus.className='minus'; minus.textContent='-'; row.appendChild(minus);
+  renderPlaceValue(row, b_tens, b_ones, b+'');
+  stage.appendChild(row);
+  speak(a+' trừ '+b+' bằng mấy?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    if(val===answer){ fb.textContent='Chính xác! '+a+' - '+b+' = '+answer; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi'); onAnswerResult(true,1); }
+    else{ fb.textContent='Đáp án đúng là '+answer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+answer); onAnswerResult(false); }
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 2C: hỗn hợp không nhớ, số lớn hơn */
+function genMixChapter2(stage){
+  if(Math.random()<0.5) genAddNoCarry(stage); else genSubNoCarry(stage);
+}
+
+/* Chapter 3A: cộng có nhớ - scaffold 2 bước */
+function genAddCarryScaffold(stage){
+  let a_tens=rand(1,8), a_ones=rand(1,9);
+  let b_tens=rand(0,9-a_tens);
+  let loA = Math.max(1,10-a_ones), hiA=9;
+  let b_ones = rand(loA, hiA);
+  const a=a_tens*10+a_ones, b=b_tens*10+b_ones;
+  const onesSum = a_ones+b_ones;
+  const onesResult = onesSum-10;
+  const tensResult = a_tens+b_tens+1;
+  const finalAnswer = a+b;
+
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> + <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const step=document.createElement('div'); step.className='steplabel'; step.textContent='Bước 1: Cộng đơn vị';
+  stage.appendChild(step);
+  const sub=document.createElement('div'); sub.style.fontWeight='700';
+  sub.textContent = a_ones+' + '+b_ones+' = ?';
+  stage.appendChild(sub);
+  speak('Trước tiên, đơn vị: '+a_ones+' cộng '+b_ones+' bằng mấy?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    if(val===onesSum){ fb.textContent='Đúng! '+a_ones+'+'+b_ones+'='+onesSum+' → viết '+onesResult+', nhớ 1 chục.'; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi, viết '+onesResult+' nhớ 1 chục'); }
+    else{ fb.textContent='Đáp án là '+onesSum+' → viết '+onesResult+', nhớ 1 chục.'; fb.className='feedback bad'; soundWrong(); speak('Đáp án là '+onesSum); }
+    setTimeout(()=>step2AddCarry(stage, a, b, a_tens, b_tens, onesResult, tensResult, finalAnswer, val===onesSum), 1700);
+  });
+  stage.appendChild(fb);
+}
+function step2AddCarry(stage, a, b, a_tens, b_tens, onesResult, tensResult, finalAnswer, step1ok){
+  stage.innerHTML='';
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> + <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const step=document.createElement('div'); step.className='steplabel'; step.textContent='Bước 2: Cộng chục (nhớ thêm 1)';
+  stage.appendChild(step);
+  const sub=document.createElement('div'); sub.style.fontWeight='700';
+  sub.textContent = a_tens+' chục + '+b_tens+' chục + 1 (nhớ) = mấy chục?';
+  stage.appendChild(sub);
+  speak(a_tens+' chục cộng '+b_tens+' chục cộng 1 chục nhớ, bằng mấy chục?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    const ok = (val===tensResult);
+    if(ok){ fb.textContent='Đúng! '+tensResult+' chục và '+onesResult+' đơn vị = '+finalAnswer; fb.className='feedback good'; soundCorrect(); speak('Vậy '+a+' cộng '+b+' bằng '+finalAnswer); }
+    else{ fb.textContent='Đáp án là '+tensResult+' chục. Vậy '+a+' + '+b+' = '+finalAnswer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+finalAnswer); }
+    onAnswerResult(step1ok && ok, 1);
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 3B: trừ có nhớ - scaffold 2 bước (mượn chục) */
+function genSubCarryScaffold(stage){
+  let a_tens=rand(2,9);
+  let b_tens=rand(1,a_tens-1);
+  let a_ones=rand(0,8);
+  let b_ones=rand(a_ones+1,9);
+  const a=a_tens*10+a_ones, b=b_tens*10+b_ones;
+  const onesBorrowed = 10+a_ones;
+  const onesResult = onesBorrowed - b_ones;
+  const tensResult = (a_tens-1) - b_tens;
+  const finalAnswer = a-b;
+
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> - <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const step=document.createElement('div'); step.className='steplabel'; step.textContent='Bước 1: Mượn 1 chục';
+  stage.appendChild(step);
+  const sub=document.createElement('div'); sub.style.fontWeight='700'; sub.style.textAlign='center';
+  sub.textContent = a_ones+' không đủ trừ '+b_ones+'. Mượn 1 chục, '+a_ones+' thành '+onesBorrowed+'. '+onesBorrowed+' - '+b_ones+' = ?';
+  stage.appendChild(sub);
+  speak('Mượn 1 chục, '+a_ones+' thành '+onesBorrowed+'. '+onesBorrowed+' trừ '+b_ones+' bằng mấy?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    const ok = (val===onesResult);
+    if(ok){ fb.textContent='Đúng! '+onesBorrowed+' - '+b_ones+' = '+onesResult; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi'); }
+    else{ fb.textContent='Đáp án là '+onesResult; fb.className='feedback bad'; soundWrong(); speak('Đáp án là '+onesResult); }
+    setTimeout(()=>step2SubCarry(stage, a, b, a_tens, b_tens, onesResult, tensResult, finalAnswer, ok), 1700);
+  });
+  stage.appendChild(fb);
+}
+function step2SubCarry(stage, a, b, a_tens, b_tens, onesResult, tensResult, finalAnswer, step1ok){
+  stage.innerHTML='';
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> - <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const step=document.createElement('div'); step.className='steplabel'; step.textContent='Bước 2: Trừ chục còn lại';
+  stage.appendChild(step);
+  const sub=document.createElement('div'); sub.style.fontWeight='700'; sub.style.textAlign='center';
+  sub.textContent = (a_tens-1)+' chục (đã mượn 1) - '+b_tens+' chục = mấy chục?';
+  stage.appendChild(sub);
+  speak((a_tens-1)+' chục trừ '+b_tens+' chục bằng mấy chục?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    const ok=(val===tensResult);
+    if(ok){ fb.textContent='Đúng! '+tensResult+' chục và '+onesResult+' đơn vị = '+finalAnswer; fb.className='feedback good'; soundCorrect(); speak('Vậy '+a+' trừ '+b+' bằng '+finalAnswer); }
+    else{ fb.textContent='Đáp án là '+tensResult+' chục. Vậy '+a+' - '+b+' = '+finalAnswer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+finalAnswer); }
+    onAnswerResult(step1ok && ok, 1);
+  });
+  stage.appendChild(fb);
+}
+
+/* Chapter 3C: thử thách tổng hợp - tự tính không gợi ý */
+function genMixChapter3(stage){
+  let a,b,answer,opSym;
+  if(Math.random()<0.5){
+    let a_tens=rand(1,8), a_ones=rand(1,9), b_tens=rand(0,9-a_tens), b_ones=rand(Math.max(1,10-a_ones),9);
+    a=a_tens*10+a_ones; b=b_tens*10+b_ones; answer=a+b; opSym='+';
+  } else {
+    let a_tens=rand(2,9), b_tens=rand(1,a_tens-1), a_ones=rand(0,8), b_ones=rand(a_ones+1,9);
+    a=a_tens*10+a_ones; b=b_tens*10+b_ones; answer=a-b; opSym='-';
+  }
+  const prompt=document.createElement('div'); prompt.className='prompt';
+  prompt.innerHTML = '<span class="hl">'+a+'</span> '+opSym+' <span class="hl">'+b+'</span> = ?';
+  stage.appendChild(prompt);
+  const note=document.createElement('div'); note.className='miniNote'; note.textContent='Bé tự tính nhé, không có gợi ý lần này!';
+  stage.appendChild(note);
+  speak(a+(opSym==='+'?' cộng ':' trừ ')+b+' bằng mấy?');
+  const fb=document.createElement('div'); fb.className='feedback';
+  buildDigitPad(stage,(val,btn,lockFn)=>{
+    lockFn();
+    if(val===answer){ fb.textContent='Xuất sắc! Đáp án là '+answer; fb.className='feedback good'; soundCorrect(); speak('Đúng rồi, xuất sắc!'); onAnswerResult(true,2); }
+    else{ fb.textContent='Đáp án đúng là '+answer; fb.className='feedback bad'; soundWrong(); speak('Đáp án đúng là '+answer); onAnswerResult(false); }
+  });
+  stage.appendChild(fb);
+}
+
+/* ================= INIT ================= */
+renderMap();
+window.addEventListener('load', ()=>{
+  setTimeout(()=>speak('Bé giỏi cộng trừ trong 20 rồi! Giờ mình chinh phục số đến 100 nha!'), 600);
+});
+</script>
+</body>
+</html>
