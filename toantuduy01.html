@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Toán Tư Duy Của Bé 🐰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF7ED;
+  --bg2:#FFEFE0;
+  --ink:#2D2A4A;
+  --coral:#FF6F61;
+  --teal:#2EC4B6;
+  --purple:#7B61FF;
+  --yellow:#FFD23F;
+  --pink:#FF8FA3;
+  --green:#06D6A0;
+  --blue:#3FA7FF;
+  --card:#FFFFFF;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:'Quicksand',sans-serif;
+  background:radial-gradient(circle at 10% 10%, var(--bg2), var(--bg) 60%);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  user-select:none;
+}
+h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+button{font-family:inherit;border:none;cursor:pointer;background:none;}
+.screen{
+  display:none;
+  min-height:100vh;
+  flex-direction:column;
+  align-items:center;
+  padding:14px 14px 40px;
+  position:relative;
+}
+.screen.active{display:flex;}
+
+/* ---------- TOP BAR ---------- */
+.topbar{
+  width:100%;max-width:760px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.starbox{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card);
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:700;
+  box-shadow:0 4px 0 #e8ddc9;
+  font-size:1.1em;
+}
+.back-btn{
+  background:var(--card);
+  border-radius:999px;
+  padding:8px 18px;
+  font-weight:700;
+  box-shadow:0 4px 0 #e8ddc9;
+  color:var(--purple);
+}
+.back-btn:active{transform:translateY(3px);box-shadow:none;}
+.sound-btn{
+  background:var(--card);
+  border-radius:50%;
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2em;
+  box-shadow:0 4px 0 #e8ddc9;
+}
+
+/* ---------- HUB ---------- */
+#hub-screen{justify-content:flex-start;}
+.mascot-row{
+  display:flex;align-items:center;gap:14px;
+  margin:14px 0 6px;
+}
+.mascot{
+  font-size:4.2em;
+  animation:bounce 2.2s ease-in-out infinite;
+  filter:drop-shadow(0 6px 4px rgba(0,0,0,.15));
+}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+.speech{
+  background:var(--card);
+  border-radius:20px;
+  padding:12px 18px;
+  font-weight:700;
+  font-size:1.15em;
+  max-width:320px;
+  box-shadow:0 4px 0 #e8ddc9;
+  position:relative;
+}
+.speech:after{
+  content:'';
+  position:absolute;left:-10px;top:50%;transform:translateY(-50%);
+  border:10px solid transparent;border-right-color:var(--card);
+}
+h1.title{
+  font-size:1.9em;color:var(--purple);margin:6px 0 2px;text-align:center;
+}
+.subtitle{color:#8a8499;font-weight:600;margin-bottom:18px;text-align:center;}
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  width:100%;max-width:560px;
+}
+@media(max-width:480px){.grid{grid-template-columns:1fr;}}
+.gamecard{
+  border-radius:24px;
+  padding:20px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  box-shadow:0 6px 0 rgba(0,0,0,.08);
+  transform:translateY(0);
+  transition:transform .12s;
+  text-align:center;
+}
+.gamecard:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(0,0,0,.08);}
+.gamecard .icon{font-size:2.8em;}
+.gamecard .name{font-family:'Baloo 2';font-size:1.25em;font-weight:700;color:#fff;}
+.gamecard .desc{font-size:.82em;color:rgba(255,255,255,.9);font-weight:600;}
+.gc1{background:linear-gradient(150deg,var(--teal),#1aa89b);}
+.gc2{background:linear-gradient(150deg,var(--coral),#e8503f);}
+.gc3{background:linear-gradient(150deg,var(--purple),#5b3fe0);}
+.gc4{background:linear-gradient(150deg,var(--pink),#ff5f7e);}
+.gc-badge{
+  position:absolute;top:10px;right:10px;
+  background:rgba(255,255,255,.35);
+  border-radius:999px;font-size:.72em;font-weight:700;color:#fff;
+  padding:3px 10px;
+}
+.gamecard{position:relative;}
+
+/* ---------- LEVEL PICKER ---------- */
+.levelrow{display:flex;gap:10px;margin:10px 0 18px;flex-wrap:wrap;justify-content:center;}
+.levelbtn{
+  background:var(--card);border-radius:16px;padding:10px 20px;font-weight:700;
+  box-shadow:0 4px 0 #e8ddc9;font-size:1em;color:var(--ink);
+}
+.levelbtn.active{background:var(--yellow);color:var(--ink);}
+
+/* ---------- PROGRESS ---------- */
+.progresswrap{width:100%;max-width:560px;margin:6px 0 18px;}
+.progressbar{
+  height:14px;background:#fff;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.08);
+}
+.progressfill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s;}
+.progresslabel{display:flex;justify-content:space-between;font-size:.8em;font-weight:700;color:#8a8499;margin-top:4px;}
+
+/* ---------- GAME STAGE ---------- */
+.stage{
+  width:100%;max-width:560px;
+  background:var(--card);
+  border-radius:28px;
+  padding:22px 18px;
+  box-shadow:0 8px 0 rgba(0,0,0,.06);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  min-height:320px;
+  position:relative;
+}
+.prompt{font-family:'Baloo 2';font-size:1.3em;text-align:center;color:var(--ink);}
+.prompt .hl{color:var(--coral);}
+
+/* dot groups */
+.dotgrid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:260px;}
+.dot{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2em;box-shadow:0 3px 0 rgba(0,0,0,.12);
+}
+.dot.a{background:var(--teal);}
+.dot.b{background:var(--coral);}
+.dot.hidden{background:#d8d3e6;color:#d8d3e6;}
+.dot.ten{background:var(--purple);}
+.dot.ghost{background:#eee;border:2px dashed #ccc;}
+
+.groupbox{
+  border:3px dashed #e3ddcc;border-radius:18px;padding:10px;
+}
+.bondrow{display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;}
+.plus,.eq{font-family:'Baloo 2';font-size:1.6em;color:var(--purple);}
+
+/* balloons */
+.balloonfield{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:320px;min-height:140px;align-items:flex-end;}
+.balloon{
+  width:46px;height:56px;border-radius:50% 50% 50% 50%/55% 55% 45% 45%;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset -6px -6px 10px rgba(0,0,0,.12), 0 4px 4px rgba(0,0,0,.1);
+  transition:transform .25s, opacity .25s;
+}
+.balloon:after{content:'';position:absolute;bottom:-14px;left:50%;width:2px;height:14px;background:#bbb;}
+.balloon.pop{transform:scale(1.4);opacity:0;}
+
+/* ten frame */
+.tenframe{display:grid;grid-template-columns:repeat(5,38px);grid-template-rows:repeat(2,38px);gap:6px;}
+.cell{
+  width:38px;height:38px;border-radius:8px;background:#f1ecdd;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 0 2px #e3ddcc;
+}
+.cell.filled{background:var(--purple);box-shadow:none;}
+.cell.fillednew{background:var(--green);box-shadow:none;}
+.cell.loose{background:var(--coral);}
+
+/* number pad */
+.numpad{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:380px;}
+.numbtn{
+  width:56px;height:56px;border-radius:16px;
+  background:var(--bg2);font-family:'Baloo 2';font-size:1.4em;font-weight:700;color:var(--ink);
+  box-shadow:0 4px 0 #e3ddcc;
+}
+.numbtn:active{transform:translateY(3px);box-shadow:none;}
+.numbtn.correct{background:var(--green)!important;color:#fff;animation:pulse .4s;}
+.numbtn.wrong{background:var(--coral)!important;color:#fff;}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+
+.feedback{font-family:'Baloo 2';font-size:1.2em;min-height:1.4em;font-weight:700;}
+.feedback.good{color:var(--green);}
+.feedback.bad{color:var(--coral);}
+
+.nextbtn{
+  background:var(--purple);color:#fff;font-family:'Baloo 2';font-weight:700;
+  padding:12px 30px;border-radius:999px;font-size:1.05em;box-shadow:0 5px 0 #5b3fe0;
+}
+.nextbtn:active{transform:translateY(4px);box-shadow:none;}
+
+.startbtn{
+  background:var(--green);color:#fff;font-family:'Baloo 2';font-weight:700;
+  padding:14px 36px;border-radius:999px;font-size:1.15em;box-shadow:0 5px 0 #04a87f;
+}
+.startbtn:active{transform:translateY(4px);box-shadow:none;}
+
+/* confetti */
+.confetti{
+  position:fixed;top:-20px;font-size:1.6em;pointer-events:none;
+  animation:fall linear forwards;z-index:50;
+}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.2;}}
+
+/* timer ring for doubles */
+.timerring{width:54px;height:54px;border-radius:50%;background:conic-gradient(var(--yellow) calc(var(--p)*1%), #f1ecdd 0);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Baloo 2';}
+.timerring span{background:#fff;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+.steplabel{font-size:.85em;font-weight:700;color:var(--purple);background:#f1ecff;padding:4px 12px;border-radius:999px;}
+
+.endcard{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.endcard .big{font-size:3.5em;}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ============ HUB ============ -->
+<div id="hub-screen" class="screen active">
+  <div class="topbar">
+    <div class="starbox">⭐ <span id="totalStars">0</span></div>
+    <button class="sound-btn" id="soundToggle">🔊</button>
+  </div>
+  <div class="mascot-row">
+    <div class="mascot">🐰</div>
+    <div class="speech" id="hubSpeech">Chào bé! Bé giỏi cộng xúc xắc lắm rồi đó. Hôm nay mình học gì nhé?</div>
+  </div>
+  <h1 class="title">Toán Tư Duy Của Bé</h1>
+  <div class="subtitle">Chọn một hoạt động để bắt đầu nha!</div>
+  <div class="grid">
+    <button class="gamecard gc1" onclick="openGame('bonds')">
+      <div class="gc-badge">Tách - Gộp</div>
+      <div class="icon">🍬</div>
+      <div class="name">Tách Kẹo Vui</div>
+      <div class="desc">Tách và gộp số trong phạm vi 10</div>
+    </button>
+    <button class="gamecard gc2" onclick="openGame('subtract')">
+      <div class="gc-badge">Phép trừ</div>
+      <div class="icon">🎈</div>
+      <div class="name">Bóng Bay Nổ</div>
+      <div class="desc">Bớt đi - còn lại mấy?</div>
+    </button>
+    <button class="gamecard gc3" onclick="openGame('bridge')">
+      <div class="gc-badge">Qua 10</div>
+      <div class="icon">🌉</div>
+      <div class="name">Qua Cầu Chục</div>
+      <div class="desc">Làm tròn chục để cộng số lớn</div>
+    </button>
+    <button class="gamecard gc4" onclick="openGame('doubles')">
+      <div class="gc-badge">Số đôi</div>
+      <div class="icon">👯</div>
+      <div class="name">Đôi Bạn Sinh Đôi</div>
+      <div class="desc">Ghi nhớ nhanh các số đôi</div>
+    </button>
+  </div>
+</div>
+
+<!-- ============ GAME 1: BONDS ============ -->
+<div id="bonds-screen" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHub()">← Menu</button>
+    <div class="starbox">⭐ <span id="bondsStars">0</span></div>
+  </div>
+  <div id="bonds-setup">
+    <h2 style="text-align:center;color:var(--teal);">🍬 Tách Kẹo Vui</h2>
+    <p style="text-align:center;max-width:380px;">Bé sẽ học cách <b>tách một số ra 2 phần</b> và <b>gộp 2 phần lại thành 1 số</b>.</p>
+    <div class="levelrow">
+      <button class="levelbtn" data-lv="1" onclick="setLevel('bonds',1,this)">Dễ (≤5)</button>
+      <button class="levelbtn active" data-lv="2" onclick="setLevel('bonds',2,this)">Vừa (≤10)</button>
+      <button class="levelbtn" data-lv="3" onclick="setLevel('bonds',3,this)">Khó (≤10)</button>
+    </div>
+    <div style="text-align:center;"><button class="startbtn" onclick="startBonds()">Bắt đầu 🚀</button></div>
+  </div>
+  <div id="bonds-play" style="display:none;width:100%;display:flex;flex-direction:column;align-items:center;">
+    <div class="progresswrap">
+      <div class="progressbar"><div class="progressfill" id="bondsProgressFill" style="width:0%"></div></div>
+      <div class="progresslabel"><span id="bondsQNum">Câu 1/10</span><span id="bondsScoreLabel">Đúng: 0</span></div>
+    </div>
+    <div class="stage">
+      <div class="prompt" id="bondsPrompt">...</div>
+      <div id="bondsVisual"></div>
+      <div class="numpad" id="bondsNumpad"></div>
+      <div class="feedback" id="bondsFeedback"></div>
+    </div>
+  </div>
+  <div id="bonds-end" style="display:none;"></div>
+</div>
+
+<!-- ============ GAME 2: SUBTRACT ============ -->
+<div id="subtract-screen" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHub()">← Menu</button>
+    <div class="starbox">⭐ <span id="subStars">0</span></div>
+  </div>
+  <div id="sub-setup">
+    <h2 style="text-align:center;color:var(--coral);">🎈 Bóng Bay Nổ</h2>
+    <p style="text-align:center;max-width:380px;">Xem bóng bay <b>nổ bớt đi</b> và đoán xem <b>còn lại mấy quả</b>!</p>
+    <div class="levelrow">
+      <button class="levelbtn" data-lv="1" onclick="setLevel('sub',1,this)">Dễ (≤5)</button>
+      <button class="levelbtn active" data-lv="2" onclick="setLevel('sub',2,this)">Vừa (≤8)</button>
+      <button class="levelbtn" data-lv="3" onclick="setLevel('sub',3,this)">Khó (≤10)</button>
+    </div>
+    <div style="text-align:center;"><button class="startbtn" onclick="startSub()">Bắt đầu 🚀</button></div>
+  </div>
+  <div id="sub-play" style="display:none;width:100%;flex-direction:column;align-items:center;">
+    <div class="progresswrap">
+      <div class="progressbar"><div class="progressfill" id="subProgressFill" style="width:0%"></div></div>
+      <div class="progresslabel"><span id="subQNum">Câu 1/10</span><span id="subScoreLabel">Đúng: 0</span></div>
+    </div>
+    <div class="stage">
+      <div class="prompt" id="subPrompt">...</div>
+      <div class="balloonfield" id="subField"></div>
+      <button class="startbtn" id="subPopBtn" onclick="popBalloons()">Nổ bóng! 💥</button>
+      <div class="numpad" id="subNumpad" style="display:none;"></div>
+      <div class="feedback" id="subFeedback"></div>
+    </div>
+  </div>
+  <div id="sub-end" style="display:none;"></div>
+</div>
+
+<!-- ============ GAME 3: BRIDGE ============ -->
+<div id="bridge-screen" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHub()">← Menu</button>
+    <div class="starbox">⭐ <span id="brStars">0</span></div>
+  </div>
+  <div id="br-setup">
+    <h2 style="text-align:center;color:var(--purple);">🌉 Qua Cầu Chục</h2>
+    <p style="text-align:center;max-width:380px;">Học cách <b>làm tròn 10</b> để cộng số lớn dễ hơn, ví dụ 8 + 5: lấy 2 từ 5 để 8 thành 10, còn lại 3, vậy 10 + 3 = 13!</p>
+    <div class="levelrow">
+      <button class="levelbtn active" data-lv="1" onclick="setLevel('br',1,this)">Tổng ≤15</button>
+      <button class="levelbtn" data-lv="2" onclick="setLevel('br',2,this)">Tổng ≤18</button>
+    </div>
+    <div style="text-align:center;"><button class="startbtn" onclick="startBridge()">Bắt đầu 🚀</button></div>
+  </div>
+  <div id="br-play" style="display:none;width:100%;flex-direction:column;align-items:center;">
+    <div class="progresswrap">
+      <div class="progressbar"><div class="progressfill" id="brProgressFill" style="width:0%"></div></div>
+      <div class="progresslabel"><span id="brQNum">Câu 1/8</span><span id="brScoreLabel">Đúng: 0</span></div>
+    </div>
+    <div class="stage">
+      <div class="steplabel" id="brStepLabel">Bước 1</div>
+      <div class="prompt" id="brPrompt">...</div>
+      <div id="brVisual"></div>
+      <div class="numpad" id="brNumpad"></div>
+      <div class="feedback" id="brFeedback"></div>
+    </div>
+  </div>
+  <div id="br-end" style="display:none;"></div>
+</div>
+
+<!-- ============ GAME 4: DOUBLES ============ -->
+<div id="doubles-screen" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHub()">← Menu</button>
+    <div class="starbox">⭐ <span id="dbStars">0</span></div>
+  </div>
+  <div id="db-setup">
+    <h2 style="text-align:center;color:var(--pink);">👯 Đôi Bạn Sinh Đôi</h2>
+    <p style="text-align:center;max-width:380px;">Hai nhóm <b>giống nhau</b> gọi là số đôi. Bé thử nhớ nhanh xem tổng là bao nhiêu nhé, càng nhanh càng nhiều sao!</p>
+    <div class="levelrow">
+      <button class="levelbtn active" data-lv="1" onclick="setLevel('db',1,this)">1+1 → 5+5</button>
+      <button class="levelbtn" data-lv="2" onclick="setLevel('db',2,this)">1+1 → 10+10</button>
+    </div>
+    <div style="text-align:center;"><button class="startbtn" onclick="startDoubles()">Bắt đầu 🚀</button></div>
+  </div>
+  <div id="db-play" style="display:none;width:100%;flex-direction:column;align-items:center;">
+    <div class="progresswrap">
+      <div class="progressbar"><div class="progressfill" id="dbProgressFill" style="width:0%"></div></div>
+      <div class="progresslabel"><span id="dbQNum">Câu 1/10</span><span id="dbScoreLabel">Đúng: 0</span></div>
+    </div>
+    <div class="stage">
+      <div class="timerring" id="dbTimerRing" style="--p:100;align-self:flex-end;"><span>⏱️</span></div>
+      <div class="prompt" id="dbPrompt">...</div>
+      <div id="dbVisual"></div>
+      <div class="numpad" id="dbNumpad"></div>
+      <div class="feedback" id="dbFeedback"></div>
+    </div>
+  </div>
+  <div id="db-end" style="display:none;"></div>
+</div>
+
+</div>
+
+<script>
+/* ================= SHARED UTILS ================= */
+let soundOn = JSON.parse(localStorage.getItem('ttd_sound') ?? 'true');
+let totalStars = parseInt(localStorage.getItem('ttd_stars') || '0');
+document.getElementById('totalStars').textContent = totalStars;
+document.getElementById('soundToggle').textContent = soundOn ? '🔊' : '🔇';
+
+function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=rand(0,i);[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function pick(arr){ return arr[rand(0,arr.length-1)]; }
+
+let viVoice = null;
+function loadVoice(){
+  const voices = speechSynthesis.getVoices();
+  viVoice = voices.find(v => v.lang === 'vi-VN') || voices.find(v=>v.lang && v.lang.startsWith('vi')) || null;
+}
+if('speechSynthesis' in window){
+  loadVoice();
+  speechSynthesis.onvoiceschanged = loadVoice;
+}
+function speak(text){
+  if(!soundOn || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'vi-VN';
+  if(viVoice) u.voice = viVoice;
+  u.rate = 0.95;
+  speechSynthesis.speak(u);
+}
+
+let audioCtx = null;
+function tone(freq, dur, type='sine'){
+  if(!soundOn) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = 0.12;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function soundCorrect(){ tone(523,0.12); setTimeout(()=>tone(784,0.18),100); }
+function soundWrong(){ tone(180,0.25,'sawtooth'); }
+function soundPop(){ tone(rand(300,600),0.08,'square'); }
+
+document.getElementById('soundToggle').onclick = function(){
+  soundOn = !soundOn;
+  localStorage.setItem('ttd_sound', JSON.stringify(soundOn));
+  this.textContent = soundOn ? '🔊' : '🔇';
+};
+
+function addStars(n){
+  totalStars += n;
+  localStorage.setItem('ttd_stars', totalStars);
+  document.getElementById('totalStars').textContent = totalStars;
+}
+
+function confettiBurst(container){
+  const emojis = ['🎉','⭐','✨','🎊','🍬'];
+  for(let i=0;i<18;i++){
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.textContent = pick(emojis);
+    el.style.left = rand(2,98) + 'vw';
+    el.style.animationDuration = (rand(18,32)/10) + 's';
+    el.style.fontSize = rand(14,28)+'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3200);
+  }
+}
+
+function goHub(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('hub-screen').classList.add('active');
+  speak('Bé muốn chơi gì tiếp theo nhè?');
+}
+function openGame(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(name+'-screen').classList.add('active');
+}
+
+const levels = { bonds:2, sub:2, br:1, db:1 };
+function setLevel(game, lv, btn){
+  levels[game] = lv;
+  btn.parentElement.querySelectorAll('.levelbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function buildNumpad(container, max, onPick, opts){
+  opts = opts || {};
+  container.innerHTML = '';
+  const nums = [];
+  for(let i=opts.min ?? 0; i<=max; i++) nums.push(i);
+  shuffle(nums);
+  nums.forEach(n=>{
+    const b = document.createElement('button');
+    b.className = 'numbtn';
+    b.textContent = n;
+    b.onclick = ()=>onPick(n,b);
+    container.appendChild(b);
+  });
+}
+
+function lockPad(container){
+  container.querySelectorAll('.numbtn').forEach(b=>b.disabled=true);
+}
+
+/* generic ten-frame renderer: filled = array of classes per cell index 0..9 */
+function renderTenFrame(container, cellClasses){
+  container.innerHTML = '';
+  const frame = document.createElement('div');
+  frame.className = 'tenframe';
+  for(let i=0;i<10;i++){
+    const c = document.createElement('div');
+    c.className = 'cell ' + (cellClasses[i] || '');
+    frame.appendChild(c);
+  }
+  container.appendChild(frame);
+}
+
+/* ================= GAME 1: BONDS (Tách - Gộp) ================= */
+let bondsState = {};
+function startBonds(){
+  document.getElementById('bonds-setup').style.display='none';
+  document.getElementById('bonds-end').style.display='none';
+  document.getElementById('bonds-play').style.display='flex';
+  bondsState = { q:0, total:10, score:0, stars:0, lv: levels.bonds };
+  document.getElementById('bondsStars').textContent = 0;
+  nextBondsQuestion();
+}
+function bondsMaxForLevel(lv){ return lv===1 ? 5 : 10; }
+function nextBondsQuestion(){
+  const fb = document.getElementById('bondsFeedback'); fb.textContent=''; fb.className='feedback';
+  if(bondsState.q >= bondsState.total){ return endBonds(); }
+  bondsState.q++;
+  document.getElementById('bondsQNum').textContent = 'Câu '+bondsState.q+'/'+bondsState.total;
+  document.getElementById('bondsProgressFill').style.width = Math.round((bondsState.q-1)/bondsState.total*100)+'%';
+  document.getElementById('bondsScoreLabel').textContent = 'Đúng: '+bondsState.score;
+
+  const maxN = bondsMaxForLevel(bondsState.lv);
+  const mode = bondsState.lv===1 ? pick(['gop','gop','tach']) : pick(['gop','tach']);
+  const visual = document.getElementById('bondsVisual');
+  const prompt = document.getElementById('bondsPrompt');
+  visual.innerHTML = '';
+
+  if(mode==='gop'){
+    let a = rand(1, maxN-1), b = rand(1, maxN-a);
+    bondsState.answer = a+b;
+    prompt.innerHTML = 'Có <span class="hl">'+a+'</span> cái kẹo xanh và <span class="hl">'+b+'</span> cái kẹo đỏ. <br>Tất cả có mấy cái kẹo?';
+    const row = document.createElement('div'); row.className='bondrow';
+    const g1 = document.createElement('div'); g1.className='dotgrid groupbox';
+    for(let i=0;i<a;i++){ const d=document.createElement('div'); d.className='dot a'; d.textContent='🍬'; g1.appendChild(d); }
+    const g2 = document.createElement('div'); g2.className='dotgrid groupbox';
+    for(let i=0;i<b;i++){ const d=document.createElement('div'); d.className='dot b'; d.textContent='🍬'; g2.appendChild(d); }
+    const plus = document.createElement('div'); plus.className='plus'; plus.textContent='+';
+    row.appendChild(g1); row.appendChild(plus); row.appendChild(g2);
+    visual.appendChild(row);
+    speak('Có '+a+' cái kẹo xanh và '+b+' cái kẹo đỏ. Tất cả có mấy cái kẹo?');
+    buildNumpad(document.getElementById('bondsNumpad'), maxN, checkBonds);
+  } else {
+    let total = rand(3, maxN);
+    let a = rand(1, total-1);
+    let b = total - a;
+    bondsState.answer = b;
+    prompt.innerHTML = 'Có <span class="hl">'+total+'</span> cái kẹo. Lộ ra <span class="hl">'+a+'</span> cái, còn lại mấy cái bị che?';
+    const row = document.createElement('div'); row.className='bondrow';
+    const g1 = document.createElement('div'); g1.className='dotgrid groupbox';
+    for(let i=0;i<a;i++){ const d=document.createElement('div'); d.className='dot a'; d.textContent='🍬'; g1.appendChild(d); }
+    const g2 = document.createElement('div'); g2.className='dotgrid groupbox';
+    for(let i=0;i<b;i++){ const d=document.createElement('div'); d.className='dot hidden'; d.textContent='?'; g2.appendChild(d); }
+    row.appendChild(g1); row.appendChild(g2);
+    visual.appendChild(row);
+    speak('Có '+total+' cái kẹo. Lộ ra '+a+' cái. Còn lại mấy cái bị che?');
+    buildNumpad(document.getElementById('bondsNumpad'), maxN, checkBonds);
+  }
+}
+function checkBonds(n, btn){
+  lockPad(document.getElementById('bondsNumpad'));
+  const fb = document.getElementById('bondsFeedback');
+  if(n === bondsState.answer){
+    btn.classList.add('correct');
+    fb.textContent = 'Tuyệt vời! 🎉'; fb.className='feedback good';
+    bondsState.score++; bondsState.stars++;
+    document.getElementById('bondsStars').textContent = bondsState.stars;
+    soundCorrect(); speak('Đúng rồi, giỏi quá!');
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = 'Chưa đúng, đáp án là '+bondsState.answer+' nha!'; fb.className='feedback bad';
+    soundWrong(); speak('Chưa đúng. Đáp án là '+bondsState.answer);
+  }
+  setTimeout(nextBondsQuestion, 1400);
+}
+function endBonds(){
+  document.getElementById('bonds-play').style.display='none';
+  const end = document.getElementById('bonds-end');
+  end.style.display='flex';
+  addStars(bondsState.stars);
+  end.innerHTML = renderEndCard(bondsState.score, bondsState.total, bondsState.stars, 'startBonds()');
+  confettiBurst();
+  speak('Bé làm đúng '+bondsState.score+' trên '+bondsState.total+' câu. Giỏi lắm!');
+}
+
+/* ================= GAME 2: SUBTRACT (Bóng bay nổ) ================= */
+let subState = {};
+function subMaxForLevel(lv){ return lv===1?5:(lv===2?8:10); }
+function startSub(){
+  document.getElementById('sub-setup').style.display='none';
+  document.getElementById('sub-end').style.display='none';
+  document.getElementById('sub-play').style.display='flex';
+  subState = { q:0, total:10, score:0, stars:0, lv: levels.sub };
+  document.getElementById('subStars').textContent = 0;
+  nextSubQuestion();
+}
+function nextSubQuestion(){
+  const fb = document.getElementById('subFeedback'); fb.textContent=''; fb.className='feedback';
+  if(subState.q >= subState.total) return endSub();
+  subState.q++;
+  document.getElementById('subQNum').textContent = 'Câu '+subState.q+'/'+subState.total;
+  document.getElementById('subProgressFill').style.width = Math.round((subState.q-1)/subState.total*100)+'%';
+  document.getElementById('subScoreLabel').textContent = 'Đúng: '+subState.score;
+
+  const maxN = subMaxForLevel(subState.lv);
+  const n = rand(3, maxN);
+  const k = rand(1, n-1);
+  subState.n = n; subState.k = k; subState.answer = n-k; subState.popped=0;
+
+  document.getElementById('subPrompt').innerHTML = 'Có <span class="hl">'+n+'</span> quả bóng bay.';
+  const field = document.getElementById('subField');
+  field.innerHTML = '';
+  const colors = ['#FF8FA3','#3FA7FF','#FFD23F','#06D6A0','#FF6F61','#7B61FF'];
+  for(let i=0;i<n;i++){
+    const b = document.createElement('div');
+    b.className = 'balloon';
+    b.style.background = pick(colors);
+    field.appendChild(b);
+  }
+  document.getElementById('subPopBtn').style.display='inline-block';
+  document.getElementById('subNumpad').style.display='none';
+  speak('Có '+n+' quả bóng bay. Xem '+k+' quả nổ nhé!');
+}
+function popBalloons(){
+  document.getElementById('subPopBtn').style.display='none';
+  const field = document.getElementById('subField');
+  const balloons = Array.from(field.children);
+  shuffle(balloons);
+  let i=0;
+  const k = subState.k;
+  const interval = setInterval(()=>{
+    if(i>=k){ clearInterval(interval); afterPop(); return; }
+    balloons[i].classList.add('pop');
+    soundPop();
+    i++;
+  }, 350);
+}
+function afterPop(){
+  document.getElementById('subPrompt').innerHTML = subState.k+' quả nổ rồi! Còn lại mấy quả bóng?';
+  speak('Còn lại mấy quả bóng?');
+  const pad = document.getElementById('subNumpad');
+  pad.style.display='flex';
+  buildNumpad(pad, subMaxForLevel(subState.lv), checkSub);
+}
+function checkSub(n, btn){
+  lockPad(document.getElementById('subNumpad'));
+  const fb = document.getElementById('subFeedback');
+  if(n === subState.answer){
+    btn.classList.add('correct');
+    fb.textContent='Chính xác! 🎈'; fb.className='feedback good';
+    subState.score++; subState.stars++;
+    document.getElementById('subStars').textContent = subState.stars;
+    soundCorrect(); speak('Đúng rồi!');
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='Chưa đúng, đáp án là '+subState.answer; fb.className='feedback bad';
+    soundWrong(); speak('Chưa đúng. Đáp án là '+subState.answer);
+  }
+  setTimeout(nextSubQuestion, 1400);
+}
+function endSub(){
+  document.getElementById('sub-play').style.display='none';
+  const end = document.getElementById('sub-end');
+  end.style.display='flex';
+  addStars(subState.stars);
+  end.innerHTML = renderEndCard(subState.score, subState.total, subState.stars, 'startSub()');
+  confettiBurst();
+  speak('Bé làm đúng '+subState.score+' trên '+subState.total+' câu!');
+}
+
+/* ================= GAME 3: BRIDGE (Qua cầu chục) ================= */
+let brState = {};
+function startBridge(){
+  document.getElementById('br-setup').style.display='none';
+  document.getElementById('br-end').style.display='none';
+  document.getElementById('br-play').style.display='flex';
+  brState = { q:0, total:8, score:0, stars:0, lv: levels.br };
+  document.getElementById('brStars').textContent = 0;
+  nextBridgeQuestion();
+}
+function nextBridgeQuestion(){
+  const fb = document.getElementById('brFeedback'); fb.textContent=''; fb.className='feedback';
+  if(brState.q >= brState.total) return endBridge();
+  brState.q++;
+  document.getElementById('brQNum').textContent = 'Câu '+brState.q+'/'+brState.total;
+  document.getElementById('brProgressFill').style.width = Math.round((brState.q-1)/brState.total*100)+'%';
+  document.getElementById('brScoreLabel').textContent = 'Đúng: '+brState.score;
+
+  let a, b, maxSum = brState.lv===1?15:18;
+  do{
+    a = rand(6,9);
+    b = rand(2,9);
+  } while(a+b<=10 || a+b>maxSum);
+  brState.a=a; brState.b=b; brState.need = 10-a; brState.rest = b-(10-a); brState.step=1;
+  showBridgeStep1();
+}
+function showBridgeStep1(){
+  document.getElementById('brStepLabel').textContent = 'Bước 1: Làm tròn 10';
+  document.getElementById('brPrompt').innerHTML = '<span class="hl">'+brState.a+'</span> + <span class="hl">'+brState.b+'</span> = ? <br>Cần thêm mấy để '+brState.a+' thành 10?';
+  const visual = document.getElementById('brVisual');
+  visual.innerHTML='';
+  const cells = [];
+  for(let i=0;i<10;i++) cells.push(i<brState.a ? 'filled' : '');
+  renderTenFrame(visual, cells);
+  const looseRow = document.createElement('div');
+  looseRow.className = 'dotgrid';
+  looseRow.style.marginTop='8px';
+  for(let i=0;i<brState.b;i++){ const d=document.createElement('div'); d.className='dot b'; d.textContent='🍬'; looseRow.appendChild(d); }
+  visual.appendChild(looseRow);
+  speak(brState.a+' cộng '+brState.b+'. Cần thêm mấy để '+brState.a+' thành 10?');
+  buildNumpad(document.getElementById('brNumpad'), 9, checkBridgeStep1, {min:1});
+}
+function checkBridgeStep1(n, btn){
+  lockPad(document.getElementById('brNumpad'));
+  const fb = document.getElementById('brFeedback');
+  if(n === brState.need){
+    btn.classList.add('correct');
+    fb.textContent='Đúng rồi! 🎉'; fb.className='feedback good';
+    soundCorrect(); speak('Đúng rồi!');
+    setTimeout(showBridgeStep2, 1200);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='Thử lại: cần '+brState.need+' để thành 10'; fb.className='feedback bad';
+    soundWrong(); speak('Cần '+brState.need+' để thành 10');
+    setTimeout(showBridgeStep2, 1600);
+  }
+}
+function showBridgeStep2(){
+  document.getElementById('brFeedback').textContent='';
+  document.getElementById('brStepLabel').textContent = 'Bước 2: Tổng cuối cùng';
+  document.getElementById('brPrompt').innerHTML = 'Đầy 10 rồi! Còn dư <span class="hl">'+brState.rest+'</span>. <br>Vậy '+brState.a+' + '+brState.b+' = 10 + '+brState.rest+' = ?';
+  const visual = document.getElementById('brVisual');
+  visual.innerHTML='';
+  const cells = [];
+  for(let i=0;i<10;i++) cells.push(i<brState.a?'filled':'fillednew');
+  renderTenFrame(visual, cells);
+  const looseRow = document.createElement('div');
+  looseRow.className='dotgrid'; looseRow.style.marginTop='8px';
+  for(let i=0;i<brState.rest;i++){ const d=document.createElement('div'); d.className='dot b'; d.textContent='🍬'; looseRow.appendChild(d); }
+  visual.appendChild(looseRow);
+  speak('Đầy mười rồi, còn dư '+brState.rest+'. Mười cộng '+brState.rest+' bằng mấy?');
+  const total = brState.a+brState.b;
+  const choices = new Set([total]);
+  while(choices.size<4){ choices.add(rand(Math.max(11,total-3), Math.min(18,total+3))); }
+  const arr = shuffle(Array.from(choices));
+  const pad = document.getElementById('brNumpad');
+  pad.innerHTML='';
+  arr.forEach(v=>{
+    const btn = document.createElement('button');
+    btn.className='numbtn'; btn.textContent=v;
+    btn.onclick = ()=>checkBridgeStep2(v, btn, total);
+    pad.appendChild(btn);
+  });
+}
+function checkBridgeStep2(n, btn, total){
+  lockPad(document.getElementById('brNumpad'));
+  const fb = document.getElementById('brFeedback');
+  if(n===total){
+    btn.classList.add('correct');
+    fb.textContent='Chính xác! '+brState.a+' + '+brState.b+' = '+total; fb.className='feedback good';
+    brState.score++; brState.stars++;
+    document.getElementById('brStars').textContent = brState.stars;
+    soundCorrect(); speak('Đúng rồi, '+brState.a+' cộng '+brState.b+' bằng '+total);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='Đáp án đúng là '+total; fb.className='feedback bad';
+    soundWrong(); speak('Đáp án đúng là '+total);
+  }
+  setTimeout(nextBridgeQuestion, 1600);
+}
+function endBridge(){
+  document.getElementById('br-play').style.display='none';
+  const end = document.getElementById('br-end');
+  end.style.display='flex';
+  addStars(brState.stars);
+  end.innerHTML = renderEndCard(brState.score, brState.total, brState.stars, 'startBridge()');
+  confettiBurst();
+  speak('Bé qua cầu chục giỏi quá!');
+}
+
+/* ================= GAME 4: DOUBLES (Đôi bạn sinh đôi) ================= */
+let dbState = {};
+let dbTimer = null;
+function startDoubles(){
+  document.getElementById('db-setup').style.display='none';
+  document.getElementById('db-end').style.display='none';
+  document.getElementById('db-play').style.display='flex';
+  dbState = { q:0, total:10, score:0, stars:0, lv: levels.db };
+  document.getElementById('dbStars').textContent = 0;
+  nextDoublesQuestion();
+}
+function dbMaxForLevel(lv){ return lv===1?5:10; }
+function nextDoublesQuestion(){
+  clearInterval(dbTimer);
+  const fb = document.getElementById('dbFeedback'); fb.textContent=''; fb.className='feedback';
+  if(dbState.q >= dbState.total) return endDoubles();
+  dbState.q++;
+  document.getElementById('dbQNum').textContent = 'Câu '+dbState.q+'/'+dbState.total;
+  document.getElementById('dbProgressFill').style.width = Math.round((dbState.q-1)/dbState.total*100)+'%';
+  document.getElementById('dbScoreLabel').textContent = 'Đúng: '+dbState.score;
+
+  const n = rand(1, dbMaxForLevel(dbState.lv));
+  dbState.n = n; dbState.answer = n+n;
+  const icons = ['👟','🧦','🧤','🍎','🍬','⭐','🎈','🐰'];
+  const icon = pick(icons);
+  document.getElementById('dbPrompt').innerHTML = 'Đôi giống nhau: <span class="hl">'+n+'</span> và <span class="hl">'+n+'</span>. Tất cả có mấy?';
+  const visual = document.getElementById('dbVisual');
+  visual.innerHTML='';
+  const row = document.createElement('div'); row.className='bondrow';
+  const g1 = document.createElement('div'); g1.className='dotgrid groupbox';
+  for(let i=0;i<n;i++){ const d=document.createElement('div'); d.className='dot a'; d.textContent=icon; g1.appendChild(d); }
+  const g2 = document.createElement('div'); g2.className='dotgrid groupbox';
+  for(let i=0;i<n;i++){ const d=document.createElement('div'); d.className='dot a'; d.textContent=icon; g2.appendChild(d); }
+  const plus = document.createElement('div'); plus.className='plus'; plus.textContent='+';
+  row.appendChild(g1); row.appendChild(plus); row.appendChild(g2);
+  visual.appendChild(row);
+  speak(n+' cộng '+n+' bằng mấy?');
+
+  buildNumpad(document.getElementById('dbNumpad'), dbState.answer+2, checkDoubles, {min:Math.max(0,dbState.answer-2)});
+
+  dbState.startTime = Date.now();
+  const ring = document.getElementById('dbTimerRing');
+  const DURATION = 8000;
+  ring.style.setProperty('--p', 100);
+  dbTimer = setInterval(()=>{
+    const elapsed = Date.now()-dbState.startTime;
+    const pct = Math.max(0, 100-(elapsed/DURATION*100));
+    ring.style.setProperty('--p', pct);
+    if(pct<=0){ clearInterval(dbTimer); }
+  }, 100);
+}
+function checkDoubles(n, btn){
+  clearInterval(dbTimer);
+  lockPad(document.getElementById('dbNumpad'));
+  const elapsed = Date.now()-dbState.startTime;
+  const fb = document.getElementById('dbFeedback');
+  if(n === dbState.answer){
+    btn.classList.add('correct');
+    let gained = elapsed<3000?2:1;
+    fb.textContent = (gained===2?'Siêu nhanh! ⚡':'Đúng rồi! 🎉');
+    fb.className='feedback good';
+    dbState.score++; dbState.stars+=gained;
+    document.getElementById('dbStars').textContent = dbState.stars;
+    soundCorrect(); speak('Đúng rồi, giỏi quá!');
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='Đáp án đúng là '+dbState.answer; fb.className='feedback bad';
+    soundWrong(); speak('Đáp án đúng là '+dbState.answer);
+  }
+  setTimeout(nextDoublesQuestion, 1400);
+}
+function endDoubles(){
+  document.getElementById('db-play').style.display='none';
+  const end = document.getElementById('db-end');
+  end.style.display='flex';
+  addStars(dbState.stars);
+  end.innerHTML = renderEndCard(dbState.score, dbState.total, dbState.stars, 'startDoubles()');
+  confettiBurst();
+  speak('Bé nhớ số đôi giỏi lắm!');
+}
+
+/* ================= SHARED END CARD ================= */
+function renderEndCard(score, total, stars, restartFn){
+  let mood = '🐰';
+  if(score/total>=0.8) mood='🥳';
+  else if(score/total>=0.5) mood='😊';
+  else mood='💪';
+  return '<div class="endcard">'+
+    '<div class="big">'+mood+'</div>'+
+    '<h2 style="color:var(--purple);">Bé làm đúng '+score+'/'+total+' câu!</h2>'+
+    '<div style="font-size:1.3em;">⭐ +'+stars+' sao</div>'+
+    '<div style="display:flex;gap:10px;margin-top:10px;">'+
+    '<button class="startbtn" onclick="'+restartFn+'">Chơi lại 🔁</button>'+
+    '<button class="back-btn" onclick="goHub()">Về menu</button>'+
+    '</div></div>';
+}
+
+/* greet on load */
+window.addEventListener('load', ()=>{
+  setTimeout(()=>speak('Chào bé! Bé giỏi cộng xúc xắc lắm rồi đó. Hôm nay mình học gì nhé?'), 600);
+});
+</script>
+</body>
+</html>
