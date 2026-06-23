@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Vườn Vần - Bé Học Ghép Vần</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF8EC;
+  --paper:#FFFFFF;
+  --green:#2D6A4F;
+  --green-light:#74C69D;
+  --green-pale:#D8F3DC;
+  --yellow:#FFC93C;
+  --yellow-pale:#FFF0C2;
+  --coral:#F2674A;
+  --coral-pale:#FFE2D6;
+  --sky:#3FA7D6;
+  --sky-pale:#DCEFF8;
+  --plum:#7B5EA7;
+  --ink:#3A3335;
+  --ink-soft:#73686B;
+  --shadow: 0 6px 0 rgba(58,51,53,0.12);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--cream);
+  background-image:
+    radial-gradient(circle at 8% 12%, var(--green-pale) 0, transparent 40%),
+    radial-gradient(circle at 92% 8%, var(--yellow-pale) 0, transparent 35%),
+    radial-gradient(circle at 95% 85%, var(--sky-pale) 0, transparent 35%);
+  font-family:'Quicksand',sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+  padding-bottom:40px;
+}
+h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+button{font-family:'Quicksand',sans-serif;cursor:pointer;border:none;}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px;}
+
+/* ===== HEADER ===== */
+header.top{
+  background:linear-gradient(180deg, var(--green) 0%, #23553e 100%);
+  color:#fff;
+  padding:18px 0 26px;
+  border-radius:0 0 28px 28px;
+  position:relative;
+  overflow:hidden;
+}
+header.top::before{
+  content:"";
+  position:absolute; left:-10%; right:-10%; bottom:-30px; height:60px;
+  background:repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,0.06) 18px 20px);
+}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-emoji{font-size:34px;filter:drop-shadow(0 3px 0 rgba(0,0,0,0.15));}
+.brand h1{margin:0;font-size:26px;letter-spacing:0.5px;}
+.brand p{margin:2px 0 0;font-size:13px;opacity:0.85;font-weight:600;}
+.garden-strip{
+  display:flex; gap:3px; margin-top:14px; padding:10px 12px;
+  background:rgba(255,255,255,0.12); border-radius:14px; overflow-x:auto;
+}
+.garden-strip .bud{font-size:15px; opacity:0.35; transition:opacity .3s, transform .3s; flex-shrink:0;}
+.garden-strip .bud.bloom{opacity:1; transform:scale(1.15);}
+.stars-chip{
+  background:var(--yellow); color:#5c4400; font-weight:700; font-family:'Baloo 2';
+  padding:8px 16px; border-radius:999px; display:flex; align-items:center; gap:6px;
+  box-shadow:0 4px 0 rgba(0,0,0,0.12); font-size:15px; white-space:nowrap;
+}
+
+/* ===== TABS ===== */
+nav.tabs{
+  display:flex; gap:8px; margin:18px auto 6px; max-width:980px; padding:0 16px;
+  overflow-x:auto;
+}
+nav.tabs button{
+  background:var(--paper); color:var(--ink-soft); font-weight:700; font-family:'Baloo 2';
+  padding:10px 18px; border-radius:14px; font-size:15px; white-space:nowrap;
+  box-shadow:var(--shadow); transition:all .15s;
+}
+nav.tabs button.active{background:var(--coral); color:#fff; transform:translateY(2px); box-shadow:0 3px 0 rgba(0,0,0,0.15);}
+
+main{max-width:980px;margin:0 auto;padding:10px 16px 60px;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ===== CHAPTER / LESSON CARDS ===== */
+.chapter{
+  background:var(--paper); border-radius:20px; margin-bottom:16px; overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.chapter-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:14px 18px; cursor:pointer; background:linear-gradient(90deg, var(--green-pale), transparent);
+}
+.chapter-head h3{margin:0;font-size:18px;color:var(--green);}
+.chapter-head .sub{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:2px;}
+.chapter-head .arrow{font-size:18px;transition:transform .25s;color:var(--green);}
+.chapter.open .arrow{transform:rotate(180deg);}
+.chapter-body{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; padding:14px 18px 18px;}
+.chapter.collapsed .chapter-body{display:none;}
+
+.lesson-card{
+  background:var(--cream); border-radius:16px; padding:12px; text-align:center;
+  position:relative; transition:transform .15s; border:2px solid transparent;
+}
+.lesson-card:hover{transform:translateY(-3px);}
+.lesson-card .num{font-size:11px;font-weight:700;color:var(--ink-soft);}
+.lesson-card .van{font-family:'Baloo 2';font-weight:700;color:var(--coral);font-size:16px;margin:4px 0;line-height:1.3;}
+.lesson-card .star{font-size:18px;position:absolute;top:6px;right:8px;}
+.lesson-card.done{border-color:var(--green-light); background:var(--green-pale);}
+
+/* ===== LESSON DETAIL ===== */
+#lessonView{display:none;}
+#lessonView.active{display:block;}
+.back-btn{
+  background:var(--paper); color:var(--ink); font-weight:700; font-family:'Baloo 2';
+  padding:8px 16px; border-radius:12px; box-shadow:var(--shadow); margin-bottom:14px; font-size:14px;
+}
+.lesson-banner{
+  background:linear-gradient(135deg, var(--plum), #5c3f8a); color:#fff; border-radius:20px;
+  padding:20px 22px; margin-bottom:16px; text-align:center;
+}
+.lesson-banner .label{font-size:13px;opacity:0.8;font-weight:600;}
+.lesson-banner .vanlist{font-family:'Baloo 2'; font-size:34px; font-weight:700; letter-spacing:2px; margin:6px 0;}
+.van-pill{display:inline-block; background:rgba(255,255,255,0.18); border-radius:12px; padding:4px 12px; margin:0 4px; cursor:pointer; transition:transform .12s;}
+.van-pill:active{transform:scale(0.93);}
+
+.section-card{background:var(--paper); border-radius:18px; padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow);}
+.section-card h4{margin:0 0 10px; font-size:16px; color:var(--green); display:flex; align-items:center; gap:8px;}
+.section-card h4 .badge{background:var(--green); color:#fff; font-family:'Baloo 2'; font-size:13px; width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;}
+
+.sentence-box{font-size:19px; line-height:1.6; font-weight:600; padding:14px; background:var(--yellow-pale); border-radius:14px;}
+.sentence-box .hl{color:var(--coral); font-weight:800; text-decoration:underline; text-decoration-color:var(--coral); text-decoration-thickness:3px;}
+.speak-btn{
+  background:var(--sky); color:#fff; border-radius:50%; width:36px; height:36px; font-size:16px;
+  display:inline-flex;align-items:center;justify-content:center; margin-left:8px; vertical-align:middle;
+  box-shadow:0 3px 0 rgba(0,0,0,0.15);
+}
+.speak-btn:active{transform:translateY(2px); box-shadow:none;}
+.speak-btn.small{width:28px;height:28px;font-size:13px;}
+
+.blend-row{display:flex; align-items:center; justify-content:center; gap:10px; padding:18px 0; flex-wrap:wrap;}
+.blend-box{
+  font-family:'Baloo 2'; font-weight:700; font-size:26px; padding:10px 18px; border-radius:14px;
+  min-width:60px; text-align:center;
+}
+.blend-box.initial{background:var(--sky-pale); color:var(--sky);}
+.blend-box.van{background:var(--coral-pale); color:var(--coral);}
+.blend-plus{font-size:24px;color:var(--ink-soft);font-weight:700;}
+.blend-eq{font-size:24px;color:var(--ink-soft);font-weight:700;}
+.blend-box.result{background:var(--green-pale); color:var(--green); font-size:30px; min-width:90px;}
+
+.word-grid{display:flex; flex-wrap:wrap; gap:8px;}
+.word-chip{
+  background:var(--green-pale); color:var(--green); font-family:'Baloo 2'; font-weight:700;
+  padding:8px 16px; border-radius:12px; font-size:16px; transition:transform .12s;
+}
+.word-chip:active{transform:scale(0.93);}
+
+.pic-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px;}
+.pic-card{background:var(--cream); border-radius:16px; padding:16px 8px; text-align:center;}
+.pic-card .emo{font-size:40px;}
+.pic-card .label{font-family:'Baloo 2'; font-weight:700; margin-top:6px; font-size:15px;}
+
+.complete-btn{
+  display:block; width:100%; background:var(--coral); color:#fff; font-family:'Baloo 2'; font-weight:700;
+  font-size:18px; padding:14px; border-radius:16px; margin-top:8px; box-shadow:0 5px 0 rgba(0,0,0,0.15);
+  transition:transform .12s;
+}
+.complete-btn:active{transform:translateY(3px); box-shadow:none;}
+.complete-btn.done-state{background:var(--green);}
+.lesson-nav{display:flex; gap:10px; margin-top:14px;}
+.lesson-nav button{flex:1; background:var(--paper); font-family:'Baloo 2'; font-weight:700; padding:12px; border-radius:14px; box-shadow:var(--shadow); color:var(--ink);}
+.lesson-nav button:disabled{opacity:0.4;}
+
+/* ===== CHU SECTION ===== */
+.chu-picker{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:10px;}
+.chu-col{flex:1; min-width:240px;}
+.chu-col h4{text-align:center;color:var(--green);}
+.chu-btn-grid{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+.chu-btn{
+  background:var(--cream); border-radius:12px; padding:10px 14px; font-family:'Baloo 2'; font-weight:700;
+  font-size:17px; color:var(--ink); min-width:48px; transition:all .12s; border:2px solid transparent;
+}
+.chu-btn.sel{background:var(--coral); color:#fff; border-color:var(--coral);}
+.chu-result{
+  text-align:center; margin-top:18px; padding:22px; background:var(--green-pale); border-radius:18px;
+}
+.chu-result .big{font-family:'Baloo 2'; font-weight:800; font-size:42px; color:var(--green);}
+.chu-result .formula{font-size:15px;color:var(--ink-soft);font-weight:700;margin-top:4px;}
+
+/* ===== GAMES ===== */
+.game-pick{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
+.game-card{
+  background:var(--paper); border-radius:18px; padding:20px; text-align:center; box-shadow:var(--shadow);
+  transition:transform .15s;
+}
+.game-card:hover{transform:translateY(-3px);}
+.game-card .icon{font-size:42px;}
+.game-card h3{margin:8px 0 4px;font-size:18px;color:var(--plum);}
+.game-card p{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
+.game-card button{background:var(--plum); color:#fff; font-family:'Baloo 2'; font-weight:700; padding:10px 20px; border-radius:12px; box-shadow:0 4px 0 rgba(0,0,0,0.15);}
+
+#gamePlay{display:none;}
+#gamePlay.active{display:block;}
+.game-topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+.game-score{font-family:'Baloo 2'; font-weight:700; color:var(--green); font-size:16px;}
+.game-question{
+  background:var(--paper); border-radius:20px; padding:28px 20px; text-align:center; box-shadow:var(--shadow);
+}
+.game-question .qword{font-family:'Baloo 2'; font-weight:800; font-size:40px; color:var(--plum); margin:10px 0;}
+.game-question .qemo{font-size:54px;}
+.game-question .qprompt{font-size:15px;color:var(--ink-soft); font-weight:700;}
+.game-opts{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px;}
+.game-opts button{
+  background:var(--cream); font-family:'Baloo 2'; font-weight:700; font-size:20px; padding:16px; border-radius:14px;
+  box-shadow:var(--shadow); transition:all .15s;
+}
+.game-opts button.correct{background:var(--green-pale); border:2px solid var(--green); color:var(--green);}
+.game-opts button.wrong{background:var(--coral-pale); border:2px solid var(--coral); color:var(--coral);}
+.game-feedback{text-align:center; font-family:'Baloo 2'; font-weight:700; font-size:18px; margin-top:14px; min-height:26px;}
+.game-feedback.ok{color:var(--green);}
+.game-feedback.no{color:var(--coral);}
+.next-q-btn{display:block; margin:14px auto 0; background:var(--coral); color:#fff; font-family:'Baloo 2'; font-weight:700; padding:10px 28px; border-radius:12px; box-shadow:0 4px 0 rgba(0,0,0,0.15);}
+
+/* ===== ACHIEVEMENTS ===== */
+.ach-summary{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:18px;}
+.ach-stat{flex:1; min-width:140px; background:var(--paper); border-radius:18px; padding:18px; text-align:center; box-shadow:var(--shadow);}
+.ach-stat .num{font-family:'Baloo 2'; font-weight:800; font-size:32px; color:var(--coral);}
+.ach-stat .lab{font-size:13px; color:var(--ink-soft); font-weight:700;}
+.garden-board{background:var(--paper); border-radius:20px; padding:20px; box-shadow:var(--shadow);}
+.garden-board h3{margin-top:0;color:var(--green);}
+.garden-grid{display:grid; grid-template-columns:repeat(10,1fr); gap:6px;}
+.garden-grid .plant{font-size:22px; text-align:center; padding:6px 0; border-radius:8px; background:var(--cream); opacity:0.35;}
+.garden-grid .plant.bloom{opacity:1; background:var(--green-pale);}
+@media (max-width:600px){ .garden-grid{grid-template-columns:repeat(5,1fr);} }
+.reset-btn{margin-top:16px; background:transparent; color:var(--ink-soft); font-size:13px; text-decoration:underline; font-weight:700;}
+footer.note{text-align:center; color:var(--ink-soft); font-size:12px; margin-top:30px; padding:0 20px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <div class="brand-emoji">🌾</div>
+        <div>
+          <h1>Vườn Vần</h1>
+          <p>Bé ghép chữ - ghép vần mỗi ngày</p>
+        </div>
+      </div>
+      <div class="stars-chip">⭐ <span id="totalStars">0</span> sao</div>
+    </div>
+    <div class="garden-strip" id="gardenStrip"></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="hocvan" class="active">📖 Học vần</button>
+  <button data-tab="ghepchu">🔤 Ôn ghép chữ</button>
+  <button data-tab="games">🎮 Trò chơi</button>
+  <button data-tab="thanhtich">🏆 Thành tích</button>
+</nav>
+
+<main>
+  <!-- HOC VAN -->
+  <section class="view active" id="view-hocvan">
+    <div id="chapterList"></div>
+  </section>
+
+  <div id="lessonView">
+    <button class="back-btn" id="backBtn">⬅ Quay lại danh sách bài</button>
+    <div class="lesson-banner">
+      <div class="label">BÀI <span id="lvNum"></span></div>
+      <div class="vanlist" id="lvVanList"></div>
+      <div style="font-size:13px;opacity:0.85;">Bấm vào từng vần để nghe đọc</div>
+    </div>
+
+    <div class="section-card">
+      <h4><span class="badge">1</span> Nhận biết</h4>
+      <div class="sentence-box" id="lvSentence"></div>
+    </div>
+
+    <div class="section-card">
+      <h4><span class="badge">2</span> Ghép vần</h4>
+      <div class="blend-row" id="lvBlend"></div>
+    </div>
+
+    <div class="section-card">
+      <h4><span class="badge">3</span> Đọc từ</h4>
+      <div class="word-grid" id="lvWords"></div>
+    </div>
+
+    <div class="section-card">
+      <h4><span class="badge">4</span> Từ tranh</h4>
+      <div class="pic-grid" id="lvPics"></div>
+    </div>
+
+    <button class="complete-btn" id="completeBtn">✅ Hoàn thành bài này</button>
+    <div class="lesson-nav">
+      <button id="prevLessonBtn">⬅ Bài trước</button>
+      <button id="nextLessonBtn">Bài sau ➡</button>
+    </div>
+  </div>
+
+  <!-- GHEP CHU -->
+  <section class="view" id="view-ghepchu">
+    <div class="section-card">
+      <h4>🔤 Ôn ghép chữ: chọn 1 phụ âm + 1 nguyên âm</h4>
+      <p style="color:var(--ink-soft);font-size:14px;margin-top:-4px;">Bé đã biết mặt chữ rồi, đây là phần ôn nhanh ghép âm đầu với nguyên âm để đọc thành tiếng.</p>
+      <div class="chu-picker">
+        <div class="chu-col">
+          <h4>Phụ âm đầu</h4>
+          <div class="chu-btn-grid" id="chuConsonants"></div>
+        </div>
+        <div class="chu-col">
+          <h4>Nguyên âm</h4>
+          <div class="chu-btn-grid" id="chuVowels"></div>
+        </div>
+      </div>
+      <div class="chu-result" id="chuResult">
+        <div class="big">?</div>
+        <div class="formula">Chọn phụ âm và nguyên âm để ghép</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section class="view" id="view-games">
+    <div class="game-pick" id="gamePick">
+      <div class="game-card" data-game="listen">
+        <div class="icon">👂</div>
+        <h3>Nghe và chọn vần</h3>
+        <p>Nghe từ phát ra, chọn đúng vần</p>
+        <button>Chơi ngay</button>
+      </div>
+      <div class="game-card" data-game="blend">
+        <div class="icon">🧩</div>
+        <h3>Ghép vần đúng</h3>
+        <p>Chọn vần để ghép thành tiếng đúng</p>
+        <button>Chơi ngay</button>
+      </div>
+      <div class="game-card" data-game="picword">
+        <div class="icon">🖼️</div>
+        <h3>Đoán từ qua tranh</h3>
+        <p>Nhìn hình, chọn từ đúng</p>
+        <button>Chơi ngay</button>
+      </div>
+    </div>
+    <div id="gamePlay">
+      <div class="game-topbar">
+        <button class="back-btn" id="gameBackBtn">⬅ Chọn trò chơi khác</button>
+        <div class="game-score">✅ <span id="gameCorrect">0</span> / <span id="gameTotal">0</span></div>
+      </div>
+      <div class="game-question">
+        <div class="qprompt" id="qPrompt"></div>
+        <div class="qemo" id="qEmo"></div>
+        <div class="qword" id="qWord"></div>
+        <button class="speak-btn" id="qSpeakBtn" style="margin-top:6px;">🔊</button>
+        <div class="game-opts" id="qOpts"></div>
+        <div class="game-feedback" id="qFeedback"></div>
+        <button class="next-q-btn" id="nextQBtn" style="display:none;">Câu tiếp ➡</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- THANH TICH -->
+  <section class="view" id="view-thanhtich">
+    <div class="ach-summary">
+      <div class="ach-stat"><div class="num" id="achStars">0</div><div class="lab">Sao đã nhận</div></div>
+      <div class="ach-stat"><div class="num" id="achDone">0/40</div><div class="lab">Bài đã học</div></div>
+      <div class="ach-stat"><div class="num" id="achGames">0</div><div class="lab">Câu trả lời đúng (trò chơi)</div></div>
+    </div>
+    <div class="garden-board">
+      <h3>🌻 Vườn Vần của bé</h3>
+      <p style="color:var(--ink-soft);font-size:13px;margin-top:-6px;">Mỗi bài học xong sẽ nở thêm một bông hoa trong vườn!</p>
+      <div class="garden-grid" id="achGarden"></div>
+      <button class="reset-btn" id="resetBtn">Đặt lại toàn bộ tiến trình</button>
+    </div>
+  </section>
+
+  <footer class="note">Nội dung biên soạn theo SGK Tiếng Việt 1 - Kết nối tri thức với cuộc sống (Bài 31-79).</footer>
+</main>
+
+<script>
+/* ===================== DATA ===================== */
+const LESSONS = [
+{id:31,van:["an","ăn","ân"],sentence:"Ngựa vằn và hươu cao cổ là đôi bạn thân.",bi:"b",bv:"an",bw:"bạn",words:["bản","nhãn","gắn","lặn","bận","gần"],pics:[["bạn thân","👫"],["khăn rằn","🧣"],["quả mận","🍑"]]},
+{id:32,van:["on","ôn","ơn"],sentence:"Sơn ca véo von: Mẹ ơi, con đã lớn khôn.",bi:"c",bv:"on",bw:"con",words:["giòn","ngon","bốn","nhộn","gọn","lớn"],pics:[["nón lá","👒"],["con chồn","🦝"],["sơn ca","🐦"]]},
+{id:33,van:["en","ên","in","un"],sentence:"Cún con nhìn thấy dế mèn trên tàu lá.",bi:"m",bv:"en",bw:"mèn",words:["khèn","sen","nến","nghển","chín","mịn","cún","vun"],pics:[["ngọn nến","🕯️"],["đèn pin","🔦"],["cún con","🐶"]]},
+{id:34,van:["am","ăm","âm"],sentence:"Nhện ngắm nghía tấm lưới vừa làm xong.",bi:"l",bv:"am",bw:"làm",words:["cam","khám","ẵm","cằm","đậm","nhẩm"],pics:[["quả cam","🍊"],["tăm tre","🥢"],["củ sâm","🌿"]]},
+{id:36,van:["om","ôm","ơm"],sentence:"Hương cốm thơm thôn xóm.",bi:"x",bv:"om",bw:"xóm",words:["khóm","vòm","nộm","tôm","bờm","rơm"],pics:[["đom đóm","✨"],["chó đốm","🐕"],["mâm cơm","🍚"]]},
+{id:37,van:["em","êm","im","um"],sentence:"Chị em Hà chơi trốn tìm. Hà tủm tỉm đếm: một, hai, ba...",bi:"đ",bv:"êm",bw:"đếm",words:["hẻm","kem","mềm","nếm","mỉm","tím","chụm","mũm"],pics:[["tem thư","📮"],["thềm nhà","🏠"],["tủm tỉm","😊"]]},
+{id:38,van:["ai","ay","ây"],sentence:"Hai bạn thi nhảy dây.",bi:"h",bv:"ai",bw:"hai",words:["bài","lái","nảy","tay","đậy","lẫy"],pics:[["chùm vải","🍒"],["máy cày","🚜"],["đám mây","☁️"]]},
+{id:39,van:["oi","ôi","ơi"],sentence:"Voi con mời bạn đi xem hội.",bi:"v",bv:"oi",bw:"voi",words:["chòi","hỏi","mỗi","xôi","đợi","mới"],pics:[["chim bói cá","🐦"],["thổi còi","📯"],["đồ chơi","🧸"]]},
+{id:41,van:["ui","ưi"],sentence:"Bà gửi cho Hà túi kẹo.",bi:"t",bv:"ui",bw:"túi",words:["bùi","mũi","sủi","cửi","gửi","ngửi"],pics:[["dãy núi","⛰️"],["bụi cỏ","🌾"],["gửi thư","✉️"]]},
+{id:42,van:["ao","eo"],sentence:"Ao thu lạnh lẽo nước trong veo.",bi:"l",bv:"eo",bw:"lẽo",words:["chào","dao","sáo","dẻo","đẽo","kẹo"],pics:[["ngôi sao","⭐"],["quả táo","🍎"],["cái kẹo","🍬"],["ao bèo","🌊"]]},
+{id:43,van:["au","âu","êu"],sentence:"Đàn sẻ nâu kêu ríu rít ở sau nhà.",bi:"s",bv:"au",bw:"sau",words:["cau","tàu","bậu","gấu","khều","rêu"],pics:[["rau củ","🥕"],["con trâu","🐃"],["chú tễu","🎭"]]},
+{id:44,van:["iu","ưu"],sentence:"Bà đã nghỉ hưu mà luôn bận bịu.",bi:"h",bv:"ưu",bw:"hưu",words:["dịu","địu","xíu","hưu","mưu","lựu"],pics:[["cái rìu","🪓"],["cái địu","👶"],["quả lựu","🍈"],["con cừu","🐑"]]},
+{id:46,van:["ac","ăc","âc"],sentence:"Tây Bắc có ruộng bậc thang, có thác nước.",bi:"th",bv:"ac",bw:"thác",words:["lạc","nhạc","mặc","nhắc","gấc","giấc"],pics:[["bác sĩ","👨‍⚕️"],["mắc áo","🧥"],["quả gấc","🟠"]]},
+{id:47,van:["oc","ôc","uc","ưc"],sentence:"Ở góc vườn, cạnh gốc cau, khóm cúc nở hoa vàng rực.",bi:"g",bv:"oc",bw:"góc",words:["học","sóc","cốc","lộc","chục","cúc","đúc","mực"],pics:[["con sóc","🐿️"],["cái cốc","🥤"],["máy xúc","🚜"],["con mực","🦑"]]},
+{id:48,van:["at","ăt","ât"],sentence:"Nam bắt nhịp cho tất cả các bạn hát.",bi:"h",bv:"at",bw:"hát",words:["bát","lạt","sắt","gặt","đất","gật"],pics:[["bãi cát","🏖️"],["mặt trời","☀️"],["bật lửa","🔥"]]},
+{id:49,van:["ot","ôt","ơt"],sentence:"Vườn nhà bà có ớt, rau ngót và cà rốt.",bi:"ng",bv:"ot",bw:"ngót",words:["ngọt","vót","cột","tốt","thớt","vọt"],pics:[["quả nhót","🍒"],["lá lốt","🌿"],["quả ớt","🌶️"]]},
+{id:51,van:["et","êt","it"],sentence:"Đôi vẹt ríu rít mãi không hết chuyện.",bi:"v",bv:"et",bw:"vẹt",words:["két","dệt","lít","sét","nết","mít","tết","vịt"],pics:[["con vẹt","🦜"],["bồ kết","🌰"],["quả mít","🍈"]]},
+{id:52,van:["ut","ưt"],sentence:"Cầu thủ số 7 thu hút khán giả bằng một cú sút dứt điểm.",bi:"s",bv:"ut",bw:"sút",words:["bụt","hụt","lụt","sựt","dứt","mứt","nứt","sứt"],pics:[["bút chì","✏️"],["mứt dừa","🍬"],["nứt nẻ","🏜️"]]},
+{id:53,van:["ap","ăp","âp"],sentence:"Mẹ đạp xe đưa Hà đến lớp. Khắp phố tấp nập.",bi:"đ",bv:"ap",bw:"đạp",words:["rạp","bắp","đập","sạp","cặp","mập","tháp","gặp","nấp"],pics:[["xe đạp","🚲"],["cặp da","💼"],["cá mập","🦈"]]},
+{id:54,van:["op","ôp","ơp"],sentence:"Mưa rào lộp độp, ếch nhái tụ họp thi hát, cá cờ há miệng đớp mưa.",bi:"h",bv:"op",bw:"họp",words:["cọp","hộp","họp","góp","tốp","lớp","xốp","lọp"],pics:[["con cọp","🐯"],["lốp xe","🛞"],["tia chớp","⚡"]]},
+{id:56,van:["ep","êp","ip","up"],sentence:"Trong bếp, lũ cún con múp míp nép vào bên mẹ.",bi:"n",bv:"ep",bw:"nép",words:["kẹp","kịp","nẹp","nhịp","nếp","búp","xếp","giúp"],pics:[["đôi dép","🩴"],["đầu bếp","👨‍🍳"],["bìm bịp","🐦"],["búp sen","🌸"]]},
+{id:57,van:["anh","ênh","inh"],sentence:"Con kênh xinh xinh chảy qua cánh đồng.",bi:"c",bv:"anh",bw:"cánh",words:["chanh","kênh","kính","mảnh","ghềnh","chỉnh","cạnh","lệnh","thịnh"],pics:[["quả chanh","🍋"],["bờ kênh","🏞️"],["kính râm","🕶️"]]},
+{id:58,van:["ach","êch","ich"],sentence:"Ếch con thích đọc sách.",bi:"s",bv:"ach",bw:"sách",words:["vách","chếch","bích","tách","mếch","xích","sạch","lệch","kịch"],pics:[["sách vở","📚"],["chênh lệch","⚖️"],["tờ lịch","📅"]]},
+{id:59,van:["ang","ăng","âng"],sentence:"Vầng trăng sáng lấp ló sau rặng tre.",bi:"s",bv:"ang",bw:"sáng",words:["làng","bằng","hẫng","rạng","rặng","tầng","vẳng","vâng"],pics:[["cá vàng","🐠"],["măng tre","🎍"],["nhà tầng","🏢"]]},
+{id:61,van:["ong","ông","ung","ưng"],sentence:"Những bông hồng rung rinh trong gió.",bi:"tr",bv:"ong",bw:"trong",words:["dòng","thúng","võng","vũng","bổng","đựng","cộng","hửng"],pics:[["chong chóng","🎐"],["bông súng","🌺"],["bánh chưng","🍙"]]},
+{id:62,van:["iêc","iên","iêp"],sentence:"Biển xanh biếc. Những hòn đảo lớn nhỏ trùng điệp.",bi:"b",bv:"iêc",bw:"biếc",words:["thiếc","điện","diệp","tiệc","kiến","thiếp","xiếc","thiện","tiệp"],pics:[["xanh biếc","🩵"],["bờ biển","🏖️"],["sò điệp","🐚"]]},
+{id:63,van:["iêng","iêm","yên"],sentence:"Yến phụng có bộ lông tím biêng biếc, trông rất diêm dúa.",bi:"b",bv:"iêng",bw:"biêng",words:["kiễng","diễm","yến","liệng","kiểm","riềng","xiêm","yên"],pics:[["sầu riêng","🍈"],["cá kiếm","🐟"],["tổ yến","🪹"]]},
+{id:64,van:["iêt","iêu","yêu"],sentence:"Em yêu sách. Nhờ có sách, em biết nhiều điều hay.",bi:"b",bv:"iêt",bw:"biết",words:["chiết","chiều","yêu","viết","diễu","yếu","việt","kiểu","yểu"],pics:[["nhiệt kế","🌡️"],["con diều","🪁"],["yêu chiều","🥰"]]},
+{id:66,van:["uôi","uôm"],sentence:"Thuyền buồm xuôi theo chiều gió.",bi:"x",bv:"uôi",bw:"xuôi",words:["muối","buồm","muỗi","muỗm","nguội","nhuốm","tuổi","nhuộm"],pics:[["con suối","💧"],["buổi sáng","🌅"],["quả muỗm","🥭"]]},
+{id:67,van:["uôc","uôt"],sentence:"Mẹ vuốt tóc và buộc nơ cho Hà.",bi:"b",bv:"uôc",bw:"buộc",words:["cuốc","buốt","luộc","muốt","ruốc","ruột","thuộc","tuốt"],pics:[["ngọn đuốc","🔥"],["viên thuốc","💊"],["con chuột","🐭"]]},
+{id:68,van:["uôn","uông"],sentence:"Chuồn chuồn bay qua các luống rau.",bi:"ch",bv:"uôn",bw:"chuồn",words:["khuôn","buồng","muốn","luống","muộn","thuổng","nguồn","vuông"],pics:[["cuộn chỉ","🧵"],["buồng chuối","🍌"],["quả chuông","🔔"]]},
+{id:69,van:["ươi","ươu"],sentence:"Chim khướu biết bắt chước tiếng người.",bi:"ng",bv:"ươi",bw:"người",words:["bưởi","bướu","cười","hươu","lưới","khướu","mười","rượu"],pics:[["tươi cười","😄"],["quả bưởi","🍈"],["ốc bươu","🐌"]]},
+{id:71,van:["ươc","ươt"],sentence:"Hà ước được lướt sóng biển.",bi:"đ",bv:"ươc",bw:"được",words:["bước","lướt","lược","lượt","ngược","mướt","nước","mượt"],pics:[["thước kẻ","📏"],["dược sĩ","👩‍⚕️"],["lướt ván","🏄"]]},
+{id:72,van:["ươm","ươp"],sentence:"Hoa mướp vàng ươm, bướm bay rập rờn.",bi:"b",bv:"ươm",bw:"bướm",words:["chườm","lượm","đượm","mướp","gươm","nượp","ướm","ướp"],pics:[["con bướm","🦋"],["nườm nượp","🚗"],["giàn mướp","🥒"]]},
+{id:73,van:["ươn","ương"],sentence:"Đường tới trường lượn theo sườn đồi.",bi:"l",bv:"ươn",bw:"lượn",words:["lươn","hướng","ruộng","phượng","sườn","sương","vượn","tưởng"],pics:[["khu vườn","🌳"],["hạt sương","💧"],["con đường","🛣️"]]},
+{id:74,van:["oa","oe"],sentence:"Các loài hoa đua nhau khoe sắc.",bi:"h",bv:"oa",bw:"hoa",words:["hoà","khoẻ","loa","loe","toả","loé","xoá","xoè"],pics:[["đoá hoa","🌹"],["váy xoè","👗"],["chích choè","🐦"]]},
+{id:76,van:["oan","oăn","oat","oăt"],sentence:"Trên phim hoạt hình, voi bước khoan thai, thỏ chạy thoăn thoắt.",bi:"kh",bv:"oan",bw:"khoan",words:["hoạt","choắt","khoát","hoắt","toán","ngoằn","xoan","thoăn"],pics:[["hoa xoan","🌸"],["tóc xoăn","👧"],["hoạt hình","🎬"],["nhọn hoắt","📍"]]},
+{id:77,van:["oai","uê","uy"],sentence:"Quê ngoại của Hà có luỹ tre xanh, có cây trái xum xuê.",bi:"ng",bv:"oai",bw:"ngoại",words:["khoai","huệ","huy","ngoái","thuế","luỹ","tuế","thuỷ"],pics:[["khoai sọ","🥔"],["vạn tuế","🌴"],["tàu thuỷ","🚢"]]},
+{id:78,van:["uân","uât"],sentence:"Chúng em xem chương trình nghệ thuật chào xuân.",bi:"x",bv:"uân",bw:"xuân",words:["chuẩn","khuất","huân","luật","khuân","thuật","tuần","xuất"],pics:[["tuần tra","👮"],["mùa xuân","🌸"],["võ thuật","🥋"]]},
+{id:79,van:["uyên","uyêt"],sentence:"Bà kể chuyện hay tuyệt.",bi:"ch",bv:"uyên",bw:"chuyện",words:["chuyến","luyện","thuyền","truyện","duyệt","khuyết","tuyết","tuyệt"],pics:[["con thuyền","⛵"],["trăng khuyết","🌙"],["truyền thuyết","📜"]]}
+];
+
+const CONSONANT_NAME = {b:"bờ",c:"cờ",ch:"chờ",d:"dờ",đ:"đờ",g:"gờ",gh:"gờ",gi:"giờ",h:"hờ",k:"cờ",kh:"khờ",l:"lờ",m:"mờ",n:"nờ",ng:"ngờ",ngh:"ngờ",nh:"nhờ",p:"pờ",ph:"phờ",qu:"quờ",r:"rờ",s:"sờ",t:"tờ",th:"thờ",tr:"trờ",v:"vờ",x:"xờ"};
+
+const CONSONANTS = ["b","c","ch","d","đ","g","gh","h","kh","l","m","n","ng","nh","ph","r","s","t","th","tr","v","x"];
+const VOWELS = ["a","ă","â","e","ê","i","o","ô","ơ","u","ư","y"];
+
+// chapter groupings: every 4 lessons
+const CHAPTERS = [];
+for(let i=0;i<LESSONS.length;i+=4){
+  CHAPTERS.push(LESSONS.slice(i,i+4));
+}
+
+const FLOWERS = ["🌱","🌿","🌷","🌸","🌼","🌻","🪷","🌺"];
+
+/* ===================== STATE ===================== */
+function loadState(){
+  try{
+    const raw = localStorage.getItem("vuonvan_state");
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {done:{}, stars:0, gameCorrect:0};
+}
+let STATE = loadState();
+function saveState(){ localStorage.setItem("vuonvan_state", JSON.stringify(STATE)); }
+
+/* ===================== TTS ===================== */
+let viVoice = null;
+function pickVoice(){
+  const voices = speechSynthesis.getVoices();
+  viVoice = voices.find(v=>v.lang === "vi-VN") || voices.find(v=>v.lang && v.lang.startsWith("vi")) || null;
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text, rate){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "vi-VN";
+  if(viVoice) u.voice = viVoice;
+  u.rate = rate || 0.85;
+  speechSynthesis.speak(u);
+}
+
+/* ===================== HELPERS ===================== */
+function highlightSentence(sentence, vanArr){
+  let html = sentence.split(/(\s+)/).map(tok=>{
+    if(/\s+/.test(tok)) return tok;
+    const lower = tok.toLowerCase();
+    const hit = vanArr.some(v=>lower.includes(v.toLowerCase()));
+    return hit ? '<span class="hl">'+tok+'</span>' : tok;
+  }).join("");
+  return html;
+}
+function totalStars(){ return Object.keys(STATE.done).length; }
+function isDone(id){ return !!STATE.done[id]; }
+
+/* ===================== RENDER: GARDEN STRIP ===================== */
+function renderGardenStrip(){
+  const el = document.getElementById("gardenStrip");
+  el.innerHTML = LESSONS.map(l=>{
+    const bloom = isDone(l.id) ? "bloom" : "";
+    const f = FLOWERS[l.id % FLOWERS.length];
+    return '<span class="bud '+bloom+'" title="Bài '+l.id+'">'+(isDone(l.id)?f:"🌱")+'</span>';
+  }).join("");
+  document.getElementById("totalStars").textContent = totalStars();
+}
+
+/* ===================== RENDER: CHAPTER LIST ===================== */
+function renderChapters(){
+  const wrap = document.getElementById("chapterList");
+  wrap.innerHTML = "";
+  CHAPTERS.forEach((chap, idx)=>{
+    const doneCount = chap.filter(l=>isDone(l.id)).length;
+    const vanPreview = chap.map(l=>l.van.join(" ")).join(" · ");
+    const div = document.createElement("div");
+    div.className = "chapter " + (idx===0 ? "" : "collapsed");
+    div.innerHTML = `
+      <div class="chapter-head" data-idx="${idx}">
+        <div>
+          <h3>Chặng ${idx+1} · Bài ${chap[0].id}-${chap[chap.length-1].id}</h3>
+          <div class="sub">${vanPreview} &nbsp;|&nbsp; ${doneCount}/${chap.length} hoàn thành</div>
+        </div>
+        <div class="arrow">▾</div>
+      </div>
+      <div class="chapter-body">
+        ${chap.map(l=>`
+          <div class="lesson-card ${isDone(l.id)?'done':''}" data-id="${l.id}">
+            <span class="star">${isDone(l.id)?'⭐':''}</span>
+            <div class="num">BÀI ${l.id}</div>
+            <div class="van">${l.van.join(" ")}</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+  wrap.querySelectorAll(".chapter-head").forEach(h=>{
+    h.addEventListener("click", ()=>{
+      h.closest(".chapter").classList.toggle("collapsed");
+    });
+  });
+  wrap.querySelectorAll(".lesson-card").forEach(c=>{
+    c.addEventListener("click", ()=> openLesson(parseInt(c.dataset.id)));
+  });
+}
+
+/* ===================== LESSON DETAIL ===================== */
+let currentLessonIdx = 0;
+function openLesson(id){
+  currentLessonIdx = LESSONS.findIndex(l=>l.id===id);
+  renderLesson();
+  document.getElementById("view-hocvan").classList.remove("active");
+  document.getElementById("lessonView").classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function closeLesson(){
+  document.getElementById("lessonView").classList.remove("active");
+  document.getElementById("view-hocvan").classList.add("active");
+  renderChapters();
+  renderGardenStrip();
+}
+function renderLesson(){
+  const l = LESSONS[currentLessonIdx];
+  document.getElementById("lvNum").textContent = l.id;
+  document.getElementById("lvVanList").innerHTML = l.van.map(v=>'<span class="van-pill" data-van="'+v+'">'+v+'</span>').join(" ");
+  document.getElementById("lvSentence").innerHTML = highlightSentence(l.sentence, l.van) + ' <button class="speak-btn small" id="sentSpeak">🔊</button>';
+  document.getElementById("lvBlend").innerHTML = `
+    <div class="blend-box initial">${l.bi}</div>
+    <div class="blend-plus">+</div>
+    <div class="blend-box van">${l.bv}</div>
+    <div class="blend-eq">=</div>
+    <div class="blend-box result">${l.bw}</div>
+    <button class="speak-btn" id="blendSpeak">🔊</button>
+  `;
+  document.getElementById("lvWords").innerHTML = l.words.map(w=>'<span class="word-chip" data-w="'+w+'">'+w+'</span>').join("");
+  document.getElementById("lvPics").innerHTML = l.pics.map(p=>`
+    <div class="pic-card" data-w="${p[0]}"><div class="emo">${p[1]}</div><div class="label">${p[0]}</div></div>
+  `).join("");
+
+  document.querySelectorAll(".van-pill").forEach(p=> p.onclick = ()=> speak(p.dataset.van));
+  document.getElementById("sentSpeak").onclick = ()=> speak(l.sentence, 0.8);
+  document.getElementById("blendSpeak").onclick = ()=>{
+    speak(CONSONANT_NAME[l.bi] || l.bi);
+    setTimeout(()=>speak(l.bv), 900);
+    setTimeout(()=>speak(l.bw), 1800);
+  };
+  document.querySelectorAll(".word-chip").forEach(w=> w.onclick = ()=> speak(w.dataset.w));
+  document.querySelectorAll(".pic-card").forEach(p=> p.onclick = ()=> speak(p.dataset.w));
+
+  const btn = document.getElementById("completeBtn");
+  if(isDone(l.id)){
+    btn.textContent = "⭐ Đã hoàn thành - học lại";
+    btn.classList.add("done-state");
+  } else {
+    btn.textContent = "✅ Hoàn thành bài này";
+    btn.classList.remove("done-state");
+  }
+  document.getElementById("prevLessonBtn").disabled = currentLessonIdx === 0;
+  document.getElementById("nextLessonBtn").disabled = currentLessonIdx === LESSONS.length-1;
+}
+document.getElementById("backBtn").onclick = closeLesson;
+document.getElementById("completeBtn").onclick = ()=>{
+  const l = LESSONS[currentLessonIdx];
+  if(!isDone(l.id)){
+    STATE.done[l.id] = true;
+    saveState();
+    renderLesson();
+    renderGardenStrip();
+    speak("Giỏi quá! Bé đã hoàn thành bài "+l.id);
+  }
+};
+document.getElementById("prevLessonBtn").onclick = ()=>{
+  if(currentLessonIdx>0){ currentLessonIdx--; renderLesson(); window.scrollTo({top:0,behavior:"smooth"}); }
+};
+document.getElementById("nextLessonBtn").onclick = ()=>{
+  if(currentLessonIdx<LESSONS.length-1){ currentLessonIdx++; renderLesson(); window.scrollTo({top:0,behavior:"smooth"}); }
+};
+
+/* ===================== TABS ===================== */
+document.querySelectorAll("nav.tabs button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll("main > .view").forEach(v=>v.classList.remove("active"));
+    document.getElementById("lessonView").classList.remove("active");
+    document.getElementById("view-"+btn.dataset.tab).classList.add("active");
+    if(btn.dataset.tab === "thanhtich") renderAchievements();
+  });
+});
+
+/* ===================== GHEP CHU TAB ===================== */
+let chuSel = {c:null, v:null};
+function renderChu(){
+  document.getElementById("chuConsonants").innerHTML = CONSONANTS.map(c=>
+    '<button class="chu-btn" data-c="'+c+'">'+c+'</button>'
+  ).join("");
+  document.getElementById("chuVowels").innerHTML = VOWELS.map(v=>
+    '<button class="chu-btn" data-v="'+v+'">'+v+'</button>'
+  ).join("");
+  document.querySelectorAll("#chuConsonants .chu-btn").forEach(b=>{
+    b.onclick = ()=>{
+      document.querySelectorAll("#chuConsonants .chu-btn").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");
+      chuSel.c = b.dataset.c;
+      speak(CONSONANT_NAME[chuSel.c] || chuSel.c);
+      updateChuResult();
+    };
+  });
+  document.querySelectorAll("#chuVowels .chu-btn").forEach(b=>{
+    b.onclick = ()=>{
+      document.querySelectorAll("#chuVowels .chu-btn").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");
+      chuSel.v = b.dataset.v;
+      speak(chuSel.v);
+      updateChuResult();
+    };
+  });
+}
+function adjustConsonantSpelling(c, v){
+  const frontVowels = ["e","ê","i","y"];
+  const isFront = frontVowels.includes(v);
+  if(c === "c" && isFront) return "k";
+  if(c === "k" && !isFront) return "c";
+  if(c === "g" && isFront) return "gh";
+  if(c === "gh" && !isFront) return "g";
+  if(c === "ng" && isFront) return "ngh";
+  if(c === "ngh" && !isFront) return "ng";
+  return c;
+}
+function updateChuResult(){
+  const box = document.getElementById("chuResult");
+  if(!chuSel.c || !chuSel.v){
+    box.innerHTML = '<div class="big">?</div><div class="formula">Chọn phụ âm và nguyên âm để ghép</div>';
+    return;
+  }
+  const c2 = adjustConsonantSpelling(chuSel.c, chuSel.v);
+  const word = c2 + chuSel.v;
+  box.innerHTML = '<div class="big">'+word+'</div><div class="formula">'+(CONSONANT_NAME[c2]||c2)+' + '+chuSel.v+' = '+word+'</div>';
+  speak(word);
+}
+
+/* ===================== GAMES ===================== */
+let gameState = {type:null, correct:0, total:0, currentAnswer:null};
+
+document.querySelectorAll(".game-card button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const type = btn.closest(".game-card").dataset.game;
+    startGame(type);
+  });
+});
+document.getElementById("gameBackBtn").onclick = ()=>{
+  document.getElementById("gamePlay").classList.remove("active");
+  document.getElementById("gamePick").style.display = "grid";
+};
+
+function startGame(type){
+  gameState = {type, correct:0, total:0};
+  document.getElementById("gamePick").style.display = "none";
+  document.getElementById("gamePlay").classList.add("active");
+  document.getElementById("gameCorrect").textContent = "0";
+  document.getElementById("gameTotal").textContent = "0";
+  nextQuestion();
+}
+function randItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){ return arr.slice().sort(()=>Math.random()-0.5); }
+
+function nextQuestion(){
+  document.getElementById("qFeedback").textContent = "";
+  document.getElementById("qFeedback").className = "game-feedback";
+  document.getElementById("nextQBtn").style.display = "none";
+  const opts = document.getElementById("qOpts");
+  opts.innerHTML = "";
+
+  if(gameState.type === "listen"){
+    const lesson = randItem(LESSONS);
+    const word = randItem(lesson.words.concat([lesson.bw]));
+    const correctVan = lesson.van.find(v=>word.toLowerCase().includes(v.toLowerCase())) || lesson.van[0];
+    let wrongPool = LESSONS.filter(l=>l.id!==lesson.id).flatMap(l=>l.van);
+    let wrongs = shuffle(wrongPool.filter(v=>v!==correctVan)).slice(0,3);
+    let allOpts = shuffle([correctVan, ...wrongs]);
+    document.getElementById("qPrompt").textContent = "Nghe từ và chọn đúng vần trong từ đó:";
+    document.getElementById("qEmo").textContent = "👂";
+    document.getElementById("qWord").textContent = "🔊 ...";
+    document.getElementById("qSpeakBtn").onclick = ()=> speak(word);
+    speak(word);
+    gameState.currentAnswer = correctVan;
+    allOpts.forEach(o=>{
+      const b = document.createElement("button");
+      b.textContent = o;
+      b.onclick = ()=> answerGame(b, o, correctVan, ()=>{ document.getElementById("qWord").textContent = word; });
+      opts.appendChild(b);
+    });
+  }
+
+  if(gameState.type === "blend"){
+    const lesson = randItem(LESSONS);
+    let wrongVan = shuffle(LESSONS.filter(l=>l.id!==lesson.id).flatMap(l=>l.van).filter(v=>!lesson.van.includes(v))).slice(0,3);
+    let allOpts = shuffle([lesson.bv, ...wrongVan]);
+    document.getElementById("qPrompt").textContent = 'Chọn vần để ghép với "'+lesson.bi+'" cho đúng:';
+    document.getElementById("qEmo").textContent = "🧩";
+    document.getElementById("qWord").innerHTML = '<span style="color:var(--sky)">'+lesson.bi+'</span> + ?';
+    document.getElementById("qSpeakBtn").onclick = ()=> speak(CONSONANT_NAME[lesson.bi]||lesson.bi);
+    gameState.currentAnswer = lesson.bv;
+    allOpts.forEach(o=>{
+      const b = document.createElement("button");
+      b.textContent = o;
+      b.onclick = ()=> answerGame(b, o, lesson.bv, ()=>{
+        document.getElementById("qWord").innerHTML = lesson.bi+' + '+lesson.bv+' = <b>'+lesson.bw+'</b>';
+        speak(lesson.bw);
+      });
+      opts.appendChild(b);
+    });
+  }
+
+  if(gameState.type === "picword"){
+    const lesson = randItem(LESSONS);
+    const pic = randItem(lesson.pics);
+    let pool = LESSONS.filter(l=>l.id!==lesson.id).flatMap(l=>l.pics.map(p=>p[0]));
+    let wrongs = shuffle(pool).slice(0,3);
+    let allOpts = shuffle([pic[0], ...wrongs]);
+    document.getElementById("qPrompt").textContent = "Nhìn hình, chọn đúng từ:";
+    document.getElementById("qEmo").textContent = pic[1];
+    document.getElementById("qWord").textContent = "";
+    document.getElementById("qSpeakBtn").onclick = ()=> speak(pic[0]);
+    gameState.currentAnswer = pic[0];
+    allOpts.forEach(o=>{
+      const b = document.createElement("button");
+      b.textContent = o;
+      b.onclick = ()=> answerGame(b, o, pic[0], ()=> speak(pic[0]));
+      opts.appendChild(b);
+    });
+  }
+}
+function answerGame(btn, chosen, correct, onCorrectReveal){
+  const opts = document.querySelectorAll("#qOpts button");
+  opts.forEach(b=>b.disabled=true);
+  gameState.total++;
+  const fb = document.getElementById("qFeedback");
+  if(chosen === correct){
+    btn.classList.add("correct");
+    gameState.correct++;
+    STATE.gameCorrect = (STATE.gameCorrect||0)+1;
+    saveState();
+    fb.textContent = "🎉 Đúng rồi, giỏi quá!";
+    fb.className = "game-feedback ok";
+    speak("Đúng rồi, giỏi quá!");
+  } else {
+    btn.classList.add("wrong");
+    opts.forEach(b=>{ if(b.textContent===correct) b.classList.add("correct"); });
+    fb.textContent = "Chưa đúng, đáp án là: "+correct;
+    fb.className = "game-feedback no";
+    speak("Chưa đúng. Đáp án là "+correct);
+  }
+  if(onCorrectReveal) onCorrectReveal();
+  document.getElementById("gameCorrect").textContent = gameState.correct;
+  document.getElementById("gameTotal").textContent = gameState.total;
+  document.getElementById("nextQBtn").style.display = "block";
+}
+document.getElementById("nextQBtn").onclick = nextQuestion;
+
+/* ===================== ACHIEVEMENTS ===================== */
+function renderAchievements(){
+  document.getElementById("achStars").textContent = totalStars();
+  document.getElementById("achDone").textContent = totalStars()+"/"+LESSONS.length;
+  document.getElementById("achGames").textContent = STATE.gameCorrect||0;
+  const grid = document.getElementById("achGarden");
+  grid.innerHTML = LESSONS.map(l=>{
+    const bloom = isDone(l.id);
+    return '<div class="plant '+(bloom?'bloom':'')+'" title="Bài '+l.id+'">'+(bloom?FLOWERS[l.id%FLOWERS.length]:"🌱")+'</div>';
+  }).join("");
+}
+document.getElementById("resetBtn").onclick = ()=>{
+  if(confirm("Bé có chắc muốn xoá toàn bộ tiến trình học không?")){
+    STATE = {done:{}, stars:0, gameCorrect:0};
+    saveState();
+    renderGardenStrip();
+    renderChapters();
+    renderAchievements();
+  }
+};
+
+/* ===================== INIT ===================== */
+renderGardenStrip();
+renderChapters();
+renderChu();
+</script>
+</body>
+</html>
