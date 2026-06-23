@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Đảo Kho Báu Anh Ngữ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean-deep:#0B4F6C;
+  --ocean-mid:#0E7C9C;
+  --ocean-light:#3FCBE0;
+  --sand:#F4D58D;
+  --sand-light:#FFF3D6;
+  --coral:#EF7B45;
+  --jungle:#2E8B57;
+  --gold:#FFD23F;
+  --ink:#0B2E3D;
+  --white:#FFFDF8;
+  --locked:#9FB4BC;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;font-family:'Quicksand',sans-serif;color:var(--ink);}
+body{
+  background:linear-gradient(180deg,var(--ocean-deep) 0%,var(--ocean-mid) 45%,var(--ocean-light) 100%);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+button:focus-visible, .tappable:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+.screen{display:none;width:100%;min-height:100vh;max-width:1400px;margin:0 auto;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ---------- TOP BAR ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;background:rgba(11,46,61,0.35);backdrop-filter:blur(4px);
+  position:sticky;top:0;z-index:30;
+}
+.topbar .title{color:var(--white);font-size:clamp(20px,2.2vw,26px);font-weight:700;display:flex;gap:8px;align-items:center;}
+.iconbtn{
+  width:46px;height:46px;border-radius:50%;background:var(--white);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 3px 0 rgba(0,0,0,0.15);
+}
+.iconbtn:active{transform:translateY(2px);box-shadow:none;}
+.stars-badge{
+  background:var(--gold);color:var(--ink);font-weight:700;border-radius:20px;
+  padding:6px 14px;font-size:15px;display:flex;align-items:center;gap:6px;
+  box-shadow:0 3px 0 rgba(0,0,0,0.15);
+}
+
+/* ---------- MAP SCREEN ---------- */
+#mapWrap{flex:1;overflow-y:auto;padding:30px 10px 90px;position:relative;}
+.mapHeader{text-align:center;color:var(--white);margin-bottom:10px;}
+.mapHeader .display{font-size:clamp(22px,3vw,32px);margin:0;}
+.mapHeader p{margin:4px 0 0;font-size:clamp(14px,1.6vw,18px);opacity:0.9;}
+#mapGrid{
+  position:relative;max-width:min(980px,94vw);margin:20px auto;height:var(--maph,1600px);
+}
+.path-svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;}
+.island-node{
+  position:absolute;width:clamp(70px,9vw,110px);height:clamp(70px,9vw,110px);transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:2;
+}
+.island-blob{
+  width:100%;height:100%;border-radius:46% 54% 58% 42% / 50% 44% 56% 50%;
+  display:flex;align-items:center;justify-content:center;font-size:clamp(26px,3.2vw,40px);
+  box-shadow:0 4px 0 rgba(0,0,0,0.18), inset 0 -6px 0 rgba(0,0,0,0.08);
+  position:relative;
+}
+.island-node.locked .island-blob{background:var(--locked);filter:grayscale(0.5);}
+.island-node.unlocked .island-blob{background:var(--sand);}
+.island-node.done .island-blob{background:var(--gold);}
+.island-node.current .island-blob{animation:bob 1.6s ease-in-out infinite;box-shadow:0 0 0 4px rgba(255,255,255,0.6),0 4px 0 rgba(0,0,0,0.18);}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.island-num{
+  position:absolute;top:-6px;right:-6px;background:var(--coral);color:#fff;
+  font-size:11px;font-weight:700;border-radius:50%;width:20px;height:20px;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 rgba(0,0,0,0.2);
+}
+.island-stars{display:flex;gap:1px;margin-top:3px;font-size:11px;height:12px;}
+.island-label{
+  margin-top:4px;font-size:11px;font-weight:700;color:var(--white);text-align:center;
+  text-shadow:0 1px 3px rgba(0,0,0,0.5); max-width:90px;
+}
+.lock-emoji{position:absolute;font-size:20px;filter:none;}
+.ship{
+  position:absolute;font-size:clamp(28px,4vw,52px);z-index:5;transform:translate(-50%,-110%);
+  transition:left 0.6s ease, top 0.6s ease;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,0.3));
+}
+
+/* ---------- ISLAND HUB ---------- */
+#hubWrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 16px 50px;}
+.hub-card{
+  background:var(--white);border-radius:28px;padding:clamp(24px,4vw,44px) clamp(20px,4vw,40px);max-width:min(640px,92vw);width:100%;
+  box-shadow:0 10px 0 rgba(0,0,0,0.12);text-align:center;
+}
+.hub-emoji{font-size:clamp(54px,7vw,90px);}
+.hub-title{font-size:clamp(24px,3.2vw,34px);margin:6px 0 2px;}
+.hub-sub{font-size:clamp(14px,1.6vw,18px);color:#5a7079;margin:0 0 16px;}
+.mode-btn{
+  width:100%;display:flex;align-items:center;gap:14px;background:var(--sand-light);
+  border-radius:18px;padding:clamp(14px,1.8vw,20px) clamp(16px,2vw,24px);margin-bottom:12px;font-size:clamp(17px,2vw,21px);font-weight:700;
+  box-shadow:0 4px 0 rgba(0,0,0,0.08);text-align:left;color:var(--ink);
+}
+.mode-btn .em{font-size:28px;}
+.mode-btn:active{transform:translateY(3px);box-shadow:none;}
+.mode-btn.explore{background:#DFF4F8;}
+.mode-btn.choose{background:#E8F6E0;}
+.mode-btn.match{background:#FBE6E0;}
+.mode-btn.repeat{background:#F3E6FB;}
+
+/* ---------- GAME SCREEN ---------- */
+#gameWrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px;}
+.progress-dots{display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap;justify-content:center;}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.4);}
+.dot.fill{background:var(--gold);}
+
+.card-stage{
+  background:var(--white);border-radius:30px;padding:clamp(30px,4vw,50px) clamp(24px,4vw,46px);width:100%;max-width:min(620px,92vw);
+  text-align:center;box-shadow:0 10px 0 rgba(0,0,0,0.12);min-height:300px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+}
+.big-emoji{font-size:clamp(70px,11vw,140px);line-height:1;}
+.big-word{font-size:clamp(30px,4.5vw,52px);font-weight:800;font-family:'Baloo 2',cursive;}
+.sub-word{font-size:clamp(15px,1.8vw,19px);color:#5a7079;}
+.speak-btn{
+  background:var(--ocean-mid);color:#fff;border-radius:50%;width:clamp(64px,7vw,84px);height:clamp(64px,7vw,84px);
+  font-size:clamp(28px,3vw,36px);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 0 rgba(0,0,0,0.2);
+}
+.speak-btn:active{transform:translateY(3px);box-shadow:none;}
+.nav-row{display:flex;gap:14px;margin-top:18px;width:100%;max-width:min(620px,92vw);justify-content:center;}
+.nav-btn{
+  background:var(--coral);color:#fff;font-weight:700;font-size:clamp(16px,1.8vw,20px);border-radius:16px;
+  padding:clamp(12px,1.6vw,16px) clamp(22px,3vw,32px);box-shadow:0 4px 0 rgba(0,0,0,0.15);
+}
+.nav-btn.secondary{background:#fff;color:var(--ink);}
+.nav-btn:active{transform:translateY(3px);box-shadow:none;}
+
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,22px);width:100%;max-width:min(560px,92vw);margin-top:8px;}
+.choice-card{
+  background:var(--white);border-radius:20px;padding:18px 8px;font-size:clamp(46px,7vw,72px);
+  box-shadow:0 6px 0 rgba(0,0,0,0.12);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+  border:4px solid transparent;
+}
+.choice-card:active{transform:translateY(3px);}
+.choice-card.correct{border-color:var(--jungle);background:#E8F6E0;}
+.choice-card.wrong{border-color:var(--coral);background:#FBE6E0;}
+
+.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,18px);width:100%;max-width:min(600px,92vw);}
+.match-card{
+  background:var(--ocean-mid);border-radius:14px;aspect-ratio:1/1;display:flex;align-items:center;
+  justify-content:center;font-size:clamp(28px,4.5vw,48px);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,0.15);
+}
+.match-card.flipped{background:var(--white);color:var(--ink);}
+.match-card.solved{background:var(--gold);color:var(--ink);opacity:0.7;}
+.match-card .back{font-size:24px;}
+
+.mic-circle{
+  width:clamp(90px,9vw,120px);height:clamp(90px,9vw,120px);border-radius:50%;background:var(--coral);color:#fff;font-size:clamp(40px,4.5vw,54px);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 rgba(0,0,0,0.2);
+  margin:6px 0;
+}
+.mic-circle.listening{animation:pulse 1s infinite;background:var(--jungle);}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,139,87,0.5)}70%{box-shadow:0 0 0 18px rgba(46,139,87,0)}100%{box-shadow:0 0 0 0 rgba(46,139,87,0)}}
+.feedback-msg{font-size:clamp(16px,1.8vw,19px);font-weight:700;min-height:22px;}
+
+/* result screen */
+#resultWrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;}
+.confetti{font-size:clamp(50px,7vw,80px);margin-bottom:6px;}
+.result-stars{font-size:clamp(40px,6vw,64px);letter-spacing:8px;margin:10px 0;}
+
+/* settings */
+.overlay{
+  position:fixed;inset:0;background:rgba(11,46,61,0.6);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
+}
+.overlay.active{display:flex;}
+.settings-card{background:var(--white);border-radius:24px;padding:24px;max-width:380px;width:100%;text-align:center;}
+.settings-card h3{margin-top:0;}
+.settings-card button{display:block;width:100%;margin:8px 0;padding:12px;border-radius:14px;font-weight:700;font-size:15px;}
+.btn-danger{background:#FBE6E0;color:#b5402a;}
+.btn-close{background:var(--ocean-mid);color:#fff;}
+
+</style>
+</head>
+<body>
+
+<!-- ============ MAP SCREEN ============ -->
+<div class="screen active" id="screen-map">
+  <div class="topbar">
+    <div class="title">🏝️ <span id="mapTitle">Đảo Kho Báu</span></div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+      <button class="iconbtn" id="btnSettings">⚙️</button>
+    </div>
+  </div>
+  <div id="mapWrap">
+    <div class="mapHeader">
+      <p class="display">🗺️ Chèo thuyền khám phá các đảo tiếng Anh!</p>
+      <p>Bé chạm vào đảo sáng để bắt đầu chơi nhé</p>
+    </div>
+    <div id="mapGrid"></div>
+  </div>
+</div>
+
+<!-- ============ ISLAND HUB ============ -->
+<div class="screen" id="screen-hub">
+  <div class="topbar">
+    <button class="iconbtn" id="btnHubBack">⬅️</button>
+    <div class="title" id="hubTopTitle">Đảo</div>
+    <div style="width:46px"></div>
+  </div>
+  <div id="hubWrap">
+    <div class="hub-card">
+      <div class="hub-emoji" id="hubEmoji">🏝️</div>
+      <div class="hub-title" id="hubTitle">Tên đảo</div>
+      <div class="hub-sub" id="hubSub">Mô tả ngắn</div>
+      <button class="mode-btn explore" id="modeExplore"><span class="em">🔎</span><span>Khám phá từ mới</span></button>
+      <button class="mode-btn choose" id="modeChoose"><span class="em">👂</span><span>Nghe & Chọn đúng</span></button>
+      <button class="mode-btn match" id="modeMatch"><span class="em">🧩</span><span>Trò chơi Ghép cặp</span></button>
+      <button class="mode-btn repeat" id="modeRepeat"><span class="em">🎤</span><span>Lặp lại theo cô</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div class="screen" id="screen-game">
+  <div class="topbar">
+    <button class="iconbtn" id="btnGameBack">⬅️</button>
+    <div class="title" id="gameTopTitle">Trò chơi</div>
+    <div style="width:46px"></div>
+  </div>
+  <div id="gameWrap">
+    <div class="progress-dots" id="progressDots"></div>
+    <div id="gameStage"></div>
+  </div>
+</div>
+
+<!-- ============ RESULT SCREEN ============ -->
+<div class="screen" id="screen-result">
+  <div id="resultWrap">
+    <div class="confetti">🎉🏆🎉</div>
+    <h2 class="display" id="resultTitle">Tuyệt vời!</h2>
+    <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+    <p id="resultMsg">Bé đã hoàn thành đảo này!</p>
+    <div class="nav-row">
+      <button class="nav-btn secondary" id="btnResultRetry">Chơi lại</button>
+      <button class="nav-btn" id="btnResultMap">Về bản đồ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS OVERLAY ============ -->
+<div class="overlay" id="settingsOverlay">
+  <div class="settings-card">
+    <h3>⚙️ Cài đặt</h3>
+    <p style="font-size:14px;color:#5a7079;">Dành cho phụ huynh</p>
+    <button class="btn-danger" id="btnReset">🗑️ Xoá toàn bộ tiến trình</button>
+    <button class="btn-close" id="btnCloseSettings">Đóng</button>
+  </div>
+</div>
+
+<script>
+/* =================== DATA: 31 ISLANDS, EASY -> HARD =================== */
+const ISLANDS = [
+// ---- STAGE 1: chữ cái & âm ----
+{id:1, vi:"Chữ cái A-M", emoji:"🔤", color:"#3FCBE0", sub:"Ôn âm các chữ cái từ A đến M", items:[
+ {speak:"A. Apple",display:"A a",vi:"Apple - quả táo",emoji:"🍎"},
+ {speak:"B. Ball",display:"B b",vi:"Ball - quả bóng",emoji:"⚽"},
+ {speak:"C. Cat",display:"C c",vi:"Cat - con mèo",emoji:"🐱"},
+ {speak:"D. Dog",display:"D d",vi:"Dog - con chó",emoji:"🐶"},
+ {speak:"E. Egg",display:"E e",vi:"Egg - quả trứng",emoji:"🥚"},
+ {speak:"F. Fish",display:"F f",vi:"Fish - con cá",emoji:"🐟"},
+ {speak:"G. Grapes",display:"G g",vi:"Grapes - chùm nho",emoji:"🍇"},
+ {speak:"H. Hat",display:"H h",vi:"Hat - cái mũ",emoji:"🎩"},
+ {speak:"I. Ice cream",display:"I i",vi:"Ice cream - kem",emoji:"🍦"},
+ {speak:"J. Juice",display:"J j",vi:"Juice - nước ép",emoji:"🧃"},
+ {speak:"K. Kite",display:"K k",vi:"Kite - cái diều",emoji:"🪁"},
+ {speak:"L. Lion",display:"L l",vi:"Lion - sư tử",emoji:"🦁"},
+ {speak:"M. Monkey",display:"M m",vi:"Monkey - con khỉ",emoji:"🐒"}
+]},
+{id:2, vi:"Chữ cái N-Z", emoji:"🔤", color:"#3FCBE0", sub:"Ôn âm các chữ cái từ N đến Z", items:[
+ {speak:"N. Nest",display:"N n",vi:"Nest - cái tổ",emoji:"🪺"},
+ {speak:"O. Orange",display:"O o",vi:"Orange - quả cam",emoji:"🍊"},
+ {speak:"P. Pig",display:"P p",vi:"Pig - con lợn",emoji:"🐷"},
+ {speak:"Q. Queen",display:"Q q",vi:"Queen - nữ hoàng",emoji:"👸"},
+ {speak:"R. Rabbit",display:"R r",vi:"Rabbit - con thỏ",emoji:"🐰"},
+ {speak:"S. Sun",display:"S s",vi:"Sun - mặt trời",emoji:"☀️"},
+ {speak:"T. Tiger",display:"T t",vi:"Tiger - hổ",emoji:"🐯"},
+ {speak:"U. Umbrella",display:"U u",vi:"Umbrella - ô dù",emoji:"☂️"},
+ {speak:"V. Violin",display:"V v",vi:"Violin - đàn vi-ô-lông",emoji:"🎻"},
+ {speak:"W. Watermelon",display:"W w",vi:"Watermelon - dưa hấu",emoji:"🍉"},
+ {speak:"X. X-ray",display:"X x",vi:"X-ray - tia X",emoji:"🩻"},
+ {speak:"Y. Yo-yo",display:"Y y",vi:"Yo-yo - con quay",emoji:"🪀"},
+ {speak:"Z. Zebra",display:"Z z",vi:"Zebra - ngựa vằn",emoji:"🦓"}
+]},
+{id:3, vi:"Vần -at", emoji:"🐱", color:"#3FCBE0", sub:"Ghép vần: cat, hat, bat, rat, mat", items:[
+ {speak:"cat",display:"c-at = cat",vi:"con mèo",emoji:"🐱"},
+ {speak:"hat",display:"h-at = hat",vi:"cái mũ",emoji:"🎩"},
+ {speak:"bat",display:"b-at = bat",vi:"con dơi",emoji:"🦇"},
+ {speak:"rat",display:"r-at = rat",vi:"con chuột",emoji:"🐀"},
+ {speak:"mat",display:"m-at = mat",vi:"tấm thảm",emoji:"🧶"}
+]},
+{id:4, vi:"Vần -an / -ap", emoji:"🧢", color:"#3FCBE0", sub:"Ghép vần: can, fan, pan, map, cap", items:[
+ {speak:"can",display:"c-an = can",vi:"lon nước",emoji:"🥫"},
+ {speak:"fan",display:"f-an = fan",vi:"cái quạt",emoji:"🌀"},
+ {speak:"pan",display:"p-an = pan",vi:"cái chảo",emoji:"🍳"},
+ {speak:"map",display:"m-ap = map",vi:"bản đồ",emoji:"🗺️"},
+ {speak:"cap",display:"c-ap = cap",vi:"cái nón",emoji:"🧢"}
+]},
+{id:5, vi:"Vần -ig / -in", emoji:"🐷", color:"#3FCBE0", sub:"Ghép vần: pig, dig, pin, fin, win", items:[
+ {speak:"pig",display:"p-ig = pig",vi:"con lợn",emoji:"🐷"},
+ {speak:"dig",display:"d-ig = dig",vi:"đào",emoji:"⛏️"},
+ {speak:"pin",display:"p-in = pin",vi:"cái kim",emoji:"📌"},
+ {speak:"fin",display:"f-in = fin",vi:"vây cá",emoji:"🐠"},
+ {speak:"win",display:"w-in = win",vi:"chiến thắng",emoji:"🏆"}
+]},
+// ---- STAGE 2: từ vựng cơ bản ----
+{id:6, vi:"Màu sắc", emoji:"🎨", color:"#2E8B57", sub:"Các màu cơ bản", items:[
+ {speak:"red",display:"Red",vi:"màu đỏ",emoji:"🔴"},
+ {speak:"blue",display:"Blue",vi:"màu xanh dương",emoji:"🔵"},
+ {speak:"yellow",display:"Yellow",vi:"màu vàng",emoji:"🟡"},
+ {speak:"green",display:"Green",vi:"màu xanh lá",emoji:"🟢"},
+ {speak:"orange",display:"Orange",vi:"màu cam",emoji:"🟠"},
+ {speak:"pink",display:"Pink",vi:"màu hồng",emoji:"🩷"},
+ {speak:"purple",display:"Purple",vi:"màu tím",emoji:"🟣"},
+ {speak:"black",display:"Black",vi:"màu đen",emoji:"⚫"}
+]},
+{id:7, vi:"Số đếm 1-10", emoji:"🔢", color:"#2E8B57", sub:"Học số đếm từ một đến mười", items:[
+ {speak:"one",display:"1 - One",vi:"một",emoji:"1️⃣"},
+ {speak:"two",display:"2 - Two",vi:"hai",emoji:"2️⃣"},
+ {speak:"three",display:"3 - Three",vi:"ba",emoji:"3️⃣"},
+ {speak:"four",display:"4 - Four",vi:"bốn",emoji:"4️⃣"},
+ {speak:"five",display:"5 - Five",vi:"năm",emoji:"5️⃣"},
+ {speak:"six",display:"6 - Six",vi:"sáu",emoji:"6️⃣"},
+ {speak:"seven",display:"7 - Seven",vi:"bảy",emoji:"7️⃣"},
+ {speak:"eight",display:"8 - Eight",vi:"tám",emoji:"8️⃣"},
+ {speak:"nine",display:"9 - Nine",vi:"chín",emoji:"9️⃣"},
+ {speak:"ten",display:"10 - Ten",vi:"mười",emoji:"🔟"}
+]},
+{id:8, vi:"Vật nuôi", emoji:"🐶", color:"#2E8B57", sub:"Các con vật nuôi quen thuộc", items:[
+ {speak:"dog",display:"Dog",vi:"con chó",emoji:"🐶"},
+ {speak:"cat",display:"Cat",vi:"con mèo",emoji:"🐱"},
+ {speak:"cow",display:"Cow",vi:"con bò",emoji:"🐮"},
+ {speak:"pig",display:"Pig",vi:"con lợn",emoji:"🐷"},
+ {speak:"duck",display:"Duck",vi:"con vịt",emoji:"🦆"},
+ {speak:"hen",display:"Hen",vi:"con gà mái",emoji:"🐔"},
+ {speak:"sheep",display:"Sheep",vi:"con cừu",emoji:"🐑"},
+ {speak:"horse",display:"Horse",vi:"con ngựa",emoji:"🐴"}
+]},
+{id:9, vi:"Thú hoang dã", emoji:"🦁", color:"#2E8B57", sub:"Các con vật trong rừng", items:[
+ {speak:"lion",display:"Lion",vi:"sư tử",emoji:"🦁"},
+ {speak:"tiger",display:"Tiger",vi:"hổ",emoji:"🐯"},
+ {speak:"elephant",display:"Elephant",vi:"voi",emoji:"🐘"},
+ {speak:"monkey",display:"Monkey",vi:"khỉ",emoji:"🐒"},
+ {speak:"bear",display:"Bear",vi:"gấu",emoji:"🐻"},
+ {speak:"zebra",display:"Zebra",vi:"ngựa vằn",emoji:"🦓"},
+ {speak:"giraffe",display:"Giraffe",vi:"hươu cao cổ",emoji:"🦒"},
+ {speak:"snake",display:"Snake",vi:"con rắn",emoji:"🐍"}
+]},
+{id:10, vi:"Gia đình", emoji:"👨‍👩‍👧", color:"#2E8B57", sub:"Các thành viên trong nhà", items:[
+ {speak:"mom",display:"Mom",vi:"mẹ",emoji:"👩"},
+ {speak:"dad",display:"Dad",vi:"bố",emoji:"👨"},
+ {speak:"brother",display:"Brother",vi:"anh/em trai",emoji:"👦"},
+ {speak:"sister",display:"Sister",vi:"chị/em gái",emoji:"👧"},
+ {speak:"baby",display:"Baby",vi:"em bé",emoji:"👶"},
+ {speak:"grandma",display:"Grandma",vi:"bà",emoji:"👵"},
+ {speak:"grandpa",display:"Grandpa",vi:"ông",emoji:"👴"}
+]},
+{id:11, vi:"Các bộ phận cơ thể", emoji:"🧑", color:"#2E8B57", sub:"Tên các bộ phận trên cơ thể", items:[
+ {speak:"head",display:"Head",vi:"đầu",emoji:"🗣️"},
+ {speak:"eyes",display:"Eyes",vi:"mắt",emoji:"👀"},
+ {speak:"nose",display:"Nose",vi:"mũi",emoji:"👃"},
+ {speak:"mouth",display:"Mouth",vi:"miệng",emoji:"👄"},
+ {speak:"ears",display:"Ears",vi:"tai",emoji:"👂"},
+ {speak:"hands",display:"Hands",vi:"tay",emoji:"🤲"},
+ {speak:"feet",display:"Feet",vi:"chân",emoji:"🦶"},
+ {speak:"hair",display:"Hair",vi:"tóc",emoji:"💇"}
+]},
+{id:12, vi:"Hoa quả", emoji:"🍎", color:"#2E8B57", sub:"Các loại trái cây", items:[
+ {speak:"apple",display:"Apple",vi:"táo",emoji:"🍎"},
+ {speak:"banana",display:"Banana",vi:"chuối",emoji:"🍌"},
+ {speak:"orange",display:"Orange",vi:"cam",emoji:"🍊"},
+ {speak:"grape",display:"Grape",vi:"nho",emoji:"🍇"},
+ {speak:"mango",display:"Mango",vi:"xoài",emoji:"🥭"},
+ {speak:"watermelon",display:"Watermelon",vi:"dưa hấu",emoji:"🍉"},
+ {speak:"strawberry",display:"Strawberry",vi:"dâu tây",emoji:"🍓"},
+ {speak:"pineapple",display:"Pineapple",vi:"dứa",emoji:"🍍"}
+]},
+{id:13, vi:"Đồ chơi", emoji:"🧸", color:"#2E8B57", sub:"Các món đồ chơi yêu thích", items:[
+ {speak:"ball",display:"Ball",vi:"quả bóng",emoji:"⚽"},
+ {speak:"doll",display:"Doll",vi:"búp bê",emoji:"🪆"},
+ {speak:"car",display:"Car",vi:"xe ô tô",emoji:"🚗"},
+ {speak:"kite",display:"Kite",vi:"diều",emoji:"🪁"},
+ {speak:"robot",display:"Robot",vi:"người máy",emoji:"🤖"},
+ {speak:"teddy bear",display:"Teddy bear",vi:"gấu bông",emoji:"🧸"},
+ {speak:"balloon",display:"Balloon",vi:"bóng bay",emoji:"🎈"}
+]},
+// ---- STAGE 3: mở rộng ----
+{id:14, vi:"Món ăn", emoji:"🍚", color:"#EF7B45", sub:"Các món ăn hàng ngày", items:[
+ {speak:"rice",display:"Rice",vi:"cơm",emoji:"🍚"},
+ {speak:"bread",display:"Bread",vi:"bánh mì",emoji:"🍞"},
+ {speak:"milk",display:"Milk",vi:"sữa",emoji:"🥛"},
+ {speak:"egg",display:"Egg",vi:"trứng",emoji:"🥚"},
+ {speak:"noodles",display:"Noodles",vi:"mì",emoji:"🍜"},
+ {speak:"fish",display:"Fish",vi:"cá",emoji:"🐟"},
+ {speak:"chicken",display:"Chicken",vi:"thịt gà",emoji:"🍗"},
+ {speak:"soup",display:"Soup",vi:"súp/canh",emoji:"🍲"}
+]},
+{id:15, vi:"Thời tiết", emoji:"⛅", color:"#EF7B45", sub:"Các kiểu thời tiết", items:[
+ {speak:"sunny",display:"Sunny",vi:"nắng",emoji:"☀️"},
+ {speak:"rainy",display:"Rainy",vi:"mưa",emoji:"🌧️"},
+ {speak:"cloudy",display:"Cloudy",vi:"nhiều mây",emoji:"☁️"},
+ {speak:"windy",display:"Windy",vi:"gió",emoji:"🌬️"},
+ {speak:"hot",display:"Hot",vi:"nóng",emoji:"🥵"},
+ {speak:"cold",display:"Cold",vi:"lạnh",emoji:"🥶"},
+ {speak:"snowy",display:"Snowy",vi:"có tuyết",emoji:"❄️"},
+ {speak:"stormy",display:"Stormy",vi:"bão",emoji:"⛈️"}
+]},
+{id:16, vi:"Cảm xúc", emoji:"😊", color:"#EF7B45", sub:"Các trạng thái cảm xúc", items:[
+ {speak:"happy",display:"Happy",vi:"vui",emoji:"😊"},
+ {speak:"sad",display:"Sad",vi:"buồn",emoji:"😢"},
+ {speak:"angry",display:"Angry",vi:"giận",emoji:"😠"},
+ {speak:"scared",display:"Scared",vi:"sợ",emoji:"😨"},
+ {speak:"surprised",display:"Surprised",vi:"ngạc nhiên",emoji:"😲"},
+ {speak:"sleepy",display:"Sleepy",vi:"buồn ngủ",emoji:"😴"},
+ {speak:"excited",display:"Excited",vi:"phấn khích",emoji:"🤩"},
+ {speak:"shy",display:"Shy",vi:"ngại ngùng",emoji:"😳"}
+]},
+{id:17, vi:"Hành động", emoji:"🏃", color:"#EF7B45", sub:"Các động từ chỉ hành động", items:[
+ {speak:"run",display:"Run",vi:"chạy",emoji:"🏃"},
+ {speak:"jump",display:"Jump",vi:"nhảy",emoji:"🤸"},
+ {speak:"eat",display:"Eat",vi:"ăn",emoji:"🍽️"},
+ {speak:"drink",display:"Drink",vi:"uống",emoji:"🥤"},
+ {speak:"sleep",display:"Sleep",vi:"ngủ",emoji:"🛌"},
+ {speak:"walk",display:"Walk",vi:"đi bộ",emoji:"🚶"},
+ {speak:"sing",display:"Sing",vi:"hát",emoji:"🎤"},
+ {speak:"dance",display:"Dance",vi:"nhảy múa",emoji:"💃"}
+]},
+{id:18, vi:"Phòng trong nhà", emoji:"🏠", color:"#EF7B45", sub:"Các phòng và đồ vật trong nhà", items:[
+ {speak:"bedroom",display:"Bedroom",vi:"phòng ngủ",emoji:"🛏️"},
+ {speak:"kitchen",display:"Kitchen",vi:"phòng bếp",emoji:"🍳"},
+ {speak:"bathroom",display:"Bathroom",vi:"phòng tắm",emoji:"🛁"},
+ {speak:"door",display:"Door",vi:"cửa",emoji:"🚪"},
+ {speak:"window",display:"Window",vi:"cửa sổ",emoji:"🪟"},
+ {speak:"table",display:"Table",vi:"cái bàn",emoji:"🪑"},
+ {speak:"bed",display:"Bed",vi:"cái giường",emoji:"🛏️"}
+]},
+{id:19, vi:"Đồ dùng học tập", emoji:"✏️", color:"#EF7B45", sub:"Đồ dùng đi học", items:[
+ {speak:"pencil",display:"Pencil",vi:"bút chì",emoji:"✏️"},
+ {speak:"book",display:"Book",vi:"sách",emoji:"📖"},
+ {speak:"bag",display:"Bag",vi:"cái túi",emoji:"🎒"},
+ {speak:"ruler",display:"Ruler",vi:"cây thước",emoji:"📏"},
+ {speak:"eraser",display:"Eraser",vi:"cục tẩy",emoji:"🧽"},
+ {speak:"crayon",display:"Crayon",vi:"bút sáp màu",emoji:"🖍️"},
+ {speak:"scissors",display:"Scissors",vi:"cái kéo",emoji:"✂️"},
+ {speak:"glue",display:"Glue",vi:"hồ dán",emoji:"🧴"}
+]},
+{id:20, vi:"Phương tiện", emoji:"🚗", color:"#EF7B45", sub:"Các phương tiện đi lại", items:[
+ {speak:"car",display:"Car",vi:"xe ô tô",emoji:"🚗"},
+ {speak:"bus",display:"Bus",vi:"xe buýt",emoji:"🚌"},
+ {speak:"bike",display:"Bike",vi:"xe đạp",emoji:"🚲"},
+ {speak:"train",display:"Train",vi:"xe lửa",emoji:"🚆"},
+ {speak:"plane",display:"Plane",vi:"máy bay",emoji:"✈️"},
+ {speak:"boat",display:"Boat",vi:"thuyền",emoji:"⛵"},
+ {speak:"motorbike",display:"Motorbike",vi:"xe máy",emoji:"🏍️"},
+ {speak:"taxi",display:"Taxi",vi:"xe taxi",emoji:"🚕"}
+]},
+{id:21, vi:"Hình khối", emoji:"🔺", color:"#EF7B45", sub:"Các hình cơ bản", items:[
+ {speak:"circle",display:"Circle",vi:"hình tròn",emoji:"⚪"},
+ {speak:"square",display:"Square",vi:"hình vuông",emoji:"🟦"},
+ {speak:"triangle",display:"Triangle",vi:"hình tam giác",emoji:"🔺"},
+ {speak:"star",display:"Star",vi:"hình ngôi sao",emoji:"⭐"},
+ {speak:"heart",display:"Heart",vi:"hình tim",emoji:"❤️"},
+ {speak:"diamond",display:"Diamond",vi:"hình thoi",emoji:"🔶"}
+]},
+// ---- STAGE 4: ghép từ ----
+{id:22, vi:"Vần -et", emoji:"🐸", color:"#9B5DE5", sub:"Ghép vần: pet, net, jet, wet, vet", items:[
+ {speak:"pet",display:"p-et = pet",vi:"vật nuôi",emoji:"🐾"},
+ {speak:"net",display:"n-et = net",vi:"cái lưới",emoji:"🥅"},
+ {speak:"jet",display:"j-et = jet",vi:"máy bay phản lực",emoji:"🛩️"},
+ {speak:"wet",display:"w-et = wet",vi:"ướt",emoji:"💧"},
+ {speak:"vet",display:"v-et = vet",vi:"bác sĩ thú y",emoji:"🩺"}
+]},
+{id:23, vi:"Vần -og", emoji:"🐶", color:"#9B5DE5", sub:"Ghép vần: dog, log, fog, frog", items:[
+ {speak:"dog",display:"d-og = dog",vi:"con chó",emoji:"🐶"},
+ {speak:"log",display:"l-og = log",vi:"thân gỗ",emoji:"🪵"},
+ {speak:"fog",display:"f-og = fog",vi:"sương mù",emoji:"🌫️"},
+ {speak:"frog",display:"fr-og = frog",vi:"con ếch",emoji:"🐸"}
+]},
+{id:24, vi:"Vần -un", emoji:"☀️", color:"#9B5DE5", sub:"Ghép vần: sun, fun, run, bun", items:[
+ {speak:"sun",display:"s-un = sun",vi:"mặt trời",emoji:"☀️"},
+ {speak:"fun",display:"f-un = fun",vi:"vui vẻ",emoji:"🎉"},
+ {speak:"run",display:"r-un = run",vi:"chạy",emoji:"🏃"},
+ {speak:"bun",display:"b-un = bun",vi:"bánh bao",emoji:"🥐"}
+]},
+{id:25, vi:"Vần -ed", emoji:"🛏️", color:"#9B5DE5", sub:"Ghép vần: bed, red, fed, led", items:[
+ {speak:"bed",display:"b-ed = bed",vi:"cái giường",emoji:"🛏️"},
+ {speak:"red",display:"r-ed = red",vi:"màu đỏ",emoji:"🔴"},
+ {speak:"led",display:"l-ed = led",vi:"dẫn đường",emoji:"🚶"}
+]},
+{id:26, vi:"Từ thường gặp", emoji:"📖", color:"#9B5DE5", sub:"Những từ xuất hiện nhiều nhất", items:[
+ {speak:"I",display:"I",vi:"tôi",emoji:"🧑"},
+ {speak:"am",display:"am",vi:"là (tôi)",emoji:"➡️"},
+ {speak:"you",display:"you",vi:"bạn",emoji:"👉"},
+ {speak:"like",display:"like",vi:"thích",emoji:"❤️"},
+ {speak:"see",display:"see",vi:"nhìn thấy",emoji:"👁️"},
+ {speak:"the",display:"the",vi:"(mạo từ)",emoji:"📌"}
+]},
+// ---- STAGE 5: câu đơn giản ----
+{id:27, vi:"Chào hỏi", emoji:"👋", color:"#FFD23F", sub:"Các câu chào hỏi cơ bản", items:[
+ {speak:"Hello!",display:"Hello!",vi:"Xin chào!",emoji:"👋"},
+ {speak:"Good morning!",display:"Good morning!",vi:"Chào buổi sáng!",emoji:"🌞"},
+ {speak:"Good night!",display:"Good night!",vi:"Chúc ngủ ngon!",emoji:"🌙"},
+ {speak:"How are you?",display:"How are you?",vi:"Bạn khoẻ không?",emoji:"❓"},
+ {speak:"I'm fine, thank you!",display:"I'm fine, thank you!",vi:"Tôi khoẻ, cảm ơn!",emoji:"😊"},
+ {speak:"Goodbye!",display:"Goodbye!",vi:"Tạm biệt!",emoji:"👋"}
+]},
+{id:28, vi:"I am...", emoji:"🙋", color:"#FFD23F", sub:"Câu giới thiệu bản thân", items:[
+ {speak:"I am happy.",display:"I am happy.",vi:"Tôi vui.",emoji:"😊"},
+ {speak:"I am a boy.",display:"I am a boy.",vi:"Tôi là con trai.",emoji:"👦"},
+ {speak:"I am a girl.",display:"I am a girl.",vi:"Tôi là con gái.",emoji:"👧"},
+ {speak:"I am six years old.",display:"I am six years old.",vi:"Tôi sáu tuổi.",emoji:"🎂"},
+ {speak:"I am hungry.",display:"I am hungry.",vi:"Tôi đói.",emoji:"🍽️"}
+]},
+{id:29, vi:"I like...", emoji:"❤️", color:"#FFD23F", sub:"Câu nói về điều bé yêu thích", items:[
+ {speak:"I like apples.",display:"I like apples.",vi:"Tôi thích táo.",emoji:"🍎"},
+ {speak:"I like dogs.",display:"I like dogs.",vi:"Tôi thích chó.",emoji:"🐶"},
+ {speak:"I like to sing.",display:"I like to sing.",vi:"Tôi thích hát.",emoji:"🎤"},
+ {speak:"I do not like rain.",display:"I do not like rain.",vi:"Tôi không thích mưa.",emoji:"🌧️"}
+]},
+{id:30, vi:"This is...", emoji:"👉", color:"#FFD23F", sub:"Câu giới thiệu đồ vật, người", items:[
+ {speak:"This is my mom.",display:"This is my mom.",vi:"Đây là mẹ tôi.",emoji:"👩"},
+ {speak:"This is a cat.",display:"This is a cat.",vi:"Đây là con mèo.",emoji:"🐱"},
+ {speak:"This is my book.",display:"This is my book.",vi:"Đây là sách của tôi.",emoji:"📖"},
+ {speak:"This is my house.",display:"This is my house.",vi:"Đây là nhà tôi.",emoji:"🏠"}
+]},
+{id:31, vi:"Câu hỏi", emoji:"❓", color:"#FFD23F", sub:"Đặt câu hỏi đơn giản", items:[
+ {speak:"What is this?",display:"What is this?",vi:"Đây là cái gì?",emoji:"❓"},
+ {speak:"Who is this?",display:"Who is this?",vi:"Đây là ai?",emoji:"🙋"},
+ {speak:"How many?",display:"How many?",vi:"Có bao nhiêu?",emoji:"🔢"},
+ {speak:"Where is the cat?",display:"Where is the cat?",vi:"Con mèo ở đâu?",emoji:"🐱"}
+]}
+];
+
+/* =================== STATE =================== */
+const STORAGE_KEY = "daoKhoBauAnhNgu_v1";
+let state = loadState();
+let curIslandIdx = 0;
+let curMode = "";
+let gameItems = [];
+let gameStep = 0;
+let gameScore = 0;
+let matchFirst = null;
+let matchLock = false;
+let isListening = false;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { unlockedIndex:0, stars:{}, completed:{} };
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function totalStars(){
+  return Object.values(state.stars).reduce((a,b)=>a+b,0);
+}
+
+/* =================== AUDIO =================== */
+let voices = [];
+function loadVoices(){ voices = speechSynthesis.getVoices(); }
+loadVoices();
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged = loadVoices; }
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.82;
+  u.pitch = 1.05;
+  const v = voices.find(v=>v.lang && v.lang.startsWith("en"));
+  if(v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+let audioCtx;
+function beep(freq, dur, type="sine"){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur);
+    osc.start(); osc.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+function soundCorrect(){ beep(880,0.15); setTimeout(()=>beep(1175,0.18),140); }
+function soundWrong(){ beep(180,0.25,"sawtooth"); }
+function soundWin(){ [660,880,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,0.2),i*120)); }
+
+/* =================== NAVIGATION =================== */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* =================== MAP RENDER =================== */
+function renderMap(){
+  document.getElementById("totalStars").textContent = totalStars();
+  const grid = document.getElementById("mapGrid");
+  grid.innerHTML = "";
+  const perRow = 4;
+  const rows = Math.ceil(ISLANDS.length/perRow);
+  const rowH = 150;
+  grid.style.setProperty("--maph", (rows*rowH+120)+"px");
+
+  const positions = [];
+  ISLANDS.forEach((isl,i)=>{
+    const row = Math.floor(i/perRow);
+    let col = i%perRow;
+    if(row%2===1) col = perRow-1-col;
+    const x = 12 + col*((100-24)/(perRow-1));
+    const y = 80 + row*rowH;
+    positions.push({x,y});
+  });
+
+  // path svg
+  let pathD = "M "+positions.map(p=>p.x+"% "+p.y).join(" L ");
+  const totalH = rows*rowH+120;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("class","path-svg");
+  svg.setAttribute("viewBox","0 0 100 "+totalH);
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.innerHTML = `<path d="${pathD.replace(/%/g,'')}" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.2" stroke-dasharray="3,3" vector-effect="non-scaling-stroke"/>`;
+  grid.appendChild(svg);
+
+  ISLANDS.forEach((isl,i)=>{
+    const pos = positions[i];
+    const unlocked = i <= state.unlockedIndex;
+    const done = !!state.completed[isl.id];
+    const node = document.createElement("div");
+    node.className = "island-node "+(done?"done":(unlocked?"unlocked":"locked"))+(i===state.unlockedIndex?" current":"");
+    node.style.left = pos.x+"%";
+    node.style.top = pos.y+"px";
+    const stars = state.stars[isl.id]||0;
+    node.innerHTML = `
+      <div class="island-blob" style="${unlocked?'':''}">
+        <span>${unlocked? isl.emoji : "🔒"}</span>
+        <span class="island-num">${i+1}</span>
+      </div>
+      <div class="island-stars">${unlocked?starString(stars):""}</div>
+      <div class="island-label">${isl.vi}</div>
+    `;
+    if(unlocked){
+      node.querySelector(".island-blob").addEventListener("click",()=>openHub(i));
+      node.style.cursor="pointer";
+    }
+    grid.appendChild(node);
+  });
+
+  // ship at current position
+  const ship = document.createElement("div");
+  ship.className="ship";
+  ship.textContent="⛵";
+  const cp = positions[Math.min(state.unlockedIndex, positions.length-1)];
+  ship.style.left = cp.x+"%";
+  ship.style.top = cp.y+"px";
+  grid.appendChild(ship);
+}
+function starString(n){
+  let s="";
+  for(let i=0;i<3;i++) s += i<n? "⭐":"<span style='opacity:0.25'>⭐</span>";
+  return s;
+}
+
+/* =================== HUB =================== */
+function openHub(idx){
+  curIslandIdx = idx;
+  const isl = ISLANDS[idx];
+  document.getElementById("hubTopTitle").textContent = "Đảo "+(idx+1);
+  document.getElementById("hubEmoji").textContent = isl.emoji;
+  document.getElementById("hubTitle").textContent = isl.vi;
+  document.getElementById("hubSub").textContent = isl.sub;
+  showScreen("screen-hub");
+}
+
+/* =================== GAME ENGINE =================== */
+function startMode(mode){
+  curMode = mode;
+  gameItems = shuffle([...ISLANDS[curIslandIdx].items]);
+  gameStep = 0;
+  gameScore = 0;
+  document.getElementById("gameTopTitle").textContent =
+    mode==="explore"?"Khám phá": mode==="choose"?"Nghe & Chọn": mode==="match"?"Ghép cặp":"Lặp lại theo cô";
+  showScreen("screen-game");
+  if(mode==="match"){ renderMatch(); }
+  else { renderDots(); renderStep(); }
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function renderDots(){
+  const dots = document.getElementById("progressDots");
+  dots.innerHTML = "";
+  if(curMode==="match"){ dots.style.display="none"; return; }
+  dots.style.display="flex";
+  gameItems.forEach((_,i)=>{
+    const d = document.createElement("div");
+    d.className = "dot"+(i<gameStep?" fill":"");
+    dots.appendChild(d);
+  });
+}
+
+function renderStep(){
+  renderDots();
+  const stage = document.getElementById("gameStage");
+  if(gameStep >= gameItems.length){
+    finishGame();
+    return;
+  }
+  const item = gameItems[gameStep];
+
+  if(curMode==="explore"){
+    stage.innerHTML = `
+      <div class="card-stage">
+        <div class="big-emoji">${item.emoji}</div>
+        <div class="big-word">${item.display}</div>
+        <div class="sub-word">${item.vi}</div>
+        <button class="speak-btn" id="btnSpeak">🔊</button>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn secondary" id="btnPrev">⬅️ Trước</button>
+        <button class="nav-btn" id="btnNext">Tiếp ➡️</button>
+      </div>
+    `;
+    document.getElementById("btnSpeak").onclick = ()=>speak(item.speak);
+    document.getElementById("btnNext").onclick = ()=>{ gameStep++; renderStep(); };
+    document.getElementById("btnPrev").onclick = ()=>{ if(gameStep>0){gameStep--; renderStep();} };
+    setTimeout(()=>speak(item.speak), 300);
+  }
+  else if(curMode==="choose"){
+    const options = buildOptions(item);
+    stage.innerHTML = `
+      <div class="card-stage" style="min-height:140px;">
+        <button class="speak-btn" id="btnSpeak" style="margin:0 auto;">🔊</button>
+        <div class="sub-word">Bé nghe và chạm vào hình đúng nhé</div>
+      </div>
+      <div class="choice-grid" id="choiceGrid"></div>
+      <div class="feedback-msg" id="feedback"></div>
+    `;
+    const grid = document.getElementById("choiceGrid");
+    options.forEach(opt=>{
+      const c = document.createElement("button");
+      c.className = "choice-card";
+      c.textContent = opt.emoji;
+      c.onclick = ()=>handleChoice(c, opt, item);
+      grid.appendChild(c);
+    });
+    document.getElementById("btnSpeak").onclick = ()=>speak(item.speak);
+    setTimeout(()=>speak(item.speak), 350);
+  }
+  else if(curMode==="repeat"){
+    stage.innerHTML = `
+      <div class="card-stage">
+        <div class="big-emoji">${item.emoji}</div>
+        <div class="big-word">${item.display}</div>
+        <button class="speak-btn" id="btnSpeak">🔊</button>
+        <div class="mic-circle" id="micBtn">🎤</div>
+        <div class="feedback-msg" id="feedback">Chạm vào micro và lặp lại nhé!</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" id="btnNext">Tiếp ➡️</button>
+      </div>
+    `;
+    document.getElementById("btnSpeak").onclick = ()=>speak(item.speak);
+    document.getElementById("micBtn").onclick = ()=>tryRecognize(item);
+    document.getElementById("btnNext").onclick = ()=>{ gameStep++; renderStep(); };
+    setTimeout(()=>speak(item.speak), 300);
+  }
+}
+
+function buildOptions(correctItem){
+  const pool = ISLANDS[curIslandIdx].items.filter(it=>it!==correctItem);
+  const wrong = shuffle([...pool]).slice(0, Math.min(3, pool.length));
+  const opts = shuffle([correctItem, ...wrong]);
+  while(opts.length < 4) opts.push(correctItem);
+  return opts;
+}
+
+function handleChoice(el, opt, correctItem){
+  document.querySelectorAll(".choice-card").forEach(c=>c.disabled=true);
+  const fb = document.getElementById("feedback");
+  if(opt === correctItem){
+    el.classList.add("correct");
+    fb.textContent = "🎉 Chính xác!";
+    fb.style.color = "#2E8B57";
+    gameScore++;
+    soundCorrect();
+  } else {
+    el.classList.add("wrong");
+    fb.textContent = "Thử lại nhé! Đáp án là: "+correctItem.display;
+    fb.style.color = "#b5402a";
+    soundWrong();
+  }
+  setTimeout(()=>{ gameStep++; renderStep(); }, 1100);
+}
+
+function tryRecognize(item){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const fb = document.getElementById("feedback");
+  const mic = document.getElementById("micBtn");
+  if(!SR){
+    fb.textContent = "Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bé cứ nói theo cô là được!";
+    return;
+  }
+  if(isListening) return;
+  const rec = new SR();
+  rec.lang = "en-US";
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  isListening = true;
+  mic.classList.add("listening");
+  fb.textContent = "Đang nghe... bé nói đi nào!";
+  rec.onresult = (e)=>{
+    const said = e.results[0][0].transcript.toLowerCase();
+    const target = item.speak.toLowerCase().replace(/[^a-z ]/g,"");
+    if(said.includes(target) || target.includes(said)){
+      fb.textContent = "🎉 Tuyệt vời! Bé nói đúng rồi!";
+      fb.style.color="#2E8B57";
+      soundCorrect();
+    } else {
+      fb.textContent = "Bé nói: \""+said+"\" — thử lại nhé!";
+      fb.style.color="#b5402a";
+    }
+  };
+  rec.onerror = ()=>{ fb.textContent = "Không nghe rõ, bé thử lại nhé!"; };
+  rec.onend = ()=>{ isListening=false; mic.classList.remove("listening"); };
+  rec.start();
+}
+
+/* ---- match game ---- */
+function renderMatch(){
+  const items = ISLANDS[curIslandIdx].items.slice(0, 6);
+  let cards = [];
+  items.forEach((it,i)=>{
+    cards.push({key:i, type:"emoji", val:it.emoji, item:it});
+    cards.push({key:i, type:"word", val:it.display, item:it});
+  });
+  cards = shuffle(cards);
+  gameScore = 0;
+  matchFirst = null; matchLock = false;
+  let solvedPairs = 0;
+  const stage = document.getElementById("gameStage");
+  stage.innerHTML = `<div class="match-grid" id="matchGrid"></div><div class="feedback-msg" id="feedback" style="margin-top:10px;">Chạm 2 thẻ để ghép cặp giống nhau</div>`;
+  const grid = document.getElementById("matchGrid");
+  cards.forEach((c,idx)=>{
+    const el = document.createElement("button");
+    el.className = "match-card";
+    el.textContent = "❓";
+    el.dataset.idx = idx;
+    el.onclick = ()=>flipCard(el, c, cards, grid, ()=>{
+      solvedPairs++;
+      if(solvedPairs === items.length){
+        gameScore = items.length;
+        setTimeout(()=>finishGame(true), 600);
+      }
+    });
+    grid.appendChild(el);
+  });
+}
+function flipCard(el, c, cards, grid, onPairSolved){
+  if(matchLock || el.classList.contains("flipped") || el.classList.contains("solved")) return;
+  el.classList.add("flipped");
+  el.textContent = c.val;
+  speak(c.item.speak);
+  if(!matchFirst){
+    matchFirst = {el,c};
+    return;
+  }
+  matchLock = true;
+  const a = matchFirst, b = {el,c};
+  if(a.c.key === b.c.key && a.c.type !== b.c.type){
+    setTimeout(()=>{
+      a.el.classList.add("solved"); b.el.classList.add("solved");
+      matchFirst=null; matchLock=false;
+      soundCorrect();
+      onPairSolved();
+    },400);
+  } else {
+    setTimeout(()=>{
+      a.el.classList.remove("flipped"); a.el.textContent="❓";
+      b.el.classList.remove("flipped"); b.el.textContent="❓";
+      matchFirst=null; matchLock=false;
+      soundWrong();
+    },700);
+  }
+}
+
+/* ---- finish ---- */
+function finishGame(isMatch){
+  const isl = ISLANDS[curIslandIdx];
+  let stars = 1;
+  if(curMode==="choose"){
+    const ratio = gameScore/gameItems.length;
+    stars = ratio>=0.99?3:ratio>=0.6?2:1;
+  } else if(isMatch || curMode==="match"){
+    stars = 3;
+  } else {
+    stars = Math.max(state.stars[isl.id]||0, 1);
+  }
+  const prevStars = state.stars[isl.id]||0;
+  if(stars > prevStars) state.stars[isl.id] = stars;
+  state.completed[isl.id] = true;
+  if(curIslandIdx === state.unlockedIndex && curIslandIdx < ISLANDS.length-1){
+    state.unlockedIndex = curIslandIdx+1;
+  }
+  saveState();
+  soundWin();
+  const finalStars = state.stars[isl.id]||0;
+  document.getElementById("resultStars").textContent = "⭐".repeat(finalStars)+"☆".repeat(3-finalStars);
+  document.getElementById("resultMsg").textContent =
+    curMode==="explore" ? "Bé đã khám phá hết các từ mới!" :
+    curMode==="repeat" ? "Bé đã luyện nói rất chăm chỉ!" :
+    "Bé đã hoàn thành đảo \""+isl.vi+"\"!";
+  showScreen("screen-result");
+}
+
+/* =================== EVENTS =================== */
+document.getElementById("btnHubBack").onclick = ()=>{ renderMap(); showScreen("screen-map"); };
+document.getElementById("btnGameBack").onclick = ()=>{ speechSynthesis.cancel(); openHub(curIslandIdx); };
+document.getElementById("modeExplore").onclick = ()=>startMode("explore");
+document.getElementById("modeChoose").onclick = ()=>startMode("choose");
+document.getElementById("modeMatch").onclick = ()=>startMode("match");
+document.getElementById("modeRepeat").onclick = ()=>startMode("repeat");
+document.getElementById("btnResultMap").onclick = ()=>{ renderMap(); showScreen("screen-map"); };
+document.getElementById("btnResultRetry").onclick = ()=>{ startMode(curMode); };
+document.getElementById("btnSettings").onclick = ()=>document.getElementById("settingsOverlay").classList.add("active");
+document.getElementById("btnCloseSettings").onclick = ()=>document.getElementById("settingsOverlay").classList.remove("active");
+document.getElementById("btnReset").onclick = ()=>{
+  if(confirm("Xoá toàn bộ tiến trình học của bé?")){
+    state = { unlockedIndex:0, stars:{}, completed:{} };
+    saveState();
+    document.getElementById("settingsOverlay").classList.remove("active");
+    renderMap();
+  }
+};
+
+/* =================== INIT =================== */
+renderMap();
+</script>
+</body>
+</html>
