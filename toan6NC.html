@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sổ Tay Toán 6 Nâng Cao</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+:root{
+  --paper:#FBF7EF;
+  --ink:#23314F;
+  --ink-soft:#5A6584;
+  --line:#D8CFBA;
+  --amber:#C2792F;
+  --amber-soft:#F1DFC4;
+  --teal:#2E6E68;
+  --teal-soft:#D8E8E4;
+  --rose:#A8425A;
+  --rose-soft:#F1DCE0;
+  --violet:#5B4B8A;
+  --violet-soft:#E4DFF1;
+  --indigo:#33476B;
+  --indigo-soft:#DCE3EE;
+  --ok:#3E7B4F;
+  --paper-card:#FFFEFB;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:26px 26px;
+  color:var(--ink);
+  font-family:'Source Sans 3', sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px 80px;}
+@media (min-width:860px){
+  .wrap{padding:26px 32px 90px;}
+  .topic-grid{grid-template-columns:1fr 1fr;}
+}
+@media (min-width:1300px){
+  .wrap{max-width:1300px;}
+}
+
+/* ===== HEADER ===== */
+header.hero{
+  position:relative;
+  background:var(--ink);
+  border-radius:18px;
+  padding:30px 26px 26px;
+  color:#F4EFE3;
+  overflow:hidden;
+  margin-bottom:20px;
+  box-shadow:0 10px 0 -4px rgba(35,49,79,0.15);
+}
+header.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 92% 8%, rgba(194,121,47,0.35), transparent 45%),
+    radial-gradient(circle at 6% 95%, rgba(46,110,104,0.35), transparent 45%);
+}
+.hero-eyebrow{
+  position:relative;
+  font-family:'JetBrains Mono', monospace;
+  font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--amber-soft); margin:0 0 8px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+}
+.fs-btn{
+  font-family:'Source Sans 3',sans-serif; text-transform:none; letter-spacing:0;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25);
+  color:#F4EFE3; border-radius:8px; padding:6px 12px; font-size:12.5px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; flex:none;
+}
+.fs-btn:hover{background:rgba(255,255,255,0.18);}
+.hero h1{
+  position:relative;
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(28px,5vw,40px); line-height:1.05; margin:0 0 10px;
+}
+.hero p{position:relative; margin:0; color:#CBD2E8; font-size:15px; max-width:520px;}
+.hero-stats{
+  position:relative;
+  display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;
+}
+.hstat{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:10px; padding:8px 14px;
+  font-family:'JetBrains Mono', monospace; font-size:12px;
+}
+.hstat b{display:block; font-size:18px; font-family:'Fraunces',serif;}
+
+/* ===== NAV GROUPS ===== */
+.group-label{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:24px 4px 10px; display:flex; align-items:center; gap:10px;
+}
+.group-label::after{content:""; flex:1; height:1px; background:var(--line);}
+
+.topic-grid{display:grid; gap:10px;}
+.topic-card{
+  background:var(--paper-card);
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  padding:14px 16px;
+  cursor:pointer;
+  display:flex; align-items:center; gap:14px;
+  transition:transform .12s, box-shadow .12s, border-color .12s;
+}
+.topic-card:hover{transform:translateY(-2px); box-shadow:0 6px 14px rgba(35,49,79,0.10); border-color:var(--amber);}
+.topic-card .num{
+  font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px;
+  width:34px; height:34px; border-radius:8px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--amber-soft); color:var(--amber);
+}
+.topic-card.teal .num{background:var(--teal-soft); color:var(--teal);}
+.topic-card.rose .num{background:var(--rose-soft); color:var(--rose);}
+.topic-card.violet .num{background:var(--violet-soft); color:var(--violet);}
+.topic-card.indigo .num{background:var(--indigo-soft); color:var(--indigo);}
+.topic-card .meta{flex:1;}
+.topic-card .meta h3{margin:0 0 2px; font-family:'Fraunces',serif; font-size:17px;}
+.topic-card .meta span{font-size:13px; color:var(--ink-soft);}
+.topic-card .prog{
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft);
+  text-align:right; min-width:54px;
+}
+.topic-card .prog b{color:var(--ok); display:block; font-size:15px;}
+
+/* ===== TOPIC DETAIL ===== */
+.detail{display:none;}
+.detail.active{display:block;}
+.detail-card{
+  background:var(--paper-card); border:1.5px solid var(--line); border-radius:18px;
+  padding:22px 22px 26px; margin-bottom:18px;
+}
+.back-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:none; border:1.5px solid var(--line); border-radius:999px;
+  padding:7px 14px; font-size:13.5px; color:var(--ink); cursor:pointer;
+  font-family:'Source Sans 3',sans-serif; margin-bottom:16px;
+}
+.back-btn:hover{border-color:var(--ink);}
+.detail-title{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+.detail-title .num{
+  font-family:'JetBrains Mono',monospace; font-weight:700;
+  width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:var(--amber-soft); color:var(--amber); flex:none;
+}
+.detail.teal .detail-title .num{background:var(--teal-soft); color:var(--teal);}
+.detail.rose .detail-title .num{background:var(--rose-soft); color:var(--rose);}
+.detail.violet .detail-title .num{background:var(--violet-soft); color:var(--violet);}
+.detail.indigo .detail-title .num{background:var(--indigo-soft); color:var(--indigo);}
+.detail-title h2{font-family:'Fraunces',serif; font-size:26px; margin:0;}
+.detail-sub{color:var(--ink-soft); font-size:14px; margin:0 0 18px 52px;}
+
+.section-tag{
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 10px; border-radius:6px; display:inline-block; margin-bottom:10px;
+}
+.tag-theory{background:var(--amber-soft); color:var(--amber);}
+.tag-example{background:var(--teal-soft); color:var(--teal);}
+.tag-practice{background:var(--rose-soft); color:var(--rose);}
+
+.theory-box{font-size:15px; line-height:1.7;}
+.theory-box ul{margin:8px 0 14px; padding-left:20px;}
+.theory-box li{margin-bottom:6px;}
+.formula{
+  font-family:'JetBrains Mono',monospace; background:#F2ECDC; border-radius:8px;
+  padding:3px 8px; display:inline-block; font-size:14px; color:var(--ink);
+}
+
+.example-box{
+  background:var(--teal-soft); border-radius:12px; padding:14px 16px; margin:10px 0;
+  font-size:14.5px; line-height:1.65;
+}
+.example-box .ex-q{font-weight:600; margin-bottom:4px;}
+.example-box .ex-s{color:#1F4742;}
+
+/* practice list */
+.qcard{
+  border:1.5px solid var(--line); border-radius:12px; padding:13px 15px; margin-bottom:10px;
+  background:#fff;
+}
+.qcard.done{border-color:var(--ok); background:#F4FAF5;}
+.qhead{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.qtext{font-size:15px; line-height:1.5; flex:1;}
+.qtext b{font-family:'JetBrains Mono',monospace; color:var(--ink-soft); margin-right:4px;}
+.qbtns{display:flex; gap:6px; flex:none;}
+.chk{
+  width:26px;height:26px;border-radius:7px;border:1.5px solid var(--line);
+  background:#fff; cursor:pointer; flex:none; font-size:14px; color:var(--ok);
+  display:flex;align-items:center;justify-content:center;
+}
+.chk.on{background:var(--ok); color:#fff; border-color:var(--ok);}
+
+.answer-row{
+  display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;
+}
+.ans-input{
+  flex:1; min-width:140px;
+  border:1.5px solid var(--line); border-radius:8px;
+  padding:9px 12px; font-size:14.5px; font-family:'Source Sans 3',sans-serif;
+  background:#FDFCF9; color:var(--ink);
+}
+.ans-input:focus{outline:none; border-color:var(--amber);}
+.btn-check{
+  background:var(--ink); color:#fff; border:none; border-radius:8px;
+  padding:9px 16px; font-size:13.5px; cursor:pointer; flex:none;
+  font-family:'Source Sans 3',sans-serif; font-weight:600;
+}
+.btn-check:hover{background:#374266;}
+.feedback{
+  margin-top:9px; font-size:13.5px; font-weight:600; display:none;
+  padding:7px 11px; border-radius:8px;
+}
+.feedback.show{display:block;}
+.feedback.correct{background:var(--teal-soft); color:var(--teal);}
+.feedback.wrong{background:var(--rose-soft); color:var(--rose);}
+
+.toggle-ans{
+  background:none; color:var(--ink-soft); border:1.5px solid var(--line); border-radius:7px;
+  padding:6px 12px; font-size:12.5px; cursor:pointer; font-family:'Source Sans 3',sans-serif;
+  margin-top:9px;
+}
+.toggle-ans.shown{background:var(--amber); color:#fff; border-color:var(--amber);}
+.ans-box{
+  display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);
+  font-size:14px; line-height:1.6;
+}
+.ans-box.show{display:block;}
+.ans-box .a-val{font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--ok); margin-bottom:4px;}
+.ans-box .a-exp{color:var(--ink-soft);}
+
+/* progress bar in detail */
+.pbar-wrap{display:flex; align-items:center; gap:10px; margin:18px 0 6px; flex-wrap:wrap;}
+.pbar{flex:1; height:8px; background:var(--line); border-radius:99px; overflow:hidden;}
+.pbar-fill{height:100%; background:var(--ok); width:0%; transition:width .25s;}
+.pbar-label{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--ink-soft); min-width:46px; text-align:right;}
+
+footer{text-align:center; color:var(--ink-soft); font-size:12.5px; margin-top:30px; font-family:'JetBrains Mono',monospace;}
+
+@media (max-width:420px){
+  .hero{padding:24px 18px 20px;}
+  .detail-card{padding:18px 14px 20px;}
+  .qcard{padding:12px 12px;}
+  .detail-sub{margin-left:0; margin-top:4px;}
+  .detail-title .num{display:none;}
+  .answer-row{flex-direction:column;}
+  .btn-check{width:100%;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="hero-eyebrow">
+      <span>Sổ tay nhà toán học · Lớp 6</span>
+      <span style="display:flex;gap:8px;flex:none;">
+        <button class="fs-btn" id="resetBtn">↺ Xóa tiến độ</button>
+        <button class="fs-btn" id="fsBtn">⤢ Toàn màn hình</button>
+      </span>
+    </p>
+    <h1>Toán 6 nâng cao</h1>
+    <p>Lý thuyết cô đọng, ví dụ có lời giải, và 15 bài thực hành cho mỗi chủ đề — bám sát SGK và mở rộng theo hướng chuyên đề bồi dưỡng.</p>
+    <div class="hero-stats">
+      <div class="hstat"><b id="statTopics">10</b>chủ đề</div>
+      <div class="hstat"><b id="statQ">150</b>bài tập</div>
+      <div class="hstat"><b id="statDone">0%</b>hoàn thành</div>
+    </div>
+  </header>
+
+  <div id="listView">
+    <div class="group-label">Số học</div>
+    <div class="topic-grid" id="grid-so-hoc"></div>
+
+    <div class="group-label">Đại số</div>
+    <div class="topic-grid" id="grid-dai-so"></div>
+
+    <div class="group-label">Hình học</div>
+    <div class="topic-grid" id="grid-hinh-hoc"></div>
+
+    <div class="group-label">Thống kê &amp; Xác suất</div>
+    <div class="topic-grid" id="grid-thong-ke"></div>
+
+    <div class="group-label">Chuyên đề bồi dưỡng HSG</div>
+    <div class="topic-grid" id="grid-chuyen-de"></div>
+  </div>
+
+  <div id="detailView"></div>
+
+  <footer>Sổ tay Toán 6 — tự lưu tiến độ trên máy của bạn</footer>
+</div>
+
+<script>
+/* ===================== DỮ LIỆU CHỦ ĐỀ ===================== */
+const TOPICS = [
+{
+  id:1, group:'so-hoc', color:'amber', title:'Số nguyên & phép tính nâng cao',
+  sub:'Cộng trừ nhân chia số nguyên, quy tắc dấu, tính nhanh',
+  theory:`
+  <ul>
+    <li>Số nguyên gồm: số nguyên âm, số 0, số nguyên dương. Tập số nguyên: <span class="formula">ℤ = {...,-2,-1,0,1,2,...}</span></li>
+    <li>Giá trị tuyệt đối |a| là khoảng cách từ a đến 0 trên trục số, luôn ≥ 0.</li>
+    <li>Cộng hai số cùng dấu: cộng giá trị tuyệt đối, giữ dấu chung.</li>
+    <li>Cộng hai số khác dấu: lấy số có giá trị tuyệt đối lớn trừ số có giá trị tuyệt đối nhỏ, dấu theo số lớn hơn.</li>
+    <li>Trừ một số = cộng với số đối: <span class="formula">a - b = a + (-b)</span></li>
+    <li>Nhân/chia hai số cùng dấu → kết quả dương; khác dấu → kết quả âm.</li>
+    <li>Quy tắc dấu ngoặc: bỏ ngoặc có dấu "−" đằng trước thì đổi dấu tất cả số hạng trong ngoặc.</li>
+  </ul>`,
+  examples:[
+    {q:'Tính: (−23) + 15 − (−7)', s:'(−23) + 15 − (−7) = −23 + 15 + 7 = −1'},
+    {q:'Tính nhanh: (−37) + 54 + 37 − 54', s:'Nhóm các số đối nhau: [(−37)+37] + [54−54] = 0 + 0 = 0'}
+  ],
+  questions:[
+    {q:'(−15) + 27 = ?', a:'12', e:'Khác dấu: 27 − 15 = 12, dấu theo số có giá trị tuyệt đối lớn hơn (27 dương) → 12.'},
+    {q:'34 + (−49) = ?', a:'−15', e:'Khác dấu: 49 − 34 = 15, mang dấu của 49 (âm) → −15.'},
+    {q:'(−8) − (−13) = ?', a:'5', e:'Trừ số âm = cộng số đối: (−8) + 13 = 5.'},
+    {q:'(−7) × 6 = ?', a:'−42', e:'Khác dấu → tích âm: 7×6=42 → −42.'},
+    {q:'(−72) : 8 = ?', a:'−9', e:'Khác dấu → thương âm: 72:8=9 → −9.'},
+    {q:'|−15| + |−9| = ?', a:'24', e:'|−15|=15, |−9|=9, tổng = 24.'},
+    {q:'(−3) × (−4) × (−5) = ?', a:'−60', e:'Ba số âm: tích hai số âm đầu = dương (12), nhân với số âm thứ ba → âm: 12×(−5)=−60.'},
+    {q:'25 − (−15) + (−10) = ?', a:'30', e:'25+15−10 = 30.'},
+    {q:'(−100) : (−25) = ?', a:'4', e:'Cùng dấu (âm:âm) → thương dương: 100:25=4.'},
+    {q:'Tính: (−9)² ', a:'81', e:'Bình phương một số âm luôn dương: (−9)×(−9)=81.'},
+    {q:'−(−(−7)) = ?', a:'−7', e:'Đổi dấu 3 lần liên tiếp: 7 → −7 → 7 → −7. Vậy kết quả là −7.'},
+    {q:'(−6) + (−8) − (−20) = ?', a:'6', e:'−6−8+20 = 6.'},
+    {q:'So sánh: −23 và −32, số nào lớn hơn?', a:'−23 lớn hơn', e:'Trên trục số, −23 nằm bên phải −32 (gần 0 hơn) nên −23 > −32.'},
+    {q:'Tìm x biết: x + (−15) = 7', a:'x = 22', e:'Chuyển vế: x = 7 − (−15) = 7+15 = 22.'},
+    {q:'Tính giá trị: (−2)³ + (−3)² ', a:'1', e:'(−2)³=−8 (lập phương số âm → âm); (−3)²=9. Tổng: −8+9=1.'}
+  ]
+},
+{
+  id:2, group:'so-hoc', color:'amber', title:'Ước chung, bội chung – ƯCLN, BCNN',
+  sub:'Tìm ƯCLN, BCNN bằng phân tích thừa số nguyên tố, bài toán chia nhóm',
+  theory:`
+  <ul>
+    <li>Ước chung của hai hay nhiều số là số chia hết tất cả các số đó. Ước chung lớn nhất gọi tắt là <b>ƯCLN</b>.</li>
+    <li>Bội chung là số chia hết cho tất cả các số đã cho. Bội chung nhỏ nhất gọi tắt là <b>BCNN</b>.</li>
+    <li>Cách tìm: phân tích mỗi số ra thừa số nguyên tố.
+      <br>• ƯCLN = tích các thừa số <b>chung</b>, mỗi thừa số lấy số mũ <b>nhỏ nhất</b>.
+      <br>• BCNN = tích các thừa số <b>chung và riêng</b>, mỗi thừa số lấy số mũ <b>lớn nhất</b>.</li>
+    <li>Tính chất quan trọng: <span class="formula">ƯCLN(a,b) × BCNN(a,b) = a × b</span></li>
+  </ul>`,
+  examples:[
+    {q:'Tìm ƯCLN(36, 60)', s:'36=2²×3², 60=2²×3×5. Thừa số chung: 2 (mũ nhỏ nhất 2), 3 (mũ nhỏ nhất 1). ƯCLN = 2²×3 = 12.'},
+    {q:'Tìm BCNN(8, 12)', s:'8=2³, 12=2²×3. Lấy 2 mũ lớn nhất (³) và 3 mũ lớn nhất (¹). BCNN = 2³×3 = 24.'}
+  ],
+  questions:[
+    {q:'Tìm ƯCLN(24, 36)', a:'12', e:'24=2³×3, 36=2²×3². ƯCLN=2²×3=12.'},
+    {q:'Tìm ƯCLN(18, 30, 45)', a:'3', e:'18=2×3², 30=2×3×5, 45=3²×5. Thừa số chung chỉ có 3 (mũ nhỏ nhất 1) → ƯCLN=3.'},
+    {q:'Tìm BCNN(6, 9)', a:'18', e:'6=2×3, 9=3². BCNN=2×3²=18.'},
+    {q:'Tìm BCNN(10, 15, 20)', a:'60', e:'10=2×5, 15=3×5, 20=2²×5. BCNN=2²×3×5=60.'},
+    {q:'Biết ƯCLN(a,b)=4 và a×b=96. Tính BCNN(a,b).', a:'24', e:'ƯCLN×BCNN=a×b → BCNN=96:4=24.'},
+    {q:'Tìm ƯCLN(48, 72)', a:'24', e:'48=2⁴×3, 72=2³×3². ƯCLN=2³×3=24.'},
+    {q:'Số nào là bội chung nhỏ nhất của 4 và 6 trong các số: 8, 12, 16, 24?', a:'12', e:'BCNN(4,6)=12 (4=2², 6=2×3 → BCNN=2²×3=12).'},
+    {q:'Một lớp có 28 nam và 32 nữ. Cô giáo muốn chia thành các nhóm có số nam và nữ bằng nhau, mỗi nhóm nhiều nhất bao nhiêu nam?', a:'4 (chia được 4 nhóm)', e:'Cần ƯCLN(28,32). 28=2²×7, 32=2⁵. ƯCLN=2²=4 → chia được tối đa 4 nhóm.'},
+    {q:'Hai bạn An và Bình lần lượt trực nhật 4 ngày và 6 ngày một lần, cùng trực hôm nay. Hỏi sau ít nhất bao nhiêu ngày họ lại cùng trực?', a:'12 ngày', e:'Cần BCNN(4,6)=12.'},
+    {q:'Tìm ƯCLN(100, 75)', a:'25', e:'100=2²×5², 75=3×5². ƯCLN=5²=25.'},
+    {q:'Tìm BCNN(14, 21)', a:'42', e:'14=2×7, 21=3×7. BCNN=2×3×7=42.'},
+    {q:'Cho a=2³×3, b=2×3². Tính ƯCLN(a,b) và BCNN(a,b).', a:'ƯCLN=6, BCNN=72', e:'ƯCLN=2¹×3¹=6. BCNN=2³×3²=72.'},
+    {q:'Có 3 sợi dây dài 18m, 24m, 30m. Cắt thành các đoạn bằng nhau, dài nhất có thể, không dư. Mỗi đoạn dài bao nhiêu?', a:'6m', e:'Cần ƯCLN(18,24,30)=6.'},
+    {q:'Tìm số tự nhiên nhỏ nhất (khác 0) chia hết cho cả 9 và 12.', a:'36', e:'Đây là BCNN(9,12). 9=3², 12=2²×3 → BCNN=2²×3²=36.'},
+    {q:'Tìm ƯCLN(0, 15)', a:'15', e:'Mọi số đều là ước của 0, nên ƯCLN(0,n)=n → ƯCLN(0,15)=15.'}
+  ]
+},
+{
+  id:3, group:'so-hoc', color:'amber', title:'Số nguyên tố – Phân tích thừa số nguyên tố',
+  sub:'Nhận biết số nguyên tố, hợp số, phân tích ra thừa số nguyên tố',
+  theory:`
+  <ul>
+    <li><b>Số nguyên tố</b> là số tự nhiên lớn hơn 1, chỉ có 2 ước là 1 và chính nó (2,3,5,7,11,13,...).</li>
+    <li><b>Hợp số</b> là số tự nhiên lớn hơn 1 có nhiều hơn 2 ước.</li>
+    <li>Số 0 và số 1 không là số nguyên tố cũng không là hợp số.</li>
+    <li>2 là số nguyên tố chẵn duy nhất.</li>
+    <li>Mọi hợp số đều phân tích được thành tích các số nguyên tố — gọi là phân tích ra thừa số nguyên tố.</li>
+    <li>Số ước của n = p<sup>a</sup>×q<sup>b</sup>×... là <span class="formula">(a+1)(b+1)...</span></li>
+  </ul>`,
+  examples:[
+    {q:'Phân tích 360 ra thừa số nguyên tố', s:'360 = 2³ × 3² × 5'},
+    {q:'Tìm số ước của 72', s:'72 = 2³×3². Số ước = (3+1)(2+1) = 4×3 = 12 ước.'}
+  ],
+  questions:[
+    {q:'Trong các số 21, 23, 27, 29 số nào là số nguyên tố?', a:'23 và 29', e:'21=3×7, 27=3³ là hợp số. 23, 29 không chia hết cho số nào khác 1 và chính nó.'},
+    {q:'Phân tích 84 ra thừa số nguyên tố', a:'2²×3×7', e:'84=4×21=2²×3×7.'},
+    {q:'Phân tích 100 ra thừa số nguyên tố', a:'2²×5²', e:'100=4×25=2²×5².'},
+    {q:'Số 1 có phải là số nguyên tố không?', a:'Không', e:'Số nguyên tố phải lớn hơn 1, nên 1 không phải số nguyên tố (và cũng không là hợp số).'},
+    {q:'Tìm số ước của 60', a:'12 ước', e:'60=2²×3×5 → số ước = (2+1)(1+1)(1+1)=12.'},
+    {q:'Tìm số ước của 49', a:'3 ước (1,7,49)', e:'49=7² → số ước=(2+1)=3.'},
+    {q:'Phân tích 126 ra thừa số nguyên tố', a:'2×3²×7', e:'126=2×63=2×3²×7.'},
+    {q:'Một số có dạng 2³×5² . Số đó bằng bao nhiêu?', a:'200', e:'2³=8, 5²=25, 8×25=200.'},
+    {q:'Số nào sau đây là hợp số: 31, 33, 37, 41?', a:'33', e:'33=3×11 có nhiều hơn 2 ước → hợp số. Các số còn lại là số nguyên tố.'},
+    {q:'Phân tích 90 ra thừa số nguyên tố rồi tìm ƯCLN(90,60) bằng cách này', a:'90=2×3²×5; ƯCLN(90,60)=30', e:'60=2²×3×5. Thừa số chung mũ nhỏ nhất: 2¹×3¹×5¹=30.'},
+    {q:'Có bao nhiêu số nguyên tố nhỏ hơn 20?', a:'8 số (2,3,5,7,11,13,17,19)', e:'Liệt kê các số chỉ có ước là 1 và chính nó, nhỏ hơn 20.'},
+    {q:'Phân tích 1000 ra thừa số nguyên tố', a:'2³×5³', e:'1000=8×125=2³×5³.'},
+    {q:'Tìm số tự nhiên n nhỏ nhất sao cho n có đúng 6 ước.', a:'12', e:'12=2²×3 → số ước=(2+1)(1+1)=6, và 12 là số nhỏ nhất thỏa mãn.'},
+    {q:'Tích của hai số nguyên tố liên tiếp 5 và 7 là bao nhiêu, và số đó là hợp số hay số nguyên tố?', a:'35, là hợp số', e:'5×7=35, có các ước 1,5,7,35 → hợp số.'},
+    {q:'Phân tích 225 ra thừa số nguyên tố', a:'3²×5²', e:'225=9×25=3²×5².'}
+  ]
+},
+{
+  id:4, group:'so-hoc', color:'amber', title:'Lũy thừa nâng cao',
+  sub:'Nhân chia lũy thừa cùng cơ số, so sánh lũy thừa, tìm x',
+  theory:`
+  <ul>
+    <li>Lũy thừa: <span class="formula">aⁿ = a×a×...×a (n thừa số)</span>, a gọi là cơ số, n là số mũ.</li>
+    <li>Nhân hai lũy thừa cùng cơ số: <span class="formula">aᵘ × aᵛ = a^(u+v)</span></li>
+    <li>Chia hai lũy thừa cùng cơ số (a≠0, u≥v): <span class="formula">aᵘ : aᵛ = a^(u−v)</span></li>
+    <li>Lũy thừa của lũy thừa: <span class="formula">(aᵘ)ᵛ = a^(u×v)</span></li>
+    <li>Quy ước: <span class="formula">a⁰ = 1</span> (a≠0), <span class="formula">a¹ = a</span></li>
+    <li>So sánh hai lũy thừa: đưa về cùng cơ số hoặc cùng số mũ để so sánh.</li>
+  </ul>`,
+  examples:[
+    {q:'Tính 2³ × 2⁵', s:'2³×2⁵ = 2^(3+5) = 2⁸ = 256'},
+    {q:'So sánh 2¹⁰ và 3⁷', s:'2¹⁰=1024, 3⁷=2187 → 2¹⁰ < 3⁷'}
+  ],
+  questions:[
+    {q:'Tính 3² × 3⁴', a:'729', e:'3²×3⁴=3⁶=729.'},
+    {q:'Tính 5⁶ : 5⁴', a:'25', e:'5⁶:5⁴=5²=25.'},
+    {q:'Tính (2³)²', a:'64', e:'(2³)²=2⁶=64.'},
+    {q:'Tính 10⁰ + 5⁰', a:'2', e:'Mọi số khác 0 lũy thừa 0 đều bằng 1: 1+1=2.'},
+    {q:'Tìm x biết 2ˣ = 32', a:'x = 5', e:'32=2⁵ → x=5.'},
+    {q:'Tìm x biết 3ˣ = 81', a:'x = 4', e:'81=3⁴ → x=4.'},
+    {q:'Tính 4³ : 4', a:'16', e:'4³:4¹=4²=16.'},
+    {q:'So sánh 2⁵ và 5²', a:'2⁵ > 5²', e:'2⁵=32, 5²=25, 32>25.'},
+    {q:'Tính giá trị: 2² + 3² + 4²', a:'29', e:'4+9+16=29.'},
+    {q:'Viết gọn bằng lũy thừa: 7×7×7×7', a:'7⁴', e:'Có 4 thừa số 7 nhân với nhau → 7⁴.'},
+    {q:'Tính 6² × 6⁰', a:'36', e:'6²×6⁰=36×1=36.'},
+    {q:'So sánh 3⁴ và 4³', a:'3⁴ > 4³', e:'3⁴=81, 4³=64, 81>64.'},
+    {q:'Tìm x biết x² = 49 (x là số tự nhiên)', a:'x = 7', e:'7²=49 → x=7.'},
+    {q:'Tính (3²)³ : 3⁴', a:'9', e:'(3²)³=3⁶. Sau đó 3⁶:3⁴=3²=9.'},
+    {q:'Tính tổng: 1 + 2 + 2² + 2³ + 2⁴', a:'31', e:'1+2+4+8+16=31.'}
+  ]
+},
+{
+  id:5, group:'dai-so', color:'teal', title:'Biểu thức đại số – Tính giá trị',
+  sub:'Làm quen biến số, tính giá trị biểu thức khi biết giá trị của biến',
+  theory:`
+  <ul>
+    <li>Biểu thức đại số là biểu thức có chứa chữ (biến) đại diện cho một số chưa biết, ví dụ: <span class="formula">3x + 5</span>, <span class="formula">2a − b</span>.</li>
+    <li>Để tính giá trị biểu thức tại một giá trị cụ thể của biến, ta thay số vào vị trí chữ rồi thực hiện phép tính theo đúng thứ tự (ngoặc → lũy thừa → nhân chia → cộng trừ).</li>
+    <li>Hệ số là số đứng trước biến, ví dụ trong 3x thì 3 là hệ số.</li>
+  </ul>`,
+  examples:[
+    {q:'Tính A = 3x + 5 khi x = 4', s:'A = 3×4 + 5 = 12+5 = 17'},
+    {q:'Tính B = 2a² − 3a khi a = −2', s:'B = 2×(−2)² − 3×(−2) = 2×4 + 6 = 8+6 = 14'}
+  ],
+  questions:[
+    {q:'Tính P = 5x − 3 khi x = 6', a:'27', e:'5×6−3=30−3=27.'},
+    {q:'Tính Q = x² + 2x khi x = 3', a:'15', e:'9+6=15.'},
+    {q:'Tính M = 4a + 3b khi a=2, b=5', a:'23', e:'8+15=23.'},
+    {q:'Tính N = a² − b² khi a=5, b=3', a:'16', e:'25−9=16.'},
+    {q:'Tính R = 2(x+3) khi x=7', a:'20', e:'2×10=20.'},
+    {q:'Tính giá trị biểu thức 3x − 2y khi x=4, y=−1', a:'14', e:'12−(−2)=12+2=14.'},
+    {q:'Tính K = x³ khi x = −2', a:'−8', e:'(−2)³=−8.'},
+    {q:'Tính biểu thức 10 − 2x khi x=−3', a:'16', e:'10−(−6)=16.'},
+    {q:'Tính giá trị: (a+b)² khi a=2, b=3', a:'25', e:'(2+3)²=5²=25.'},
+    {q:'Tính giá trị: a² + b² khi a=2, b=3 (so sánh với câu trên)', a:'13', e:'4+9=13 (khác với (a+b)²=25).'},
+    {q:'Một hình chữ nhật có chiều dài (x+4) cm, chiều rộng x cm. Tính diện tích khi x=5.', a:'45 cm²', e:'Diện tích = x(x+4) = 5×9=45.'},
+    {q:'Tính giá trị biểu thức 2x² − 3x + 1 khi x = 1', a:'0', e:'2−3+1=0.'},
+    {q:'Tính giá trị biểu thức 2x² − 3x + 1 khi x = 0', a:'1', e:'0−0+1=1.'},
+    {q:'Cho biểu thức C = 100 − 3n. Tính C khi n=10, và cho biết khi n tăng thì C tăng hay giảm?', a:'C=70, C giảm khi n tăng', e:'100−30=70. Vì hệ số của n là −3 (âm) nên n tăng thì C giảm.'},
+    {q:'Tính giá trị biểu thức x(x−1)(x+1) khi x=3', a:'24', e:'3×2×4=24.'}
+  ]
+},
+{
+  id:6, group:'dai-so', color:'teal', title:'Tỉ lệ thức – Dãy tỉ số bằng nhau',
+  sub:'Tính chất tỉ lệ thức, chia một số theo tỉ lệ – ứng dụng thực tế',
+  theory:`
+  <ul>
+    <li>Tỉ lệ thức là đẳng thức giữa hai tỉ số: <span class="formula">a/b = c/d</span> (b,d ≠ 0).</li>
+    <li>Tính chất cơ bản: <span class="formula">a/b = c/d  ⇔  a×d = b×c</span> (tích chéo bằng nhau).</li>
+    <li>Tính chất dãy tỉ số bằng nhau: nếu <span class="formula">a/b = c/d = k</span> thì <span class="formula">(a+c)/(b+d) = k</span> và <span class="formula">(a−c)/(b−d) = k</span> (khi b−d ≠ 0).</li>
+    <li>Ứng dụng: chia một tổng theo tỉ lệ cho trước — thường gặp trong bài toán chia phần, chia lãi theo vốn góp, pha trộn nguyên liệu.</li>
+  </ul>`,
+  examples:[
+    {q:'Tìm x, y biết x/3 = y/5 và x+y=24', s:'Đặt x/3=y/5=k → x=3k, y=5k. x+y=8k=24 → k=3. Vậy x=9, y=15.'},
+    {q:'Hai bạn An và Bình góp vốn theo tỉ lệ 3:5 để mở quán, cuối tháng lãi 800 nghìn đồng, chia theo tỉ lệ vốn góp. Mỗi người nhận bao nhiêu?', s:'An/Bình = 3/5 → An=3k, Bình=5k, tổng 8k=800 → k=100. An nhận 300 nghìn, Bình nhận 500 nghìn.'}
+  ],
+  questions:[
+    {q:'Tìm x biết x/4 = 15/20', a:'x = 3', e:'Tích chéo: 20x=4×15=60 → x=3.'},
+    {q:'Tìm x, y biết x/2=y/7 và x+y=18', a:'x=4, y=14', e:'k=18/9=2 → x=2×2=4, y=7×2=14.'},
+    {q:'Tìm x, y biết x/5=y/3 và x−y=10', a:'x=25, y=15', e:'k=10/2=5 → x=25, y=15.'},
+    {q:'Ba số a,b,c tỉ lệ với 2:3:5 và có tổng 100. Tìm a,b,c.', a:'a=20, b=30, c=50', e:'k=100/10=10 → 2k=20, 3k=30, 5k=50.'},
+    {q:'Một lớp có 40 học sinh, số nam và nữ tỉ lệ 3:5. Tính số nam, số nữ.', a:'15 nam, 25 nữ', e:'k=40/8=5 → nam=15, nữ=25.'},
+    {q:'Hai kho gạo có số lượng tỉ lệ 4:7, kho lớn nhiều hơn kho nhỏ 90 tấn. Tính số gạo mỗi kho.', a:'Kho nhỏ 120 tấn, kho lớn 210 tấn', e:'7k−4k=3k=90 → k=30 → 4k=120, 7k=210.'},
+    {q:'Ba người góp vốn kinh doanh theo tỉ lệ 2:3:4, lãi thu được 18 triệu chia theo vốn góp. Tính phần lãi mỗi người.', a:'4 triệu, 6 triệu, 8 triệu', e:'k=18/9=2 → 2k=4, 3k=6, 4k=8 (triệu).'},
+    {q:'Tìm x biết 3/x = 9/15', a:'x = 5', e:'9x=3×15=45 → x=5.'},
+    {q:'Tỉ lệ thức 2/3 = x/12 cho biết x bằng bao nhiêu?', a:'x = 8', e:'3x=2×12=24 → x=8.'},
+    {q:'Một đội công nhân chia tiền thưởng theo số ngày công, tỉ lệ 5:6:9 cho 3 người, tổng tiền 4 triệu. Tính tiền mỗi người.', a:'1 triệu, 1.2 triệu, 1.8 triệu', e:'k=4/20=0.2 triệu → 5k=1, 6k=1.2, 9k=1.8.'},
+    {q:'Cho a/b=c/d. Chứng tỏ (a+b)/b = (c+d)/d (tính chất mở rộng). Áp dụng: nếu a/b=3/5, tính (a+b)/b.', a:'(a+b)/b = 8/5', e:'a/b=3/5 → (a+b)/b = a/b + 1 = 3/5+1=8/5.'},
+    {q:'Hai số có tỉ số 5:8 và hiệu của chúng là 27. Tìm hai số.', a:'45 và 72', e:'8k−5k=3k=27→k=9→5k=45,8k=72.'},
+    {q:'Trộn dung dịch theo tỉ lệ nước:muối = 9:1, cần 2kg muối thì cần bao nhiêu kg nước?', a:'18 kg', e:'9/1 = x/2 → x=18.'},
+    {q:'Tìm x,y,z biết x:y:z = 2:4:5 và x+y+z=33', a:'x=6, y=12, z=15', e:'k=33/11=3 → 2k=6,4k=12,5k=15.'},
+    {q:'Tỉ số vốn góp của 2 cổ đông là 7:9, công ty lãi 320 triệu chia theo vốn góp. Cổ đông góp ít hơn nhận bao nhiêu?', a:'140 triệu', e:'k=320/16=20 → 7k=140 triệu.'}
+  ]
+},
+{
+  id:7, group:'dai-so', color:'teal', title:'Tìm x nâng cao',
+  sub:'Giải các bài toán tìm x với phép tính hỗn hợp, có ngoặc, có lũy thừa',
+  theory:`
+  <ul>
+    <li>Quy tắc chuyển vế: khi chuyển một số hạng từ vế này sang vế kia của đẳng thức, phải đổi dấu số hạng đó.</li>
+    <li>Thứ tự giải: thực hiện rút gọn từng bước, ưu tiên ngoặc trong cùng trước, đưa biểu thức về dạng đơn giản nhất rồi mới tìm x.</li>
+    <li>Với bài có lũy thừa chứa x ở số mũ, đưa hai vế về cùng cơ số để so sánh số mũ.</li>
+  </ul>`,
+  examples:[
+    {q:'Tìm x biết 2x + 5 = 17', s:'2x = 17−5 = 12 → x = 6'},
+    {q:'Tìm x biết 3(x−2) = 15', s:'x−2 = 15:3 = 5 → x = 7'}
+  ],
+  questions:[
+    {q:'Tìm x biết x + 12 = 30', a:'x = 18', e:'x=30−12=18.'},
+    {q:'Tìm x biết 5x = 45', a:'x = 9', e:'x=45:5=9.'},
+    {q:'Tìm x biết 2x − 7 = 13', a:'x = 10', e:'2x=20→x=10.'},
+    {q:'Tìm x biết 4(x+3) = 32', a:'x = 5', e:'x+3=8→x=5.'},
+    {q:'Tìm x biết (x−5) : 3 = 4', a:'x = 17', e:'x−5=12→x=17.'},
+    {q:'Tìm x biết 3x + 2x = 45', a:'x = 9', e:'5x=45→x=9.'},
+    {q:'Tìm x biết 2x − 3(x−1) = 5', a:'x = −2', e:'2x−3x+3=5→−x=2→x=−2.'},
+    {q:'Tìm x biết x² = 64 (x là số tự nhiên)', a:'x = 8', e:'8²=64.'},
+    {q:'Tìm x biết 2ˣ = 64', a:'x = 6', e:'64=2⁶→x=6.'},
+    {q:'Tìm x biết 15 − 2x = 7', a:'x = 4', e:'2x=8→x=4.'},
+    {q:'Tìm x biết (2x+1) × 3 = 21', a:'x = 3', e:'2x+1=7→2x=6→x=3.'},
+    {q:'Tìm x nguyên biết −3x = 18', a:'x = −6', e:'x=18:(−3)=−6.'},
+    {q:'Tìm x biết x : 5 + 3 = 8', a:'x = 25', e:'x:5=5→x=25.'},
+    {q:'Tìm x biết 7x − 2x + 9 = 39', a:'x = 6', e:'5x+9=39→5x=30→x=6.'},
+    {q:'Tìm x biết 2(x−2) + 3(x+2) = 22', a:'x = 4', e:'2x−4+3x+6=22 → 5x+2=22 → 5x=20 → x=4.'}
+  ]
+},
+{
+  id:8, group:'hinh-hoc', color:'rose', title:'Góc và tính toán góc',
+  sub:'Các loại góc, hai góc kề bù, phụ nhau, tia phân giác',
+  theory:`
+  <ul>
+    <li>Góc nhọn: 0° &lt; góc &lt; 90°. Góc vuông: = 90°. Góc tù: 90° &lt; góc &lt; 180°. Góc bẹt: = 180°.</li>
+    <li>Hai góc <b>phụ nhau</b> có tổng số đo bằng 90°. Hai góc <b>bù nhau</b> có tổng số đo bằng 180°.</li>
+    <li>Hai góc <b>kề bù</b> là hai góc kề nhau có tổng bằng 180° (chung 1 cạnh, hai cạnh còn lại là hai tia đối nhau).</li>
+    <li>Tia phân giác của một góc chia góc đó thành hai góc bằng nhau, mỗi góc bằng một nửa góc ban đầu.</li>
+  </ul>`,
+  examples:[
+    {q:'Hai góc kề bù, góc thứ nhất bằng 65°. Tính góc thứ hai.', s:'Góc thứ hai = 180° − 65° = 115°'},
+    {q:'Góc xOy = 70°. Tia Oz là tia phân giác. Tính góc xOz.', s:'Góc xOz = 70°:2 = 35°'}
+  ],
+  questions:[
+    {q:'Hai góc phụ nhau, một góc bằng 35°. Tính góc còn lại.', a:'55°', e:'90°−35°=55°.'},
+    {q:'Hai góc bù nhau, một góc bằng 110°. Tính góc còn lại.', a:'70°', e:'180°−110°=70°.'},
+    {q:'Góc A = 48°. Tính góc kề bù với góc A.', a:'132°', e:'180°−48°=132°.'},
+    {q:'Tia Ot là phân giác góc xOy = 84°. Tính góc xOt.', a:'42°', e:'84°:2=42°.'},
+    {q:'Góc bẹt có số đo bằng bao nhiêu độ?', a:'180°', e:'Theo định nghĩa góc bẹt = 180°.'},
+    {q:'Một góc tù có số đo trong khoảng nào?', a:'Từ 90° đến 180° (không tính 90° và 180°)', e:'Định nghĩa góc tù.'},
+    {q:'Góc xOy=130°, tia Oz nằm trong góc sao cho góc xOz=70°. Tính góc zOy.', a:'60°', e:'130°−70°=60°.'},
+    {q:'Hai góc kề bù có một góc gấp đôi góc kia. Tính số đo mỗi góc.', a:'60° và 120°', e:'Gọi góc nhỏ là x, góc lớn 2x, x+2x=180→x=60, 2x=120.'},
+    {q:'Góc A và góc B phụ nhau, góc A gấp 2 lần góc B. Tính góc A, góc B.', a:'A=60°, B=30°', e:'B+2B=90→3B=90→B=30, A=60.'},
+    {q:'Trên cùng nửa mặt phẳng, góc xOy=90°, góc xOz=40°. Tính góc zOy (Oz nằm giữa Ox,Oy).', a:'50°', e:'90°−40°=50°.'},
+    {q:'Một góc bằng 1/3 góc bẹt. Tính số đo góc đó và cho biết loại góc.', a:'60°, là góc nhọn', e:'180°:3=60°, vì 0<60°<90° nên là góc nhọn.'},
+    {q:'Hai góc kề bù, hiệu của chúng là 40°. Tính mỗi góc.', a:'70° và 110°', e:'x+y=180, y−x=40 → x=70, y=110.'},
+    {q:'Tia phân giác Ot của góc xOy=120° tạo với Ox góc bao nhiêu?', a:'60°', e:'120°:2=60°.'},
+    {q:'Góc vuông có số đo bằng bao nhiêu độ, và bằng bao nhiêu góc bẹt?', a:'90°, bằng 1/2 góc bẹt', e:'90° = 180°:2.'},
+    {q:'Hai góc phụ nhau, góc lớn hơn góc nhỏ 20°. Tính hai góc.', a:'35° và 55°', e:'x+y=90, y−x=20→x=35,y=55.'}
+  ]
+},
+{
+  id:9, group:'hinh-hoc', color:'rose', title:'Tam giác – Chu vi, diện tích, tính chất',
+  sub:'Tổng ba góc, các loại tam giác, công thức chu vi và diện tích',
+  theory:`
+  <ul>
+    <li>Tổng ba góc trong một tam giác luôn bằng <span class="formula">180°</span>.</li>
+    <li>Tam giác đều: 3 cạnh bằng nhau, 3 góc bằng nhau và bằng 60°. Tam giác cân: 2 cạnh bằng nhau, 2 góc đáy bằng nhau. Tam giác vuông: có 1 góc 90°.</li>
+    <li>Chu vi tam giác = tổng độ dài 3 cạnh.</li>
+    <li>Diện tích tam giác: <span class="formula">S = (đáy × chiều cao) : 2</span></li>
+    <li>Bất đẳng thức tam giác: mỗi cạnh nhỏ hơn tổng hai cạnh còn lại và lớn hơn hiệu hai cạnh còn lại.</li>
+  </ul>`,
+  examples:[
+    {q:'Tam giác có hai góc 50° và 65°. Tính góc còn lại.', s:'180°−50°−65° = 65°'},
+    {q:'Tam giác có đáy 8cm, chiều cao 5cm. Tính diện tích.', s:'S = (8×5):2 = 20 cm²'}
+  ],
+  questions:[
+    {q:'Tam giác ABC có góc A=70°, góc B=50°. Tính góc C.', a:'60°', e:'180−70−50=60°.'},
+    {q:'Tam giác đều có cạnh 6cm. Tính chu vi.', a:'18 cm', e:'6×3=18cm.'},
+    {q:'Tam giác có 3 cạnh 5cm, 7cm, 9cm. Tính chu vi.', a:'21 cm', e:'5+7+9=21.'},
+    {q:'Tam giác có đáy 10cm, diện tích 35cm². Tính chiều cao.', a:'7 cm', e:'h=2S:đáy=70:10=7.'},
+    {q:'Tam giác cân có góc ở đáy 50°. Tính góc ở đỉnh.', a:'80°', e:'180−50−50=80°.'},
+    {q:'Tam giác vuông có 2 cạnh góc vuông 6cm và 8cm. Tính diện tích.', a:'24 cm²', e:'S=(6×8):2=24.'},
+    {q:'Tam giác đều có chu vi 27cm. Tính độ dài mỗi cạnh.', a:'9 cm', e:'27:3=9.'},
+    {q:'Có thể tạo thành tam giác với 3 cạnh 3cm, 4cm, 8cm được không?', a:'Không', e:'Vì 3+4=7 < 8, không thỏa bất đẳng thức tam giác.'},
+    {q:'Tam giác ABC vuông tại A, góc B=35°. Tính góc C.', a:'55°', e:'90+35+C=180→C=55°.'},
+    {q:'Tam giác có đáy 12cm, chiều cao bằng nửa đáy. Tính diện tích.', a:'36 cm²', e:'h=6, S=(12×6):2=36.'},
+    {q:'Một tam giác cân có cạnh bên 7cm, cạnh đáy 5cm. Tính chu vi.', a:'19 cm', e:'7+7+5=19.'},
+    {q:'Tam giác có góc A gấp đôi góc B, góc C=60°, góc A+góc B=120°. Tính góc A, góc B.', a:'A=80°, B=40°', e:'A=2B, A+B=120→3B=120→B=40,A=80.'},
+    {q:'Diện tích tam giác là 48cm², chiều cao 8cm. Tính đáy.', a:'12 cm', e:'đáy=2S:h=96:8=12.'},
+    {q:'Hai cạnh tam giác là 9cm và 4cm. Cạnh thứ ba có thể nhận giá trị nguyên nào trong khoảng nào?', a:'Từ 6cm đến 12cm', e:'9−4 < cạnh ba < 9+4 → 5<cạnh ba<13, số nguyên từ 6 đến 12.'},
+    {q:'Tam giác đều có diện tích liên quan cạnh, nếu cạnh tăng gấp đôi thì chu vi tăng mấy lần?', a:'2 lần', e:'Chu vi tỉ lệ thuận với cạnh, cạnh tăng gấp đôi → chu vi tăng gấp đôi.'}
+  ]
+},
+{
+  id:10, group:'hinh-hoc', color:'rose', title:'Hình bình hành, hình thoi, hình thang',
+  sub:'Tính chất và công thức diện tích các tứ giác đặc biệt',
+  theory:`
+  <ul>
+    <li><b>Hình bình hành</b>: 2 cặp cạnh đối song song và bằng nhau. Diện tích = <span class="formula">đáy × chiều cao</span>.</li>
+    <li><b>Hình thoi</b>: 4 cạnh bằng nhau, 2 đường chéo vuông góc với nhau. Diện tích = <span class="formula">(đường chéo 1 × đường chéo 2) : 2</span>.</li>
+    <li><b>Hình thang</b>: có 1 cặp cạnh đối song song (gọi là 2 đáy). Diện tích = <span class="formula">(đáy lớn + đáy nhỏ) × chiều cao : 2</span>.</li>
+    <li>Hình chữ nhật và hình vuông là các trường hợp đặc biệt của hình bình hành.</li>
+  </ul>`,
+  examples:[
+    {q:'Hình bình hành có đáy 9cm, chiều cao 4cm. Tính diện tích.', s:'S = 9×4 = 36 cm²'},
+    {q:'Hình thoi có 2 đường chéo 6cm và 8cm. Tính diện tích.', s:'S = (6×8):2 = 24 cm²'}
+  ],
+  questions:[
+    {q:'Hình bình hành có đáy 12cm, chiều cao 5cm. Tính diện tích.', a:'60 cm²', e:'12×5=60.'},
+    {q:'Hình thoi có 2 đường chéo 10cm và 14cm. Tính diện tích.', a:'70 cm²', e:'(10×14):2=70.'},
+    {q:'Hình thang có đáy lớn 10cm, đáy nhỏ 6cm, chiều cao 5cm. Tính diện tích.', a:'40 cm²', e:'(10+6)×5:2=40.'},
+    {q:'Hình bình hành có diện tích 48cm², đáy 8cm. Tính chiều cao.', a:'6 cm', e:'h=48:8=6.'},
+    {q:'Hình thoi có diện tích 50cm², một đường chéo 10cm. Tính đường chéo còn lại.', a:'10 cm', e:'d2=2S:d1=100:10=10.'},
+    {q:'Hình thang có diện tích 60cm², chiều cao 6cm, đáy lớn 12cm. Tính đáy nhỏ.', a:'8 cm', e:'tổng 2 đáy=2S:h=120:6=20, đáy nhỏ=20−12=8.'},
+    {q:'Hình bình hành ABCD có góc A=70°. Tính góc B (kề với A).', a:'110°', e:'Trong hình bình hành, 2 góc kề bù nhau: 180−70=110°.'},
+    {q:'Hình thoi có cạnh 5cm. Chu vi hình thoi là bao nhiêu?', a:'20 cm', e:'5×4=20.'},
+    {q:'Hình bình hành có chu vi 34cm, một cạnh dài 9cm. Tính cạnh kia.', a:'8 cm', e:'34:2−9=17−9=8.'},
+    {q:'Hình thang vuông có đáy lớn 8cm, đáy nhỏ 5cm, chiều cao 4cm. Tính diện tích.', a:'26 cm²', e:'(8+5)×4:2=26.'},
+    {q:'Trong hình bình hành, hai đường chéo có tính chất gì đặc biệt?', a:'Cắt nhau tại trung điểm mỗi đường', e:'Đây là tính chất quan trọng của hình bình hành.'},
+    {q:'Hình thoi có diện tích 36cm² và 2 đường chéo tỉ lệ 1:2. Tính độ dài mỗi đường chéo.', a:'6cm và 12cm', e:'d1×d2=72, d2=2d1 → d1×2d1=72→d1²=36→d1=6, d2=12.'},
+    {q:'Một mảnh đất hình thang có đáy lớn 30m, đáy nhỏ 20m, chiều cao 15m. Tính diện tích (m²).', a:'375 m²', e:'(30+20)×15:2=375.'},
+    {q:'Hình bình hành có đáy gấp 3 lần chiều cao, diện tích 75cm². Tính đáy và chiều cao.', a:'đáy=15cm, cao=5cm', e:'đáy×cao=75, đáy=3×cao → 3cao²=75→cao²=25→cao=5, đáy=15.'},
+    {q:'So sánh: hình vuông cạnh 6cm và hình thoi có 2 đường chéo đều 6cm, hình nào diện tích lớn hơn?', a:'Hình vuông lớn hơn (36cm² so với 18cm²)', e:'Hình vuông: 6×6=36cm². Hình thoi: (6×6):2=18cm².'}
+  ]
+},
+{
+  id:11, group:'so-hoc', color:'amber', title:'Phân số nâng cao',
+  sub:'Rút gọn, so sánh, bốn phép tính với phân số và hỗn số',
+  theory:`
+  <ul>
+    <li>Phân số <span class="formula">a/b</span> (b≠0) tối giản khi ƯCLN(|a|,b)=1. Rút gọn bằng cách chia cả tử và mẫu cho ƯCLN.</li>
+    <li>So sánh phân số: quy đồng mẫu số (hoặc tử số) rồi so sánh tử với tử.</li>
+    <li>Cộng, trừ phân số: quy đồng mẫu, giữ mẫu, cộng/trừ tử số.</li>
+    <li>Nhân phân số: tử nhân tử, mẫu nhân mẫu. Chia phân số: nhân với phân số nghịch đảo của số chia.</li>
+    <li>Hỗn số = phần nguyên kèm một phân số, ví dụ <span class="formula">2¾ = 2 + 3/4 = 11/4</span>.</li>
+  </ul>`,
+  examples:[
+    {q:'Rút gọn phân số 18/24', s:'ƯCLN(18,24)=6 → 18/24 = (18:6)/(24:6) = 3/4'},
+    {q:'Tính 2/3 + 3/4', s:'Quy đồng mẫu 12: 2/3=8/12, 3/4=9/12 → 8/12+9/12=17/12'}
+  ],
+  questions:[
+    {q:'Rút gọn phân số 16/20', a:'4/5', e:'ƯCLN(16,20)=4 → 16:4=4, 20:4=5.'},
+    {q:'Rút gọn phân số 45/60', a:'3/4', e:'ƯCLN(45,60)=15 → 45:15=3, 60:15=4.'},
+    {q:'So sánh 3/4 và 5/6, phân số nào lớn hơn?', a:'5/6 lớn hơn', e:'Quy đồng mẫu 12: 3/4=9/12, 5/6=10/12. Vì 10>9 nên 5/6 > 3/4.'},
+    {q:'Tính 1/2 + 1/3', a:'5/6', e:'Quy đồng mẫu 6: 3/6+2/6=5/6.'},
+    {q:'Tính 3/5 − 1/4', a:'7/20', e:'Quy đồng mẫu 20: 12/20−5/20=7/20.'},
+    {q:'Tính 2/3 × 3/4', a:'1/2', e:'(2×3)/(3×4)=6/12=1/2 (sau khi rút gọn).'},
+    {q:'Tính 4/5 : 2/3', a:'6/5', e:'4/5 × 3/2 = 12/10 = 6/5.'},
+    {q:'Viết 7/2 dưới dạng hỗn số', a:'3½', e:'7=2×3+1 → 7/2 = 3 và 1/2.'},
+    {q:'Đổi hỗn số 2¾ thành phân số', a:'11/4', e:'2¾ = (2×4+3)/4 = 11/4.'},
+    {q:'Tính 5/6 − 1/3', a:'1/2', e:'Quy đồng mẫu 6: 5/6−2/6=3/6=1/2.'},
+    {q:'Sắp xếp theo thứ tự tăng dần: 2/3, 1/2, 5/6', a:'1/2 < 2/3 < 5/6', e:'Quy đồng mẫu 6: 3/6, 4/6, 5/6 → so sánh tử: 3<4<5.'},
+    {q:'Tính 3/7 × 14/9', a:'2/3', e:'(3×14)/(7×9)=42/63=2/3 (rút gọn cho 21).'},
+    {q:'Một bể nước chứa 3/5 bể, người ta lấy ra 1/4 bể. Hỏi còn lại bao nhiêu phần bể?', a:'7/20 bể', e:'3/5−1/4 = 12/20−5/20 = 7/20.'},
+    {q:'Tính giá trị biểu thức: (2/3 + 1/6) × 3/5', a:'1/2', e:'2/3+1/6=5/6; 5/6×3/5=15/30=1/2.'},
+    {q:'Một lớp có 1/3 số học sinh thích Toán, 1/4 số học sinh thích Văn. Hỏi tổng số học sinh thích cả hai môn chiếm bao nhiêu phần lớp (giả sử không trùng)?', a:'7/12 số học sinh', e:'1/3+1/4 = 4/12+3/12 = 7/12.'}
+  ]
+},
+{
+  id:12, group:'so-hoc', color:'amber', title:'Số thập phân',
+  sub:'Bốn phép tính, làm tròn và ước lượng số thập phân',
+  theory:`
+  <ul>
+    <li>Số thập phân gồm phần nguyên và phần thập phân, ngăn cách bởi dấu phẩy, ví dụ: 3,45.</li>
+    <li>Cộng, trừ: đặt tính sao cho các dấu phẩy thẳng cột với nhau.</li>
+    <li>Nhân: nhân như số tự nhiên, sau đó đặt dấu phẩy vào kết quả — đếm tổng số chữ số ở phần thập phân của cả hai số.</li>
+    <li>Chia: có thể nhân cả số chia và số bị chia với 10, 100,... để đưa về chia số tự nhiên.</li>
+    <li>Làm tròn: xem chữ số ngay sau hàng cần làm tròn — nếu ≥5 thì tăng thêm 1 đơn vị ở hàng làm tròn, nếu &lt;5 thì giữ nguyên.</li>
+  </ul>`,
+  examples:[
+    {q:'Tính 3,45 + 2,7', s:'Đặt tính thẳng cột dấu phẩy: 3,45 + 2,70 = 6,15'},
+    {q:'Làm tròn 3,456 đến hàng phần trăm', s:'Chữ số hàng phần nghìn là 6 ≥ 5 → tăng hàng phần trăm: 3,46'}
+  ],
+  questions:[
+    {q:'Tính 12,5 + 3,75', a:'16,25', e:'Cộng thẳng cột dấu phẩy: 12,50+3,75=16,25.'},
+    {q:'Tính 7,2 − 4,85', a:'2,35', e:'7,20−4,85=2,35.'},
+    {q:'Tính 2,5 × 1,4', a:'3,5', e:'25×14=350, có 2 chữ số phần thập phân (1+1) → 3,50=3,5.'},
+    {q:'Tính 9,6 : 3', a:'3,2', e:'96:3=32 → dịch dấu phẩy: 3,2.'},
+    {q:'Làm tròn 5,378 đến hàng phần trăm', a:'5,38', e:'Chữ số hàng phần nghìn là 8 ≥5 → tăng hàng phần trăm từ 7 lên 8: 5,38.'},
+    {q:'Làm tròn 12,34 đến hàng phần chục (chữ số đầu sau dấu phẩy)', a:'12,3', e:'Chữ số hàng phần trăm là 4 <5 → giữ nguyên: 12,3.'},
+    {q:'So sánh 0,7 và 0,65, số nào lớn hơn?', a:'0,7 lớn hơn', e:'0,70 > 0,65 vì 70>65 (so hàng phần trăm).'},
+    {q:'Tính 3,14 × 2', a:'6,28', e:'314×2=628 → 6,28.'},
+    {q:'Viết phân số 3/4 dưới dạng số thập phân', a:'0,75', e:'3:4=0,75.'},
+    {q:'Viết số thập phân 0,6 dưới dạng phân số tối giản', a:'3/5', e:'0,6=6/10=3/5 (rút gọn cho 2).'},
+    {q:'Tính tổng 1,5 + 2,25 + 0,75', a:'4,5', e:'1,50+2,25+0,75=4,50.'},
+    {q:'Một mét vải giá 45,5 nghìn đồng, mua 3,5m. Tính số tiền phải trả.', a:'159,25 nghìn đồng', e:'45,5×3,5=159,25.'},
+    {q:'Tính 100 : 0,25', a:'400', e:'Nhân cả hai số với 100: 10000:25=400.'},
+    {q:'Làm tròn 9,995 đến hàng phần chục', a:'10,0', e:'Chữ số hàng phần trăm là 9≥5 → 9,995 ≈ 10,0 (làm tròn liên hoàn).'},
+    {q:'Tính giá trị: 2,5²', a:'6,25', e:'2,5×2,5=6,25.'}
+  ]
+},
+{
+  id:13, group:'so-hoc', color:'amber', title:'Dấu hiệu chia hết & bài toán chia hết',
+  sub:'Dấu hiệu chia hết cho 2, 3, 5, 9 và các bài toán tìm chữ số nâng cao',
+  theory:`
+  <ul>
+    <li>Chia hết cho 2: chữ số tận cùng là 0, 2, 4, 6 hoặc 8.</li>
+    <li>Chia hết cho 5: chữ số tận cùng là 0 hoặc 5.</li>
+    <li>Chia hết cho 3: tổng các chữ số của số đó chia hết cho 3.</li>
+    <li>Chia hết cho 9: tổng các chữ số của số đó chia hết cho 9.</li>
+    <li>Một số chia hết cho cả 2 và 5 thì chữ số tận cùng phải là 0.</li>
+    <li>Bài toán nâng cao thường yêu cầu tìm chữ số chưa biết để số thỏa mãn một hoặc nhiều dấu hiệu chia hết cùng lúc.</li>
+  </ul>`,
+  examples:[
+    {q:'Số 4536 có chia hết cho 9 không?', s:'Tổng các chữ số: 4+5+3+6=18, 18 chia hết cho 9 → 4536 chia hết cho 9.'},
+    {q:'Tìm chữ số x để số 7x2 chia hết cho 9', s:'Tổng chữ số: 7+x+2=9+x. Để chia hết cho 9, x=0 hoặc x=9.'}
+  ],
+  questions:[
+    {q:'Số 2457 có chia hết cho 3 không?', a:'Có', e:'Tổng chữ số 2+4+5+7=18, chia hết cho 3.'},
+    {q:'Tìm x để số 23x chia hết cho 5', a:'x = 0 hoặc x = 5', e:'Chữ số tận cùng phải là 0 hoặc 5.'},
+    {q:'Số nào chia hết cho cả 2 và 3 trong các số: 18, 21, 34, 42?', a:'18 và 42', e:'18: tận cùng 8 (chẵn), tổng=9 chia hết 3. 42: tận cùng chẵn, tổng=6 chia hết 3. 21,34 không thỏa cả hai điều kiện.'},
+    {q:'Tìm số tự nhiên nhỏ nhất có 3 chữ số chia hết cho 5', a:'100', e:'100 là số có 3 chữ số nhỏ nhất, tận cùng là 0.'},
+    {q:'Số 3a5 (a là một chữ số) chia hết cho 9. Tìm a.', a:'a = 1', e:'Tổng chữ số 3+a+5=8+a chia hết cho 9 → a=1 (vì a là 1 chữ số từ 0-9).'},
+    {q:'Có bao nhiêu số có 2 chữ số chia hết cho 5?', a:'18 số', e:'Các số từ 10 đến 95 tận cùng 0 hoặc 5: 10,15,20,...,95, có (95-10):5+1=18 số.'},
+    {q:'Tìm x để số 12x chia hết cho cả 2 và 5', a:'x = 0', e:'Chia hết cho cả 2 và 5 thì tận cùng phải là 0.'},
+    {q:'Số gồm n chữ số 9 (999...9) có chia hết cho 9 không? Vì sao?', a:'Có', e:'Tổng các chữ số = 9×n luôn chia hết cho 9.'},
+    {q:'Tìm các chữ số x để 56x chia hết cho 2 nhưng không chia hết cho 5', a:'x ∈ {2, 4, 6, 8}', e:'Chia hết cho 2: x chẵn (0,2,4,6,8); không chia hết cho 5 nên loại 0 → còn 2,4,6,8.'},
+    {q:'Cho số N = 2a3 chia hết cho 3. Tìm các giá trị có thể của a.', a:'a ∈ {1, 4, 7}', e:'Tổng 2+a+3=5+a chia hết cho 3 → a=1,4,7 (a từ 0-9).'},
+    {q:'Một số chia hết cho cả 3 và 5 thì chắc chắn chia hết cho số nào nữa?', a:'15', e:'Vì ƯCLN(3,5)=1 nên số đó chia hết cho BCNN(3,5)=15.'},
+    {q:'Tìm số tự nhiên có 2 chữ số lớn nhất chia hết cho 9', a:'99', e:'Tổng chữ số 9+9=18 chia hết cho 9, và 99 là số 2 chữ số lớn nhất.'},
+    {q:'Tìm x để số 4x5 chia hết cho 9 (x là chữ số)', a:'x = 0 hoặc x = 9', e:'Tổng 4+x+5=9+x chia hết cho 9 → x=0 hoặc x=9.'},
+    {q:'Số 99999 chia hết cho 3 và 9 không?', a:'Có, chia hết cho cả 2 số', e:'Tổng chữ số = 45, chia hết cho cả 3 và 9.'},
+    {q:'Tìm số tự nhiên nhỏ nhất có 4 chữ số khác nhau, chia hết cho 5', a:'1025', e:'Số nhỏ nhất có 4 chữ số khác nhau là 1023, ta cần tận cùng 0 hoặc 5; số nhỏ nhất thỏa là 1025.'}
+  ]
+},
+{
+  id:14, group:'so-hoc', color:'amber', title:'Dãy số có quy luật',
+  sub:'Dãy số cách đều, tính tổng dãy số — chuyên đề bồi dưỡng',
+  theory:`
+  <ul>
+    <li>Dãy số cách đều: mỗi số hạng (kể từ số hạng thứ 2) bằng số hạng trước cộng với một số không đổi gọi là <b>công sai</b> (d).</li>
+    <li>Số hạng thứ n: <span class="formula">aₙ = a₁ + (n−1)×d</span></li>
+    <li>Số số hạng của dãy: <span class="formula">n = (số cuối − số đầu) : d + 1</span></li>
+    <li>Tổng của dãy cách đều: <span class="formula">S = (số đầu + số cuối) × n : 2</span></li>
+  </ul>`,
+  examples:[
+    {q:'Tính tổng 1+2+3+...+100', s:'Số số hạng=100, S=(1+100)×100:2=5050'},
+    {q:'Tìm số hạng thứ 10 của dãy 3,7,11,15,...', s:'d=4, a₁₀=3+9×4=39'}
+  ],
+  questions:[
+    {q:'Tính tổng 1+2+3+...+50', a:'1275', e:'S=(1+50)×50:2=1275.'},
+    {q:'Tính tổng các số chẵn từ 2 đến 100', a:'2550', e:'Số số hạng=50, S=(2+100)×50:2=2550.'},
+    {q:'Tìm số hạng thứ 15 của dãy 5, 8, 11, 14, ...', a:'47', e:'d=3, a₁₅=5+14×3=47.'},
+    {q:'Dãy số 2, 5, 8, 11, ..., 98 có bao nhiêu số hạng?', a:'33 số hạng', e:'(98−2):3+1=33.'},
+    {q:'Tính tổng các số lẻ từ 1 đến 99', a:'2500', e:'Số số hạng=50, S=(1+99)×50:2=2500.'},
+    {q:'Dãy số 4, 9, 14, 19, ... có số hạng tổng quát là gì (theo n)?', a:'aₙ = 5n − 1', e:'d=5, a₁=4 → aₙ=4+(n−1)×5=5n−1.'},
+    {q:'Tính tổng dãy: 3 + 6 + 9 + ... + 99', a:'1683', e:'Số số hạng=33, S=(3+99)×33:2=1683.'},
+    {q:'Một rạp có hàng đầu 20 ghế, mỗi hàng sau nhiều hơn hàng trước 2 ghế, có 10 hàng. Tính tổng số ghế.', a:'290 ghế', e:'Hàng 10 có 20+9×2=38 ghế. Tổng=(20+38)×10:2=290.'},
+    {q:'Tìm x biết 3 số 7, x, 19 lập thành một dãy cách đều', a:'x = 13', e:'x là trung bình của 7 và 19: (7+19):2=13.'},
+    {q:'Số hạng đầu của một dãy cách đều là 12, công sai 5. Tìm số hạng thứ 20.', a:'107', e:'a₂₀=12+19×5=107.'},
+    {q:'Tính tổng 10 số tự nhiên liên tiếp bắt đầu từ 5', a:'95', e:'Dãy 5..14, S=(5+14)×10:2=95.'},
+    {q:'Xếp sỏi thành hình tam giác: hàng 1 có 1 viên, hàng 2 có 2 viên,..., hàng 10 có 10 viên. Tính tổng số viên sỏi.', a:'55 viên', e:'S=(1+10)×10:2=55.'},
+    {q:'Dãy số 1, 4, 9, 16, 25,... là dãy các số gì, và số hạng thứ 6 bằng bao nhiêu?', a:'Dãy số chính phương; số hạng thứ 6 là 36', e:'Đây là dãy bình phương các số tự nhiên: 1²,2²,3²,...; số hạng thứ 6 là 6²=36.'},
+    {q:'Tính tổng 2+4+6+...+2n (theo n)', a:'n(n+1)', e:'Đây là tổng n số chẵn đầu tiên: S=(2+2n)×n:2=n(n+1).'},
+    {q:'Tính tổng các số tự nhiên từ 1 đến 30 chia hết cho 3', a:'165', e:'Dãy 3,6,...,30 có 10 số hạng, S=(3+30)×10:2=165.'}
+  ]
+},
+{
+  id:15, group:'dai-so', color:'teal', title:'Phần trăm — Ứng dụng thực tế',
+  sub:'Tỉ số phần trăm, bài toán lãi suất, giảm giá, lợi nhuận',
+  theory:`
+  <ul>
+    <li>Tỉ số phần trăm của a so với b: <span class="formula">(a : b) × 100%</span></li>
+    <li>Tìm a% của một số b: <span class="formula">b × a : 100</span></li>
+    <li>Tìm một số biết a% của nó bằng b: <span class="formula">b : a × 100</span></li>
+    <li>Ứng dụng thực tế: tính tiền lãi gửi tiết kiệm, giá sau khi giảm/tăng phần trăm, tỉ suất lợi nhuận kinh doanh.</li>
+  </ul>`,
+  examples:[
+    {q:'Một sản phẩm giá 500.000đ được giảm giá 20%. Tính giá sau giảm.', s:'Số tiền giảm = 500.000×20:100=100.000đ. Giá sau giảm = 500.000−100.000=400.000đ.'},
+    {q:'Lớp có 40 học sinh, 25% là học sinh giỏi. Tính số học sinh giỏi.', s:'40×25:100 = 10 học sinh.'}
+  ],
+  questions:[
+    {q:'Tính 20% của 150', a:'30', e:'150×20:100=30.'},
+    {q:'Tính 15% của 800.000đ', a:'120.000đ', e:'800.000×15:100=120.000.'},
+    {q:'Một cửa hàng giảm giá 30% cho áo gốc 250.000đ. Tính giá sau giảm.', a:'175.000đ', e:'Giảm=250.000×30:100=75.000. Giá sau=250.000−75.000=175.000.'},
+    {q:'Gửi tiết kiệm 10 triệu đồng với lãi suất 6%/năm. Tính tiền lãi sau 1 năm.', a:'600.000đ', e:'10.000.000×6:100=600.000.'},
+    {q:'Một mặt hàng tăng giá 10% từ 200.000đ. Tính giá mới.', a:'220.000đ', e:'200.000+200.000×10:100=220.000.'},
+    {q:'Lớp có 30 học sinh, 60% là học sinh nữ. Tính số học sinh nữ.', a:'18 học sinh', e:'30×60:100=18.'},
+    {q:'Số tiền lãi nhận được là 450.000đ với lãi suất 9%. Tính số tiền gốc.', a:'5.000.000đ', e:'450.000:9×100=5.000.000.'},
+    {q:'Một mặt hàng đã giảm 25% và còn lại 300.000đ. Tính giá ban đầu.', a:'400.000đ', e:'Giá còn lại = 75% giá gốc → giá gốc=300.000:75×100=400.000.'},
+    {q:'Tỉ số phần trăm của 15 so với 60 là bao nhiêu?', a:'25%', e:'15:60×100=25%.'},
+    {q:'Một công ty lãi 120 triệu trên vốn đầu tư 800 triệu. Tính tỉ suất lợi nhuận.', a:'15%', e:'120:800×100=15%.'},
+    {q:'Giá vốn một sản phẩm là 80.000đ, bán với giá 100.000đ. Tính tỉ lệ phần trăm lợi nhuận so với giá vốn.', a:'25%', e:'Lợi nhuận=20.000đ. 20.000:80.000×100=25%.'},
+    {q:'Một sản phẩm giá 1.000.000đ được giảm giá 2 lần liên tiếp, mỗi lần 10%. Tính giá cuối cùng.', a:'810.000đ', e:'Lần 1: 1.000.000×0,9=900.000. Lần 2: 900.000×0,9=810.000.'},
+    {q:'Gửi 20 triệu đồng, sau 1 năm nhận cả gốc và lãi là 21,4 triệu. Tính lãi suất.', a:'7%', e:'Tiền lãi=1,4 triệu. 1,4:20×100=7%.'},
+    {q:'Một bài kiểm tra có 40 câu, làm đúng 34 câu. Tính tỉ lệ phần trăm làm đúng.', a:'85%', e:'34:40×100=85%.'},
+    {q:'Một món hàng giá 600.000đ, sau khi tăng giá 15% rồi giảm giá 15% trên giá mới. Tính giá cuối cùng.', a:'586.500đ', e:'Sau tăng: 600.000×1,15=690.000. Sau giảm: 690.000×0,85=586.500.'}
+  ]
+},
+{
+  id:16, group:'hinh-hoc', color:'rose', title:'Hình vuông, hình chữ nhật nâng cao',
+  sub:'Chu vi, diện tích và các bài toán thực tế liên quan',
+  theory:`
+  <ul>
+    <li>Hình vuông: 4 cạnh bằng nhau, 4 góc vuông. Chu vi = <span class="formula">4 × cạnh</span>, Diện tích = <span class="formula">cạnh²</span>.</li>
+    <li>Hình chữ nhật: các cạnh đối bằng nhau, 4 góc vuông. Chu vi = <span class="formula">2 × (dài + rộng)</span>, Diện tích = <span class="formula">dài × rộng</span>.</li>
+    <li>Bài toán nâng cao thường cho diện tích hoặc chu vi, yêu cầu tìm cạnh còn lại, hoặc gắn với tình huống thực tế (lát gạch, làm hàng rào, đo đất...).</li>
+  </ul>`,
+  examples:[
+    {q:'Hình vuông cạnh 7cm. Tính diện tích và chu vi.', s:'S=7²=49cm², P=4×7=28cm.'},
+    {q:'Hình chữ nhật dài 12cm, rộng 5cm. Tính diện tích.', s:'S=12×5=60cm².'}
+  ],
+  questions:[
+    {q:'Hình vuông cạnh 9cm. Tính chu vi.', a:'36cm', e:'4×9=36.'},
+    {q:'Hình vuông có diện tích 64cm². Tính cạnh.', a:'8cm', e:'√64=8.'},
+    {q:'Hình chữ nhật có chiều dài 15cm, rộng 8cm. Tính chu vi.', a:'46cm', e:'2×(15+8)=46.'},
+    {q:'Hình chữ nhật có diện tích 96cm², chiều dài 12cm. Tính chiều rộng.', a:'8cm', e:'96:12=8.'},
+    {q:'Hình chữ nhật có chu vi 50cm, chiều dài 15cm. Tính chiều rộng.', a:'10cm', e:'50:2−15=25−15=10.'},
+    {q:'Một sân hình chữ nhật dài 25m, rộng 18m. Tính diện tích.', a:'450m²', e:'25×18=450.'},
+    {q:'Một mảnh đất hình vuông có chu vi 100m. Tính diện tích.', a:'625m²', e:'Cạnh=100:4=25, S=25²=625.'},
+    {q:'Hình chữ nhật có chiều dài gấp đôi chiều rộng, chu vi 36cm. Tính diện tích.', a:'72cm²', e:'Gọi rộng=x, dài=2x. 2×(x+2x)=36→6x=36→x=6, dài=12. S=6×12=72.'},
+    {q:'Lát gạch hình vuông cạnh 30cm cho sàn nhà hình chữ nhật 6m×4,5m. Cần bao nhiêu viên gạch?', a:'300 viên', e:'Diện tích sàn=6×4,5=27m²=270.000cm². Diện tích 1 viên=900cm². Số viên=270.000:900=300.'},
+    {q:'Một khung ảnh hình chữ nhật dài 40cm, rộng 25cm. Tính chu vi khung.', a:'130cm', e:'2×(40+25)=130.'},
+    {q:'Hình vuông có cạnh tăng gấp 3 lần thì diện tích tăng mấy lần?', a:'9 lần', e:'(3a)²=9a², gấp 9 lần diện tích ban đầu.'},
+    {q:'Hình chữ nhật có diện tích 120cm², chiều rộng 8cm. Tính chu vi.', a:'46cm', e:'Dài=120:8=15. P=2×(15+8)=46.'},
+    {q:'Một thửa ruộng hình chữ nhật có chiều dài 80m, chiều rộng bằng 3/4 chiều dài. Tính diện tích.', a:'4800m²', e:'Rộng=80×3/4=60. S=80×60=4800.'},
+    {q:'Một tấm bìa hình vuông cạnh 20cm, cắt bỏ một hình vuông nhỏ cạnh 5cm ở góc. Tính diện tích phần còn lại.', a:'375cm²', e:'20²−5²=400−25=375.'},
+    {q:'Một bể nước hình chữ nhật có đáy dài 2m, rộng 1,5m. Tính diện tích đáy bể.', a:'3m²', e:'2×1,5=3.'}
+  ]
+},
+{
+  id:17, group:'hinh-hoc', color:'rose', title:'Đối xứng trục, đối xứng tâm',
+  sub:'Nhận biết trục đối xứng và tâm đối xứng của hình phẳng',
+  theory:`
+  <ul>
+    <li>Một hình có <b>trục đối xứng</b> nếu tồn tại một đường thẳng chia hình thành hai phần mà khi gấp theo đường thẳng đó, hai phần trùng khớp lên nhau.</li>
+    <li>Một hình có <b>tâm đối xứng</b> nếu tồn tại một điểm O sao cho khi quay hình đó 180° quanh O, hình thu được trùng với hình ban đầu.</li>
+    <li>Một số hình có cả trục đối xứng và tâm đối xứng (hình vuông, hình chữ nhật, hình tròn); một số hình chỉ có một trong hai, hoặc không có loại nào.</li>
+  </ul>`,
+  examples:[
+    {q:'Hình tròn có bao nhiêu trục đối xứng?', s:'Vô số — mọi đường thẳng đi qua tâm (đường kính) đều là trục đối xứng.'},
+    {q:'Hình bình hành (không đặc biệt) có trục đối xứng không?', s:'Không có trục đối xứng, nhưng có tâm đối xứng là giao điểm hai đường chéo.'}
+  ],
+  questions:[
+    {q:'Hình vuông có bao nhiêu trục đối xứng?', a:'4 trục', e:'2 đường chéo và 2 đường trung trực của các cạnh.'},
+    {q:'Tam giác đều có bao nhiêu trục đối xứng?', a:'3 trục', e:'Mỗi trục đi qua 1 đỉnh và trung điểm cạnh đối diện.'},
+    {q:'Hình chữ nhật (không phải hình vuông) có bao nhiêu trục đối xứng?', a:'2 trục', e:'Hai đường trung trực của các cạnh (không có đường chéo vì 2 đường chéo không bằng vai trò đối xứng).'},
+    {q:'Hình thoi có bao nhiêu trục đối xứng?', a:'2 trục', e:'Hai đường chéo của hình thoi là hai trục đối xứng.'},
+    {q:'Chữ cái "A" (kiểu in hoa thông thường) có trục đối xứng không?', a:'Có', e:'Có 1 trục đối xứng đứng ở giữa.'},
+    {q:'Chữ cái "S" có trục đối xứng không?', a:'Không, nhưng có tâm đối xứng', e:'Chữ S không gấp trùng khớp được, nhưng quay 180° quanh tâm thì trùng với chính nó.'},
+    {q:'Hình bình hành (không đặc biệt) có trục đối xứng không?', a:'Không', e:'Hình bình hành thường chỉ có tâm đối xứng, không có trục đối xứng.'},
+    {q:'Hình tròn có tâm đối xứng không? Tâm đó ở vị trí nào?', a:'Có, tâm đối xứng là tâm của đường tròn', e:'Quay 180° quanh tâm, hình tròn luôn trùng với chính nó.'},
+    {q:'Tam giác cân (không đều) có bao nhiêu trục đối xứng?', a:'1 trục', e:'Trục đối xứng là đường cao kẻ từ đỉnh cân xuống cạnh đáy.'},
+    {q:'Hình lục giác đều có bao nhiêu trục đối xứng?', a:'6 trục', e:'3 trục qua các đỉnh đối diện và 3 trục qua trung điểm các cạnh đối diện.'},
+    {q:'Trong các chữ số 0,1,...,9 viết theo kiểu chuẩn, chữ số nào có tâm đối xứng?', a:'0 và 8', e:'Quay 180° hai chữ số này trùng với chính nó.'},
+    {q:'Hình chữ nhật có tâm đối xứng không?', a:'Có, là giao điểm hai đường chéo', e:'Quay 180° quanh giao điểm 2 đường chéo, hình chữ nhật trùng với chính nó.'},
+    {q:'Đoạn thẳng AB có bao nhiêu trục đối xứng?', a:'2 trục', e:'Đường thẳng chứa AB, và đường trung trực của AB.'},
+    {q:'Tam giác thường (3 cạnh đều khác nhau) có trục đối xứng không?', a:'Không', e:'Không có đường thẳng nào chia tam giác thường thành hai phần trùng khớp.'},
+    {q:'Hình vuông có tâm đối xứng không? Nếu có, ở vị trí nào?', a:'Có, là giao điểm hai đường chéo', e:'Đây cũng chính là tâm của hình vuông.'}
+  ]
+},
+{
+  id:18, group:'thong-ke', color:'violet', title:'Thu thập, biểu diễn dữ liệu',
+  sub:'Bảng số liệu, biểu đồ tranh, biểu đồ cột — đọc và phân tích dữ liệu',
+  theory:`
+  <ul>
+    <li>Dữ liệu thống kê là các thông tin thu thập được, có thể là số liệu (định lượng) hoặc đặc điểm (định tính).</li>
+    <li>Biểu diễn dữ liệu thường dùng: bảng số liệu, biểu đồ tranh (mỗi hình vẽ đại diện một số lượng quy ước), biểu đồ cột, biểu đồ cột đôi (so sánh 2 nhóm).</li>
+    <li>Khi đọc biểu đồ cần xác định: giá trị lớn nhất, nhỏ nhất, tổng số liệu, và rút ra nhận xét.</li>
+    <li>Trước khi xử lý dữ liệu, cần kiểm tra tính hợp lý (đầy đủ, chính xác) của dữ liệu thu thập được.</li>
+  </ul>`,
+  examples:[
+    {q:'Biểu đồ cột cho số học sinh giỏi của 3 lớp 6A, 6B, 6C là 10, 15, 12. Lớp nào có nhiều học sinh giỏi nhất?', s:'So sánh 10, 15, 12 → lớp 6B có nhiều học sinh giỏi nhất (15 học sinh).'}
+  ],
+  questions:[
+    {q:'Khảo sát môn thể thao yêu thích của 30 bạn: 12 bạn thích bóng đá, 8 bạn thích cầu lông, 10 bạn thích bóng bàn. Môn nào được yêu thích nhất?', a:'Bóng đá', e:'12 là số lớn nhất trong 12, 8, 10.'},
+    {q:'Với dữ liệu trên, tính tỉ số phần trăm số bạn thích bóng đá.', a:'40%', e:'12:30×100=40%.'},
+    {q:'Một bảng điểm kiểm tra: 2 bạn điểm 10, 5 bạn điểm 9, 10 bạn điểm 8, 8 bạn điểm 7, 5 bạn điểm 6. Tổng số học sinh là bao nhiêu?', a:'30 học sinh', e:'2+5+10+8+5=30.'},
+    {q:'Với dữ liệu câu trên, có bao nhiêu học sinh đạt điểm từ 8 trở lên?', a:'17 học sinh', e:'2+5+10=17.'},
+    {q:'Biểu đồ cột số sách đọc trong 4 tháng: T1=5, T2=8, T3=6, T4=10. Tháng nào đọc nhiều sách nhất?', a:'Tháng 4', e:'10 là số lớn nhất.'},
+    {q:'Tính tổng số sách đọc trong 4 tháng ở câu trên.', a:'29 quyển', e:'5+8+6+10=29.'},
+    {q:'Tính trung bình số sách đọc mỗi tháng (dữ liệu trên).', a:'7,25 quyển', e:'29:4=7,25.'},
+    {q:'Một lớp 40 học sinh, khảo sát phương tiện đến trường: 20 xe đạp, 15 đi bộ, 5 xe buýt. Tính tỉ lệ % học sinh đi xe đạp.', a:'50%', e:'20:40×100=50%.'},
+    {q:'Dữ liệu định lượng và dữ liệu định tính khác nhau như thế nào?', a:'Định lượng là số đo đếm được; định tính là đặc điểm không phải số', e:'Ví dụ: chiều cao, điểm số là định lượng; màu sắc, sở thích là định tính.'},
+    {q:'Trong biểu đồ tranh, mỗi hình vẽ thường đại diện cho điều gì?', a:'Một đơn vị hoặc một nhóm đơn vị đã quy ước trước', e:'Cần đọc kỹ phần chú giải để biết mỗi hình vẽ tương ứng bao nhiêu đơn vị.'},
+    {q:'Một cửa hàng bán ra trong 5 ngày: 20, 25, 18, 30, 22 sản phẩm. Ngày nào bán được nhiều nhất?', a:'Ngày 4 (30 sản phẩm)', e:'30 là số lớn nhất trong dãy.'},
+    {q:'Tính tổng số sản phẩm bán ra trong 5 ngày ở câu trên.', a:'115 sản phẩm', e:'20+25+18+30+22=115.'},
+    {q:'Để so sánh số học sinh nam, nữ của 3 lớp trên cùng một biểu đồ, nên dùng loại biểu đồ nào?', a:'Biểu đồ cột đôi (cột kép)', e:'Biểu đồ cột đôi cho phép đặt 2 cột nam-nữ cạnh nhau cho từng lớp để dễ so sánh.'},
+    {q:'Khảo sát màu yêu thích của 25 bạn: đỏ 10, xanh 8, vàng 7. Tính tỉ lệ % thích màu xanh.', a:'32%', e:'8:25×100=32%.'},
+    {q:'Vì sao cần kiểm tra tính hợp lý của dữ liệu trước khi xử lý?', a:'Vì dữ liệu sai hoặc thiếu sẽ làm kết quả phân tích không chính xác', e:'Dữ liệu là đầu vào của mọi phân tích, dữ liệu lỗi dẫn đến kết luận sai.'}
+  ]
+},
+{
+  id:19, group:'thong-ke', color:'violet', title:'Xác suất thực nghiệm',
+  sub:'Tính xác suất thực nghiệm của một sự kiện qua các lần thử',
+  theory:`
+  <ul>
+    <li>Xác suất thực nghiệm của một sự kiện = <span class="formula">số lần sự kiện xảy ra : tổng số lần thử</span>.</li>
+    <li>Giá trị xác suất thực nghiệm luôn nằm trong khoảng từ 0 đến 1 (hoặc 0% đến 100%).</li>
+    <li>Số lần thử nghiệm càng nhiều, xác suất thực nghiệm thường càng gần với xác suất lý thuyết (khả năng thật của sự kiện).</li>
+    <li>Tổng xác suất thực nghiệm của tất cả các kết quả có thể xảy ra trong một phép thử luôn bằng 1.</li>
+  </ul>`,
+  examples:[
+    {q:'Tung một đồng xu 50 lần, có 28 lần ra mặt sấp. Tính xác suất thực nghiệm ra mặt sấp.', s:'28/50 = 0,56 = 56%'}
+  ],
+  questions:[
+    {q:'Gieo 1 con xúc xắc 60 lần, có 11 lần ra mặt 6 chấm. Tính xác suất thực nghiệm ra mặt 6 chấm.', a:'11/60 ≈ 18,3%', e:'11:60×100≈18,3%.'},
+    {q:'Tung đồng xu 100 lần, có 47 lần ra mặt sấp. Tính xác suất thực nghiệm ra mặt ngửa.', a:'53%', e:'Số lần ngửa=100−47=53. 53:100×100=53%.'},
+    {q:'Trong 200 lần bốc thăm, có 80 lần trúng giải. Tính xác suất thực nghiệm trúng giải.', a:'40%', e:'80:200×100=40%.'},
+    {q:'Một hộp có bi xanh và đỏ, lấy ra rồi trả lại 40 lần, có 16 lần ra bi đỏ. Tính xác suất thực nghiệm lấy được bi đỏ.', a:'40%', e:'16:40×100=40%.'},
+    {q:'Với dữ liệu câu trên, ước lượng xác suất thực nghiệm lấy được bi xanh.', a:'60%', e:'100%−40%=60%.'},
+    {q:'Gieo xúc xắc 30 lần, có 18 lần ra số chẵn (2,4,6). Tính xác suất thực nghiệm ra số chẵn.', a:'60%', e:'18:30×100=60%.'},
+    {q:'Kiểm tra 500 sản phẩm, có 5 sản phẩm lỗi. Tính xác suất thực nghiệm một sản phẩm bị lỗi.', a:'1%', e:'5:500×100=1%.'},
+    {q:'Nếu xác suất thực nghiệm của một sự kiện sau rất nhiều lần thử xấp xỉ 0,5, điều đó cho thấy gì?', a:'Khả năng sự kiện xảy ra khoảng 50%, ngang bằng khả năng không xảy ra', e:'Giá trị gần 0,5 cho thấy sự kiện và không xảy ra có khả năng tương đương.'},
+    {q:'Xác suất thực nghiệm có thể bằng 0 hoặc bằng 1 không?', a:'Có thể', e:'Bằng 0 nếu sự kiện không xảy ra lần nào; bằng 1 nếu sự kiện xảy ra ở mọi lần thử.'},
+    {q:'Một xạ thủ bắn 50 lần, trúng tâm 42 lần. Tính xác suất thực nghiệm bắn trúng tâm.', a:'84%', e:'42:50×100=84%.'},
+    {q:'Gieo đồng thời 2 đồng xu 80 lần, có 18 lần cả hai đều ra mặt ngửa. Tính xác suất thực nghiệm của sự kiện này.', a:'22,5%', e:'18:80×100=22,5%.'},
+    {q:'Nếu thực hiện thí nghiệm với số lần rất ít, xác suất thực nghiệm có đáng tin cậy như khi thử nhiều lần không?', a:'Không', e:'Số lần thử ít dễ cho kết quả lệch xa so với xác suất lý thuyết.'},
+    {q:'Trong 1000 lượt khách, có 250 lượt chọn món A. Tính xác suất thực nghiệm một khách chọn món A.', a:'25%', e:'250:1000×100=25%.'},
+    {q:'Hỏi 40 bạn trong lớp có thích môn Toán không, có 24 bạn trả lời có. Tính xác suất thực nghiệm một bạn thích Toán.', a:'60%', e:'24:40×100=60%.'},
+    {q:'Tổng xác suất thực nghiệm của tất cả các kết quả có thể xảy ra trong một phép thử bằng bao nhiêu?', a:'Bằng 1 (100%)', e:'Vì các kết quả bao trùm toàn bộ phép thử nên tổng tỉ lệ luôn bằng 1.'}
+  ]
+},
+{
+  id:20, group:'chuyen-de', color:'indigo', title:'Chứng minh & so sánh nâng cao',
+  sub:'Ước lượng tổng phân số, so sánh hiệu lũy thừa, so sánh tổng phân số ghép',
+  theory:`
+  <ul>
+    <li>Để chứng tỏ một tổng nhiều phân số <b>lớn hơn</b> (hoặc <b>nhỏ hơn</b>) một giá trị, ta thay mỗi phân số bằng phân số nhỏ nhất (hoặc lớn nhất) trong tổng để ước lượng chặn dưới (hoặc chặn trên).</li>
+    <li>Để so sánh hai biểu thức dạng hiệu hai lũy thừa liên tiếp <span class="formula">aⁿ − aⁿ⁻¹</span>, ta đặt nhân tử chung: <span class="formula">aⁿ − aⁿ⁻¹ = aⁿ⁻¹(a−1)</span>, đưa về dạng tích để so sánh dễ hơn.</li>
+    <li>Để so sánh tổng các phân số có tử và mẫu liên tiếp với một phân số "ghép" (tử là tổng các tử, mẫu là tổng các mẫu), ta đánh giá mỗi phân số trong tổng so với 1, hoặc so với phân số nhỏ nhất trong tổng.</li>
+    <li>Với lũy thừa khác cơ số, đưa về cùng số mũ (hoặc cùng cơ số) bằng cách viết lại dưới dạng lũy thừa của một số mới.</li>
+  </ul>`,
+  examples:[
+    {q:'Chứng tỏ rằng: 1/101 + 1/102 + 1/103 + ... + 1/200 > 1/2', s:'Tổng có 100 số hạng. Mỗi số hạng (trừ số hạng cuối 1/200) đều lớn hơn 1/200. Do đó tổng > 100 × 1/200 = 1/2.'},
+    {q:'Cho M = 2014<sup>100</sup> − 2014<sup>99</sup> và N = 2014<sup>99</sup> − 2014<sup>98</sup>. So sánh M và N.', s:'M = 2014<sup>99</sup>(2014−1) = 2013×2014<sup>99</sup>. N = 2014<sup>98</sup>(2014−1) = 2013×2014<sup>98</sup>. Vì M:N = 2014<sup>99</sup>:2014<sup>98</sup> = 2014 > 1, nên M > N.'},
+    {q:'Cho A = 2011/2012 + 2012/2013 + 2013/2014 và B = (2011+2012+2013)/(2012+2013+2014). So sánh A và B.', s:'Mỗi phân số trong A đều lớn hơn 2011/2012 ≈ 0,9995, nên A > 3×0,9995 ≈ 2,998. Còn B = 6036/6039 < 1 (vì tử nhỏ hơn mẫu). Vậy A > B.'}
+  ],
+  questions:[
+    {q:'Chứng tỏ rằng: 1/51 + 1/52 + ... + 1/100 > 1/2', a:'Đúng, tổng > 1/2', e:'Tổng có 50 số hạng, mỗi số hạng (trừ số hạng cuối) đều lớn hơn 1/100, nên tổng > 50×(1/100) = 1/2.'},
+    {q:'Chứng tỏ rằng: 1/21 + 1/22 + ... + 1/40 < 1', a:'Đúng, tổng < 1', e:'Tổng có 20 số hạng, mỗi số hạng đều ≤ 1/21, nên tổng ≤ 20×(1/21) = 20/21 < 1.'},
+    {q:'Chứng tỏ rằng: 1/11 + 1/12 + ... + 1/20 > 1/2', a:'Đúng, tổng > 1/2', e:'Tổng có 10 số hạng, mỗi số hạng (trừ số hạng cuối) đều lớn hơn 1/20, nên tổng > 10×(1/20) = 1/2.'},
+    {q:'Chứng tỏ rằng: 1/41 + 1/42 + ... + 1/80 < 1', a:'Đúng, tổng < 1', e:'Tổng có 40 số hạng, mỗi số hạng đều ≤ 1/41, nên tổng ≤ 40×(1/41) = 40/41 < 1.'},
+    {q:'Chứng tỏ rằng: 1/2² + 1/3² + ... + 1/10² < 1', a:'Đúng, tổng < 1', e:'Với n≥2: 1/n² < 1/((n−1)n) = 1/(n−1) − 1/n. Tổng các hiệu này từ n=2 đến 10 triệt tiêu dần: (1/1−1/2)+(1/2−1/3)+...+(1/9−1/10) = 1 − 1/10 = 9/10 < 1.'},
+    {q:'Cho M = 2015<sup>50</sup> − 2015<sup>49</sup>, N = 2015<sup>49</sup> − 2015<sup>48</sup>. So sánh M và N.', a:'M > N', e:'M=2014×2015<sup>49</sup>, N=2014×2015<sup>48</sup>. M:N=2015>1 → M>N.'},
+    {q:'Cho M = 5<sup>21</sup> − 5<sup>20</sup>, N = 4×5<sup>20</sup>. So sánh M và N.', a:'M = N', e:'M=5<sup>20</sup>(5−1)=4×5<sup>20</sup>=N.'},
+    {q:'Cho A = 7<sup>10</sup> − 7<sup>9</sup>, B = 7<sup>9</sup>. So sánh A và B.', a:'A > B', e:'A=7<sup>9</sup>(7−1)=6×7<sup>9</sup>=6B, vì 6>1 nên A>B.'},
+    {q:'Cho P = 3<sup>15</sup> − 3<sup>14</sup>, Q = 3<sup>14</sup>. So sánh P và Q.', a:'P > Q', e:'P=3<sup>14</sup>(3−1)=2×3<sup>14</sup>=2Q, vì 2>1 nên P>Q.'},
+    {q:'Cho X = 10⁸ − 10⁷, Y = 10⁷. So sánh X và Y.', a:'X > Y', e:'X=10⁷(10−1)=9×10⁷=9Y, vì 9>1 nên X>Y.'},
+    {q:'Cho A = 2021/2022 + 2022/2023 + 2023/2024 và B = (2021+2022+2023)/(2022+2023+2024). So sánh A và B.', a:'A > B', e:'Mỗi phân số trong A đều xấp xỉ gần 1 nên A gần bằng 3, trong khi B = 6066/6069 < 1. Vậy A > B.'},
+    {q:'So sánh A = 3²⁰ và B = 2³⁰', a:'A > B', e:'A=3²⁰=(3²)¹⁰=9¹⁰, B=2³⁰=(2³)¹⁰=8¹⁰. Vì 9>8 nên A>B.'},
+    {q:'So sánh A = 100¹⁰ và B = 10²⁰', a:'A = B', e:'A=100¹⁰=(10²)¹⁰=10²⁰=B.'},
+    {q:'So sánh A = 2⁵⁰ và B = 5²⁰', a:'A > B', e:'A=2⁵⁰=(2⁵)¹⁰=32¹⁰, B=5²⁰=(5²)¹⁰=25¹⁰. Vì 32>25 nên A>B.'},
+    {q:'So sánh A = 1/2 + 1/4 + 1/8 + ... + 1/2¹⁰ (tổng 10 số hạng) và B = 1', a:'A < B', e:'Đây là tổng cấp số nhân: A = 1 − 1/2¹⁰ < 1 = B.'}
+  ]
+},
+{
+  id:21, group:'chuyen-de', color:'indigo', title:'Tìm x & tìm chữ số nâng cao',
+  sub:'Phương trình kết hợp phần trăm-phân số, tìm chữ số theo nhiều điều kiện',
+  theory:`
+  <ul>
+    <li>Phương trình kết hợp phần trăm và phân số: đổi tỉ số phần trăm về phân số (ví dụ 60% = 3/5), quy đồng mẫu số với phân số còn lại để cộng/trừ hệ số của x, rồi tìm x như bình thường.</li>
+    <li>Bài toán tìm chữ số thường cho 2 điều kiện: một điều kiện về quan hệ giữa các chữ số (ví dụ a = b + k), một điều kiện chia hết (thường dựa vào dấu hiệu chia hết cho 9 hoặc 3 — tổng các chữ số).</li>
+    <li>Cách giải: thay điều kiện quan hệ giữa các chữ số vào điều kiện chia hết để đưa về phương trình chỉ còn một biến, sau đó thử các giá trị chữ số hợp lệ (0–9) để tìm nghiệm thỏa mãn.</li>
+  </ul>`,
+  examples:[
+    {q:'Tìm x biết: 60%x + 2/3x = −76', s:'60% = 3/5. Quy đồng mẫu 15: 3/5x + 2/3x = 9/15x + 10/15x = 19/15x. Vậy 19/15x = −76 → x = −76 × 15/19 = −60.'},
+    {q:'Tìm các chữ số a, b sao cho a = b + 4 và số ̄87ab chia hết cho 9.', s:'Tổng các chữ số: 8+7+a+b = 15+a+b. Thay a=b+4: 15+(b+4)+b = 19+2b chia hết cho 9. Thử b=0..5 (vì a=b+4≤9): b=4 cho 19+8=27 chia hết 9. Vậy b=4, a=8 — số 8784 (kiểm tra: 8784:9=976 ✓).'}
+  ],
+  questions:[
+    {q:'Tìm x biết: 25%x + 3/4x = 50', a:'x = 50', e:'25%=1/4. 1/4+3/4=1 → x=50.'},
+    {q:'Tìm x biết: 50%x − 1/4x = 9', a:'x = 36', e:'50%=1/2. 1/2−1/4=1/4 → x=9×4=36.'},
+    {q:'Tìm x biết: 75%x + 1/4x = −40', a:'x = −40', e:'75%=3/4. 3/4+1/4=1 → x=−40.'},
+    {q:'Tìm x biết: 20%x + 3/5x = 32', a:'x = 40', e:'20%=1/5. 1/5+3/5=4/5 → x=32×5/4=40.'},
+    {q:'Tìm x biết: 80%x − 1/5x = 36', a:'x = 60', e:'80%=4/5. 4/5−1/5=3/5 → x=36×5/3=60.'},
+    {q:'Tìm x biết: 30%x + 7/10x = −100', a:'x = −100', e:'30%=3/10. 3/10+7/10=1 → x=−100.'},
+    {q:'Tìm x biết: 60%x − 1/3x = 12', a:'x = 45', e:'60%=3/5. 3/5−1/3 = (9−5)/15 = 4/15 → x=12×15/4=45.'},
+    {q:'Tìm x biết: 90%x − 1/2x = 20', a:'x = 50', e:'90%=9/10. 9/10−1/2=9/10−5/10=4/10=2/5 → x=20×5/2=50.'},
+    {q:'Tìm các chữ số a, b sao cho a = b + 1 và số ̄29ab chia hết cho 9.', a:'a = 4, b = 3 (số 2943)', e:'Tổng=2+9+a+b=11+(b+1)+b=12+2b chia hết 9. Thử b=0..8: b=3 cho 12+6=18 chia hết 9 → b=3, a=4. Kiểm tra 2943:9=327 ✓.'},
+    {q:'Tìm các chữ số a, b sao cho a = b + 2 và số ̄31ab chia hết cho 9.', a:'a = 8, b = 6 (số 3186)', e:'Tổng=3+1+a+b=4+(b+2)+b=6+2b chia hết 9. Thử b=0..7: b=6 cho 6+12=18 chia hết 9 → b=6, a=8. Kiểm tra 3186:9=354 ✓.'},
+    {q:'Tìm các chữ số a, b sao cho a = b + 1 và số ̄48ab chia hết cho 9.', a:'a = 8, b = 7 (số 4887)', e:'Tổng=4+8+a+b=12+(b+1)+b=13+2b chia hết 9. Thử b=0..8: b=7 cho 13+14=27 chia hết 9 → b=7, a=8. Kiểm tra 4887:9=543 ✓.'},
+    {q:'Tìm chữ số x để số ̄45x chia hết cho cả 3 và 5.', a:'x = 0 (số 450)', e:'Chia hết 5: x=0 hoặc 5. Chia hết 3: 4+5+x=9+x chia hết 3 → x∈{0,3,6,9}. Giao của 2 điều kiện: x=0.'},
+    {q:'Tìm chữ số x để số ̄6x18 chia hết cho 9.', a:'x = 3 (số 6318)', e:'Tổng=6+x+1+8=15+x chia hết 9 → x=3 (vì 15+3=18). Kiểm tra 6318:9=702 ✓.'},
+    {q:'Tìm các chữ số x, y biết x − y = 5 và số ̄2x5y chia hết cho 9.', a:'x = 8, y = 3 (số 2853)', e:'Tổng=2+x+5+y=7+(y+5)+y=12+2y chia hết 9. Thử y=0..4: y=3 cho 12+6=18 chia hết 9 → y=3, x=8. Kiểm tra 2853:9=317 ✓.'},
+    {q:'Tìm các chữ số a, b sao cho b = a + 5 và số ̄61ab chia hết cho 9.', a:'a = 3, b = 8 (số 6138)', e:'Tổng=6+1+a+b=7+a+(a+5)=12+2a chia hết 9. Thử a=0..4: a=3 cho 12+6=18 chia hết 9 → a=3, b=8. Kiểm tra 6138:9=682 ✓.'}
+  ]
+},
+{
+  id:22, group:'chuyen-de', color:'indigo', title:'Chứng minh chia hết nâng cao',
+  sub:'Chứng minh một biểu thức chia hết cho một số mà không cần tính giá trị cụ thể',
+  theory:`
+  <ul>
+    <li>Để chứng minh chia hết mà không cần tính ra số cụ thể, thường <b>nhóm các số hạng</b> hoặc <b>đặt nhân tử chung</b> sao cho xuất hiện thừa số chia hết cho số cần chứng minh.</li>
+    <li>Tích của 2 số tự nhiên liên tiếp <span class="formula">n(n+1)</span> luôn chia hết cho 2 (vì trong 2 số liên tiếp luôn có 1 số chẵn).</li>
+    <li>Tích của 3 số tự nhiên liên tiếp <span class="formula">n(n+1)(n+2)</span> luôn chia hết cho 6 (luôn có 1 số chia hết cho 2 và 1 số chia hết cho 3).</li>
+    <li>Với tổng các lũy thừa cùng cơ số, có thể nhóm từng cặp (hoặc từng nhóm) số hạng để xuất hiện thừa số chung.</li>
+  </ul>`,
+  examples:[
+    {q:'Chứng minh rằng n(n+1) chia hết cho 2 với mọi số tự nhiên n.', s:'Trong 2 số tự nhiên liên tiếp n và n+1 luôn có 1 số chẵn (chia hết cho 2), nên tích n(n+1) luôn chia hết cho 2.'},
+    {q:'Chứng minh rằng A = 2+2²+2³+2⁴ chia hết cho 3.', s:'Nhóm: (2+2²)+(2³+2⁴) = 2(1+2)+2³(1+2) = 3×2+3×8 = 3(2+8) = 3×10. Vậy A chia hết cho 3.'}
+  ],
+  questions:[
+    {q:'Chứng minh rằng tích của 3 số tự nhiên liên tiếp n(n+1)(n+2) luôn chia hết cho 6.', a:'Đúng', e:'Trong 3 số liên tiếp luôn có ít nhất 1 số chia hết cho 2 và đúng 1 số chia hết cho 3, mà 2 và 3 nguyên tố cùng nhau nên tích chia hết cho 2×3=6.'},
+    {q:'Chứng minh rằng A = 5+5²+5³+5⁴ chia hết cho 6.', a:'Đúng', e:'A=5(1+5)+5³(1+5)=6×5+6×125=6(5+125)=6×130, chia hết cho 6.'},
+    {q:'Chứng minh rằng B = 3+3²+3³ chia hết cho 13.', a:'Đúng', e:'B=3(1+3+3²)=3×13=39, chia hết cho 13.'},
+    {q:'Chứng minh rằng C = 2+2²+2³+...+2¹⁰ chia hết cho 3.', a:'Đúng', e:'Nhóm từng cặp: (2+2²)+(2³+2⁴)+...+(2⁹+2¹⁰) = 3(2+2³+2⁵+2⁷+2⁹), chia hết cho 3.'},
+    {q:'Chứng minh rằng D = 4+4²+4³ chia hết cho 21.', a:'Đúng', e:'D=4(1+4+4²)=4×21=84, chia hết cho 21.'},
+    {q:'Chứng minh rằng tổng của 2 số tự nhiên liên tiếp luôn là một số lẻ.', a:'Đúng', e:'n+(n+1)=2n+1, là số lẻ vì 2n là số chẵn, cộng 1 thành số lẻ.'},
+    {q:'Chứng minh rằng hiệu (n+1)² − n² luôn là một số lẻ với mọi số tự nhiên n.', a:'Đúng', e:'(n+1)²−n² = 2n+1, là số lẻ.'},
+    {q:'Chứng minh rằng A = n² + n chia hết cho 2 với mọi số tự nhiên n.', a:'Đúng', e:'A=n(n+1) là tích 2 số tự nhiên liên tiếp, luôn có 1 số chẵn nên chia hết cho 2.'},
+    {q:'Chứng minh rằng A = n³ − n chia hết cho 6 với mọi số tự nhiên n.', a:'Đúng', e:'A=n(n−1)(n+1) là tích 3 số tự nhiên liên tiếp, nên chia hết cho 6 (tương tự lý do số liên tiếp chia hết 2 và 3).'},
+    {q:'Chứng minh rằng tổng của 3 số tự nhiên liên tiếp luôn chia hết cho 3.', a:'Đúng', e:'n+(n+1)+(n+2)=3n+3=3(n+1), chia hết cho 3.'},
+    {q:'Chứng minh rằng tổng của 5 số tự nhiên liên tiếp luôn chia hết cho 5.', a:'Đúng', e:'n+(n+1)+(n+2)+(n+3)+(n+4)=5n+10=5(n+2), chia hết cho 5.'},
+    {q:'Chứng minh rằng E = 7+7²+7³+7⁴+7⁵+7⁶ chia hết cho 8.', a:'Đúng', e:'Nhóm từng cặp: (7+7²)+(7³+7⁴)+(7⁵+7⁶) = 8(7+7³+7⁵), chia hết cho 8.'}
+  ]
+},
+{
+  id:23, group:'chuyen-de', color:'indigo', title:'Tính tổng dãy phân số có quy luật',
+  sub:'Phương pháp khử liên tiếp (telescoping) với phân số dạng 1/(n×(n+k))',
+  theory:`
+  <ul>
+    <li>Với phân số dạng <span class="formula">1/(n×(n+1))</span>, ta tách: <span class="formula">1/(n(n+1)) = 1/n − 1/(n+1)</span>.</li>
+    <li>Khi cộng nhiều phân số liên tiếp dạng này, các số hạng giữa sẽ triệt tiêu lẫn nhau (gọi là "khử liên tiếp"), chỉ còn số hạng đầu và số hạng cuối.</li>
+    <li>Tổng quát: <span class="formula">1/(1×2)+1/(2×3)+...+1/(n(n+1)) = 1 − 1/(n+1)</span></li>
+    <li>Với mẫu cách nhau k đơn vị: <span class="formula">1/(n(n+k)) = (1/k)×[1/n − 1/(n+k)]</span></li>
+  </ul>`,
+  examples:[
+    {q:'Tính A = 1/(1×2) + 1/(2×3) + 1/(3×4) + ... + 1/(9×10)', s:'A = (1−1/2)+(1/2−1/3)+...+(1/9−1/10) = 1 − 1/10 = 9/10 (các số hạng giữa triệt tiêu).'},
+    {q:'Tính B = 1/(1×3) + 1/(3×5) + 1/(5×7) + 1/(7×9)', s:'Mỗi số hạng = 1/2×[1/(2k−1) − 1/(2k+1)]. Tổng = 1/2×(1−1/9) = 1/2×8/9 = 4/9.'}
+  ],
+  questions:[
+    {q:'Tính 1/(1×2)+1/(2×3)+1/(3×4)+1/(4×5)', a:'4/5', e:'= 1 − 1/5 = 4/5 (khử liên tiếp).'},
+    {q:'Tính 1/(1×2)+1/(2×3)+...+1/(99×100)', a:'99/100', e:'= 1 − 1/100 = 99/100.'},
+    {q:'Tính 1/(2×3)+1/(3×4)+...+1/(9×10)', a:'2/5', e:'= 1/2 − 1/10 = 2/5.'},
+    {q:'Tính 1/(1×3)+1/(3×5)+1/(5×7)+1/(7×9)+1/(9×11)', a:'5/11', e:'= 1/2×(1−1/11) = 1/2×10/11 = 5/11.'},
+    {q:'Tính 1/(5×6)+1/(6×7)+1/(7×8)+1/(8×9)', a:'4/45', e:'= 1/5 − 1/9 = 4/45.'},
+    {q:'Tính 2/(1×3)+2/(3×5)+2/(5×7)+2/(7×9)+2/(9×11)', a:'10/11', e:'Mỗi số hạng = 1/(2k−1) − 1/(2k+1) (vì hệ số 2 khử hệ số 1/2). Tổng = 1 − 1/11 = 10/11.'},
+    {q:'Tính 1/(10×11)+1/(11×12)+...+1/(19×20)', a:'1/20', e:'= 1/10 − 1/20 = 1/20.'},
+    {q:'Tính 3/(1×4)+3/(4×7)+3/(7×10)+3/(10×13)', a:'12/13', e:'Mỗi số hạng = 1/n − 1/(n+3) (vì hệ số 3 khử mẫu chung 3). Tổng = 1 − 1/13 = 12/13.'},
+    {q:'Tính 1/2+1/6+1/12+1/20+1/30', a:'5/6', e:'Đây là 1/(1×2)+1/(2×3)+1/(3×4)+1/(4×5)+1/(5×6) = 1−1/6 = 5/6.'},
+    {q:'Tính 1/(1×2)+1/(2×3)+...+1/(2014×2015)', a:'2014/2015', e:'= 1 − 1/2015 = 2014/2015.'},
+    {q:'So sánh A = 1/(1×2)+1/(2×3)+...+1/(49×50) với 1', a:'A < 1 (A = 49/50)', e:'A = 1 − 1/50 = 49/50 < 1.'},
+    {q:'Tính 1/(3×5)+1/(5×7)+1/(7×9)', a:'1/9', e:'Mỗi số hạng = 1/2×[1/(2k+1)−1/(2k+3)]. Tổng = 1/2×(1/3−1/9) = 1/2×2/9 = 1/9.'}
+  ]
+},
+{
+  id:24, group:'chuyen-de', color:'indigo', title:'Giá trị tuyệt đối nâng cao',
+  sub:'Phương trình chứa dấu giá trị tuyệt đối, tìm giá trị nhỏ nhất',
+  theory:`
+  <ul>
+    <li><span class="formula">|a| = a</span> nếu a≥0; <span class="formula">|a| = −a</span> nếu a&lt;0. Luôn có |a| ≥ 0 với mọi a.</li>
+    <li>Phương trình <span class="formula">|x| = k</span> (k≥0) có 2 nghiệm: x=k hoặc x=−k. Nếu k&lt;0, phương trình vô nghiệm.</li>
+    <li>Phương trình <span class="formula">|x−a| = k</span> (k≥0): x−a=k hoặc x−a=−k, suy ra x=a+k hoặc x=a−k.</li>
+    <li>Phương trình <span class="formula">|x−a| = |x−b|</span>: x là điểm cách đều a và b, tức x là trung điểm của a và b: x=(a+b):2.</li>
+  </ul>`,
+  examples:[
+    {q:'Tìm x biết |x| = 7', s:'x = 7 hoặc x = −7.'},
+    {q:'Tìm x biết |x−3| = 5', s:'x−3=5 → x=8, hoặc x−3=−5 → x=−2. Vậy x=8 hoặc x=−2.'}
+  ],
+  questions:[
+    {q:'Tìm x biết |x| = 12', a:'x = 12 hoặc x = −12', e:'Theo định nghĩa giá trị tuyệt đối.'},
+    {q:'Tìm x biết |x+5| = 9', a:'x = 4 hoặc x = −14', e:'x+5=9→x=4, hoặc x+5=−9→x=−14.'},
+    {q:'Tìm x biết |x−7| = 2', a:'x = 9 hoặc x = 5', e:'x−7=2→x=9, hoặc x−7=−2→x=5.'},
+    {q:'Tìm x biết |2x| = 16', a:'x = 8 hoặc x = −8', e:'2x=16→x=8, hoặc 2x=−16→x=−8.'},
+    {q:'Tìm x biết |x| + 3 = 10', a:'x = 7 hoặc x = −7', e:'|x|=7 → x=7 hoặc x=−7.'},
+    {q:'Tìm x biết |x−1| = 0', a:'x = 1', e:'|x−1|=0 chỉ khi x−1=0, nên chỉ có 1 nghiệm duy nhất.'},
+    {q:'Tìm x biết |x| = −5', a:'Vô nghiệm', e:'Vì |x|≥0 với mọi x, không thể bằng một số âm.'},
+    {q:'Tìm x biết 2|x| − 4 = 10', a:'x = 7 hoặc x = −7', e:'2|x|=14→|x|=7→x=7 hoặc x=−7.'},
+    {q:'Tìm x biết |3x−6| = 12', a:'x = 6 hoặc x = −2', e:'3x−6=12→x=6, hoặc 3x−6=−12→x=−2.'},
+    {q:'Tìm giá trị nhỏ nhất của biểu thức A = |x−4| + 5', a:'5 (đạt khi x = 4)', e:'Vì |x−4|≥0 với mọi x, nên A≥5, dấu "=" xảy ra khi x=4.'},
+    {q:'Tìm x nguyên biết |x| < 4', a:'x ∈ {−3, −2, −1, 0, 1, 2, 3}', e:'Các số nguyên có giá trị tuyệt đối nhỏ hơn 4.'},
+    {q:'Tìm x biết |x+2| = |x−6|', a:'x = 2', e:'x là điểm cách đều −2 và 6, nên x = (−2+6):2 = 2.'}
+  ]
+},
+{
+  id:25, group:'chuyen-de', color:'indigo', title:'Toán Tổng-Tỉ, Hiệu-Tỉ',
+  sub:'Tìm hai số khi biết tổng (hoặc hiệu) và tỉ số của chúng',
+  theory:`
+  <ul>
+    <li><b>Toán tổng-tỉ</b>: biết tổng hai số và tỉ số của chúng. Chia tổng theo số phần bằng nhau dựa vào tỉ số, tìm giá trị 1 phần = <span class="formula">tổng : tổng số phần</span>, rồi tính từng số.</li>
+    <li><b>Toán hiệu-tỉ</b>: biết hiệu hai số và tỉ số của chúng. Giá trị 1 phần = <span class="formula">hiệu : hiệu số phần</span>, rồi tính từng số.</li>
+    <li>Các bước chung: xác định tỉ số (m:n) → tổng/hiệu số phần bằng nhau → giá trị 1 phần → nhân ngược lại để ra từng số.</li>
+  </ul>`,
+  examples:[
+    {q:'Tổng hai số là 75, tỉ số của chúng là 2:3. Tìm hai số.', s:'Tổng số phần = 2+3=5. Giá trị 1 phần = 75:5=15. Số bé = 2×15=30, số lớn = 3×15=45.'},
+    {q:'Hiệu hai số là 24, tỉ số của chúng là 3:5. Tìm hai số.', s:'Hiệu số phần = 5−3=2. Giá trị 1 phần = 24:2=12. Số bé = 3×12=36, số lớn = 5×12=60.'}
+  ],
+  questions:[
+    {q:'Tổng hai số là 96, tỉ số 3:5. Tìm hai số.', a:'36 và 60', e:'Tổng phần=8, 1 phần=12 → 3×12=36, 5×12=60.'},
+    {q:'Tổng hai số là 120, tỉ số 1:3. Tìm hai số.', a:'30 và 90', e:'Tổng phần=4, 1 phần=30 → 30 và 90.'},
+    {q:'Tổng hai số là 150, số thứ nhất gấp đôi số thứ hai. Tìm hai số.', a:'50 và 100', e:'Tỉ số 2:1, tổng phần=3, 1 phần=50 → số bé=50, số lớn=100.'},
+    {q:'Hiệu hai số là 28, tỉ số 3:4. Tìm hai số.', a:'84 và 112', e:'Hiệu phần=1, 1 phần=28 → 3×28=84, 4×28=112.'},
+    {q:'Hiệu hai số là 45, tỉ số 2:5. Tìm hai số.', a:'30 và 75', e:'Hiệu phần=3, 1 phần=15 → 2×15=30, 5×15=75.'},
+    {q:'Hai lớp 6A và 6B có tổng 80 học sinh, tỉ số học sinh 6A và 6B là 3:5. Tính số học sinh mỗi lớp.', a:'6A: 30, 6B: 50', e:'Tổng phần=8, 1 phần=10 → 6A=30, 6B=50.'},
+    {q:'Tuổi mẹ hơn tuổi con 24 tuổi, tỉ số tuổi con và tuổi mẹ là 2:5. Tính tuổi mỗi người.', a:'Con 16 tuổi, mẹ 40 tuổi', e:'Hiệu phần=3, 1 phần=8 → con=16, mẹ=40.'},
+    {q:'Hai kho chứa tổng 540 tấn gạo, tỉ số kho A và kho B là 4:5. Tính số gạo mỗi kho.', a:'Kho A: 240 tấn, kho B: 300 tấn', e:'Tổng phần=9, 1 phần=60 → A=240, B=300.'},
+    {q:'Tổng hai số là 63, tỉ số 4:5. Tìm hai số.', a:'28 và 35', e:'Tổng phần=9, 1 phần=7 → 28 và 35.'},
+    {q:'Hiệu hai số là 36, tỉ số 5:7. Tìm hai số.', a:'90 và 126', e:'Hiệu phần=2, 1 phần=18 → 5×18=90, 7×18=126.'},
+    {q:'Một đội công nhân có tổng 45 người chia làm 2 tổ theo tỉ lệ 4:5. Tính số người mỗi tổ.', a:'Tổ 1: 20 người, tổ 2: 25 người', e:'Tổng phần=9, 1 phần=5 → 20 và 25.'},
+    {q:'Một thư viện có số sách Toán nhiều hơn số sách Văn 80 cuốn, tỉ số sách Văn và sách Toán là 3:5. Tính số sách mỗi loại.', a:'Văn: 120 cuốn, Toán: 200 cuốn', e:'Hiệu phần=2, 1 phần=40 → Văn=120, Toán=200.'}
+  ]
+},
+{
+  id:26, group:'chuyen-de', color:'indigo', title:'Nguyên lý Dirichlet (chuồng thỏ)',
+  sub:'Chứng minh sự tồn tại mà không cần chỉ rõ cụ thể — chuyên đề bồi dưỡng',
+  theory:`
+  <ul>
+    <li><b>Nguyên lý Dirichlet</b> (nguyên lý chuồng thỏ): nếu nhốt nhiều hơn n con thỏ vào n chuồng, thì có ít nhất 1 chuồng chứa từ 2 con thỏ trở lên.</li>
+    <li>Mở rộng: nếu có m đối tượng chia vào n nhóm và m &gt; k×n, thì tồn tại ít nhất 1 nhóm có nhiều hơn k đối tượng (cụ thể, có ít nhất ⌈m/n⌉ đối tượng).</li>
+    <li>Ứng dụng: chứng minh tồn tại 2 (hoặc nhiều) phần tử có cùng tính chất nào đó (cùng số dư, cùng tháng sinh, cùng màu...) mà không cần chỉ ra cụ thể là phần tử nào.</li>
+  </ul>`,
+  examples:[
+    {q:'Một lớp có 35 học sinh. Chứng minh rằng có ít nhất 3 học sinh có cùng tháng sinh.', s:'Có 12 tháng ("chuồng"). Nếu mỗi tháng chỉ có tối đa 2 học sinh thì tổng tối đa là 12×2=24 < 35. Vậy phải có ít nhất 1 tháng có từ 3 học sinh trở lên.'},
+    {q:'Chứng minh rằng trong 13 số tự nhiên bất kỳ, luôn có 2 số có cùng số dư khi chia cho 12.', s:'Khi chia cho 12 có 12 số dư có thể (0–11, là 12 "chuồng"). Có 13 số ("thỏ") nhiều hơn 12 chuồng, nên có ít nhất 2 số rơi vào cùng 1 chuồng — tức có cùng số dư.'}
+  ],
+  questions:[
+    {q:'Một hộp có bút 5 màu khác nhau. Cần lấy ra ít nhất bao nhiêu bút để chắc chắn có 2 bút cùng màu?', a:'6 bút', e:'5 màu là 5 "chuồng", cần 5+1=6 bút để chắc chắn có 2 bút trùng màu.'},
+    {q:'Chứng minh rằng trong 8 số tự nhiên bất kỳ, luôn có 2 số có cùng số dư khi chia cho 7.', a:'Đúng', e:'Có 7 số dư có thể (0–6) là 7 chuồng, 8 số là 8 thỏ, 8>7 nên có ít nhất 2 số cùng chuồng (cùng số dư).'},
+    {q:'Một lớp có 30 học sinh. Chứng minh rằng có ít nhất 3 học sinh có cùng tháng sinh.', a:'Đúng', e:'12 tháng×2=24<30, vậy phải có ít nhất 1 tháng có từ ⌈30/12⌉=3 học sinh trở lên.'},
+    {q:'Một hộp có bi chỉ mang 4 màu. Cần lấy ra ít nhất bao nhiêu viên để chắc chắn có 3 viên cùng màu?', a:'9 viên', e:'4 màu×2+1=9 viên để chắc chắn có 3 viên cùng màu.'},
+    {q:'Chứng minh rằng trong 367 người bất kỳ, luôn có ít nhất 2 người có cùng ngày sinh (ngày/tháng).', a:'Đúng', e:'Một năm có tối đa 366 ngày (kể cả năm nhuận) — 366 "chuồng". 367 người ("thỏ") nhiều hơn 366 nên có ít nhất 2 người trùng ngày sinh.'},
+    {q:'Một túi chỉ có bi 3 màu xanh, đỏ, vàng. Cần lấy ra ít nhất bao nhiêu viên để chắc chắn có 4 viên cùng màu?', a:'10 viên', e:'3 màu×3+1=10 viên.'},
+    {q:'Chứng minh rằng trong 6 số tự nhiên bất kỳ, luôn có 2 số có cùng số dư khi chia cho 5.', a:'Đúng', e:'5 số dư có thể (0–4) là 5 chuồng, 6 số là 6 thỏ, 6>5 nên có 2 số cùng chuồng.'},
+    {q:'Một rổ chỉ có táo và cam (2 loại). Cần lấy ra ít nhất bao nhiêu quả để chắc chắn có 5 quả cùng loại?', a:'9 quả', e:'2 loại×4+1=9 quả.'},
+    {q:'Giải thích vì sao trong 4 số tự nhiên liên tiếp bất kỳ, không thể cả 4 số đều là số lẻ.', a:'Đúng, không thể', e:'Trong 4 số tự nhiên liên tiếp, tính chẵn-lẻ xen kẽ nhau, nên chỉ có 2 số lẻ và 2 số chẵn.'},
+    {q:'50 lá thư được chia vào 7 hòm thư. Chứng minh rằng có ít nhất 1 hòm nhận từ 8 lá thư trở lên.', a:'Đúng', e:'7×7=49<50, vậy phải có ít nhất 1 hòm nhận ⌈50/7⌉=8 lá thư trở lên.'},
+    {q:'Một hộp bút có 6 màu khác nhau. Cần lấy ra ít nhất bao nhiêu chiếc bút để chắc chắn có 2 chiếc cùng màu?', a:'7 chiếc', e:'6 màu là 6 chuồng, cần 6+1=7 chiếc.'},
+    {q:'Một lớp 45 học sinh đăng kí 4 môn thể thao (mỗi học sinh chọn 1 môn). Chứng minh rằng có ít nhất 1 môn được từ 12 học sinh trở lên chọn.', a:'Đúng', e:'4×11=44<45, vậy phải có ít nhất 1 môn có ⌈45/4⌉=12 học sinh trở lên.'}
+  ]
+},
+{
+  id:27, group:'chuyen-de', color:'indigo', title:'Số chính phương',
+  sub:'Tính chất, dấu hiệu nhận biết và chứng minh không là số chính phương',
+  theory:`
+  <ul>
+    <li>Số chính phương là số bằng bình phương của một số tự nhiên (0, 1, 4, 9, 16, 25, ...).</li>
+    <li>Số chính phương chỉ có thể có chữ số tận cùng là: <span class="formula">0, 1, 4, 5, 6, 9</span> (không thể tận cùng 2, 3, 7, 8).</li>
+    <li>Số chính phương chia cho 4 chỉ có thể dư 0 hoặc 1 (không thể dư 2 hoặc 3); chia cho 3 chỉ có thể dư 0 hoặc 1 (không thể dư 2).</li>
+    <li>Tích của 2 số chính phương cũng là một số chính phương.</li>
+    <li>Một cách kiểm tra khác: nếu n nằm giữa hai số chính phương liên tiếp k² và (k+1)² mà không trùng với cả hai, thì n không là số chính phương.</li>
+  </ul>`,
+  examples:[
+    {q:'Trong các số 1234, 1235, 1236, 1237, số nào chắc chắn không là số chính phương (dựa vào chữ số tận cùng)?', s:'Số chính phương chỉ tận cùng 0,1,4,5,6,9. Số 1237 tận cùng 7 — không hợp lệ, nên chắc chắn không là số chính phương. Các số còn lại chưa thể kết luận chỉ dựa vào chữ số tận cùng.'},
+    {q:'Chứng minh rằng số có dạng 4n+2 (n là số tự nhiên) không thể là số chính phương.', s:'Số chính phương chia cho 4 chỉ có thể dư 0 hoặc 1, không thể dư 2. Mà 4n+2 chia 4 dư 2, nên không thể là số chính phương.'}
+  ],
+  questions:[
+    {q:'Trong các số 1421, 1422, 1423, 1424, số nào chắc chắn không là số chính phương dựa vào chữ số tận cùng?', a:'1422 và 1423', e:'Tận cùng 2 và 3 không phải chữ số tận cùng hợp lệ của số chính phương.'},
+    {q:'Số có chữ số tận cùng là 8 có thể là số chính phương không?', a:'Không', e:'Số chính phương chỉ có thể tận cùng 0,1,4,5,6,9.'},
+    {q:'Chứng minh rằng số có dạng 3n+2 không thể là số chính phương.', a:'Đúng', e:'Số chính phương chia 3 chỉ dư 0 hoặc 1, không thể dư 2; mà 3n+2 chia 3 dư 2.'},
+    {q:'169 có là số chính phương không? Nếu có, bằng bình phương của số nào?', a:'Có, 169 = 13²', e:'13×13=169.'},
+    {q:'225 có là số chính phương không?', a:'Có, 225 = 15²', e:'15×15=225.'},
+    {q:'Số 1000 có là số chính phương không?', a:'Không', e:'Vì 31²=961 và 32²=1024, số 1000 nằm giữa hai số chính phương liên tiếp này nên không là số chính phương.'},
+    {q:'Biết 1²+2²=5, 2²+3²=13. Tính 3²+4².', a:'25', e:'9+16=25.'},
+    {q:'Áp dụng tính chất "tích 2 số chính phương là số chính phương": 4×9 có là số chính phương không?', a:'Có, 36 = 6²', e:'4=2², 9=3², 4×9=(2×3)²=36=6².'},
+    {q:'Số chính phương nhỏ nhất có 3 chữ số là số nào?', a:'100', e:'100=10², là số chính phương nhỏ nhất có 3 chữ số.'},
+    {q:'Số chính phương lớn nhất có 3 chữ số là số nào?', a:'961', e:'961=31², và 32²=1024 đã có 4 chữ số.'},
+    {q:'Tìm số tự nhiên n để n² nằm trong khoảng từ 50 đến 100 (không tính 2 đầu).', a:'n = 8 hoặc n = 9', e:'8²=64, 9²=81 đều nằm trong khoảng; 7²=49 (nhỏ hơn 50), 10²=100 (bằng biên).'},
+    {q:'Chứng minh rằng số 2024 không là số chính phương.', a:'Đúng', e:'44²=1936, 45²=2025; 2024 nằm giữa hai số chính phương liên tiếp này (không trùng với 2025) nên không là số chính phương.'}
+  ]
+}
+  ]
+
+/* ===================== RENDER ===================== */
+/* ===================== HELPERS ===================== */
+function escapeAttr(s){
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+}
+function normalize(s){
+  return String(s)
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/g,'d')
+    .replace(/[^a-z0-9/\-,.]/g,'')
+    .replace(/,/g,'.')
+    .trim();
+}
+function isCorrect(userInput, correctAnswer){
+  const u = normalize(userInput);
+  const a = normalize(correctAnswer);
+  if(!u) return false;
+  if(u === a) return true;
+  if(a.length>0 && (a.includes(u) || u.includes(a))) return true;
+  return false;
+}
+
+const GROUPS = {'so-hoc':'grid-so-hoc','dai-so':'grid-dai-so','hinh-hoc':'grid-hinh-hoc','thong-ke':'grid-thong-ke','chuyen-de':'grid-chuyen-de'};
+const STORE_KEY = 'toan6_progress_v1';
+
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveProgress(p){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }catch(e){}
+}
+let progress = loadProgress();
+
+function topicDoneCount(t){
+  const p = progress[t.id] || {};
+  return Object.values(p).filter(Boolean).length;
+}
+
+function renderGrid(){
+  Object.values(GROUPS).forEach(id=>{document.getElementById(id).innerHTML='';});
+  let totalQ=0, totalDone=0;
+  TOPICS.forEach(t=>{
+    totalQ += t.questions.length;
+    const done = topicDoneCount(t);
+    totalDone += done;
+    const pct = Math.round(done/t.questions.length*100);
+    const card = document.createElement('div');
+    card.className = 'topic-card ' + t.color;
+    card.innerHTML = `
+      <div class="num">${String(t.id).padStart(2,'0')}</div>
+      <div class="meta">
+        <h3>${t.title}</h3>
+        <span>${t.sub}</span>
+      </div>
+      <div class="prog"><b>${pct}%</b>${done}/${t.questions.length}</div>
+    `;
+    card.onclick = ()=>openTopic(t.id);
+    document.getElementById(GROUPS[t.group]).appendChild(card);
+  });
+  document.getElementById('statTopics').textContent = TOPICS.length;
+  document.getElementById('statQ').textContent = totalQ;
+  document.getElementById('statDone').textContent = Math.round(totalDone/totalQ*100)+'%';
+}
+
+function openTopic(id){
+  const t = TOPICS.find(x=>x.id===id);
+  document.getElementById('listView').style.display='none';
+  const dv = document.getElementById('detailView');
+  dv.innerHTML = renderDetail(t);
+  dv.style.display='block';
+  attachDetailEvents(t);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function closeTopic(){
+  document.getElementById('listView').style.display='block';
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('detailView').innerHTML='';
+  renderGrid();
+}
+
+function renderDetail(t){
+  const exHtml = t.examples.map(ex=>`
+    <div class="example-box">
+      <div class="ex-q">${ex.q}</div>
+      <div class="ex-s">${ex.s}</div>
+    </div>`).join('');
+
+  const qHtml = t.questions.map((q,i)=>`
+    <div class="qcard" data-idx="${i}" data-answer="${escapeAttr(q.a)}">
+      <div class="qhead">
+        <div class="qtext"><b>Câu ${i+1}.</b>${q.q}</div>
+        <div class="qbtns">
+          <button class="chk" data-act="check" title="Đánh dấu đã làm">✓</button>
+        </div>
+      </div>
+      <div class="answer-row">
+        <input type="text" class="ans-input" placeholder="Nhập câu trả lời của bạn...">
+        <button class="btn-check" data-act="grade">Kiểm tra</button>
+      </div>
+      <div class="feedback"></div>
+      <button class="toggle-ans" data-act="toggle">Xem đáp án &amp; giải thích</button>
+      <div class="ans-box">
+        <div class="a-val">Đáp án: ${q.a}</div>
+        <div class="a-exp">${q.e}</div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="detail-card detail active ${t.color}">
+      <button class="back-btn" id="backBtn">← Quay lại danh sách</button>
+      <div class="detail-title">
+        <div class="num">${String(t.id).padStart(2,'0')}</div>
+        <h2>${t.title}</h2>
+      </div>
+      <p class="detail-sub">${t.sub}</p>
+
+      <span class="section-tag tag-theory">Lý thuyết</span>
+      <div class="theory-box">${t.theory}</div>
+
+      <span class="section-tag tag-example">Ví dụ minh họa</span>
+      ${exHtml}
+
+      <span class="section-tag tag-practice">Bài thực hành — ${t.questions.length} câu</span>
+      <div class="pbar-wrap">
+        <div class="pbar"><div class="pbar-fill" id="pbarFill"></div></div>
+        <div class="pbar-label" id="pbarLabel">0/${t.questions.length}</div>
+        <button class="toggle-ans" id="resetTopicBtn" style="margin-top:0;">↺ Xóa chủ đề này</button>
+      </div>
+      <div id="qlist">${qHtml}</div>
+    </div>
+  `;
+}
+
+function attachDetailEvents(t){
+  document.getElementById('backBtn').onclick = closeTopic;
+  document.getElementById('resetTopicBtn').onclick = ()=>{
+    if(confirm('Xóa tiến độ đã làm của chủ đề "'+t.title+'"?')){
+      progress[t.id] = {};
+      saveProgress(progress);
+      openTopic(t.id);
+    }
+  };
+  const p = progress[t.id] || {};
+
+  function refreshBar(){
+    const done = Object.values(progress[t.id]||{}).filter(Boolean).length;
+    const pct = Math.round(done/t.questions.length*100);
+    document.getElementById('pbarFill').style.width = pct+'%';
+    document.getElementById('pbarLabel').textContent = done+'/'+t.questions.length;
+  }
+
+  document.querySelectorAll('.qcard').forEach(card=>{
+    const idx = card.dataset.idx;
+    const correctAnswer = card.dataset.answer;
+    const chk = card.querySelector('.chk');
+    const toggle = card.querySelector('.toggle-ans');
+    const ansBox = card.querySelector('.ans-box');
+    const input = card.querySelector('.ans-input');
+    const gradeBtn = card.querySelector('.btn-check');
+    const feedback = card.querySelector('.feedback');
+
+    function markDone(val){
+      progress[t.id] = progress[t.id] || {};
+      progress[t.id][idx] = val;
+      chk.classList.toggle('on', val);
+      card.classList.toggle('done', val);
+      saveProgress(progress);
+      refreshBar();
+    }
+
+    if(p[idx]){ chk.classList.add('on'); card.classList.add('done'); }
+
+    chk.onclick = ()=>{ markDone(!progress[t.id]?.[idx]); };
+
+    function doGrade(){
+      const val = input.value.trim();
+      if(!val){ input.focus(); return; }
+      const ok = isCorrect(val, correctAnswer);
+      feedback.classList.add('show');
+      feedback.classList.toggle('correct', ok);
+      feedback.classList.toggle('wrong', !ok);
+      feedback.textContent = ok ? '✓ Chính xác! Làm tốt lắm.' : '✗ Chưa đúng — bấm "Xem đáp án" để kiểm tra lại cách làm.';
+      if(ok) markDone(true);
+    }
+    gradeBtn.onclick = doGrade;
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); doGrade(); } });
+
+    toggle.onclick = ()=>{
+      ansBox.classList.toggle('show');
+      toggle.classList.toggle('shown');
+      toggle.textContent = ansBox.classList.contains('show') ? 'Ẩn đáp án' : 'Xem đáp án & giải thích';
+    };
+  });
+  refreshBar();
+}
+
+document.getElementById('resetBtn').onclick = ()=>{
+  if(confirm('Xóa toàn bộ tiến độ đã làm của tất cả chủ đề? Hành động này không thể hoàn tác.')){
+    progress = {};
+    saveProgress(progress);
+    renderGrid();
+    if(document.getElementById('detailView').style.display==='block'){
+      closeTopic();
+    }
+  }
+};
+
+/* ===================== FULLSCREEN ===================== */
+const fsBtn = document.getElementById('fsBtn');
+if(!document.documentElement.requestFullscreen && !document.documentElement.webkitRequestFullscreen){
+  fsBtn.style.display = 'none';
+}
+fsBtn.onclick = ()=>{
+  const el = document.documentElement;
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
+    if(el.requestFullscreen) el.requestFullscreen();
+    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }else{
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+};
+document.addEventListener('fullscreenchange', updateFsLabel);
+document.addEventListener('webkitfullscreenchange', updateFsLabel);
+function updateFsLabel(){
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  fsBtn.textContent = isFs ? '⤡ Thoát toàn màn hình' : '⤢ Toàn màn hình';
+}
+
+renderGrid();
+</script>
+</body>
+</html>
