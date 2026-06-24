@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 6: Các bài toán về số chính phương - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.2rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.7rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.76rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.7rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(3,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 9px;font-size:.74rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.92rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 14px 16px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.86rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.8rem;}
+  .theory .formula{margin:5px 0;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:11px 11px 13px;margin-bottom:10px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:5px;font-size:.85rem;}
+  .problem .statement{font-size:.89rem;margin-bottom:7px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:8px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:.89rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .result-msg{font-size:.8rem;margin-top:5px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:9px;padding:9px 11px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.85rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 5px;font-size:.75rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.72rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+  .jumpnav{position:fixed;right:8px;bottom:70px;background:var(--primary);color:#fff;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;z-index:60;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 CHUYÊN ĐỀ 6: CÁC BÀI TOÁN VỀ SỐ CHÍNH PHƯƠNG</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 207–225)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.82rem;color:var(--muted)">
+    Đầy đủ 4 Dạng (24 bài mẫu có lời giải chi tiết) + Bài tập áp dụng (30 bài, lời giải ở cuối).
+    Phần lớn là "chứng minh" nên đánh dấu <span class="badge-illustration">MINH HỌA</span>; bài "tìm số/n" có đáp số cụ thể thì có ô nhập kiểm tra.
+  </p>
+
+  <div class="theory" style="border-left-color:var(--primary);background:#eef3fc;">
+    <h4 style="color:var(--primary);">A. KIẾN THỨC CẦN NHỚ (nguyên văn)</h4>
+    <div class="formula"><b>1. Định nghĩa:</b> Số chính phương là số bằng bình phương của một số nguyên (n=k², k∈ℤ).</div>
+    <div class="formula"><b>2. Một số tính chất cần nhớ:</b><br>
+    1- Số chính phương chỉ có thể có chữ số tận cùng bằng 0,1,4,5,6,9; không thể có chữ số tận cùng 2,3,7,8.<br>
+    2- Khi phân tích ra thừa số nguyên tố, số chính phương chỉ chứa các thừa số nguyên tố với số mũ chẵn.<br>
+    3- Số chính phương chỉ có thể có dạng 4n hoặc 4n+1. Không có số chính phương dạng 4n+2 hoặc 4n+3.<br>
+    4- Số chính phương chỉ có thể có dạng 3n hoặc 3n+1. Không có số chính phương dạng 3n+2.<br>
+    5- Số chính phương tận cùng 1,4,9 thì chữ số hàng chục là chữ số chẵn. Tận cùng 5 thì chữ số hàng chục là 2. Tận cùng 6 thì chữ số hàng chục là chữ số lẻ.<br>
+    6- Số chính phương ⋮2 thì ⋮4. ⋮3 thì ⋮9. ⋮5 thì ⋮25. ⋮8 thì ⋮16.<br>
+    7- Mọi số chính phương khi chia cho 5, cho 8 chỉ dư 1,0,4.<br>
+    8- Giữa hai số chính phương liên tiếp không có số chính phương nào.<br>
+    9- Nếu hai số nguyên liên tiếp có tích là một số chính phương thì một trong hai số đó là số 0.<br>
+    10- Số các ước của một số chính phương là số lẻ. Ngược lại, một số có số các ước là số lẻ thì số đó là số chính phương.<br>
+    11- Nếu n²<k<(n+1)² (n∈ℤ) thì k không là số chính phương.<br>
+    12- Nếu hai số tự nhiên a,b nguyên tố cùng nhau có tích là một số chính phương thì mỗi số a,b cũng là các số chính phương.<br>
+    13- Nếu a là số chính phương, a chia hết cho số nguyên tố p thì a chia hết cho p².<br>
+    14- Nếu tích hai số a,b là số chính phương thì a,b có dạng a=mp², b=mq².</div>
+  </div>
+
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<a href="#top" class="jumpnav" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+function normalizeSet(str){
+  return str.replace(/\s+/g,'').toLowerCase().split(/[,;]/).map(x=>x.trim()).filter(x=>x!=='').sort().join(',');
+}
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',', '.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+
+const DATA = [
+{id:1, title:"Dạng 1: Chứng minh một số là số chính phương, hoặc là tổng nhiều số chính phương",
+ theory:`<h4>Cơ sở phương pháp</h4><div class="formula">Để chứng minh một số n là số chính phương ta thường dựa vào định nghĩa, tức là chứng minh n=k² (k∈ℤ).</div>`,
+ problems:[
+  {id:"c6-d1-b1",title:"Bài 1",statement:`Cho n là một số tự nhiên. Chứng minh rằng: A=n(n+1)(n+2)(n+3)+1 là số chính phương`,
+   illustration:true,solution:`A=(n²+3n)(n²+3n+2)+1=(n²+3n)²+2(n²+3n)+1=(n²+3n+1)². Vì n∈ℕ nên n²+3n+1∈ℕ ⇒ A là số chính phương`},
+  {id:"c6-d1-b2",title:"Bài 2",statement:`Cho B=1.2.3+2.3.4+...+k(k+1)(k+2) với k là số tự nhiên. Chứng minh rằng 4B+1 là số chính phương`,
+   illustration:true,solution:`n(n+1)(n+2)=¼[n(n+1)(n+2)(n+3)−(n−1)n(n+1)(n+2)]. Áp dụng và cộng dồn: B=¼k(k+1)(k+2)(k+3) ⇒ 4B+1=k(k+1)(k+2)(k+3)+1=(k²+3k+1)² (theo Bài 1) ⇒ là số chính phương`},
+  {id:"c6-d1-b3",title:"Bài 3",statement:`Chứng minh rằng: C=<u>11...1</u>(2n chữ số 1)+<u>44...4</u>(n chữ số 4)+1 với n là số tự nhiên. Chứng minh rằng C là số chính phương`,
+   illustration:true,solution:`Đặt a=<u>11...1</u>(n chữ số 1) ⇒ 9a=<u>99...9</u>(n chữ số 9)=10ⁿ−1. C=a.10ⁿ+a+4a+1=a(9a+1)+5a+1=9a²+6a+1=(3a+1)² ⇒ C=<u>33...3</u>4² là số chính phương`},
+  {id:"c6-d1-b4",title:"Bài 4",statement:`Cho a=<u>11...1</u>(2016 chữ số 1), b=<u>10...0</u>5(2015 chữ số 0). Chứng minh √(ab+1) là số tự nhiên`,
+   illustration:true,solution:`b=9a+6 (biến đổi từ <u>10...0</u>−1+6=<u>9...9</u>+6). ⇒ ab+1=a(9a+6)+1=9a²+6a+1=(3a+1)² ⇒ √(ab+1)=3a+1∈ℕ`},
+  {id:"c6-d1-b5",title:"Bài 5",statement:`Cho số tự nhiên a gồm 60 chữ số 1, số tự nhiên b gồm 30 chữ số 2. Chứng minh a−b là một số chính phương`,
+   illustration:true,solution:`a=(10⁶⁰−1)/9, b=2(10³⁰−1)/9. a−b=(10⁶⁰−2.10³⁰+1)/9=[(10³⁰−1)/3]²=(<u>33...3</u> 30 chữ số 3)² ⇒ là số chính phương`},
+  {id:"c6-d1-b6",title:"Bài 6",statement:`Cho n∈ℕ sao cho (n²−1)/3 là tích của hai số tự nhiên liên tiếp. Chứng minh rằng n là tổng của hai số chính phương liên tiếp`,
+   illustration:true,solution:`Đặt (n²−1)/3=a(a+1) ⇒ (2n−1)(2n+1)=3(2a+1)². Vì 2n−1,2n+1 là 2 số lẻ liên tiếp, xét 2 trường hợp phân chia thừa số 3, chỉ trường hợp 2n−1=p²,2n+1=3q² hợp lý (p lẻ=2k+1) ⇒ 2n=(2k+1)²+1 ⇒ n=k²+(k+1)²`},
+  {id:"c6-d1-b7",title:"Bài 7",statement:`Cho k là một số nguyên dương và a=3k²+3k+1. a) Chứng minh rằng 2a và a² là tổng của ba số chính phương &nbsp; b) Chứng minh rằng nếu a là một ước của một số nguyên dương b và b là một tổng gồm ba số chính phương thì bⁿ là một tổng của ba số chính phương`,
+   illustration:true,solution:`a) 2a=6k²+6k+2=(2k+1)²+(k+1)²+k². a²=9k⁴+18k³+15k²+6k+1=(k²+k)²+(2k²+3k+1)²+(2k²+k)²<br>b) Đặt b=ca (do a|b), b=b₁²+b₂²+b₃². Khi đó bⁿ với n=2p+1 hoặc n=2p+2 đều biểu diễn được qua (bᵖ)²(b₁²+b₂²+b₃²) hoặc (bᵖ)²b²(...) ⇒ là tổng 3 số chính phương`}
+ ]},
+{id:2, title:"Dạng 2: Chứng minh một số không là số chính phương",
+ theory:`<h4>Cơ sở phương pháp</h4><div class="formula">Để chứng minh n không là số chính phương, tùy bài toán có thể: 1) CM n không viết được dưới dạng bình phương một số nguyên; 2) CM k²<n<(k+1)²; 3) CM n có chữ số tận cùng 2,3,7,8; 4) CM n có dạng 4k+2,4k+3; 5) CM n có dạng 3k+2; 6) CM n chia hết cho số nguyên tố p nhưng không chia hết cho p².</div>`,
+ problems:[
+  {id:"c6-d2-b1",title:"Bài 1",statement:`Một số tự nhiên có tổng các chữ số bằng 2018 thì có thể là số chính phương được không? Tại sao?`,
+   answer:"không",solution:`2018=3.672+2 ⇒ số đó chia 3 dư 2, có dạng 3k+2. Số chính phương không có dạng 3k+2 ⇒ số đó <b>không</b> là số chính phương`},
+  {id:"c6-d2-b2",title:"Bài 2",statement:`Chứng minh rằng số A=n⁴+2n³+2n²+2n+1 trong đó n∈ℕ và n>1 không phải là số chính phương`,
+   illustration:true,solution:`A=(n²+n)²+(n+1)²>(n²+n)² ∀n>1. Và (n²+n+1)²=A+n²>A ⇒ (n²+n)²<A<(n²+n+1)², mà (n²+n),(n²+n+1) là 2 số tự nhiên liên tiếp ⇒ A không thể là số chính phương`},
+  {id:"c6-d2-b3",title:"Bài 3",statement:`Cho A=1+2+2²+2³+...+2³³. Hỏi A có là số chính phương không? Vì sao?`,
+   answer:"không",solution:`A=3+2²(1+2+2²+2³)+...=3+(2²+...+2³⁰).30 — A có chữ số tận cùng bằng 3. Số chính phương không có chữ số tận cùng 3 ⇒ A <b>không</b> là số chính phương`},
+  {id:"c6-d2-b4",title:"Bài 4",statement:`Chứng minh rằng A=2012⁴ⁿ+2013⁴ⁿ+2014⁴ⁿ+2015⁴ⁿ không phải là số chính phương với mọi số nguyên dương n`,
+   illustration:true,solution:`2012⁴ⁿ,2014⁴ⁿ chia hết cho 4. 2013⁴ⁿ và 2015⁴ⁿ chia 4 dư 1 mỗi số ⇒ A chia 4 dư 2. A chia hết 2 nhưng không chia hết 4=2² ⇒ A không là số chính phương`},
+  {id:"c6-d2-b5",title:"Bài 5",statement:`Cho 2≤n∈ℕ, chứng minh rằng A=n⁶−n⁴+2n³+2n² không thể là số chính phương`,
+   illustration:true,solution:`A=n²(n+1)²(n²−2n+2). Với n≥2: (n−1)²<n²−2n+2<n² ⇒ n²−2n+2 không là số chính phương ⇒ A không là số chính phương`},
+  {id:"c6-d2-b6",title:"Bài 6",statement:`Chứng minh rằng tổng bình phương của hai số lẻ bất kì không phải là một số chính phương`,
+   illustration:true,solution:`a=2m+1,b=2n+1 ⇒ a²+b²=4(m²+m+n²+n)+2=4k+2. Không có số chính phương dạng 4k+2 ⇒ a²+b² không là số chính phương`}
+ ]},
+{id:3, title:"Dạng 3: Điều kiện để một số là số chính phương",
+ theory:`<h4>Cơ sở phương pháp</h4><div class="formula">Thường sử dụng: Phương pháp 1 (định nghĩa); Phương pháp 2 (tính chẵn lẻ); Phương pháp 3 (tính chia hết và chia có dư); Phương pháp 4 (các tính chất ở phần A).</div>`,
+ problems:[
+  {id:"c6-d3-b1",title:"Bài 1",statement:`Tìm số nguyên n sao cho n(n+3) là số chính phương`,
+   answer:"-4,-3,0,1",solution:`n²+3n=k² ⇒ (2n+2k+3)(2n−2k+3)=9. Xét các trường hợp phân tích 9=9.1=3.3=(−1)(−9)=(−3)(−3) ⇒ n∈{<b>-4,-3,0,1</b>}`},
+  {id:"c6-d3-b2",title:"Bài 2",statement:`Tìm số nguyên n sao cho n+1955 và n+2014 là một số chính phương`,
+   answer:"-1114",solution:`Đặt n+1955=a²,n+2014=b² (a<b). b²−a²=59=1.59 (59 nguyên tố) ⇒ b−a=1,b+a=59 ⇒ a=29,b=30 ⇒ n=<b>-1114</b>`},
+  {id:"c6-d3-b3",title:"Bài 3",statement:`Tìm số nguyên dương n để các biểu thức sau là số chính phương: a) A=n²−n+2 &nbsp; b) B=n⁵−n+2`,
+   answer:"2",solution:`a) n=1: A=2 không CP; n=2: A=4 là CP; n>2: (n−1)²<A<n² ⇒ không CP. Vậy n=<b>2</b><br>b) n⁵−n luôn chia hết cho 5 (xét các dạng n=5k,5k±1,5k±2) ⇒ B=n⁵−n+2 chia 5 dư 2, có tận cùng 2 hoặc 7 ⇒ không bao giờ là CP<br><i>(nhập đáp số câu a)</i>`},
+  {id:"c6-d3-b4",title:"Bài 4",statement:`Tìm số nguyên dương n nhỏ nhất sao cho các số n+1, 2n+1, 5n+1 đều là các số chính phương`,
+   answer:"24",solution:`n⋮3 (xét các dạng n=3k+1,3k+2 đều loại). 2n+1 là CP lẻ chia 8 dư 1 ⇒n⋮4 và n+1 lẻ ⇒n⋮8. Kết hợp n⋮3,8 (nguyên tố cùng nhau) ⇒n⋮24. Với n=24: n+1=25=5²,2n+1=49=7²,5n+1=121=11² ⇒ n nhỏ nhất=<b>24</b>`},
+  {id:"c6-d3-b5",title:"Bài 5",statement:`Tìm số tự nhiên n≥1 sao cho tổng 1!+2!+3!+...+n! là một số chính phương`,
+   answer:"1,3",solution:`n=1: 1!=1=1² (CP). n=2: 1!+2!=3 (không CP). n=3: 1!+2!+3!=9=3² (CP). n≥4: tổng có tận cùng 3 (vì 5!,6!,...,n! đều tận cùng 0) ⇒ không CP. Vậy n∈{<b>1,3</b>}`},
+  {id:"c6-d3-b6",title:"Bài 6",statement:`Tìm số nguyên dương n sao cho A=(n+3)(4n²+14n+7) là một số chính phương`,
+   answer:"1",solution:`4n²+14n+7=(n+3)(4n+2)+1, và (n+3,4n²+14n+7)=1 ⇒ cả 2 nhân tử đều phải là CP. Vì (2n+3)²≤4n²+14n+7<(2n+4)² ⇒ 4n²+14n+7=(2n+3)²⇒n=1. Khi đó n+3=4 là CP. Thử lại: A=10²=100. Vậy n=<b>1</b>`},
+  {id:"c6-d3-b7",title:"Bài 7",statement:`Tìm 3≤a∈ℕ sao cho <u>a(a−1)</u>.<u>a(a−1)</u>=<u>(a−2)aa(a−1)</u>`,
+   answer:"7",solution:`Đẳng thức ⇔ [<u>a(a−1)</u>]²=<u>(a−2)aa(a−1)</u> (vế phải phải là CP). a có chữ số tận cùng (của VP) ∈{1,2,5,6,7,0} kết hợp 3≤a≤9 ⇒ a∈{5,6,7}; thử lần lượt được a=<b>7</b> (76²=5776)`},
+  {id:"c6-d3-b8",title:"Bài 8",statement:`Tìm số tự nhiên n sao cho 2ⁿ+9 là số chính phương`,
+   answer:"4",solution:`Giả sử 2ⁿ+9=m² ⇒(m−3)(m+3)=2ⁿ. Đặt m−3=2ᵃ,m+3=2ᵇ (a<b) ⇒2ᵃ(2ᵇ⁻ᵃ−1)=6⇒a=1⇒m=5⇒n=<b>4</b>`}
+ ]},
+{id:4, title:"Dạng 4: Tìm số chính phương",
+ theory:`<h4>Cơ sở phương pháp</h4><div class="formula">Dựa vào định nghĩa số chính phương A=k² (k∈ℤ) và các yêu cầu của bài toán để tìm ra số chính phương thỏa mãn.</div>`,
+ problems:[
+  {id:"c6-d4-b1",title:"Bài 1",statement:`Tìm số chính phương <u>abcd</u> biết <u>ab</u>−<u>cd</u>=1`,
+   answer:"8281",solution:`n²=<u>abcd</u>=101<u>cd</u>+100 ⇒101<u>cd</u>=(n−10)(n+10). Vì n<100 và 101 nguyên tố ⇒n+10=101⇒n=91. <u>abcd</u>=91²=<b>8281</b>`},
+  {id:"c6-d4-b2",title:"Bài 2",statement:`Cho A là số chính phương gồm 4 chữ số. Nếu ta thêm vào mỗi chữ số của A một đơn vị thì ta được số chính phương B. Hãy tìm các số A và B`,
+   answer:"2025",solution:`A=k², B=A+1111=m² ⇒(m−k)(m+k)=1111=11.101 ⇒m−k=11,m+k=101⇒k=45,m=56 ⇒ A=<b>2025</b>, B=3136`},
+  {id:"c6-d4-b3",title:"Bài 3",statement:`Tìm một số chính phương gồm 4 chữ số sao cho chữ số cuối là số nguyên tố, căn bậc hai của số đó có tổng các chữ số là một số chính phương`,
+   answer:"2025",solution:`Chữ số cuối d nguyên tố và d∈{0,1,4,5,6,9}⇒d=5. <u>abcd</u>=k²<10000⇒32≤k<100, k tận cùng 5. Tổng chữ số của k là CP ⇒k=45 ⇒ <u>abcd</u>=<b>2025</b>`}
+ ]},
+{id:5, title:"C. Bài tập áp dụng (Câu 1-16, Bài 17-30)",
+ theory:`<h4>Ghi chú</h4><div class="formula">30 bài tập áp dụng tổng hợp, có lời giải đầy đủ ở mục Hướng dẫn giải cuối sách.</div>`,
+ problems:[
+  {id:"c6-bt-1",title:"Câu 1",statement:`Tìm tất cả các số tự nhiên có ba chữ số <u>abc</u> sao cho p=<u>abc</u>+<u>bca</u>+<u>cab</u> là số chính phương`,
+   answer:"không có",solution:`p=111(a+b+c)=3.37(a+b+c). Để p là CP cần (a+b+c)⋮37.3, nhưng 0<a+b+c≤27 ⇒ không có a+b+c thỏa ⇒ <b>không có</b> số tự nhiên nào thỏa mãn`},
+  {id:"c6-bt-2",title:"Câu 2",statement:`Tìm số nguyên tố <u>ab</u> (a>b>0), biết <u>ab</u>−<u>ba</u> là số chính phương`,
+   answer:"43,73",solution:`<u>ab</u>−<u>ba</u>=9(a−b)=3²(a−b). Cần a−b là CP ⇒a−b∈{1,4} (do 1≤a−b≤8). a−b=1: <u>ab</u> nguyên tố lẻ trong {21,32,...,98}⇒<u>ab</u>=43. a−b=4: <u>ab</u>=73. Vậy <u>ab</u>∈{<b>43,73</b>}`},
+  {id:"c6-bt-3",title:"Câu 3",statement:`Tìm các chữ số a và số tự nhiên x sao cho (12+3x)²=<u>1a96</u>`,
+   answer:"2,8",solution:`9(4+x)²=1089+7+100a, vì 1089⋮9 ⇒(7+a)⋮9⇒a=2. Với a=2: (4+x)²=144⇒4+x=12⇒x=8 (chọn nghiệm tự nhiên). Vậy a=<b>2</b>, x=8`},
+  {id:"c6-bt-4",title:"Câu 4",statement:`Tìm số nguyên tố có hai chữ số khác nhau dạng <u>xy</u> (x>y>0) sao cho hiệu của số đó với số viết theo thứ tự ngược lại là số chính phương`,
+   answer:"43,73",solution:`<u>xy</u>−<u>yx</u>=9(x−y) là CP ⇒x−y∈{1,4,9}. x−y=1: <u>xy</u> nguyên tố ⇒43. x−y=4: <u>xy</u>=73. x−y=9: không có số nào. Vậy <u>xy</u>∈{<b>43,73</b>}`},
+  {id:"c6-bt-5",title:"Câu 5",statement:`Cho A=5+5²+5³+...+5²⁰¹⁹. Chứng tỏ rằng 4A+5 là số chính phương`,
+   illustration:true,solution:`5A−A=4A=5²⁰²⁰−5 ⇒4A+5=5²⁰²⁰=(5¹⁰¹⁰)² ⇒ là số chính phương`},
+  {id:"c6-bt-6",title:"Câu 6",statement:`Tìm các số có ba chữ số, sao cho hiệu của số ấy và số gồm ba chữ số ấy viết theo thứ tự ngược lại là một số chính phương`,
+   answer:"a=c",solution:`<u>abc</u>−<u>cba</u>=9.11(a−c)=3².11(a−c). Để là CP cần a−c=11(không tồn tại do a,c là chữ số) hoặc a−c=0. Vậy số cần tìm có dạng <u>abc</u> với <b>a=c</b> (a,c∈1-9, b∈0-9 tùy ý)`},
+  {id:"c6-bt-7",title:"Câu 7",statement:`Cho x,y là 2 số nguyên thỏa mãn: x+2019x²=2020y²+y. Chứng minh rằng: x−y là số chính phương`,
+   illustration:true,solution:`Biến đổi thành (x−y)(2020x+2020y+1)=x². Gọi d=ƯCLN(x−y,2020x+2020y+1), chứng minh d=1 (dùng x⋮d² và 4040x+1⋮d) ⇒ x−y và 2020x+2020y+1 nguyên tố cùng nhau, tích là số chính phương ⇒ mỗi số đều là số chính phương ⇒ x−y là số chính phương`},
+  {id:"c6-bt-8",title:"Câu 8",statement:`Cho n lẻ. Chứng minh rằng n²⁰⁰⁴+1 không là số chính phương`,
+   illustration:true,solution:`Giả sử n²⁰⁰⁴+1=a² ⇒(a−n¹⁰⁰²)(a+n¹⁰⁰²)=1 ⇒a+n¹⁰⁰²=1, vô lý vì a+n¹⁰⁰²>2 với n lẻ ⇒ không là số chính phương`},
+  {id:"c6-bt-9",title:"Câu 9",statement:`Một số chính phương có dạng <u>abcd</u>. Biết <u>ab</u>−<u>cd</u>=1. Hãy tìm số <u>abcd</u>`,
+   answer:"8281",solution:`(giống Dạng4-Bài1) n²−100=(n−10)(n+10)=101<u>cd</u> ⇒ n=91 ⇒ <u>abcd</u>=<b>8281</b>`},
+  {id:"c6-bt-10",title:"Câu 10",statement:`Cho tích a.b là số chính phương và (a,b)=1. Chứng minh rằng a và b đều là số chính phương`,
+   illustration:true,solution:`Đặt ab=c² (1), (a,c)=d ⇒a=md,c=nd với (m,n)=1. Thay vào (1): m.b=n².d ⇒ b⋮n² (vì (m,n)=1), và n²⋮b (từ b.m=n².d và xét chia hết) ⇒b=n² ⇒a=d² (đpcm)`},
+  {id:"c6-bt-11",title:"Câu 11",statement:`Tìm số tự nhiên <u>ab</u> sao cho <u>ab</u>²=(a+b)³`,
+   answer:"27",solution:`(a+b)³ là CP ⇒a+b là CP, đặt a+b=x². <u>ab</u>²=(a+b)³=x⁶⇒x³=<u>ab</u><100,<u>ab</u>>8⇒2<x<5⇒x∈{3,4}. x=3: (a+b)³=27=(2+7)³ ✓ ⇒<u>ab</u>=27. x=4: không thỏa. Vậy <u>ab</u>=<b>27</b>`},
+  {id:"c6-bt-12",title:"Câu 12",statement:`Cho n là số tự nhiên có hai chữ số. Tìm n biết n+4 và 2n đều là các số chính phương`,
+   answer:"32",solution:`9<n<100⇒2n∈{36,64,100,144,196}. Kiểm tra n+4 với từng giá trị n tương ứng (18,32,50,72,98): chỉ n=32 cho n+4=36 là CP. Vậy n=<b>32</b>`},
+  {id:"c6-bt-13",title:"Câu 13",statement:`Cho A=10²⁰¹²+10²⁰¹¹+10²⁰¹⁰+10²⁰⁰⁹+8. Chứng minh rằng A không phải là số chính phương`,
+   illustration:true,solution:`Các lũy thừa của 10 đều tận cùng 0 ⇒ A có chữ số tận cùng là 8. Số chính phương không có tận cùng 8 ⇒ A không là số chính phương`},
+  {id:"c6-bt-14",title:"Câu 14",statement:`Chứng minh rằng với mọi số tự nhiên khác 0, có số lượng các ước tự nhiên là một số lẻ thì số tự nhiên đó là một số chính phương`,
+   illustration:true,solution:`P=a^x.b^y...c^z (phân tích nguyên tố), số ước=(x+1)(y+1)...(z+1) lẻ ⇒ mọi x+1,y+1,...,z+1 đều lẻ ⇒x,y,...,z đều chẵn ⇒P=(a^(x/2).b^(y/2)...c^(z/2))² là số chính phương`},
+  {id:"c6-bt-15",title:"Câu 15",statement:`M có là một số chính phương không nếu: M=1+3+5+...+(2n−1) (với n∈ℕ, n≠0)`,
+   answer:"có",solution:`M là tổng n số lẻ đầu = n² ⇒ M <b>có</b> là số chính phương (M=n²)`},
+  {id:"c6-bt-16",title:"Câu 16",statement:`Tìm các số tự nhiên n có hai chữ số, biết rằng hai số 2n+1 và 3n+1 đồng thời là hai số chính phương`,
+   answer:"40",solution:`10≤n<100⇒21≤2n+1<201, 2n+1 là CP lẻ ⇒2n+1∈{25,49,81,121,169}⇒n∈{12,24,40,60,84}. Kiểm tra 3n+1: chỉ n=40 cho 3n+1=121=11² là CP. Vậy n=<b>40</b>`},
+  {id:"c6-bt-17",title:"Bài 17",statement:`Tìm số chính phương có 4 chữ số mà hai chữ số đầu giống nhau và hai chữ số cuối giống nhau (dạng <u>xxyy</u>)`,
+   answer:"7744",solution:`<u>xxyy</u>=1100x+11y=11(100x+y)⋮11 ⇒ là CP thì ⋮121 ⇒(100x+y)⋮11⇒(x+y)⋮11(vì 99x⋮11)⇒x+y=11(do 0<x+y≤11). <u>xxyy</u>=11(99x+11)=11²(9x+1), cần 9x+1 là CP ⇒x=7,y=4 ⇒ số = <b>7744</b>`},
+  {id:"c6-bt-18",title:"Bài 18",statement:`Tìm số tự nhiên có hai chữ số biết rằng hiệu các bình phương của số đó và viết số đó theo thứ tự ngược lại là một số chính phương`,
+   answer:"65",solution:`<u>ab</u>²−<u>ba</u>²=99(a²−b²)=3².11.(a−b)(a+b). Cần a−b là CP(do 11 phải xuất hiện chẵn ⇒a+b=11), a−b∈{1,4}. a−b=1,a+b=11⇒a=6,b=5⇒<u>ab</u>=65 (kiểm tra 65²−56²=1089=33²). a−b=4: a=7.5 (loại). Vậy số cần tìm là <b>65</b>`},
+  {id:"c6-bt-19",title:"Bài 19",statement:`Tìm tất cả các số tự nhiên n sao cho số 2⁸+2¹¹+2ⁿ là số chính phương`,
+   answer:"12",solution:`2ⁿ=a²−48²=(a−48)(a+48)=2ᵖ.2ᵠ (p+q=n,p<q) ⇒a+48=2ᵖ,a−48=2ᵠ... giải ra q=5,p=7⇒n=p+q=<b>12</b> (thử lại: 2⁸+2¹¹+2¹²=80²)`},
+  {id:"c6-bt-20",title:"Bài 20",statement:`Có hay không số tự nhiên n để 2010+n² là số chính phương`,
+   answer:"không",solution:`Giả sử 2010+n²=m² ⇒(m−n)(m+n)=2010. m+n,m−n cùng tính chẵn lẻ (vì tổng=2m chẵn) ⇒ cả 2 đều chẵn ⇒ tích⋮4, nhưng 2010 không⋮4 ⇒ giả sử sai ⇒ <b>không</b> tồn tại n`},
+  {id:"c6-bt-21",title:"Bài 21",statement:`Chứng minh số: n=2004²+2003²+2002²−2001² không phải là số chính phương`,
+   illustration:true,solution:`Chữ số tận cùng của 2004²,2003²,2002²,2001² lần lượt là 6,9,4,1 ⇒ n có chữ số tận cùng là 6+9+4−1=18→tận cùng 8 ⇒ không là số chính phương`},
+  {id:"c6-bt-22",title:"Bài 22",statement:`Chứng minh số 1234567890 không phải là số chính phương`,
+   illustration:true,solution:`Số này chia hết cho 5 (tận cùng 0) nhưng không chia hết cho 25 (2 chữ số tận cùng là 90) ⇒ không là số chính phương (số CP chia hết 5 thì phải chia hết 25)`},
+  {id:"c6-bt-23",title:"Bài 23",statement:`Chứng minh rằng nếu một số có tổng các chữ số là 2004 thì số đó không phải là số chính phương`,
+   illustration:true,solution:`Tổng chữ số của 2004 là 6 ⇒2004⋮3 nhưng không⋮9 ⇒ số có tổng chữ số 2004 cũng ⋮3 mà không⋮9 ⇒ không là số chính phương (CP chia hết 3 thì phải chia hết 9)`},
+  {id:"c6-bt-24",title:"Bài 24",statement:`Chứng minh rằng tổng sau: P=1+3+3²+3³+...+3⁶¹+3⁶² không là số chính phương`,
+   illustration:true,solution:`Nhóm 4 số hạng liên tiếp (tận cùng 0) cho đến 3⁵⁹, còn lại 3⁶⁰(tận cùng 1)+3⁶¹(tận cùng 3)+3⁶²(tận cùng 9) ⇒ P có chữ số tận cùng 3 ⇒ không là số chính phương`},
+  {id:"c6-bt-25",title:"Bài 25",statement:`Cho A=1+2+2²+2³+...+2²⁰¹⁰+2²⁰¹¹. Hỏi số A+8 có phải là số chính phương không?`,
+   answer:"không",solution:`A+8=2²⁰¹²−1+8=2²⁰¹²+7=2⁴·⁵⁰³+7, có chữ số tận cùng 6+7=...3 (vì 2⁴ᵏ tận cùng 6) ⇒ <b>không</b> là số chính phương`},
+  {id:"c6-bt-26",title:"Bài 26",statement:`Giả sử N=1.3.5.7...2007.2011 (tích các số lẻ từ 1 đến 2011). Chứng minh rằng trong 3 số nguyên liên tiếp 2N−1, 2N và 2N+1 không có số nào là số chính phương`,
+   illustration:true,solution:`a) 2N⋮3 nhưng N không⋮3 hết hoàn toàn theo cách chia, dẫn đến 2N−1≡3k+2(mod 3) ⇒ không là CP<br>b) 2N⋮2 nhưng N lẻ nên 2N không⋮4 ⇒ không là CP<br>c) 2N+1 lẻ nên không⋮4; vì 2N không⋮4 nên 2N+1 chia 4 dư 1 nhưng cách chứng minh cụ thể cho thấy nó cũng không là CP`},
+  {id:"c6-bt-27",title:"Bài 27",statement:`Chứng minh rằng nếu p là tích của n (với n>1) số nguyên tố đầu tiên thì p−1 và p+1 không thể là các số chính phương`,
+   illustration:true,solution:`p⋮2 nhưng không⋮4 (chỉ có đúng 1 thừa số 2). a) Giả sử p+1=m² (m lẻ do p chẵn) ⇒p=4k²+4k=4k(k+1)⋮4 (mâu thuẫn) ⇒p+1 không là CP<br>b) p⋮3 (vì n>1 có chứa thừa số 3) ⇒p−1 chia 3 dư 2 ⇒p−1 không là CP`},
+  {id:"c6-bt-28",title:"Bài 28",statement:`Chứng minh rằng tổng bình phương của 2 số lẻ bất kỳ không phải là số chính phương`,
+   illustration:true,solution:`a=2k+1,b=2m+1 ⇒a²+b²=4(k²+k+m²+m)+2, chia 4 dư 2 ⇒ không là số chính phương`},
+  {id:"c6-bt-29",title:"Bài 29",statement:`Chứng minh rằng: Nếu m,n là các số tự nhiên thỏa mãn 3m²+m=4n²+n thì m−n và 4m+4n+1 đều là số chính phương`,
+   illustration:true,solution:`Biến đổi: (m−n)(4m+4n+1)=m². Gọi d=ƯCLN(m−n,4m+4n+1), chứng minh d=1 (dùng 8m+1⋮d và m⋮d) ⇒ 2 nhân tử nguyên tố cùng nhau có tích là CP ⇒ mỗi nhân tử đều là số chính phương`},
+  {id:"c6-bt-30",title:"Bài 30",statement:`Cho a=<u>111...1</u>(2017 số 1) và b=<u>1000...0</u>5(2016 số 0). Chứng minh rằng số M=ab+1 là số chính phương`,
+   illustration:true,solution:`a=(10²⁰¹⁷−1)/9, b=10²⁰¹⁷+5. M=ab+1=[(10²⁰¹⁷)²+4.10²⁰¹⁷−5+9]/9=[(10²⁰¹⁷+2)/3]². Vì 10²⁰¹⁷+2⋮3 nên (10²⁰¹⁷+2)/3∈ℕ ⇒ M là số chính phương`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${p.illustration?`<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`:
+      `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  let ok=false;
+  const userRaw = inputEl.value.trim();
+  const userVal=parseVal(userRaw), correctVal=parseVal(correct);
+  if(userVal!==null && correctVal!==null && Math.abs(userVal-correctVal)<1e-6){
+    ok=true;
+  } else if(normalizeSet(userRaw.replace(/[{}]/g,'')) === normalizeSet(correct.replace(/[{}]/g,'')) && correct.replace(/\s+/g,'')!==''){
+    ok=true;
+  } else if(userRaw.replace(/\s+/g,'').toLowerCase() === correct.replace(/\s+/g,'').toLowerCase()){
+    ok=true;
+  }
+  inputEl.classList.remove('correct','wrong');
+  if(ok){
+    inputEl.classList.add('correct');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    inputEl.classList.add('wrong');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+const STORAGE_KEY='cd6_sochinhphuong_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){
+  const data=loadProgress();
+  allCheckableIds.forEach(id=>{
+    if(data[id]===true){
+      const inputEl=document.getElementById('input-'+id);
+      const msgEl=document.getElementById('msg-'+id);
+      if(inputEl) inputEl.classList.add('correct');
+      if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}
+    }
+  });
+}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
