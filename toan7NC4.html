@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 4: Chứng minh chia hết - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.2rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.7rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.76rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.7rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(3,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 9px;font-size:.74rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.92rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 14px 16px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.86rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.8rem;}
+  .theory .formula{margin:5px 0;}
+  .subhead{background:#e0e7ff;color:#3730a3;font-weight:700;padding:7px 11px;border-radius:8px;margin:14px 0 8px;font-size:.84rem;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:11px 11px 13px;margin-bottom:10px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:5px;font-size:.85rem;}
+  .problem .statement{font-size:.89rem;margin-bottom:7px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .badge-nosol{display:inline-block;background:#fef3c7;color:#92400e;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:8px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:.89rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .result-msg{font-size:.8rem;margin-top:5px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:9px;padding:9px 11px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.85rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 5px;font-size:.75rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.72rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+  .jumpnav{position:fixed;right:8px;bottom:70px;background:var(--primary);color:#fff;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;z-index:60;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📕 CHUYÊN ĐỀ 4: CÁC DẠNG TOÁN VÀ PHƯƠNG PHÁP CHỨNG MINH CHIA HẾT</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi — 3 Dạng lớn, ~150 bài</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 133–178)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.82rem;color:var(--muted)">
+    Phần lớn bài trong chuyên đề này là dạng "<b>Chứng minh rằng...</b>" (không có một đáp số cụ thể để nhập) —
+    các bài này đánh dấu <span class="badge-illustration">MINH HỌA</span>, bấm để xem cách chứng minh.
+    Các bài dạng "<b>Tìm số/chữ số...</b>" có đáp số cụ thể thì có ô nhập để kiểm tra.
+    Vài bài trong sách chỉ là đề tham khảo thêm <span class="badge-nosol">KHÔNG CÓ LỜI GIẢI TRONG SÁCH</span> — em chỉ liệt kê đề, không tự chế lời giải.
+  </p>
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<a href="#top" class="jumpnav" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+function normalizeSet(str){
+  return str.replace(/\s+/g,'').toLowerCase().split(/[,;]/).map(x=>x.trim()).filter(x=>x!=='').sort().join(',');
+}
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',', '.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+
+const DATA = [
+{id:1, title:"Dạng 1: Chứng minh chia hết",
+ theory:`<h4>A. LÝ THUYẾT CẦN NHỚ (nguyên văn)</h4>
+ <div class="formula"><b>Định nghĩa:</b> Cho hai số tự nhiên a và b, trong đó b≠0. Ta nói a chia hết cho b nếu tồn tại số tự nhiên q sao cho a=bq. Khi đó ta còn nói: a là bội của b, hoặc b là ước của a.</div>
+ <div class="formula"><b>Các tính chất chung:</b><br>
+ 1) Bất cứ số nào khác 0 cũng chia hết cho chính nó<br>
+ 2) Tính chất bắc cầu: nếu a chia hết cho b và b chia hết cho c thì a chia hết cho c<br>
+ 3) Số 0 chia hết cho mọi số b khác 0<br>
+ 4) Bất cứ số nào cũng chia hết cho 1</div>
+ <div class="formula"><b>Tính chất chia hết của một tổng và hiệu:</b><br>
+ 5) Nếu a và b cùng chia hết cho m thì a+b chia hết cho m, a−b chia hết cho m.<br>
+ <i>Hệ quả:</i> Nếu tổng của hai số chia hết cho m và một trong hai số ấy chia hết cho m thì số còn lại cũng chia hết cho m.<br>
+ 6) Nếu một trong hai số a và b chia hết cho m, số kia không chia hết cho m thì a+b không chia hết cho m, a−b không chia hết cho m</div>
+ <div class="formula"><b>Tính chất chia hết của một tích:</b><br>
+ 7) Nếu một thừa số của tích chia hết cho m thì tích chia hết cho m<br>
+ 8) Nếu a chia hết cho m và b chia hết cho n thì ab chia hết cho m.n<br>
+ <i>Hệ quả:</i> Nếu a chia hết cho b thì aⁿ chia hết cho bⁿ</div>
+ <div class="formula"><b>Một số dấu hiệu chia hết</b> (đặt A=<u>aₙaₙ₋₁...a₂a₁a₀</u>):<br>
+ • A⋮2 ⇔ a₀∈{0,2,4,6,8} &nbsp; • A⋮3 ⇔ (a₀+a₁+...+aₙ)⋮3 &nbsp; • A⋮4 ⇔ <u>a₁a₀</u>⋮4 &nbsp; • A⋮5 ⇔ a₀∈{0,5}<br>
+ • A⋮8 ⇔ <u>a₂a₁a₀</u>⋮8 &nbsp; • A⋮9 ⇔ (a₀+a₁+...+aₙ)⋮9 &nbsp; • A⋮11 ⇔ [(a₀+a₂+...)−(a₁+a₃+...)]⋮11<br>
+ • A⋮25 ⇔ <u>a₁a₀</u>⋮25 &nbsp; • A⋮125 ⇔ <u>a₂a₁a₀</u>⋮125</div>`,
+ problems:[
+  {id:"d1-b1",title:"Bài 1",statement:`Chứng minh rằng: a) <u>ab</u>+<u>ba</u> ⋮ 11 &nbsp; b) <u>ab</u>−<u>ba</u> ⋮ 9 (a>b) &nbsp; c) <u>abcabc</u> ⋮ 7,11,13`,
+   illustration:true,solution:`a) <u>ab</u>+<u>ba</u>=11a+11b=11(a+b)⋮11<br>b) <u>ab</u>−<u>ba</u>=9a−9b=9(a−b)⋮9<br>c) <u>abcabc</u>=<u>abc</u>.1001=<u>abc</u>.7.11.13⋮7,11,13`},
+  {id:"d1-b2",title:"Bài 2",statement:`Chứng minh rằng: a) (n+10)(n+15)⋮2 &nbsp; b) n(n+1)(n+2)⋮2,3 &nbsp; c) n²+n+1 không ⋮4,2,5`,
+   illustration:true,solution:`a) Nếu n lẻ thì n+15⋮2; nếu n chẵn thì n+10⋮2 ⇒ luôn đúng<br>b) 3 số tự nhiên liên tiếp luôn có 1 số ⋮2 và 1 số ⋮3<br>c) n²+n+1=n(n+1)+1 là số lẻ nên không ⋮2,4; tận cùng khác 0,5 nên không ⋮5`},
+  {id:"d1-b3",title:"Bài 3",statement:`Chứng minh rằng: a) (n+3)(n+6)⋮2 &nbsp; b) n²+n+6 không ⋮5 &nbsp; c) <u>aaabbb</u>⋮37`,
+   illustration:true,solution:`a) Tương tự Bài2a<br>b) n²+n+6=n(n+1)+6, n(n+1) tận cùng 0,2,6 ⇒ tổng tận cùng 6,8,2, không ⋮5<br>c) <u>aaabbb</u>=a.111000+b.111=a.300.37+b.3.37⋮37`},
+  {id:"d1-b4",title:"Bài 4",statement:`Chứng minh rằng: a) <u>aaa</u>⋮a,37 &nbsp; b) ab(a+b)⋮2 &nbsp; c) <u>abc</u>−<u>cba</u>⋮99`,
+   illustration:true,solution:`a) <u>aaa</u>=a.111=a.3.37<br>b) Nếu a,b cùng tính chẵn lẻ thì a+b chẵn; nếu khác thì 1 trong a,b chẵn ⇒ ab chẵn<br>c) <u>abc</u>−<u>cba</u>=99a−99c=99(a−c)`},
+  {id:"d1-b5",title:"Bài 5",statement:`Chứng minh rằng: <u>ab</u>+8.<u>ba</u>⋮9`,
+   illustration:true,solution:`<u>ab</u>+8<u>ba</u>=10a+b+8(10b+a)=18a+18b=18(a+b)⋮9`},
+  {id:"d1-b6",title:"Bài 6",statement:`Cho a,b∈ℕ. Chứng minh rằng: (4a+b)⋮5 ⇔ (a+4b)⋮5`,
+   illustration:true,solution:`(4a+b)⋮5⇒4(4a+b)⋮5⇒(16a+4b)⋮5⇒15a+(a+4b)⋮5⇒(a+4b)⋮5 (đpcm)`},
+  {id:"d1-b7",title:"Bài 7",statement:`Chứng minh rằng số có dạng <u>abcabc</u> luôn chia hết cho 11`,
+   illustration:true,solution:`<u>abcabc</u>=<u>abc</u>.1001=<u>abc</u>.7.11.13 ⇒ chia hết cho 11`},
+  {id:"d1-b8",title:"Bài 8",statement:`Tìm n là số tự nhiên để: A=(n+5)(n+6)⋮6n`,
+   answer:"1,2,3,5,6,10,15,30",solution:`A=12n+n(n−1)+30. Để A⋮6n cần n(n−1)+30⋮6n ⇒ n∈Ư(30) và n(n−1)⋮6 ⇒ thử các giá trị: n∈{<b>1,2,3,5,6,10,15,30</b>}, kiểm tra thỏa mãn n∈{1,3,10,30}`},
+  {id:"d1-b9",title:"Bài 9",statement:`Chứng minh rằng: 3a+2b⋮17 khi và chỉ khi 10a+b⋮17 (a,b∈ℤ) và ngược lại có đúng không?`,
+   illustration:true,solution:`3a+2b⋮17⇒9(3a+2b)⋮17⇒27a+18b⋮17⇒(17a+17b)+(10a+b)⋮17⇒10a+b⋮17 (và ngược lại tương tự, đúng cả 2 chiều)`},
+  {id:"d1-b10",title:"Bài 10",statement:`Chứng minh rằng: a) Nếu <u>ab</u>+<u>cd</u>⋮11 thì <u>abcd</u>⋮11 &nbsp; b) Cho <u>abc</u>−<u>deg</u>⋮7, cmr <u>abcdeg</u>⋮7`,
+   illustration:true,solution:`a) <u>abcd</u>=100<u>ab</u>+<u>cd</u>=99<u>ab</u>+(<u>ab</u>+<u>cd</u>), cả 2 hạng tử ⋮11<br>b) <u>abcdeg</u>=1000<u>abc</u>+<u>deg</u>=1001<u>abc</u>−(<u>abc</u>−<u>deg</u>), 1001⋮7 và <u>abc</u>−<u>deg</u>⋮7`},
+  {id:"d1-b11",title:"Bài 11",statement:`Chứng minh rằng: a) Nếu <u>ab</u>=2<u>cd</u> với a,b,c,d≠0 thì <u>abcd</u>⋮67 &nbsp; b) Cho <u>abc</u>⋮27. Chứng minh <u>bca</u>⋮27`,
+   illustration:true,solution:`a) <u>abcd</u>=<u>ab</u>.100+<u>cd</u>=2<u>cd</u>.100+<u>cd</u>=<u>cd</u>.201=<u>cd</u>.67.3<br>b) <u>abc</u>⋮27⇒1000a+<u>bc0</u>⋮27 (nhân 10)⇒999a+a+<u>bc0</u>⋮27⇒27.37a+<u>bca</u>⋮27⇒<u>bca</u>⋮27`},
+  {id:"d1-b12",title:"Bài 12",statement:`Chứng minh rằng: a) <u>abcdeg</u>⋮23,29 nếu <u>abc</u>=2.<u>deg</u> &nbsp; b) Cmr nếu (<u>ab</u>+<u>cd</u>+<u>eg</u>)⋮11 thì <u>abcdeg</u>⋮11`,
+   illustration:true,solution:`a) <u>abcdeg</u>=1000<u>abc</u>+<u>deg</u>=2001<u>deg</u>=<u>deg</u>.23.29.3<br>b) <u>abcdeg</u>=10000<u>ab</u>+100<u>cd</u>+<u>eg</u>=9999<u>ab</u>+99<u>cd</u>+(<u>ab</u>+<u>cd</u>+<u>eg</u>)⋮11`},
+  {id:"d1-b13",title:"Bài 13",statement:`Chứng minh rằng: a) Cho <u>abc</u>+<u>deg</u>⋮37 cmr <u>abcdeg</u>⋮37 &nbsp; b) Nếu <u>abcd</u>⋮99 thì <u>ab</u>+<u>cd</u>⋮99`,
+   illustration:true,solution:`a) <u>abcdeg</u>=999<u>abc</u>+(<u>abc</u>+<u>deg</u>)⋮37<br>b) <u>abcd</u>=99<u>ab</u>+(<u>ab</u>+<u>cd</u>)⋮99 ⇒ <u>ab</u>+<u>cd</u>⋮9 (lưu ý: chỉ suy ra chia hết 9 không phải 99, theo sách)`},
+  {id:"d1-b14",title:"Bài 14",statement:`Chứng minh rằng: Nếu <u>abcd</u>⋮101 thì <u>ab</u>−<u>cd</u>⋮101`,
+   illustration:true,solution:`<u>abcd</u>=101<u>ab</u>−(<u>ab</u>−<u>cd</u>) ⇒ <u>ab</u>−<u>cd</u>⋮101`},
+  {id:"d1-b15",title:"Bài 15",statement:`Chứng minh rằng: a−11b+3c⋮17 thì 2a−5b+6c⋮17 (a,b,c∈ℤ)`,
+   illustration:true,solution:`a−11b+3c⋮17⇒2a−22b+6c⋮17⇒(2a−5b+6c)−17b⋮17⇒2a−5b+6c⋮17`},
+  {id:"d1-b16",title:"Bài 16",statement:`Chứng minh rằng: a) <u>abcd</u>⋮29 thì a+3b+9c+27d⋮29 &nbsp; b) <u>abc</u>⋮21 thì a−2b+4c⋮21`,
+   illustration:true,solution:`a) Biến đổi (2001a+203b+29c+29d)−(a+3b+9c+27d)⋮29<br>b) 4<u>abc</u>=4(100a+10b+c)⋮21 ⇒ (a−2b+4c)+21(19a+2b)⋮21 ⇒ a−2b+4c⋮21`},
+  {id:"d1-b17",title:"Bài 17",statement:`Chứng minh rằng nếu <u>ab</u>+<u>cd</u>+<u>eg</u> chia hết cho 11 thì <u>abcdeg</u> chia hết cho 11`,
+   illustration:true,solution:`(giống Bài 12b) <u>abcdeg</u>=9999<u>ab</u>+99<u>cd</u>+(<u>ab</u>+<u>cd</u>+<u>eg</u>)⋮11`},
+  {id:"d1-b18",title:"Bài 18",statement:`Với a,b là các số nguyên, chứng tỏ rằng: a+4b⋮13 khi và chỉ khi 10a+b⋮13`,
+   illustration:true,solution:`a+4b⋮13⇒10(a+4b)⋮13⇒10a+40b⋮13⇒10a+b+39a⋮13 (39a⋮13)⇒10a+b⋮13`},
+  {id:"d1-b19",title:"Bài 19",statement:`a) Cho <u>abc</u>+<u>deg</u> chia hết cho 37. Chứng minh <u>abcdeg</u> chia hết cho 37 &nbsp; b) Cho <u>abc</u>−<u>deg</u> chia hết cho 7. Chứng minh <u>abcdeg</u> chia hết cho 7`,
+   illustration:true,solution:`a) <u>abcdeg</u>=999<u>abc</u>+(<u>abc</u>+<u>deg</u>)⋮37<br>b) <u>abcdeg</u>=1001<u>abc</u>−(<u>abc</u>−<u>deg</u>)⋮7`},
+  {id:"d1-b20",title:"Bài 20",statement:`Tìm chữ số a biết rằng <u>20a20a20a</u> chia hết cho 7`,
+   answer:"3",solution:`n=1001.<u>20a</u>.1000+<u>20a</u>, mà 1001⋮7 nên cần <u>20a</u>⋮7 ⇒ 196+(4+a)⋮7 ⇒ a=<b>3</b>`},
+  {id:"d1-b21",title:"Bài 21",statement:`Cho ba chữ số khác nhau và khác 0. Lập tất cả các số tự nhiên có ba chữ số gồm cả ba chữ số ấy. Chứng minh rằng tổng của chúng chia hết cho 6 và 37`,
+   illustration:true,solution:`Tổng 6 số <u>abc</u>+<u>acb</u>+<u>bca</u>+<u>bac</u>+<u>cba</u>+<u>cab</u>=222(a+b+c)⋮6 và ⋮37`},
+  {id:"d1-b22",title:"Bài 22 (minh họa)",illustration:true,
+   statement:`Có hai số tự nhiên x và y nào mà (x+y)(x−y)=1002 hay không?`,
+   solution:`Nếu x,y khác tính chẵn lẻ thì tích lẻ (mâu thuẫn với 1002 chẵn). Nếu cùng chẵn lẻ thì x+y,x−y đều chẵn ⇒ tích⋮4, nhưng 1002 không⋮4 (mâu thuẫn) ⇒ không tồn tại`},
+  {id:"d1-b23",title:"Bài 23",statement:`Tìm số tự nhiên có hai chữ số, sao cho nếu viết nó tiếp sau số 1999 thì ta được một số chia hết cho 37`,
+   answer:"11,48,85",solution:`<u>1999ab</u>⋮37 ⇒ 26+<u>ab</u>⋮37 ⇒ <u>ab</u>∈{<b>11,48,85</b>}`},
+  {id:"d1-b24",title:"Bài 24",statement:`Cho n là số tự nhiên. Chứng minh rằng: a) (n+10)(n+15) chia hết cho 2 &nbsp; b) n(n+1)(n+2) chia hết cho 2 và cho 3 &nbsp; c) n(2n+7)(7n+1) chia hết cho 6`,
+   illustration:true,solution:`a,b) (giống Bài2) &nbsp; c) Trong n,7n+1 luôn có 1 số chẵn ⇒⋮2; xét n theo mod 3 (3 trường hợp) đều cho tích⋮3 ⇒ tích⋮6`},
+  {id:"d1-b25",title:"Bài 25",statement:`Tìm tất cả các chữ số x,y sao cho <u>2019xy</u> chia hết cho cả 2, 3 và 5`,
+   answer:"0,0;3,0;6,0;9,0",solution:`Chia hết 2 và 5 ⇒ y=0. Chia hết 3 ⇒ (12+x)⋮3 ⇒ x∈{0,3,6,9} ⇒ (x;y)∈{(<b>0,0</b>),(3,0),(6,0),(9,0)}`},
+  {id:"d1-b26",title:"Bài 26",statement:`Cho hai số nguyên a và b không chia hết cho 3, nhưng khi chia cho 3 thì có cùng số dư. Chứng minh rằng: (ab−1)⋮3`,
+   illustration:true,solution:`a=3p+r, b=3q+r (r=1,2). ab−1=9pq+3pr+3qr+r²−1. Với r=1: r²−1=0⋮3; r=2: r²−1=3⋮3 ⇒ luôn ⋮3`},
+  {id:"d1-b27",title:"Bài 27",statement:`Tìm số tự nhiên có 4 chữ số, chia hết cho 5 và cho 27 biết rằng hai chữ số giữa của số đó là 97`,
+   answer:"2970",solution:`Số dạng *97* tận cùng 0 hoặc 5, chia hết 9. Thử *975: không⋮27. Thử *970: *=2⇒2970⋮27 ✓ ⇒ Số cần tìm = <b>2970</b>`},
+  {id:"d1-b28",title:"Bài 28",statement:`Hai số tự nhiên a và 2a đều có tổng các chữ số bằng k. Chứng minh rằng a chia hết cho 9`,
+   illustration:true,solution:`Số và tổng chữ số của nó có cùng số dư khi chia 9 ⇒ (2a−k)⋮9 và (a−k)⋮9 ⇒ hiệu (2a−k)−(a−k)=a⋮9`},
+  {id:"d1-b29",title:"Bài 29",statement:`Cho số tự nhiên <u>ab</u> bằng 3 lần tích các chữ số của nó. a) Chứng minh rằng b chia hết cho a &nbsp; b) Giả sử b=ka (k∈ℕ), chứng minh rằng k là ước của 10 &nbsp; c) Tìm các số <u>ab</u> nói trên`,
+   answer:"24,15",solution:`a) 10a+b=3ab⇒10a+ba⋮a⇒b⋮a<br>b) Thay b=ka: 10+k=3ak⇒10⋮k<br>c) k∈{1,2,5}: k=2⇒a=2,b=4⇒<u>ab</u>=24; k=5⇒a=1,b=5⇒<u>ab</u>=15. Đáp số: <b>24</b> và 15`},
+  {id:"d1-b30",title:"Bài 30",statement:`Tìm số tự nhiên có hai chữ số, biết rằng số đó chia hết cho tích các chữ số của nó`,
+   answer:"11,12,15,24,36",solution:`Tương tự Bài29, k=1⇒<u>ab</u>=11; k=2⇒12,24,36; k=5⇒15 ⇒ 5 số: <b>11,12,15,24,36</b>`},
+  {id:"d1-b31",title:"Bài 31",statement:`Tìm số tự nhiên n sao cho 18n+3 chia hết cho 7`,
+   answer:"n=7k+1",solution:`18n+3⋮7⇔4n+3⋮7⇔4(n−1)⋮7⇔n−1⋮7 (vì (4,7)=1) ⇒ n=<b>7k+1</b> (k∈ℕ)`},
+  {id:"d1-b32",title:"Bài 32",statement:`Tìm số tự nhiên nhỏ nhất biết rằng số đó chia 9 dư 5, chia 7 dư 4, chia 5 dư 3`,
+   answer:"158",solution:`a+157 là bội chung của (9,5,7); BCNN=315 ⇒ a+157=315 (k nhỏ nhất=1) ⇒ a=<b>158</b>`},
+  {id:"d1-b33",title:"Bài 33",statement:`Một số chia cho 7 dư 3, chia cho 17 dư 12, chia cho 23 dư 7. Hỏi số đó chia cho 2737 dư bao nhiêu?`,
+   answer:"2698",solution:`A+39 chia hết cho 7,17,23 (nguyên tố cùng nhau) ⇒ A+39⋮2737 ⇒ A=2698 (vì 2698<2737, đó là số dư)`},
+  {id:"d1-b34",title:"Bài 34",statement:`Cho số <u>abc</u>⋮37. Chứng minh rằng <u>cab</u>⋮37`,
+   illustration:true,solution:`100.<u>abc</u>⋮37 ⇒ 10000a+1000b+100c⋮37 ⇒ <u>cab</u>+37(270a+27b)⋮37 ⇒ <u>cab</u>⋮37`},
+  {id:"d1-b35",title:"Bài 35",statement:`Chứng tỏ rằng trong 27 số tự nhiên tùy ý luôn tồn tại hai số sao cho tổng hoặc hiệu của chúng chia hết cho 50`,
+   illustration:true,solution:`Nguyên lý Dirichlet: 50 số dư {0,...,49} chia thành 26 nhóm (0),(1,49),...,(25). 27 số dư vào 26 nhóm ⇒ có 2 số cùng nhóm ⇒ tổng hoặc hiệu ⋮50`},
+  {id:"d1-b36",title:"Bài 36",statement:`Cho n=<u>7a5</u>+<u>8b4</u>. Biết a−b=6 và n⋮9. Tìm a,b`,
+   answer:"9,3",solution:`6+a+b⋮9⇒a+b∈{3,12}. Với a+b=3: không tồn tại a,b nguyên cùng a−b=6 hợp lệ. Với a+b=12,a−b=6⇒a=<b>9</b>,b=3`},
+  {id:"d1-b37",title:"Bài 37",statement:`Tìm các chữ số a,b sao cho: a) a−b=4 và <u>7a5b1</u> chia hết cho 3 &nbsp; b) a−b=6 và <u>4a7</u>+<u>1b5</u> chia hết cho 9`,
+   answer:"6,2",solution:`a) a+3 chia 3 dư 2, kết hợp a−b=4 và a+b chẵn ⇒ a+b∈{8,14} ⇒ (a,b)=(6,2) hoặc (9,5)<br>b) a+b chia 9 dư 1, a+b≥6 ⇒ a+b=10 ⇒ a=8,b=2<br><i>(nhập 6,2 cho câu a)</i>`},
+  {id:"d1-b38",title:"Bài 38",statement:`Chứng minh rằng: a) 2n+<u>11...1</u>(n chữ số) chia hết cho 3 &nbsp; b) 10ⁿ+18n−1 chia hết cho 27 &nbsp; c) 10ⁿ+72n−1 chia hết cho 81`,
+   illustration:true,solution:`Dùng nhận xét <u>11...1</u>(n chữ số)−n chia hết cho 9, từ đó biến đổi từng biểu thức về dạng có nhân tử 9.(...)⋮3,27,81 tương ứng`},
+  {id:"d1-b39",title:"Bài 39",statement:`Cho số tự nhiên <u>ab</u> bằng ba lần tích các chữ số của nó, chứng minh rằng b⋮a`,
+   illustration:true,solution:`<u>ab</u>=3ab⇒10a+b=3ab⇒10a+b⋮a⇒b⋮a`},
+  {id:"d1-b40",title:"Bài 40",statement:`Cho A=11⁹+11⁸+11⁷+...+11+1. Chứng minh rằng A chia hết cho 5`,
+   illustration:true,solution:`A tận cùng bằng 0 (tổng các lũy thừa của 11 đều tận cùng 1, có 10 số hạng) nên chia hết cho 5`},
+  {id:"d1-b41",title:"Bài 41",statement:`Tìm a,b biết: a−b=3 và (<u>14a3</u>+<u>35b2</u>)⋮9`,
+   answer:"6,3",solution:`a+b⋮9 (từ tổng các chữ số) ⇒ a+b∈{0,9,18}, kết hợp a−b=3 ⇒ a=<b>6</b>,b=3`},
+  {id:"d1-b42",title:"Bài 42",statement:`Tìm số tự nhiên có ba chữ số như nhau, biết rằng số đó có thể viết được dưới dạng tổng các số tự nhiên liên tiếp bắt đầu từ 1`,
+   answer:"666",solution:`<u>aaa</u>=n(n+1)/2=111a=3.37.a ⇒ n hoặc n+1 chia hết 37, n<74 ⇒ n+1=37⇒n=36⇒tổng=666`},
+  {id:"d1-b43",title:"Bài 43",statement:`Cho biết a+4b chia hết cho 13 (a,b∈ℕ). Chứng minh rằng 10a+b chia hết cho 13`,
+   illustration:true,solution:`Có 4 cách: xét 10x−y, 4y−x, 3x+y, hoặc x+9y với x=a+4b,y=10a+b, đều ra bội của 13, từ x⋮13 suy ra y⋮13`},
+  {id:"d1-b44",title:"Bài 44",statement:`Tìm số tự nhiên có ba chữ số biết rằng khi chia số đó cho các số 25;28;35 thì được các số dư lần lượt là 4;7;14`,
+   answer:"679",solution:`x+21 là bội chung của 25,28,35; BCNN=700 ⇒ x+21=700⇒x=<b>679</b>`},
+  {id:"d1-b45",title:"Bài 45",statement:`Tìm số tự nhiên nhỏ nhất khi chia cho 5 thì dư 1, chia cho 7 thì dư 5`,
+   answer:"26",solution:`n+9 là bội chung của 5,7 nhỏ nhất ⇒ n+9=35⇒n=<b>26</b>`},
+  {id:"d1-b46",title:"Bài 46",statement:`Tìm số tự nhiên n có bốn chữ số sao cho chia n cho 131 thì dư 112, chia n cho 132 thì dư 98`,
+   answer:"1946",solution:`Lập hệ và giải, vì n có 4 chữ số nên k=0 ⇒ n=<b>1946</b>`},
+  {id:"d1-b47",title:"Bài 47",statement:`Chứng minh rằng nếu p là số nguyên tố lớn hơn 3 thì (p−1)(p+1) chia hết cho 24`,
+   illustration:true,solution:`(p−1)p(p+1)⋮3 mà (p,3)=1 ⇒(p−1)(p+1)⋮3; p lẻ nên p−1,p+1 là 2 số chẵn liên tiếp, trong đó có số ⋮4 ⇒ tích ⋮8 ⇒ (p−1)(p+1)⋮24`},
+  {id:"d1-b48",title:"Bài 48",statement:`Chứng minh nếu <u>ab</u>=2<u>cd</u> với a,b,c,d là các chữ số khác 0 thì <u>abcd</u> chia hết cho 67`,
+   illustration:true,solution:`(giống Bài11a) <u>abcd</u>=<u>cd</u>.201=<u>cd</u>.67.3⋮67`},
+  {id:"d1-b49",title:"Bài 49",statement:`Chứng minh rằng: A=n²+n+1 không chia hết cho 2 và 5, với n là số tự nhiên`,
+   illustration:true,solution:`n(n+1) chẵn ⇒ n(n+1)+1 lẻ, không⋮2. Xét tận cùng của n(n+1) chỉ có thể 0,2,6 ⇒ n(n+1)+1 tận cùng 1,3,7, không⋮5`},
+  {id:"d1-b50",title:"Bài 50",statement:`Chứng minh rằng nếu x,y là các số nguyên sao cho (7x+3y)⋮13 thì (5x+4y) cũng chia hết cho 13 và ngược lại`,
+   illustration:true,solution:`5x+4y⋮13⇒4(5x+4y)⋮13⇒20x+16y⋮13⇒7x+3y⋮13. Từ đó đi ngược lại cũng đúng`},
+  {id:"d1-b51",title:"Bài 51",statement:`Cho a,b là hai số chính phương lẻ liên tiếp. Chứng minh rằng: (a−1)(b−1)⋮192`,
+   illustration:true,solution:`a,b lẻ nên (a−1)(b−1)⋮4. Đặt a=(2k−1)²,b=(2k+1)² ⇒(a−1)(b−1)=16k²(k−1)(k+1), mà k(k−1)(k+1)⋮6 ⇒ (a−1)(b−1)⋮192`},
+  {id:"d1-b52",title:"Bài 52",statement:`Cho 4 số nguyên phân biệt a,b,c,d. Chứng minh rằng: A=(a−b)(a−c)(a−d)(b−c)(b−d)(c−d)⋮12`,
+   illustration:true,solution:`Theo Dirichlet, trong 4 số luôn có 2 số cùng số dư khi chia 3 ⇒ A⋮3. Xét các trường hợp chẵn lẻ của 4 số đều cho ít nhất vài hiệu chẵn ⇒ A⋮4 ⇒ A⋮12`},
+  {id:"d1-b53",title:"Bài 53",statement:`Tìm các số nguyên dương x và y lớn hơn 1 sao cho x+3 chia hết cho y và y+3 chia hết cho x`,
+   answer:"2,5",solution:`Giả sử 2≤x≤y, xét x+3=ky (k≤2): k=1⇒x+3=y, x∈{2,3,6}; k=2⇒x+3=2y, x∈{3,9}. Các cặp (x,y): (<b>2,5</b>),(5,2),(3,6),(6,3),(6,9),(9,6),(3,3)`},
+  {id:"d1-b54",title:"Bài 54",statement:`Cho 10 số tự nhiên bất kì a₁,a₂,...,a₁₀. Chứng minh rằng tồn tại một số hoặc tổng một số các số liên tiếp nhau trong dãy chia hết cho 10`,
+   illustration:true,solution:`Xét 10 tổng Sᵢ=a₁+...+aᵢ. Nếu có 1 tổng ⋮10 thì xong. Nếu không, 10 số dư (1-9, 9 giá trị) cho 10 tổng ⇒ theo Dirichlet có 2 tổng cùng số dư ⇒ hiệu của chúng ⋮10`},
+  {id:"d1-b55",title:"Bài 55",statement:`Chứng minh rằng với n là số tự nhiên thì n(n+1)+2019 không chia hết cho 2020`,
+   illustration:true,solution:`n(n+1) luôn chẵn ⇒ n(n+1)+2019 là số lẻ, không thể chia hết cho 2020 (số chẵn)`},
+  {id:"d1-b56",title:"Bài 56",statement:`a) Cho A=1999+1999²+1999³+⋯+1999¹⁹⁹⁸. Chứng minh rằng A⋮2000 &nbsp; b) Tìm số tự nhiên n lớn nhất có 3 chữ số thỏa mãn điều kiện: n chia cho 8 dư 7, chia cho 31 dư 28`,
+   answer:"927",solution:`a) Nhóm từng cặp: A=1999(1+1999)+1999³(1+1999)+...=2000(1999+1999³+...)⋮2000<br>b) n+65 là bội chung của (8,31) ⇒ n∈{183,431,679,927} ⇒ n lớn nhất có 3 chữ số = <b>927</b>`},
+  {id:"d1-b57",title:"Bài 57",statement:`Tìm x,y biết <u>124xy</u>⋮45`,
+   answer:"2,0",solution:`Cần ⋮5 và ⋮9: y=0 hoặc 5. Với y=0: (1+2+4+x)⋮9⇒x=2. Với y=5: x=6 ⇒ (x;y)=(<b>2,0</b>) hoặc (6,5)`},
+  {id:"d1-b58",title:"Bài 58",statement:`Tìm số tự nhiên nhỏ nhất lớn hơn 10, biết rằng số đó chia cho 5;6;7 có số dư lần lượt là 3;2;1`,
+   answer:"218",solution:`a−8 là bội chung của (5,6,7)=210 ⇒ a=8+210=<b>218</b>`},
+  {id:"d1-b59",title:"Bài 59",statement:`Cho S=5+5²+5³+5⁴+5⁵+5⁶+...+5²⁰¹⁹. Chứng tỏ S chia hết cho 31`,
+   illustration:true,solution:`Nhóm 3 số hạng: S=(1+5+5²)(5+5⁴+...+5²⁰¹⁷)=31(...)⋮31`},
+  {id:"d1-b60",title:"Bài 60",statement:`Tìm số có ba chữ số chia hết cho 7 và tổng các chữ số của nó cũng chia hết cho 7`,
+   answer:"133",solution:`<u>abc</u>=98a+7b+(a+b+c)+(a+2b); cần a+2b∈{7,14,21}. Giải từng trường hợp ra nhiều số: 133,322,329,392,399,455,511,518,581,588,644,770,777,833,966,266<br><i>(nhập 133 — một trong các đáp số đúng, xem lời giải để biết toàn bộ danh sách)</i>`},
+  {id:"d1-b61",title:"Bài 61",statement:`Tìm các chữ số x;y để A=<u>x183y</u> chia cho 2;5 và 9 đều dư 1`,
+   answer:"6,1",solution:`Chia 2,5 dư 1 ⇒ y=1. <u>x1830</u>⋮9 ⇒ x+1+8+3+0⋮9 ⇒ x+3⋮9 ⇒ x=<b>6</b>`},
+  {id:"d1-b62",title:"Bài 62",statement:`Cho a,b∈ℕ*, thỏa mãn số M=(9a+11b)(5b+11a) chia hết cho 19. Hãy giải thích vì sao M chia hết cho 361`,
+   illustration:true,solution:`19 nguyên tố ⇒ 9a+11b⋮19 hoặc 5b+11a⋮19. Xét M=3(9a+11b)+(5b+11a)=19(2a+2b)⋮19 ⇒ cả hai nhân tử đều ⋮19 ⇒ M⋮19²=361`},
+  {id:"d1-b63",title:"Bài 63",statement:`Cho hai số tự nhiên a và b thỏa mãn: m=(16a+17b)(17a+16b) là 1 bội số của 11. Chứng minh rằng số m cũng là một bội số của 121`,
+   illustration:true,solution:`Giả sử 16a+17b⋮11, cần chứng minh 17a+16b⋮11: 2(16a+17b)⋮11⇒33(a+b)+b−a⋮11⇒b−a⋮11; lại có 2(17a+16b)=33(a+b)−a+b⋮11⇒17a+16b⋮11 ⇒ m⋮121`},
+  {id:"d1-b64",title:"Bài 64",statement:`Chứng minh rằng: A=75.(4²⁰¹⁸+4²⁰¹⁷+...+4²+5)+25 chia hết cho 4²⁰¹⁹`,
+   illustration:true,solution:`Đặt M=4²⁰¹⁸+...+4²+4+1, tính 3M=4²⁰¹⁹−1⇒A=25.(4²⁰¹⁹−1)+25=25.4²⁰¹⁹⋮4²⁰¹⁹`},
+  {id:"d1-b65",title:"Bài 65",statement:`Cho N=<u>155*710*4*16</u> là số tự nhiên có 12 chữ số. Chứng tỏ rằng nếu thay các dấu * bởi các chữ số khác nhau trong ba chữ số 1;2;3 một cách tùy ý thì N luôn chia hết cho 396`,
+   illustration:true,solution:`396=4.9.11. N có 2 chữ số tận cùng 16⋮4; tổng các chữ số =36⋮9 (không đổi dù hoán vị 1,2,3); tổng chữ số hàng chẵn trừ hàng lẻ=0⋮11 ⇒ N⋮396`},
+  {id:"d1-b66",title:"Bài 66",statement:`Chứng minh rằng từ 52 số nguyên bất kì luôn tồn tại 2 số mà tổng hoặc hiệu của chúng chia hết cho 100`,
+   illustration:true,solution:`(tương tự Bài35) Chia 100 số dư thành 51 nhóm, 52 số dư vào 51 nhóm ⇒ có 2 cùng nhóm ⇒ tổng hoặc hiệu ⋮100`},
+  {id:"d1-b67",title:"Bài 67",statement:`Chứng minh rằng: 10²⁸+8 chia hết cho 72`,
+   illustration:true,solution:`72=8.9. 10²⁸+8 có 3 chữ số tận cùng 008⋮8; tổng chữ số =1+27.0+8=9⋮9 ⇒ chia hết cho 8 và 9 (nguyên tố cùng nhau) ⇒ ⋮72`}
+ ]},
+{id:2, title:"Dạng 2: Chữ số tận cùng của một số",
+ theory:`<h4>A/ Tìm MỘT chữ số tận cùng — Phương pháp (nguyên văn rút gọn)</h4>
+ <div class="formula">* Tính chất 1: a) số tận cùng 0,1,5,6 nâng lũy thừa bất kỳ vẫn giữ tận cùng đó.
+ b) số tận cùng 4,9 nâng lũy thừa bậc lẻ vẫn giữ tận cùng đó.
+ c) số tận cùng 3,7,9 nâng lũy thừa bậc 4n thì tận cùng là 1.
+ d) số tận cùng 2,4,8 nâng lũy thừa bậc 4n thì tận cùng là 6.</div>
+ <div class="formula">* Tính chất 2: số tự nhiên bất kỳ nâng lũy thừa bậc 4n+1 thì chữ số tận cùng không đổi.</div>
+ <div class="formula">* Tính chất 3: a) số tận cùng 3 nâng lũy thừa bậc 4n+3 cho tận cùng 7 (và ngược lại 7↔3).
+ b) số tận cùng 2 nâng lũy thừa bậc 4n+3 cho tận cùng 8 (và ngược lại 2↔8).
+ c) số tận cùng 0,1,4,5,6,9 nâng lũy thừa bậc 4n+3 không đổi tận cùng.</div>
+ <h4>B/ Tìm HAI chữ số tận cùng — Phương pháp (nguyên văn rút gọn)</h4>
+ <div class="formula">Nếu x=100k+y thì hai chữ số tận cùng của x chính là hai chữ số tận cùng của y.
+ Với a chẵn: tìm n sao cho aⁿ⁻¹⋮25, viết m=pn+q (q nhỏ nhất để aᵍ⋮4) rồi tìm 2 chữ số tận cùng của aᵍ.
+ Với a lẻ: tìm n sao cho aⁿ⁻¹⋮100, viết m=un+v rồi tìm 2 chữ số tận cùng của aᵛ.</div>
+ <div class="formula">Một số trường hợp cụ thể: số tận cùng 01,25,76 nâng lũy thừa nào (khác 0) vẫn tận cùng 01,25,76.
+ Các số 3²⁰,81⁵,7⁴,51²,99² có tận cùng 01. Các số 2²⁰,6⁵,18⁴,24²,68⁴,74² có tận cùng 76. Số 26ⁿ (n>1) có tận cùng 76.</div>
+ <h4>C/ Tìm BA CHỮ SỐ TẬN CÙNG TRỞ LÊN — Phương pháp (nguyên văn rút gọn)</h4>
+ <div class="formula">Tương tự B nhưng dùng modulo 1000=8.125. Tính chất 6: nếu (a,5)=1 thì a¹⁰⁰−1 chia hết cho 125.
+ Trường hợp số tận cùng 001,376,625 nâng lũy thừa nào vẫn tận cùng 001,376,625. Số tận cùng 0625 nâng lũy thừa nào (khác 0) vẫn tận cùng 0625.</div>`,
+ problems:[
+  {id:"d2-b1",title:"Bài 1 (A)",statement:`Tìm chữ số tận cùng của các số: a) 7⁹⁹ &nbsp; b) 14¹⁴¹⁴ &nbsp; c) 4⁵⁶⁷`,
+   answer:"3",solution:`a) 99=4.24+3 ⇒ 7⁹⁹=7⁴ᵏ.7³, tận cùng giống 7³=343 ⇒ tận cùng <b>3</b><br>b) 1414=4k+2 ⇒ tận cùng giống 6.14²(=1176) ⇒ tận cùng 6<br>c) 567=4k+3 ⇒ tận cùng giống 6.4³(=384) ⇒ tận cùng 4<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b2",title:"Bài 2",statement:`Tìm chữ số tận cùng của tổng: S=2¹+3⁵+4⁹+...+2004⁸⁰⁰⁹`,
+   answer:"9",solution:`Mọi số mũ đều dạng 4(k−2)+1 ⇒ tận cùng giữ nguyên theo cơ số ⇒ tổng tận cùng = tận cùng của (2+3+...+9)+199(0+1+...+9)+1+2+3+4 = 9009 ⇒ tận cùng <b>9</b>`},
+  {id:"d2-b3",title:"Bài 3",statement:`Tìm chữ số tận cùng của tổng: T=2³+3⁷+4¹¹+...+2004⁸⁰¹¹`,
+   answer:"9",solution:`Mọi số mũ dạng 4(n−2)+3: 2³ tận cùng 8;3⁷ tận cùng 7;4¹¹ tận cùng 4;... tổng các tận cùng=9019 ⇒ tận cùng <b>9</b>`},
+  {id:"d2-b4",title:"Bài 4",statement:`Tìm chữ số tận cùng của 187³²⁴`,
+   answer:"1",solution:`187³²⁴=(187⁴)⁸¹, số tận cùng 7 lũy thừa bậc 4 cho tận cùng 1, rồi tận cùng 1 lũy thừa bất kỳ vẫn là 1 ⇒ tận cùng <b>1</b>`},
+  {id:"d2-b5",title:"Bài 5",statement:`Cho A=2+2²+2³+....+2²⁰. Tìm chữ số tận cùng của A`,
+   answer:"0",solution:`A=2²¹−2=16⁵.2−2 tận cùng ...6.2−2 = 0. Vậy tận cùng <b>0</b>`},
+  {id:"d2-b6",title:"Bài 6",statement:`Tìm chữ số cuối cùng của số: A=9^(9⁹)`,
+   answer:"9",solution:`9⁹ là số lẻ ⇒ M=9^(lẻ) tận cùng 9. Vậy A tận cùng <b>9</b>`},
+  {id:"d2-b7",title:"Bài 7",statement:`Tìm chữ số cuối cùng của số: B=2^(3⁴)`,
+   answer:"2",solution:`B=2⁸¹=(2⁵)¹⁶.2=32¹⁶.2=(30+2)¹⁶.2=10q+2¹⁷=...=10t+2. Vậy tận cùng <b>2</b>`},
+  {id:"d2-b9",title:"Bài 9 (Bài 9 trong sách)",statement:`Tìm chữ số tận cùng của: C=6²⁰⁰², D=2²⁰⁰¹`,
+   answer:"6",solution:`C: 6ⁿ luôn tận cùng 6 ⇒ tận cùng <b>6</b>. D: 2⁴=16 tận cùng 6 ⇒ 2²⁰⁰²=(2⁴)⁵⁰⁰.2² tận cùng 4<br><i>(nhập đáp số của C)</i>`},
+  {id:"d2-b10",title:"Bài 10",statement:`Tìm chữ số cuối cùng của số: M=7¹⁹⁹⁹, G=18¹⁷⁷`,
+   answer:"3",solution:`7⁴=2401 tận cùng 1 ⇒ M=7¹⁹⁹⁹=(7⁴)⁴⁹⁹.7³ tận cùng giống 343 ⇒ tận cùng <b>3</b>. 18⁴ tận cùng 6 ⇒ G tận cùng 8<br><i>(nhập đáp số của M)</i>`},
+  {id:"d2-b11",title:"Bài 11",statement:`Tìm chữ số tận cùng của các số sau: a) 7^(9⁹) &nbsp; b) 14^(14¹⁴) &nbsp; c) 3^(5^(6⁷))`,
+   answer:"7",solution:`a) 9⁹=4k+1 ⇒ 7^(4k+1)=7.7⁴ᵏ tận cùng 7<br>b) 14¹⁴=4k ⇒ tận cùng 6<br>c) 5^(6⁷)=4k+1 ⇒ 3^(4k+1) tận cùng 3<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b13",title:"Bài 13",statement:`Cho M=2¹+3⁵+4⁹+...+2018⁸⁰⁶⁵+2019⁸⁰⁶⁹. Tìm chữ số tận cùng của M`,
+   answer:"9",solution:`Mọi số hạng có dạng a^(4n+1), chữ số tận cùng giống tận cùng của cơ số a ⇒ M tận cùng giống N=2+3+4+...+2019=2019.1010−1, có tận cùng 9 ⇒ M tận cùng <b>9</b>`},
+  {id:"d2-bt13",title:"Bài tập 13",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm chữ số tận cùng của X, Y: X=2²+3⁶+4¹⁰+...+2004⁸⁰¹⁰; &nbsp; Y=2⁸+3¹²+4¹⁶+...+2004⁸⁰¹⁶`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt14",title:"Bài tập 14",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Chứng minh rằng chữ số tận cùng của hai tổng sau giống nhau: U=2¹+3⁵+4⁹+...+2005⁸⁰¹³; &nbsp; V=2³+3⁷+4¹¹+...+2005⁸⁰¹⁵`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt15",title:"Bài tập 15",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Chứng minh rằng không tồn tại các số tự nhiên x,y,z thỏa mãn: 19ˣ+5ʸ+1980z=1975⁴³⁰+2004`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-b16",title:"Bài tập 16 (B)",statement:`Tìm hai chữ số tận cùng của 7¹⁹⁹¹`,
+   answer:"43",solution:`7⁴=2401 tận cùng 01 ⇒ 7¹⁹⁹¹=7¹⁹⁸⁸.7³=(7⁴)⁴⁹⁷.343, tận cùng (...01).343=...43. Vậy <b>43</b>`},
+  {id:"d2-b17",title:"Bài tập 17",statement:`Tìm hai chữ số tận cùng của 2¹⁰⁰`,
+   answer:"76",solution:`2¹⁰=1024; số tận cùng 24 bình phương cho tận cùng 76, và 76 lũy thừa nào vẫn 76 ⇒ 2¹⁰⁰=(2¹⁰)¹⁰=(1024²)⁵ tận cùng <b>76</b>`},
+  {id:"d2-b18",title:"Bài tập 18",statement:`Tìm hai chữ số tận cùng của: a) 51⁵¹ &nbsp; b) 99^(99⁹⁹) &nbsp; c) 6⁶⁶⁶ &nbsp; d) 14¹⁰¹.16¹⁰¹`,
+   answer:"51",solution:`a) tận cùng ...51<br>b) 99²ᵏ⁺¹ tận cùng ...99<br>c) 6⁵=...76 ⇒ 6⁶⁶⁶=(6⁵)¹³³.6 tận cùng ...56<br>d) (14.16)¹⁰¹=224¹⁰¹ tận cùng ...24<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b19",title:"Bài tập 19",statement:`Tìm hai chữ số tận cùng của các số: a) 2²⁰⁰³ &nbsp; b) 7⁹⁹`,
+   answer:"08",solution:`a) Dùng 2²⁰=...76, 2²⁰⁰³=2³(2²⁰⁰⁰−1)+2³=100k+8 ⇒ tận cùng <b>08</b><br>b) 7⁴−1⋮100 với số mũ dư hợp lý ⇒ 7⁹⁹ tận cùng 07<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b20",title:"Bài tập 20",statement:`Tìm hai chữ số tận cùng của số: C=2⁹⁹⁹, D=3⁹⁹⁹`,
+   answer:"88",solution:`C=2⁹⁹⁹=(2²⁰)⁴⁹.2¹⁹ tận cùng 88. D: 3D=3¹⁰⁰⁰=(3²⁰)⁵⁰ tận cùng 01, suy ra D tận cùng 67<br><i>(nhập đáp số của C)</i>`},
+  {id:"d2-b21",title:"Bài tập 21",statement:`Tìm hai chữ số tận cùng của số: a) M=7⁸⁹⁶⁶ &nbsp; b) N=24⁷⁵⁶¹ &nbsp; c) Q=81⁶²⁵¹`,
+   answer:"49",solution:`a) 7⁴ tận cùng 01 ⇒ M tận cùng <b>49</b><br>b) 24² tận cùng 76 ⇒ N tận cùng 24<br>c) 81⁵ tận cùng 01 ⇒ Q tận cùng 81<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b22",title:"Bài tập 22",statement:`Tìm hai chữ số tận cùng của số: a) Z=26⁸⁵⁴ &nbsp; b) C=68¹⁹⁴`,
+   answer:"76",solution:`a) 26⁴ tận cùng 76 ⇒ Z tận cùng <b>76</b><br>b) 68⁴ tận cùng 76 ⇒ C tận cùng 24<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b26",title:"Bài tập 26",statement:`Tìm hai chữ số tận cùng của các tổng: a) S₁=1²⁰⁰²+2²⁰⁰²+3²⁰⁰²+...+2004²⁰⁰² &nbsp; b) S₂=1²⁰⁰³+2²⁰⁰³+3²⁰⁰³+...+2004²⁰⁰³`,
+   answer:"30",solution:`a) Hai chữ số tận cùng của S₁ = hai chữ số tận cùng của Σk² (k=1..2004) = 2684707030 ⇒ tận cùng <b>30</b><br>b) S₂ tận cùng = hai chữ số tận cùng của Σk³ = 4036121180100 ⇒ tận cùng 00<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-bt34",title:"Bài tập 34",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Chứng minh 1ⁿ+2ⁿ+3ⁿ+4ⁿ chia hết cho 5 khi và chỉ khi n không chia hết cho 4`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt35",title:"Bài tập 35",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Chứng minh 9²⁰⁰⁰²⁰⁰³, 7²⁰⁰⁰²⁰⁰³ có chữ số tận cùng giống nhau`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt36",title:"Bài tập 36",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm hai chữ số tận cùng của: a) 3⁹⁹⁹ &nbsp; b) 11¹²¹³`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt37",title:"Bài tập 37",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm hai chữ số tận cùng của: S=2³+2²³+...+2⁴⁰⁰²³`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt38",title:"Bài tập 38",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm ba chữ số tận cùng của: S=1²⁰⁰⁴+2²⁰⁰⁴+...+2003²⁰⁰⁴`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt39",title:"Bài tập 39",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Cho (a,10)=1. Chứng minh rằng chữ số tận cùng của a¹⁰¹ cũng bằng chữ số tận cùng của a`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt40",title:"Bài tập 40",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Cho A là một số chẵn không chia hết cho 10. Hãy tìm ba chữ số tận cùng của A²⁰⁰`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt41",title:"Bài tập 41",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm ba chữ số tận cùng của số: 1993^(1994^(1995...2000))`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-bt42",title:"Bài tập 42",illustration:true,statement:`<span class="badge-nosol">Tham khảo thêm — không có lời giải trong sách</span><br>Tìm sáu chữ số tận cùng của 5²¹`,
+   solution:`Đề bài tham khảo thêm, sách không in lời giải.`},
+  {id:"d2-b27",title:"Bài tập 27 (C)",statement:`Tìm bốn chữ số tận cùng của 5¹⁹⁹²`,
+   answer:"0625",solution:`5¹⁹⁹²=(5⁴)⁴⁹⁸=625⁴⁹⁸ tận cùng <b>0625</b> (số tận cùng 0625 nâng lũy thừa vẫn 0625)`},
+  {id:"d2-b28",title:"Bài tập 28",statement:`Tìm ba chữ số tận cùng của số: T=5⁹⁴⁶`,
+   answer:"125",solution:`5³=125 tận cùng 125; T=(5³)³¹⁵.5 tận cùng <b>125</b>`},
+  {id:"d2-b29",title:"Bài tập 29",statement:`Tìm 4 chữ số tận cùng của số: P=5¹⁹⁹⁴`,
+   answer:"5625",solution:`Chu kỳ 4 chữ số tận cùng của 5ⁿ lặp lại sau 4: 5⁴→0625,5⁵→3125,5⁶→5625,5⁷→8125. 1994=4m+2 ⇒ tận cùng <b>5625</b>`},
+  {id:"d2-b30",title:"Bài tập 30",statement:`Tìm ba chữ số tận cùng của 123¹⁰¹`,
+   answer:"123",solution:`(123,5)=1⇒123¹⁰⁰−1⋮125 và ⋮8 ⇒⋮1000 ⇒123¹⁰¹=123(123¹⁰⁰−1)+123=1000k+123 ⇒ tận cùng <b>123</b>`},
+  {id:"d2-b31",title:"Bài tập 31",statement:`Tìm ba chữ số tận cùng của 3^(399...98) (số mũ có dạng 399...98)`,
+   answer:"889",solution:`9¹⁰⁰−1⋮1000 ⇒ 3^(số mũ)=9^(99...9) tận cùng giống 9⁹⁹ tận cùng = 889. Vậy tận cùng <b>889</b>`},
+  {id:"d2-b32",title:"Bài tập 32",statement:`Tìm ba chữ số tận cùng của 2004²⁰⁰`,
+   answer:"376",solution:`(2004,5)=1⇒2004¹⁰⁰−1⋮125⇒2004²⁰⁰ chia 125 dư 1 ⇒ tận cùng có thể 126,251,376,501,626,751,876; vì 2004²⁰⁰⋮8 nên chỉ <b>376</b> thỏa`},
+  {id:"d2-b33",title:"Bài tập 33",statement:`Tìm bốn chữ số tận cùng của 5¹⁹⁹²`,
+   answer:"0625",solution:`(trùng Bài tập27) tận cùng <b>0625</b>`},
+  {id:"d2-b43",title:"Bài tập 43 (D)",statement:`Chứng minh rằng 8¹⁰²−2¹⁰² chia hết cho 10`,
+   illustration:true,solution:`8¹⁰²=(8⁴)²⁵.8² tận cùng 4; 2¹⁰²=(2⁴)²⁵.2² tận cùng 4 ⇒ hiệu tận cùng 0 ⇒ chia hết cho 10`},
+  {id:"d2-b44",title:"Bài tập 44",statement:`Tồn tại hay không số tự nhiên n sao cho n²+n+1 chia hết cho 1995²⁰⁰⁰?`,
+   illustration:true,solution:`1995²⁰⁰⁰ tận cùng 5 nên ⋮5. n²+n+1=n(n+1)+1, mà n(n+1) tận cùng chỉ 0,2,6 ⇒ n²+n+1 tận cùng 1,3,7, không ⋮5 ⇒ không tồn tại n`},
+  {id:"d2-b45",title:"Bài tập 45",statement:`Chứng minh rằng 26¹⁵⁷⁰ chia hết cho 8`,
+   illustration:true,solution:`26⁵=11881376 tận cùng 376 (không đổi khi nâng lũy thừa) ⇒ 26¹⁵⁷⁰=(26⁵)³¹⁴ tận cùng 376, mà 376⋮8 ⇒ 26¹⁵⁷⁰⋮8`},
+  {id:"d2-b46",title:"Bài tập 46",statement:`Chứng tỏ rằng 17⁵+24⁴−13²¹ chia hết cho 10`,
+   illustration:true,solution:`Tìm tận cùng từng số hạng rồi cộng/trừ ⇒ tổng có tận cùng 0 ⇒ chia hết cho 10`},
+  {id:"d2-b47",title:"Bài tập 47",statement:`Chứng minh rằng với mọi số tự nhiên n: a) 7⁴ⁿ−1⋮5 &nbsp; b) 3⁴ⁿ⁺¹+2⋮5 &nbsp; c) 2⁴ⁿ⁺¹+3⋮5 &nbsp; d) 2⁴ⁿ⁺²+1⋮5 &nbsp; e) 9²ⁿ⁺¹+1⋮10`,
+   illustration:true,solution:`a) 7⁴ⁿ−1=2401ⁿ−1 tận cùng 0<br>b) 3⁴ⁿ⁺¹+2=81ⁿ.3+2 tận cùng 5<br>c) 2⁴ⁿ⁺¹+3=16ⁿ.2+3 tận cùng 5<br>d) 2⁴ⁿ⁺²+1 tận cùng 5<br>e) 9²ⁿ⁺¹+1=81ⁿ.9+1 tận cùng 0`},
+  {id:"d2-b49",title:"Bài tập 49",statement:`Chứng minh rằng 1991¹⁹⁹⁷−1997¹⁹⁹⁶ chia hết cho 10`,
+   illustration:true,solution:`1991¹⁹⁹⁷ và 1997¹⁹⁹⁶ có cùng chữ số tận cùng là 1 ⇒ hiệu chia hết cho 10`},
+  {id:"d2-b50",title:"Bài tập 50",statement:`Tồn tại hay không số tự nhiên n sao cho số n²+n+1 chia hết cho 2005²⁰⁰⁵?`,
+   illustration:true,solution:`(tương tự Bài tập44) 2005²⁰⁰⁵⋮5, nhưng n²+n+1 không thể ⋮5 ⇒ không tồn tại n`},
+  {id:"d2-b51",title:"Bài tập 51",statement:`Cho P là số nguyên tố lớn hơn 5. Chứng minh rằng (P⁸ⁿ+3P⁴ⁿ−4)⋮5`,
+   illustration:true,solution:`P nguyên tố >5 nên tận cùng ∈{1,3,7,9}; xét từng trường hợp đều cho P⁸ⁿ+3P⁴ⁿ−4 tận cùng 0 ⇒⋮5`},
+  {id:"d2-b52",title:"Bài tập 52",statement:`Chứng minh rằng n⁵ và n có chữ số tận cùng giống nhau`,
+   illustration:true,solution:`A=n⁵−n=(n−1)n(n+1)(n²+1)⋮2 (3 số liên tiếp); xét n theo các dạng dư mod 5 đều cho A⋮5 ⇒ A⋮10 ⇒ n⁵,n cùng tận cùng`},
+  {id:"d2-b53",title:"Bài tập 53",statement:`Tìm số dư của phép chia 3⁵¹⁷ cho 25`,
+   answer:"18",solution:`Tìm 2 chữ số tận cùng của 3⁵¹⁷ là 43 (qua các bước biến đổi lũy thừa) ⇒ số dư khi chia 25 là <b>18</b>`},
+  {id:"d2-b54",title:"Bài tập 54",statement:`Cho Q=½(7^(2020²⁰¹⁸)−3^(2008²⁰⁰⁷)). Chứng minh Q là số tự nhiên chia hết cho 5`,
+   illustration:true,solution:`2020²⁰¹⁸ và 2008²⁰⁰⁷ đều là bội của 4 ⇒ 7^(...)=2401^m, 3^(...)=81^n đều tận cùng 1 ⇒ hiệu tận cùng 0 ⇒ Q tận cùng 0 hoặc 5 ⇒ Q là số tự nhiên chia hết cho 5`}
+ ]},
+{id:3, title:"Dạng 3: Nhóm hợp lý",
+ theory:`<h4>Gợi ý</h4><div class="formula">Nhóm các số hạng của tổng thành từng nhóm (2,3,4,... số hạng) sao cho mỗi nhóm có nhân tử chung chia hết cho số cần chứng minh, từ đó suy ra cả tổng chia hết.</div>`,
+ problems:[
+  {id:"d3-b1",title:"Bài 1",statement:`Chứng minh rằng với mọi n nguyên dương thì 3ⁿ⁺²−2ⁿ⁺²+3ⁿ−2ⁿ chia hết cho 10`,
+   illustration:true,solution:`=3ⁿ(3²+1)−2ⁿ(2²+1)=10.3ⁿ−5.2ⁿ=10(3ⁿ−2ⁿ⁻¹)⋮10`},
+  {id:"d3-b2",title:"Bài 2",statement:`Chứng minh rằng: a) 8.2ⁿ+2ⁿ⁺¹⋮10 &nbsp; b) 3ⁿ⁺³+2ⁿ⁺³+3ⁿ⁺¹+2ⁿ⁺²⋮6`,
+   illustration:true,solution:`a) =2ⁿ(8+2)=10.2ⁿ⋮10<br>b) =3ⁿ.30+2ⁿ.12⋮6`},
+  {id:"d3-b3",title:"Bài 3",statement:`Chứng minh rằng: 3²ⁿ⁺¹+2²ⁿ⁺²⋮7`,
+   illustration:true,solution:`=3.3²ⁿ+4.2²ⁿ=3(7+2)ⁿ+4.2ⁿ=7M+7.2ⁿ⋮7`},
+  {id:"d3-b4",title:"Bài 4",statement:`Chứng minh rằng: a) 10ⁿ+18n−1⋮27 &nbsp; b) D=10ⁿ+72n−1⋮81`,
+   illustration:true,solution:`a) VT=999...9(n số 9)+18n=9(<u>111...1</u>+2n)⋮9, và <u>111...1</u>+2n⋮3 (do tổng chữ số bằng 0 mod 3) ⇒ VT⋮27<br>b) Tương tự với 9(<u>111...1</u>−n)+81n, <u>111...1</u>−n⋮9 ⇒ D⋮81`},
+  {id:"d3-b5",title:"Bài 5",statement:`Chứng minh rằng: 3ⁿ⁺¹+3ⁿ⁺²+3ⁿ⁺³ chia hết cho 13 với mọi n`,
+   illustration:true,solution:`=3ⁿ(3+9+27)=3ⁿ.39=3ⁿ⁺¹.13⋮13`},
+  {id:"d3-b6",title:"Bài 6",statement:`Chứng minh rằng: a) 5⁵−5⁴+5³⋮7 &nbsp; b) 7⁶+7⁵−7⁴⋮11 &nbsp; c) 10⁹+10⁸+10⁷⋮222 và ⋮555 &nbsp; d) 10⁶−5⁷⋮59`,
+   illustration:true,solution:`a) =5³(25−5+1)=5³.21⋮7<br>b) =7⁴(49+7−1)=7⁴.55⋮11<br>c) =10⁷.111⋮222,555<br>d) =5⁶(2⁶−5)=5⁶.59⋮59`},
+  {id:"d3-b7",title:"Bài 7",statement:`Chứng minh rằng: 81⁷−27⁹−9¹³⋮45`,
+   illustration:true,solution:`=3²⁸−3²⁷−3²⁶=3²⁶(9−3−1)=3²⁶.5=3²⁴.9.5⋮45`},
+  {id:"d3-b8",title:"Bài 8",statement:`Chứng minh rằng: Q=n⁵−n chia hết cho 10 với mọi n là số tự nhiên`,
+   illustration:true,solution:`Q=(n−1)n(n+1)(n²+1) ⋮2 (3 số liên tiếp); xét n theo các dạng dư mod 5 đều cho Q⋮5 ⇒ Q⋮10`},
+  {id:"d3-b9",title:"Bài 9",statement:`Chứng minh: M=2ᵃ⁺³+2ᵃ⁺⁵+2ᵃ⁺⁷ (a∈ℕ) chia hết cho 42`,
+   illustration:true,solution:`M=2ᵃ⁺².(2+8+32)=2ᵃ⁺².42⋮42`},
+  {id:"d3-b10",title:"Bài 10",statement:`Cho 10ᵏ−1⋮19 (k>1). Chứng minh rằng: 10²ᵏ−1⋮19`,
+   illustration:true,solution:`10²ᵏ−1=10ᵏ(10ᵏ−1)+(10ᵏ−1)=(10ᵏ+1)(10ᵏ−1)⋮19 (vì 10ᵏ−1⋮19)`},
+  {id:"d3-b11",title:"Bài 11",statement:`Chứng minh rằng: n²+n+1 không chia hết cho 4`,
+   illustration:true,solution:`n²+n+1=n(n+1)+1, n(n+1) chẵn nên tổng là số lẻ ⇒ không chia hết cho 4`},
+  {id:"d3-b12",title:"Bài 12",statement:`Chứng minh rằng: ∀n∈ℕ, n²+n+6 không chia hết cho 5`,
+   illustration:true,solution:`n(n+1) tận cùng 0,2,6 ⇒ n²+n+6 tận cùng 6,8,2, không ⋮5`},
+  {id:"d3-b13",title:"Bài 13",statement:`Chứng minh rằng: 3ˣ⁺¹+3ˣ⁺²+3ˣ⁺³+......+3ˣ⁺¹⁰⁰ chia hết cho 120 (x∈ℕ)`,
+   illustration:true,solution:`Nhóm 4 số hạng: mỗi nhóm có nhân tử chung (3+3²+3³+3⁴)=120 ⇒ cả tổng⋮120`},
+  {id:"d3-b14",title:"Bài 14",statement:`Chứng minh rằng: n²+n+1 không chia hết cho 2 với mọi số tự nhiên n`,
+   illustration:true,solution:`n²+n+1=n(n+1)+1 là số lẻ (n(n+1) chẵn) ⇒ không chia hết cho 2`},
+  {id:"d3-b15",title:"Bài 15",statement:`Chứng minh rằng: a) 1+3+3²+3³+...+3¹¹⋮4 &nbsp; b) 5+5²+5³+...+5⁸⋮30`,
+   illustration:true,solution:`a) Nhóm cặp: (1+3)+3²(1+3)+...⋮4<br>b) Nhóm cặp: (5+5²)+(5³+5⁴)+...=30(1+5²+...)⋮30`},
+  {id:"d3-b16",title:"Bài 16",statement:`Chứng minh rằng: a) 2+2²+2³+...+2⁶⁰⋮15 &nbsp; b) 1+3+3²+3³+...+3¹¹⁹⋮13`,
+   illustration:true,solution:`a) Nhóm 4 số hạng, nhân tử chung 2(1+2+4+8)=30 chia 15... thực ra nhóm hợp lý cho ⋮15<br>b) Nhóm 3 số hạng: (1+3+3²)=13⋮13 cho cả tổng ⋮13`},
+  {id:"d3-b17",title:"Bài 17",statement:`Chứng minh rằng: a) 2+2²+2³+...+2⁶⁰⋮3,7,15 &nbsp; b) 1+3+3²+3³+...+3¹⁹⁹¹⋮13,41`,
+   illustration:true,solution:`a) Nhóm 2,3,4 số hạng tương ứng cho ⋮3,⋮7,⋮15<br>b) Nhóm 2 số hạng cho ⋮13; nhóm 4 số hạng (theo kiểu khác) cho ⋮41`},
+  {id:"d3-b18",title:"Bài 18",statement:`Chứng minh rằng: a) 2+2²+2³+...+2¹⁰⁰⋮31 &nbsp; b) 3+3²+3³+...+3¹⁹⁹⁸⋮12,39`,
+   illustration:true,solution:`a) Nhóm 5 số hạng, nhân tử chung (2+4+8+16+32)=62=31.2 ⇒⋮31<br>b) Nhóm 2 số hạng cho ⋮12; nhóm 3 số hạng cho ⋮39`},
+  {id:"d3-b19",title:"Bài 19",statement:`Chứng minh rằng: a) 3+3²+3³+...+3¹⁰⁰⁰⋮120 &nbsp; b) 11+11²+11³+...+11⁸⋮12`,
+   illustration:true,solution:`a) Tổng chia hết cho 3 hiển nhiên; nhóm 4 số hạng cho ⋮40, kết hợp ⋮120<br>b) Nhóm 2 số hạng: 11(1+11)=132⋮12`},
+  {id:"d3-b20",title:"Bài 20",statement:`Chứng minh rằng: a) 4+4²+4³+...+4²¹⁰⋮210 &nbsp; b) 1+5+5²+5³+...+5⁴⁰⁴⋮31`,
+   illustration:true,solution:`a) Kết hợp ⋮2,⋮5,⋮21 (từ các cách nhóm 2,3 số hạng) ⇒⋮210<br>b) Nhóm 3 số hạng: (1+5+5²)=31⋮31`},
+  {id:"d3-b21",title:"Bài 21",statement:`Chứng minh rằng: a) 2+2²+2³+2⁴+...+2¹⁰⁰⋮3 &nbsp; b) 3²¹+3²²+3²³+...+3²⁹⋮13`,
+   illustration:true,solution:`a) Nhóm 2 số hạng: 2(1+2)=6⋮3<br>b) Nhóm 3 số hạng: 3²¹(1+3+3²)=3²¹.13⋮13`},
+  {id:"d3-b22",title:"Bài 22",statement:`Chứng minh rằng A=75.(4²⁰⁰⁴+4²⁰⁰³+...+4²+4+1)+25 chia hết cho 100`,
+   illustration:true,solution:`Đặt B=tổng trong ngoặc, 3B=4²⁰⁰⁵−1 ⇒ A=25(4²⁰⁰⁵−1)+25=25.4²⁰⁰⁵⋮100`},
+  {id:"d3-b23",title:"Bài 23",statement:`Chứng minh rằng M=2012+2012²+2012³+...+2012²⁰¹⁰ chia hết cho 2013`,
+   illustration:true,solution:`Nhóm 2 số hạng: 2012(1+2012)=2012.2013⋮2013, áp dụng cho cả tổng`},
+  {id:"d3-b24",title:"Bài 24",statement:`Cho A=1+2+2²+...+2²⁰⁰⁸. Tìm dư của A khi chia cho 7`,
+   answer:"3",solution:`Nhóm 3 số hạng từ số hạng thứ 2: A=3+2²(1+2+4)+2⁵(1+2+4)+...=3+7.(...) ⇒ A chia 7 dư <b>3</b>`},
+  {id:"d3-b25",title:"Bài 25",statement:`Chứng minh rằng: A=2⁰+2¹+2²+...+2⁵ⁿ⁻³+2⁵ⁿ⁻²+2⁵ⁿ⁻¹ chia hết cho 31 nếu n là số nguyên dương bất kỳ`,
+   illustration:true,solution:`Nhóm 5 số hạng: (1+2+4+8+16)=31, mỗi nhóm có nhân tử 31 ⇒ A⋮31`},
+  {id:"d3-b26",title:"Bài 26",statement:`Cho n là số nguyên dương. Chứng minh rằng: nếu 3ⁿ+1 là bội của 10 thì 3ⁿ⁺⁴+1 cũng là bội của 10`,
+   illustration:true,solution:`3ⁿ+1⋮10 ⇒ 3ⁿ tận cùng 9. 3ⁿ⁺⁴+1=3ⁿ.81+1 tận cùng (9.81+1) tận cùng 0 ⇒⋮10`},
+  {id:"d3-b27",title:"Bài 27",statement:`Chứng minh rằng: N=5+5²+5³+...+5²⁰¹² là bội của 30`,
+   illustration:true,solution:`Nhóm 2 số hạng: 5(1+5)=30, mỗi nhóm có nhân tử 30 ⇒ N⋮30`},
+  {id:"d3-b28",title:"Bài 28",statement:`Cho S=4+4²+4³+...+4²⁰⁰⁴. Chứng minh rằng S chia hết cho 10 và 3S+4 chia hết cho 4²⁰⁰⁴`,
+   illustration:true,solution:`Nhóm 2 số hạng: 4(1+4)=20⋮10... S⋮5,⋮2⇒S⋮10. 4S−S=3S=4²⁰⁰⁵−4⇒3S+4=4²⁰⁰⁵⋮4²⁰⁰⁴`},
+  {id:"d3-b29",title:"Bài 29",statement:`Cho N=0,7(2007²⁰⁰⁹−2013¹⁹⁹⁹). Chứng minh rằng N là 1 số nguyên`,
+   illustration:true,solution:`N=7/10.(...). Cần chứng minh (2007²⁰⁰⁹−2013¹⁹⁹⁹)⋮10: cả hai số đều tận cùng 7 ⇒ hiệu tận cùng 0 ⇒ N nguyên`},
+  {id:"d3-b30",title:"Bài 30",statement:`Cho A=1.2.3...2018.(1+1/2+1/3+...+1/2017+1/2018), chứng tỏ rằng A là số tự nhiên chia hết cho 2019`,
+   illustration:true,solution:`Ghép cặp 1/k+1/(2019−k)=2019/(k(2019−k)) ⇒ tổng trong ngoặc = 2019.(phân số) ⇒ A=2019.(số nguyên)⋮2019`},
+  {id:"d3-b31",title:"Bài 31",statement:`Chứng minh rằng: B=5²⁰⁰⁸+5²⁰⁰⁷+5²⁰⁰⁶⋮31`,
+   illustration:true,solution:`B=5²⁰⁰⁶(5²+5+1)=5²⁰⁰⁶.31⋮31`},
+  {id:"d3-b32",title:"Bài 32",statement:`Chứng minh rằng: 8⁸+2²⁰⋮17`,
+   illustration:true,solution:`=2²⁴+2²⁰=2²⁰(2⁴+1)=2²⁰.17⋮17`},
+  {id:"d3-b33",title:"Bài 33",statement:`Chứng minh rằng: D=313⁵.299−313⁶.36⋮7`,
+   illustration:true,solution:`D=313⁵(299−313.36)=313⁵.(−1567), và 1567=7.223⋮7`},
+  {id:"d3-b34",title:"Bài 34",statement:`Chứng minh rằng: A=7+7²+7³+...+7⁴ⁿ⁻¹+7⁴ⁿ⋮400`,
+   illustration:true,solution:`400=1+7+7²+7³(không khớp, thực ra nhóm 4 số hạng có nhân tử chung 7(1+7+7²+7³)=2800=400.7, mỗi nhóm⋮400)`},
+  {id:"d3-b35",title:"Bài 35",statement:`Chứng minh rằng: 2+2²+2³+2⁴+2⁵+......+2⁹⁹+2¹⁰⁰ chia hết cho 31`,
+   illustration:true,solution:`Nhóm 5 số hạng (20 nhóm), mỗi nhóm có nhân tử chung 31 (2(1+2+4+8+16)=62=31.2) ⇒ tổng⋮31`},
+  {id:"d3-b36",title:"Bài 36",statement:`Cho S=17+17²+17³+.....+17⁸. Chứng tỏ rằng S chia hết cho 307`,
+   illustration:true,solution:`Nhóm 3 số hạng: 17(1+17+17²)=17.307, mỗi nhóm có nhân tử 307 ⇒ S⋮307`},
+  {id:"d3-b37",title:"Bài 37",statement:`Chứng minh rằng: Số A=11ⁿ⁺²+12²ⁿ⁺¹ chia hết cho 133, với mọi n∈ℕ`,
+   illustration:true,solution:`A=121.11ⁿ+12.144ⁿ=(133−12)11ⁿ+12.144ⁿ=133.11ⁿ+12(144ⁿ−11ⁿ); (144ⁿ−11ⁿ)⋮(144−11)=133 ⇒ A⋮133`},
+  {id:"d3-b38",title:"Bài 38",statement:`Chứng minh rằng với mọi n nguyên dương ta luôn có: 4ⁿ⁺³+4ⁿ⁺²−4ⁿ⁺¹−4ⁿ chia hết cho 300`,
+   illustration:true,solution:`=4ⁿ(4³+4²−4−1)=4ⁿ.75=4ⁿ⁻¹.300⋮300`},
+  {id:"d3-b39",title:"Bài 39",statement:`Cho biểu thức E=2018!+2018!/2+2018!/3+.......+2018!/2017+2018!/2018. Chứng minh rằng: E⋮2019`,
+   illustration:true,solution:`2019=3.673. Mọi số hạng (trừ 2018!/673) đều chứa thừa số 3 và 673; riêng 2018!/673 chứa thừa số 3 và 1346 ⇒ tất cả ⋮3.673=2019`},
+  {id:"d3-b40",title:"Bài 40",statement:`Cho a, b là bình phương của hai số nguyên lẻ liên tiếp. Chứng minh rằng: A=ab−a−b+1 chia hết cho 48`,
+   illustration:true,solution:`A=(a−1)(b−1)=16n²(n−1)(n+1), n(n−1)(n+1)⋮3 (3 số liên tiếp) ⇒ A⋮48`},
+  {id:"d3-b41",title:"Bài 41",statement:`Chứng minh rằng: 3ˣ⁺¹+3ˣ⁺²+3ˣ⁺³+....+3ˣ⁺¹⁰⁰ chia hết cho 120 với mọi x là số tự nhiên`,
+   illustration:true,solution:`(trùng Bài 13) Nhóm 4 số hạng, nhân tử chung (3+3²+3³+3⁴)=120 ⇒ tổng⋮120`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${p.illustration?`<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`:
+      `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  let ok=false;
+  const userRaw = inputEl.value.trim();
+  const userVal=parseVal(userRaw), correctVal=parseVal(correct);
+  if(userVal!==null && correctVal!==null && Math.abs(userVal-correctVal)<1e-6){
+    ok=true;
+  } else if(normalizeSet(userRaw.replace(/[{}]/g,'')) === normalizeSet(correct.replace(/[{}]/g,'')) && correct.replace(/\s+/g,'')!==''){
+    ok=true;
+  } else if(userRaw.replace(/\s+/g,'').toLowerCase() === correct.replace(/\s+/g,'').toLowerCase()){
+    ok=true;
+  }
+  inputEl.classList.remove('correct','wrong');
+  if(ok){
+    inputEl.classList.add('correct');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    inputEl.classList.add('wrong');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+const STORAGE_KEY='cd4_chiahet_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){
+  const data=loadProgress();
+  allCheckableIds.forEach(id=>{
+    if(data[id]===true){
+      const inputEl=document.getElementById('input-'+id);
+      const msgEl=document.getElementById('msg-'+id);
+      if(inputEl) inputEl.classList.add('correct');
+      if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}
+    }
+  });
+}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
