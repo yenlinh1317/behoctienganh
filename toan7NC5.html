@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 5: Số nguyên tố, hợp số - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.2rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.7rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.76rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.7rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(3,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 9px;font-size:.74rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.92rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 14px 16px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.86rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.8rem;}
+  .theory .formula{margin:5px 0;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:11px 11px 13px;margin-bottom:10px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:5px;font-size:.85rem;}
+  .problem .statement{font-size:.89rem;margin-bottom:7px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:8px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:.89rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .result-msg{font-size:.8rem;margin-top:5px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:9px;padding:9px 11px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.85rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 5px;font-size:.75rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.72rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+  .jumpnav{position:fixed;right:8px;bottom:70px;background:var(--primary);color:#fff;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;z-index:60;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 CHUYÊN ĐỀ 5: SỐ NGUYÊN TỐ, HỢP SỐ</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 179–206)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.82rem;color:var(--muted)">
+    Lưu ý: phần Dạng 2 (Định lí Fermat) và một số bài ở Dạng 3,4 dùng kiến thức <b>vượt chương trình lớp 7 thông thường</b>
+    (đồng dư thức, định lí Fermat nhỏ) — đây là phần nâng cao dành cho học sinh giỏi cấp cao.
+    Phần lớn bài là "chứng minh" nên đánh dấu <span class="badge-illustration">MINH HỌA</span> — xem cách giải, không có đáp số để nhập.
+  </p>
+
+  <div class="theory" style="border-left-color:var(--primary);background:#eef3fc;">
+    <h4 style="color:var(--primary);">I. MỘT SỐ VẤN ĐỀ LỊCH SỬ VỀ SỐ NGUYÊN TỐ (tóm tắt)</h4>
+    <div class="formula"><b>1) Sàng Ơratosten:</b> Để tìm số nguyên tố trong giới hạn nào đó (ví dụ 1-100): xóa số 1; giữ số 2, xóa các bội của 2 lớn hơn 2; giữ số 3, xóa các bội của 3 lớn hơn 3;... Các số còn lại không bị xóa là số nguyên tố. Nhà toán học Ơratosten (thế kỉ III TCN) là người đầu tiên đưa ra cách này.</div>
+    <div class="formula"><b>2) Sự phân bố số nguyên tố:</b> Từ 1-100 có 25 số nguyên tố; trăm thứ 2 có 21; trăm thứ 3 có 16... Tập hợp số nguyên tố là vô hạn (Ơclit chứng minh từ thế kỉ III TCN bằng phản chứng: giả sử có hữu hạn số nguyên tố p₁,...,pₙ, xét A=p₁p₂...pₙ+1, A chia mỗi pᵢ dư 1 nhưng A là hợp số nên phải có ước nguyên tố — mâu thuẫn).</div>
+    <div class="formula"><b>3) Công thức cho số nguyên tố:</b> Mọi số nguyên tố lớn hơn 3 viết được dưới dạng 6n+1 hoặc 6n−1, nhưng không phải mọi số dạng 6n±1 đều là số nguyên tố (vd 25=6.4+1 không nguyên tố). Số Fermat: 2^(2ⁿ)+1 — Fermat dự đoán luôn là số nguyên tố, nhưng Ơle bác bỏ năm 1732 khi chỉ ra 2³²+1 chia hết cho 641.</div>
+    <div class="formula"><b>4) Biểu diễn một số dưới dạng tổng các số nguyên tố:</b> Giả thuyết Gônbách-Ơle: mọi số chẵn >2 là tổng của 2 số nguyên tố; mọi số tự nhiên >5 là tổng của 3 số nguyên tố (hai mệnh đề này tương đương). Vinôgradốp (1937) chứng minh: mọi số lẻ đủ lớn biểu diễn được dưới dạng tổng 3 số nguyên tố. Bài toán Gônbách-Ơle đến nay vẫn chưa được chứng minh hoàn toàn.</div>
+    <h4 style="color:var(--primary);margin-top:8px;">II.A. TÓM TẮT LÝ THUYẾT</h4>
+    <div class="formula">1. Số nguyên tố là số tự nhiên lớn hơn 1 có 2 ước dương là 1 và chính nó. Số nguyên tố nhỏ nhất là 2 (số nguyên tố chẵn duy nhất); các số nguyên tố còn lại đều là số lẻ.</div>
+    <div class="formula">2. Hợp số là số tự nhiên lớn hơn 1 có nhiều hơn 2 ước dương. Ước nguyên tố nhỏ nhất của hợp số a là một số không vượt quá √a.</div>
+    <div class="formula">Phân tích một số ra thừa số nguyên tố là viết số đó dưới dạng tích của nhiều thừa số, mỗi thừa số là số nguyên tố hoặc lũy thừa của một số nguyên tố. Dù phân tích bằng cách nào cũng được kết quả duy nhất.</div>
+    <div class="formula">Hai hay nhiều số được gọi là nguyên tố cùng nhau khi ƯCLN của chúng bằng 1. Hai số tự nhiên liên tiếp là hai số nguyên tố cùng nhau.</div>
+    <div class="formula"><i>Hệ quả:</i> Số a>1 không có ước nguyên tố nào từ 2 đến √a thì a là số nguyên tố. Tập hợp số nguyên tố là vô hạn.</div>
+  </div>
+
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<a href="#top" class="jumpnav" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+function normalizeSet(str){
+  return str.replace(/\s+/g,'').toLowerCase().split(/[,;]/).map(x=>x.trim()).filter(x=>x!=='').sort().join(',');
+}
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',', '.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+
+const DATA = [
+{id:1, title:"Dạng 1: Sử dụng các tính chất của phép chia số nguyên",
+ theory:`<h4>Gợi ý</h4><div class="formula">i) Trong n số nguyên liên tiếp có một và chỉ một số chia hết cho n.<br>
+ ii) Mọi số nguyên tố lớn hơn 2 đều có dạng 4n±1.<br>
+ iii) Mọi số nguyên tố lớn hơn 3 đều có dạng 6n±1.</div>`,
+ problems:[
+  {id:"c5-d1-b1",title:"Bài 1",statement:`Cho p là số nguyên tố và một trong 2 số 8p+1 và 8p−1 là 2 số nguyên tố, hỏi số nguyên tố thứ 3 là số nguyên tố hay hợp số?`,
+   illustration:true,solution:`Với p=3: 8p+1=25 hợp số, 8p−1=23 nguyên tố. Với p≠3: 8p−1,8p,8p+1 là 3 số liên tiếp nên có 1 số⋮3; vì 8p không⋮3 nên 8p−1 hoặc 8p+1⋮3 ⇒ số thứ 3 là hợp số`},
+  {id:"c5-d1-b2",title:"Bài 2",statement:`Hai số 2ⁿ−1 và 2ⁿ+1 (n>2) có thể đồng thời là số nguyên tố được không? Tại sao?`,
+   illustration:true,solution:`Trong 3 số liên tiếp 2ⁿ−1,2ⁿ,2ⁿ+1 có 1 số⋮3, mà 2ⁿ không⋮3 ⇒ 2ⁿ−1 hoặc 2ⁿ+1 ⋮3 và >3 ⇒ không đồng thời là số nguyên tố`},
+  {id:"c5-d1-b3",title:"Bài 3",statement:`Chứng minh rằng nếu p và p+2 là hai số nguyên tố lớn hơn 3 thì tổng của chúng chia hết cho 12`,
+   illustration:true,solution:`p+(p+2)=2(p+1). p lẻ ⇒ p+1⋮2 ⇒ 2(p+1)⋮4. p,p+1,p+2 liên tiếp, p và p+2 không⋮3 ⇒ p+1⋮3 ⇒ 2(p+1)⋮3. Vậy 2(p+1)⋮12`},
+  {id:"c5-d1-b4",title:"Bài 4",statement:`Tìm số nguyên tố p sao cho p+10 và p+14 là các số nguyên tố`,
+   answer:"3",solution:`Với p=3: p+10=13,p+14=17 đều nguyên tố. Với p>3: p=3k±1, kiểm tra p+14 hoặc p+10 chia hết 3 ⇒ chỉ p=<b>3</b> thỏa mãn`},
+  {id:"c5-d1-b5",title:"Bài 5",statement:`a) Tìm 3 số lẻ liên tiếp đều là các số nguyên tố &nbsp; b) Tìm số nguyên tố p sao cho p vừa là tổng vừa là hiệu của hai số nguyên tố`,
+   answer:"3,5,7",solution:`a) Trong 3 số lẻ liên tiếp có 1 số⋮3 ⇒ 3 số đó là <b>3,5,7</b><br>b) p=p₁+p₂=p₃−p₄, biện luận p₁,p₁+2,p₁+4 là 3 số nguyên tố lẻ liên tiếp ⇒ p₁=3 ⇒ p=5 (=3+2=7−2)<br><i>(nhập 3,5,7 cho câu a)</i>`},
+  {id:"c5-d1-b6",title:"Bài 6",statement:`Tìm các số tự nhiên k để dãy: k+1,k+2,k+3,...,k+10 chứa nhiều số nguyên tố nhất`,
+   answer:"1",solution:`k=0: dãy 1-10 chứa 4 SNT (2,3,5,7). k=1: dãy 2-11 chứa 5 SNT (2,3,5,7,11). k≥3: dãy chứa 5 số lẻ liên tiếp luôn có 1⋮3, và 5 số chẵn không là SNT ⇒ ít hơn 5. Vậy k=<b>1</b> cho nhiều SNT nhất`},
+  {id:"c5-d1-b7",title:"Bài 7 (minh họa)",illustration:true,
+   statement:`Gọi p,q là hai số tự nhiên liên tiếp, nếu giữa p và q không có số nguyên tố nào khác. Tìm 3 số nguyên tố liên tiếp p,q,r sao cho p²+q²+r² cũng là số nguyên tố`,
+   solution:`Nếu p,q,r đều khác 3 thì p²,q²,r² đều ≡1(mod 3) ⇒ tổng⋮3 và >3 ⇒ hợp số. Vậy p=3,q=5,r=7: tổng=9+25+49=83 là số nguyên tố`},
+  {id:"c5-d1-b8",title:"Bài 8 (minh họa)",illustration:true,
+   statement:`Tìm 3 số nguyên tố sao cho p^q+q^p=r`,
+   solution:`r>3 nên r lẻ ⇒ p,q khác tính chẵn lẻ. Giả sử p=2,q lẻ: 2^q+q²=r. Nếu q không⋮3 thì biện luận dẫn đến r⋮3 (vô lý) ⇒ q=3 ⇒ r=2³+3²=17 (nguyên tố). Vậy (p,q,r)=(2,3,17) hoặc (3,2,17)`},
+  {id:"c5-d1-b9",title:"Bài 9 (minh họa)",illustration:true,
+   statement:`a) Chứng minh rằng số dư trong phép chia của một số nguyên tố cho 30 chỉ có thể là 1 hoặc là số nguyên tố. Khi chia cho 60 thì kết quả ra sao? &nbsp; b) Chứng minh rằng nếu tổng của n lũy thừa bậc 4 của các số nguyên tố lớn hơn 5 là một số nguyên tố thì (n,30)=1`,
+   solution:`a) p=30k+r (0<r<30); nếu r là hợp số thì r có ước nguyên tố q≤√30 ⇒ q∈{2,3,5}, nhưng p nguyên tố nên vô lý ⇒ r=1 hoặc r nguyên tố. Với chia 60: không còn đúng (vd p=109=60.1+49, 49 là hợp số)<br>b) Số nguyên tố p>5 chia 30 dư ∈{1,7,11,13,17,19,23,29}; tính p⁴ mod 30 đều ≡1 ⇒ tổng n số hạng ≡n(mod 30); vì tổng là số nguyên tố nên (n,30)=1`},
+  {id:"c5-d1-b10",title:"Bài 10 (minh họa)",illustration:true,
+   statement:`Tìm tất cả các bộ ba số nguyên tố a,b,c sao cho abc<ab+bc+ca`,
+   solution:`Giả sử a≤b≤c ⇒ a<3 ⇒ a=2. Khi đó b<4 ⇒ b=2 hoặc 3. Nếu b=2: c bất kỳ là số nguyên tố. Nếu b=3: c<6 ⇒ c=3 hoặc 5. Các bộ: (2,2,p),(2,3,3),(2,3,5) và các hoán vị`},
+  {id:"c5-d1-b11",title:"Bài 11 (minh họa)",illustration:true,
+   statement:`Cho dãy số nguyên dương a₁,a₂,....,aₙ được xác định như sau: a₁=2, aₙ là ước nguyên tố lớn nhất của a₁a₂a₃...aₙ₋₁+1 với n≥2. Chứng minh rằng aₖ≠5 với mọi k`,
+   solution:`a₁=2,a₂=3. Giả sử a_n=5 là ước nguyên tố lớn nhất của A=2.3.a₃...aₙ₋₁+1 ⇒ A không⋮2,3 ⇒ A=5^m (m≥2) ⇒ A−1=5^m−1⋮4, nhưng A−1=2.3.a₃...aₙ₋₁ không⋮4 (các a lẻ) ⇒ vô lý ⇒ aₖ≠5`},
+  {id:"c5-d1-b12",title:"Bài 12",statement:`Tìm tất cả các số nguyên tố p để 2^p+p² cũng là số nguyên tố`,
+   answer:"3",solution:`p=2: 2²+2²=4 không nguyên tố. p=3: 2³+3²=17 nguyên tố. p>3: p²+2^p=(p²−1)+(2^p+1), p lẻ và không⋮3 ⇒ p²−1⋮3 và 2^p+1⋮3 ⇒ tổng là hợp số. Vậy p=<b>3</b>`}
+ ]},
+{id:2, title:"Dạng 2: Áp dụng định lí Fermat (nâng cao)",
+ theory:`<h4>Định lí Fermat nhỏ</h4><div class="formula">p là số nguyên tố và (a,p)=1 thì aᵖ⁻¹≡1 (mod p).</div>`,
+ problems:[
+  {id:"c5-d2-b1",title:"Bài 1 (minh họa)",illustration:true,
+   statement:`Nhà toán học Pháp Fermat đã đưa ra công thức 2^(2ⁿ)+1 để tìm các số nguyên tố. 1) Tính giá trị công thức khi n=4 &nbsp; 2) Với giá trị này, chứng tỏ 3 tính chất: a) Tổng hai chữ số đầu và cuối bằng tổng các chữ số còn lại b) Tổng bình phương các chữ số là số chính phương c) Hiệu giữa tổng bình phương 2 chữ số đầu+cuối và tổng bình phương các chữ số còn lại bằng tổng các chữ số`,
+   solution:`1) n=4: 2^(2⁴)+1=2¹⁶+1=65537 (số nguyên tố)<br>2a) 6+7=13=5+5+3<br>2b) 6²+5²+5²+3²+7²=144=12²<br>2c) (6²+7²)−(5²+5²+3²)=85−59=26=6+5+5+3+7`},
+  {id:"c5-d2-b2",title:"Bài 2 (minh họa)",illustration:true,
+   statement:`Cho n∈ℕ*, chứng minh rằng: 2^(2^(10n+1))+19 và 2^(3^(4n+1))+3^(2^(4n+1))+5 là những hợp số`,
+   solution:`Dùng định lý Fermat với mod 23: 2¹⁰≡1(mod 11)... biến đổi số mũ ⇒ 2^(2^(10n+1))≡4(mod 23) ⇒ +19⋮23 và >23 ⇒ hợp số. Biểu thức thứ 2 chứng minh tương tự ⋮11`},
+  {id:"c5-d2-b3",title:"Bài 3",statement:`Tìm số nguyên tố p sao cho 2^p+1 chia hết cho p`,
+   answer:"3",solution:`Theo Fermat: 2^p≡2(mod p) ⇒ 2^p−2⋮p ⇒ 3=(2^p+1)−(2^p−2)⋮p ⇒ p=<b>3</b> (kiểm tra: 2³+1=9⋮3 ✓)`},
+  {id:"c5-d2-b4",title:"Bài 4 (minh họa)",illustration:true,
+   statement:`Cho p là số nguyên tố lớn hơn 2. Chứng minh rằng có vô số số tự nhiên n thỏa n.2ⁿ−1 chia hết cho p`,
+   solution:`2^(p−1)≡1(mod p). Tìm n=(p−1) sao cho n.2ⁿ≡1(mod p): n.2ⁿ=m(p−1).2^(m(p−1))(mod p) ⇒ với n=(kp−1)(p−1), k∈ℕ*, ta có n.2ⁿ−1⋮p — có vô số giá trị n`},
+  {id:"c5-d2-b5",title:"Bài 5 (minh họa)",illustration:true,
+   statement:`Cho p là số nguyên tố, chứng minh rằng số 2^p−1 chỉ có ước nguyên tố có dạng 2pk+1`,
+   solution:`Gọi q là ước nguyên tố của 2^p−1 (q lẻ). Theo Fermat: 2^(q−1)≡1(mod q). Dùng (2^p−1,2^(q−1)−1)=2^((p,q−1))−1⋮q, suy ra q−1⋮p (vì nếu (q−1,p)=1 thì 1⋮q vô lý). q−1 chẵn nên q−1⋮2p ⇒ q=2pk+1`},
+  {id:"c5-d2-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Giả sử p là số nguyên tố lẻ và m=(9^p−1)/8. Chứng minh rằng m là hợp số lẻ không chia hết cho 3 và 3^(m−1)≡1 (mod m)`,
+   solution:`m=[(3^p−1)/2].[(3^p+1)/4]=a.b với a,b>1 ⇒ m là hợp số. m=9^(p−1)+...+9+1 (p số hạng, p lẻ) ⇒ m lẻ và m≡1(mod 3). Dùng Fermat với 9^p−9⋮p để suy ra m−1⋮2p, từ đó 3^(m−1)−1⋮3^(2p)−1=(9^p−1)/8.8 =m.8⋮m`},
+  {id:"c5-d2-b7",title:"Bài 7 (minh họa)",illustration:true,
+   statement:`Chứng minh rằng dãy số 2003+23k với k=1,2,3.... chứa vô hạn số là lũy thừa của cùng một số nguyên tố`,
+   solution:`Giả sử p²²ᵗ⁺ⁿ=2003+23(k+sp^n) với mọi t — dùng định lý Fermat nhỏ mod 23 (p²²−1⋮23) để chỉ ra với p=2003, tồn tại k thỏa 2003+23k=2003²³, từ đó suy ra vô hạn số hạng dạng pⁿ trong dãy`},
+  {id:"c5-d2-b8",title:"Bài 8 (minh họa)",illustration:true,
+   statement:`Tìm bảy số nguyên tố sao cho tích của chúng bằng tổng các lũy thừa bậc sáu của bảy số đó`,
+   solution:`Dùng Fermat nhỏ: nếu a không⋮7 thì a⁶≡1(mod 7). Xét p₁...p₇=p₁⁶+...+p₇⁶: nếu có k số ≠7 (0≤k≤7) thì xét k=0 (tất cả =7): 7⁷=7.7⁶ thỏa mãn; k=7 (tất cả ≠7): vế trái không⋮7, vế phải⋮7 (mâu thuẫn). Vậy cả 7 số nguyên tố đều là <b>7</b>`}
+ ]},
+{id:3, title:"Dạng 3: Phương pháp phân tích",
+ theory:`<h4>Gợi ý</h4><div class="formula">Phân tích biểu thức thành nhân tử (hằng đẳng thức, nhóm hạng tử...) để chỉ ra biểu thức là tích của các số >1, từ đó suy ra hợp số (hoặc biện luận từng trường hợp để tìm số nguyên tố).</div>`,
+ problems:[
+  {id:"c5-d3-b1",title:"Bài 1",statement:`Tìm n∈ℕ* để: a) n⁴+4 là số nguyên tố &nbsp; b) n²⁰⁰³+n²⁰⁰²+1 là số nguyên tố`,
+   answer:"1",solution:`a) n⁴+4=(n²+2)²−(2n)²=(n²+2+2n)(n²+2−2n); để là SNT cần n²−2n+2=1⇒n=1, thử lại n⁴+4=5 nguyên tố ⇒ n=<b>1</b><br>b) Với n>1: biểu thức⋮(n²+n+1) và >n²+n+1 ⇒ hợp số. Với n=1: =3 nguyên tố<br><i>(nhập đáp số câu a)</i>`},
+  {id:"c5-d3-b2",title:"Bài 2",statement:`a) Tìm các số nguyên tố p để 2p+1 là lập phương của một số tự nhiên &nbsp; b) Tìm các số nguyên tố p để 13p+1 là lập phương của một số tự nhiên`,
+   answer:"13",solution:`a) 2p+1=n³, n lẻ=2m+1 ⇒ p=m(4m²+6m+3), p nguyên tố ⇒ m=1 ⇒ p=<b>13</b> (thử lại 2.13+1=27=3³)<br>b) 13p+1=n³=(n−1)(n²+n+1), n−1=13 hoặc n−1=p ⇒ p=211 hoặc p=2<br><i>(nhập đáp số câu a)</i>`},
+  {id:"c5-d3-b3",title:"Bài 3",statement:`Tìm tất cả các số nguyên x,y thỏa x²−2y²=1`,
+   answer:"3,2",solution:`x lẻ, đặt x=2n+1: 4n²+4n+1=2y²+1⇒y²=2(n²+n)⋮2⇒y=2 (vì y nguyên tố) ⇒x=<b>3</b>`},
+  {id:"c5-d3-b4",title:"Bài 4",statement:`Tìm các số nguyên tố x,y,z thỏa xʸ+1=z`,
+   answer:"2,2,5",solution:`x,y≥2⇒z≥5, z lẻ ⇒ xʸ chẵn ⇒x=2. y chẵn (nếu y lẻ thì z⋮3 vô lý) ⇒y=2,z=2²+1=5 ⇒ (x,y,z)=(<b>2,2,5</b>)`},
+  {id:"c5-d3-b5",title:"Bài 5 (minh họa)",illustration:true,
+   statement:`Chứng minh rằng nếu 1+2ⁿ+4ⁿ (n∈ℕ*) là số nguyên tố thì n=3ᵏ với k∈ℕ`,
+   solution:`Đặt n=3ᵏ.m với (m,3)=1. Giả sử m>1, xét m=3l+1 hoặc 3l+2, đều phân tích được 1+2ⁿ+4ⁿ thành tích có nhân tử >1 (dùng a=2^(3ᵏ)) ⇒ hợp số (mâu thuẫn) ⇒ m=1 ⇒ n=3ᵏ`},
+  {id:"c5-d3-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Cho a,b,c,d∈ℕ* thỏa mãn ab=cd. Chứng minh rằng: A=aⁿ+bⁿ+cⁿ+dⁿ là hợp số với mọi n∈ℕ`,
+   solution:`Đặt (a,b)=t, a=ta₁,b=tb₁ (a₁,b₁)... từ ab=cd suy ra tồn tại k sao cho A=(kⁿ+tⁿ)(a₁ⁿ+c₁ⁿ), cả 2 nhân tử >1 ⇒ A là hợp số`},
+  {id:"c5-d3-b7",title:"Bài 7",statement:`Tìm tất cả các số nguyên tố p dạng n(n+1)/2 − 1 (n≥1)`,
+   answer:"2,5",solution:`p=(n−1)(n+2)/2. n=2⇒p=2; n=3⇒p=5; n>3 thì cả (n−1)/2 và n+2 đều >1 ⇒ hợp số. Vậy p=<b>2</b> hoặc 5`},
+  {id:"c5-d3-b8",title:"Bài 8",statement:`Tìm tất cả các số có hai chữ số <u>ab</u> sao cho ab/|a−b| là số nguyên tố`,
+   answer:"12,21,26,62",solution:`Giả sử a>b, ab/(a−b)=p (nguyên tố) ⇒ a,b chia hết cho p ⇒ ab=ap−bp ⇒(a+p)(p−b)=p² ⇒ a=p²−p,b=p−1. Với p=2:<u>ab</u>=21 hoặc 12; p=3: 62 hoặc 26; p=5,7: a có 2 chữ số (loại). Đáp số: <b>12,21,26,62</b>`},
+  {id:"c5-d3-b9",title:"Bài 9 (minh họa)",illustration:true,
+   statement:`Cho các số p=bᶜ+a, q=aᵇ+c, r=cᵃ+b là các số nguyên tố (a,b,c∈ℕ*). Chứng minh rằng ba số p,q,r có ít nhất hai số bằng nhau`,
+   solution:`a,b,c có ít nhất 2 số cùng tính chẵn lẻ. Giả sử a,b cùng chẵn/lẻ ⇒ p=bᶜ+a chẵn ⇒p=2 ⇒a=b=1⇒q=c+1,r=c+1⇒q=r`},
+  {id:"c5-d3-b10",title:"Bài 10",statement:`a) Cho 2ᵏ+1 là số nguyên tố (gọi là nguyên tố Fermat). Chứng minh rằng k=0 hoặc k=2ⁿ &nbsp; b) Cho 2ᵏ−1 là số nguyên tố (gọi là số nguyên tố Mersenne). Chứng minh rằng k là số nguyên tố`,
+   illustration:true,solution:`a) Giả sử k>0 và k≠2ⁿ ⇒ k=2ⁿ.t với t lẻ>1 ⇒ 2ᵏ+1 phân tích được thành tích có nhân tử >1 (mâu thuẫn)<br>b) Giả sử k=m.t (1<t<k) ⇒ 2ᵏ−1=(2ᵗ)ᵘ... có nhân tử 2ᵗ−1>1 ⇒ hợp số (mâu thuẫn) ⇒ k nguyên tố`}
+ ]},
+{id:4, title:"Dạng 4: Giải phương trình nghiệm nguyên nhờ sử dụng tính chất số nguyên tố (nâng cao)",
+ theory:`<h4>Hai mệnh đề (nguyên văn rút gọn)</h4>
+ <div class="formula"><b>Mệnh đề 1:</b> Nếu số nguyên tố p=2ᵗk+1 (t,k nguyên dương, k lẻ) là ước của n=a^(2ᵗ)+b^(2ᵗ) thì p là ước số chung của a và b.</div>
+ <div class="formula"><b>Mệnh đề 2:</b> Nếu a,b nguyên tố cùng nhau thì mọi ước nguyên tố lẻ của a²+b² chỉ có dạng 4m+1 (không có dạng 4m+3).</div>`,
+ problems:[
+  {id:"c5-d4-b1",title:"Bài 1 (minh họa)",illustration:true,
+   statement:`Giải phương trình nghiệm nguyên: x²−y³=7`,
+   solution:`Biến đổi x²+1=(y+2)(y²−2y+4). Xét y chẵn/lẻ và dùng Mệnh đề 2 (ước nguyên tố của x²+1 chỉ dạng 4m+1) để chỉ ra vế phải phải có ước dạng 4m+3 (mâu thuẫn) ⇒ phương trình vô nghiệm nguyên`},
+  {id:"c5-d4-b2",title:"Bài 2 (minh họa)",illustration:true,
+   statement:`Tìm tất cả các cặp số nguyên dương (x,y) sao cho (x²+y²)/(x−y) là số nguyên dương và là ước số của 1995`,
+   solution:`1995=5.3.7.19, các ước nguyên tố 3,7,19 đều dạng 4m+3. Dùng Mệnh đề 2, biện luận qua ƯCLN d=(x,y): các số x,y phải có dạng x=3m,y=m hoặc x=2m,y=m với m là 1 trong 8 ước của 3.7.19`},
+  {id:"c5-d4-b3",title:"Bài 3 (minh họa)",illustration:true,
+   statement:`Tìm số nhỏ nhất trong tập hợp các số chính phương dạng 15a+16b và 16a−15b với a,b là các số nguyên dương nào đó`,
+   solution:`Đặt 15a+16b=m², 16a−15b=n². Suy ra m⁴+n⁴=481(a²+b²) với 481=13.37 (cả 2 đều dạng 4k+1). Biện luận qua ƯCLN d=(m,n), chọn t=1,u=v=1 để m,n nhỏ nhất ⇒ m=n=481, từ đó a=31.481,b=481`},
+  {id:"c5-d4-b4",title:"Bài 4",statement:`Tìm số có 3 chữ số mà có đúng 5 ước`,
+   answer:"625",solution:`Số có đúng 5 ước (số lẻ) phải có dạng pⁿ⁺¹ ước với n=4 ⇒ dạng p⁴. p⁴ có 3 chữ số khi p=5 ⇒ số là 5⁴=<b>625</b>`},
+  {id:"c5-d4-b5",title:"Bài 5",statement:`Tìm 3 số nguyên tố biết rằng một trong ba số đó bằng hiệu các lập phương của hai số kia`,
+   answer:"2,3,19",solution:`c=a³−b³=(a−b)(a²+ab+b²); để c nguyên tố cần a−b=1 ⇒ a=3,b=2 (2 SNT liên tiếp) ⇒ c=27−8=19. Ba số: <b>2,3,19</b>`},
+  {id:"c5-d4-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Xét dãy số nguyên tố từ nhỏ đến lớn: 2;3;5;7;11;13;17;... ta lập hai dãy: 5=2+3;8=3+5;12=5+7;... (tổng 2 SNT liền nhau) và 6=2.3;15=3.5;35=5.7;... (tích 2 SNT liền nhau). Có hay không một số hạng của dãy thứ nhất bằng một số hạng của dãy thứ hai?`,
+   solution:`Dãy 1 (trừ số hạng đầu 5): luôn là số chẵn. Dãy 2 (trừ số hạng đầu 6): luôn là số lẻ. Vậy không có số hạng nào của dãy 1 bằng số hạng của dãy 2`},
+  {id:"c5-d4-b7",title:"Bài 7",statement:`Tìm số nguyên tố p biết rằng p+2 và p+4 cũng là số nguyên tố`,
+   answer:"3",solution:`p≠1. Nếu p=3k+1 thì p+2=3k+3 hợp số; nếu p=3k+2 thì p+4=3k+6 hợp số ⇒ p chỉ có thể =<b>3</b> (p+2=5,p+4=7 đều nguyên tố)`},
+  {id:"c5-d4-b8",title:"Bài 8",statement:`Có bao nhiêu số có ba chữ số mà mỗi chữ số của nó là ước nguyên tố của chúng?`,
+   answer:"222,333,555,735,777",solution:`Các chữ số chỉ có thể ∈{2,3,5,7}. Thử các trường hợp bắt đầu bằng 2,3,5,7 và kiểm tra chia hết ⇒ 5 số: <b>222,333,555,735,777</b>`},
+  {id:"c5-d4-b9",title:"Bài 9",statement:`Một xí nghiệp điện tử trong một ngày đã giao cho một cửa hàng một số máy tivi. Số máy này là một số có ba chữ số mà nếu tăng chữ số đầu lên n lần, giảm các chữ số thứ hai và thứ ba đi n lần thì sẽ được một số mới lớn gấp n lần số máy đã giao. Tìm n và số máy tivi đã giao`,
+   answer:"178",solution:`Lập phương trình ⇒ 100a+10b+c=89n/(n−1). Vì 89 nguyên tố nên n=2 ⇒ số máy = <b>178</b>`},
+  {id:"c5-d4-b10",title:"Bài 10 (minh họa)",illustration:true,
+   statement:`Những số nguyên tố nào có thể là ước của số có dạng 111...11 (gồm các chữ số 1)?`,
+   solution:`Số dạng 111...1 không chia hết cho 2 và 5. Với p nguyên tố khác 2,5: xét p+1 số 1,11,111,...,11...1 — theo Dirichlet có 2 số cùng số dư khi chia p ⇒ hiệu của chúng (dạng 11...100...0) chia hết cho p ⇒ p là ước. Vậy ước có thể là mọi số nguyên tố trừ 2 và 5`}
+ ]},
+{id:5, title:"Dạng 5: Các bài toán về hai số nguyên tố cùng nhau",
+ theory:`<h4>Định nghĩa</h4><div class="formula">Hai số nguyên tố cùng nhau là hai số có ước chung lớn nhất bằng 1.</div>`,
+ problems:[
+  {id:"c5-d5-b1",title:"Bài 1",statement:`Chứng minh rằng: a) Hai số tự nhiên liên tiếp (khác 0) là hai số nguyên tố cùng nhau &nbsp; b) Hai số lẻ liên tiếp là hai số nguyên tố cùng nhau &nbsp; c) 2n+1 và 3n+1 (n∈ℕ) là hai số nguyên tố cùng nhau`,
+   illustration:true,solution:`a) d=ƯC(n,n+1)⇒(n+1)−n=1⋮d⇒d=1<br>b) d=ƯC(2n+1,2n+3)⇒2⋮d, mà d lẻ⇒d=1<br>c) d=ƯC(2n+1,3n+1)⇒3(2n+1)−2(3n+1)=1⋮d⇒d=1`},
+  {id:"c5-d5-b2",title:"Bài 2",statement:`Cho a và b là hai số nguyên tố cùng nhau. Chứng minh rằng hai số sau cũng là hai số nguyên tố cùng nhau: a) a và a+b &nbsp; b) a² và a+b &nbsp; c) ab và a+b`,
+   illustration:true,solution:`a) d=ƯC(a,a+b)⇒b⋮d, mà a⋮d⇒d∈ƯC(a,b)⇒d=1<br>b) Nếu a²,a+b cùng⋮d (d nguyên tố) thì a⋮d⇒b⋮d (mâu thuẫn (a,b)=1)<br>c) Nếu ab,a+b cùng⋮d thì 1 trong a,b⋮d⇒số kia cũng⋮d (mâu thuẫn)`},
+  {id:"c5-d5-b3",title:"Bài 3",statement:`Tìm số tự nhiên n để các số 9n+24 và 3n+4 là các số nguyên tố cùng nhau`,
+   answer:"n lẻ",solution:`d=ƯC(9n+24,3n+4)⇒(9n+24)−3(3n+4)=12⋮d⇒d∈{1,2,3}. d≠3 (vì 3n+4 không⋮3). d≠2 khi n lẻ (9n+24,3n+4 đều lẻ) ⇒ điều kiện: n là số <b>lẻ</b>`}
+ ]},
+{id:6, title:"Phần bài tập tự luyện (Dạng 1-5, có Hướng dẫn giải tóm tắt cuối sách)",
+ theory:`<h4>Ghi chú</h4><div class="formula">Phần này là các bài tự luyện thêm, sách chỉ cho đáp số/gợi ý ngắn (không phải lời giải đầy đủ từng bước như các Dạng 1-5 ở trên).</div>`,
+ problems:[
+  {id:"c5-tl-1",title:"Bài 1 (Dạng 1)",statement:`Tìm số nguyên tố p sao cho các số sau cũng là số nguyên tố: a) p+2 và p+10 &nbsp; b) p+10 và p+20 &nbsp; c) p+2, p+6, p+8, p+12, p+14`,
+   answer:"3",solution:`a,b) Đáp số: p=3<br>c) Đáp số: p=5<br><i>(nhập đáp số chung câu a,b)</i>`},
+  {id:"c5-tl-2",title:"Bài 2",statement:`Chứng minh rằng nếu n và n²+2 là các số nguyên tố thì n³+2 cũng là số nguyên tố`,
+   answer:"3",solution:`Đáp số: n=3 (là giá trị duy nhất thỏa mãn giả thiết, từ đó n³+2=29 nguyên tố)`},
+  {id:"c5-tl-3",title:"Bài 3",statement:`Chứng minh rằng nếu a, a+k, a+2k (a,k∈ℕ*) là các số nguyên tố lớn hơn 3 thì k chia hết cho 6`,
+   illustration:true,solution:`Số nguyên tố lớn hơn 3 có dạng 6n+1 hoặc 6n+5. 3 số a,a+k,a+2k phải có ít nhất 2 số cùng dạng ⇒ hiệu là k hoặc 2k chia hết cho 6 ⇒ k chia hết cho 3 (kết hợp tính chẵn của k) ⇒ k⋮6`},
+  {id:"c5-tl-4",title:"Bài 4",statement:`Chứng minh rằng nếu p là số nguyên tố lớn hơn 3 thì (p−1)(p+1) chia hết cho 24`,
+   illustration:true,solution:`(p−1)p(p+1)⋮3 mà (p,3)=1⇒(p−1)(p+1)⋮3. p lẻ⇒p−1,p+1 là 2 số chẵn liên tiếp, 1 trong đó⋮4⇒tích⋮8. Vậy (p−1)(p+1)⋮24`},
+  {id:"c5-tl-5",title:"Bài 5",statement:`Một số nguyên tố p chia cho 42 có dư là một hợp số r. Tìm r`,
+   answer:"25",solution:`p=42k+r=2.3.7k+r, p nguyên tố nên r không⋮2,3,7. Các hợp số nhỏ hơn 42 không⋮2 là 9,15,21,25,27,33,35,39; loại các số⋮3,⋮7 chỉ còn r=<b>25</b>`},
+  {id:"c5-tl-6",title:"Bài 6",statement:`Một số nguyên tố p chia cho 30 có số dư là r. Tìm r biết rằng r không là số nguyên tố`,
+   answer:"1",solution:`p=30k+r=2.3.5k+r, r không⋮2,3,5. Các hợp số nhỏ hơn 30 không⋮2 là 9,15,21,25,27; loại các số ⋮3,5 thì không còn số nào ⇒ r không là hợp số, cũng không là SNT (theo giả thiết) ⇒ r=<b>1</b>`},
+  {id:"c5-tl-7",title:"Bài 7 (minh họa)",illustration:true,
+   statement:`Chứng minh rằng số <u>11...1</u>(n chữ số 1)2<u>11...1</u>(n chữ số 1) là hợp số với n≥1`,
+   solution:`Số này = <u>11...1</u>(n+1 chữ số 1).10...0(n chữ số 0) + <u>11...1</u>(n+1 chữ số 1) = <u>11...1</u>(n+1 chữ số 1).(10ⁿ+1), là tích 2 số >1 ⇒ hợp số`},
+  {id:"c5-tl-8",title:"Bài 8",statement:`Tìm n số sao cho 10101...0101 (n chữ số 0 và n+1 chữ số 1 xen kẽ nhau) là số nguyên tố`,
+   answer:"1",solution:`p=(10^(n+1)−1)(10^(n+1)+1)/(9.11). Với n=1: p=101 là số nguyên tố. Với n>1: p là hợp số. Vậy n=<b>1</b>`},
+  {id:"c5-tl-9",title:"Bài 9 (minh họa)",illustration:true,
+   statement:`Các số sau là số nguyên tố hay hợp số: a) A=11...1 (2001 chữ số 1) &nbsp; b) B=11...1 (2000 chữ số 1) &nbsp; c) C=1010101 &nbsp; d) D=1112111 &nbsp; e) E=1!+2!+3!+...+100! &nbsp; g) G=3.5.7.9−28 &nbsp; h) H=311141111`,
+   solution:`Tất cả đều là hợp số: a) Tổng chữ số =2001⋮3; b) B⋮11; c) C⋮101; d) D=1111000+1111⋮1111; e) E⋮3 (vì 1!+2!=3⋮3 và các số hạng còn lại cũng ⋮3); g) G⋮7; h) H=311110000+31111⋮31111`},
+  {id:"c5-tl-10",title:"Bài 10 (Dạng 2 - nâng cao)",illustration:true,
+   statement:`Cho n∈ℕ*, chứng minh rằng các số sau là hợp số: a) A=2^(2^(2n+1))+3 &nbsp; b) B=2^(2^(4n+1))+7 &nbsp; c) C=2^(2^(6n+2))+13`,
+   solution:`Chứng minh A⋮7, B⋮11, C⋮29 (dùng định lý Fermat nhỏ với các modulo tương ứng, tương tự cách làm ở Dạng 2 - Bài 2)`},
+  {id:"c5-tl-11",title:"Bài 11",statement:`p là số nguyên tố lớn hơn 5, chứng minh rằng p⁴≡1 (mod 240)`,
+   illustration:true,solution:`240=2⁴.3.5. Chứng minh riêng p⁴≡1 theo từng modulo 16,3,5 (dùng p lẻ, không⋮3, không⋮5) rồi kết hợp bằng CRT`},
+  {id:"c5-tl-12",title:"Bài 12",statement:`Chứng minh rằng dãy aₙ=10ⁿ+3 có vô số hợp số`,
+   answer:"n=6k+4",solution:`Với n=<b>6k+4</b> (k∈ℕ), có thể chỉ ra 10ⁿ+3 luôn chia hết cho 1 số cố định ⇒ vô số hợp số trong dãy`},
+  {id:"c5-tl-13",title:"Bài 13",statement:`Chứng minh rằng với mỗi số nguyên tố p có vô số dạng 2ⁿ−n chia hết cho p`,
+   illustration:true,solution:`Với p=2: lấy n chẵn. Với p>2: lấy n=(pk−1)(p−1) tương tự cách làm ở Dạng 2 - Bài 4, dùng định lý Fermat nhỏ`},
+  {id:"c5-tl-14",title:"Bài 14 (Dạng 3)",statement:`Tìm n∈ℕ* để n³−n²+n−1 là số nguyên tố`,
+   answer:"2",solution:`n³−n²+n−1=(n−1)(n²+1). Để là SNT cần n−1=1⇒n=<b>2</b> (thử lại: 8−4+2−1=5 nguyên tố)`},
+  {id:"c5-tl-15",title:"Bài 15",statement:`Tìm các số x,y∈ℕ* sao cho x⁴+4y⁴ là số nguyên tố`,
+   answer:"1,1",solution:`x⁴+4y⁴=(x²+2y²)²−(2xy)²=(x²−2xy+2y²)(x²+2xy+2y²). Để là SNT cần x²−2xy+2y²=1⇒x=y=1 ⇒ giá trị =5 là số nguyên tố`},
+  {id:"c5-tl-16",title:"Bài 16",statement:`Tìm tất cả các số nguyên tố p có dạng n(n+1)(n+2)/6+1 (n≥1)`,
+   answer:"2,5,11",solution:`p=(n+3)(n²+2)/6. Với n=1,2,3: p=2,5,11 là số nguyên tố. Với n≥4: cả (n+3) và (n²+2) đủ lớn và tích chia hết cho 6 với thừa số dư ra >1 ⇒ hợp số. Vậy p∈{<b>2,5,11</b>}`},
+  {id:"c5-tl-17",title:"Bài 17 (minh họa)",illustration:true,
+   statement:`Cho n∈ℕ*, chứng minh A=n⁴+4ⁿ là hợp số với n>1`,
+   solution:`n chẵn: A chia hết cho 2 và A>2 ⇒ hợp số. n lẻ, đặt n=2k+1: A=(n²+2^(2k+1)−n.2^(k+1))(n²+2^(2k+1)+n.2^(k+1)), là tích 2 số >1 ⇒ hợp số`},
+  {id:"c5-tl-18",title:"Bài 18 (Dạng 4 - nâng cao, minh họa)",illustration:true,
+   statement:`Giải phương trình nghiệm nguyên: 4(a−x)(x−b)+b−a=y² (1), trong đó a,b là các số nguyên cho trước và a>b`,
+   solution:`Đặt m=a−x,n=x−b (m,n>0), phương trình thành 4mn−m−n=y² ⇔(4m−1)(4n−1)=4y²+1 (dạng tích 2 số 4k+1). Dùng Mệnh đề 2 (ước nguyên tố của 4y²+1 chỉ dạng 4k+1) và định lý Fermat nhỏ để dẫn đến mâu thuẫn ⇒ phương trình (1) không có nghiệm nguyên`},
+  {id:"c5-tl-19",title:"Bài 19 (Dạng 4)",statement:`Giải phương trình nghiệm nguyên sau: a) x²+y²=585 &nbsp; b) x²+y²=1210`,
+   illustration:true,solution:`Đề bài tự luyện, sách không in lời giải chi tiết cho bài này (lời giải nhảy từ Bài 18 sang Bài 20 ở phần Dạng 5).`},
+  {id:"c5-tl-20",title:"Bài 20 (Dạng 5)",statement:`Chứng minh rằng với mọi số tự nhiên n, các số sau là hai số nguyên tố cùng nhau: a) 7n+10 và 5n+7 &nbsp; b) 2n+3 và 4n+8`,
+   illustration:true,solution:`a) d=ƯC(7n+10,5n+7)⇒5(7n+10)−7(5n+7)=1⋮d⇒d=1<br>b) d=ƯCLN(2n+3,4n+8)⇒(4n+8)−2(2n+3)=2⋮d, mà d là ước của số lẻ 2n+3 ⇒d=1`},
+  {id:"c5-tl-21",title:"Bài 21",statement:`a) Cho a và b là hai số nguyên tố cùng nhau. Chứng minh các số sau cũng là hai số nguyên tố cùng nhau: b và a−b (a>b); a²+b² và ab &nbsp; b) Chứng minh rằng nếu số c nguyên tố cùng với a và với b thì c nguyên tố cùng nhau với tích ab`,
+   illustration:true,solution:`a) d=ƯC(b,a−b)⇒a−b⋮d,b⋮d⇒a⋮d⇒d∈ƯC(a,b)⇒d=1. Tương tự nếu a²+b²,ab cùng⋮d (nguyên tố) thì dẫn đến mâu thuẫn (a,b)=1<br>b) Giả sử ab,c cùng⋮d (d nguyên tố) thì a hoặc b⋮d, dẫn đến mâu thuẫn với (a,c)=1 hoặc (b,c)=1`},
+  {id:"c5-tl-22",title:"Bài 22",statement:`Tìm số tự nhiên n sao cho: a) 4n−5 chia hết cho 13 &nbsp; b) 5n+1 chia hết cho 7 &nbsp; c) 25n+3 chia hết cho 53`,
+   answer:"13k-2",solution:`a) 4(n+2)⋮13⇒n+2⋮13 (vì (4,13)=1)⇒n=<b>13k−2</b><br>b) n=7k−3<br>c) n=53k+2<br><i>(nhập 13k-2 cho câu a, thay k là số tự nhiên dương)</i>`},
+  {id:"c5-tl-23",title:"Bài 23",statement:`Tìm các số tự nhiên n để các số sau nguyên tố cùng nhau: a) 4n+3 và 2n+3 &nbsp; b) 7n+13 và 2n+4 &nbsp; c) 9n+24 và 3n+4 &nbsp; d) 18n+3 và 21n+7`,
+   answer:"n không chia hết cho 3",solution:`a) Điều kiện: n không⋮3<br>b) Điều kiện: n là số chẵn<br>c) Điều kiện: n là số lẻ<br>d) Điều kiện: n≠7k+1 (k∈ℕ)<br><i>(nhập "n không chia hết cho 3" cho câu a)</i>`},
+  {id:"c5-tl-24",title:"Bài 24",statement:`Chứng minh rằng có vô số số tự nhiên n để n+15 và n+72 là hai số nguyên tố cùng nhau`,
+   illustration:true,solution:`d=ƯC(n+15,n+72)⇒57⋮d. Chọn n=57k−14 (k=1,2,3,...) thì n+15=57k+1 không⋮d với d>1 là ước của 57 ⇒ d=1, có vô số giá trị n như vậy`},
+  {id:"c5-tl-25",title:"Bài 25 (minh họa)",illustration:true,
+   statement:`a) Viết các số 7,8,9,10 thành tổng hai số nguyên tố cùng nhau lớn hơn 1 &nbsp; b) Chứng minh rằng với mọi số tự nhiên n lớn hơn 6 đều biểu diễn được dưới dạng tổng hai số nguyên tố cùng nhau lớn hơn 1`,
+   solution:`a) 7=3+4,8=3+5,9=4+5,10=3+7 (các cặp đều nguyên tố cùng nhau)<br>b) Với n lẻ: n=2+(n−2) (2,n−2 nguyên tố cùng nhau vì n−2 lẻ). Với n chẵn: n=3+(n−3) (n−3 lẻ, nguyên tố cùng với 3 nếu n−3 không⋮3, chọn cặp khác nếu cần)`}
+ ]},
+{id:7, title:"Bài tập trong các đề thi học sinh giỏi (Bài 26-38)",
+ theory:`<h4>Ghi chú</h4><div class="formula">Các bài này có lời giải tóm tắt ở cuối sách (mục Hướng dẫn giải).</div>`,
+ problems:[
+  {id:"c5-hsg-26",title:"Bài 26",statement:`Tìm tất cả các số nguyên tố p,q sao cho 7p+q và pq+11 đều là số nguyên tố`,
+   answer:"2,3",solution:`pq+11 lẻ (vì >11 và nguyên tố)⇒pq chẵn. Xét p=2: nếu q⋮3 thì q=3 (thỏa: 7.2+3=17, 2.3+11=17). Xét q=2: nếu 7p⋮3 thì p=3 (thỏa: 7.3+2=23, 3.2+11=17). Vậy (p,q)=(<b>2,3</b>) hoặc (3,2)`},
+  {id:"c5-hsg-27",title:"Bài 27",statement:`Biết <u>abcd</u> là số nguyên tố có bốn chữ số thỏa mãn <u>ab</u>,<u>cd</u> cũng là các số nguyên tố và b²=<u>cd</u>+b−c. Hãy tìm <u>abcd</u>`,
+   answer:"1979,2979,7979",solution:`b lẻ, khác 5 (vì <u>ab</u>,<u>cd</u> nguyên tố). Từ b(b−1)=9c+d: xét b=1,3,7,9 ⇒ chỉ b=9 cho nghiệm thỏa (c=7,d=9) ⇒ a∈{1,2,7} ⇒ <u>abcd</u>∈{<b>1979,2979,7979</b>}`},
+  {id:"c5-hsg-28",title:"Bài 28",statement:`Giả sử p và p²+2 là các số nguyên tố. Chứng tỏ p³+p²+1 cũng là số nguyên tố`,
+   illustration:true,solution:`p=2: p²+2=6 không nguyên tố (loại). p=3: p²+2=11 và p³+p²+1=37 đều nguyên tố. p>3: p=3k±1⇒p²+2⋮3 và >3 ⇒ hợp số (loại). Vậy chỉ p=3 thỏa, khi đó p³+p²+1=37 là số nguyên tố`},
+  {id:"c5-hsg-29",title:"Bài 29",statement:`Tìm hai số nguyên tố x,y thỏa mãn x²−y²=45`,
+   answer:"7,2",solution:`x²=45+y²>45⇒x lẻ. Suy ra y² chẵn ⇒y=2(nguyên tố chẵn duy nhất)⇒x²=49⇒x=<b>7</b>`},
+  {id:"c5-hsg-30",title:"Bài 30",statement:`Chứng minh rằng hai số 2n+1 và 10n+7 là hai số nguyên tố cùng nhau với mọi số tự nhiên n`,
+   illustration:true,solution:`d=ƯCLN(2n+1,10n+7)⇒10n+7−5(2n+1)=2⋮d. Nếu d=2 thì 2n+1⋮2 (vô lý vì 2n+1 lẻ) ⇒d=1`},
+  {id:"c5-hsg-31",title:"Bài 31",statement:`Cho 4 số tự nhiên a,b,c,d∈ℕ* thỏa mãn đẳng thức a²+b²=c²+d². Chứng minh rằng số a+b+c+d là hợp số`,
+   illustration:true,solution:`a²+b²+c²+d²=2(b²+d²) là số chẵn. Xét a²+b²+c²+d²−(a+b+c+d)=a(a−1)+b(b−1)+c(c−1)+d(d−1)⋮2 (tích 2 số liên tiếp) ⇒ (a+b+c+d) chẵn và <2(a+b+c+d... ) ⇒ là hợp số`},
+  {id:"c5-hsg-32",title:"Bài 32",statement:`Cho số nguyên tố p>3. Hỏi p²+2018 là số nguyên tố hay hợp số?`,
+   answer:"hợp số",solution:`p>3 nguyên tố ⇒p²≡1(mod 3)⇒p²+2018=3k+1+2018=3k+2019=3(k+673) ⇒ chia hết cho 3 và >3 ⇒ là <b>hợp số</b>`},
+  {id:"c5-hsg-33",title:"Bài 33",statement:`Tìm số nguyên tố p sao cho các số sau cũng là số nguyên tố: p+14; p+40`,
+   answer:"3",solution:`p=2: p+14=16,p+40=42 đều không nguyên tố. p=3: p+14=17,p+40=43 đều nguyên tố ✓. p≠3: p=3k+1 thì p+14⋮5(loại theo cách khác) hoặc p=3k−1 thì p+40⋮3 (loại). Vậy p=<b>3</b>`},
+  {id:"c5-hsg-34",title:"Bài 34",statement:`Cho p và p+4 là các số nguyên tố (p>3). Chứng minh rằng p+14 là hợp số`,
+   illustration:true,solution:`p>3 nguyên tố nên p=3k+1 hoặc 3k+2. Vì p+4 nguyên tố nên p≠3k+2 (vì p+4=3k+6⋮3) ⇒p=3k+1⇒p+14=3k+15=3(k+5) ⇒ là hợp số`},
+  {id:"c5-hsg-35",title:"Bài 35",statement:`Tìm các số nguyên tố x và y để P=xy+5x−2y−10 cũng là số nguyên tố`,
+   answer:"3,2",solution:`P=x(y+5)−2(y+5)=(x−2)(y+5). Để P nguyên tố cần x−2=1 (vì y+5≥7)⇒x=3⇒P=y+5, y phải chẵn (nếu không P lẻ+chẵn vô lý)⇒y=2(nguyên tố chẵn). Vậy x=<b>3</b>,y=2`},
+  {id:"c5-hsg-36",title:"Bài 36",statement:`Chứng tỏ rằng với mọi số tự nhiên n thì 3n+2 và 5n+3 là hai số nguyên tố cùng nhau`,
+   illustration:true,solution:`d=ƯCLN(3n+2,5n+3)⇒5(3n+2)−3(5n+3)=1⋮d⇒d=1`},
+  {id:"c5-hsg-37",title:"Bài 37",statement:`Tìm số nguyên tố p sao cho 2p−1 và p²+2 đều là các số nguyên tố`,
+   answer:"3",solution:`p=2: p²+2=6 hợp số (loại). p=3: 2p−1=5,p²+2=11 đều nguyên tố ✓. p>3: xét p=3k+1 thì p²+2⋮3 (hợp số); p=3k+2 thì 2p−1⋮3 (hợp số). Vậy p=<b>3</b>`},
+  {id:"c5-hsg-38",title:"Bài 38",statement:`Tìm số nguyên tố x,y biết: 19x⁴+57=y²`,
+   answer:"2,19",solution:`Nếu x lẻ thì 19x⁴+57 chẵn ⇒y chẵn⇒y=2 (vô lý vì 19x⁴+57>2). Vậy x chẵn ⇒x=2: 19.16+57=361=19²⇒y=<b>19</b>`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${p.illustration?`<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`:
+      `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  let ok=false;
+  const userRaw = inputEl.value.trim();
+  const userVal=parseVal(userRaw), correctVal=parseVal(correct);
+  if(userVal!==null && correctVal!==null && Math.abs(userVal-correctVal)<1e-6){
+    ok=true;
+  } else if(normalizeSet(userRaw.replace(/[{}]/g,'')) === normalizeSet(correct.replace(/[{}]/g,'')) && correct.replace(/\s+/g,'')!==''){
+    ok=true;
+  } else if(userRaw.replace(/\s+/g,'').toLowerCase() === correct.replace(/\s+/g,'').toLowerCase()){
+    ok=true;
+  }
+  inputEl.classList.remove('correct','wrong');
+  if(ok){
+    inputEl.classList.add('correct');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    inputEl.classList.add('wrong');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+const STORAGE_KEY='cd5_songuyento_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){
+  const data=loadProgress();
+  allCheckableIds.forEach(id=>{
+    if(data[id]===true){
+      const inputEl=document.getElementById('input-'+id);
+      const msgEl=document.getElementById('msg-'+id);
+      if(inputEl) inputEl.classList.add('correct');
+      if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}
+    }
+  });
+}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
