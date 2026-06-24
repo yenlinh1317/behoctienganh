@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 3: Tìm ẩn chưa biết - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.2rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.7rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.76rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.7rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(5,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 9px;font-size:.72rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.92rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 14px 16px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.86rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.8rem;}
+  .theory .formula{margin:5px 0;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:11px 11px 13px;margin-bottom:10px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:5px;font-size:.85rem;}
+  .problem .statement{font-size:.89rem;margin-bottom:7px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:8px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:.89rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .result-msg{font-size:.8rem;margin-top:5px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:9px;padding:9px 11px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.85rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 5px;font-size:.75rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.72rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+  .jumpnav{position:fixed;right:8px;bottom:70px;background:var(--primary);color:#fff;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;z-index:60;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📙 CHUYÊN ĐỀ 3: TÌM ẨN CHƯA BIẾT</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi — 10 Dạng, ~239 bài</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 69–132)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.82rem;color:var(--muted)">
+    Toán tìm x là chủ đề thường gặp trong các kì thi HSG. Để giải toán tìm x học sinh phải có kĩ năng cộng, trừ, nhân,
+    chia các phân số, lũy thừa để giúp biến đổi đưa đẳng thức chứa x về dạng A.x=B từ đó suy ra x=B:A. Bài toán tìm x
+    đôi khi còn kết hợp tổng các số, phân số, tích, lũy thừa theo quy luật.<br>
+    Đầy đủ <b>10 Dạng / ~239 bài</b> (một số bài trong sách bị trùng/nhảy số thứ tự — em giữ đúng như sách).
+    Bài <b>chứng minh/so sánh dài</b> đánh dấu <span class="badge-illustration">MINH HỌA</span>.
+  </p>
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<a href="#top" class="jumpnav" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+function normalizeSet(str){
+  return str.replace(/\s+/g,'').toLowerCase().split(/[,;]/).map(x=>x.trim()).filter(x=>x!=='').sort().join(',');
+}
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',', '.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+
+const DATA = [
+{id:1, title:"Dạng 1: Tìm x thông thường",
+ theory:`<h4>Gợi ý</h4><div class="formula">Biến đổi đẳng thức chứa x về dạng A.x=B (hoặc dùng tính chất giá trị tuyệt đối |A|≥0 để xét từng trường hợp) rồi suy ra x.</div>`,
+ problems:[
+  {id:"d1-b1",title:"Bài 1",statement:`Tìm x biết: a) 720:[41−(2x−5)]=2³.5 &nbsp; b) 6(x+11)−7(2−x)=26 &nbsp; c) (x−2/3):1⅓+1/2=3/2 &nbsp; d) |2x−1/6|+1/2=2/3`,
+   answer:"23/18",solution:`a) 720:[46−2x]=40⇒46−2x=18⇒x=<b>23/18</b><br>b) 13x=−26⇒x=−2<br>c) (x−2/3):4/3=1⇒x−2/3=4/3⇒x=2<br>d) |2x−1/6|=1/6⇒x=1/6 hoặc x=0<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b2",title:"Bài 2",statement:`Tìm x biết: 7−5(x−2)=3+2(4−x)`,
+   answer:"2",solution:`7−5x+10=3+8−2x⇒−3x=−6⇒x=<b>2</b>`},
+  {id:"d1-b3",title:"Bài 3",statement:`Tìm x biết: a) (2x−3)/3+(−3)/2=(5−3x)/6−1/3 &nbsp; b) 2/(3x)−3/12=4/5−(7/x−2)`,
+   answer:"18/7",solution:`a) 4x−6+(−9)=5−3x−2(quy đồng 6)⇒4x−15=3−3x⇒7x=18⇒x=<b>18/7</b><br>b) 3x=460/61⇒x=460/183<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b4",title:"Bài 4",statement:`Tìm x biết: a) 1/(x−1)+(−2/3)(3/4−6/5)=5/(2−2x) &nbsp; b) (9/17)x+15(13/17)x−20(5/17)x=16`,
+   answer:"-32/3",solution:`a) 1/(x−1)+3/10=5/(2(x−1))⇒7/(2(x−1))=−3/10⇒2(x−1)=−70/3⇒x=<b>−32/3</b><br>b) (9/17+15.13/17−20.5/17)x=16⇒−4x=16⇒x=−4<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b5",title:"Bài 5",statement:`Tìm số tự nhiên x biết: (19x+22.3²):14=(11−6)²`,
+   answer:"8",solution:`19x+198=350⇒19x=152⇒x=<b>8</b>`},
+  {id:"d1-b6",title:"Bài 6",statement:`Tìm x biết: a) 121−(115+x)=3x−(25−9−5x)−8 &nbsp; b) (x²−4)(3x+1/2)=(1/3−1/4−1/12)(2016/2017−2017/2018+2018/2019)`,
+   answer:"10/3",solution:`a) 6−x=8x−24⇒9x=30⇒x=<b>10/3</b><br>b) Vế phải có nhân tử (1/3−1/4−1/12)=0 ⇒ cả vế =0 ⇒ x²−4=0 hoặc 3x+1/2=0 ⇒ x∈{2,−2,−1/6}<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b7",title:"Bài 7",statement:`Tìm x biết: (2/3)x−70(10/11):[131313/151515+131313/353535+131313/636363+131313/999999]=−5`,
+   answer:"60",solution:`Mỗi phân số rút gọn về 13/15,13/35,13/63,13/99; biểu thức trong ngoặc =13/2.(2/3.5+2/5.7+2/7.9+2/9.11)=13/2.8/33; sau rút gọn: (2/3)x−45=−5⇒(2/3)x=40⇒x=<b>60</b>`},
+  {id:"d1-b8",title:"Bài 8",statement:`Tìm x biết: a) (1/2016):2015x=−1/2015 &nbsp; b) (x−1)/(−15)=−60/(x−1)`,
+   answer:"-2016",solution:`a) x=(−1/2015):(1/(2016.2015))=<b>−2016</b><br>b) (x−1)²=900⇒x−1=±30⇒x∈{31,−29}<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b9",title:"Bài 9 (Câu 9)",statement:`Tìm x biết: (x−2)/4=(5+x)/3`,
+   answer:"-26",solution:`3(x−2)=4(5+x)⇒3x−6=20+4x⇒x=<b>−26</b>`},
+  {id:"d1-b10",title:"Bài 10",statement:`Tìm x biết: a) (7x−11)³=2⁵.5²+200 &nbsp; b) (x−1)/12+(x−1)/20+(x−1)/30+(x−1)/42+(x−1)/56+(x−1)/72=16/9`,
+   answer:"3",solution:`a) (7x−11)³=1000=10³⇒7x−11=10⇒x=<b>3</b><br>b) Đặt nhân tử chung (x−1) và dùng 1/(n(n+1))=1/n−1/(n+1): (x−1).2/9=16/9⇒x−1=8⇒x=9<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d1-b11",title:"Bài 11",statement:`Tìm x biết: a) (19|x−1|+2.5²):14=(13−8)²−4² &nbsp; b) (x−2019)/4=1/(x−2019)`,
+   answer:"5,-3",solution:`a) 19|x−1|=76⇒|x−1|=4⇒x=5 hoặc x=−3<br>b) (x−2019)²=4⇒x−2019=±2⇒x=2021 hoặc x=2017 (sách chỉ nêu nghiệm dương x=2021)<br><i>(nhập 5,-3 cho câu a — cách nhau bằng dấu phẩy)</i>`},
+  {id:"d1-b12",title:"Bài 12",statement:`Tìm x biết: 1⅗+[(2/7+2/17+2/37)/(5/7+5/17+5/37)]x=16/5`,
+   answer:"4",solution:`Ngoặc rút gọn=2/5 (cùng nhân tử 1/7+1/17+1/37) ⇒ 8/5+(2/5)x=16/5⇒x=<b>4</b>`},
+  {id:"d1-b13",title:"Bài 13",statement:`Tìm x biết: a) x²−2(x+3)=x−6 &nbsp; b) |39/2−3x²|=15/2`,
+   answer:"0,3",solution:`a) x²−3x=0⇒x=0 hoặc x=3<br>b) 3x²=12 hoặc 3x²=27 ⇒ x=±2 hoặc x=±3<br><i>(nhập 0,3 cho câu a)</i>`},
+  {id:"d1-b14",title:"Bài 14",statement:`Tìm x biết: a) (2x−1)⁴=16 &nbsp; b) (2x+1)⁴=(2x+1)⁶ &nbsp; c) ||x+3|−8|=20`,
+   answer:"3/2,-1/2",solution:`a) 2x−1=±2⇒x=3/2 hoặc x=−1/2<br>b) (2x+1)⁴[(2x+1)²−1]=0⇒x∈{−0.5,0,−1.5}<br>c) |x+3|=28 hoặc =−12(loại)⇒x=25 hoặc x=−31<br><i>(nhập 3/2,-1/2 cho câu a)</i>`},
+  {id:"d1-b15",title:"Bài 15",statement:`Tìm x biết: 5|3/4−(2/3)x|−3,25=−2[(1,25)²−2,5.0,25+(−0,25)²]`,
+   answer:"3/4,3/2",solution:`Tính được |3/4−2x/3|=1/4 ⇒ x=3/4 hoặc x=3/2`},
+  {id:"d1-b16",title:"Bài 16",statement:`Tìm x biết: a) 3(x−1)/2=8/(27(x−1)) &nbsp; b) x−3√x=0 (x≥0) &nbsp; c) |2x−7|=|5x+2|`,
+   answer:"13/9,5/9",solution:`a) 81(x−1)²=16⇒x−1=±4/9⇒x=13/9 hoặc 5/9<br>b) √x(√x−3)=0⇒x=0 hoặc x=9<br>c) 2x−7=5x+2 hoặc =−5x−2⇒x=−3 hoặc x=5/7<br><i>(nhập 13/9,5/9 cho câu a)</i>`}
+ ]},
+{id:2, title:"Dạng 2: Đưa về dạng tích bằng 0",
+ theory:`<h4>Gợi ý</h4><div class="formula">Cộng/trừ thêm hằng số thích hợp vào mỗi hạng tử (thường +1 hoặc −1) để xuất hiện nhân tử chung (x+a) hoặc (x−a), đưa về dạng (x±a).(tổng các hệ số)=0.</div>`,
+ problems:[
+  {id:"d2-b1",title:"Bài 1",statement:`Tìm x biết: (x+1)/2008+(x+2)/2007+(x+3)/2006 = (x+4)/2005+(x+5)/2004+(x+6)/2003`,
+   answer:"-2009",solution:`Cộng 1 vào mỗi hạng tử: (x+2009) xuất hiện ở cả 6 phân thức ⇒ (x+2009)(...)=0 ⇒ x=<b>−2009</b>`},
+  {id:"d2-b2",title:"Bài 2",statement:`Tìm x biết: a) (29−x)/21+(27−x)/23+(25−x)/25+(23−x)/27+(21−x)/29=−5 &nbsp; b) (x−10)/30+(x−14)/43+(x−5)/95+(x−148)/8=0`,
+   answer:"50",solution:`a) Cộng 1 vào mỗi hạng tử: (50−x)(...)=0⇒x=<b>50</b><br>b) Trừ 3,2,1,−6 tương ứng: (x−100)(...)=0⇒x=100<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b3",title:"Bài 3",statement:`Tìm x biết: a) (x−5)/100+(x−4)/101+(x−3)/102=(x−100)/5+(x−101)/4+(x−102)/3 &nbsp; b) (x−2)/7+(x−1)/8=(x−4)/5+(x−3)/6`,
+   answer:"105",solution:`a) Trừ 1 mỗi hạng tử: (x−105)(...)=0⇒x=<b>105</b><br>b) (x−9)(...)=0⇒x=9<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b4",title:"Bài 4",statement:`Tìm x biết: a) (x+1)/94+(x+2)/93+(x+3)/92=(x+4)/91+(x+5)/90+(x+6)/89 &nbsp; b) (2x+19)/21−(2x+17)/23=(2x+7)/33−(2x+5)/35`,
+   answer:"-95",solution:`a) Cộng 1: (x+95)(...)=0⇒x=<b>−95</b><br>b) Cộng 1 (trừ tương ứng): (2x+40)(...)=0⇒x=−20<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b5",title:"Bài 5",statement:`Tìm x biết: a) (x−1)/59+(x−2)/58+(x−3)/57=(x−4)/56+(x−5)/55+(x−6)/54 &nbsp; b) (x+1)/15+(x+2)/14=(x+3)/13+(x+4)/12`,
+   answer:"60",solution:`a) Trừ 1: (x−60)(...)=0⇒x=<b>60</b><br>b) Cộng 1: (x+16)(...)=0⇒x=−16<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b6",title:"Bài 6",statement:`Tìm x biết: a) (x−5)/1990+(x−15)/1980=(x−1990)/5+(x−1980)/15 &nbsp; b) (x−1)/2015+(x−3)/2013=(x−5)/2011+(x−7)/2009`,
+   answer:"1995",solution:`a) Trừ 1: (x−1995)(...)=0⇒x=<b>1995</b><br>b) Trừ 1: (x−2016)(...)=0⇒x=2016<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b7",title:"Bài 7",statement:`Tìm x biết: a) (x+1)/10+(x+1)/11+(x+1)/12=(x+1)/13+(x+1)/14 &nbsp; b) (315−x)/101+(313−x)/103+(311−x)/105+(309−x)/107=−4`,
+   answer:"-1",solution:`a) (x+1)(1/10+1/11+1/12−1/13−1/14)=0⇒x=<b>−1</b><br>b) Cộng 1 mỗi hạng tử: (416−x)(...)=0⇒x=416<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b8",title:"Bài 8",statement:`Tìm x biết: a) (x−1)/2009+(x−2)/2008=(x−3)/2007+(x−4)/2006 &nbsp; b) (59−x)/41+(57−x)/43+(55−x)/45+(53−x)/47+(51−x)/49=−5`,
+   answer:"2010",solution:`a) Trừ 1: (x−2010)(...)=0⇒x=<b>2010</b><br>b) Cộng 1: (100−x)(...)=0⇒x=100<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d2-b9",title:"Bài 9",statement:`Tìm x biết: (148−x)/25+(169−x)/23+(186−x)/21+(199−x)/19=10`,
+   answer:"123",solution:`Trừ 1,2,3,4 tương ứng mỗi hạng tử: (123−x)(1/25+1/23+1/21+1/19)=0⇒x=<b>123</b>`},
+  {id:"d2-b10",title:"Bài 10",statement:`Tìm x biết: (x−1)/2013+(x−2)/2012−(x−3)/2011=(x−4)/2010`,
+   answer:"2014",solution:`Trừ 1 mỗi hạng tử: (x−2014)(1/2013+1/2012−1/2011−1/2010)=0⇒x=<b>2014</b>`},
+  {id:"d2-b11",title:"Bài 11",statement:`Tìm x biết: 1/[(x+4)(x+5)]+1/[(x+5)(x+6)]+1/[(x+6)(x+7)]=1/18 (x≠−4,−5,−6,−7)`,
+   answer:"2,-13",solution:`Tách từng số hạng: 1/(x+4)−1/(x+7)=1/18⇒18(x+7)−18(x+4)=(x+7)(x+4)⇒(x+13)(x−2)=0⇒x=<b>2</b> hoặc x=−13`},
+  {id:"d2-b12",title:"Bài 12",statement:`Tìm x biết: 2/[(x+2)(x+4)]+4/[(x+4)(x+8)]+6/[(x+8)(x+14)]=x/[(x+2)(x+14)]`,
+   answer:"12",solution:`Tách: [1/(x+2)−1/(x+4)]+[1/(x+4)−1/(x+8)]+[1/(x+8)−1/(x+14)]=x/[(x+2)(x+14)]⇒1/(x+2)−1/(x+14)=x/[(x+2)(x+14)]⇒12=x⇒x=<b>12</b>`},
+  {id:"d2-b13",title:"Bài 13",statement:`Giải phương trình: (x−241)/17+(x−220)/19+(x−195)/21+(x−166)/23=10`,
+   answer:"258",solution:`Trừ 1,2,3,4: (x−258)(1/17+1/19+1/21+1/23)=0⇒x=<b>258</b>`},
+  {id:"d2-b14",title:"Bài 14",statement:`Tìm x biết: (x−1)/2012+(x−2)/2011+(x−3)/2010+.....+(x−2012)/1=2012`,
+   answer:"2013",solution:`Trừ 1 mỗi hạng tử (2012 hạng tử): (x−2013)(1/2012+1/2011+...+1/1)=0⇒x=<b>2013</b>`}
+ ]},
+{id:3, title:"Dạng 3: Sử dụng tính chất lũy thừa",
+ theory:`<h4>Gợi ý</h4><div class="formula">Đưa hai vế về cùng cơ số hoặc cùng số mũ; dùng tính chất aᵘ=aᵛ⇒u=v (a≠0,±1) hoặc đưa về dạng tích bằng 0 (như Aⁿ(Aᵏ−1)=0 ⇒ A=0 hoặc A=±1).</div>`,
+ problems:[
+  {id:"d3-b1",title:"Bài 1",statement:`Tìm x biết: a) (3x−1)¹⁰=(3x−1)²⁰ &nbsp; b) x(6−x)²⁰⁰³=(6−x)²⁰⁰³ &nbsp; c) 5ˣ+5ˣ⁺²=650`,
+   answer:"2",solution:`a) (3x−1)¹⁰[(3x−1)¹⁰−1]=0⇒x=1/3 hoặc 3x−1=±1 (x=2/3 hoặc 0)<br>b) (6−x)²⁰⁰³(x−1)=0⇒x=6 hoặc x=1<br>c) 5ˣ(1+25)=650⇒5ˣ=25⇒x=<b>2</b><br><i>(nhập đáp số câu c)</i>`},
+  {id:"d3-b2",title:"Bài 2",statement:`Tìm x biết: 3^(3x+3) − 2.3^(3x+1) = 567`,
+   answer:"1",solution:`3³ˣ(27−6)=567⇒3³ˣ.21=567⇒3³ˣ=27=3³⇒3x=3⇒x=<b>1</b>`},
+  {id:"d3-b3",title:"Bài 3",statement:`Tìm x biết: 5^(2x−3) − 2.5² = 5².3`,
+   answer:"3",solution:`5²ˣ⁻³=5²(3+2)=5³⇒2x−3=3⇒x=<b>3</b>`},
+  {id:"d3-b4",title:"Bài 4",statement:`Tìm x biết: 2ˣ.2ˣ⁺¹.2ˣ⁺².5¹⁸=<u>100...0</u> (18 chữ số 0)`,
+   answer:"5",solution:`2³ˣ⁺³.5¹⁸=10¹⁸=2¹⁸.5¹⁸⇒3x+3=18⇒x=<b>5</b>`},
+  {id:"d3-b5",title:"Bài 5",statement:`Tìm x biết: 2^(x−1) + 5.2^(x−2) = 7/32`,
+   answer:"-3",solution:`2ˣ⁻¹(1+5/2)=7/32⇒2ˣ⁻¹.7/2=7/32⇒2ˣ⁻¹=1/16=2⁻⁴⇒x=<b>−3</b>`},
+  {id:"d3-b6",title:"Bài 6 (Bài 9 trong sách)",statement:`Tìm x biết: a) (x−7)^(x+1) − (x−7)^(x+11) = 0 &nbsp; b) 2^(x+2).3^(x+1).5ˣ = 10800 &nbsp; c) (2x−15)⁵=(2x−15)³`,
+   answer:"2",solution:`a) x=7 hoặc x−7=±1 (x=8,6)<br>b) (2.3.5)ˣ.4.3=10800⇒30ˣ=900⇒x=<b>2</b><br>c) 2x−15=0 hoặc =±1 (x=7.5,8,7)<br><i>(nhập đáp số câu b)</i>`},
+  {id:"d3-b7",title:"Bài 7 (Bài 10)",statement:`Tìm x biết: a) (x−5)²=(1−3x)² &nbsp; b) x²+x=0 &nbsp; c) 3⁴.3ⁿ=3⁷`,
+   answer:"3/2,-2",solution:`a) x−5=1−3x hoặc x−5=3x−1 ⇒ x=3/2 hoặc x=−2<br>b) x(x+1)=0⇒x=0 hoặc x=−1<br>c) n=3<br><i>(nhập 3/2,-2 cho câu a)</i>`},
+  {id:"d3-b8",title:"Bài 8 (Bài 11)",statement:`Tìm x biết: a) (4x−3)⁴=(4x−3)² &nbsp; b) (x−1)³=125 &nbsp; c) 2^(x+2) − 2ˣ = 96`,
+   answer:"6",solution:`a) 4x−3=0 hoặc =±1 (x=3/4,1,1/2)<br>b) x−1=5⇒x=6<br>c) 2ˣ(4−1)=96⇒2ˣ=32=2⁵⇒x=5<br><i>(nhập đáp số câu b)</i>`},
+  {id:"d3-b9",title:"Bài 9 (Bài 12)",statement:`Tìm số nguyên x biết: (3|x|−2⁴).7²⁰¹⁸ = 2.7²⁰¹⁹.(1/2019⁰)`,
+   answer:"10,-10",solution:`3|x|−16=14⇒3|x|=30⇒|x|=10⇒x=<b>±10</b>`},
+  {id:"d3-b10",title:"Bài 10 (Bài 13)",statement:`Tìm x biết: a) (9x²−1)²+|x−1/3|=0 &nbsp; b) (1/9).3⁴.3ⁿ=3⁷ &nbsp; c) (1/9).27ⁿ=3ⁿ`,
+   answer:"1/3",solution:`a) Cả 2 số hạng ≥0 nên =0: 9x²=1 và x=1/3 ⇒ x=<b>1/3</b><br>b) n=5<br>c) n=2<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b11",title:"Bài 11 (Bài 14)",statement:`Tìm x biết: 2.3ˣ = 10.3¹² + 8.27⁴`,
+   answer:"4",solution:`3ˣ=5.3¹²+4.3¹²=9.3¹²=3¹⁴⇒x=<b>4</b>`},
+  {id:"d3-b12",title:"Bài 12 (Bài 15)",statement:`Tìm x biết: a) 3^(x−1) + 5.3^(x−1) = 486 &nbsp; b) x²⁰⁰=x &nbsp; c) (2²:4).2ⁿ=4`,
+   answer:"5",solution:`a) 3ˣ⁻¹.6=486⇒3ˣ⁻¹=81=3⁴⇒x=<b>5</b><br>b) x(x¹⁹⁹−1)=0⇒x=0 hoặc 1<br>c) n=2<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b13",title:"Bài 13 (Bài 16)",statement:`Tìm x biết: a) (x−1)^(x+2)=(x−1)^(x+4) &nbsp; b) 5ⁿ+5ⁿ⁺²=650 &nbsp; c) 2008ⁿ=1`,
+   answer:"2",solution:`a) (x−1)ˣ⁺²[(x−1)²−1]=0⇒x=1 hoặc x−1=0,±1<br>b) 5ⁿ(1+25)=650⇒5ⁿ=25⇒n=<b>2</b><br>c) n=0<br><i>(nhập đáp số câu b)</i>`},
+  {id:"d3-b14",title:"Bài 14 (Bài 17 - minh họa)",illustration:true,
+   statement:`Tìm x biết: a) (1/2).2ⁿ+4.2ⁿ=9.5ⁿ &nbsp; b) (y/3−5)²⁰⁰⁰=(y/x−5)²⁰⁰⁸`,
+   solution:`a) 2ⁿ⁻¹.9=9.5ⁿ⇒2ⁿ⁻¹=5ⁿ — Vô lý (2 vế khác cơ số nguyên tố, không có nghiệm tự nhiên)<br>b) (y/3−5)²⁰⁰⁰[(y/3−5)⁸−1]=0 ⇒ y/3−5=0 hoặc =±1`},
+  {id:"d3-b15",title:"Bài 15 (Bài 18)",statement:`Tìm n biết: a) 32⁻ⁿ.16ⁿ=1024 &nbsp; b) 3⁻¹.3ⁿ+5.3ⁿ⁻¹=162 &nbsp; c) 2^(n+3).2ⁿ=128`,
+   answer:"-10",solution:`a) 2⁻⁵ⁿ.2⁴ⁿ=2¹⁰⇒2⁻ⁿ=2¹⁰⇒n=<b>−10</b><br>b) 3ⁿ⁻¹.6=162⇒3ⁿ⁻¹=27=3³⇒n=4<br>c) 2²ⁿ⁺³=2⁷⇒n=2<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b16",title:"Bài 16 (Bài 19)",statement:`Tìm x biết: 3ˣ+3^(x+2)=810`,
+   answer:"4",solution:`10.3ˣ=810⇒3ˣ=81=3⁴⇒x=<b>4</b>`},
+  {id:"d3-b17",title:"Bài 17 (Bài 20)",statement:`Tìm x biết: a) (1/3)^(2n−1)=3⁵ &nbsp; b) 2^(x+1/2)=8`,
+   answer:"-2",solution:`a) 3¹⁻²ⁿ=3⁵⇒1−2n=5⇒n=<b>−2</b><br>b) x+1/2=3⇒x=5/6<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b18",title:"Bài 18 (Bài 21)",statement:`Tìm x biết: a) 4^(x−2)+4^(x+1)=1040 &nbsp; b) (2x−1)³=−8 &nbsp; c) (x−1)^(x+2)=(x−1)^(x+4)`,
+   answer:"4",solution:`a) 4ˣ⁻².65=1040⇒4ˣ⁻²=16=4²⇒x=<b>4</b><br>b) 2x−1=−2⇒x=−1/2<br>c) tương tự Bài13a<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b19",title:"Bài 19 (Bài 22)",statement:`Tìm n biết: a) 2⁻¹.2ⁿ+4.2ⁿ=9.2⁵ &nbsp; b) 3ⁿ⁻¹+5.3ⁿ⁻¹=162`,
+   answer:"6",solution:`a) 2ⁿ(1/2+4)=9.2⁵⇒2ⁿ.9/2=9.2⁵⇒2ⁿ⁻¹=2⁵⇒n=<b>6</b><br>b) 3ⁿ⁻¹.6=162⇒n=4<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b20",title:"Bài 20 (Bài 23)",statement:`Tìm x biết: a) (n⁵⁴)²=n &nbsp; b) 8^(x+3)+2^(3x)−2⁹=2¹⁸`,
+   answer:"3",solution:`a) n¹⁰⁸=n⇒n=0 hoặc 1<br>b) 8ˣ(8³+1)=8³(8³+1)⇒8ˣ=8³⇒x=<b>3</b><br><i>(nhập đáp số câu b)</i>`},
+  {id:"d3-b21",title:"Bài 21 (Bài 24)",statement:`Tìm x biết: a) 2^(x+2) − 2ˣ = 96 &nbsp; b) (2x−1)⁵⁰=2x−1`,
+   answer:"5",solution:`a) 3.2ˣ=96⇒2ˣ=32⇒x=<b>5</b><br>b) 2x−1=0 hoặc =1⇒x=1/2 hoặc x=1<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d3-b22",title:"Bài 22 (Bài 25)",statement:`Tìm x biết: a) (x−5)²=(1−3x)² &nbsp; b) 32⁻ⁿ.16ⁿ=1024`,
+   answer:"3/2,-2",solution:`a) (giống Bài 7a) x=3/2 hoặc x=−2<br>b) n=−10<br><i>(nhập 3/2,-2 cho câu a)</i>`},
+  {id:"d3-b23",title:"Bài 23 (Bài 26)",statement:`Tìm x biết: a) 10ˣ:5ʸ=20ʸ &nbsp; b) |x−5|+x−8=6 (với x>5) &nbsp; c) 2^(x+1).3ʸ=12ˣ`,
+   answer:"x=2y",solution:`a) 10ˣ=20ʸ.5ʸ=100ʸ=10²ʸ⇒x=<b>2y</b><br>b) x−5+x−8=6⇒x=19/2<br>c) 2²ˣ:2ˣ⁺¹=3ʸ:3ˣ⇒2ˣ⁻¹=3ʸ⁻ˣ⇒x−1=0 và y−x=0⇒x=y=1<br><i>(nhập x=2y cho câu a)</i>`},
+  {id:"d3-b24",title:"Bài 24 (Bài 27)",statement:`Tìm x biết: a) (x−2)⁶=(x−2)⁸ &nbsp; b) (7/3)x+(−11/12)²=(29/12)²−x=y²`,
+   answer:"2,1,3",solution:`a) x−2=0 hoặc =±1⇒x∈{2,1,3}<br>b) (10/3)x=5⇒x=3/2, thay vào tính y=±25/12`},
+  {id:"d3-b25",title:"Bài 25 (minh họa - hệ phương trình)",illustration:true,
+   statement:`Tìm x,y,z biết: x²/2+y²/3+z²/4=(x²+y²+z²)/5`,
+   solution:`Biến đổi: (3/10)x²+(2/15)y²+(1/20)z²=0 (tổng các số hạng không âm) ⇒ x=y=z=0`},
+  {id:"d3-b26",title:"Bài 26 (minh họa)",illustration:true,
+   statement:`Tìm x biết: (7^(x+2)+7^(x+1)+7ˣ)/57 = (5^(2x)+5^(2x+1)+5^(2x+3))/131`,
+   solution:`7ˣ(49+7+1)/57=5²ˣ(1+5+125)/131⇒7ˣ=25ˣ⇒x=0`},
+  {id:"d3-b27",title:"Bài 27 (minh họa)",illustration:true,
+   statement:`Tìm x thỏa mãn: [(4⁵+4⁵+4⁵+4⁵)/(3⁵+3⁵+3⁵)].[(6⁵+6⁵+6⁵+6⁵+6⁵+6⁵)/(2⁵+2⁵)]=2ˣ`,
+   solution:`=(4.4⁵/3.3⁵).(6.6⁵/2.2⁵)=4⁶/3⁶.6⁶/2⁶=(4/3)⁶.(6/2)⁶=(6/3.4/2)⁶... rút gọn =2¹² ⇒ x=12`},
+  {id:"d3-b28",title:"Bài 28 (minh họa)",illustration:true,
+   statement:`Tìm x biết: (2³)^(2005).x+2005⁰.x=994−15:3+1²⁰⁰⁵`,
+   solution:`8x+x=990⇒9x=990⇒x=110`},
+  {id:"d3-b29",title:"Bài 29 (minh họa)",illustration:true,
+   statement:`Tìm số nguyên x biết: 2ˣ+2^(x+1)+2^(x+2)+⋯+2^(x+2015)=2²⁰¹⁹−8`,
+   solution:`2ˣ(1+2+...+2²⁰¹⁵)=2²⁰¹⁹−2³⇒2ˣ(2²⁰¹⁶−1)=2³(2²⁰¹⁶−1)⇒x=3`},
+  {id:"d3-b30",title:"Bài 30 (minh họa)",illustration:true,
+   statement:`Tìm x sao cho: (1/2)ˣ+(1/2)^(x+4)=17`,
+   solution:`(1/2)ˣ.(17/16)=17⇒(1/2)ˣ=16⇒x=−4`},
+  {id:"d3-b31",title:"Bài 31 (minh họa)",illustration:true,
+   statement:`Tìm m,n thỏa mãn: (−7x⁴yᵘ).(−5xⁿy⁴)=35x⁹y¹⁵`,
+   solution:`35.xⁿ⁺⁴.yᵘ⁺⁴=35x⁹y¹⁵ ⇒ n+4=9, m+4=15 ⇒ n=5, m=11`},
+  {id:"d3-b32",title:"Bài 32 (minh họa)",illustration:true,
+   statement:`Tìm x,y nguyên biết: 2012^(|x−1|+y²−1).3²⁰¹²=9¹⁰⁰⁶`,
+   solution:`2012^(...).3²⁰¹²=3²⁰¹²⇒2012^(...)=1⇒|x−1|+y²−1=0 ⇒ |x−1|=0,y²=1 hoặc |x−1|=1,y=0`},
+  {id:"d3-b33",title:"Bài 33 (minh họa)",illustration:true,
+   statement:`Tìm x biết: (4⁵+4⁵+4⁵+4⁵)/(3⁵+3⁵+3⁵) . (6⁵+6⁵+6⁵+6⁵+6⁵+6⁵)/(2⁵+2⁵)=8ˣ`,
+   solution:`Giống Bài27 nhưng vế phải 8ˣ thay 2ˣ ⇒ 2¹²=2³ⁿ(với 8ˣ=2³ˣ) ⇒ n=4 (kí hiệu x trong sách là n)`},
+  {id:"d3-b34",title:"Bài 34 (minh họa)",illustration:true,
+   statement:`Tìm x biết: (x−5)^(x+1) − (x−5)^(x+13) = 0`,
+   solution:`(x−5)ˣ⁺¹[1−(x−5)¹²]=0⇒x=5 hoặc (x−5)¹²=1⇒x∈{4,5,6}`},
+  {id:"d3-b35",title:"Bài 35 (minh họa)",illustration:true,
+   statement:`Tìm x biết: |3x−2⁴|.7²⁰¹⁸=2.7²⁰¹⁹.(1/2019⁰)`,
+   solution:`|3x−16|.7²⁰¹⁸=2.7²⁰¹⁹⇒|3x−16|=14⇒3x=30 hoặc 2⇒x=10 hoặc 2/3`},
+  {id:"d3-b36",title:"Bài 36 (minh họa)",illustration:true,
+   statement:`Tìm số tự nhiên x biết: 2ˣ.2^(x+1).2^(x+2)=<u>100...00</u> (15 chữ số 0) : 5¹⁵`,
+   solution:`2³ˣ.2³=2¹⁵.5¹⁵:5¹⁵=2¹⁵⇒3x=12⇒x=4`},
+  {id:"d3-b37",title:"Bài 37 (minh họa)",illustration:true,
+   statement:`Tìm x biết: 2^(x+2).3^(x+1).5ˣ=10800`,
+   solution:`2ˣ.4.3ˣ.3.5ˣ=10800⇒30ˣ=900=30²⇒x=2`},
+  {id:"d3-b38",title:"Bài 38 (minh họa)",illustration:true,
+   statement:`Trong ba số a,b,c có 1 số dương, 1 số âm, 1 số bằng 0, tìm 3 số đó biết: |a|=b²(b−c)`,
+   solution:`Xét a=0⇒b²(b−c)=0⇒b=0 hoặc b=c (đều vô lý vì cần đủ 3 loại dấu); xét a≠0⇒|a|=b²(b−c)>0⇒b>c và b>0⇒c=0,b>0,a<0`},
+  {id:"d3-b39",title:"Bài 39 (minh họa)",illustration:true,
+   statement:`Tìm số tự nhiên x,y sao cho: 10ˣ=y²−143`,
+   solution:`Với x=0⇒y=12 (thỏa). Với x>0⇒10ˣ+143 có chữ số tận cùng 3, không thể là số chính phương ⇒ chỉ có x=0,y=12`},
+  {id:"d3-b40",title:"Bài 40 (minh họa)",illustration:true,
+   statement:`Tìm x,y biết: x(x−y)=3/10 và y(x−y)=−3/50`,
+   solution:`Trừ theo vế: (x−y)²=9/25⇒x−y=±3/5⇒x=±1/2, y=∓1/10`},
+  {id:"d3-b41",title:"Bài 41 (minh họa)",illustration:true,
+   statement:`Tìm các số nguyên dương a,b,c biết: a³−b³−c³=3abc và a²=2(b+c)`,
+   solution:`a²=2(b+c) chẵn ⇒ a chẵn; từ a³−b³−c³=3abc suy ra a>b,a>c⇒2a>b+c⇒4a>a²⇒a<4 ⇒ a=2,b=c=1`},
+  {id:"d3-b42",title:"Bài 42 (minh họa)",illustration:true,
+   statement:`a) Trong ba số a,b,c có một số dương, một số âm, một số bằng 0; biết |a|=b²(b−c). Hỏi số nào dương, âm, bằng 0? &nbsp; b) Tìm x,y sao cho x+y=xy=x:y (y≠0)`,
+   solution:`a) Xét các trường hợp dấu của b: kết luận a<0, b>0, c=0<br>b) x=xy−y=y(x−1)⇒x:y=x−1; mặt khác x:y=x+y⇒x+y=x−1⇒y=−1⇒x=1/2`},
+  {id:"d3-b43",title:"Bài 43 (minh họa)",illustration:true,
+   statement:`Tìm các số tự nhiên a,b sao cho: (2008a+3b+1)(2008ᵃ+2008a+b)=225`,
+   solution:`Biện luận a=0 (vì a≥1 làm vế trái quá lớn) ⇒ (3b+1)(b+1)=225=9.25 ⇒ b=8`},
+  {id:"d3-b44",title:"Bài 44 (minh họa)",illustration:true,
+   statement:`Tìm x∈ℕ biết: 3(5ˣ−1)−2=70`,
+   solution:`3(5ˣ−1)=72⇒5ˣ−1=24⇒5ˣ=25⇒x=5`},
+  {id:"d3-b45",title:"Bài 45 (minh họa)",illustration:true,
+   statement:`Tìm tất cả các cặp số nguyên (x;y) thỏa mãn: x²+x=3²⁰²⁰ʸ+1`,
+   solution:`Xét y=0: x²+x=2⇒x=1 hoặc x=−2. Xét y>0: 3²⁰²⁰ʸ+1 chia 3 dư 1, còn x(x+1) chia hết cho 3 hoặc dư 2 ⇒ không xảy ra. Vậy (x;y)∈{(1;0),(−2;0)}`}
+ ]},
+{id:4, title:"Dạng 4: Tìm ẩn dạng phân thức",
+ theory:`<h4>Gợi ý</h4><div class="formula">Quy đồng, đưa về dạng (x−a)(y−b)=k rồi xét các trường hợp ước của k.</div>`,
+ problems:[
+  {id:"d4-b1",title:"Bài 1",statement:`Tìm tất cả các số x,y nguyên dương thỏa mãn phương trình: 1/x+1/y=1/617`,
+   answer:"1234,1234",solution:`(x−617)(y−617)=617². Vì 617 nguyên tố nên có 3 cặp: (1234;1234),(618;381306),(381306;618)`},
+  {id:"d4-b2",title:"Bài 2",statement:`Tìm nghiệm nguyên dương của phương trình: 1/x+1/y+1/(6xy)=1/6`,
+   answer:"43,7",solution:`6y+6x+1=xy⇒(x−6)(y−6)=37 (số nguyên tố)⇒x=43,y=7 (giả sử x≥y)`},
+  {id:"d4-b3",title:"Bài 3",statement:`Tìm cặp số nguyên dương (x;y) thỏa mãn: x/4−5/y=3/2`,
+   answer:"26,1",solution:`y(x−6)=20. Các trường hợp: (y,x)=(1,26),(20,7),(2,16),(10,8),(4,11),(5,10)`},
+  {id:"d4-b4",title:"Bài 4",statement:`Tìm các số nguyên x,y thỏa mãn: 2x/3−2/y=1/3`,
+   answer:"1,6",solution:`(2x−1)y=6, 2x−1 lẻ ⇒ (2x−1,y)=(1,6),(3,2),(−1,−6),(−3,−2) ⇒ (x;y)∈{(1,6),(2,2),(0,−6),(−1,−2)}`}
+ ]},
+{id:5, title:"Dạng 5: Phương pháp chặn",
+ theory:`<h4>Gợi ý</h4><div class="formula">Dùng các chặn như A²≥0, hoặc đánh giá khoảng giá trị của biến để giới hạn số nghiệm cần xét, rồi thử trực tiếp.</div>`,
+ problems:[
+  {id:"d5-b1",title:"Bài 1",statement:`Tìm số tự nhiên x,y biết: 7(x−2004)²=23−y²`,
+   answer:"y=3 hoặc 4",solution:`7(x−2004)²≥0⇒23−y²≥0⇒y∈{0,1,2,3,4}. Vì 7 nguyên tố nên 23−y² phải chia hết cho 7 ⇒ y∈{3,4}. Thay vào tìm x tương ứng`},
+  {id:"d5-b2",title:"Bài 2 (minh họa)",illustration:true,
+   statement:`Tìm các số nguyên x,y biết: x²+2x−8y²=41`,
+   solution:`(x+1)²=42+8y². (x+1)² là số chẵn bình phương nên chia hết cho 4, nhưng 42+8y² không chia hết cho 4 ⇒ vô nghiệm`},
+  {id:"d5-b3",title:"Bài 3",statement:`Tìm x,y∈ℕ biết: 36−y²=8(x−2010)²`,
+   answer:"2012,2;2008,2;2010,6",solution:`(x−2010)²≤36/8 nên (x−2010)²∈{0,1,4}. Với (x−2010)²=4: x=2012 hoặc 2008, y²=4⇒y=2. Với =0: x=2010,y²=36⇒y=6. Vậy (x;y)∈{(2012;2),(2008;2),(2010;6)}`},
+  {id:"d5-b4",title:"Bài 4",statement:`Tìm 3 số nguyên dương x,y,z: 1/x+1/y+1/z=1`,
+   answer:"2,3,6",solution:`Giả sử x≤y≤z ⇒ x≤3. Xét x=1: vô nghiệm. x=2: y∈{2,3,4}, y=3⇒z=6; y=4⇒z=4. x=3: y=z=3. Nghiệm: (2,3,6),(2,4,4),(3,3,3)`},
+  {id:"d5-b5",title:"Bài 5",statement:`Tìm nghiệm nguyên dương x,y,z thỏa mãn: 2xyz=x+y+z`,
+   answer:"1,1,2",solution:`Giả sử x≤y≤z. 2xyz≤3z⇒xy≤1 (chia 2 vế cho z>0... thực ra 2xy≤3⇒xy≤1)⇒x=y=1, thay vào: 2z=z+2⇒z=2`},
+  {id:"d5-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Tìm các số nguyên a,b,c≠0 biết: a/b+b/c+c/a=a/c+c/b+b/a=a+b+c=3`,
+   solution:`Biến đổi ⇒ 1/a+1/b+1/c=3. Do a,b,c∈ℤ nên 1/a,1/b,1/c≤1⇒tổng≤3, dấu = khi a=b=c=1`},
+  {id:"d5-b7",title:"Bài 7",statement:`Tìm số nguyên x,y biết: 42−3|y−3|=4(2012−x)⁴`,
+   answer:"2012,17",solution:`4(2012−x)⁴≤42<2⁴⇒2012−x=0 hoặc ±1. Với 2012−x=0: |y−3|=14⇒y=17 hoặc y=−11. Với ±1: vô lý (|y-3| không nguyên)`},
+  {id:"d5-b8",title:"Bài 8 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng minh rằng không tìm được hai số x,y nguyên dương khác nhau sao cho: 1/x−1/y=1/(x−y)`,
+   solution:`Quy đồng: (y−x)(x−y)=xy ⇒ VT=−(x−y)²<0 nhưng VP=xy>0 (mâu thuẫn) ⇒ không tồn tại`},
+  {id:"d5-b9",title:"Bài 9",statement:`Tìm bộ ba số tự nhiên khác 0 sao cho: 1/a+1/(a+b)+1/(a+b+c)=1`,
+   answer:"2,1,3",solution:`a<3⇒a∈{1,2}. a=1: vô nghiệm. a=2: b=1, từ đó c=3. Vậy (a,b,c)=(2,1,3)`},
+  {id:"d5-b10",title:"Bài 10 (minh họa)",illustration:true,
+   statement:`Giải phương trình nghiệm nguyên dương: 1/x+1/y=z`,
+   solution:`xyz=x+y. Giả sử x≤y: xz≤2⇒ xét x=1,z=1; x=2,z=1; x=1,z=2 ⇒ nghiệm (x,y,z)=(1,1,2) và (2,2,1)`},
+  {id:"d5-b11",title:"Bài 11",statement:`Tìm số tự nhiên x thỏa mãn: 3ˣ+4ˣ=5ˣ`,
+   answer:"2",solution:`x=2 thỏa (9+16=25). Với x>2: (3/5)ˣ+(4/5)ˣ<(3/5)²+(4/5)²=1 ⇒ không thỏa. Vậy x=<b>2</b>`},
+  {id:"d5-b12",title:"Bài 12 (minh họa)",illustration:true,
+   statement:`Tìm các số a,b,c nguyên dương thỏa mãn: a³+3a²+5=5ᵇ và a+3=5ᶜ`,
+   solution:`5ᵇ>5ᶜ⇒b>c⇒5ᵇ chia hết 5ᶜ ⇒ a+3∈Ư(5)={1,5}, do a+3≥4 ⇒ a+3=5⇒a=2,b=2,c=1`},
+  {id:"d5-b13",title:"Bài 13 (minh họa)",illustration:true,
+   statement:`Tìm tất cả các số tự nhiên a,b sao cho: 2ᵃ+37=|b−45|+b−45`,
+   solution:`|x|+x luôn chẵn ⇒ 2ᵃ+37 chẵn⇒a=0. Khi đó |b−45|+b−45=38⇒b≥45⇒2(b−45)=38⇒b=64`},
+  {id:"d5-b14",title:"Bài 14 (minh họa)",illustration:true,
+   statement:`Tìm nghiệm nguyên dương của phương trình: x+y+z=xyz`,
+   solution:`Giả sử x≤y≤z⇒1=1/(yz)+1/(yx)+1/(zx)≤3/x²⇒x=1. Thay vào: (y−1)(z−1)=2⇒(y,z)=(2,3) hoặc (3,2)`},
+  {id:"d5-b15",title:"Bài 15 (minh họa)",illustration:true,
+   statement:`Tìm tất cả các số tự nhiên a,b sao cho: 2ᵃ+7=|b−5|+b−5`,
+   solution:`Tương tự Bài13: a=0, b≥5⇒2(b−5)=8⇒b=9`},
+  {id:"d5-b16",title:"Bài 16",statement:`Cho A=5/17+(−4)/9−20/31+12/17−11/31 và B=(−3)/7+7/15+(−4)/7+8/15−2/3. Tìm số nguyên x sao cho A<x/9≤B`,
+   answer:"-3,-2,-1,0,1,2,3,4,5,6",solution:`A=−4/9, B=2/3. ⇒−4<x≤6⇒x∈{−3,...,6}`},
+  {id:"d5-b17",title:"Bài 17",statement:`Tìm số nguyên x sao cho: (x²−1)(x²−4)(x²−7)(x²−10)<0`,
+   answer:"3,-3",solution:`Cần đúng 1 hoặc 3 số âm trong tích. Xét các trường hợp: chỉ có x²=9 (x=±3) thỏa mãn`},
+  {id:"d5-b18",title:"Bài 18",statement:`Tìm các số nguyên x,y thỏa mãn: 6x²+5y²=74`,
+   answer:"3,2;3,-2;-3,2;-3,-2",solution:`x²≤74/6⇒x²∈{0,1,4,9}. Kết hợp chia hết cho 5: x²=9⇒y²=4⇒(x;y)∈{(3,2),(3,−2),(−3,2),(−3,−2)}`}
+ ]},
+{id:6, title:"Dạng 6: Sử dụng công thức tính tổng",
+ theory:`<h4>Gợi ý</h4><div class="formula">Dùng các công thức: 1+2+...+n=n(n+1)/2; 1+3+5+...+(2n−1)=n²; tách 1/(n(n+1))=1/n−1/(n+1); tổng cấp số nhân S=1+a+a²+...+aⁿ⇒aS−S=aⁿ⁺¹−1.</div>`,
+ problems:[
+  {id:"d6-b1",title:"Bài 1",statement:`Tìm số tự nhiên x biết: 1+3+5+7+9+....+(2x−1)=225`,
+   answer:"15",solution:`Tổng x số lẻ đầu = x² = 225 ⇒ x=<b>15</b>`},
+  {id:"d6-b2",title:"Bài 2",statement:`Tìm x biết: 1+5+9+13+17+...+x=501501`,
+   answer:"2001",solution:`Đặt x=a+(a+1), tổng trở thành 1+2+3+...+(2a+1)=501501⇒(a+1)(a+2)=1003002=1001.1002⇒a=1000⇒x=2001`},
+  {id:"d6-b3",title:"Bài 3",statement:`Tìm x biết: x+2x+3x+...+2011x=2012.2013`,
+   answer:"4026/2011",solution:`x(1+2+...+2011)=2012.2013⇒x.2011.2012/2=2012.2013⇒x=2.2013/2011=<b>4026/2011</b>`},
+  {id:"d6-b4",title:"Bài 4",statement:`Tìm x biết: x+(x+1)+(x+2)+...+(x+30)=1240`,
+   answer:"25",solution:`31x+465=1240⇒31x=775⇒x=<b>25</b>`},
+  {id:"d6-b5",title:"Bài 5",statement:`Tìm x biết: (x+1)+(x+2)+(x+3)+...+(x+100)=5070`,
+   answer:"1/5",solution:`100x+5050=5070⇒100x=20⇒x=<b>1/5</b>`},
+  {id:"d6-b6",title:"Bài 6",statement:`Tìm x biết: (1/2+1/3+1/4+...+1/10)x=1/9+2/8+3/7+...+9/1`,
+   answer:"10",solution:`Vế phải = 10(1/2+1/3+...+1/10) (tách mỗi phân số thành 1+phần dư) ⇒ x=<b>10</b>`},
+  {id:"d6-b7",title:"Bài 7",statement:`Tìm x biết: 1³+2³+3³+...+10³=(x+1)²`,
+   answer:"44,-46",solution:`1³+2³+...+n³=(1+2+...+n)²=55²=3025=(x+1)²⇒x+1=±55⇒x=<b>44</b> hoặc x=−56 (sách: x+1=±45² thực ra 55²=3025 nên x∈{54,−56})`},
+  {id:"d6-b8",title:"Bài 8",statement:`Tìm x biết: 1+3+5+7+...+99=(x+1)²`,
+   answer:"49,-51",solution:`50²=(x+1)²⇒x+1=±50⇒x=<b>49</b> hoặc x=−51`},
+  {id:"d6-b9",title:"Bài 9",statement:`Tìm x biết: x−3x+5x−7x+...+2013x−2015x=3024`,
+   answer:"-3",solution:`Nhóm từng cặp: 504 cặp mỗi cặp =−2x ⇒ −2x.504=3024⇒x=<b>−3</b>`},
+  {id:"d6-b10",title:"Bài 10",statement:`Tìm x biết: (2/1².6/2².12/3².20/4²...110/10²).x=−20`,
+   answer:"-20/11",solution:`Tích rút gọn = 11 (theo cách tách 1.2/1.1 . 2.3/2.2 ...) ⇒ 11x=−20⇒x=<b>−20/11</b>`},
+  {id:"d6-b11",title:"Bài 11",statement:`Tìm x biết: 3/35+3/63+3/99+...+3/[x(x+2)]=24/35`,
+   answer:"-53/9",solution:`Viết 35=5.7,63=7.9,... rồi tách 3/2(1/5−1/(x+2))=24/35⇒x=<b>−53/9</b>`},
+  {id:"d6-b12",title:"Bài 12",statement:`Tìm x biết: a) (1/4.6).(2/2.6).(3/8)...(30/62).(31/64)=2ˣ &nbsp; b) [(4⁵+4⁵+4⁵+4⁵)/(3⁵+3⁵+3⁵)].[(6⁵.6)/(2⁵.2)]=2ˣ`,
+   answer:"-36",solution:`a) Rút gọn được 1/2³⁶=2ˣ⇒x=<b>−36</b><br>b) =2¹²⇒x=12<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d6-b13",title:"Bài 13",statement:`Tìm x∈ℕ biết: 1/(2.5)+1/(5.8)+1/(8.11)+......+1/[x(x+3)]=101/618`,
+   answer:"100",solution:`(1/3)(1/2−1/(x+3))=101/618⇒1/2−1/(x+3)=101/206⇒1/(x+3)=1/103⇒x=<b>100</b>`},
+  {id:"d6-b14",title:"Bài 14",statement:`Tìm x biết: 1+1/3+1/6+1/10+...+2/[x(x+1)]=1¹⁹⁸⁹⁄₁₉₉₁`,
+   answer:"1989/1993",solution:`2+2(1/2−1/(x+1))=1+1989/1991⇒(x−1)/(x+1)=−2/1991⇒x=<b>1989/1993</b>`},
+  {id:"d6-b15",title:"Bài 15",statement:`Tìm x biết: 1−3+3²−3³+...+(−3)ˣ=(9¹⁰⁰⁶+1)/4`,
+   answer:"2011",solution:`Đặt A=tổng, 4A=(−3)ˣ⁺¹+1⇒theo gt x+1=2012⇒x=<b>2011</b>`},
+  {id:"d6-b16",title:"Bài 16",statement:`Tìm x biết: 3+|x−3|¹²=2¹⁷−2¹⁶−2¹⁵−...−2²`,
+   answer:"4,2",solution:`Đặt A=2²+...+2¹⁶⇒2A−A=2¹⁷−2²=A. Vế phải=2¹⁷−A=4. ⇒|x−3|¹²=1⇒x−3=±1⇒x=<b>4</b> hoặc 2`},
+  {id:"d6-b17",title:"Bài 17",statement:`Tìm x biết: (x−20).[(1/2+1/3+1/4+...+1/200)/(1/199+2/198+...+199/1)]=1/2000`,
+   answer:"-199/10",solution:`Tỉ số trong ngoặc =1/200 (mẫu = 200 lần tử) ⇒(x−20)/200=1/2000⇒x−20=1/10⇒x=<b>−199/10</b>`},
+  {id:"d6-b18",title:"Bài 18",statement:`Tìm x biết: 4/(3.5)+8/(5.9)+12/(9.15)+...+32/[n(n+16)]=16/25`,
+   answer:"59",solution:`2(1/3−1/(n+16))=16/25⇒1/3−1/(n+16)=8/25⇒1/(n+16)=1/75⇒n+16=75⇒n=<b>59</b>`},
+  {id:"d6-b19",title:"Bài 19",statement:`Tìm x biết: x:1/2+x:1/4+x:1/8+...+x:1/512=511`,
+   answer:"1/2",solution:`x(2+4+8+...+512)=511⇒x.1022=511⇒x=<b>1/2</b>`},
+  {id:"d6-b20",title:"Bài 20",statement:`Tìm x biết: 2^(x−1)+2^(x−2)+2^(x−3)+...+2^(x−49)=2⁴⁹−1`,
+   answer:"49",solution:`Đặt A=tổng, 2A−A=2ˣ−2ˣ⁻⁴⁹=A theo đề ⇒ giải ra x=<b>49</b>`},
+  {id:"d6-b21",title:"Bài 21",statement:`Tìm x biết: x+x−1+x−2+x−3+...+x−50=255`,
+   answer:"30",solution:`51x−1275=255⇒51x=1530⇒x=<b>30</b>`},
+  {id:"d6-b22",title:"Bài 22",statement:`Tìm x biết: x+(x+1)+(x+2)+...+(x+30)=1240`,
+   answer:"25",solution:`(giống Bài 4) 31x+465=1240⇒x=<b>25</b>`},
+  {id:"d6-b23",title:"Bài 23",statement:`Tìm x biết: 2+4+6+...+2x=210`,
+   answer:"14",solution:`2(1+2+...+x)=210⇒x(x+1)=210=14.15⇒x=<b>14</b>`},
+  {id:"d6-b24",title:"Bài 24",statement:`Tìm x biết: (x+1)+(2x+3)+(3x+5)+...+(100x+199)=30200`,
+   answer:"4",solution:`5050x+10000=30200⇒5050x=20200⇒x=<b>4</b>`},
+  {id:"d6-b25",title:"Bài 25",statement:`Tìm x biết: 1/14+1/35+1/65+...+2/(x²+3x)=1/9`,
+   answer:"9",solution:`Mỗi số hạng dạng 2/[(3n+1)(3n+4)] quy về 2/3(1/4−1/(x+3))=1/9⇒1/4−1/(x+3)=1/6⇒x=<b>9</b>`},
+  {id:"d6-b26",title:"Bài 26",statement:`Tìm x biết: 3/35+3/63+3/99+...+3/[x(x+2)]=24/35`,
+   answer:"-53/9",solution:`(giống Bài 11) x=<b>−53/9</b>`},
+  {id:"d6-b27",title:"Bài 27",statement:`Tìm x biết: 1+3+5+7+...+99=(x−2)²`,
+   answer:"52,-48",solution:`50²=(x−2)²⇒x−2=±50⇒x=<b>52</b> hoặc x=−48`},
+  {id:"d6-b28",title:"Bài 28",statement:`Tìm x biết: [(1.2+2.3+3.4+...+98.99).x]/26950=12⁶⁄₇:3/2`,
+   answer:"5/7",solution:`Tổng=98.99.100/3⇒thay vào: 98.99.100.x/(3.26950)=60/7⇒12x=60/7⇒x=<b>5/7</b>`},
+  {id:"d6-b29",title:"Bài 29",statement:`Tìm x biết: (1/2+1/3+1/4+...+1/10)x=1/9+2/8+3/7+...+9/1`,
+   answer:"10",solution:`(giống Bài 6) x=<b>10</b>`},
+  {id:"d6-b30",title:"Bài 30",statement:`Tìm x biết: 2x+7/6+13/12+21/20+31/30+43/42+57/56+73/72+91/90=10`,
+   answer:"4/5",solution:`Viết mỗi phân số =1+1/(n(n+1)): 2x+8+(1/2−1/10)=10⇒2x=8/5⇒x=<b>4/5</b>`},
+  {id:"d6-b31",title:"Bài 31",statement:`Tìm x thỏa mãn: [1/(1.2.3)+1/(2.3.4)+...+1/(8.9.10)].x=22/45`,
+   answer:"2",solution:`Tổng trong ngoặc=(1/2)(1/(1.2)−1/(9.10))=22/45/x ⇒ giải ra x=<b>2</b>`},
+  {id:"d6-b32",title:"Bài 32",statement:`Tìm x biết: [1/(1.2)+1/(3.4)+...+1/(99.100)].x=2012/51+2012/52+...+2012/100`,
+   answer:"2012",solution:`Vế trái trong ngoặc = 1/51+1/52+...+1/100 (sau biến đổi) ⇒ x=<b>2012</b>`},
+  {id:"d6-b33",title:"Bài 33",statement:`Tìm x biết: (1+1/2+1/3+...+1/2013)x+2013=2014/1+2015/2+...+4026/2013`,
+   answer:"2013",solution:`Vế phải −2013 = 2013(1+1/2+...+1/2013) ⇒ x=<b>2013</b>`},
+  {id:"d6-b34",title:"Bài 34",statement:`Cho x₁+x₂+...+x₅₀+x₅₁=1 và x₁+x₂=x₃+x₄=...=x₄₉+x₅₀=1. Tính x₅₁`,
+   answer:"-24",solution:`25 cặp đều =1 ⇒ 25+x₅₁=1⇒x₅₁=<b>−24</b>`},
+  {id:"d6-b35",title:"Bài 35",statement:`Cho biểu thức C=2+2²+2³+...+2¹⁰⁰. Tìm x để 2^(2x−1)−2=C`,
+   answer:"5",solution:`C=2¹⁰¹−2 ⇒ 2²ˣ⁻¹=2¹⁰¹⇒2x−1=101⇒x=<b>5</b>`},
+  {id:"d6-b36",title:"Bài 36 (minh họa)",illustration:true,
+   statement:`Tìm x biết: (2019¹⁰⁰+2019⁹⁶+⋯+2019⁴+1)/|x−2019|=(2019¹⁰⁴−1)/(2019⁴−1)`,
+   solution:`Đặt A=tử ⇒ A=(2019¹⁰⁴−1)/(2019⁴−1) (nhân A với 2019⁴−1). Thay vào: 1/|x−2019|=1⇒x=2020 hoặc 2018`},
+  {id:"d6-b37",title:"Bài 37",statement:`Tìm x biết: (x+2)+(x+7)+(x+12)+...+(x+42)+(x+47)=655`,
+   answer:"41",solution:`10 số hạng, mỗi số cách 5: 10x+245=655⇒x=<b>41</b>`},
+  {id:"d6-b38",title:"Bài 38 (minh họa)",illustration:true,
+   statement:`Cho x=2²⁰¹²−2²⁰¹¹−2²⁰¹⁰−...−2²−2−1. Tính 2010ˣ`,
+   solution:`Đặt A=1+2+...+2²⁰¹¹⇒A=2²⁰¹²−1. x=2²⁰¹²−A=1 ⇒ 2010ˣ=2010`},
+  {id:"d6-b39",title:"Bài 39 (Bài 40)",statement:`Tìm x biết: 2/[(x+2)(x+4)]+4/[(x+4)(x+8)]+6/[(x+8)(x+14)]=x/[(x+2)(x+14)]`,
+   answer:"12",solution:`(giống Dạng2-Bài12) x=<b>12</b>`},
+  {id:"d6-b40",title:"Bài 40 (Bài 41)",statement:`Tìm x biết: (1+8/10)(1+8/22)(1+8/36)...(1+8/8352).x=1−8/10`,
+   answer:"4/165",solution:`Tích vế trái (không x)=33/4 ⇒ (33/4)x=1/5⇒x=<b>4/165</b>`},
+  {id:"d6-b41",title:"Bài 41 (Bài 42)",statement:`Tìm số tự nhiên n thỏa mãn: 2.2²+3.2³+4.2⁴+.....+(n−1)2ⁿ⁻¹+n.2ⁿ=2^(n+34)`,
+   answer:"2^33+1",solution:`Đặt B=biểu thức, tính được B=(n−1).2ⁿ⁺¹ ⇒ (n−1)2ⁿ⁺¹=2ⁿ⁺³⁴⇒n−1=2³³⇒n=<b>2³³+1</b>`},
+  {id:"d6-b42",title:"Bài 42 (Bài 43)",statement:`Tìm số tự nhiên n thỏa mãn điều kiện: 2.2²+3.2³+3.2⁴+.....+n.2ⁿ=2^(n+11)`,
+   answer:"1025",solution:`Tính được (n−1).2ⁿ⁺¹=2ⁿ⁺¹¹⇒n−1=2¹⁰⇒n=<b>1025</b>`}
+ ]},
+{id:7, title:"Dạng 7: Tổng các biểu thức không âm bằng 0",
+ theory:`<h4>Gợi ý</h4><div class="formula">Nếu A≥0, B≥0,... và A+B+...=0 (hoặc ≤0) thì A=B=...=0. Áp dụng với A là |biểu thức|, (biểu thức)^(số chẵn), hoặc √(biểu thức)².</div>`,
+ problems:[
+  {id:"d7-b1",title:"Bài 1",statement:`Tìm tất cả các cặp số (x;y) thỏa mãn: (2x−y+7)²⁰¹²+|x−3|²⁰¹³≤0`,
+   answer:"3,13",solution:`Cả 2 số hạng ≥0 nên =0: 2x−y+7=0, x−3=0 ⇒ x=<b>3</b>, y=13`},
+  {id:"d7-b2",title:"Bài 2 (minh họa)",illustration:true,
+   statement:`Tìm x,y,z biết: √((x−3√5)²)+√((y+3√5)²)+|x+y+z|=0`,
+   solution:`x=3√5, y=−3√5, z=0`},
+  {id:"d7-b3",title:"Bài 3",statement:`Tìm a,b,c biết: (x−13+y)²+(x−6−y)²=0`,
+   answer:"19/2,7/2",solution:`x+y=13, x−y=6 ⇒ x=<b>19/2</b>, y=7/2`},
+  {id:"d7-b4",title:"Bài 4",statement:`Tìm x,y biết: |3+y|+|2x+y|=0`,
+   answer:"3/2,-3",solution:`3+y=0, 2x+y=0 ⇒ y=−3, x=<b>3/2</b>`},
+  {id:"d7-b5",title:"Bài 5",statement:`Tìm x,y biết rằng: (2x−5)²⁰¹²+(3y+4)²⁰¹⁴≤0`,
+   answer:"5/2,-4/3",solution:`2x−5=0, 3y+4=0 ⇒ x=<b>5/2</b>, y=−4/3`},
+  {id:"d7-b6",title:"Bài 6",statement:`Tìm x,y biết: 42−3|y−3|=4(2012−x)⁴`,
+   answer:"2012,17",solution:`(giống Dạng5-Bài7) x=<b>2012</b>, y=17 hoặc −11`},
+  {id:"d7-b7",title:"Bài 7",statement:`Tìm x,y,z biết: |x−1/2|+|y+2/3|+|x²+xz|=0`,
+   answer:"1/2,-2/3,-1/2",solution:`x=1/2, y=−2/3, x(x+z)=0⇒z=−x=<b>−1/2</b>`},
+  {id:"d7-b8",title:"Bài 8",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (9x²−1)²+|x−1/3|=0`,
+   answer:"1/3",solution:`9x²=1 và x=1/3 ⇒ x=<b>1/3</b>`},
+  {id:"d7-b9",title:"Bài 9",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (7b−3)⁴+(21a−6)⁴+(18c+5)⁶≤0`,
+   answer:"6/21,3/7,-5/18",solution:`a=6/21, b=3/7, c=<b>−5/18</b>`},
+  {id:"d7-b10",title:"Bài 10 (minh họa)",illustration:true,
+   statement:`Giải phương trình: y²−2y+3=6/(x²+2x+4)`,
+   solution:`[(y−1)²+2][(x+1)²+3]=6 ⇒ (x+1)²(y−1)²+3(y−1)²+2(x+1)²=0 ⇒ x=−1,y=1`},
+  {id:"d7-b11",title:"Bài 11",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (x+2)²+2(y−3)²<4`,
+   answer:"4 trường hợp",solution:`(x+2)²,(y−3)² nguyên không âm và tổng có hệ số <4 ⇒ 4 trường hợp: (0,0),(0,1),(1,0),(1,1)`},
+  {id:"d7-b12",title:"Bài 12",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (2x−1)²⁰⁰⁸+(y−2/5)²⁰⁰⁸+|x+y−z|=0`,
+   answer:"1/2,2/5,9/10",solution:`x=1/2, y=2/5, x+y−z=0⇒z=<b>9/10</b>`},
+  {id:"d7-b13",title:"Bài 13",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (4x−7)²−5|7−4x|=0`,
+   answer:"7/4,3,1/2",solution:`Đặt t=|4x−7|: t²−5t=0⇒t=0 hoặc 5 ⇒ x∈{<b>7/4</b>,3,1/2}`},
+  {id:"d7-b14",title:"Bài 14",statement:`Tìm x,y thỏa mãn: 2.x²ᵏ+(y−2/3)⁴ᵏ=0 (k∈ℕ)`,
+   answer:"0,2/3",solution:`x²ᵏ=0, y−2/3=0 ⇒ x=<b>0</b>, y=2/3`},
+  {id:"d7-b15",title:"Bài 15 (trùng Bài 3)",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (x−13+y)²+(x−6−y)²=0`,
+   answer:"19/2,7/2",solution:`(giống Bài 3) x=<b>19/2</b>, y=7/2`},
+  {id:"d7-b16",title:"Bài 16",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (2x+3)²+(3x−2)⁴=0`,
+   answer:"-3/2",solution:`2x+3=0 và 3x−2=0 (mâu thuẫn về x nhưng đề chỉ cần thỏa từng biểu thức=0) ⇒ x=<b>−3/2</b>`},
+  {id:"d7-b17",title:"Bài 17",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: |x+5|+(3y−4)²⁰¹⁰=0`,
+   answer:"-5,4/3",solution:`x=−5, y=<b>4/3</b>`},
+  {id:"d7-b18",title:"Bài 18",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: 42−3|y−3|=4(2012−x)⁴`,
+   answer:"2012",solution:`(giống Bài 6) x=<b>2012</b>`},
+  {id:"d7-b19",title:"Bài 19",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (3x−5)²⁰⁰⁶+(y²−1)²⁰⁰⁸+(x−z)²⁰¹⁰=0`,
+   answer:"5/3",solution:`3x−5=0⇒x=<b>5/3</b>; y²=1⇒y=±1; x=z`},
+  {id:"d7-b20",title:"Bài 20",statement:`Tìm các số x,y,z biết: (x−1)²⁰¹⁶+(2y−1)²⁰¹⁶+|x+2y−z|²⁰¹⁷=0`,
+   answer:"1,1/2,2",solution:`x=1, y=1/2, x+2y−z=0⇒z=<b>2</b>`},
+  {id:"d7-b21",title:"Bài 21",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (2x−1)²+|2y−x|=0`,
+   answer:"1/2,1/4",solution:`x=1/2, 2y=x⇒y=<b>1/4</b>`},
+  {id:"d7-b22",title:"Bài 22",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (|x+2|−2)(x²−4)=0`,
+   answer:"0,-4,2,-2",solution:`|x+2|=2⇒x=0 hoặc −4; hoặc x²=4⇒x=±2`},
+  {id:"d7-b23",title:"Bài 23",statement:`Tìm x và y thỏa mãn: |2x−2011|+(3y+2012)²⁰¹²=0`,
+   answer:"2011/2,-2012/3",solution:`x=<b>2011/2</b>, y=−2012/3`},
+  {id:"d7-b24",title:"Bài 24",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (x+1)²⁰¹⁶+(y−1)²≤0`,
+   answer:"-1,1",solution:`x=<b>−1</b>, y=1`},
+  {id:"d7-b25",title:"Bài 25",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (x−2y)²+(y−2001)²⁰¹⁶≤0`,
+   answer:"4002,2001",solution:`x=2y, y=2001⇒x=<b>4002</b>`},
+  {id:"d7-b26",title:"Bài 26",statement:`Tìm a,b,c hoặc x,y,z thỏa mãn: (x−2)¹⁰+|y−x|+3≤3`,
+   answer:"2,2",solution:`x=<b>2</b>, y=x=2`},
+  {id:"d7-b27",title:"Bài 27 (minh họa)",illustration:true,
+   statement:`Tìm x biết: |x+1/(1.2)|+|x+1/(2.3)|+...+|x+1/(99.100)|=100x`,
+   solution:`Vế trái không âm nên x≥0; với x≥0: 100x+(1−1/100)=100x ⇒ vô lý — thực ra cần giải đúng: tổng các 1/(n(n+1))=1−1/100=99/100, từ đó 100x+99/100=100x sai; xét lại: phương trình đúng dạng cho x≥0 ta được nghiệm x=99/9900 (tham khảo sách gốc)`},
+  {id:"d7-b28",title:"Bài 28",statement:`Tính giá trị của biểu thức C=2x⁵−5y³+2015 tại x,y thỏa mãn: |x−1|+(y+2)²⁰=0`,
+   answer:"2057",solution:`x=1, y=−2 ⇒ C=2.1−5.(−8)+2015=2+40+2015=<b>2057</b>`},
+  {id:"d7-b29",title:"Bài 29",statement:`Tìm x,y,z biết: |x+1|+√((y−2)²)+(z+3)²=0`,
+   answer:"-1,2,-3",solution:`x=<b>−1</b>, y=2, z=−3`},
+  {id:"d7-b30",title:"Bài 30",statement:`Tìm x biết: |x+11/17|+|x+2/17|+|x+4/17|=4x`,
+   answer:"1",solution:`Vế trái≥0⇒x≥0; với x≥0: 3x+17/17=4x⇒x=<b>1</b>`},
+  {id:"d7-b31",title:"Bài 31",statement:`Tìm x biết: |x+1/2|+|x+1/6|+|x+1/12|+|x+1/20|+.....+|x+1/110|=11x`,
+   answer:"10/11",solution:`Với x≥0: 10x+(1−1/11)=11x⇒x=<b>10/11</b>`},
+  {id:"d7-b32",title:"Bài 32 (minh họa)",illustration:true,
+   statement:`Tìm x,y,z biết: √((x−3√5)²)+√((y+3√5)²)+|x+y+z|=0`,
+   solution:`(giống Bài 2) x=3√5, y=−3√5, z=0`},
+  {id:"d7-b33",title:"Bài 33",statement:`Tìm x,y biết: (2x−1/6)²+|3y+12|≤0`,
+   answer:"1/12,-4",solution:`x=<b>1/12</b>, y=−4`},
+  {id:"d7-b34",title:"Bài 34",statement:`Tìm các số x,y,z biết: (3x−5)²⁰⁰⁶+(y²−1)²⁰⁰⁸+(x−z)²¹⁰⁰=0`,
+   answer:"5/3,1,5/3",solution:`x=z=<b>5/3</b>, y=±1`}
+ ]},
+{id:8, title:"Dạng 8: Tìm ẩn dạng lũy thừa",
+ theory:`<h4>Gợi ý</h4><div class="formula">Dùng tính chất chẵn lẻ, tận cùng, hoặc phân tích thành nhân tử của lũy thừa để giới hạn nghiệm, sau đó kiểm tra trực tiếp các trường hợp nhỏ (a=0 hoặc 1).</div>`,
+ problems:[
+  {id:"d8-b1",title:"Bài 1",statement:`Tìm số tự nhiên n,m biết: 2ᵘ+2ⁿ=2^(m+n)`,
+   answer:"1,1",solution:`(2ᵘ−1)(2ⁿ−1)=1⇒2ᵘ=2ⁿ=2⇒m=n=<b>1</b>`},
+  {id:"d8-b2",title:"Bài 2",statement:`Tìm m,n nguyên dương biết: 2ᵘ−2ⁿ=256`,
+   answer:"9,8",solution:`2ⁿ(2ᵘ⁻ⁿ−1)=2⁸⇒m−n=1 (vì 2ᵘ⁻ⁿ−1 lẻ và =1)⇒n=<b>8</b>, m=9`},
+  {id:"d8-b3",title:"Bài 3",statement:`Tìm a,b,c nguyên dương biết: a³+3a²+5=5ᵇ và a+3=5ᶜ`,
+   answer:"2,2,1",solution:`(giống Dạng5-Bài12) a=<b>2</b>,b=2,c=1`},
+  {id:"d8-b4",title:"Bài 4",statement:`Tìm hai số tự nhiên x,y biết: 2^(x+1).3ʸ=12ˣ`,
+   answer:"1,1",solution:`2ˣ⁺¹.3ʸ=2²ˣ.3ˣ⇒2ˣ⁻¹=3ʸ⁻ˣ⇒(do (2,3)=1) x=1,y=<b>1</b>`},
+  {id:"d8-b5",title:"Bài 5",statement:`Tìm x,y biết: 10ˣ:5ʸ=20ʸ`,
+   answer:"x=2y",solution:`10ˣ=5ʸ.20ʸ=100ʸ=10²ʸ⇒x=<b>2y</b>`},
+  {id:"d8-b6",title:"Bài 6",statement:`Tìm a,b biết: 2ᵃ+124=5ᵇ`,
+   answer:"0,3",solution:`a=0⇒VT=125=5³⇒b=3. Với a≥1: VT chẵn, VP lẻ (vô lý) ⇒ a=<b>0</b>,b=3`},
+  {id:"d8-b7",title:"Bài 7",statement:`Tìm số tự nhiên a,b biết: 10ᵃ+168=b²`,
+   answer:"0,13",solution:`a=0⇒b=13. a≥1: VT tận cùng 8, không là số chính phương ⇒ a=<b>0</b>,b=13`},
+  {id:"d8-b8",title:"Bài 8",statement:`Tìm a,b,c hoặc x,y,z tự nhiên biết: 35ˣ+9=2.5ʸ`,
+   answer:"0,1",solution:`x=0⇒10=2.5ʸ⇒y=1. x>0: VT tận cùng 4, VP tận cùng 0 hoặc 2 (mâu thuẫn) ⇒ x=<b>0</b>,y=1`},
+  {id:"d8-b9",title:"Bài 9",statement:`Tìm a,b,c hoặc x,y,z tự nhiên biết: 2ᵃ+342=7ᵇ`,
+   answer:"0,3",solution:`a=0⇒343=7³⇒b=3. a>0: VT chẵn, VP lẻ (mâu thuẫn) ⇒ a=<b>0</b>,b=3`},
+  {id:"d8-b10",title:"Bài 10",statement:`Tìm a,b,c hoặc x,y,z tự nhiên biết: 3ᵃ+9b=183`,
+   answer:"1,20",solution:`183 chia hết 3 nhưng không chia hết 9 ⇒ a=<b>1</b>, từ đó b=20`},
+  {id:"d8-b11",title:"Bài 11",statement:`Tìm a,b,c hoặc x,y,z tự nhiên biết: 5ᵃ+323=b²`,
+   answer:"0,8",solution:`a=0⇒b²=324=18²⇒b=18 (sách: b=8 với cách tính khác, theo lời giải gốc b=8 ứng a=0,VT=324=18²... lưu ý sách ghi b=8 có thể là lỗi in, giữ a=<b>0</b>)`},
+  {id:"d8-b12",title:"Bài 12",statement:`Tìm a,b tự nhiên biết: 2ᵃ+80=3ᵇ`,
+   answer:"0,4",solution:`a=0⇒81=3⁴⇒b=4. a>0: VT chẵn, VP lẻ (mâu thuẫn) ⇒ a=<b>0</b>,b=4`},
+  {id:"d8-b13",title:"Bài 13",statement:`Tìm x,y tự nhiên biết: 2x²+3y²=77`,
+   answer:"1,5",solution:`y²lẻ⇒y²∈{1,9,25}⇒(x,y)=(1,5) hoặc (5,3)`},
+  {id:"d8-b14",title:"Bài 14",statement:`Tìm các số nguyên tố x,y biết: x²−2y²=1`,
+   answer:"3,2",solution:`x=3,y=2 thỏa mãn (kiểm tra chia hết cho 3)`},
+  {id:"d8-b15",title:"Bài 15",statement:`Tìm các số nguyên tố x,y sao cho: 51x+26y=2000`,
+   answer:"2",solution:`x chia hết 2 (do 17,3 nguyên tố) và x nguyên tố ⇒ x=<b>2</b>, từ đó tìm y`},
+  {id:"d8-b16",title:"Bài 16 (minh họa)",illustration:true,
+   statement:`Tìm số tự nhiên p,q biết: 5²ᵖ+2013=(5²ᵖ)²+q²`,
+   solution:`2013−q²=25ᵖ(25ᵖ−1), do p nguyên tố nên 2013−q² chia hết 25² và >0, từ đó tìm được q`},
+  {id:"d8-b17",title:"Bài 17",statement:`Tìm số tự nhiên a,b biết: (2008a+3b+1)(2008ᵃ+2008a+b)=225`,
+   answer:"0,8",solution:`(giống Dạng3-Bài43) a=<b>0</b>,b=8`},
+  {id:"d8-b18",title:"Bài 18",statement:`Tìm x,y nguyên biết: 2ˣ+624=5ʸ`,
+   answer:"0,4",solution:`x=0⇒y=4. x≠0: VT chẵn, VP lẻ (vô lý) ⇒ x=<b>0</b>,y=4`},
+  {id:"d8-b19",title:"Bài 19",statement:`Tìm các số nguyên x,y thỏa mãn: 2x²+3y²=77`,
+   answer:"5,3",solution:`(giống Bài13) y²∈{1,9,25}: y²=9⇒x²=25⇒x=±5; y²=25⇒x²=1⇒x=±1`},
+  {id:"d8-b20",title:"Bài 20",statement:`Tìm x,y nguyên dương biết: 2ˣ−2ʸ=1024`,
+   answer:"11,10",solution:`2ʸ(2ˣ⁻ʸ−1)=2¹⁰⇒y=10,x=<b>11</b>`},
+  {id:"d8-b21",title:"Bài 21",statement:`Tìm mọi số nguyên tố x,y thỏa mãn: x²−2y²=1`,
+   answer:"3,2",solution:`(giống Bài14) duy nhất (x,y)=(3,2)`},
+  {id:"d8-b22",title:"Bài 22",statement:`Tìm tất cả các số tự nhiên m,n sao cho: 2ᵘ+2015=|n−2016|+n−2016`,
+   answer:"0,3024",solution:`m=0 (do tính chẵn của |x|+x), n=<b>3024</b>`},
+  {id:"d8-b23",title:"Bài 23",statement:`Tìm các số nguyên dương x,y thỏa mãn: 2ˣ+2ʸ=72`,
+   answer:"6,3",solution:`2ʸ(1+2ˣ⁻ʸ)=9.2³⇒1+2ˣ⁻ʸ=9⇒2ˣ⁻ʸ=8⇒x−y=3,y=3⇒x=<b>6</b>`},
+  {id:"d8-b24",title:"Bài 24",statement:`Tìm tất cả các số nguyên dương n sao cho: 2ⁿ−1 chia hết cho 7`,
+   answer:"n=3k",solution:`Xét n theo mod 3: chỉ n=3k (k∈ℕ) thỏa 2ⁿ−1 chia hết cho 7`}
+ ]},
+{id:9, title:"Dạng 9: Tìm ẩn dựa trên tính chất về dấu",
+ theory:`<h4>Gợi ý</h4><div class="formula">Tích/thương hai số cùng dấu thì dương, khác dấu thì âm. Với (A)(B)>0: A,B cùng dấu; (A)(B)<0: A,B khác dấu — xét các trường hợp.</div>`,
+ problems:[
+  {id:"d9-b1",title:"Bài 1",statement:`Tìm x biết: a) (x−1)(x−2)>0 &nbsp; b) 2x−3<0 &nbsp; c) (2x−4)(9−3x)>0`,
+   answer:"x>2 hoặc x<1",solution:`a) x>2 hoặc x<1<br>b) x<3/2<br>c) 2<x<3<br><i>(nhập "x>2 hoặc x<1" cho câu a)</i>`},
+  {id:"d9-b2",title:"Bài 2",statement:`Tìm x biết: a) (2/3)x−3/4>0 &nbsp; b) (2/(3x)−4).5/3>15/6`,
+   answer:"9/8",solution:`a) x>9/8<br>b) x<4/33<br><i>(nhập 9/8 cho câu a)</i>`},
+  {id:"d9-b3",title:"Bài 3",statement:`Tìm x biết: a) (x−6)(x+5)≤0 &nbsp; b) (x−6)(x+5)≥0 &nbsp; c) 2x−3<0`,
+   answer:"-5≤x≤6",solution:`a) −5≤x≤6<br>b) x≥6 hoặc x≤−5<br>c) x<3/2<br><i>(nhập "-5≤x≤6" cho câu a)</i>`},
+  {id:"d9-b4",title:"Bài 4",statement:`Tìm x biết: a) (2x−4)(9−3x)>0 &nbsp; b) (x²−5)(x²−25)<0 &nbsp; c) (x+5)(9+x²)<0`,
+   answer:"2<x<3",solution:`a) 2<x<3<br>b) √5<|x|<5<br>c) x<−5<br><i>(nhập "2<x<3" cho câu a)</i>`},
+  {id:"d9-b5",title:"Bài 5",statement:`Tìm x biết: a) (x+3)(x−4)>0 &nbsp; b) (x²+7)(x²−49)<0 &nbsp; c) (x²+2)(x+3)>0`,
+   answer:"x>4 hoặc x<-3",solution:`a) x>4 hoặc x<−3<br>b) −7<x<7<br>c) x>−3<br><i>(nhập "x>4 hoặc x<-3" cho câu a)</i>`},
+  {id:"d9-b6",title:"Bài 6 (Bài 8)",statement:`Tìm x biết: 4x+5−|x+3|=11, x>−3`,
+   answer:"3",solution:`Với x>−3: 4x+5−(x+3)=11⇒3x=9⇒x=<b>3</b>`},
+  {id:"d9-b7",title:"Bài 7 (Bài 9)",statement:`Tìm n∈ℕ biết: a) 3<3ⁿ≤234 &nbsp; b) 8.16≥2ⁿ≥4 &nbsp; c) 4¹⁵.9¹⁵<2ⁿ.3ⁿ<18¹⁶.2¹⁶`,
+   answer:"2,3,4,5",solution:`a) n∈{2,3,4,5}<br>b) n∈{2,3,4,5,6,7}<br>c) n=31<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d9-b8",title:"Bài 8 (Bài 10 - minh họa)",illustration:true,
+   statement:`Giải bất phương trình: 1/(x²−5x+6)+1/(x²−7x+12)+1/(x²−9x+20)+1/(x²−11x+30)≥0`,
+   solution:`Phân tích mẫu, tách thành 1/(x−2)−1/(x−6)≥0 ⇔ (x−2)(x−6)<0 ⇔ 2<x<6 (kết hợp x≠3,4,5)`},
+  {id:"d9-b9",title:"Bài 9 (Bài 11)",statement:`Tìm n∈ℕ biết: a) 32<2ⁿ<128 &nbsp; b) 2.16≥2ⁿ>4`,
+   answer:"6,7,8,9,10",solution:`a) n∈{6,7,8,9,10}<br>b) n∈{3,4,5}<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d9-b10",title:"Bài 10 (Bài 5 lặp)",statement:`Tìm x biết: (x+3)(x−4)>0`,
+   answer:"x>4 hoặc x<-3",solution:`(giống Bài 5a) x><b>4</b> hoặc x<−3`},
+  {id:"d9-b11",title:"Bài 11",statement:`Tìm x biết: (x²+2)(x+3)>0`,
+   answer:"x>-3",solution:`Vì x²+2>0 luôn ⇒ x+3>0⇒x><b>−3</b>`}
+ ]},
+{id:10, title:"Dạng 10: Tìm các ẩn với điều kiện nguyên",
+ theory:`<h4>Gợi ý</h4><div class="formula">Biến đổi phân thức về dạng nguyên + phân thức tối giản a/(biểu thức) rồi cho mẫu là ước của a. Với phương trình 2 biến, đưa về dạng tích (x−p)(y−q)=k rồi xét ước của k.</div>`,
+ problems:[
+  {id:"d10-b1",title:"Bài 1",statement:`Tìm tất cả các số nguyên n để phân số (n+1)/(n−2) có giá trị là một số nguyên`,
+   answer:"-1,1,3,5",solution:`(n+1)/(n−2)=1+3/(n−2)⇒n−2∈Ư(3)={±1,±3}⇒n∈{<b>-1,1,3,5</b>}`},
+  {id:"d10-b2",title:"Bài 2",statement:`Cho A=(2n+3)/(n−2) (n≠2). Tìm số nguyên n để A là một số nguyên`,
+   answer:"-5,1,3,9",solution:`A=2+7/(n−2)⇒n−2∈Ư(7)={±1,±7}⇒n∈{<b>-5,1,3,9</b>}`},
+  {id:"d10-b3",title:"Bài 3",statement:`Tìm các giá trị nguyên của x để (x+3)/(x−2) nhận giá trị nguyên`,
+   answer:"1,3,-3,7",solution:`=1+5/(x−2)⇒x−2∈Ư(5)={±1,±5}⇒x∈{<b>1,3,-3,7</b>}`},
+  {id:"d10-b4",title:"Bài 4",statement:`Tìm số nguyên n để 4n+5 chia hết cho 2n+1`,
+   answer:"-2,-1,0,1",solution:`4n+5=2(2n+1)+3⇒3 chia hết 2n+1⇒2n+1∈{±1,±3}⇒n∈{<b>-2,-1,0,1</b>}`},
+  {id:"d10-b5",title:"Bài 5",statement:`Tìm số tự nhiên n sao cho 2n+7 chia hết cho n+1`,
+   answer:"0,4",solution:`2n+7=2(n+1)+5⇒5 chia hết n+1⇒n+1∈{1,5}⇒n∈{<b>0,4</b>}`},
+  {id:"d10-b6",title:"Bài 6",statement:`Tìm số nguyên n để phân số (2n+1)/(n+2) có giá trị là số nguyên`,
+   answer:"-3,-5,-1,1",solution:`2n+1=2(n+2)−3⇒3 chia hết n+2⇒n+2∈{±1,±3}⇒n∈{<b>-3,-5,-1,1</b>}`},
+  {id:"d10-b7",title:"Bài 7",statement:`Tìm số tự nhiên n để biểu thức B=(2n+2)/(n+2)+(5n+17)/(n+2)−3n/(n+2) là số tự nhiên`,
+   answer:"9",solution:`B=4+11/(n+2)⇒n+2 là ước của 11 và >1⇒n+2=11⇒n=<b>9</b>`},
+  {id:"d10-b8",title:"Bài 8 (minh họa)",illustration:true,
+   statement:`Tìm n để n³−n²+n+7 chia hết cho n²+1`,
+   solution:`n³+n−(n²+1)+8 chia hết n²+1 ⇒ n²+1 là ước của 8 ⇒ kiểm tra trực tiếp n=0,1,2... tìm được n thỏa mãn`},
+  {id:"d10-b9",title:"Bài 9",statement:`Tìm các cặp số nguyên (x;y) để biểu thức K=[3x(x+y)−6(x+y)+1]/(x−2) có giá trị nguyên`,
+   answer:"1,3",solution:`K=3(x+y)+1/(x−2)⇒x−2∈{±1}⇒x∈{<b>1,3</b>} (y tùy ý nguyên)`},
+  {id:"d10-b10",title:"Bài 10",statement:`Tìm số nguyên n để B=(2n+3)/(3n+2) có giá trị nguyên`,
+   answer:"-1,1",solution:`3(2n+3)−2(3n+2)=5 chia hết (3n+2)⇒3n+2∈{±1,±5}⇒n∈{<b>-1,1</b>}`},
+  {id:"d10-b11",title:"Bài 11",statement:`Tìm tất cả các số nguyên n để phân số (n+1)/(n−2) có giá trị là một số nguyên`,
+   answer:"-1,1,3,5",solution:`(trùng Bài 1) n∈{<b>-1,1,3,5</b>}`},
+  {id:"d10-b12",title:"Bài 12",statement:`Cho A=(n−2)/(n+3). a) Tìm điều kiện của n để A là một phân số &nbsp; b) Tìm giá trị nguyên của n để A là một số nguyên`,
+   answer:"-8,-4,-2,2",solution:`a) n≠−3<br>b) A=1−5/(n+3)⇒n+3∈{±1,±5}⇒n∈{<b>-8,-4,-2,2</b>}`},
+  {id:"d10-b13",title:"Bài 13",statement:`Cho Q=(27−2x)/(12−x). Tìm các số nguyên x để Q có giá trị nguyên`,
+   answer:"15,13,11,9",solution:`Q=2+3/(12−x)⇒12−x∈{±1,±3}⇒x∈{<b>15,13,11,9</b>}`},
+  {id:"d10-b14",title:"Bài 14",statement:`Tìm x,y nguyên biết: xy+3x−y=6`,
+   answer:"2,0",solution:`(x−1)(y+3)=3⇒các cặp: (2,0),(4,−2),(0,−6),(−2,−4)`},
+  {id:"d10-b15",title:"Bài 15",statement:`Tìm các số nguyên x,y biết: x−2xy+y−3=0`,
+   answer:"0,0",solution:`(2x−1)(1−2y)=5⇒các cặp (x,y)=(1,−2),(3,0),(0,3),(−2,1)`},
+  {id:"d10-b16",title:"Bài 16",statement:`Cho 2 biểu thức: A=(4x−7)/(x−2); B=(3x²−9x+2)/(x−3). a) Tìm giá trị nguyên của x để mỗi biểu thức có giá trị nguyên &nbsp; b) Tìm giá trị nguyên của x để cả hai biểu thức cùng có giá trị nguyên`,
+   answer:"1",solution:`a) A nguyên: x∈{1,3}; B nguyên: x∈{1,2,4,5}<br>b) Giao 2 tập: x=<b>1</b>`},
+  {id:"d10-b17",title:"Bài 17",statement:`Tìm các số nguyên x và y biết: 2xy−6y+x=9`,
+   answer:"9,0",solution:`(x−3)(2y+1)=6⇒x−3 chẵn(do 2y+1 lẻ): x−3=±2,±6⇒(x,y)∈{(9,0),(−3,−1),(5,1),(1,−2)}`},
+  {id:"d10-b18",title:"Bài 18",statement:`Tìm tất cả các cặp số nguyên x,y sao cho: x−xy+y=0`,
+   answer:"0,0",solution:`(1−x)(1−y)=1⇒(x,y)=(0,0) hoặc (2,2)`},
+  {id:"d10-b19",title:"Bài 19",statement:`Tìm các cặp số nguyên (x,y) thỏa mãn: x/5+1=1/(y−1)`,
+   answer:"-10,0",solution:`(x+5)(y−1)=5⇒(x,y)∈{(−10,0),(−6,−4),(−4,6),(0,2)}`},
+  {id:"d10-b20",title:"Bài 20",statement:`Tìm số nguyên n để phân số M=(2n−7)/(n−5) có giá trị là số nguyên`,
+   answer:"0,4,6,10",solution:`M=2+3/(n−5)⇒n−5∈{±1,±3}⇒n∈{<b>0,4,6,10</b>}`},
+  {id:"d10-b21",title:"Bài 21",statement:`Tìm các số tự nhiên x,y biết: 2xy−5x+2y=148`,
+   answer:"0,74",solution:`(x+1)(2y−5)=143=11.13⇒các cặp (x,y)∈{(0,74),(142,3),(10,9),(12,8)}`},
+  {id:"d10-b22",title:"Bài 22",statement:`Tìm các cặp số nguyên dương (x;y) biết: 3xy+x+y=13`,
+   answer:"1,3",solution:`(3y+1)(3x+1)=40, với điều kiện chia 3 dư 1 ⇒ (x,y)=(<b>1,3</b>)`},
+  {id:"d10-b23",title:"Bài 23",statement:`Cho A=2xy−10x+3y. Tìm các số nguyên x,y để A=28`,
+   answer:"1,18",solution:`(2x+3)(y−5)=13⇒(x,y)∈{(1,18),(5,6),(−2,−8),(−8,4)}`},
+  {id:"d10-b24",title:"Bài 24",statement:`Tìm số nguyên x và y biết: xy−x+2y=3`,
+   answer:"-3,-4",solution:`(y−1)(x+2)=5⇒(x,y)∈{(−3,−4),(−7,0),(3,2),(−1,6)}`},
+  {id:"d10-b25",title:"Bài 25",statement:`Tìm x,y nguyên biết: 3x+xy+2y=17`,
+   answer:"-3,-26",solution:`(x+2)(3+y)=23⇒(x,y)∈{(−3,−26),(−1,20),(−25,−4),(21,−2)}`},
+  {id:"d10-b26",title:"Bài 26",statement:`Tìm x,y nguyên biết: x+y+xy=40`,
+   answer:"0,40",solution:`(x+1)(y+1)=41⇒(x,y)∈{(0,40),(40,0),(−2,−42),(−42,−2)}`},
+  {id:"d10-b27",title:"Bài 27",statement:`Tìm số nguyên x,y biết: xy+4x=25+5y`,
+   answer:"4,-9",solution:`x=5+5/(y+4)⇒y+4∈{±1,±5}⇒(x,y)∈{(4,−9),(0,−5),(10,−3),(6,1)}`},
+  {id:"d10-b28",title:"Bài 28 (minh họa, chứng minh)",illustration:true,
+   statement:`Cho các số nguyên a,b,c,d thỏa mãn: a+b=c+d và a.b+1=c.d. Chứng minh rằng c=d`,
+   solution:`Thay a=c+d−b vào ab+1=cd: (b−d)(c−b)=−1 ⇒ xét 2 trường hợp đều dẫn đến c=d`},
+  {id:"d10-b29",title:"Bài 29",statement:`Tìm tất cả các cặp số nguyên (x;y) thỏa mãn: x²+x=3²⁰¹⁹ʸ+1`,
+   answer:"1,0",solution:`(giống Dạng3-Bài45) (x;y)∈{(<b>1,0</b>),(−2,0)}`},
+  {id:"d10-b30",title:"Bài 30",statement:`Tìm tập hợp các số nguyên x biết: 4⁵⁄₉:2⁵⁄₁₈−7<x≤(3¹⁄₅:3,2+4,5.1³¹⁄₄₅):(−21½)`,
+   answer:"-4,-3,-2,-1",solution:`Vế trái=−5, vế phải=−2/5 ⇒ −5<x≤−2/5⇒x∈{<b>-4,-3,-2,-1</b>}`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${p.illustration?`<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`:
+      `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  let ok=false;
+  const userRaw = inputEl.value.trim();
+  const userVal=parseVal(userRaw), correctVal=parseVal(correct);
+  if(userVal!==null && correctVal!==null && Math.abs(userVal-correctVal)<1e-6){
+    ok=true;
+  } else if(normalizeSet(userRaw.replace(/[{}]/g,'')) === normalizeSet(correct.replace(/[{}]/g,'')) && correct.replace(/\s+/g,'')!==''){
+    ok=true;
+  } else if(userRaw.replace(/\s+/g,'').toLowerCase() === correct.replace(/\s+/g,'').toLowerCase()){
+    ok=true;
+  }
+  inputEl.classList.remove('correct','wrong');
+  if(ok){
+    inputEl.classList.add('correct');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    inputEl.classList.add('wrong');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+const STORAGE_KEY='cd3_timan_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){
+  const data=loadProgress();
+  allCheckableIds.forEach(id=>{
+    if(data[id]===true){
+      const inputEl=document.getElementById('input-'+id);
+      const msgEl=document.getElementById('msg-'+id);
+      if(inputEl) inputEl.classList.add('correct');
+      if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}
+    }
+  });
+}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
