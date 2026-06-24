@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 2: Các bài toán về lũy thừa số tự nhiên - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.25rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.72rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.78rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.72rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(3,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:.76rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.95rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 16px 18px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 16px;font-size:.89rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.82rem;}
+  .theory .formula{margin:6px 0;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:12px 12px 14px;margin-bottom:12px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:6px;font-size:.88rem;}
+  .problem .statement{font-size:.92rem;margin-bottom:8px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:.92rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:9px 13px;font-size:.8rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .btn-cmp{background:#fff;border:1.5px solid var(--primary);color:var(--primary);min-width:64px;}
+  .btn-cmp.sel-ok{background:var(--green);color:#fff;border-color:var(--green);}
+  .btn-cmp.sel-no{background:var(--red);color:#fff;border-color:var(--red);}
+  .result-msg{font-size:.83rem;margin-top:6px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:10px;padding:10px 12px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.87rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 6px;font-size:.77rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.74rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📗 CHUYÊN ĐỀ 2: CÁC BÀI TOÁN VỀ LŨY THỪA SỐ TỰ NHIÊN</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 50–68)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.83rem;color:var(--muted)">
+    Đầy đủ lý thuyết + 4 Dạng (Thí dụ minh họa) + 28 Bài tập vận dụng (có lời giải đầy đủ).
+    Với bài <b>so sánh</b>, bấm chọn dấu &lt;, &gt; hoặc = . Với bài <b>tìm n/x</b>, nhập đáp số vào ô trống.
+    Bài chứng minh dài/phức tạp đánh dấu <span class="badge-illustration">MINH HỌA</span> — chỉ xem cách giải.
+  </p>
+
+  <div class="theory" style="border-left-color:var(--primary);background:#eef3fc;">
+    <h4 style="color:var(--primary);">A. LÝ THUYẾT CẦN NHỚ (nguyên văn)</h4>
+    <div class="formula">* Luỹ thừa với số mũ tự nhiên: aⁿ = a.a.a...a (n thừa số a, với a∈ℚ). Qui ước: a⁰=1 (a≠0) và a¹=a.</div>
+    <div class="formula">* Các phép tính luỹ thừa:</div>
+    <div class="formula">- Nhân hai luỹ thừa cùng cơ số: aᵘ.aᵛ = aᵘ⁺ᵛ</div>
+    <div class="formula">- Chia hai luỹ thừa cùng cơ số: aᵘ:aᵛ = aᵘ⁻ᵛ (a≠0; u≥v)</div>
+    <div class="formula">- Luỹ thừa của một tích: (a.b)ⁿ = aⁿ.bⁿ</div>
+    <div class="formula">- Luỹ thừa của một thương: (a:b)ⁿ = aⁿ:bⁿ (b≠0)</div>
+    <div class="formula">- Luỹ thừa của luỹ thừa: (aᵘ)ᵛ = aᵘ·ᵛ</div>
+    <div class="formula">- Luỹ thừa tầng: a^(u^v) = a^(u^v). Ví dụ: 3^(2³) = 3⁸</div>
+    <div class="formula">- Luỹ thừa với số mũ âm: a⁻ⁿ = 1/aⁿ (a≠0). Ví dụ: 10⁻³ = 1/10³</div>
+    <h4 style="color:var(--primary);margin-top:10px;">B. CÁC PHƯƠNG PHÁP SO SÁNH 2 LŨY THỪA</h4>
+    <div class="formula"><b>I/ Phương pháp 1:</b> Để so sánh hai luỹ thừa ta thường đưa về so sánh hai luỹ thừa cùng cơ số hoặc cùng số mũ.<br>
+    - Nếu 2 luỹ thừa cùng cơ số (lớn hơn 1) thì luỹ thừa nào có số mũ lớn hơn sẽ lớn hơn: aᵘ>aᵛ (a>1) ⇔ u>v<br>
+    - Nếu 2 luỹ thừa cùng số mũ (lớn hơn 0) thì luỹ thừa nào có cơ số lớn hơn sẽ lớn hơn: aⁿ>bⁿ (n>0) ⇔ a>b<br>
+    - Với các số dương a,b và số tự nhiên m: aᵘ<bᵘ ⇒ a<b</div>
+    <div class="formula"><b>II/ Phương pháp 2:</b> Dùng tính chất bắc cầu, tính chất đơn điệu của phép nhân:<br>
+    A>B và B>C thì A>C. &nbsp; A.C &lt; B.C (với C>0) ⇔ A&lt;B</div>
+  </div>
+
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+const DATA = [
+{id:1, title:"Dạng 1: So sánh hai số lũy thừa",
+ theory:`<h4>Lời bình (nguyên văn)</h4><div class="formula">Trước khi so sánh hai luỹ thừa với nhau cần làm 2 việc: + Kiểm tra cơ số xem các cơ số có biến đổi được về cùng cơ số không. + Kiểm tra số mũ của các luỹ thừa xem có ước chung lớn nhất không. Việc này giúp ta lựa chọn đúng phương pháp so sánh.</div>`,
+ problems:[
+  {id:"c2-d1-vd1a",type:"compare",title:"Thí dụ 1a",statement:`So sánh: 128⁷ và 4²⁴`,
+   answer:">",solution:`128⁷ = (2⁷)⁷ = 2⁴⁹; 4²⁴ = (2²)²⁴ = 2⁴⁸. Vì 2⁴⁹>2⁴⁸ ⇒ <b>128⁷ > 4²⁴</b>`},
+  {id:"c2-d1-vd1b",type:"compare",title:"Thí dụ 1b",statement:`So sánh: 81⁸ và 27¹¹`,
+   answer:"<",solution:`81⁸ = 3³²; 27¹¹ = 3³³. Vì 3³²<3³³ ⇒ <b>81⁸ < 27¹¹</b>`},
+  {id:"c2-d1-vd2a",type:"compare",title:"Thí dụ 2a",statement:`So sánh: 5³⁶ và 11²⁴`,
+   answer:">",solution:`5³⁶=125¹²; 11²⁴=121¹². Vì 125¹²>121¹² ⇒ <b>5³⁶ > 11²⁴</b>`},
+  {id:"c2-d1-vd2b",type:"compare",title:"Thí dụ 2b",statement:`So sánh: 32⁶⁰ và 81⁵⁰`,
+   answer:"<",solution:`32⁶⁰=2³⁰⁰=8¹⁰⁰; 81⁵⁰=3²⁰⁰=9¹⁰⁰. Vì 8¹⁰⁰<9¹⁰⁰ ⇒ <b>32⁶⁰ < 81⁵⁰</b>`},
+  {id:"c2-d1-vd2c",type:"compare",title:"Thí dụ 2c",statement:`So sánh: 3⁵⁰⁰ và 7³⁰⁰`,
+   answer:"<",solution:`3⁵⁰⁰=243¹⁰⁰; 7³⁰⁰=343¹⁰⁰. Vì 243¹⁰⁰<343¹⁰⁰ ⇒ <b>3⁵⁰⁰ < 7³⁰⁰</b>`},
+  {id:"c2-d1-vd3a",type:"compare",title:"Thí dụ 3a",statement:`So sánh: 3²ⁿ và 2³ⁿ (n∈ℕ*)`,
+   answer:">",solution:`3²ⁿ=(3²)ⁿ=9ⁿ; 2³ⁿ=(2³)ⁿ=8ⁿ. Vì 9>8 ⇒ <b>3²ⁿ > 2³ⁿ</b>`},
+  {id:"c2-d1-vd3b",type:"compare",title:"Thí dụ 3b",statement:`So sánh: 2³⁰⁰ và 3²⁰⁰`,
+   answer:"<",solution:`2³⁰⁰=(2³)¹⁰⁰=8¹⁰⁰; 3²⁰⁰=(3²)¹⁰⁰=9¹⁰⁰. Vì 8¹⁰⁰<9¹⁰⁰ ⇒ <b>2³⁰⁰ < 3²⁰⁰</b>`},
+  {id:"c2-d1-vd3c",type:"compare",title:"Thí dụ 3c",statement:`So sánh: 5³⁰⁰ và 3⁵⁰⁰`,
+   answer:"<",solution:`5³⁰⁰=(5³)¹⁰⁰=125¹⁰⁰; 3⁵⁰⁰=(3⁵)¹⁰⁰=243¹⁰⁰. Vì 125¹⁰⁰<243¹⁰⁰ ⇒ <b>5³⁰⁰ < 3⁵⁰⁰</b>`},
+  {id:"c2-d1-vd4",type:"compare",title:"Thí dụ 4 (Phương pháp 2)",statement:`Hãy so sánh: a) 107⁵⁰ và 73⁷⁵`,
+   answer:"<",solution:`107⁵⁰<108⁵⁰=(4.27)⁵⁰=2¹⁰⁰.3¹⁵⁰; 73⁷⁵>72⁷⁵=(8.9)⁷⁵=2²²⁵.3¹⁵⁰. Vì 2¹⁰⁰<2²²⁵ ⇒ <b>107⁵⁰ < 73⁷⁵</b>`},
+  {id:"c2-d1-vd4b",type:"compare",title:"Thí dụ 4b",statement:`So sánh: 2⁹¹ và 5³⁵`,
+   answer:">",solution:`2⁹¹>2⁹⁰=(2⁵)¹⁸=32¹⁸; 5³⁵<5³⁶=(5²)¹⁸=25¹⁸. Vì 32¹⁸>25¹⁸ ⇒ <b>2⁹¹ > 5³⁵</b>`},
+  {id:"c2-d1-vd5",title:"Thí dụ 5 (4 ý)",
+   statement:`Hãy so sánh: a) 107⁵⁰ và 73⁷⁵ &nbsp; b) 2⁹¹ và 5³⁵ &nbsp; c) 54⁴ và 21¹² &nbsp; d) 9⁸ và 8⁹`,
+   illustration:true,
+   solution:`a) 107⁵⁰<108⁵⁰=2¹⁰⁰.3¹⁵⁰ và 73⁷⁵>72⁷⁵=2²²⁵.3¹⁵⁰ nên <b>107⁵⁰<73⁷⁵</b><br>
+   b) 2⁹¹=(2¹³)⁷=8192⁷ và 5³⁵=(5⁵)⁷=3125⁷ nên <b>2⁹¹>5³⁵</b><br>
+   c) 54⁴=(2.27)⁴=2⁴.3¹² và 21¹²=3¹².7¹² nên <b>54⁴<21¹²</b><br>
+   d) 9⁸<10⁸=100⁴=100.100³; 8⁹=512³>500³=5³.100³=125.100³ nên <b>9⁸<8⁹</b>`}
+ ]},
+{id:2, title:"Dạng 2: So sánh biểu thức lũy thừa với một số",
+ theory:`<h4>Phương pháp (nguyên văn)</h4>
+ <div class="formula">* Thu gọn biểu thức luỹ thừa bằng cách vận dụng các phép tính luỹ thừa, cộng trừ các số theo quy luật...</div>
+ <div class="formula">* Vận dụng phương pháp so sánh hai luỹ thừa ở phần B.</div>
+ <div class="formula">* Nếu biểu thức luỹ thừa là dạng phân thức: đối với từng trường hợp bậc của luỹ thừa ở tử lớn hơn hay bé hơn bậc của luỹ thừa ở mẫu mà ta nhân với hệ số thích hợp nhằm tách phần nguyên rồi so sánh từng phần tương ứng. Với a,n,m,K∈ℕ, ta có:<br>
+ - Nếu m>n thì: K − a/m &gt; K − a/n &nbsp; và &nbsp; K + a/m &lt; K + a/n<br>
+ - Nếu m&lt;n thì: K − a/m &lt; K − a/n &nbsp; và &nbsp; K + a/m &gt; K + a/n<br>
+ (còn gọi là phương pháp so sánh phần bù)</div>
+ <div class="formula">* Với biểu thức là tổng các số 1/a² (a∈ℕ*) ta có vận dụng so sánh sau: 1/a − 1/(a+1) &lt; 1/a² &lt; 1/(a−1) − 1/a</div>`,
+ problems:[
+  {id:"c2-d2-vd1",type:"compare",title:"Thí dụ 1",statement:`Cho S = 1+2+2²+2³+...+2⁹. So sánh S với 5.2⁸`,
+   answer:"<",solution:`2S=2+2²+...+2¹⁰ ⇒ 2S−S=S=2¹⁰−1. Mà 2¹⁰−1<2¹⁰=2⁸.2²=4.2⁸ ⇒ <b>S < 5.2⁸</b>`},
+  {id:"c2-d2-vd2a",type:"compare",title:"Thí dụ 2a",statement:`So sánh 2 biểu thức: A = (10¹⁵+1)/(10¹⁶+1) và B = (10¹⁶+1)/(10¹⁷+1)`,
+   answer:">",solution:`10A = 1 + 9/(10¹⁶+1); 10B = 1 + 9/(10¹⁷+1). Vì 10¹⁶+1<10¹⁷+1 nên 9/(10¹⁶+1) > 9/(10¹⁷+1) ⇒ 10A>10B ⇒ <b>A > B</b>`},
+  {id:"c2-d2-vd2b",type:"compare",title:"Thí dụ 2b",statement:`So sánh 2 biểu thức: C = (2²⁰⁰⁸−3)/(2²⁰⁰⁷−1) và D = (2²⁰⁰⁷−3)/(2²⁰⁰⁶−1)`,
+   answer:">",solution:`½C = 1 − 1/(2²⁰⁰⁸−2); ½D = 1 − 1/(2²⁰⁰⁷−2). Vì 2²⁰⁰⁸−2>2²⁰⁰⁷−2 nên 1/(2²⁰⁰⁸−2)<1/(2²⁰⁰⁷−2) ⇒ ½C>½D ⇒ <b>C > D</b>`}
+ ]},
+{id:3, title:"Dạng 3: Từ việc so sánh lũy thừa, tìm cơ số (số mũ) chưa biết",
+ theory:`<h4>Lý thuyết (nguyên văn)</h4>
+ <div class="formula">* Với các số tự nhiên m,x,p và số dương a:<br>
+ + Nếu a>1 thì: aᵘ&lt;aˣ&lt;aᵖ ⇒ m&lt;x&lt;p<br>
+ + Nếu a&lt;1 thì: aᵘ&lt;aˣ&lt;aᵖ ⇒ m&gt;x&gt;p</div>
+ <div class="formula">* Với các số dương a,b và số tự nhiên m, ta có: aᵘ&lt;bᵘ ⇒ a&lt;b</div>`,
+ problems:[
+  {id:"c2-d3-vd1",title:"Thí dụ 1",statement:`Tìm các số nguyên n thoả mãn: 3⁶⁴ < n⁴⁸ < 5⁷²`,
+   answer:"5,6,7,8,9,10,11",solution:`n⁴⁸>3⁶⁴ ⇒ (n³)¹⁶>(3⁴)¹⁶ ⇒ n³>81 ⇒ n>4 (n∈ℤ). n⁴⁸<5⁷² ⇒ (n²)²⁴<(5³)²⁴ ⇒ n²<125 ⇒ −11≤n≤11.
+   Từ 2 điều kiện: 4<n≤11 ⇒ n nhận các giá trị: <b>5;6;7;8;9;10;11</b>`},
+  {id:"c2-d3-vd1-bs1",title:"Bài số 1 (từ Thí dụ 1)",statement:`Tìm tổng các số nguyên n thoả mãn: 3⁶⁴ < n⁴⁸ < 5⁷²`,
+   answer:"56",solution:`Các số nguyên n thoả mãn là 5;6;7;8;9;10;11. Tổng = 5+6+7+8+9+10+11 = <b>56</b>`},
+  {id:"c2-d3-vd1-bs2",title:"Bài số 2 (từ Thí dụ 1)",statement:`Tìm tất cả các số nguyên có một chữ số n sao cho: 3⁶⁴ < n⁴⁸ < 5⁷²`,
+   answer:"5,6,7,8,9",solution:`Trong các số n∈{5;6;7;8;9;10;11}, các số có 1 chữ số là: <b>5; 6; 7; 8; 9</b>`},
+  {id:"c2-d3-vd1-bs3",title:"Bài số 3 (từ Thí dụ 1)",statement:`Tìm tất cả các số nguyên có 2 chữ số n sao cho: 3⁶⁴ < n⁴⁸ < 5⁷²`,
+   answer:"10,11",solution:`Trong các số n∈{5;6;7;8;9;10;11}, các số có 2 chữ số là: <b>10; 11</b>`},
+  {id:"c2-d3-vd2",title:"Thí dụ 2",
+   statement:`Tìm x thuộc ℕ. Biết: a) 16ˣ < 128⁴ &nbsp; b) 5ˣ.5ˣ⁺¹.5ˣ⁺² ≤ <u>100...0</u> (18 chữ số 0) : 2¹⁸`,
+   answer:"0,1,2,3,4,5,6",solution:`a) 16ˣ<128⁴ ⇒ (2⁴)ˣ<(2⁷)⁴ ⇒ 2⁴ˣ<2²⁸ ⇒ 4x<28 ⇒ x<7 ⇒ x∈{0,1,2,3,4,5,6}<br>
+   b) 5ˣ.5ˣ⁺¹.5ˣ⁺²=5³ˣ⁺³≤10¹⁸:2¹⁸=5¹⁸ ⇒ 3x+3≤18 ⇒ x≤5 ⇒ x∈{0,1,2,3,4,5}<br><i>(nhập đáp số câu a)</i>`}
+ ]},
+{id:4, title:"Dạng 4: Một số bài toán khác",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">Phân tích số ra luỹ thừa của 10 (hoặc luỹ thừa của 2, 5) để đếm số chữ số; hoặc xét các trường hợp cơ số/số mũ để tìm số lớn nhất có thể viết được.</div>`,
+ problems:[
+  {id:"c2-d4-vd1",title:"Thí dụ 1 (minh họa)",illustration:true,
+   statement:`Hãy viết số lớn nhất bằng cách dùng ba chữ số 1; 2; 3 với điều kiện mỗi chữ số dùng một lần và chỉ một lần (có thể dùng luỹ thừa)?`,
+   solution:`Không dùng luỹ thừa: số lớn nhất là 321. Dùng luỹ thừa, xét các luỹ thừa có thể tạo từ 1,2,3: với số mũ 1 chữ số: 13²,31²,12³,21³, lớn nhất là 21³; với số mũ 2 chữ số: 2¹³,2³¹,3¹²,3²¹, vì 3²¹=3.9¹⁰ và 2³¹=2.8¹⁰ nên 3²¹ lớn nhất trong nhóm này.
+   So sánh 3²¹ và 21³: 3²¹>3⁹=27³>21³. Vậy số lớn nhất viết được là <b>3²¹</b>`},
+  {id:"c2-d4-vd2",title:"Thí dụ 2",
+   statement:`a) Số 5⁸ có bao nhiêu chữ số? &nbsp; b) Hai số 2²⁰⁰³ và 5²⁰⁰³ viết liền nhau được số có bao nhiêu chữ số?`,
+   answer:"6",solution:`a) 5⁸=(5⁴)²=625²>600²=360000; 5⁸=10⁸/2⁸<100000000/250=400000 ⇒ 360000<5⁸<400000 ⇒ 5⁸ có <b>6 chữ số</b><br>
+   b) Giả sử 2²⁰⁰³ có a chữ số, 5²⁰⁰³ có b chữ số. Vì 10ᵃ⁻¹<2²⁰⁰³<10ᵃ và 10ᵇ⁻¹<5²⁰⁰³<10ᵇ ⇒ 10ᵃ⁺ᵇ⁻²<10²⁰⁰³<10ᵃ⁺ᵇ ⇒ a+b−1=2003 ⇒ a+b=2004. Vậy số đó có <b>2004 chữ số</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"c2-d4-vd3",title:"Thí dụ 3 (tìm số các chữ số)",
+   statement:`Tìm số các chữ số của các số n và m trong các trường hợp sau: a) n = 8³.15⁵ &nbsp; b) m = 4¹⁶.5²⁵`,
+   answer:"9",solution:`a) n=8³.15⁵=(2³)³.(3.5)⁵=2⁹.3⁵.5⁵=2⁴.3⁵.(2.5)⁵=16.243.10⁵=3888.10⁵. Số 3888.10⁵ có 3888 theo sau 5 chữ số 0 nên có <b>9 chữ số</b><br>
+   b) m=4¹⁶.5²⁵=(2²)¹⁶.5²⁵=2³².5²⁵=2⁷.(2²⁵.5²⁵)=128.10²⁵. Số 128.10²⁵ có 128 theo sau 25 chữ số 0 nên có <b>28 chữ số</b><br><i>(nhập đáp số câu a)</i>`}
+ ]},
+{id:5, title:"C/ Bài tập vận dụng (28 bài)",
+ theory:`<h4>Ghi chú</h4><div class="formula">28 bài tập đều có "Hướng dẫn giải"/"Lời giải" đầy đủ trong sách (trang 59-68). Với bài so sánh, bấm chọn dấu &lt;, &gt;, = . Với bài tìm n/x, nhập đáp số.</div>`,
+ problems:[
+  {id:"c2-bt1a",type:"compare",title:"Bài 1a",statement:`So sánh: 243⁵ và 3.27⁵`,
+   answer:">",solution:`243⁵=(3⁵)⁵=3²⁵; 3.27⁵=3.(3³)⁵=3.3¹⁵=3¹⁶. Vì 3¹⁶<3²⁵ ⇒ <b>243⁵ > 3.27⁵</b>`},
+  {id:"c2-bt1b",type:"compare",title:"Bài 1b",statement:`So sánh: 625⁵ và 125⁷`,
+   answer:"<",solution:`625⁵=(5⁴)⁵=5²⁰; 125⁷=(5³)⁷=5²¹. Vì 5²¹>5²⁰ ⇒ <b>625⁵ < 125⁷</b>`},
+  {id:"c2-bt2a",type:"compare",title:"Bài 2a",statement:`So sánh: 99²⁰ và 9999¹⁰`,
+   answer:"<",solution:`99²⁰=(99²)¹⁰=(99.99)¹⁰; 9999¹⁰=(99.101)¹⁰. Vì 99.99<99.101 ⇒ <b>99²⁰ < 9999¹⁰</b>`},
+  {id:"c2-bt2b",type:"compare",title:"Bài 2b",statement:`So sánh: 3⁵⁰⁰ và 7³⁰⁰`,
+   answer:"<",solution:`3⁵⁰⁰=(3⁵)¹⁰⁰=243¹⁰⁰; 7³⁰⁰=(7³)¹⁰⁰=343¹⁰⁰. Vì 243¹⁰⁰<343¹⁰⁰ ⇒ <b>3⁵⁰⁰ < 7³⁰⁰</b>`},
+  {id:"c2-bt2c",type:"compare",title:"Bài 2c",statement:`So sánh: 202³⁰³ và 303²⁰²`,
+   answer:">",solution:`202³⁰³=(2.101)³.¹⁰¹=(808.101)¹⁰¹; 303²⁰²=(3.101)².¹⁰¹=(9.101²)¹⁰¹. Vì 808.101²>9.101² ⇒ <b>202³⁰³ > 303²⁰²</b>`},
+  {id:"c2-bt2d",type:"compare",title:"Bài 2d",statement:`So sánh: 11¹⁹⁷⁹ và 37¹³²⁰`,
+   answer:"<",solution:`11¹⁹⁷⁹<11¹⁹⁸⁰=(11³)⁶⁶⁰=1331⁶⁶⁰; 37¹³²⁰=(37²)⁶⁶⁰=1369⁶⁶⁰. Vì 1331⁶⁶⁰<1369⁶⁶⁰ ⇒ <b>11¹⁹⁷⁹ < 37¹³²⁰</b>`},
+  {id:"c2-bt3a",type:"compare",title:"Bài 3a",statement:`So sánh: 8⁵ và 3.4⁷`,
+   answer:"<",solution:`8⁵=2¹⁵=2.2¹⁴; 3.4⁷=3.2¹⁴. Vì 2<3 ⇒ <b>8⁵ < 3.4⁷</b>`},
+  {id:"c2-bt3b",type:"compare",title:"Bài 3b",statement:`So sánh: 10¹⁰ và 48.50⁵`,
+   answer:"<",solution:`10¹⁰=2¹⁰.5¹⁰=2.2⁹.5¹⁰; 48.50⁵=(3.2⁴).(2⁵.5¹⁰)=3.2⁹.5¹⁰. Vì 2<3 ⇒ <b>10¹⁰ < 48.50⁵</b>`},
+  {id:"c2-bt3c",type:"compare",title:"Bài 3c",statement:`So sánh: 2³⁰+3³⁰+4³⁰ và 3.24¹⁰`,
+   answer:">",solution:`4³⁰=2⁶⁰=2³⁰.2³⁰=8¹⁰.4¹⁵; 24¹⁰.3=8¹⁰.3¹⁰.3=8¹⁰.3¹¹. Vì 3¹¹<4¹⁵ ⇒ 8¹⁰.3¹¹<8¹⁰.4¹⁵ ⇒ 4³⁰>3.24¹⁰ ⇒ <b>2³⁰+3³⁰+4³⁰ > 3.24¹⁰</b>`},
+  {id:"c2-bt3d",type:"compare",title:"Bài 3d",statement:`So sánh: 1990¹⁰+1990⁹ và 1991¹⁰`,
+   answer:"<",solution:`1990¹⁰+1990⁹=1990⁹(1990+1)=1991.1990⁹; 1991¹⁰=1991.1991⁹. Vì 1990⁹<1991⁹ ⇒ <b>1990¹⁰+1990⁹ < 1991¹⁰</b>`},
+  {id:"c2-bt4",type:"compare",title:"Bài 4",statement:`So sánh các số sau: 199²⁰ và 2003¹⁵`,
+   answer:"<",solution:`199²⁰<200²⁰=(8.25)²⁰=2⁶⁰.5⁴⁰; 2003¹⁵>2000¹⁵=(16.125)¹⁵=2⁶⁰.5⁴⁵. Vì 5⁴⁵>5⁴⁰ ⇒ <b>199²⁰ < 2003¹⁵</b>`},
+  {id:"c2-bt5a",type:"compare",title:"Bài 5a",statement:`So sánh: 78¹²−78¹¹ và 78¹¹−78¹⁰`,
+   answer:">",solution:`78¹²−78¹¹=78¹¹(78−1)=78¹¹.77; 78¹¹−78¹⁰=78¹⁰.77. Vì 78¹¹>78¹⁰ ⇒ <b>78¹²−78¹¹ > 78¹¹−78¹⁰</b>`},
+  {id:"c2-bt5b",type:"compare",title:"Bài 5b",statement:`So sánh: A = 72⁴⁵−72⁴⁴ và B = 72⁴⁴−72⁴³`,
+   answer:">",solution:`A=72⁴⁴(72−1)=72⁴⁴.71; B=72⁴³(72−1)=72⁴³.71. Vì 72⁴⁴>72⁴³ ⇒ <b>A > B</b>`},
+  {id:"c2-bt6",type:"compare",title:"Bài 6",statement:`So sánh các số sau: 3³⁹ và 11²¹`,
+   answer:"<",solution:`3³⁹<3⁴⁰=(3⁴)¹⁰=81¹⁰; 11²⁰=(11²)¹⁰=121¹⁰<11²¹. Vì 81¹⁰<121¹⁰ ⇒ <b>3³⁹ < 11²¹</b>`},
+  {id:"c2-bt7",title:"Bài 7 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng tỏ rằng: 5²⁷ < 2⁶³ < 5²⁸`,
+   solution:`2⁶³=(2⁷)⁹=128⁹; 5²⁷=(5³)⁹=125⁹ ⇒ 2⁶³>5²⁷ (vì 128⁹>125⁹) (1)<br>
+   2⁶³=(2⁹)⁷=512⁷; 5²⁸=(5⁴)⁷=625⁷ ⇒ 2⁶³<5²⁸ (vì 512⁷<625⁷) (2)<br>
+   Từ (1) và (2) ⇒ 5²⁷ < 2⁶³ < 5²⁸ (đpcm)`},
+  {id:"c2-bt8",title:"Bài 8 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng minh rằng: 2¹⁹⁹⁵ < 5⁸⁶³`,
+   solution:`2¹⁹⁹⁵=2¹⁹⁹⁰.2⁵; 5⁸⁶³=5⁸⁶⁰.5³. Nhận xét 2⁵=32<5³=125 nên cần so sánh 2¹⁹⁹⁰ và 5⁸⁶⁰.
+   Có 2¹⁰=1024, 5⁵=3025 ⇒ 2¹⁰.3<5⁵ ⇒ 2¹⁷²⁰.3¹⁷²<5⁸⁶⁰. Có 2¹⁹⁹⁰=2¹⁷²⁰.2²⁷⁰, cần so sánh 2¹⁷²⁰.2²⁷⁰ với 2¹⁷²⁰.3¹⁷²: vì 3⁷=2187>2¹¹=2048 ⇒ 3¹⁷²=(3⁷)²⁴.3⁴>(2¹¹)²⁴.2⁶=2²⁷⁰.
+   Do đó 2¹⁷²⁰.2²⁷⁰<2¹⁷²⁰.3¹⁷²<5⁸⁶⁰ ⇒ 2¹⁹⁹⁰<5⁸⁶⁰. Mà 2⁵<5³ ⇒ <b>2¹⁹⁹⁵ < 5⁸⁶³</b> (đpcm)`},
+  {id:"c2-bt9",title:"Bài 9 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng minh rằng: 2¹⁹⁹⁹ < 7⁷¹⁴`,
+   solution:`2¹⁰=1024, 7³=343 ⇒ 2¹⁰<3.7³ ⇒ (2¹⁰)²³⁸<3²³⁸.(7³)²³⁸ ⇒ 2²³⁸⁰<3²³⁸.7⁷¹⁴ (1)<br>
+   Xét 3²³⁸=3³.3²³⁵=3³.(3⁵)⁴⁷<3³.(2⁸)⁴⁷<2⁵.2³⁷⁶=2³⁸¹ (vì 3⁵<2⁸) (2)<br>
+   Từ (1),(2): 2²³⁸⁰<2³⁸¹.7⁷¹⁴ ⇒ <b>2¹⁹⁹⁹ < 7⁷¹⁴</b> (đpcm)`},
+  {id:"c2-bt10",type:"compare",title:"Bài 10",statement:`So sánh: 3²⁰⁰ và 2³⁰⁰`,
+   answer:">",solution:`3²⁰⁰=(3²)¹⁰⁰=9¹⁰⁰; 2³⁰⁰=(2³)¹⁰⁰=8¹⁰⁰. Vì 8¹⁰⁰<9¹⁰⁰ ⇒ <b>3²⁰⁰ > 2³⁰⁰</b>`},
+  {id:"c2-bt11",type:"compare",title:"Bài 11",statement:`So sánh: 71⁵⁰ và 37⁷⁵`,
+   answer:"<",solution:`71⁵⁰<72⁵⁰=(8.9)⁵⁰=2¹⁵⁰.3¹⁰⁰; 37⁷⁵>36⁷⁵=(4.9)⁷⁵=2¹⁵⁰.3¹⁵⁰. Vì 3¹⁵⁰>3¹⁰⁰ ⇒ <b>71⁵⁰ < 37⁷⁵</b>`},
+  {id:"c2-bt12a",type:"compare",title:"Bài 12a",statement:`So sánh các số: 50²⁰ và 2550¹⁰`,
+   answer:"<",solution:`50²⁰=(50²)¹⁰=2500¹⁰. Vì 2500¹⁰<2550¹⁰ ⇒ <b>50²⁰ < 2550¹⁰</b>`},
+  {id:"c2-bt12b",type:"compare",title:"Bài 12b",statement:`So sánh các số: 999¹⁰ và 999999⁵`,
+   answer:"<",solution:`999¹⁰=(999²)⁵<998001⁵<999999⁵ ⇒ <b>999¹⁰ < 999999⁵</b>`},
+  {id:"c2-bt13",title:"Bài 13",statement:`Viết theo thứ tự từ nhỏ đến lớn: 2¹⁰⁰; 3⁷⁵ và 5⁵⁰`,
+   answer:"2^100<5^50<3^75",solution:`2¹⁰⁰=(2²)⁵⁰=4⁵⁰<5⁵⁰ (1). 3⁷⁵=(3³)²⁵=27²⁵>5⁵⁰=(5²)²⁵=25²⁵ (2). 5⁵⁰=(5²)²⁵=25²⁵ (3).
+   Từ (1),(2),(3) ⇒ <b>2¹⁰⁰ < 5⁵⁰ < 3⁷⁵</b>`},
+  {id:"c2-bt14",type:"compare",title:"Bài 14",statement:`So sánh 2 số: 1234⁵⁶⁷⁸⁹ và 56789¹²³⁴`,
+   answer:">",solution:`A=1234⁵⁶⁷⁸⁹>1000⁵⁰⁰⁰⁰=(10³)⁵⁰⁰⁰⁰=10¹⁵⁰⁰⁰⁰. B=56789¹²³⁴<100000²⁰⁰⁰=(10⁵)²⁰⁰⁰=10¹⁰⁰⁰⁰. Vì 10¹⁰⁰⁰⁰<10¹⁵⁰⁰⁰⁰ ⇒ <b>1234⁵⁶⁷⁸⁹ > 56789¹²³⁴</b>`},
+  {id:"c2-bt15",type:"compare",title:"Bài 15",statement:`Gọi m là số các số có 9 chữ số mà trong cách ghi của nó không có chữ số 0. Hãy so sánh m với 10.9⁸`,
+   answer:"<",solution:`Số có 9 chữ số không chứa số 0: mỗi chữ số có 9 cách chọn (từ 1-9) ⇒ m=9⁹=9.9⁸<10.9⁸ ⇒ <b>m < 10.9⁸</b>`},
+  {id:"c2-bt16",type:"compare",title:"Bài 16",statement:`Cho A = 1+2012+2012²+2012³+2012⁴+...+2012⁷¹+2012⁷² và B = 2012⁷³−1. So sánh A và B`,
+   answer:"<",solution:`2012A=2012+2012²+...+2012⁷³ ⇒ 2012A−A=2011A=2012⁷³−1 ⇒ A=(2012⁷³−1):2011<2012⁷³−1=B ⇒ <b>A < B</b>`},
+  {id:"c2-bt17",type:"compare",title:"Bài 17",statement:`So sánh hai biểu thức: B = (3¹⁰.11+3¹⁰.5)/(3⁹.2⁴) và C = (2¹⁰.13+2¹⁰.65)/(2⁸.104)`,
+   answer:"=",solution:`B = 3¹⁰(11+5)/(3⁹.2⁴) = 3¹⁰.16/(3⁹.16) = 3. C = 2¹⁰(13+65)/(2⁸.104) = 2¹⁰.78/(2⁸.104) = 4.78/104 = 3. Vậy <b>B = C</b>`},
+  {id:"c2-bt18",type:"compare",title:"Bài 18",statement:`So sánh: M = 3/8³ + 7/8⁴ và N = 7/8³ + 3/8⁴`,
+   answer:"<",solution:`M = (3/8³+3/8⁴)+4/8⁴; N = (3/8³+3/8⁴)+4/8³. Vì 4/8⁴<4/8³ ⇒ <b>M < N</b>`},
+  {id:"c2-bt19",type:"compare",title:"Bài 19",statement:`So sánh M và N biết: M = (19³⁰+5)/(19³¹+5) và N = (19³¹+5)/(19³²+5)`,
+   answer:">",solution:`19M = 1+90/(19³¹+5); 19N = 1+90/(19³²+5). Vì 19³¹+5<19³²+5 nên 90/(19³¹+5)>90/(19³²+5) ⇒ 19M>19N ⇒ <b>M > N</b>`},
+  {id:"c2-bt20",type:"compare",title:"Bài 20",statement:`So sánh: 1/101² + 1/102² + 1/103² + 1/104² + 1/105² và 1/(2².3.5².7)`,
+   answer:"<",solution:`Với n>1: 1/n² < 1/(n−1) − 1/n. Áp dụng: tổng 5 số hạng < 1/100 − 1/105 = 5/(100.105) = 1/(2².5².3.7) ⇒ <b>Tổng < 1/(2².3.5².7)</b>`},
+  {id:"c2-bt21",type:"compare",title:"Bài 21",statement:`So sánh A = (1/2²−1)(1/3²−1)(1/4²−1)......(1/100²−1) và −1/2`,
+   answer:"<",solution:`A là tích của 99 số âm nên A<0. −A = (3/2²)(8/3²)(15/4²)...(9999/100²) = (1.2.3...98.99)/(2.3...99.100) . (3.4...100.101)/(2.3...99.100) = (1/100).(101/2) = 101/200 > 1/2 ⇒ A < −1/2`},
+  {id:"c2-bt22a",title:"Bài 22a",statement:`Tìm các số tự nhiên n sao cho: 3 < 3ⁿ ≤ 234`,
+   answer:"2,3,4,5",solution:`3<3ⁿ≤234 ⇒ 3¹<3ⁿ≤3⁵ (vì 3⁵=243 gần 234, kiểm tra 3⁵=243>234 nên thực ra cận trên là n≤5 vì 3⁴=81≤234<243=3⁵, theo sách: 1<n≤5) ⇒ n∈{<b>2,3,4,5</b>}`},
+  {id:"c2-bt22b",title:"Bài 22b",statement:`Tìm các số tự nhiên n sao cho: 8.16 ≥ 2ⁿ ≥ 4`,
+   answer:"2,3,4,5,6,7",solution:`8.16=2⁷ ⇒ 2⁷≥2ⁿ≥2² ⇒ 7≥n≥2 ⇒ n∈{<b>2,3,4,5,6,7</b>}`},
+  {id:"c2-bt23",title:"Bài 23",statement:`Tìm số tự nhiên n biết rằng: 4¹⁵.9¹⁵ < 2ⁿ.3ⁿ < 18¹⁶.2¹⁶`,
+   answer:"31",solution:`4¹⁵.9¹⁵=(4.9)¹⁵=36¹⁵; 18¹⁶.2¹⁶=36¹⁶. Bất đẳng thức: 36¹⁵<6ⁿ<36¹⁶ ⇒ 6³⁰<6ⁿ<6³² ⇒ 30<n<32 ⇒ n=<b>31</b>`},
+  {id:"c2-bt24",title:"Bài 24",statement:`Cho A = 3+3²+3³+....+3¹⁰⁰. Tìm số tự nhiên n, biết: 2A+3 = 3ⁿ`,
+   answer:"101",solution:`3A=3²+3³+...+3¹⁰¹ ⇒ 3A−A=2A=3¹⁰¹−3 ⇒ 2A+3=3¹⁰¹=3ⁿ ⇒ n=<b>101</b>`},
+  {id:"c2-bt25",title:"Bài 25",statement:`Tìm các số nguyên dương m và n sao cho: 2ᵘ − 2ⁿ = 256 (với m,n là số mũ)`,
+   answer:"m=9,n=8",solution:`2ᵘ−2ⁿ=2⁸ ⇒ 2ⁿ(2ᵘ⁻ⁿ−1)=2⁸. Xét m−n=1: 2ⁿ.1=2⁸ ⇒ n=8, m=9. Xét m−n≥2: vế trái có ước nguyên tố lẻ, vô lý. Vậy <b>n=8, m=9</b> là đáp số duy nhất`},
+  {id:"c2-bt26a",title:"Bài 26a",statement:`Tìm số nguyên dương n biết: 64 < 2ⁿ < 256`,
+   answer:"7",solution:`64<2ⁿ<256 ⇒ 2⁶<2ⁿ<2⁸ ⇒ 6<n<8 ⇒ n=<b>7</b>`},
+  {id:"c2-bt26b",title:"Bài 26b",statement:`Tìm số nguyên dương n biết: 243 > 3ⁿ ≥ 9`,
+   answer:"2,3,4",solution:`243>3ⁿ≥9 ⇒ 3⁵>3ⁿ≥3² ⇒ 5>n≥2 ⇒ n∈{<b>2,3,4</b>}`},
+  {id:"c2-bt27",title:"Bài 27",statement:`Tìm số nguyên n lớn nhất sao cho: n²⁰⁰ < 6³⁰⁰`,
+   answer:"14",solution:`n²⁰⁰=(n²)¹⁰⁰; 6³⁰⁰=(6³)¹⁰⁰=216¹⁰⁰ ⇒ n²<216. Số nguyên lớn nhất thoả mãn là n=<b>14</b> (vì 14²=196<216<225=15²)`},
+  {id:"c2-bt28a",title:"Bài 28a",statement:`Tìm n∈ℕ biết: 32 < 2ⁿ < 512`,
+   answer:"6,7,8",solution:`32<2ⁿ<512 ⇒ 2⁵<2ⁿ<2⁹ ⇒ 5<n<9 ⇒ n∈{<b>6,7,8</b>}`},
+  {id:"c2-bt28b",title:"Bài 28b*",statement:`Tìm n∈ℕ biết: 3¹⁸ < n¹² ≤ 20⁸`,
+   answer:"6,7",solution:`3¹⁸<n¹² ⇔ (3³)⁶<(n²)⁶ ⇔ 27<n² ⇒ n≥6 (vì 5²<27<6²). n¹²≤20⁸ ⇔ (n³)⁴≤(20²)⁴ ⇔ n³≤400 ⇒ n≤7 (vì 7³<400<8³). Vậy n∈{<b>6,7</b>}`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    let inner='';
+    if(p.illustration){
+      inner = `<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`;
+    } else if(p.type==='compare'){
+      inner = `<div class="answer-row" id="cmprow-${p.id}">
+        <button class="btn btn-cmp" onclick="checkCompare('${p.id}','<','${p.answer}')">A &lt; B</button>
+        <button class="btn btn-cmp" onclick="checkCompare('${p.id}','=','${p.answer}')">A = B</button>
+        <button class="btn btn-cmp" onclick="checkCompare('${p.id}','>','${p.answer}')">A &gt; B</button>
+        <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button>
+      </div>
+      <div class="result-msg" id="msg-${p.id}"></div>`;
+    } else {
+      inner = `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`;
+    }
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${inner}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+
+function checkCompare(id, chosen, correct){
+  const msgEl=document.getElementById('msg-'+id);
+  const row=document.getElementById('cmprow-'+id);
+  row.querySelectorAll('.btn-cmp').forEach(b=>b.classList.remove('sel-ok','sel-no'));
+  const btns=row.querySelectorAll('.btn-cmp');
+  const map={'<':0,'=':1,'>':2};
+  let ok = (chosen===correct);
+  if(ok){
+    btns[map[chosen]].classList.add('sel-ok');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    btns[map[chosen]].classList.add('sel-no');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',', '.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+
+function normalizeSet(str){
+  return str.replace(/\s+/g,'').split(',').map(x=>x.trim()).filter(x=>x!=='').sort().join(',');
+}
+
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  let ok=false;
+  const userRaw = inputEl.value.trim();
+  // try numeric first
+  const userVal=parseVal(userRaw), correctVal=parseVal(correct);
+  if(userVal!==null && correctVal!==null && Math.abs(userVal-correctVal)<1e-6){
+    ok=true;
+  } else if(normalizeSet(userRaw.replace(/[{}]/g,'')) === normalizeSet(correct.replace(/[{}]/g,''))){
+    ok=true;
+  } else if(userRaw.replace(/\s+/g,'').toLowerCase() === correct.replace(/\s+/g,'').toLowerCase()){
+    ok=true;
+  }
+  inputEl.classList.remove('correct','wrong');
+  if(ok){
+    inputEl.classList.add('correct');
+    msgEl.textContent='🎉 Chính xác! Giỏi quá!'; msgEl.className='result-msg ok';
+  } else {
+    inputEl.classList.add('wrong');
+    msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.'; msgEl.className='result-msg no';
+  }
+  saveProgress(id, ok);
+  updateProgressBar();
+}
+
+const STORAGE_KEY='cd2_luythua_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){
+  const data=loadProgress();
+  allCheckableIds.forEach(id=>{
+    if(data[id]===true){
+      const inputEl=document.getElementById('input-'+id);
+      const msgEl=document.getElementById('msg-'+id);
+      if(inputEl) inputEl.classList.add('correct');
+      if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}
+    }
+  });
+}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.btn-cmp').forEach(b=>b.classList.remove('sel-ok','sel-no'));
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
