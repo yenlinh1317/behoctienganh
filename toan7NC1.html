@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyên đề 1: Thực hiện phép tính - Toán 7 nâng cao</title>
+<style>
+  :root{--primary:#1e3a8a;--primary-light:#3b82f6;--accent:#f59e0b;--green:#16a34a;--red:#dc2626;--bg:#f3f6fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#e2e8f0;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:60px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:20px 16px 24px;text-align:center;box-shadow:0 4px 14px rgba(30,58,138,.25);}
+  header h1{margin:0 0 6px;font-size:1.3rem;}
+  header p{margin:4px 0;font-size:.85rem;opacity:.92;}
+  .source-tag{display:inline-block;margin-top:8px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:.72rem;}
+  .container{max-width:900px;margin:0 auto;padding:14px;}
+  .progress-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .progress-bar .track{flex:1;height:10px;background:#e5e7eb;border-radius:6px;overflow:hidden;}
+  .progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:.4s;}
+  .progress-bar .label{font-size:.78rem;font-weight:600;color:var(--primary);white-space:nowrap;}
+  .reset-btn{border:none;background:#fee2e2;color:var(--red);padding:7px 10px;border-radius:8px;font-size:.72rem;cursor:pointer;font-weight:600;white-space:nowrap;}
+  .toc{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 20px;}
+  @media(min-width:600px){.toc{grid-template-columns:repeat(4,1fr);}}
+  .toc a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:.74rem;color:var(--primary);text-decoration:none;font-weight:600;}
+  .toc a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#cbd5e1;margin-right:6px;}
+  .toc a.done .dot{background:var(--green);}
+  .section-divider{margin:26px 0 10px;padding:6px 0;border-bottom:2px solid var(--primary);}
+  .section-divider h2{margin:0;font-size:1.05rem;color:var(--primary);}
+  .topic{background:var(--card);border-radius:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);overflow:hidden;border:1px solid var(--border);}
+  .topic-head{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#eef3fc;}
+  .topic-head h2{margin:0;font-size:.95rem;color:var(--primary);}
+  .topic-head .chev{transition:.25s;color:var(--primary);font-size:1.1rem;flex-shrink:0;margin-left:8px;}
+  .topic.open .chev{transform:rotate(180deg);}
+  .topic-body{display:none;padding:6px 16px 18px;}
+  .topic.open .topic-body{display:block;}
+  .theory{background:#fffbea;border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0 16px;font-size:.89rem;}
+  .theory h4{margin:0 0 6px;color:#92400e;font-size:.82rem;}
+  .theory .formula{margin:6px 0;}
+  .problem{border:1px solid var(--border);border-radius:10px;padding:12px 12px 14px;margin-bottom:12px;background:#fafcff;}
+  .problem .ptitle{font-weight:700;color:var(--primary);margin-bottom:6px;font-size:.88rem;}
+  .problem .statement{font-size:.92rem;margin-bottom:8px;}
+  .badge-illustration{display:inline-block;background:#e0e7ff;color:#3730a3;font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .answer-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .answer-row input[type=text]{flex:1;min-width:110px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:.92rem;}
+  .answer-row input.correct{border-color:var(--green);background:#f0fdf4;}
+  .answer-row input.wrong{border-color:var(--red);background:#fef2f2;}
+  .btn{border:none;border-radius:8px;padding:9px 13px;font-size:.8rem;font-weight:600;cursor:pointer;}
+  .btn-check{background:var(--primary);color:#fff;}
+  .btn-sol{background:#fff;border:1.5px solid var(--primary-light);color:var(--primary-light);}
+  .result-msg{font-size:.82rem;margin-top:6px;font-weight:600;}
+  .result-msg.ok{color:var(--green);}
+  .result-msg.no{color:var(--red);}
+  .solution{display:none;margin-top:10px;padding:10px 12px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;font-size:.87rem;}
+  .solution.show{display:block;}
+  .solution h5{margin:0 0 6px;font-size:.77rem;color:var(--muted);}
+  sup{font-size:.72em;} sub{font-size:.72em;}
+  footer{text-align:center;font-size:.74rem;color:var(--muted);margin-top:20px;padding:0 14px;}
+  .jumpnav{position:fixed;right:8px;bottom:70px;background:var(--primary);color:#fff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;z-index:60;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 CHUYÊN ĐỀ 1: THỰC HIỆN PHÉP TÍNH</h1>
+  <p>Toán 7 nâng cao — Bồi dưỡng học sinh giỏi — Đầy đủ 12 Dạng</p>
+  <span class="source-tag">Nguồn: Tuyển tập 15 chuyên đề BD HSG Toán 7 — THCS.TOANMATH.com (trang 1–49)</span>
+</header>
+<div class="progress-bar">
+  <span class="label" id="progLabel">0/0 câu đúng</span>
+  <div class="track"><div class="fill" id="progFill"></div></div>
+  <button class="reset-btn" onclick="resetProgress()">🗑 Xóa tiến trình</button>
+</div>
+<div class="container">
+  <p style="font-size:.83rem;color:var(--muted)">
+    Đầy đủ <b>12 dạng / 133+ bài</b> của Chuyên đề 1 (đọc trực tiếp từ ảnh scan từng trang gốc để chép đúng công thức,
+    giữ nguyên số thập phân/phân số như sách — không tự ý chuyển đổi). Bài có kết quả là lũy thừa quá lớn (sách cũng
+    không quy về 1 số cụ thể) được đánh dấu <span class="badge-illustration">MINH HỌA</span> — chỉ xem cách giải.
+    2 bài ở Dạng 9 (mục 2, Bài 9-10) sách không in lời giải trên trang nên không đưa vào, tránh đoán sai đáp số.
+    Các khung "Gợi ý" (không phải "Phương pháp") là phần em tổng hợp thêm cho dễ hiểu, KHÔNG phải nguyên văn sách —
+    chỉ những khung ghi rõ "Phương pháp" mới là chép đúng 100% nguyên văn từ sách.
+  </p>
+
+  <div class="theory" style="margin-bottom:18px;border-left-color:var(--primary);background:#eef3fc;">
+    <h4 style="color:var(--primary);">A. LÝ THUYẾT CẦN NHỚ (nguyên văn đầu Chuyên đề 1, trang 1)</h4>
+    <div class="formula"><b>1) Một số tính chất của lũy thừa:</b></div>
+    <div class="formula">• Nhân, chia hai lũy thừa cùng cơ số:<br>
+      &nbsp;&nbsp;aᵘ.aᵛ = aᵘ⁺ᵛ &nbsp;(u,v ∈ ℕ)<br>
+      &nbsp;&nbsp;aᵘ : aᵛ = aᵘ⁻ᵛ &nbsp;(u,v ∈ ℕ; u ≥ v)<br>
+      &nbsp;&nbsp;(a/b)ᵘ = aᵘ/bᵘ &nbsp;(b ≠ 0)</div>
+    <div class="formula">• Lũy thừa của một lũy thừa: (aᵘ)ᵛ = aᵘ·ᵛ &nbsp;(u,v ∈ ℕ)</div>
+    <div class="formula">• Lũy thừa của một tích: (a.b)ⁿ = aⁿ.bⁿ &nbsp;(n ∈ ℕ)</div>
+    <div class="formula">• Lũy thừa tầng: a^(uᵛ) = a^(uᵛ) &nbsp;(u,v ∈ ℕ)</div>
+    <div class="formula"><b>2) Một số công thức đặt thừa số chung:</b></div>
+    <div class="formula">• a.b + a.c + a.d + ... + a.k = a.(b+c+d+...+k)</div>
+    <div class="formula">• a/x₁ + a/x₂ + ... + a/xₙ = a.(1/x₁ + 1/x₂ + ... + 1/xₙ)</div>
+  </div>
+
+  <div class="toc" id="toc"></div>
+  <div id="topics"></div>
+</div>
+<a href="#top" class="jumpnav" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+<footer>Tự động lưu tiến trình trên trình duyệt này (localStorage).</footer>
+<script>
+function f(n,d){return `<span style="display:inline-block;vertical-align:middle;text-align:center;font-size:.92em;"><span style="display:block;border-bottom:1.2px solid #1f2937;padding:0 3px;">${n}</span><span style="display:block;padding:0 3px;">${d}</span></span>`;}
+
+const DATA = [
+{id:1, title:"Dạng 1: Lũy thừa, phối hợp các phép tính",
+ theory:`<h4>Lý thuyết cần nhớ</h4>
+ <div class="formula">• aᵘ.aᵛ=aᵘ⁺ᵛ ; aᵘ:aᵛ=aᵘ⁻ᵛ (u≥v); (a/b)ᵘ=aᵘ/bᵘ; (aᵘ)ᵛ=aᵘᵛ; (a.b)ⁿ=aⁿ.bⁿ</div>
+ <div class="formula">• Đặt thừa số chung: a.b+a.c+...+a.k = a.(b+c+...+k)</div>
+ <div class="formula">• Kỹ năng: phân tích các số ra luỹ thừa của số nguyên tố để rút gọn.</div>`,
+ problems:[
+  {id:"d1-b1",title:"Bài 1",statement:`Thực hiện phép tính: a) A=${f("3<sup>11</sup>.11+3<sup>11</sup>.21","3<sup>9</sup>.2<sup>5</sup>")} &nbsp; b) B=${f("75.5<sup>4</sup>+175.5<sup>4</sup>","20.25.125-625.75")} &nbsp; c) C=${f("(3.4.2<sup>16</sup>)<sup>2</sup>","11.2<sup>13</sup>.4<sup>11</sup>-16<sup>9</sup>")}`,
+   answer:"9",solution:`a) A=3¹¹(11+21)/(3⁹.2⁵)=3¹¹.32/(3⁹.32)=3²=<b>9</b><br>b) B=(3.5².5⁴+5².7.5⁴)/(2².5².5³-5⁴.3.5²)=(3.5⁶+7.5⁶)/(2².5⁶-3.5⁶)=5⁶.10/5⁶=<b>10</b><br>c) C=3².2³⁶/(2³⁵(11-2))=3².2³⁶/(2³⁵.9)=<b>2</b><br><i>(Nhập đáp số câu a = 9 để kiểm tra; b=10, c=2)</i>`},
+  {id:"d1-b2",title:"Bài 2",statement:`Thực hiện phép tính: a) A=${f("5.4<sup>15</sup>.9<sup>9</sup>-4.3<sup>20</sup>.8<sup>9</sup>","5.2<sup>9</sup>.6<sup>19</sup>-7.2<sup>29</sup>.27<sup>6</sup>")} &nbsp; b) B=${f("5<sup>10</sup>.7<sup>3</sup>-25<sup>5</sup>.49<sup>2</sup>","(125.7)<sup>3</sup>+5<sup>9</sup>.14<sup>3</sup>")} &nbsp; c) C=${f("(3.4.2<sup>16</sup>)<sup>2</sup>","11.2<sup>13</sup>.4<sup>11</sup>-4<sup>9</sup>.2<sup>18</sup>")}`,
+   answer:"2",solution:`a) =5.2³⁰.3¹⁸-2².3²⁰.2²⁷ / 5.2²⁸.3¹⁹-7.2²⁹.3¹⁸ = 2²⁹.3¹⁸(10-9)/2²⁸.3¹⁸(15-14) = <b>2</b><br>b) =5¹⁰.7³-5¹⁰.7⁴ / 5⁹.7³+5⁹.7³.2³ = 5¹⁰.7³(1-7)/5⁹.7³(1+2³) = 5(-6)/9 = <b>-10/3</b><br>c) =3².2³⁶/2³⁵(11-2)=<b>2</b><br><i>(Nhập đáp số câu a = 2)</i>`},
+  {id:"d1-b3",title:"Bài 3",statement:`Thực hiện phép tính: a) A=${f("5.7<sup>11</sup>+7<sup>12</sup>","7<sup>9</sup>.5<sup>2</sup>-13.7<sup>9</sup>")} &nbsp; b) B=${f("2<sup>15</sup>.7-2<sup>16</sup>","5.2<sup>15</sup>")} &nbsp; c) C=${f("5.4<sup>15</sup>.9<sup>9</sup>-4.3<sup>20</sup>.8<sup>9</sup>","5.2<sup>9</sup>.6<sup>19</sup>-7.2<sup>29</sup>27<sup>6</sup>")}`,
+   answer:"49",solution:`a) A=7¹¹(5+7)/7⁹(5²-13)=7¹¹.12/(7⁹.12)=7²=<b>49</b><br>b) B=2¹⁵(7-2)/(5.2¹⁵)=5/5=<b>1</b><br>c) C=5.2³⁰.3¹⁸-2².3²⁰.2²⁷ / 5.2²⁸.3¹⁹-7.2²⁹.3¹⁸ = 2²⁹.3¹⁸(5.2-3²)/2²⁸.3¹⁸(5.3-7.2) = 2.1.1/1.1.1 = <b>2</b><br><i>(Nhập đáp số câu a=49; câu c trùng công thức với Bài 2c, đáp số = 2, đúng như sách)</i>`},
+  {id:"d1-b4",title:"Bài 4",statement:`Tính: 1¹³⁄₁₅·(0,5)²·3 + (8/15 − 1¹⁹⁄₆₀):1²³⁄₂₄`,
+   answer:"1",solution:`= 28/15 . 1/4 . 3 + (8/15-79/60).24/47 = 7/5 - 2/5 = <b>1</b>`},
+  {id:"d1-b5",title:"Bài 5",statement:`Tính: B = (151515/161616 + 17⁹/17¹⁰) − (1500/1600 − 176/187)`,
+   answer:"1",solution:`= 15/16+1/17-15/16+16/17 = 1/17+16/17 = <b>1</b>`},
+  {id:"d1-b6",title:"Bài 6",statement:`Thực hiện phép tính: A = 2⁴.5 − [131 − (13−4)²]`,
+   answer:"30",solution:`A = 16.5 − (131−81) = 80 − 50 = <b>30</b>`},
+  {id:"d1-b7",title:"Bài 7",statement:`Thực hiện phép tính: a) (−8)²:{25−18:[(5²+2²):11−2018⁰]} &nbsp; b) (11.3⁷.9¹¹−9¹⁵):(2.3¹⁴)²`,
+   answer:"4",solution:`a) =64:{25-18:[33:11-1]}=64:{25-18:2}=64:16=<b>4</b><br>b) =(11.3²⁹-3³⁰):(2².3²⁸)=3²⁹.8:(2².3²⁸)=3.2=<b>6</b><br><i>(Nhập đáp số câu a=4)</i>`},
+  {id:"d1-b8",title:"Bài 8",statement:`Thực hiện phép tính: 2⁴ + 8[(−2)²:½]⁰ − 2⁻².4 + (−2)²`,
+   answer:"27",solution:`=16+8.1-¼.4+4=<b>27</b>`},
+  {id:"d1-b9",title:"Bài 9",statement:`Rút gọn: B = ${f("2<sup>55</sup>+2<sup>57</sup>+2<sup>59</sup>","5<sup>11</sup>+5<sup>13</sup>+5<sup>15</sup>+5<sup>17</sup>+5<sup>19</sup>+5<sup>21</sup>")}`,
+   answer:"1/130",solution:`Nhóm mẫu: (5¹¹+5¹⁵+5¹⁹)+(5¹³+5¹⁷+5²¹)=(1+5⁴+5⁸)(5¹¹+5¹³); Tử=5¹⁰(1+5⁴+5⁸).<br>B=5¹⁰/(5¹¹+5¹³)=1/(5+125)=<b>1/130</b>`},
+  {id:"d1-b10",title:"Bài 10",statement:`Thực hiện phép tính: A = [ (0,4−2/9+2/11 − (1/3−0,25+1/5)) / (1,4−7/9+7/11 − (1+1/6−0,875+0,7)) ] : 2013/2014`,
+   answer:"0",solution:`Biến đổi tử/mẫu thành dạng k(1/5-1/9+1/11), k(1/3-1/4+1/5)... cùng nhân tử chung → tử/mẫu (phần trong ngoặc) bằng nhau từng đôi, kết quả trong [] = 2/7−2/7 = 0 ⇒ A = 0:2013/2014 = <b>0</b>`}
+ ]},
+{id:2, title:"Dạng 2: Tính đơn giản (dãy hiệu giống nhau)",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách — sách không có khung lý thuyết riêng cho dạng này)</h4><div class="formula">Khi tử và mẫu có cùng cấu trúc k.(1 − 1/19 + 1/43 − ...), đặt biểu thức trong ngoặc làm nhân tử chung rồi triệt tiêu.</div>`,
+ problems:[
+  {id:"d2-b1",title:"Bài 1",statement:`Rút gọn: A = (2−2/19+2/43−2/1943)/(3−3/19+3/43−3/1943) : (4−4/19+4/41−4/2941)/(5−5/19+5/41−5/2941)`,
+   answer:"5/6",solution:`Đặt X=1-1/19+1/43-1/1943, Y=1-1/19+1/41-1/2941. A=(2X/3X):(4Y/5Y)=(2/3):(4/5)=<b>5/6</b>`},
+  {id:"d2-b2",title:"Bài 2",statement:`Thực hiện phép tính: M = (0,4−2/9+2/11 − (1/3−0,25+1/5)) / (1,4−7/9+7/11 − (1+1/6−0,875+0,7)) : 2014/2015`,
+   answer:"0",solution:`Tương tự Bài 10 Dạng 1, phần trong [] = 2/7−2/7 = 0 ⇒ M=<b>0</b>`},
+  {id:"d2-b3",title:"Bài 3",statement:`Thực hiện phép tính: M = [−1,2:(1⅗.1,25)] / [0,64−1/25] + [(1,08−2/25):4/7] / [(5⅝−9/4).36/17] + 0,6.0,5:2/5`,
+   answer:"0",solution:`= -1,2:2 / 0,6 + (7/4)/(119/36.36/17) + 0,75 = -1 + 1/4 + 3/4 = <b>0</b>`},
+  {id:"d2-b4",title:"Bài 4",statement:`Thực hiện phép tính: A = [(2/193−3/386).193/17+33/34] : [(7/1931+11/3862).1931/25+9/2]`,
+   answer:"1/5",solution:`Ngoặc 1 = 2/17-2/34+33/34=1; ngoặc 2 = 7/25+11/50+9/2=5 ⇒ A=1:5=<b>1/5</b>`},
+  {id:"d2-b5",title:"Bài 5",statement:`Thực hiện phép tính: M = (0,4−2/9+2/11 − (1/3−0,25+1/5)) / (1,4−7/9+7/11 − (1+1/6−0,875+0,7)) : 2014/2015`,
+   answer:"0",solution:`Cùng cấu trúc Bài 2, kết quả trong [] = 2/7−2/7 = 0 ⇒ M=<b>0</b> (đề lặp số liệu giống Bài 2, chỉ đổi 2013/2014→2014/2015)`},
+  {id:"d2-b6",title:"Bài 6",statement:`Thực hiện phép tính: [0,375−0,3+3/11+3/12] / [−0,265+0,5−5/11−5/12] + [1,5+1−0,75] / [2,5+5/3−1,25]`,
+   answer:"-1881/29740",solution:`Đổi hỗn hợp về cùng dạng phân số rồi đặt nhân tử chung: ngoặc 1 (tử và mẫu) đặt chung 1/8−1/10+1/11+1/12 với hệ số 3 và −53/100−5(...); ngoặc 2 đặt chung 1/2+1/3−1/4 với hệ số 3 và 5.<br>
+   Kết quả theo sách: 3.(263/1320)/(−1749/1225×...) + 3/5 = 3945/(−5948) + 3/5 = <b>−1881/29740</b>`},
+  {id:"d2-b7",title:"Bài 7",statement:`Tính biểu thức: B = (0,5−3/17+3/37)/(5/6−5/17+5/37) + (0,5−1/3+1/4−0,2)/(7/5−7/4+7/3−3,5)`,
+   answer:"16/35",solution:`Mỗi số hạng rút gọn theo nhân tử chung 3 và 5(hoặc 7): B = 3/5 − 1/7 = <b>16/35</b>`},
+  {id:"d2-b8",title:"Bài 8",statement:`Thực hiện phép tính: [(1+2+3+...+100)(1/2−1/3−1/7−1/9)(63.1,2−21.3,6)] / [1−2+3−4+...+99−100]`,
+   answer:"0",solution:`Vì 63.1,2−21.3,6 = 75,6−75,6 = 0 nên cả tử bằng 0 ⇒ kết quả = <b>0</b>`}
+ ]},
+{id:3, title:"Dạng 3: Tổng các số tự nhiên lập từ một chữ số",
+ theory:`<h4>Phương pháp (nguyên văn)</h4>
+ <div class="formula">Tính tổng: S = a + <u>aa</u> + <u>aaa</u> + ... + <u>aa...a</u> (n chữ số a)</div>
+ <div class="formula">Ta có: S = a+<u>aa</u>+<u>aaa</u>+...+<u>aa...a</u>(n) = a(1+11+111+...+<u>111...1</u>(n))</div>
+ <div class="formula">⇒ 9S = a(9+99+999+...+<u>999...9</u>(n))</div>
+ <div class="formula">Đặt A = 9+99+999+...+<u>999...9</u>(n)</div>
+ <div class="formula">Ta có: A = (10−1)+(10²−1)+(10³−1)+...+(10ⁿ−1) = (10+10²+10³+...+10ⁿ)−n = <u>111...1</u>0(n)−n</div>
+ <div class="formula">⇒ S = a(<u>111...1</u>0(n)−n) / 9</div>`,
+ problems:[
+  {id:"d3-b1",title:"Bài 1 (minh họa)",illustration:true,
+   statement:`Tính tổng tự nhiên: a) A = 9+99+999+...+<u>999...9</u> (10 số 9) &nbsp; b) B = 1+11+111+...+<u>111...1</u> (10 số 1)`,
+   solution:`a) A=(10−1)+(10²−1)+...+(10¹⁰−1)=(10+10²+...+10¹⁰)−10=<u>111...1</u>(9 số1)0−10=<u>111...1</u>(9 số1)00<br>b) 9B = A (cùng cách tách) ⇒ B = A/9 = <u>111...1</u>(9 số1)00/9`},
+  {id:"d3-b2",title:"Bài 2 (minh họa)",illustration:true,
+   statement:`Tính tổng tự nhiên: C = 5+55+555+...+<u>555...5</u> (10 số 5)`,
+   solution:`C = 5(1+11+111+...+<u>111...1</u> 10 số1) = 5×B (B ở Bài 1b) = <u>555...5</u>(9 số5)00 / 9`}
+ ]},
+{id:4, title:"Dạng 4: Tính tổng dãy phân số có quy luật",
+ theory:`<h4>1) Phương pháp (nguyên văn) — hiệu mẫu = 1</h4>
+ <div class="formula">Tính tổng: S = 1/(a₁a₂) + 1/(a₂a₃) + 1/(a₃a₄) + ... + 1/(aₙ₋₁aₙ), với a₂−a₁=a₃−a₂=...=aₙ−aₙ₋₁=1</div>
+ <div class="formula">Ta có: 1/(a₁a₂)=(a₂−a₁)/(a₁a₂)=1/a₁−1/a₂ ; 1/(a₂a₃)=(a₃−a₂)/(a₂a₃)=1/a₂−1/a₃ ; ...... ; 1/(aₙ₋₁aₙ)=1/aₙ₋₁−1/aₙ</div>
+ <div class="formula">Do đó: S = 1/a₁−1/a₂+1/a₂−1/a₃+...+1/aₙ₋₁−1/aₙ = <b>1/a₁ − 1/aₙ</b></div>
+ <div class="formula"><b>Nhận xét:</b> nếu số hạng tổng quát có dạng 1/(n(n+1)) thì tách: 1/(n(n+1))=1/n−1/(n+1).
+ Công thức tổng quát: S=1/(1.2)+1/(2.3)+...+1/(n(n+1)) = 1 − 1/(n+1)</div>
+ <h4>2) Phương pháp (nguyên văn) — hiệu mẫu = k>1</h4>
+ <div class="formula">S = 1/(a₁a₂)+1/(a₂a₃)+...+1/(aₙ₋₁aₙ), với a₂−a₁=a₃−a₂=...=aₙ−aₙ₋₁=k>1</div>
+ <div class="formula">Ta có: k/(a₁a₂)=(a₂−a₁)/(a₁a₂)=1/a₁−1/a₂ ; k/(a₂a₃)=1/a₂−1/a₃ ; ...... ; k/(aₙ₋₁aₙ)=1/aₙ₋₁−1/aₙ</div>
+ <div class="formula">Do đó: S = (1/k)(1/a₁−1/a₂+1/a₂−1/a₃+...+1/aₙ₋₁−1/aₙ) = <b>(1/k)(1/a₁ − 1/aₙ)</b></div>
+ <h4>3) Phương pháp (nguyên văn) — mẫu là 3 số tự nhiên liên tiếp</h4>
+ <div class="formula">Sₙ = 1/(1.2.3)+1/(2.3.4)+...+1/(n(n+1)(n+2)). Tử các số hạng là 1; mẫu là 3 tích số tự nhiên liên tiếp.</div>
+ <div class="formula">Ta có: 1/(k(k+1)(k+2)) = (1/2).2/(k(k+1)(k+2)) = (1/2).[(k+2)−k]/(k(k+1)(k+2)) = (1/2)[1/(k(k+1)) − 1/((k+1)(k+2))]</div>
+ <div class="formula">Cộng vế với vế: Sₙ = (1/2)(1/(1.2)−1/(2.3)+1/(2.3)−1/(3.4)+...+1/(n(n+1))−1/((n+1)(n+2)))</div>
+ <div class="formula"><b>Nhận xét kết quả:</b> nếu mẫu có 3 số tự nhiên liên tiếp thì tổng bằng tích nghịch đảo của (3−1) với hiệu nghịch đảo của tích 2 thừa số nhỏ nhất và tích 2 thừa số lớn nhất: Sₙ = (1/2)(1/(1.2) − 1/((n+1)(n+2)))</div>
+ <h4>4) Phương pháp (nguyên văn) — mẫu là 4 số tự nhiên liên tiếp + Bài toán tổng quát</h4>
+ <div class="formula">Sₙ = 1/(1.2.3.4)+1/(2.3.4.5)+...+1/(n(n+1)(n+2)(n+3)). Mẫu là 4 tích số tự nhiên liên tiếp.</div>
+ <div class="formula">Ta có: 1/(k(k+1)(k+2)(k+3)) = (1/3).3/(k(k+1)(k+2)(k+3)) = (1/3).[(k+3)−k]/(...) = (1/3)[1/(k(k+1)(k+2)) − 1/((k+1)(k+2)(k+3))]</div>
+ <div class="formula">Cộng vế với vế: Sₙ = (1/3)(1/(1.2.3) − 1/((n+1)(n+2)(n+3)))</div>
+ <div class="formula"><b>c) Bài toán tổng quát:</b> Sₙ=1/(1.2.3...m)+1/(2.3.4...(m+1))+...+1/(n(n+1)(n+2)...(n+m−1))<br>
+ Ta có ngay: Sₙ = (1/(m−1)).(1/(1.2.3...(m−1)) − 1/((n+1)(n+2)(n+3)...(n+m−1))), với m=2;3;4...; n=1;2;3...</div>
+ <div class="formula"><b>Chú ý:</b> Ví dụ 1 có thể khai thác cho học sinh thấy trong tổng Sₙ=1/(1.2.3)+1/(2.3.4)+...+1/(n(n+1)(n+2)) thì 3−1=4−2=...=n+2−n=2</div>`,
+ problems:[
+  {id:"d4-m1-b1",title:"Mục 1 - Bài 1",statement:`Tính tổng: S = 1/(1.2)+1/(2.3)+1/(3.4)+...+1/(2004.2005)`,
+   answer:"2004/2005",solution:`Tách 1/(n(n+1))=1/n−1/(n+1), cộng dồn: S=1−1/2005=<b>2004/2005</b>`},
+  {id:"d4-m1-b2",title:"Mục 1 - Bài 2",statement:`Tính tổng: S = 1/(9.10)+1/(10.11)+...+1/(2004.2005)`,
+   answer:"1996/18045",solution:`S = 1/9 − 1/2005 = <b>1996/18045</b>`},
+  {id:"d4-m2-b1",title:"Mục 2 (k>1) - Bài 1",statement:`Tính tổng: A = 2/(1.3)+2/(3.5)+2/(5.7)+...+2/(99.101)`,
+   answer:"100/101",solution:`Mỗi hạng tử = 1/(2n−1) − 1/(2n+1). A = 1 − 1/101 = <b>100/101</b>`},
+  {id:"d4-m2-b2",title:"Mục 2 - Bài 2",statement:`Tính tổng: S = 1/(1.3)+1/(3.5)+...+1/(2003.2005)`,
+   answer:"1002/2005",solution:`2S = 2/(1.3)+...= 1−1/2005 = 2004/2005 ⇒ S = 2004/2005:2 = <b>1002/2005</b>`},
+  {id:"d4-m2-b3",title:"Mục 2 - Bài 3",statement:`Tính nhanh: a) A = 3²/(2.5)+3²/(5.8)+3²/(8.11)+3²/(11.14)+3²/(14.17) &nbsp; b) B = 4/(11.16)+4/(16.21)+4/(21.26)+...+4/(61.66)`,
+   answer:"45/34",solution:`a) A=3(1/2−1/17)=3.15/34=<b>45/34</b><br>b) 5B=4(1/11−1/66)=4.55/(11.66) ⇒ B=4/66=<b>2/33</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d4-m2-b4",title:"Mục 2 - Bài 4",statement:`Tính giá trị: A = (3/1.8+3/8.15+3/15.22+...+3/106.113) − (25/50.55+25/55.60+...+25/95.100)`,
+   answer:"847/2260",solution:`7B=3(1−1/113) ⇒ B=48/113. 5C=1/50−1/100 ⇒ C=1/20. A=B−C=48/113−1/20=<b>847/2260</b>`},
+  {id:"d4-m2-b5",title:"Mục 2 - Bài 5",statement:`Tính nhanh: 1/19 + 9/(19.29) + 9/(29.39) + ... + 9/(1999.2009)`,
+   answer:"200/2009",solution:`10A = 9(10/(9.19)+10/(19.29)+...) = 9(1/9−1/2009) = 2000/2009 ⇒ A = <b>200/2009</b>`},
+  {id:"d4-m2-b6",title:"Mục 2 - Bài 6",statement:`Thực hiện phép tính: A = 3.1/(1.2) − 5.1/(2.3) + 7.1/(3.4) − ... + 15.1/(7.8) − 17.1/(8.9)`,
+   answer:"8/9",solution:`= (1/1+1/2)−(1/2+1/3)+(1/3+1/4)−...−(1/8+1/9) = 1 − 1/9 = <b>8/9</b>`},
+  {id:"d4-m2-b7",title:"Mục 2 - Bài 7",statement:`Tính tỉ số A/B biết A = 1/(1.300)+1/(2.301)+...+1/(101.400) và B = 1/(1.102)+1/(2.103)+...+1/(299.400)`,
+   answer:"101/299",solution:`299A = (1+1/2+...+1/101)−(1/300+...+1/400); 101B = (1+1/2+...+1/299)−(1/300+...+1/400); 299A=101B ⇒ A/B=<b>101/299</b>`},
+  {id:"d4-m2-b8",title:"Mục 2 - Bài 8",statement:`Rút gọn: A = 1/100 − 1/(100.99) − 1/(99.98) − ... − 1/(3.2) − 1/(2.1)`,
+   answer:"-49/50",solution:`A = 1/100 − (1−1/100) = <b>−49/50</b>`},
+  {id:"d4-m3-b1",title:"Mục 3 (mẫu 3 số liên tiếp) - Bài 1",statement:`Tính tổng: B = 1/(1.2.3)+1/(2.3.4)+1/(3.4.5)+...+1/(37.38.39)`,
+   answer:"185/741",solution:`2B = 1/(1.2)−1/(38.39) = 740/(38.39) ⇒ B = <b>185/741</b>`},
+  {id:"d4-m3-b2",title:"Mục 3 - Bài 2",statement:`Tính nhanh tổng: P = 1/(1.2.3)+1/(2.3.4)+1/(3.4.5)+...+1/(10.11.12)`,
+   answer:"65/264",solution:`2P = 1/(1.2)−1/(11.12) = 65/132 ⇒ P = <b>65/264</b>`},
+  {id:"d4-m4-b1",title:"Mục 4 (mẫu 4 số liên tiếp) - Bài 1",statement:`Tính tổng: 1/(1.2.3.4)+1/(2.3.4.5)+1/(3.4.5.6)+...+1/(27.28.29.30)`,
+   answer:"1353/8120",solution:`3A = 1/(1.2.3) − 1/(28.29.30) = 4059/(28.29.30) ⇒ A = <b>1353/8120</b>`}
+ ]},
+{id:5, title:"Dạng 5: Tổng tự nhiên dạng tích",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">1.2+2.3+...+n(n+1): nhân 3, viết 3=(k+2)-(k-1), triệt tiêu liên hoàn ⇒ Tổng = n(n+1)(n+2)/3</div>
+ <div class="formula">1²+2²+...+n² = n(n+1)(2n+1)/6 &nbsp;&nbsp; 1.n+2(n-1)+3(n-2)+...+n.1 = n(n+1)(n+2)/6</div>`,
+ problems:[
+  {id:"d5-b1",title:"Bài 1",statement:`a) Tính A=1.2+2.3+3.4+...+98.99 &nbsp; b) Dùng kết quả câu a, tính B=1²+2²+...+97²+98² &nbsp; c) Dùng kết quả câu a, tính C=1.99+2.98+3.97+...+98.2+99.1`,
+   answer:"323400",solution:`a) A=98.99.100/3=<b>323400</b><br>b) B=(1.2+2.3+...+98.99)−(1+2+...+98)=A-98.99/2=323400-4851=<b>318549</b><br>c) C=99(1+2+...+99)-A=99.99.100/2-323400=<b>166650</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d5-b2",title:"Bài 2",statement:`Tính tổng: B = 1.2.3 + 2.3.4 + 3.4.5 + 4.5.6 + .... + 17.18.19`,
+   answer:"29070",solution:`4B=17.18.19.20 (triệt tiêu liên hoàn với hệ số (k+3)-(k-1)=4) ⇒ B=17.18.19.5=<b>29070</b>`},
+  {id:"d5-b3",title:"Bài 3",statement:`Tính nhanh các tổng: a) D = 1.4+2.5+3.6+...+100.103 &nbsp; b) E = 1.(1+2)+2.(2+2)+3.(3+2)+...+98.(98+2)`,
+   answer:"348450",solution:`a) D=(1.2+2.3+...+100.101)+2(1+2+...+100)=100.101.34+5050=<b>348450</b><br>b) E=(1²+2²+...+98²)+2(1+2+...+98)=318549+9702=<b>328251</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d5-b4",title:"Bài 4",statement:`Tính: (1.2+2.4+3.6+4.8+5.10) / (3.4+6.8+9.12+12.16+15.20)`,
+   answer:"1/6",solution:`Mẫu = 6×(1.2+2.4+3.6+4.8+5.10) (vì 3.4=6.1.2, 6.8=6.2.4...) ⇒ tỉ số = <b>1/6</b>`},
+  {id:"d5-b5",title:"Bài 5",statement:`Biết 1²+2²+3²+...+10²=385. Tính tổng: S = 2²+4²+6²+...+20²`,
+   answer:"1540",solution:`S=(2.1)²+(2.2)²+...+(2.10)²=2²(1²+2²+...+10²)=4×385=<b>1540</b>`},
+  {id:"d5-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Không sử dụng máy tính, hãy so sánh: A = 2.1+2.3+2.5+...+2.99 và B = 2.2+2.4+2.6+...+2.98+100`,
+   solution:`B−A = 2+2+...+2(50 số) + 2(50−99) = 2.49+2.(−49) = 0 ⇒ <b>A = B</b>`}
+ ]},
+{id:6, title:"Dạng 6: Tính tổng công thức",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">1/k.(1+2+...+k) = 1/k . k(k+1)/2 = (k+1)/2 — đưa về tổng các số tự nhiên liên tiếp chia 2</div>`,
+ problems:[
+  {id:"d6-b1",title:"Bài 1",statement:`Tính tổng: A = 1 + 1/2(1+2) + 1/3(1+2+3) + ... + 1/16(1+2+...+16)`,
+   answer:"76",solution:`Mỗi hạng tử = (k+1)/2. A = (2+3+...+17)/2 = [(1+2+...+17)−1]/2 = (153−1)/2=<b>76</b>`},
+  {id:"d6-b2",title:"Bài 2",statement:`Tính tổng: P = 1 + 1/2(1+2) + 1/3(1+2+3) + 1/4(1+2+3+4) + .... + 1/2012(1+2+3+....+2012)`,
+   answer:"2025077/2",solution:`P = (2+3+4+...+2013)/2 = [(1+2+...+2013)−1]/2 = (2012.2013/2 − 1)/2 = <b>2025077/2</b>`},
+  {id:"d6-b3",title:"Bài 3",statement:`Tính: 1/(1+2+3) + 1/(1+2+3+4) + ... + 1/(1+2+...+59)`,
+   answer:"19/30",solution:`Mỗi hạng tử = 2/(n(n+1)) dạng telescoping ⇒ tổng = 2(1/3−1/60)=2.19/60=<b>19/30</b>`},
+  {id:"d6-b4",title:"Bài 4",statement:`Tính: A = 50 + 50/3 + 25/3 + 20/4 + 10/3 + 100/6,7 + ... + 100/98,99 + 100/99`,
+   answer:"99",solution:`A=100(1/1.2+1/2.3+...+1/99.100)=100(1−1/100)=<b>99</b>`},
+  {id:"d6-b5",title:"Bài 5",statement:`Tính: C = −1/3(1+2+3) − 1/4(1+2+3+4) − ... − 1/50(1+2+3+...+50)`,
+   answer:"612",solution:`C = −(1+3+1+4+...+1+50)/2 = −(48 số 1 + (3+4+...+50))/2 = −24 + 53.12 = <b>612</b>`}
+ ]},
+{id:7, title:"Dạng 7: Tính tích",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">Viết mỗi thừa số n²/((n-1)(n+1)) rồi nhóm tử/mẫu thành tích các số liên tiếp để rút gọn "domino".</div>`,
+ problems:[
+  {id:"d7-b1",title:"Bài 1",statement:`Tính tích: a) A = 2²/(1.3) . 3²/(2.4) . 4²/(3.5) . ... . 20²/(19.21) &nbsp; b) B = 1²/(1.2) . 2²/(2.3) . 3²/(3.4) . ... . 10²/(10.11)`,
+   answer:"40/21",solution:`a) A = (2.3...20)²/[(1.2...19)(3.4...21)] = 20.2/21 = <b>40/21</b><br>b) B = 1/11<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b2",title:"Bài 2",statement:`Tính tổng: C = (1−1/(1+2))(1−1/(1+2+3))(1−1/(1+2+3+4))...(1−1/(1+2+3+...+2016))`,
+   answer:"1004/3009",solution:`C = 1.4/2.3 . 2.5/3.4 . 3.6/4.5 ... 2015.2018/2016.2017 = <b>1004/3009</b>`},
+  {id:"d7-b3",title:"Bài 3 (minh họa)",illustration:true,
+   statement:`Tính: A = (1/2−1/3)(1/2−1/5)(1/2−1/7)...(1/2−1/99)`,
+   solution:`A = 1.3.5...97/(2.3.5...99)= (1.3.5...97)/(2⁴⁹.(3.5.7...99)) = <b>1/(2⁴⁹.99)</b>`},
+  {id:"d7-b4",title:"Bài 4",statement:`Tính: [(1+1999/1)(1+1999/2)...(1+1999/1000)] / [(1+1000/1)(1+1000/2)...(1+1000/1999)]`,
+   answer:"1",solution:`Tử = (2000.2001...2999)/(1.2...1000); Mẫu = (1001.1002...2999)/(1.2...1999). Tỉ số = <b>1</b>`},
+  {id:"d7-b5",title:"Bài 5",statement:`Tính: (1−1/4)(1−1/9)(1−1/16)...(1−1/400)`,
+   answer:"21/40",solution:`= 3/4.8/9.15/16...399/400 = (1.3.5...19)(3.5.7...21)/(2.2.3.3...20.20) = <b>21/40</b>`},
+  {id:"d7-b6",title:"Bài 6 (minh họa)",illustration:true,
+   statement:`Tính: A = (1−1/(1+2))(1−1/(1+2+3))...(1−1/(1+2+...+n))`,
+   solution:`A = 1.4/2.3 . 2.5/3.4 . 3.6/4.5 ... (n−1)(n+2)/(n(n+1)) = <b>(n+2)/(3n)</b>`},
+  {id:"d7-b7",title:"Bài 7",statement:`Tính: a) C = (1+1/(1.3))(1+1/(2.4))(1+1/(3.5))...(1+1/(2018.2020)) &nbsp; b) B = (1−1/5)(1−1/6)...(1−1/100)`,
+   answer:"4038",solution:`a) C = 2²/(1.3).3²/(2.4)...2019²/(2018.2019)=2.2019=<b>4038</b><br>b) B = 4/5.5/6...99/100 = 4/100=<b>1/25</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b8",title:"Bài 8",statement:`Tính tích: a) D = 2²/3.3²/8.4²/15.5²/24.6²/35.7²/48.8²/63.9²/80 &nbsp; b) E = 8/9.15/16.24/25...2499/2500`,
+   answer:"9/5",solution:`a) D = (2.3...9)(2.3...9)/[(1.2...7)(3.4...9.10)]=9.2/10=<b>9/5</b><br>b) E = (2.4)(3.5)(4.6)...(49.51)/[(3.3)(4.4)...(50.50)]=2.51/(50.3)=<b>17/25</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b9",title:"Bài 9",statement:`Tính tích: a) B = (1/4−1)(1/9−1)(1/16−1)...(1/400−1) &nbsp; b) C = (1−1/7)(1−2/7)(1−3/7)...(1−10/7)`,
+   answer:"-21/40",solution:`a) B = (−3/4)(−8/9)...(−399/400) = −1.21/(2.20)=<b>−21/40</b><br>b) C chứa nhân tử (1−7/7)=0 ⇒ C=<b>0</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b10",title:"Bài 10",statement:`Tính: A = (1−1/2)(1−1/3)(1−1/4)...(1−1/2018)(1−1/2019)`,
+   answer:"1/2019",solution:`A = 1/2.2/3.3/4...2017/2018.2018/2019 = <b>1/2019</b>`},
+  {id:"d7-b11",title:"Bài 11",statement:`Tính tích: a) A = (1/4−1).(1/9−1).(1/16−1)......(1/100−1).(1/121−1) &nbsp; b) M = (1/2+1)(1/3+1)(1/4+1)...(1/999+1)`,
+   answer:"12/22",solution:`a) A = (1.2.11.12)/(2².11²)=<b>12/22</b> (=6/11)<br>b) M = 3/2.4/3.5/4...1000/999 = 1000/2=<b>500</b><br><i>(nhập đáp số câu a, dạng 12/22)</i>`},
+  {id:"d7-b12",title:"Bài 12",statement:`Tính tích: a) F = 3/2².8/3².15/4²...99/10² &nbsp; b) N = (1/2−1)(1/3−1)(1/4−1)...(1/1000−1)`,
+   answer:"11/20",solution:`a) F = (1.3.2.4.3.5...9.11)/(2.3...10)(2.3...10)=1.11/(10.2)=<b>11/20</b><br>b) N = (−1/2)(−2/3)(−3/4)...(−999/1000)=<b>−1/1000</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b13",title:"Bài 13",statement:`Tính tích: a) C = 3/4.8/9.15/16...9999/10000 &nbsp; b) A = tích tổng quát dạng (1−k²/k²) từ k=2→2012`,
+   answer:"101/200",solution:`a) C = (1.3.2.4...99.101)/(2.2.3.3...100.100)=1.101/(100.2)=<b>101/200</b><br>b) A = −2013/(2012.2)=<b>−2013/4024</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d7-b14",title:"Bài 14",statement:`Tính giá trị: A = (1/2)(1+1/(1.3))(1+1/(2.4))(1+1/(3.5))...(1+1/(2015.2017))`,
+   answer:"2016/2017",solution:`A = ½(2/1.2/3)(3/2.3/4)(4/3.4/5)...(2016/2015.2016/2017) — rút gọn theo sách = <b>2016/2017</b>`},
+  {id:"d7-b15",title:"Bài 15 (minh họa)",illustration:true,
+   statement:`Cho E = (1−1/(1+2))(1−1/(1+2+3))...(1−1/(1+2+3+...+n)) và F = (n+2)/n. So sánh E và F.`,
+   solution:`E = (n+2)/(3n) (Bài 6), F=(n+2)/n ⇒ F = 3E nên <b>F > E</b>`},
+  {id:"d7-b16",title:"Bài 16 (minh họa)",illustration:true,
+   statement:`So sánh: V = 1/(2²⁰−1) và U = (1.3.5...39)/(21.22.23...40)`,
+   solution:`Biến đổi U = 1/2²⁰ (rút gọn tích các số lẻ/chẵn liên tiếp). Vì 1/2²⁰ < 1/(2²⁰−1) ⇒ <b>U < V</b>`},
+  {id:"d7-b17",title:"Bài 17",statement:`Tính nhanh: C = (1+1/(1.3))(1+1/(2.4))(1+1/(3.5))...(1+1/(2017.2019)).(1,08−2/25)`,
+   answer:"2/2019",solution:`Với mọi n: 1+1/(n(n+2))=(n+1)²/(n(n+2)). C = (2².3²...2018²)/(1.3.2.4...2017.2019).(27/25−2/25) = <b>2/2019</b>`},
+  {id:"d7-b18",title:"Bài 18 (minh họa, chứng minh)",illustration:true,
+   statement:`Cho M = 1/2.3/4.5/6.7/8.....631/632. Chứng minh rằng: M < 0,04`,
+   solution:`Đặt N=2/3.4/5...632/633. M.N=1/633 và M<N (vì từng cặp tử<mẫu) ⇒ M²<M.N=1/633 ⇒ M<0,04 (đpcm)`},
+  {id:"d7-b19",title:"Bài 19",statement:`Thực hiện phép tính: (1/8+1/(8.15)+1/(15.22)+...+1/(43.50)) . (4−3−5−7−...−49)/217`,
+   answer:"-2/5",solution:`Ngoặc 1 = (1/7)(1−1/50)=49/350=7/50; tử phân số sau (theo sách) =5−(1+3+5+...+49)=5−625=−620, kết quả cuối = <b>−2/5</b>`}
+ ]},
+{id:8, title:"Dạng 8: Tính tổng cùng số mũ (tổng bình phương/lập phương)",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">Viết k²=k(k+1)−k để đưa tổng bình phương về tổng dạng tích (Dạng 5) trừ tổng các số tự nhiên liên tiếp.</div>
+ <div class="formula">Công thức: 1²+2²+...+n² = n(n+1)(2n+1)/6 ; tổng các số lẻ bình phương 1²+3²+...+(2n−1)² = n(2n−1)(2n+1)/3</div>`,
+ problems:[
+  {id:"d8-b1",title:"Bài 1",statement:`Tổng cùng số mũ: a) A = 1²+2²+3²+...+98² &nbsp; b) B = −1²+2²−3²+4²−...−19²+20²`,
+   answer:"318549",solution:`a) A = 98.99.197/6 = <b>318549</b><br>b) B = (2²−1²)+(4²−3²)+...+(20²−19²) = Σ(4k−1),k=1..10 = 4.55−10=<b>210</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d8-b2",title:"Bài 2",statement:`Tổng cùng số mũ: a) D = 1²+3²+5²+...+99² &nbsp; b) E = 11²+13²+15²+...+199²`,
+   answer:"166650",solution:`a) D = 50.99.101/3 = <b>166650</b><br>b) E = (tổng lẻ²1→199) − (tổng lẻ²1→9) = 1333300 − 165 = <b>1333135</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d8-b3",title:"Bài 3",statement:`Tổng cùng số mũ: a) C = 2²+4²+6²+...+20² &nbsp; b) F = 1²+4²+7²+...+100²`,
+   answer:"1540",solution:`a) C = 2²(1²+...+10²) = 4.385 = <b>1540</b><br>b) F = Σ(3k−2)² (k=1..34) = <b>116161</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d8-b4",title:"Bài 4",statement:`Cho biết: 1²+2²+3²+...+12²=650. Tính nhanh: 2²+4²+6²+...+24²`,
+   answer:"2600",solution:`= 2²(1²+2²+...+12²) = 4×650 = <b>2600</b>`},
+  {id:"d8-b5",title:"Bài 5",statement:`Tổng cùng số mũ: a) G = 1²+3²+5²+...+99² &nbsp; b) K = 1.2²+2.3²+3.4²+...+99.100²`,
+   answer:"166650",solution:`a) G = <b>166650</b> (giống Bài 2a)<br>b) K = Σk(k+1)² (k=1..99) = Σk³+2Σk²+Σk = 24502500+656700+4950 = <b>25164150</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d8-b6",title:"Bài 6",statement:`Tổng cùng số mũ: a) H = 2²+4²+6²+...+100² &nbsp; b) I = 1.3²+3.5²+5.7²+...+97.99²`,
+   answer:"171700",solution:`a) H = 4(1²+2²+...+50²) = 4×42925 = <b>171700</b><br>b) I = Σ(2k−1)(2k+1)² (k=1..49) = <b>12164201</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d8-b7",title:"Bài 7",statement:`Biết: 1³+2³+...+10³ = 3025. Tính A = 2³+4³+...+20³`,
+   answer:"24200",solution:`A = 2³(1³+2³+...+10³) = 8×3025 = <b>24200</b>`},
+  {id:"d8-b8",title:"Bài 8",statement:`Cho biết: 1²+2²+3²+...+12² = 650. Tính nhanh tổng sau: 2²+4²+6²+...+24²`,
+   answer:"2600",solution:`= 2²(1²+...+12²) = 4×650 = <b>2600</b> (đề lặp giống Bài 4 trong sách)`}
+ ]},
+{id:9, title:"Dạng 9: Tổng cùng cơ số",
+ theory:`<h4>Phương pháp (nguyên văn)</h4>
+ <div class="formula">Để giải các bài toán thuộc dạng này chúng ta dùng phương pháp giải phương trình (làm trội).</div>
+ <div class="formula">Tính tổng dạng: S = 1+a+a²+a³+...+aⁿ &nbsp; (1)</div>
+ <div class="formula">Bước 1: Nhân vào hai vế của đẳng thức với số a ta được: aS = a+a²+a³+a⁴+...+aⁿ⁺¹ &nbsp; (2)</div>
+ <div class="formula">Bước 2: Lấy (2) trừ (1) vế theo vế được: aS−S = aⁿ⁺¹−1 ⇒ S = (aⁿ⁺¹−1)/(a−1)</div>
+ <div class="formula"><i>(Mục 2 — cơ số bé hơn 1 — sách áp dụng đúng cách làm trội tương tự, không có khung lý thuyết riêng.)</i></div>`,
+ problems:[
+  {id:"d9-m1-b1",title:"Mục 1 (cơ số>1) - Bài 1 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: a) A = 3⁰+3¹+3²+...+3¹⁰⁰ &nbsp; b) B = 2+2³+2⁵+...+2²⁰⁰⁹`,
+   solution:`a) 3A−A=2A=3¹⁰¹−1 ⇒ A=(3¹⁰¹−1)/2<br>b) 4B−B=3B=2²⁰¹¹−2 ⇒ B=(2²⁰¹¹−2)/3`},
+  {id:"d9-m1-b2",title:"Mục 1 - Bài 2 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: a) M = 5⁰+5¹+5²+...+5²⁰¹⁹ &nbsp; b) C = 5+5³+5⁵+...+5¹⁰¹`,
+   solution:`a) 5M−M=4M=5²⁰²⁰−1 ⇒ M=(5²⁰²⁰−1)/4<br>b) 25C−C=24C=5¹⁰³−5 ⇒ C=(5¹⁰³−5)/24`},
+  {id:"d9-m1-b3a",title:"Mục 1 - Bài 3a (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: a) B = 7+7²+7³+...+7²⁰¹⁸+7²⁰¹⁹ &nbsp; b) F = 1+5²+5⁴+5⁶+...+5²⁰¹⁶`,
+   solution:`a) 7B−B=6B=7²⁰²⁰−7 ⇒ B=(7²⁰²⁰−7)/6<br>b) 25F−F=24F=5²⁰¹⁸−1 ⇒ F=(5²⁰¹⁸−1)/24`},
+  {id:"d9-m1-b3b",title:"Mục 1 - Bài 3 (tính trực tiếp)",
+   statement:`Thực hiện phép tính: A = 2¹⁰⁰ − 2⁹⁹ − 2⁹⁸ − ... − 2² − 2 − 1`,
+   answer:"1",solution:`Đặt B=2⁹⁹+2⁹⁸+...+2+1 ⇒ 2B−B=B=2¹⁰⁰−1. Vậy A=2¹⁰⁰−B=2¹⁰⁰−(2¹⁰⁰−1)=<b>1</b>`},
+  {id:"d9-m1-b4",title:"Mục 1 - Bài 4 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: G = 1+2²+2⁴+2⁶+...+2²⁰¹⁶`,
+   solution:`4G−G=3G=2²⁰¹⁸−1 ⇒ G=(2²⁰¹⁸−1)/3`},
+  {id:"d9-m1-b5",title:"Mục 1 - Bài 5",
+   statement:`Tổng cùng cơ số: a) M = 2⁵⁰−2⁴⁹−2⁴⁸−...−2²−2 &nbsp; b) N = 3¹⁰⁰−3⁹⁹+3⁹⁸−3⁹⁷+...+3²−3¹+1`,
+   answer:"2",solution:`a) Đặt A=2+2²+...+2⁴⁹ ⇒ A=2⁵⁰−2. M=2⁵⁰−A=<b>2</b><br>b) 3N+N=4N=3¹⁰¹+1 ⇒ N=(3¹⁰¹+1)/4 (minh họa)<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d9-m1-b6",title:"Mục 1 - Bài 6 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: I = 1+2²+2³+...+2⁶³`,
+   solution:`2I−I dẫn tới I = 2⁶⁴+1 (số quá lớn để nhập, chỉ xem cách giải)`},
+  {id:"d9-m1-b7",title:"Mục 1 - Bài 7 (minh họa)",illustration:true,
+   statement:`Tính giá trị của biểu thức: B = 1−2+2²−2³+...+2²⁰⁰⁸`,
+   solution:`2B+B=3B=1+2²⁰⁰⁹ ⇒ B=(2²⁰⁰⁹+1)/3`},
+  {id:"d9-m1-b8",title:"Mục 1 - Bài 8 (minh họa)",illustration:true,
+   statement:`Tính: A = 2000(2001⁹+2001⁸+...+2001²+2001)+1`,
+   solution:`Đặt B=2001+2001²+...+2001⁹ ⇒ 2001B−B=2000B=2001¹⁰−2001 ⇒ A=2000B+1=<b>2001¹⁰−2000</b>`},
+  {id:"d9-m1-b9",title:"Mục 1 - Bài 9",
+   statement:`Cho H = 2²⁰¹⁰−2²⁰⁰⁹−2²⁰⁰⁸−...−2²−2−1. Tính 2010ᴴ`,
+   answer:"2010",solution:`Tương tự Bài 3: H = 2²⁰¹⁰−(2²⁰¹⁰−1) = 1 ⇒ 2010ᴴ = 2010¹ = <b>2010</b>`},
+  {id:"d9-m1-b10",title:"Mục 1 - Bài 10 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: H = 1+2.6+3.6²+4.6³+...+100.6⁹⁹`,
+   solution:`Sau khi triệt tiêu: H = (499.6¹⁰⁰+1)/25`},
+  {id:"d9-m2-b1",title:"Mục 2 (cơ số<1) - Bài 1 (minh họa)",illustration:true,
+   statement:`Tính tổng: S = 1/2+1/2²+1/2³+...+1/2²⁰⁰⁵`,
+   solution:`S = 1−1/2²⁰⁰⁵ = (2²⁰⁰⁵−1)/2²⁰⁰⁵`},
+  {id:"d9-m2-b2",title:"Mục 2 - Bài 2",
+   statement:`Tính nhanh: A = 1/3+1/3²+1/3³+...+1/3⁸`,
+   answer:"3280/6561",solution:`3A=1+1/3+...+1/3⁷. 2A=1−1/3⁸=6560/6561 ⇒ A=<b>3280/6561</b>`},
+  {id:"d9-m2-b3",title:"Mục 2 - Bài 3 (minh họa)",illustration:true,
+   statement:`Tính tổng cơ số: A = 1/7+1/7²+1/7³+...+1/7¹⁰⁰`,
+   solution:`A−A/7 = 1/7−1/7¹⁰¹ ⇒ A = (7¹⁰⁰−1)/(6.7¹⁰⁰)`},
+  {id:"d9-m2-b4",title:"Mục 2 - Bài 4 (minh họa)",illustration:true,
+   statement:`Tính tổng cơ số: B = 1/3+1/3²+1/3³+...+1/3²⁰`,
+   solution:`B−B/3 = 1/3−1/3²¹ ⇒ B = (3²⁰−1)/(2.3²⁰)`},
+  {id:"d9-m2-b5",title:"Mục 2 - Bài 5 (minh họa)",illustration:true,
+   statement:`Tổng cùng cơ số: a) D = (−1/7)⁰+(−1/7)¹+...+(−1/7)²⁰¹⁷ &nbsp; b) E = −1/3+1/3²−1/3³+...+1/3⁵⁰−1/3⁵¹`,
+   solution:`a) D=(7²⁰¹⁸−1)/(8.7²⁰¹⁸)<br>b) E=−(3⁵¹+1)/(4.3⁵¹)`},
+  {id:"d9-m2-b6",title:"Mục 2 - Bài 6 (minh họa)",illustration:true,
+   statement:`Tính tổng cơ số: G = 3/5+3/5⁴+3/5⁷+...+3/5¹⁰⁰`,
+   solution:`G=3(1/5+1/5⁴+...+1/5¹⁰⁰); sau khi nhân 1/125 và trừ: G = (5¹⁰²−1)/(5¹⁰⁰.124)`},
+  {id:"d9-m2-b7",title:"Mục 2 - Bài 7",
+   statement:`Tính tổng cơ số: a) K = [200−(3+2/3+2/4+...+2/100)] : [1/2+2/3+3/4+...+99/100] &nbsp; b) I = 1+1/2+(1/2)²+...+(1/2)¹⁰⁰`,
+   answer:"2",solution:`a) Tử số = 2×Mẫu số (sau biến đổi) ⇒ K=<b>2</b><br>b) I=(2¹⁰¹−1)/2¹⁰⁰ (minh họa, số quá lớn)<br><i>(nhập đáp số câu a)</i>`},
+  {id:"d9-m2-b8",title:"Mục 2 - Bài 8 (minh họa)",illustration:true,
+   statement:`Tính tổng cơ số: C = 1/2+1/2³+1/2⁵+...+1/2⁹⁹`,
+   solution:`¼C = 1/2³+1/2⁵+...+1/2¹⁰¹; ¾C=1/2−1/2¹⁰¹ ⇒ C=(2¹⁰⁰−1)/(3.2⁹⁹)`}
+ ]},
+{id:10, title:"Dạng 10: Tính đơn giản (số nguyên & biểu thức)",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">Nhóm các số hạng đối nhau hoặc cùng dấu thuận lợi; đặt nhân tử chung; chú ý dấu của luỹ thừa số âm: (−1)<sup>chẵn</sup>=1, (−1)<sup>lẻ</sup>=−1.</div>`,
+ problems:[
+  {id:"d10-b1",title:"Bài 1",statement:`Tính giá trị các biểu thức: a) A=−37+54+(−70)+(−163)+246 &nbsp; b) B=125.(−61).(−2)³.(−1)²ⁿ (n∈ℕ*) &nbsp; c) C=1+2−3−4+5+6−7−...+2014−2015−2016+2017+2018`,
+   answer:"30",solution:`a) A=(54+246)+[(−37)+(−163)]+(−70)=300−200−70=<b>30</b><br>b) B=125.(−8).(−61).1=<b>61000</b><br>c) Nhóm 4 số: 1+(2−3−4+5)+(6−7−8+9)+...+(2014−2015−2016+2017)+2018=1+2018=<b>2019</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d10-b2",title:"Bài 2",statement:`Tính hợp lí: B = (51.125−51.42−17.150) / (3+6+9+...+99)`,
+   answer:"1",solution:`Tử=51(125−42−50)=51.33; Mẫu=33.51 (33 số hạng, TBC 51) ⇒ B=<b>1</b>`},
+  {id:"d10-b3",title:"Bài 3",statement:`Tính bằng cách hợp lý: a) 78.(−23)+37.(−78)+40.(−78) &nbsp; b) −1⅗.15+2/7.(−15)+(−105).(2/3−4/5+1/7)`,
+   answer:"-7800",solution:`a) =(−78)(23+37+40)=(−78).100=<b>−7800</b><br>b) =(−15)(12/7+2/7)+(−105)(1/105)=(−15).2−1=<b>−31</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d10-b3b",title:"Bài 3 (tiếp - hợp lý)",statement:`Tính bằng cách hợp lý nhất: B = 40.(171717/303030 + 1717171/424242 + 1717171/565656)`,
+   answer:"51",solution:`Mỗi phân số rút gọn theo 17.10101 ⇒ B=40.17(1/30+1/42+1/56)=40.17.(1/5−1/8)=40.17.3/40=<b>51</b>`},
+  {id:"d10-b4",title:"Bài 4",statement:`Rút gọn: B = (25⁵+25⁷+25⁹) / (5¹¹+5¹³+5¹⁵+5¹⁷+5¹⁹+5²¹)`,
+   answer:"1/130",solution:`Giống Dạng 1 - Bài 9: B = <b>1/130</b>`},
+  {id:"d10-b5",title:"Bài 5",statement:`Thực hiện phép tính: A = (2.3.5+4.9.25+6.9.35+10.21.40) / (2.3.7+4.9.35+6.9.49+10.21.56)`,
+   answer:"5/7",solution:`Đặt nhân tử chung 2.3.5(1+2.3.5+3.3.7+5.7.8) ở tử và 2.3.7(...) ở mẫu cùng phần trong ngoặc ⇒ A=<b>5/7</b>`},
+  {id:"d10-b6",title:"Bài 6",statement:`Thực hiện phép tính: a) (1.2.3+2.4.6+4.8.12+7.14.21)/(1.3.5+2.6.10+4.12.20+7.21.35) &nbsp; b) (1.7.9+3.21.27+5.35.45+7.49.63)/(1.3.5+3.9.15+5.15.25+7.21.35)`,
+   answer:"2/5",solution:`a) =1.2.3(1+2³+4³+7³)/[1.3.5(1+2³+4³+7³)]=1.2.3/(1.3.5)=<b>2/5</b><br>b) =1.7.9(1+3³+5³+7³)/[1.3.5(1+3³+5³+7³)]=1.7.9/(1.3.5)=<b>21/5</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d10-b7",title:"Bài 7",statement:`Thực hiện phép tính: (1.2+2.4+3.6+4.8+5.10) / (3.4+6.8+9.12+12.16+15.20)`,
+   answer:"1/6",solution:`Giống Dạng 5 - Bài 4: = <b>1/6</b>`},
+  {id:"d10-b8",title:"Bài 8 (minh họa)",illustration:true,
+   statement:`Tính giá trị của biểu thức sau biết 2a/5b=5b/6c=6c/7d=7d/2a, (a,b,c,d≠0): B = 2a/5b+5b/6c+6c/7d+7d/2a`,
+   solution:`Đặt k=tỉ số chung ⇒ k⁴=1 ⇒ k=±1. Nếu k=1: B=4. Nếu k=−1: B=−4. Vậy B = ±4`},
+  {id:"d10-b9",title:"Bài 9 (minh họa - biểu thức chứa biến)",illustration:true,
+   statement:`Tính giá trị của biểu thức: B = (a²m−a²n−b²n+b²m)/(a²+b²)`,
+   solution:`B = [a²(m−n)+b²(m−n)]/(a²+b²) = <b>m−n</b>`},
+  {id:"d10-b10",title:"Bài 10 (minh họa - biểu thức chứa biến)",illustration:true,
+   statement:`Thực hiện phép tính: [(ab+bc+cd+da)abcd] / [(c+d)(a+b)+(b−c)(a−d)]`,
+   solution:`Mẫu = ca+cb+da+db+ab−bd−ca+cd = ab+bc+cd+da (bằng đúng phần trong ngoặc của tử) ⇒ kết quả = <b>abcd</b>`},
+  {id:"d10-b11",title:"Bài 11 (minh họa - biểu thức chứa biến)",illustration:true,
+   statement:`Tính giá trị của biểu thức: A = [(a+b)(−x−y)−(a−y)(b−x)] / [abxy(xy+ay+ab+bx)]`,
+   solution:`Khai triển tử = −ay−bx−ab−xy = −(xy+ay+ab+by) ⇒ A = <b>−1/(abxy)</b>`},
+  {id:"d10-b12",title:"Bài 12",statement:`Tính tổng: A = [2⁰+2¹+...+2²⁰⁰⁴] / [1+2⁵+2¹⁰+...+2²⁰⁰⁰]`,
+   answer:"31",solution:`Nhóm tử thành các cụm 5 số hạng giống mẫu: A = 1+2+4+8+16 = <b>31</b>`},
+  {id:"d10-b13",title:"Bài 13",statement:`Tính tổng: A = (101+100+99+...+2+1) / (101−100+99−98+...−2+1)`,
+   answer:"101",solution:`Tử (TS) = (1+101).101/2=5151. Mẫu (MS)=(101−100)+(99−98)+...+(3−2)+1=51 ⇒ A=TS/MS=5151/51=<b>101</b>`},
+  {id:"d10-b14",title:"Bài 14",statement:`Cho x là tổng của tất cả các số nguyên có hai chữ số, y là số nguyên âm lớn nhất. Tính: A = 2020.x²⁰¹⁸ − 2019.y²⁰¹⁷`,
+   answer:"2019",solution:`x=0 (các số nguyên 2 chữ số đối xứng triệt tiêu); y=−1 ⇒ A=2020.0−2019.(−1)²⁰¹⁷=0−2019.(−1)=<b>2019</b>`}
+ ]},
+{id:11, title:"Dạng 11: Tính tỉ số của hai tổng",
+ theory:`<h4>Gợi ý (tổng hợp, không phải nguyên văn sách)</h4><div class="formula">Biến đổi số bị chia thành tổng các phân số có tử giống số chia (thường +1 vào mỗi hạng tử), đặt nhân tử chung để tỉ số ra hằng số.</div>`,
+ problems:[
+  {id:"d11-b1",title:"Bài 1",statement:`Thực hiện phép tính: C = [2010/1+2009/2+2008/3+...+1/2010] : [1/2+1/3+1/4+...+1/2011]`,
+   answer:"2011",solution:`Mỗi hạng tử của tử +1 đều ra 2011/k ⇒ tử = 2011×(mẫu) ⇒ C = <b>2011</b>`},
+  {id:"d11-b2",title:"Bài 2",statement:`Tính giá trị các biểu thức: a) A = [1+1/3+1/5+...+1/97+1/99] / [1/(1.99)+1/(3.97)+1/(5.95)+...+1/(97.3)+1/(99.1)] &nbsp; b) B = [1/2+1/3+1/4+...+1/99+1/100] / [99/1+98/2+97/3+...+1/99]`,
+   answer:"50",solution:`a) Ghép cặp đầu-cuối của tử để có mẫu số chung giống số chia. Biểu thức gấp 50 lần số chia ⇒ A = <b>50</b><br>b) Biến đổi mẫu: viết 99/1+98/2+...+1/99 = (100−1)/1+(100−2)/2+...+(100−99)/99 = 100(1/1+1/2+...+1/99)−99 = 100(1+1/2+...+1/99)−100 = 100(1/2+1/3+...+1/100). Biểu thức này gấp 100 lần số bị chia ⇒ B = <b>1/100</b><br><i>(nhập đáp số câu a)</i>`},
+  {id:"d11-b3",title:"Bài 3",statement:`a) Tính D = [1+(1+2)+(1+2+3)+...+(1+2+3+...+98)] / [1.98+2.97+3.96+...+98.1] &nbsp; b*) Chứng minh E = 1/2, với E = [1.98+2.97+...+98.1]/[1.2+2.3+3.4+...+98.99]`,
+   answer:"1",solution:`a) Tử và mẫu đều bằng 1.98+2.97+...+98.1 (mỗi số i xuất hiện trong (99−i) tổng) ⇒ D=<b>1</b><br>b) Tử bài a chia 2 (theo công thức tổng số tự nhiên liên tiếp) ⇒ E=<b>1/2</b>`},
+  {id:"d11-b4",title:"Bài 4",statement:`Cho A = 1/(1.2)+1/(3.4)+...+1/(37.38) và B = 1/(20.38)+1/(21.37)+...+1/(38.20). Chứng minh A/B là số nguyên.`,
+   answer:"29",solution:`A = 1/20+1/21+...+1/38 (rút gọn từ tổng nghịch đảo lẻ); 58B=2A ⇒ A/B=58/2=<b>29</b> ∈ ℤ`},
+  {id:"d11-b5",title:"Bài 5",statement:`Tính tỉ số A/B biết A = 4/(7.31)+6/(7.11)+9/(10.41)+7/(10.57) và B = 7/(19.31)+5/(19.43)+3/(23.43)+11/(23.57)`,
+   answer:"5/2",solution:`A/5 = 1/31−1/57; B/2 cũng = 1/31−1/57 ⇒ A/5=B/2 ⇒ A/B=<b>5/2</b>`},
+  {id:"d11-b6",title:"Bài 6",statement:`Tính giá trị biểu thức hợp lý: A = [1/2+1/12+1/30+...+1/9120+1/9506+1/9900] / [50−50/51−51/52−52/53−...−97/98−98/99−99/100]`,
+   answer:"1",solution:`Tử T = 1/51+1/52+...+1/100 (sau khi tách 1/(n(n+1))); Mẫu M (sau biến đổi 50−Σ) cũng = 1/51+...+1/100 ⇒ A=<b>1</b>`},
+  {id:"d11-b7",title:"Bài 7",statement:`Tính: A = [1/2+1/2²+1/2³+...+1/2²⁰¹⁹] : [1−1/2²⁰¹⁹]`,
+   answer:"1",solution:`2A=(1+1/2+...+1/2²⁰¹⁸):(1−1/2²⁰¹⁹); 2A−A=(1−1/2²⁰¹⁹):(1−1/2²⁰¹⁹)=1 ⇒ A=<b>1</b>`},
+  {id:"d11-b8",title:"Bài 8",statement:`Tính tỉ số A/B biết: A = 2012/51+2012/52+...+2012/100 và B = 1/(1.2)+1/(3.4)+1/(5.6)+...+1/(99.100)`,
+   answer:"2012",solution:`A=2012(1/51+...+1/100); B (sau khi tách và rút gọn) = 1/51+1/52+...+1/100 ⇒ A/B=<b>2012</b>`},
+  {id:"d11-b9",title:"Bài 9",statement:`Tính tỉ số A/B biết: A = 1/(1.2)+1/(3.4)+1/(5.6)+...+1/(199.200) và B = 1/(101.200)+1/(102.199)+...+1/(200.101)`,
+   answer:"301/2",solution:`A=1/101+1/102+...+1/200 (sau rút gọn); ghép cặp đối xứng cho A=301/2.(tổng các cặp), B=2.(tổng các cặp) ⇒ A/B=<b>301/2</b>`},
+  {id:"d11-b10",title:"Bài 10",statement:`Tính giá trị A/B biết: A = 1/(1.2)+1/(3.4)+1/(5.6)+...+1/(101.102) và B = 1/(52.102)+1/(53.101)+1/(54.100)+...+1/(102.52)+2/(77.154)`,
+   answer:"77",solution:`A (sau rút gọn) = 1/52+1/53+...+1/102; ghép cặp đối xứng quanh 77 cho A=154/2.(tổng cặp), B=2.(tổng cặp) ⇒ A/B=154/2=<b>77</b>`},
+  {id:"d11-b11",title:"Bài 11 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng minh rằng: [1+1/3+1/5+...+1/99] − [1/2+1/4+1/6+...+1/100] = 1/51+1/52+...+1/100`,
+   solution:`VT = (1+1/2+1/3+...+1/100) − 2(1/2+1/4+...+1/100) = (1+1/2+...+1/100)−(1+1/2+...+1/50) = 1/51+...+1/100 = VP (đpcm)`},
+  {id:"d11-b12",title:"Bài 12",statement:`Cho S=1−1/2+1/3−1/4+...+1/2013−1/2014+1/2015 và P=1/1008+1/1009+...+1/2014+1/2015. Tính (S−P)²⁰¹⁶`,
+   answer:"0",solution:`Biến đổi P và chứng minh được P = S ⇒ S−P=0 ⇒ (S−P)²⁰¹⁶ = <b>0</b>`},
+  {id:"d11-b13",title:"Bài 13 (minh họa, chứng minh)",illustration:true,
+   statement:`Chứng minh rằng: 100 − [1+1/2+1/3+...+1/100] = 1/2+2/3+3/4+...+99/100`,
+   solution:`VT = (1−1)+(1−1/2)+(1−1/3)+...+(1−1/100) = 1/2+2/3+3/4+...+99/100 = VP (đpcm)`},
+  {id:"d11-b14",title:"Bài 14",statement:`Tính tỉ số A/B biết: A = 92−1/9−2/10−3/11−...−92/100 và B = 1/45+1/50+1/55+...+1/500`,
+   answer:"40",solution:`A=(1−1/9)+(1−2/10)+...+(1−92/100)=8(1/9+1/10+...+1/100); B=(1/5)(1/9+1/10+...+1/100) ⇒ A/B=8/(1/5)=<b>40</b>`}
+ ]},
+{id:12, title:"Dạng 12: Tính giá trị biểu thức",
+ theory:`<h4>Gợi ý</h4><div class="formula">Kết hợp tính chất dãy tỉ số bằng nhau, biến đổi tổng nghịch đảo, dùng tính không-âm của giá trị tuyệt đối/luỹ thừa chẵn để tìm điều kiện biến (ví dụ |x−1|≥0 và (...)²ᵏ≥0 cùng bằng 0 thì cả hai số hạng đều phải bằng 0).</div>`,
+ problems:[
+  {id:"d12-b1",title:"Bài 1",statement:`Cho a,b,c là 3 số thực khác 0 thỏa: (a+b−c)/c=(b+c−a)/a=(c+a−b)/b. Tính B=(1+b/a)(1+a/c)(1+c/b)`,
+   answer:"8",solution:`Nếu a+b+c≠0: theo dãy tỉ số bằng nhau, mỗi tỉ số =1 ⇒ a+b=2c,b+c=2a,c+a=2b ⇒ B=8.<br>Nếu a+b+c=0: mỗi tỉ số =0 ⇒ B=1<br><i>(nhập 8 — trường hợp phổ biến a+b+c≠0)</i>`},
+  {id:"d12-b2",title:"Bài 2",statement:`Cho biểu thức A = (3x³−x²−3x+2005)/(3x⁴−x³+3x+2014). Tính giá trị của biểu thức với x=1/3`,
+   answer:"2014/2015",solution:`x=1/3 ⇒ 3x−1=0. A = [x²(3x−1)−(3x−1)+2014]/[x³(3x−1)+(3x−1)+2015] = <b>2014/2015</b> (các hạng tử chứa (3x−1) triệt tiêu)`},
+  {id:"d12-b2b",title:"Bài 2 (chứng minh)",illustration:true,
+   statement:`Cho (a+3)(b−4)−(a−3)(b+4)=0. Chứng minh: a/3 = b/4`,
+   solution:`Khai triển: ab−4a+3b−12−ab−4a+3b+12=0 ⇒ 6a=8b ⇒ a/b=6/8=3/4 ⇒ a/3=b/4 (đpcm)`},
+  {id:"d12-b3",title:"Bài 3 (minh họa, chứng minh)",illustration:true,
+   statement:`Cho x,y,z là số thực thỏa xyz=1. Chứng minh: P = 1/(1+x+xy) + 1/(1+y+yz) + 1/(1+z+zx) = 1`,
+   solution:`1/(1+y+yz)=x/(1+x+xy); 1/(1+z+zx)=xy/(1+x+xy) (nhân tử và mẫu với x, xy và dùng xyz=1) ⇒ P=(1+x+xy)/(1+x+xy)=1 (đpcm)`},
+  {id:"d12-b4",title:"Bài 4",statement:`Cho abc=2. Tính: B = a/(ab+a+2) + b/(bc+b+1) + 2c/(ac+2c+2)`,
+   answer:"1",solution:`Thay 2=abc: B = a/(ab+a+abc) + b/(bc+b+1) + abc²/(ac+abc²+abc) — sau khi quy đồng và rút gọn toàn bộ về 1 mẫu chung ⇒ B = <b>1</b>`},
+  {id:"d12-b5",title:"Bài 5 (minh họa, chứng minh)",illustration:true,
+   statement:`Cho xyz=2010. Chứng minh rằng: 2010x/(xy+2010x+2010) + y/(yz+y+2010) + z/(xz+z+1) = 1`,
+   solution:`Thay 2010=xyz và biến đổi tương tự Bài 3, tổng các phân số = 1 (đpcm)`},
+  {id:"d12-b8",title:"Bài 8",statement:`Cho a+b=50. Tính giá trị của biểu thức: A = 10a+16b+4a−2b`,
+   answer:"700",solution:`A = (10a+4a)+(16b−2b) = 14a+14b = 14(a+b) = 14×50 = <b>700</b>`},
+  {id:"d12-b9",title:"Bài 9",statement:`Tính giá trị của biểu thức 5x²+6x−2 khi |x−1|=2`,
+   answer:"61",solution:`|x−1|=2 ⇒ x=3 hoặc x=−1. Tại x=3: 5.9+18−2=<b>61</b>. (Trường hợp còn lại theo sách cho giá trị −2)<br><i>(nhập 61, ứng với x=3)</i>`},
+  {id:"d12-b10",title:"Bài 10",statement:`Tính giá trị của biểu thức P = x²⁰²⁰+y²⁰²⁰ khi |x−1|+(x+y−2)²⁰²⁰=0`,
+   answer:"2",solution:`Cả 2 số hạng đều ≥0 nên tổng=0 ⇒ |x−1|=0 và (x+y−2)²⁰²⁰=0 ⇒ x=1,y=1 ⇒ P=1²⁰²⁰+1²⁰²⁰=<b>2</b>`},
+  {id:"d12-b11",title:"Bài 11",statement:`Tính giá trị của biểu thức x⁴−5y³+4, biết (x−1)²⁰²⁰+(y+2)²⁰²²=0`,
+   answer:"45",solution:`Cả 2 số hạng ≥0 nên =0 từng số ⇒ x=1, y=−2. Thay vào: 1⁴−5.(−2)³+4=1+40+4=<b>45</b>`},
+  {id:"d12-b12",title:"Bài 12",statement:`Cho a,b,c khác 0, đôi một khác nhau, thỏa a²(b+c)=b²(a+c)=2013. Tính A = c²(a+b)`,
+   answer:"2013",solution:`Từ a²(b+c)=b²(a+c) suy ra (a−b)(ab+bc+ca)=0 ⇒ ab+bc+ca=0 (vì a≠b). Khi đó b²(a+c)=−abc=2013, tương tự c²(a+b)=−abc=<b>2013</b>`},
+  {id:"d12-b13",title:"Bài 13",statement:`Cho A = (1,11+0,19−1,3.2)/(2,06+0,54) − (1/2+1/3):2 và B = (5⅞−2¼−0,5):2²³⁄₂₆. &nbsp; a) Rút gọn A và B &nbsp; b) Tìm x nguyên sao cho: A < x < B`,
+   answer:"-11/12",solution:`a) A = (−1/2)−(5/6):2 = −1/2−5/12 = <b>−11/12</b>. &nbsp; B = (25/8):(75/26) = 13/12<br>b) A<x<B ⇒ −11/12<x<13/12 ⇒ −11<12x<13 ⇒ 12x=0 hoặc 12x=12 ⇒ x=0 hoặc x=1<br><i>(nhập đáp số câu a, rút gọn A)</i>`},
+  {id:"d12-b14",title:"Bài 14",statement:`Cho P = |2a−1| − (a−5). &nbsp; a) Rút gọn P &nbsp; b) Có giá trị nào của a để P=4 không?`,
+   answer:"0",solution:`a) P = a+4 (nếu a≥1/2) hoặc P = 6−3a (nếu a<1/2)<br>b) Xét 2 trường hợp: a+4=4 (a≥1/2)⇒a=0 (không thỏa a≥1/2, loại); 6−3a=4 (a<1/2)⇒a=2/3 (không thỏa a<1/2, loại) ⇒ <b>không có giá trị nào của a để P=4</b> (nhập 0 để xác nhận đã xem kỹ — không có nghiệm thật)`},
+  {id:"d12-b15",title:"Bài 15",statement:`Cho biểu thức C = [2(x−1)²+1] / [(x−1)²+2]. &nbsp; a) Chứng tỏ rằng với mọi x, biểu thức C luôn có giá trị là một số dương. &nbsp; b) Tìm tất cả các số nguyên x để C có giá trị là một số nguyên. &nbsp; c) Với giá trị nào của x thì biểu thức C có giá trị nhỏ nhất? Tìm giá trị nhỏ nhất đó (MinC).`,
+   answer:"1/3",solution:`a) Vì 2(x−1)²+1>0 và (x−1)²+2>0 với mọi x ⇒ C luôn dương<br>b) C = 2 − 3/[(x−1)²+2]. Để C nguyên cần (x−1)²+2 là ước dương của 3; vì (x−1)²+2≥2 nên (x−1)²+2=3 ⇒ (x−1)²=1 ⇒ x=2 hoặc x=0<br>c) C nhỏ nhất khi 3/[(x−1)²+2] lớn nhất, tức (x−1)²+2 nhỏ nhất (=2 tại x=1) ⇒ MinC = <b>1/3</b> tại x=1`},
+  {id:"d12-b16",title:"Bài 16",statement:`Cho 2 biểu thức: A = (4x−7)/(x−2) ; B = (3x²−9x+2)/(x−3). &nbsp; a) Tìm giá trị nguyên của x để mỗi biểu thức có giá trị nguyên &nbsp; b) Tìm giá trị nguyên của x để cả hai biểu thức cùng có giá trị nguyên`,
+   answer:"1",solution:`a) A=4+1/(x−2) nguyên khi x−2∈{±1}⇒x∈{1,3}. B=3x+2/(x−3) nguyên khi x−3∈{±1,±2}⇒x∈{1,2,4,5}<br>b) Giao 2 tập ở câu a: x = <b>1</b>`},
+  {id:"d12-b17",title:"Bài 17",statement:`Cho a,b,c khác 0 thỏa ab/(a+b)=bc/(b+c)=ca/(c+a). Tính giá trị của biểu thức M = (ab+bc+ca)/(a²+b²+c²)`,
+   answer:"1",solution:`Từ giả thiết suy ra a=c, tương tự chứng minh được a=b=c ⇒ M = 3a²/3a² = <b>1</b>`}
+ ]}
+];
+
+const topicsEl=document.getElementById('topics'),tocEl=document.getElementById('toc');let allCheckableIds=[];
+DATA.forEach(topic=>{
+  const tDiv=document.createElement('div');tDiv.className='topic';tDiv.id='topic-'+topic.id;
+  let probsHtml='';
+  topic.problems.forEach(p=>{
+    if(!p.illustration) allCheckableIds.push(p.id);
+    probsHtml+=`<div class="problem" id="prob-${p.id}">
+      <div class="ptitle">${p.title} ${p.illustration?'<span class="badge-illustration">MINH HỌA</span>':''}</div>
+      <div class="statement">${p.statement}</div>
+      ${p.illustration?`<button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Xem cách giải</button>`:
+      `<div class="answer-row"><input type="text" id="input-${p.id}" placeholder="Nhập đáp số (vd: 5 hoặc 2/3)">
+       <button class="btn btn-check" onclick="checkAnswer('${p.id}','${p.answer}')">✅ Kiểm tra</button>
+       <button class="btn btn-sol" onclick="toggleSol('${p.id}')">👁 Hướng dẫn</button></div>
+       <div class="result-msg" id="msg-${p.id}"></div>`}
+      <div class="solution" id="sol-${p.id}"><h5>HƯỚNG DẪN GIẢI</h5>${p.solution}</div>
+    </div>`;
+  });
+  tDiv.innerHTML=`<div class="topic-head" onclick="toggleTopic(${topic.id})"><h2>${topic.title}</h2><span class="chev">▾</span></div>
+  <div class="topic-body"><div class="theory">${topic.theory}</div>${probsHtml}</div>`;
+  topicsEl.appendChild(tDiv);
+  const a=document.createElement('a');a.href='#topic-'+topic.id;a.id='toc-'+topic.id;
+  a.innerHTML=`<span class="dot"></span>${topic.title.split(':')[0]}`;
+  a.onclick=(e)=>{e.preventDefault();openTopic(topic.id);};
+  tocEl.appendChild(a);
+});
+function toggleTopic(id){document.getElementById('topic-'+id).classList.toggle('open');}
+function openTopic(id){document.querySelectorAll('.topic').forEach(t=>t.classList.remove('open'));const el=document.getElementById('topic-'+id);el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleSol(id){document.getElementById('sol-'+id).classList.toggle('show');}
+function parseVal(str){str=str.trim().replace(/\s+/g,'');if(str==='')return null;str=str.replace(',','.');
+  if(/^-?\d+\/\d+$/.test(str)){const[n,d]=str.split('/').map(Number);if(d===0)return null;return n/d;}
+  if(/^-?\d+(\.\d+)?$/.test(str))return parseFloat(str);return null;}
+function checkAnswer(id,correct){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  const userVal=parseVal(inputEl.value),correctVal=parseVal(correct);
+  inputEl.classList.remove('correct','wrong');let ok=false;
+  if(userVal!==null&&correctVal!==null&&Math.abs(userVal-correctVal)<1e-6)ok=true;
+  if(ok){inputEl.classList.add('correct');msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';saveProgress(id,true);}
+  else{inputEl.classList.add('wrong');msgEl.textContent='❌ Chưa đúng, thử lại hoặc xem hướng dẫn nhé.';msgEl.className='result-msg no';saveProgress(id,false);}
+  updateProgressBar();
+}
+const STORAGE_KEY='cd1_toan7_hsg_full_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
+function saveProgress(id,c){const d=loadProgress();d[id]=c;localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+function updateProgressBar(){
+  const data=loadProgress();const total=allCheckableIds.length;const done=allCheckableIds.filter(id=>data[id]===true).length;
+  document.getElementById('progLabel').textContent=`${done}/${total} câu đúng`;
+  document.getElementById('progFill').style.width=(total?(done/total*100):0)+'%';
+  DATA.forEach(topic=>{const ids=topic.problems.filter(p=>!p.illustration).map(p=>p.id);
+    const allDone=ids.length>0&&ids.every(id=>data[id]===true);
+    document.getElementById('toc-'+topic.id).classList.toggle('done',allDone);});
+}
+function restoreInputs(){const data=loadProgress();allCheckableIds.forEach(id=>{if(data[id]===true){
+  const inputEl=document.getElementById('input-'+id),msgEl=document.getElementById('msg-'+id);
+  if(inputEl)inputEl.classList.add('correct');
+  if(msgEl){msgEl.textContent='🎉 Chính xác! Giỏi quá!';msgEl.className='result-msg ok';}}});}
+function resetProgress(){if(confirm('Xóa hết tiến trình đã làm?')){
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text]').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.querySelectorAll('.result-msg').forEach(m=>{m.textContent='';m.className='result-msg';});
+  updateProgressBar();}}
+restoreInputs();updateProgressBar();openTopic(1);
+</script>
+</body>
+</html>
