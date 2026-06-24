@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toán 6 Nâng Cao — 13 Chuyên Đề</title>
+<style>
+:root{
+  --blue:#1d4ed8; --red:#dc2626; --bg:#f6f7fb; --card:#ffffff;
+  --text:#1f2330; --muted:#6b7280; --green:#15803d; --border:#e5e7eb; --amber:#92400e;
+}
+html{font-size:16px;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);}
+.topbar{position:sticky;top:0;z-index:5;}
+header{background:var(--blue);color:#fff;padding:clamp(10px,3vw,16px) clamp(12px,4vw,20px);box-shadow:0 2px 6px rgba(0,0,0,.15);}
+header h1{margin:0;font-size:clamp(14px,3.6vw,18px);line-height:1.3;}
+header p{margin:4px 0 0;font-size:clamp(10.5px,2.6vw,12.5px);opacity:.85;}
+.headrow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.progress-btns{display:flex;gap:6px;flex-shrink:0;}
+.pbtn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:7px;font-size:11px;padding:5px 8px;cursor:pointer;white-space:nowrap;}
+.pbtn:hover{background:rgba(255,255,255,.28);}
+.cd-select{display:flex;gap:6px;overflow-x:auto;padding:9px 10px;background:#eef1fb;border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch;}
+.cd-pill{flex:0 0 auto;padding:6px 12px;border-radius:999px;font-size:clamp(11.5px,2.6vw,12.5px);font-weight:600;color:var(--blue);background:#fff;border:1px solid #c7d2fe;cursor:pointer;white-space:nowrap;}
+.cd-pill.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 10px 0;background:#fff;border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch;}
+.tab{flex:0 0 auto;padding:8px 12px;border-radius:8px 8px 0 0;font-size:clamp(12px,2.8vw,13px);font-weight:600;color:var(--muted);cursor:pointer;border:1px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--red);border-color:var(--border);border-bottom-color:#fff;background:#fff;}
+main{max-width:760px;width:100%;margin:0 auto;padding:clamp(10px,3vw,18px) clamp(8px,3vw,14px) 60px;}
+.dang-title{font-size:clamp(13px,3.2vw,15px);font-weight:700;color:var(--red);margin:14px 4px 10px;text-transform:uppercase;}
+.theory{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px;font-size:clamp(12.5px,2.8vw,13.5px);line-height:1.7;margin-bottom:14px;}
+.theory h4{margin:0 0 6px;color:var(--amber);font-size:13px;}
+.theory + .theory{margin-top:-6px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+.card-head{padding:clamp(10px,3vw,14px);cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.bai-label{font-weight:700;color:var(--blue);white-space:nowrap;}
+.de{font-size:clamp(13px,3vw,14.5px);line-height:1.55;word-wrap:break-word;}
+.chev{color:var(--muted);font-size:13px;margin-top:2px;flex-shrink:0;}
+.card-body{display:none;padding:0 clamp(10px,3vw,14px) clamp(10px,3vw,14px);}
+.card.open .card-body{display:block;}
+.answer-box{margin-top:10px;}
+.answer-box label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;}
+.answer-box textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:clamp(13px,2.8vw,14px);font-family:inherit;color:var(--text);background:#fafbff;}
+.answer-box textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+.btn-dapan{margin-top:10px;background:#eef2ff;color:var(--blue);border:1px solid #c7d2fe;border-radius:8px;font-size:clamp(12px,2.8vw,13px);font-weight:600;padding:8px 13px;cursor:pointer;}
+.btn-dapan:hover{background:#e0e7ff;}
+.dapan{display:none;margin-top:10px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:clamp(13px,2.8vw,13.5px);line-height:1.65;word-wrap:break-word;}
+.dapan.show{display:block;}
+.dapan .nhan{font-weight:700;color:var(--green);display:block;margin-bottom:4px;}
+.tuluyen-badge{display:inline-block;font-size:11px;background:#fef3c7;color:var(--amber);border-radius:6px;padding:2px 7px;margin-left:6px;font-weight:600;vertical-align:middle;}
+.ov{text-decoration:overline;}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:.92em;line-height:1;}
+.frac .num{padding:0 3px;border-bottom:1px solid var(--text);}
+.frac .den{padding:0 3px;}
+.note{font-size:11px;color:var(--muted);margin:10px 4px 0;}
+footer{text-align:center;font-size:11px;color:var(--muted);padding:18px 10px 30px;}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:8px 16px;border-radius:999px;font-size:12.5px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;}
+.toast.show{opacity:.95;}
+@media (min-width:760px){
+  .card-head{padding:16px 18px;}
+  .card-body{padding:0 18px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+<header>
+  <div class="headrow">
+    <div>
+      <h1 id="appTitle">📘 Toán 6 Nâng Cao</h1>
+      <p>13 chuyên đề nâng cao môn Toán lớp 6 · HSG</p>
+    </div>
+    <div class="progress-btns">
+      <button class="pbtn" onclick="manualSave()">💾 Lưu</button>
+      <button class="pbtn" onclick="clearProgress()">🗑️ Xóa</button>
+    </div>
+  </div>
+</header>
+<div class="cd-select" id="cdSelect"></div>
+<div class="tabs" id="tabs"></div>
+</div>
+<main id="main"></main>
+<footer>Nội dung trích đúng nguyên văn từ sách (đã đối chiếu ảnh trang gốc để khôi phục công thức / số có gạch ngang bị mất khi trích xuất tự động).</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const ov = s => `<span class="ov">${s}</span>`;
+const frac = (a,b) => `<span class="frac"><span class="num">${a}</span><span class="den">${b}</span></span>`;
+
+/* ===================== DATA: CHUYÊN ĐỀ 1 ===================== */
+const CD1_DANG = [
+{
+  ten:"Dạng 1: Tập hợp",
+  bai:[
+    {so:"Bài 1", de:`Viết các tập hợp sau rồi tìm số phần tử của mỗi tập hợp đó:<br>
+a. Tập hợp A các số tự nhiên x mà 8 : x = 2<br>
+b. Tập hợp B các số tự nhiên x mà x + 3 &lt; 5<br>
+c. Tập hợp C các số tự nhiên x mà x – 2 = x + 2<br>
+d. Tập hợp D các số tự nhiên x mà x : 2 = x : 4<br>
+e. Tập hợp E các số tự nhiên x mà x + 0 = x`,
+    dap:`a) x = 8:2 = 4 ⇒ A = {4}<br>
+b) x + 3 &lt; 5 ⇒ x &lt; 2 ⇒ A = {0; 1}<br>
+c) x – 2 = x + 2 ⇒ 0.x = 4 ⇒ A = ∅<br>
+d) x : 2 = x : 4 ⇒ x = 0 ⇒ A = {0}<br>
+e) x + 0 = x ⇒ x = x ⇒ A = {0; 1; 2; 3; ….}`},
+    {so:"Bài 2", de:`Viết các tập hợp sau bằng cách liệt kê các phần tử của nó:<br>
+a. Tập hợp A các số tự nhiên có hai chữ số, trong đó chữ số hàng chục lớn hơn chữ số hàng đơn vị là 2.<br>
+b. Tập hợp B các số tự nhiên có ba chữ số mà tổng các chữ số bằng 3.`,
+    dap:`a) A = {20; 31; 42; 53; 64; 75; 86; 97}<br>
+b) B = {102; 120; 111; 201; 210}`},
+    {so:"Bài 3", de:`Cho các tập hợp: A = {1; 2; 3; 4}, B = {3; 4; 5}<br>
+Viết các tập hợp vừa là tập hợp con của A, vừa là tập hợp con của B.`,
+    dap:`∅; {3; 4}; {3}; {4}.`},
+    {so:"Bài 4", de:`Cho tập hợp: A = {1; 2; 3; 4}<br>
+a. Viết các tập hợp con của A mà mọi phần tử của nó đều là số chẵn<br>
+b. Viết các tập hợp con của A.`,
+    dap:`a) B = {2; 4}, B<sub>1</sub> = {2}, B<sub>2</sub> = {4}<br>
+b) C={1}; D={2}; E={3}; F={4}<br>
+G={1;2}; H={1;3}; I={1;4}; K={2;3}; L={3;4}; M={2;4}<br>
+N={1;2;3}; O={1;3;4}; P={2;3;4}; T={1;2;4}<br>
+Q = ∅<br>
+A = {1; 2; 3; 4}`},
+  ]
+},
+{
+  ten:"Dạng 2: Đếm",
+  bai:[
+    {so:"Bài 1", de:`Trong các số tự nhiên từ 1 đến 100, có bao nhiêu số:<br>
+a. Chia hết cho 2 mà không chia hết cho 3?<br>
+b. Chia hết cho ít nhất một trong hai số 2 và 3?<br>
+c. Không chia hết cho 2 và không chia hết cho 3?`,
+    dap:`a) Các số chia hết cho 2: 2; 4; 6; …; 100<br>
+Số các số chia hết cho 2 là: ${frac("(100−2)","2")} + 1 = 50 số<br>
+Các số chia hết cho 2 và 3: 6; 12; 18; 24; …; 96<br>
+Số các số chia hết cho cả 2 và 3 là: ${frac("(96−6)","6")} + 1 = 16 số<br>
+Vậy từ 1–100 có 50 – 16 = 34 số chia hết cho 2 mà không chia hết cho 3<br><br>
+b) Các số chia hết cho 3: 3; 6; 9; 12; 15; …; 99<br>
+Số các số chia hết cho 3 là: ${frac("(99−3)","3")} + 1 = 33 số<br>
+Vậy các số chia hết cho ít nhất một trong hai số 2 và 3 là: 50 + 33 – 16 = 67 số<br><br>
+c) Các số không chia hết cho 2 và cho 3 là: 100 – 67 = 33 số`},
+    {so:"Bài 2", de:`Trong các số tự nhiên từ 1 đến 1000, có bao nhiêu số:<br>
+a. Chia hết cho ít nhất một trong các số 2, 3, 5?<br>
+b. Không chia hết cho tất cả các số tự nhiên từ 2 đến 5?`,
+    dap:`Gọi A, B, C, D, E, G, H là tập hợp các số từ 1 đến 1000 mà theo thứ tự chia hết cho 2, chia hết cho 3, chia hết cho 5, chia hết cho 2 và 3, chia hết cho 2 và 5, chia hết cho 3 và 5, chia hết cho cả 3 số. Số phần tử của các tập hợp đó theo thứ tự bằng s<sub>1</sub>, s<sub>2</sub>, s<sub>3</sub>, s<sub>4</sub>, s<sub>5</sub>, s<sub>6</sub>, s<sub>7</sub>.<br>
+Ta có:<br>
+s<sub>1</sub> = 1000 : 2 = 500<br>
+s<sub>2</sub> = [1000 : 3] = 333<br>
+s<sub>3</sub> = 1000 : 5 = 200<br>
+s<sub>4</sub> = [1000 : 6] = 166<br>
+s<sub>5</sub> = 1000 : 10 = 100<br>
+s<sub>6</sub> = [1000 : 15] = 66<br>
+s<sub>7</sub> = [1000 : 30] = 33<br>
+a) Các số phải tìm gồm: s<sub>1</sub>+s<sub>2</sub>+s<sub>3</sub>−s<sub>4</sub>−s<sub>5</sub>−s<sub>6</sub>+s<sub>7</sub> = 734 số<br><br>
+b) Còn lại 1000 – 734 = 266 số`},
+    {so:"Bài 3", de:`Trong số 100 học sinh có 75 học sinh thích học Toán, 60 học sinh thích Văn.<br>
+a. Nếu có 5 học sinh không thích cả Toán lẫn Văn thì có bao nhiêu học sinh thích cả hai môn Văn và Toán?<br>
+b. Có nhiều nhất bao nhiêu học sinh thích cả hai môn Văn và Toán?<br>
+c. Có ít nhất bao nhiêu học sinh không thích cả hai môn Văn và Toán?`,
+    dap:`Gọi số học sinh thích cả hai môn Văn và Toán là x, số học sinh thích Toán mà không thích Văn là 75 – x.<br>
+a) Ta có: 75 – x + 60 + 5 = 100 ⇒ x = 40. Vậy có 40 học sinh thích cả hai môn.<br>
+b) 60 học sinh (nếu tất cả số thích Văn đều thích Toán)<br>
+c) 75 – x + 60 ≤ 100 ⇒ x ≥ 35. Có ít nhất 35 học sinh thích cả hai môn Văn và Toán.`},
+    {so:"Bài 4", de:`Có bao nhiêu số tự nhiên chia hết cho 4 gồm bốn chữ số, chữ số tận cùng bằng 2?`,
+    dap:`Các số phải đếm có dạng ${ov("abc2")}<br>
+Chữ số a có 9 cách chọn<br>
+Với mỗi cách chọn a, chữ số b có 10 cách chọn<br>
+Với mỗi cách chọn a, b chữ số c có 5 cách chọn (1, 3, 5, 7, 9) để tạo với chữ số 2 tận cùng làm thành số chia hết cho 4.<br>
+Tất cả có: 9.10.5 = 450 số.`},
+    {so:"Bài 5", de:`Có bao nhiêu số tự nhiên có ba chữ số trong đó có đúng một chữ số 5?`,
+    dap:`Chia ra 3 loại số:<br>
+- Số đếm có dạng ${ov("5ab")}: chữ số a có 9 cách chọn, chữ số b có 9 cách chọn. Các số thuộc loại này có: 9.9 = 81 số.<br>
+- Số đếm có dạng ${ov("a5b")}: chữ số a có 8 cách chọn, chữ số b có 9 cách chọn. Các số thuộc loại này có: 8.9 = 72 số<br>
+- Số đếm có dạng ${ov("ab5")}: các số thuộc loại này có: 8.9 = 72 số.<br>
+Vậy số tự nhiên có ba chữ số trong đó có đúng một chữ số 5 là: 81 + 72 + 72 = 225 số`},
+    {so:"Bài 6", de:`Để đánh số trang của một cuốn sách, người ta viết dãy số tự nhiên bắt đầu từ 1 và phải dùng tất cả 1998 chữ số.<br>
+a) Hỏi cuốn sách có bao nhiêu trang?<br>
+b) Chữ số thứ 1010 là chữ số nào?`,
+    dap:`a) Từ trang 1 đến trang 9 phải dùng 9 chữ số (viết tắt c/s)<br>
+Từ trang 10 đến trang 99 phải dùng (99–10)+1 = 90 số có 2 c/s = 180 c/s<br>
+Vì còn các trang gồm các số có 3 c/s<br>
+⇒ Còn lại: 1998 – (180+9) = 1809 c/s là đánh số các trang có 3 c/s<br>
+⇒ Có: 1809 : 3 = 603 số có 3 c/s<br>
+Vậy: Cuốn sách đó có: 603 + 99 = 702 trang (vì từ trang 1→99 có 99 trang)<br>
+<b>Cuốn sách có 702 trang</b><br><br>
+b) Chữ số thứ 1010 là chữ số 7 của số 374.`},
+    {so:"Bài 7", de:`Trong các số tự nhiên có ba chữ số, có bao nhiêu số:<br>
+a) Chứa đúng một chữ số 4?<br>
+b) Chứa đúng hai chữ số 4?<br>
+c) Chia hết cho 5, có chứa chữ số 5?<br>
+d) Chia hết cho 3, không chứa chữ số 3?`,
+    dap:`a) Các số phải đếm có 3 dạng: ${ov("4bc")} có 9.9=81 số; ${ov("a4c")} có 8.9=72 số; ${ov("ab4")} có 8.9=72 số.<br>
+Tất cả có: 81+72+72 = 225 số<br><br>
+b) Các số phải đếm gồm 3 dạng: ${ov("44c")}, ${ov("a44")}, ${ov("4b4")}, có 26 số<br><br>
+c) Số có ba chữ số chia hết cho 5 gồm 180 số. Trong đó số không chứa chữ số 5 có dạng ${ov("abc")}, a có 8 cách chọn, b có 9 cách chọn, c có 1 cách chọn (là 0), gồm 8.9 = 72 số.<br>
+Vậy có: 180 – 72 = 108 số phải đếm<br><br>
+d) Số phải tìm có dạng ${ov("abc")}, a có 8 cách chọn, b có 9 cách chọn, c có 3 cách chọn (nếu a+b=3k thì c=0;3;6;9, nếu a+b=3k+1 thì c=2;5;8, nếu a+b=3k+2 thì c=1;4;7), có 8.9.3 = 216 số`},
+    {so:"Bài 8", de:`Viết dãy số tự nhiên từ 1 đến 999 ta được một số tự nhiên A.<br>
+a) Số A có bao nhiêu chữ số?<br>
+b) Tính tổng các chữ số của số A?<br>
+c) Chữ số 1 được viết bao nhiêu lần?<br>
+d) Chữ số 0 được viết bao nhiêu lần?`,
+    dap:`a) Từ 1 đến 9 có 9 số gồm: 1.9=9 chữ số<br>
+Từ 10 đến 99 có 90 số gồm: 90.2=180 chữ số<br>
+Từ 100 đến 999 có 900 số gồm: 900.3=2700 chữ số<br>
+Số A có: 9+180+2700 = <b>2889 chữ số</b><br><br>
+b) Xét số B là các số tự nhiên từ 000 đến 999 (mỗi số viết bởi 3 chữ số) thì tổng các chữ số của B cũng bằng tổng các chữ số của A.<br>
+B có: 3.1000=3000 chữ số, mỗi chữ số từ 0 đến 9 đều có mặt 3000:10=300 (lần)<br>
+Tổng các chữ số của B (cũng là của A): (0+1+2+…+9).300 = 45.300 = <b>13500</b><br><br>
+c) Xét dãy 000,001,…,999 (1000 số, mỗi số 3 chữ số). Mỗi chữ số (0–9) có mặt: 3.1000:10=300 lần. Vậy chữ số 1 được viết <b>300 lần</b>.<br><br>
+d) Ở dãy 000–999, chữ số 0 có mặt 300 lần. So với dãy 1–999 thì dãy 000–999 viết thêm 0 ở: hàng trăm 100 lần (000–099), hàng chục 10 lần (000–009), hàng đơn vị 1 lần (000).<br>
+Vậy chữ số 0 ở dãy 1–999 được viết: 300 – 111 = <b>189 lần</b>`},
+    {so:"Bài 9", de:`Từ các chữ số 1, 2, 3, 4, lập tất cả các số tự nhiên mà mỗi chữ số trên đều có mặt đúng một lần. Tính tổng các số ấy.`,
+    dap:`Ta lập được 4.3.2.1 = 24 số tự nhiên bao gồm cả bốn chữ số 1, 2, 3, 4. Mỗi chữ số có mặt 6 lần ở mỗi hàng. Tổng của 24 số nói trên bằng:<br>
+60 + 600 + 6000 + 60000 = <b>66660</b>.`},
+  ]
+},
+{
+  ten:"Dạng 3: Tìm số tự nhiên",
+  bai:[
+    {so:"Bài 1", de:`Tìm số tự nhiên có năm chữ số, biết rằng nếu viết thêm chữ số 2 vào đằng sau số đó thì được số lớn gấp ba lần số có được bằng cách viết thêm chữ số 2 vào đằng trước số đó.`,
+    dap:`Gọi số cần tìm là ${ov("abcde")} (a khác 0)<br>
+Theo bài ra ta có: ${ov("abcde2")} = 3.${ov("2abcde")}<br>
+⇒ 10.${ov("abcde")} + 2 = 3.200000 + 3.${ov("abcde")}<br>
+⇒ 7.${ov("abcde")} = 599998<br>
+⇒ ${ov("abcde")} = 85714<br>
+Thử lại: 857142 = 3.285714<br>
+<b>Vậy số cần tìm là 857142</b>`},
+    {so:"Bài 2", de:`Tìm số tự nhiên có tận cùng bằng 3, biết rằng nếu xóa chữ số hàng đơn vị thì số đó giảm đi 1992 đơn vị.`,
+    dap:`Vì xóa chữ số hàng đơn vị thì số đó giảm đi 1992 đơn vị nên số cần tìm có 4 chữ số.<br>
+Gọi số tự nhiên cần tìm là ${ov("abc3")} (a≠0)<br>
+Theo bài ra ta có ${ov("abc3")} – 1992 = ${ov("abc")}<br>
+⇒ 10.${ov("abc")} + 3 – 1992 = ${ov("abc")}<br>
+⇒ 9.${ov("abc")} = 1989<br>
+⇒ ${ov("abc")} = 221<br>
+<b>Vậy số cần tìm là 2213</b>`},
+    {so:"Bài 3", de:`Tìm ba chữ số khác nhau và khác 0, biết rằng nếu dùng cả ba chữ số này lập thành các số tự nhiên có ba chữ số thì hai số lớn nhất có tổng bằng 1444.`,
+    dap:`Gọi ba chữ số cần tìm là a, b, c (a > b > c > 0).<br>
+Theo bài ra ta có: ${ov("abc")} + ${ov("acb")} = 1444<br>
+100a+10b+c+100a+10c+b = 1444<br>
+200a+11b+11c = 1444<br>
+200a+11(b+c) = 1400+11.4 (biện luận tiếp được)<br>
+⇒ a=7; b=3; c=1<br>
+<b>Vậy 3 số cần tìm là 1; 3; 7</b>`},
+    {so:"Bài 4", de:`Hiệu của hai số là 4. Nếu tăng một số gấp ba lần, giữ nguyên số kia thì hiệu của chúng bằng 60. Tìm hai số đó.`,
+    dap:`Gọi 2 số đó là a, b (a > b)<br>
+Theo bài ra ta có: a – b = 4 ⇒ b = a – 4 (1)<br>
+Nếu tăng một số gấp ba lần, giữ nguyên số kia thì hiệu của chúng bằng 60 ⇒ 3a – b = 60 (2)<br>
+Thay (1) vào (2): 3a – (a–4) = 60 ⇒ 3a – a + 4 = 60 ⇒ 2a = 56 ⇒ a = 28 ⇒ b = 24<br>
+<b>Vậy số cần tìm là 28; 24.</b>`},
+    {so:"Bài 5", de:`Tìm hai số, biết rằng tổng của chúng gấp 5 lần hiệu của chúng, tích của chúng gấp 24 lần hiệu của chúng.`,
+    dap:`Nếu biểu thị hiệu là 1 phần thì tổng là 5 phần và tích là 24 phần.<br>
+Số lớn là: (5+1):2 = 3 (phần)<br>
+Số bé là: 5–3 = 2 (phần)<br>
+Vậy tích sẽ bằng 12 lần số bé.<br>
+Tích = Số lớn × Số bé = 12 × Số bé ⇒ Số lớn là 12.<br>
+Số bé là: 12:3×2 = 8<br>
+<b>Đáp số: Số lớn = 12, Số bé = 8</b>`},
+    {so:"Bài 6", de:`Tích của hai số là 6210. Nếu giảm một thừa số đi 7 đơn vị thì tích mới là 5265. Tìm các thừa số của tích.`,
+    dap:`Gọi thừa số được giảm là a, thừa số còn lại là b. Ta có:<br>
+a.b = 6210<br>
+(a–7).b = 5265<br>
+⇒ a.b – 7.b = 5265 ⇒ 6210 – 7.b = 5265 ⇒ 7.b = 945 ⇒ b = 945:7 = 135<br>
+⇒ a = 6210:135 = 46<br>
+<b>Vậy hai thừa số cần tìm là 46; 135</b>`},
+    {so:"Bài 7", de:`Một học sinh nhân một số với 463. Vì bạn đó viết các chữ số tận cùng của các tích riêng ở cùng một cột nên tích bằng 30524. Tìm số bị nhân?`,
+    dap:`Do đặt sai vị trí các tích riêng nên bạn học sinh đó chỉ nhân số bị nhân với 4+6+3 = 13.<br>
+<b>Vậy số bị nhân bằng: 30524 : 13 = 2348.</b>`},
+    {so:"Bài 8", de:`Tìm thương của một phép chia, biết rằng nếu thêm 15 vào số bị chia và thêm 5 vào số chia thì thương và số dư không đổi?`,
+    dap:`Gọi số bị chia, số chia, thương và số dư lần lượt là a, b, c, d.<br>
+a : b = c (dư d) ⇒ a = c.b+d<br>
+(a+15) : (b+5) = c (dư d) ⇒ a+15 = c.(b+5)+d = c.b+c.5+d<br>
+Mà a = c.b+d nên: a+15 = c.b+d+15 = c.b+c.5+d ⇒ 15 = c.5 ⇒ <b>c = 3</b>`},
+    {so:"Bài 9", de:`Khi chia một số tự nhiên gồm ba chữ số như nhau cho một số tự nhiên gồm ba chữ số khác nhau, ta được thương là 2 và còn dư. Nếu xóa một chữ số ở số bị chia và xóa một chữ số ở số chia thì thương của phép chia vẫn bằng 2 nhưng số dư giảm hơn trước là 100. Tìm số bị chia và số chia lúc đầu.`,
+    dap:`Gọi số bị chia lúc đầu là ${ov("aaa")}, số chia lúc đầu là ${ov("bbb")}, số dư lúc đầu là r.<br>
+Ta có: ${ov("aaa")} = 2.${ov("bbb")} + r &nbsp;(1)<br>
+${ov("aa")} = 2.${ov("bb")} + r – 100 &nbsp;(2)<br>
+Từ (1) và (2) ⇒ ${ov("aaa")} − ${ov("aa")} = 2.(${ov("bbb")} − ${ov("bb")}) + 100<br>
+⇒ ${ov("a00")} = 2.${ov("b00")} + 100 ⇒ a = 2b+1<br>
+Lập bảng: b=1→a=3; b=2→a=5; b=3→a=7; b=4→a=9<br>
+Thử từng trường hợp ta được 3 đáp số:<br>
+<b>555 và 222; 777 và 333; 999 và 444</b>`},
+  ]
+},
+{
+  ten:"Tự luyện", tuluyen:true,
+  bai:[
+    {so:"Bài 1", de:`Viết liên tiếp các số tự nhiên thành dãy 12345… Hỏi chữ số 1 ở hàng đơn vị của số 1991 đứng ở hàng thứ bao nhiêu?`},
+    {so:"Bài 2", de:`Viết liên tiếp các số tự nhiên chẵn thành dãy 246810… Hỏi chữ số thứ 2000 là chữ số gì?`},
+    {so:"Bài 3", de:`Cho dãy số 4, 7, 10, 13, 16, …<br>1. Tìm số thứ 100, số thứ n của dãy số đó.<br>2. Các số 45723 và số 3887 có mặt trong dãy đó không?`},
+    {so:"Bài 4", de:`Cho dãy số 7, 12, 17, 22, 27, …<br>1. Tìm số thứ 1000 của dãy số trên.<br>2. Các số 38246 và 795841 có mặt trong dãy đó không?`},
+    {so:"Bài 5", de:`Có bao nhiêu số có ba chữ số mà có ít nhất hai chữ số giống nhau?`},
+    {so:"Bài 6", de:`Tính nhẩm:<br>1. 9.24.25<br>2. 12.125.54<br>3. 64.125.875<br>4. 425.7.4 – 170.60<br>5. 8.9.14 + 6.17.12 + 19.4.18`},
+    {so:"Bài 7", de:`Tìm số lớn nhất có ba chữ số mà khi chia cho 75 có thương và số dư bằng nhau?`},
+    {so:"Bài 8", de:`Có bao nhiêu số năm chữ số mà tổng các chữ số của nó bằng 2?`},
+    {so:"Bài 9", de:`Tính nhanh: 1992.19911991 – 1991.19921992`},
+    {so:"Bài 10", de:`Tìm số tự nhiên nhỏ nhất mà tổng các chữ số của nó bằng 21.`},
+    {so:"Bài 11", de:`Tổng số trang của 8 quyển vở loại 1, 9 quyển vở loại 2 và 5 quyển vở loại 3 là 1980 trang. Số trang của một quyển vở loại 2 chỉ bằng ${frac(2,3)} số trang của một quyển vở loại 1. Số trang của 4 quyển vở loại 3 bằng số trang của 3 quyển vở loại 2. Tính số trang của mỗi quyển vở mỗi loại.`},
+    {so:"Bài 12", de:`Trong một cuộc thi có 20 câu hỏi. Mỗi câu trả lời đúng được 10 điểm, còn sai bị trừ đi 15 điểm. Một học sinh được tất cả 50 điểm. Hỏi bạn đấy đã trả lời đúng mấy câu?`},
+    {so:"Bài 13", de:`Tổng hai số bằng 270. Nếu gạch bỏ chữ số 6 ở hàng đơn vị của một trong hai số thì ta được số thứ hai. Tìm hai số đó.`},
+    {so:"Bài 14", de:`Một số có hai chữ số được tăng lên bao nhiêu lần nếu viết tiếp vào số đó hai chữ số ấy?`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 2 ===================== */
+const CD2_DANG = [
+{
+  ten:"Lý thuyết", lythuyet:true,
+  noidung:[
+    {h:"1. Định nghĩa", t:`Với mọi a, b∈N (b≠0) ta luôn tìm được số tự nhiên r sao cho a = bq + r (0 ≤ r &lt; b)<br>
+a là số bị chia, b là số chia, q là thương, r là số dư.<br>
+- Nếu r = 0 ta được phép chia hết, ta nói rằng a chia hết cho b (a⋮b), hay a là bội của b, hay b chia hết a, hay b là ước của a (b/a).<br>
+- Nếu r &gt; 0, ta được phép chia có dư, ta nói rằng a không chia hết cho b.`},
+    {h:"2. Các tính chất về phép chia hết", t:`a. Số 0 chia hết cho mọi số b≠0.<br>
+b. Số a chia hết cho mọi a≠0.<br>
+c. Nếu a⋮b, b⋮c thì a⋮c.<br>
+d. Nếu a và b cùng chia hết cho m thì a+b và a−b đều chia hết cho m.<br>
+e. Nếu một trong hai số a và b chia hết cho m, số kia không chia hết cho m thì a+b và a−b đều không chia hết cho m.<br>
+f. Nếu tổng hoặc hiệu hai số chia hết cho m và một trong hai số ấy chia hết cho m thì số còn lại cũng chia hết cho m.<br>
+g. Nếu một thừa số của tích chia hết cho m thì tích chia hết cho m.<br>
+h. Suy ra a⋮m thì aⁿ⋮m (n∈N*).<br>
+i. Nếu a⋮m, b⋮n thì ab⋮mn<br>
+j. Suy ra nếu a⋮b thì aⁿ⋮bⁿ.<br>
+k. Nếu một số chia hết cho hai số nguyên tố cùng nhau thì nó chia hết cho tích của hai số đó.<br>
+l. Nếu tích ab chia hết cho m, trong đó b và m là hai số nguyên tố cùng nhau thì a chia hết cho m.<br>
+m. Nếu một tích chia hết cho số nguyên tố p thì tồn tại một thừa số của tích chia hết cho p. Suy ra nếu aⁿ⋮p, p là số nguyên tố thì a⋮p.`},
+    {h:"3. Dấu hiệu chia hết cơ bản", t:`a. Chia hết cho 2: chữ số tận cùng là 0,2,4,6,8<br>
+b. Chia hết cho 5: chữ số tận cùng là 0,5<br>
+c. Chia hết cho 3: tổng các chữ số chia hết cho 3<br>
+d. Chia hết cho 9: tổng các chữ số chia hết cho 9`},
+    {h:"4. Dấu hiệu chia hết cho các số khác", t:`a. Chia hết cho 4 (25): hai chữ số tận cùng tạo thành một số chia hết cho 4 (25)<br>
+b. Chia hết cho 8 (125): ba chữ số tận cùng tạo thành một số chia hết cho 8 (125)<br>
+c. Chia hết cho 11: tổng các chữ số hàng lẻ trừ đi tổng chữ số hàng chẵn chia hết cho 11 hoặc ngược lại.`},
+  ]
+},
+{
+  ten:"Dạng 1: Chứng minh",
+  bai:[
+    {so:"Bài 1", de:`Chứng minh rằng:<br>
+a. A = 1+3+3²+…+3¹¹ chia hết cho 4<br>
+b. B = 16⁵+2¹⁵ chia hết cho 33<br>
+c. C = 5+5²+5³+…+5⁸ chia hết cho 30<br>
+d. D = 45+99+180 chia hết cho 9<br>
+e. E = 1+3+3²+3³+…+3¹¹⁹ chia hết cho 13.<br>
+f. F = 10²⁸+8 chia hết cho 72<br>
+g. G = 8⁸+2²⁰ chia hết cho 17<br>
+h. H = 2+2²+2³+…+2⁶⁰ chia hết cho 3, 7, 15<br>
+i. I = E = 1+3+3²+3³+…+3¹⁹⁹¹ chia hết cho 13 và 41.<br>
+j. J = 10ⁿ+18n–1 chia hết cho 27<br>
+k. K = 10ⁿ+72n–1 chia hết cho 81`,
+    dap:`<b>a)</b> A=(1+3)+3².(1+3)+…+3¹⁰(1+3) = 4+3².4+…+3¹⁰.4 = 4.(1+3²+…+3¹⁰) ⋮4 (đpcm)<br><br>
+<b>b)</b> B=(2⁴)⁵+2¹⁵ = 2²⁰+2¹⁵ = 2¹⁵.(1+2⁵) = 2¹⁵.33 ⋮33 (đpcm)<br><br>
+<b>c)</b> C=(5+5²)+5².(5+5²)+…+5⁶.(5+5²) = 30+5².30+…+5⁶.30 = 30.(1+5²+…+5⁶) ⋮30 (đpcm)<br><br>
+<b>d)</b> Ta có: 45⋮9; 99⋮9; 180⋮9 nên D=45+99+180 ⋮9 (đpcm) (tính chất chia hết của một tổng)<br><br>
+<b>e)</b> E=(1+3+3²)+3³.(1+3+3²)+…+3¹¹⁷.(1+3+3²) = 13+3³.13+…+3¹¹⁷.13 = 13.(1+3³+…+3¹¹⁷) ⋮13 (đpcm)<br><br>
+<b>f)</b> Ta thấy 72=8.9. Ta có: 10²⁸+8 ⋮9 vì tổng các chữ số bằng 9; 10²⁸+8 ⋮8 vì có tận cùng là 008. Mà (8;9)=1 nên 10²⁸+8 ⋮8.9=72 (đpcm)<br><br>
+<b>g)</b> G=(2³)⁸+2²⁰ = 2²⁴+2²⁰ = 2²⁰.(2⁴+1) = 2²⁰.17 ⋮17 (đpcm)<br><br>
+<b>h)</b> H=2.(1+2)+2³.(1+2)+…+2⁵⁹.(1+2)=2.3+2³.3+…+2⁵⁹.3=3.(2+2³+…+2⁵⁹) ⋮3<br>
+Tương tự: H=2.(1+2+2²)+2⁴.(1+2+2²)+…+2⁵⁸.(1+2+2²)=7.(2+2⁴+…+2⁵⁸) ⋮7<br>
+Và: H=2.(1+2+2²+2³)+2⁵.(1+2+2²+2³)+…+2⁵⁷.(1+2+2²+2³)=15.(2+2⁵+…+2⁵⁷) ⋮15<br>
+Vậy H chia hết cho 3, 7, 15.<br><br>
+<b>i)</b> I=(1+3+3²)+3³.(1+3+3²)+…+3¹⁹⁸⁹.(1+3+3²)=13.(1+3³+…+3¹⁹⁸⁹) ⋮13<br>
+Mặt khác: I=(1+3²+3⁴+3⁶)+3.(1+3²+3⁴+3⁶)+…+3¹⁹⁸⁴.(1+3²+3⁴+3⁶)+3¹⁹⁸⁵.(1+3²+3⁴+3⁶)=820.(1+3+…+3¹⁹⁸⁴+3¹⁹⁸⁵)=41.20.(1+3+…+3¹⁹⁸⁵) ⋮41<br>
+Vậy I chia hết cho 13, 41.<br><br>
+<b>j)</b> J=10ⁿ+18n–1=(10ⁿ–1)+18n = 99…9 (n chữ số 9) + 18n = 9(11…1+2n) (11…1 có n chữ số 1) = 9.L<br>
+L=11…1+2n=11…1–n+3n. Số 11…1 (n chữ số 1) có tổng chữ số =n nên 11…1 và n có cùng số dư chia cho 3 ⇒ 11…1–n ⋮3 ⇒ L⋮3 ⇒ 9.L⋮27. Vậy J⋮27 (đpcm)<br><br>
+<b>k)</b> K=10ⁿ+72n–1=(10–1)[10ⁿ⁻¹+10ⁿ⁻²+…+10+1]+72n = 9[10ⁿ⁻¹+…+1]–9n+81n = 9[(10ⁿ⁻¹–1)+(10ⁿ⁻²–1)+…+(10–1)+(1–1)]+81n.<br>
+Vì 10ᵏ–1 ⋮9 với mọi k, nên 9[…] ⋮81, suy ra K ⋮81 (đpcm).`},
+
+    {so:"Bài 2", de:`Chứng minh rằng:<br>
+a. ${ov("abcabc")} chia hết cho 7, 11 và 13<br>
+b. ${ov("abcdeg")} chia hết cho 23 và 29, biết ${ov("abc")} = 2.${ov("deg")}<br>
+c. ${ov("aaa")} chia hết cho a<br>
+d. Số gồm 27 chữ số 1 thì chia hết cho 27<br>
+e. ${ov("abcd")} chia hết cho 29 ⇔ a+3b+9c+27d chia hết cho 29<br>
+f. ${ov("abc")} chia hết cho 21 ⇔ a−2b+4c chia hết cho 21`,
+    dap:`<b>a)</b> ${ov("abcabc")} = 1000.${ov("abc")}+${ov("abc")} = 1001.${ov("abc")} = 7.11.13.${ov("abc")} ⋮7;11;13 (đpcm)<br><br>
+<b>b)</b> ${ov("abcdeg")} = 1000.${ov("abc")}+${ov("deg")} = 1000.2.${ov("deg")}+${ov("deg")} = ${ov("deg")}.2001 = ${ov("deg")}.23.29.3 ⋮23;29 (đpcm)<br><br>
+<b>c)</b> ${ov("aaa")} = 100a+10a+a = 111.a ⋮a (đpcm)<br><br>
+<b>d)</b> Gọi A là số gồm 27 chữ số 1, B là số gồm 9 chữ số 1. Lấy A chia cho B được thương C=10..010..01. Như vậy A=B.C, trong đó B⋮9, C⋮3. Vậy A⋮27 (đpcm).<br><br>
+<b>e)</b> ${ov("abcd")}⋮29 ⇔ 1000a+100b+10c+d⋮29 ⇔ 2000a+200b+20c+2d⋮29 ⇔ (2001a+203b+29c+29d)−(a+3b+9c+27d)⋮29 ⇔ (69.29a+7.29b+29c+29d)−(a+3b+9c+27d)⋮29 ⇔ (a+3b+9c+27d)⋮29 (đpcm)<br><br>
+<b>f)</b> ${ov("abc")} = 100a+10b+c = 16(a−2b+4c)+84a+42b−63c. Vì ${ov("abc")}⋮21 và 84a+42b−63c⋮21 ⇒ a−2b+4c⋮21 (đpcm)`},
+
+    {so:"Bài 3", de:`Chứng minh rằng:<br>
+a. Tổng ba số tự nhiên liên tiếp chia hết cho 3.<br>
+b. ∀n∈N thì 60n+45 chia hết cho 15 nhưng không chia hết cho 30.<br>
+c. Không có số tự nhiên nào mà chia cho 15 dư 6 và chia cho 9 dư 1.<br>
+d. (1005a+2100b) chia hết cho 15, ∀a,b∈N.<br>
+e. A=n²+n+1 không chia hết cho 2 và 5, ∀n∈N.<br>
+f. ∀n∈N thì tích (n+3)(n+6) chia hết cho 2.`,
+    dap:`<b>a)</b> Gọi 3 số liên tiếp là a; a+1; a+2. Tổng = 3a+3 ⋮3 (đpcm)<br><br>
+<b>b)</b> 60⋮15 ⇒ 60n⋮15; 45⋮15 ⇒ 60n+45⋮15. Nhưng 60⋮30 thì 60n⋮30 còn 45 không chia hết cho 30 ⇒ 60n+45 không chia hết cho 30.<br><br>
+<b>c)</b> Giả sử có a∈N thỏa cả 2 điều kiện: a=15q₁+6 chia hết cho 3, còn a=15q₂+1 không chia hết cho 3 ⇒ mâu thuẫn. Vậy không có số tự nhiên nào thỏa mãn (đpcm).<br><br>
+<b>d)</b> 1005⋮3 và 2100⋮3 ⇒ (1005a+2100b)⋮3. 1005⋮5 và 2100⋮5 ⇒ (1005a+2100b)⋮5. Mà (3;5)=1 ⇒ (1005a+2100b)⋮15 (đpcm)<br><br>
+<b>e)</b> n.(n+1) là tích 2 số tự nhiên liên tiếp nên là số chẵn ⇒ n.(n+1)+1 là số lẻ, không chia hết cho 2.<br>
+Xét chữ số tận cùng: n.(n+1) chỉ có thể tận cùng là 0, 2, 6 ⇒ n.(n+1)+1 tận cùng là 1, 3, 7 ⇒ không chia hết cho 5.<br><br>
+<b>f)</b> Nếu n lẻ: n+3 chẵn, n+6 lẻ ⇒ tích chẵn. Nếu n chẵn: n+3 lẻ, n+6 chẵn ⇒ tích chẵn. Vậy (n+3)(n+6)⋮2 với mọi n (đpcm).`},
+  ]
+},
+{
+  ten:"Dạng 2: Tìm số tự nhiên",
+  bai:[
+    {so:"Câu 1", de:`Tìm các chữ số a và b sao cho a − b = 4 và ${ov("87ab")} chia hết cho 9`,
+    dap:`Vì a−b=4 ⇒ a=b+4 mà ${ov("87ab")}⋮9 ⇒ 15+a+b⋮9 ⇒ 19+2b⋮9 ⇒ b=4; a=8.`},
+    {so:"Câu 2", de:`Cho n = ${ov("7a5")} + ${ov("8b4")}. Biết a − b = 6 và n chia hết cho 9. Tìm a và b`,
+    dap:`n⋮9 ⇒ 7+a+5+8+b+4⋮9 ⇒ 24+a+b⋮9. Mà a,b≤9 ⇒ a+b≤18 ⇒ a+b=3 hoặc a+b=12.<br>
+- a+b=3: a=(3+6):2=9/2 không thuộc N (loại)<br>
+- a+b=12: a=(12+6):2=9; b=9−6=3 (chọn)<br>
+Vậy a=9 và b=3.`},
+    {so:"Câu 3", de:`Tìm hai số tự nhiên chia hết cho 9, biết: Tổng của chúng bằng ${ov("*657")} và hiệu của chúng bằng ${ov("5*91")}.`,
+    dap:`Vì hai số chia hết cho 9 nên tổng ${ov("*657")}⋮9 ⇔ *=9; và hiệu ${ov("5*91")}⋮9 ⇔ *=3.<br>
+Vậy tổng = 9657 và hiệu = 5391.<br>
+⇒ Hai số cần tìm là: 7524 và 2133`},
+    {so:"Câu 4", de:`Tìm chữ số a, biết: ${ov("20a20a20a")} chia hết cho 7`,
+    dap:`${ov("20a20a20a")} = ${ov("20a20a")}.1000+${ov("20a")} = 1001.${ov("20a")}.1000+${ov("20a")} = 7.143.${ov("20a")}.1000+${ov("20a")}<br>
+Vì 7.143.${ov("20a")}.1000⋮7 nên ${ov("20a")}⋮7.<br>
+${ov("20a")} = 200+a = 196+(4+a). Vì 196⋮7 ⇒ 4+a⋮7 ⇒ a=3`},
+    {so:"Câu 5", de:`Tìm số tự nhiên có hai chữ số, sao cho nếu viết nó tiếp sau số 1999 thì ta được một số chia hết cho 37.`,
+    dap:`Gọi số cần tìm là ${ov("ab")}. Ta có ${ov("1999ab")}⋮37 ⇒ 199900+${ov("ab")}⋮37 ⇒ 5402.37+26+${ov("ab")}⋮37 ⇒ 26+${ov("ab")}⋮37<br>
+Vậy ${ov("ab")} ∈ {11; 48; 85}`},
+    {so:"Câu 6", de:`Tìm các số tự nhiên chia cho 4 dư 1, còn chia cho 25 thì dư 3`,
+    dap:`Gọi thương tuần tự là a, b. Ta có: x=4a+1=25b+3 ⇒ 4a=25b+2 ⇒ a=(25b+2)/4<br>
+b=2,a=13⇒x=53; b=6,a=38⇒x=153; b=10,a=63⇒x=253; b=14,a=88⇒x=353; b=18,a=113⇒x=453;…<br>
+<b>Đáp số:</b> Tất cả các số tự nhiên tận cùng là 53 đều thoả mãn.`},
+    {so:"Câu 7", de:`Tìm số tự nhiên có 5 chữ số, biết rằng số đó bằng 45 lần tích các chữ số của nó.`,
+    dap:`Gọi số đó là ${ov("abcde")} (a,b,c,d,e là chữ số, a≠0). Ta có ${ov("abcde")}=45.a.b.c.d.e=5.9.a.b.c.d.e<br>
+⇒ ${ov("abcde")}⋮5 nên e=0 (loại) hoặc e=5. Vì số lẻ nên a,b,c,d,e đều lẻ.<br>
+${ov("abcd5")}=25.9.a.b.c.d ⇒ chia hết cho 25. Mà ${ov("abcd5")}=abc.100+${ov("d5")}, ${ov("d5")}⋮25 và d lẻ ⇒ d=7.<br>
+${ov("abcde")}=${ov("abc75")}⋮9 ⇒ a+b+c+12⋮9, mà 2&lt;a+b+c&lt;28 nên a+b+c=6;15 hoặc 24. Vì a,b,c lẻ ⇒ a+b+c=15.<br>
+15=1+5+9=1+7+7=3+3+9=3+5+7=5+5+5. Vì 45.a.b.c.7.5&lt;100000 nên a.b.c&lt;64, chỉ xét a+b+c=1+5+9 hoặc 1+7+7.<br>
+Thử chọn: <b>77175</b> thoả mãn. Đ/S: 77175.`},
+    {so:"Câu 8", de:`Tìm số ${ov("abcd")}, biết rằng số đó chia hết cho tích các số ${ov("ab")} và ${ov("cd")}.`,
+    dap:`${ov("abcd")}=100.${ov("ab")}+${ov("cd")} ⋮ ${ov("ab")}.${ov("cd")} ⇒ ${ov("cd")}⋮${ov("ab")}. Đặt ${ov("cd")}=k.${ov("ab")} (1≤k≤9)<br>
+⇒ 100+k chia hết cho k.${ov("ab")} (1) ⇒ 100 chia hết cho k ⇒ k∈{1,2,4,5}<br>
++k=1: ${ov("cd")}=${ov("ab")} ⇒ 101⋮${ov("ab")} vô lí (101 nguyên tố)<br>
++k=2: 102⋮2.${ov("ab")} ⇒ 51⋮${ov("ab")} ⇒ ${ov("ab")}=17 ⇒ ${ov("cd")}=34. Số cần tìm: <b>1734</b><br>
++k=4: 104⋮4.${ov("ab")} ⇒ 26⋮${ov("ab")} ⇒ ${ov("ab")}=13,${ov("cd")}=52 (nhận) hoặc ${ov("ab")}=26,${ov("cd")}=104 (loại)<br>
++k=5: 105⋮5.${ov("ab")} ⇒ 21⋮${ov("ab")} ⇒ ${ov("ab")}=21 ⇒ ${ov("cd")}=105 vô lí<br>
+Vậy có hai cặp số thoả mãn: <b>1734 và 1352</b>`},
+    {so:"Câu 9", de:`${ov("*63*")} chia hết cho cả 2, 3, 5, 9`,
+    dap:`${ov("*63*")} chia hết cho 2 và 5 ⇒ ${ov("*63*")}=${ov("*630")}.<br>
+Vì chia hết cho 9 nên *+6+3+0=*+9 ⋮9 ⇒ *=0 (loại) hoặc *=9.<br>
+Số chia hết cho 9 thì chia hết cho 3. Vậy số cần tìm là: <b>9630</b>`},
+    {so:"Câu 10", de:`Tìm tất cả các số có 5 chữ số dạng: ${ov("34x5y")} mà chia hết cho 36.`,
+    dap:`36=9.4 mà ƯC(4;9)=1. Vậy cần ${ov("34x5y")} chia hết cho cả 4 và 9.<br>
+Chia hết cho 9 ⇔ 3+4+x+5+y⋮9 ⇔ 12+x+y⋮9 (1)<br>
+Chia hết cho 4 ⇔ ${ov("5y")}⋮4 ⇒ y=2 hoặc y=6<br>
+y=2 thay vào (1) ⇒ 14+x⋮9 ⇒ x=4<br>
+y=6 thay vào (1) ⇒ 18+x⋮9 ⇒ x=0 hoặc x=9<br>
+Vậy các cặp (x,y) cần tìm: <b>(4;2), (0;6), (9;6)</b>.`},
+  ]
+},
+{
+  ten:"Dạng 3: Bài toán đếm",
+  bai:[
+    {so:"Câu 1", de:`Từ 1 đến 100 có bao nhiêu số chia hết cho 2, bao nhiêu số chia hết cho 5?`,
+    dap:`Các số chia hết cho 2 từ 1–100: 2;4;6;8;…;100 ⇒ Số các số là (100−2):2+1=50 số<br>
+Các số chia hết cho 5 từ 1–100: 5;10;15;…;100 ⇒ Số các số là (100−5):5+1=20 số`},
+    {so:"Câu 2", de:`Có bao nhiêu số tự nhiên nhỏ hơn 100 chia hết cho 5 và dư 3?`,
+    dap:`Các số chia 5 dư 3 nhỏ hơn 100: 3;8;13;18;…;98<br>
+Vậy có: ${frac("(98−3)","5")} + 1 = 19+1 = 20 số`},
+    {so:"Câu 3", de:`Có bao nhiêu số tự nhiên có ba chữ số và chia hết cho 3?`,
+    dap:`Các số có 3 chữ số chia hết cho 3: 102;105;108;…;999<br>
+Vậy có: ${frac("(999−102)","3")} + 1 = 299+1 = 300 số`},
+    {so:"Câu 4", de:`Trong các số tự nhiên nhỏ hơn 1000, có bao nhiêu số chia hết cho 2 nhưng không chia hết cho 5?`,
+    dap:`Các số tự nhiên chia hết cho cả 2 và 5 là: 0;2;4;6;8;…;998;1000<br>
+Các số tự nhiên chẵn chia hết cho 5 là: 0;10;20;…;990;1000<br>
+Vậy có: [${frac("(1000−0)","2")}+1] − [${frac("(1000−0)","10")}+1] = 501 − 101 = <b>400 số</b> tự nhiên nhỏ hơn 1000 chia hết cho 2 nhưng không chia hết cho 5.`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 3 ===================== */
+const CD3_DANG = [
+{
+  ten:"Dạng 1: Tính giá trị biểu thức",
+  bai:[
+    {so:"Bài 1", de:`Tính giá trị các biểu thức sau:<br>
+a. 4¹⁰.8¹⁵<br>
+b. 4¹⁵.5³⁰<br>
+c. ${frac("2¹⁰.13+2¹⁰.65","2⁸.104")}<br>
+d. (1+2+3+…+100).(1²+2²+3²+…+10²).(65.111 – 13.15.37)<br>
+e. 19991999.1998 – 19981998.1999<br>
+f. ${frac("101+100+99+98+⋯+3+2+1","101−100+99−98+⋯+3−2+1")}<br>
+g. 6^(3¹)<br>
+h. 3^(2³)<br>
+i. ${frac("11.3²².3⁷ − 9¹⁵","(2.3¹⁴)²")}<br>
+j. 9! – 8! – 7!.8²<br>
+k. 27¹⁶ : 9¹⁰`,
+    dap:`a) 4¹⁰.8¹⁵ = (2²)¹⁰.(2³)¹⁵ = 2²⁰.2⁴⁵ = <b>2⁶⁵</b><br><br>
+b) 4¹⁵.5³⁰ = (2²)¹⁵.5³⁰ = 2³⁰.5³⁰ = (2.5)³⁰ = <b>10³⁰</b><br><br>
+c) ${frac("2¹⁰.13+2¹⁰.65","2⁸.104")} = ${frac("2¹⁰.(13+65)","2⁸.104")} = ${frac("2¹¹.39","2⁸.104")} = ${frac("39","13")} = <b>3</b> (vì 104=8.13)<br><br>
+d) = (1+2+…+100).(1²+…+10²).(13.5.3.37 − 13.15.37) = (…).(…).0 = <b>0</b><br><br>
+e) 19991999.1998 − 19981998.1999 = 1999.10001.1998 − 1998.10001.1999 = <b>0</b><br><br>
+f) = ${frac("101.(101+1)","2")} : <u>1+1+1+⋯+1</u><sub>(51 chữ số 1)</sub> = ${frac("101.51","51")} = <b>101</b><br><br>
+g) 6^(3¹) = 6³ = <b>216</b><br><br>
+h) 3^(2³) = 3⁸ = <b>6561</b><br><br>
+i) = ${frac("11.3²⁹ − 3³⁰","2².3²⁸")} = ${frac("(11.3−3²).3²⁸","2².3²⁸")} = ${frac("24","4")} = <b>6</b><br><br>
+j) 9! − 8! − 7!.8² = 8!.(9−1) − 7!.8² = 8.8! − 7!.8² = 8².7! − 7!.8² = <b>0</b><br><br>
+k) 27¹⁶:9¹⁰ = (3³)¹⁶:(3²)¹⁰ = 3⁴⁸:3²⁰ = <b>3²⁸</b>`},
+  ]
+},
+{
+  ten:"Dạng 2: Tìm chữ số tận cùng",
+  bai:[
+    {so:"Bài 1", de:`Tìm chữ số tận cùng của các số sau:<br>
+1. 74³⁰<br>2. 49³¹<br>3. 87³²<br>4. 58³³<br>5. 23³⁵<br>6. 2¹⁰¹<br>7. 3¹⁹<br>8. 2+2²+2³+…+2²⁰`,
+    dap:`1. Luỹ thừa của số có tận cùng 4 là số có tận cùng 6 nếu số mũ chẵn, tận cùng 4 nếu số mũ lẻ. 30 chẵn nên 74³⁰ có tận cùng <b>6</b>.<br><br>
+2. Luỹ thừa của số có tận cùng 9 là số có tận cùng 1 nếu số mũ chẵn, tận cùng 9 nếu số mũ lẻ. 31 lẻ nên 49³¹ có tận cùng <b>9</b><br><br>
+3. 87³²=(87⁴)⁸. Số tận cùng 7 nâng lên luỹ thừa 4 được số tận cùng 1, dù nâng tiếp lên luỹ thừa nào tận cùng vẫn là 1. Vậy 87³² có tận cùng <b>1</b><br><br>
+4. 58³³=(58⁴)⁸.58=(…6)⁸.58=<b>(…8)</b>. Vậy 58³³ có tận cùng <b>8</b><br><br>
+5. 23³⁵=(23⁴)⁸.23³=(…1)⁸.(…7). Vậy 23³⁵ có tận cùng <b>7</b><br><br>
+6. 2¹⁰¹=(2⁴)²⁵.2=16²⁵.2=(…6).2=(…2). Vậy 2¹⁰¹ có tận cùng <b>2</b><br><br>
+7. 3¹⁹=(3⁴)⁴.3³=(…1)⁴.27=…7. Vậy 3¹⁹ có tận cùng <b>7</b><br><br>
+8. <i>(Sách không đưa ra lời giải cho câu này)</i>`},
+    {so:"Bài 2", de:`Tìm hai chữ số tận cùng của các số sau:<br>
+a. 51⁵¹<br>b. 99⁹⁹<br>c. 6⁶⁶⁶`,
+    dap:`a) 51⁵¹=(51²)²⁵.51. Số tận cùng 01 dù nâng lên luỹ thừa tự nhiên nào cũng tận cùng 01 nên 51⁵¹ có tận cùng <b>51</b>.<br><br>
+b) 99⁹⁹=(99²)⁴⁹.9=9801⁴⁹.9. Vì 9801⁴⁹ có tận cùng 01 nên 99⁹⁹ có tận cùng <b>99</b>.<br><br>
+c) 6⁵ có tận cùng 76. Số tận cùng 76 dù nâng lên luỹ thừa tự nhiên khác 0 nào cũng tận cùng 76. Do đó 6⁶⁶⁶=(6⁵)¹³³.6=(…76)¹³³.6=(…76).6=(…56). Vậy 6⁶⁶⁶ có tận cùng <b>56</b>`},
+  ]
+},
+{
+  ten:"Dạng 3: So sánh lũy thừa",
+  bai:[
+    {so:"Bài 1", de:`So sánh các luỹ thừa sau:<br>
+a. 27¹¹ và 81⁸<br>b. 625⁵ và 125⁷<br>c. 5³⁶ và 11²⁴<br>d. 3²ⁿ và 2³ⁿ<br>e. 5²³ và 6.5²²<br>f. 199²⁰ và 2003¹⁵<br>g. 3⁹⁹ và 11²¹`,
+    dap:`a) 27¹¹=(3³)¹¹=3³³ và 81⁸=(3⁴)⁸=3³². Vì 3³³&gt;3³² nên <b>27¹¹ &gt; 81⁸</b><br><br>
+b) 625⁵=(5⁴)⁵=5²⁰ và 125⁷=(5³)⁷=5²¹. Vì 5²⁰&lt;5²¹ nên <b>625⁵ &lt; 125⁷</b><br><br>
+c) 5³⁶=(5³)¹²=125¹² và 11²⁴=(11²)¹²=121¹²&lt;125¹². Vậy <b>5³⁶ &gt; 11²⁴</b><br><br>
+d) 3²ⁿ=9ⁿ; 2³ⁿ=8ⁿ. Vì 9ⁿ&gt;8ⁿ ⇒ <b>3²ⁿ &gt; 2³ⁿ</b><br><br>
+e) 6.5²²=(5+1).5²²=5²³+5²²&gt;5²³. Vậy <b>5²³ &lt; 6.5²²</b><br><br>
+f) 199²⁰&lt;200²⁰=(2³.5²)²⁰=2⁶⁰.5⁴⁰. 2003¹⁵&gt;2000¹⁵=(2⁴.5³)¹⁵=2⁶⁰.5⁴⁵. Vậy <b>2003¹⁵ &gt; 199²⁰</b><br><br>
+g) 11²¹&lt;27²¹=(3³)²¹=3⁶³&lt;3⁹⁹. Vậy <b>3⁹⁹ &gt; 11²¹</b>`},
+  ]
+},
+{
+  ten:"Dạng 4: Tìm giá trị x",
+  bai:[
+    {so:"Bài 1", de:`Tìm x∈N biết:<br>
+a. (x − 47) − 115 = 0<br>
+b. 2ˣ − 15 = 17<br>
+c. (7x − 11)³ = 2⁵.5² + 200<br>
+d. x¹⁰ = 1ˣ<br>
+e. x¹⁰ = x<br>
+f. (2x − 15)⁵ = (2x − 15)³<br>
+g. 2.3ˣ = 10.3¹² + 8.27⁴`,
+    dap:`a) x−47=115 ⇒ <b>x=162</b><br><br>
+b) 2ˣ=32=2⁵ ⇒ <b>x=5</b><br><br>
+c) (7x−11)³=32.25+200=1000=10³ ⇒ 7x−11=10 ⇒ 7x=21 ⇒ <b>x=3</b><br><br>
+d) x¹⁰=1 ⇒ <b>x=1</b><br><br>
+e) x¹⁰=x ⇒ <b>x=0 hoặc x=1</b><br><br>
+f) (2x−15)³.[(2x−15)²−1]=0 ⇒ 2x−15=0 hoặc (2x−15)²=1 ⇒ x=15/2 (loại vì không là số tự nhiên) hoặc <b>x=8</b><br><br>
+g) 2.3ˣ=10.3¹²+8.27⁴ ⇒ 3ˣ=5.3¹²+4.3¹²=3¹².(5+4)=3¹².3²=3¹⁴ ⇒ <b>x=14</b>`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 4 ===================== */
+const CD4_DANG = [
+{
+  ten:"Lý thuyết: Công thức dãy số", lythuyet:true,
+  noidung:[
+    {h:"Các công thức tổng dãy số tổng quát", t:`
+1. A = 1+2+3+…+(n−1)+n = ${frac("n(n+1)","2")}<br><br>
+2. A = 1.2+2.3+3.4+…+(n−1)n = ${frac("(n−1).n.(n+1)","3")}<br><br>
+3. A = 1.3+2.4+3.5+…+(n−1)(n+1) = ${frac("(n−1).n.(2n+1)","6")}<br><br>
+4. A = 1.2.3+2.3.4+3.4.5+…+(n−2)(n−1)n = ${frac("(n−2)(n−1)n(n+1)","4")}<br><br>
+5. A = 1²+2²+3²+…+(n−1)²+n² = ${frac("n(n+1)(2n+1)","6")}<br><br>
+6. A = 1³+2³+3³+…+(n−1)³+n³ = ${frac("[n(n+1)]²","4")} &nbsp;(tức [n(n+1)/2]²)<br><br>
+7. A = 1⁵+2⁵+….+n⁵ = ${frac("1","12")}.n²(n+1)²(2n²+2n−1)<br><br>
+8. A = 1+p+p²+p³+…..+pⁿ = ${frac("pⁿ⁺¹−1","p−1")} &nbsp;(p≠1)<br><br>
+9. A = 1+2p+3p²+….+(n+1)pⁿ = ${frac("(n+1)pⁿ⁺¹","p−1")} − ${frac("pⁿ⁺¹−1","(p−1)²")} &nbsp;(p≠1)<br><br>
+10. A = 1.2+2.5+3.8+…...+n(3n−1) = n².(n+1)<br><br>
+11. A = 1³+3³+5³+…+(2n+1)³ = (n+1)².(2n²+4n+1)<br><br>
+12. A = ${frac("1","1.2")} + ${frac("1","2.3")} + …… + ${frac("1","n(n+1)")} = ${frac("n","n+1")} &nbsp;(n&gt;1)<br><br>
+13. A = ${frac("1","1.2.3")} + ${frac("1","2.3.4")} + ${frac("1","3.4.5")} + …… + ${frac("1","n(n+1)(n+2)")} = ${frac("n(n+3)","4(n+1)(n+2)")}<br><br>
+14. A = ${frac("3","(1.2)²")} + ${frac("5","(2.3)²")} + …… + ${frac("2n+1","[n(n+1)]²")} = ${frac("n(n+2)","(n+1)²")}`},
+  ]
+},
+{
+  ten:"Dạng 2: Bài tập vận dụng",
+  bai:[
+    {so:"Bài 1", de:`Tính giá trị của các biểu thức sau:<br>
+I. A=1+2+3+…+2015<br>II. B=1+3+5+…+1017<br>III. C=2+4+6+…+2014<br>IV. D=1+4+7+…+2008<br>
+V. E=1.2+2.3+3.4+…+1001.1002<br>VI. F=1.3+2.4+3.5+…+2013.2015<br>VII. G=1.2.3+2.3.4+3.4.5+…+2013.2014.2015<br>
+VIII. H=1²+2²+3²+…+99²+100²<br>IX. I=1²+2²+3²+…+1001²+1002²<br>X. J=6+16+30+48+…+19600+19998<br>
+XI. K=2+5+9+14+…+4949+5049<br>XII. L=2²+4²+6²+…+98²+100²<br>XIII. M=1³+2³+3³+…+99³+100³<br>
+XIV. N=1+5²+5³+…+5¹⁰⁰<br>XV. O=1+3¹+3²+…+3¹⁰⁰`,
+    dap:`I. A=${frac("2015.2016","2")}=2015.1008=<b>2031120</b><br><br>
+II. B=(1017+1).[${frac("1017−1","2")}+1]:2=1018.509:2=<b>259081</b><br><br>
+III. C=(2014+2).[${frac("2014−2","2")}+1]:2=2016.1007:2=<b>1015056</b><br><br>
+IV. D=(2008+1).[${frac("2008−1","3")}+1]:2=2009.670:2=<b>673015</b><br><br>
+V. E=${frac("(1002−1).1002.(1002+1)","3")}=${frac("1001.1002.1003","3")}=<b>335337002</b><br><br>
+VI. F=${frac("(2014−1).2014.(2.2014+1)","6")}=${frac("2013.2014.4029","6")}=<b>2722383213</b><br><br>
+VII. G=${frac("(2015−2)(2015−1).2015.(2015+1)","4")}=${frac("2013.2014.2015.2016","4")}=<b>4117265071920</b><br><br>
+VIII. H=${frac("100.101.201","6")}=<b>338350</b><br><br>
+IX. I=${frac("1002.1003.2005","6")}=<b>335839505</b><br><br>
+X. J: Đặt ½J=1.3+2.4+3.5+…+99.101=${frac("(100−1).100.(2.100+1)","6")}=${frac("99.100.201","6")}=331650 ⇒ J=331650.2=<b>663300</b><br><br>
+XI. K: 2K=(1.2+2.3+3.4+…+99.100)+2.(1+2+…+99)=${frac("(100−1).100.(100+1)","3")}+2.${frac("99.(99+1)","2")}=333300+9900=343200 ⇒ K=343200:2=<b>171600</b><br><br>
+XII. L=2².(1²+2²+…+50²)=4.${frac("50.51.101","6")}=<b>171700</b><br><br>
+XIII. M=[${frac("100.101","2")}]²=5050²=<b>25502500</b><br><br>
+XIV. N=1+5.(1+5+5²+…+5⁹⁹) ⇒ N=1+5.(N−5¹⁰⁰) ⇒ N=1+5N−5¹⁰¹ ⇒ 4N=5¹⁰¹−1 ⇒ N=${frac("5¹⁰¹−1","4")}<br><br>
+XV. O=${frac("3¹⁰¹−1","2")}`},
+
+    {so:"Bài 2", de:`A. Cho A=3+3²+3³+3⁴+…..3¹⁰⁰. Tìm số tự nhiên n biết rằng 2A+3=3ⁿ<br><br>
+B. Cho M=3+3²+3³+3⁴+…..3¹⁰⁰. Hỏi: a. M có chia hết cho 4, cho 12 không? Vì sao? b. Tìm số tự nhiên n biết rằng 2M+3=3ⁿ<br><br>
+C. Cho biểu thức M=1+3+3²+3³+…+3¹¹⁸+3¹¹⁹. a) Thu gọn biểu thức M. b) Biểu thức M có chia hết cho 5, cho 13 không? Vì sao?<br><br>
+D. Cho A=1–2+3–4+…….99–100. a) Tính A. b) A có chia hết cho 2, cho 3, cho 5 không? c) A có bao nhiêu ước tự nhiên, bao nhiêu ước nguyên?<br><br>
+E. Cho A=1–7+13–19+25–31+…. a) Biết A=181. Hỏi A có bao nhiêu số hạng? b) Biết A có n số hạng. Tính giá trị của A theo n?<br><br>
+F. Cho A=1–7+13–19+25–31+…. a) Biết A có 40 số hạng. Tính giá trị của A. b) Tìm số hạng thứ 2004 của A.<br><br>
+G. Tìm giá trị của x trong dãy tính sau: (x+2)+(x+12)+(x+42)+(x+47)=655<br><br>
+H. Tìm x biết: x+(x+1)+(x+2)+(x+3)+…+(x+2009)=2009.2010<br><br>
+I. Bạn Lâm đánh số trang một cuốn sách dày 284 trang bằng dãy số chẵn 2,4,6,8,… Biết mỗi chữ số viết mất 1 giây. Hỏi bạn Lâm cần bao nhiêu phút để đánh số trang cuốn sách?<br><br>
+J. Tích A=1.2.3…500 tận cùng bằng bao nhiêu chữ số 0?<br><br>
+K. Tính giá trị của biểu thức sau: A=9+99+999+…+ ${ov("99...9")} (50 chữ số 9)<br><br>
+L. Cho A=1+4+4²+…+4⁹⁹, B=4¹⁰⁰. Chứng minh rằng: A &lt; B/3`,
+    dap:`<b>A.</b> A=3.(1+3+3²+…+3⁹⁹)=3.(1+A−3¹⁰⁰)=3+3A−3¹⁰¹ ⇒ 2A=3¹⁰¹−3 ⇒ A=${frac("3¹⁰¹−3","2")}<br>
+2A+3=3ⁿ ⇔ 3¹⁰¹−3+3=3ⁿ ⇔ 3¹⁰¹=3ⁿ ⇒ <b>n=101</b><br><br>
+<b>B.</b> a) M=3.(1+3)+3².(1+3)+…+3⁹⁹.(1+3)=4.(3+3²+…+3⁹⁹) ⋮4. Vì (3+3²+…+3⁹⁹) cũng chia hết cho 3 nên M=4.3.(…) ⋮12.<br>
+b) Tương tự câu A: M=${frac("3¹⁰¹−3","2")} ⇒ 2M+3=3ⁿ ⇒ <b>n=101</b><br><br>
+<b>C.</b> a) M=${frac("3¹²⁰−1","2")}<br>
+b) Vì 3¹²⁰=3⁴.³⁰ có tận cùng là 1 nên (3¹²⁰−1) có tận cùng 0 ⇒ M ⋮5.<br>
+M=(1+3+3²)+3³.(1+3+3²)+…+3¹¹⁷.(1+3+3²)=13.(1+3³+…+3¹¹⁷) ⋮13.<br>
+Vậy M chia hết cho 5, chia hết cho 13.<br><br>
+<b>D.</b> a) A=(1+3+…+99)−(2+4+…+100)=100.50:2−102.51:2=2500−2601=<b>−101</b><br>
+b) A không chia hết cho 2, 3 và 5.<br>
+c) Ư(A)={−101;−1;1;101} và 4 ước nguyên. Vậy A có <b>2 ước tự nhiên</b>.<br><br>
+<b>E.</b> Các số hạng có giá trị tuyệt đối tăng dần 6 đơn vị, dấu xen nhau.<br>
+Nếu n lẻ: A=1+6.${frac("n−1","2")}=181 ⇒ ${frac("n−1","2")}=30 ⇒ <b>n=61</b> (TM)<br>
+Nếu n chẵn: A=(−6).${frac("n","2")}=−3n=181 (loại)<br>
+Vậy A có 61 số hạng.<br>
+b) Nếu n chẵn: A=−3n. Nếu n lẻ: A=1+6.${frac("n−1","2")}=3n−2.<br><br>
+<b>F.</b> a) n=40 (chẵn) ⇒ A=−3n=−3.40=<b>−120</b><br>
+b) Số hạng thứ n: Aₙ=(−1)ⁿ⁻¹.[1+6.(n−1)]. Với n=2004: A₂₀₀₄=(−1)²⁰⁰³.[1+6.2003]=−(1+12018)=<b>−12019</b><br><br>
+<b>G.</b> 4x+2+12+42+47=655 ⇔ 4x+103=655 ⇔ 4x=552 ⇒ <b>x=138</b><br><br>
+<b>H.</b> 2010x+(1+2+…+2009)=2009.2010 ⇔ 2010x+${frac("2009.2010","2")}=2009.2010 ⇔ 2010x=2009.2010−2009.2010:2 ⇒ <b>x=1004,5</b><br><br>
+<b>I.</b> Từ trang 2–8: (8−2):2+1=4 trang → 4 chữ số<br>
+Từ trang 10–98: (98−10):2+1=45 trang → 90 chữ số<br>
+Từ trang 100–284: (284−100):2+1=93 trang → 93.3=279 chữ số<br>
+Tổng: 4+90+279=373 chữ số = 373 giây = <b>6 phút 13 giây</b><br><br>
+<b>J.</b> Số mũ của 5 trong 500! là [500/5]+[500/5²]+[500/5³]=100+20+4=124. Vậy 500! có tận cùng <b>124 chữ số 0</b>.<br><br>
+<b>K.</b> A=(10−1)+(10²−1)+…+(10⁵⁰−1)=(10+10²+…+10⁵⁰)−50 = ${ov("111...10")}(50 chữ số 1, có thêm số 0)−50 = <b>${ov("111...1060")}</b> (48 chữ số 1)<br><br>
+<b>L.</b> A=${frac("4¹⁰⁰−1","3")} &lt; ${frac("4¹⁰⁰","3")} = B/3 (đpcm)`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 5 ===================== */
+const CD5_DANG = [
+{
+  ten:"Lý thuyết", lythuyet:true,
+  noidung:[
+    {h:"Ước và bội", t:`a⋮b ⇔ a là bội của b ⇔ b là ước của a`},
+    {h:"Ước chung lớn nhất (ƯCLN)", t:`ƯCLN của hai hay nhiều số là số lớn nhất trong tập hợp các ước chung của các số đó. Kí hiệu ƯCLN(a,b,c) hoặc (a,b,c).<br>
+Ta có: (a,b)=d ⇔ Tồn tại a',b'∈N sao cho a=da', b=db', (a',b')=1.`},
+    {h:"Bội chung nhỏ nhất (BCNN)", t:`BCNN của hai hay nhiều số là số nhỏ nhất khác 0 trong tập hợp các bội chung của các số đó. Kí hiệu BCNN(a,b,c) hoặc [a,b,c].<br>
+Ta có: [a,b]=m ⇔ Tồn tại x,y∈N sao cho m=ax, m=by, (x,y)=1.`},
+    {h:"Tính chất", t:`- Số lượng ước của một số: nếu A=aˣ.bʸ.cᶻ… thì số lượng ước của A bằng (x+1)(y+1)(z+1)…<br>
+- Nếu một tích chia hết cho số nguyên tố p thì tồn tại một thừa số của tích chia hết cho p.<br>
+- Nếu tích ab chia hết cho m, trong đó b và m nguyên tố cùng nhau thì a chia hết cho m.<br>
+- Nếu a chia hết cho m và n thì a chia hết cho BCNN của m và n.<br>
+- Tích của hai số bằng tích của BCNN với ƯCLN của chúng: a.b = (a,b).[a,b].<br>
+- Ba số a,b,c nguyên tố cùng nhau đôi một nếu (a,b)=1; (b,c)=1; (c,a)=1.`},
+    {h:"Thuật toán Ơ-clit tìm ƯCLN(a,b)", t:`Chia a cho b được số dư r:<br>
+- Nếu r=0 thì ƯCLN(a,b)=b. Dừng lại.<br>
+- Nếu r&gt;0, chia tiếp b cho r được số dư r₁: nếu r₁=0 thì ƯCLN(a,b)=r₁=r... cứ thế lặp lại.<br>
+<b>ƯCLN(a,b) là số dư khác 0 nhỏ nhất trong dãy phép chia liên tiếp đó.</b>`},
+  ]
+},
+{
+  ten:"Dạng 1: Bài toán cơ bản Ước-Bội",
+  bai:[
+    {so:"Bài 1", de:`Tìm số chia và thương của một phép chia có số bị chia bằng 145, số dư bằng 12 biết rằng thương khác 1 (số chia và thương là các số tự nhiên).`,
+    dap:`Gọi x là số chia, a là thương, ta có 145=ax+12 (x&gt;12). Như vậy x là ước của 145−12=133.<br>
+133=7.19. Ước của 133 lớn hơn 12 là 19 và 133.<br>
+Nếu số chia=19 thì thương=7. Nếu số chia=133 thì thương=1 (trái đề bài).<br>
+<b>Vậy số chia=19 và thương=7</b>`},
+    {so:"Bài 2", de:`Một phép chia số tự nhiên có số bị chia bằng 3193. Tìm số chia và thương của phép chia đó, biết rằng số chia có hai chữ số.`,
+    dap:`3193 không chia hết cho 2,3,5,7,9 (loại suy các trường hợp) ⇒ số chia của 3193 là một số nguyên tố. Gọi số chia là ${ov("ab")} ⇒ b chỉ có thể là 1,3,7,9, và thương cũng phải là số nguyên tố.<br>
+Thử: b=9⇒a=1,2,5,7,9 không cho thương tự nhiên; b=7 tương tự không được; b=3 tương tự không được; b=1⇒a=3 cho kết quả đúng.<br>
+<b>⇒ Số chia = 31; thương = 103</b>`},
+    {so:"Bài 3", de:`Tìm hai số tự nhiên liên tiếp có tích bằng 600.`,
+    dap:`Phân tích: 600=2³.3.5²=(8.3).25=24.25<br>
+<b>Đáp số: 24 và 25</b>`},
+    {so:"Bài 4", de:`Tìm số tự nhiên n, sao cho: n + 5 chia hết cho n + 1`,
+    dap:`n+5=(n+1)+4. Để n+5⋮n+1 thì (n+1)+4⋮n+1 ⇒ n+1 là ước của 4.<br>
+n+1∈{1,2,4} ⇒ <b>n∈{0; 1; 3}</b>`},
+    {so:"Bài 5", de:`Tìm số tự nhiên n biết rằng: 1 + 2 + 3 + … + n = 820`,
+    dap:`${frac("n.(n+1)","2")}=820 ⇒ n(n+1)=1640=40.41 ⇒ <b>n=40</b>`},
+    {so:"Tự luyện 1", de:`Tìm ba số lẻ liên tiếp có tích bằng 12075.`,
+    dap:`12075=3.5².7.23=21.23.25 ⇒ <b>21, 23, 25</b>`},
+    {so:"Tự luyện 2", de:`Tìm số tự nhiên n, sao cho: 2n + 7 chia hết cho n + 2`,
+    dap:`2n+7=2(n+2)+3. Để 2n+7⋮n+2 thì n+2 là ước của 3 ⇒ <b>n=1</b>`},
+    {so:"Tự luyện 3", de:`Hãy viết số 100 dưới dạng tổng các số lẻ liên tiếp.`,
+    dap:`Giả sử 100 viết được dưới dạng k số lẻ liên tiếp n+2;n+4;…;n+2k với n lẻ, k&gt;1.<br>
+<b>Có hai đáp số: 49+51 và 1+3+…+19</b>`},
+    {so:"Tự luyện 4", de:`Tìm số tự nhiên có ba chữ số, biết rằng nó tăng gấp n lần nếu cộng mỗi chữ số của nó với n (n là số tự nhiên, có thể gồm một hoặc nhiều chữ số).`,
+    dap:`Gọi số phải tìm là ${ov("abc")}. Ta có ${ov("abc")}+111n=${ov("abc")}.n ⇒ ${ov("abc")}⋮n. Đặt ${ov("abc")}=nk ⇒ 111=k(n−1). k và n−1 là ước của 111.<br>
+<b>4 đáp số:</b> (k=1,n=112)→112; (k=3,n=38)→114; (k=37,n=4)→148; (k=111,n=2)→222`},
+  ]
+},
+{
+  ten:"Dạng 2: Tìm số tự nhiên qua ƯCLN/BCNN",
+  bai:[
+    {so:"Bài 1", de:`Tìm hai số tự nhiên, biết rằng tổng của chúng bằng 84, ƯCLN của chúng bằng 6.`,
+    dap:`Gọi 2 số là a,b (a≤b). (a,b)=6 ⇒ a=6a', b=6b' với (a',b')=1.<br>
+a+b=84 ⇒ 6(a'+b')=84 ⇒ a'+b'=14. Các cặp (a',b'): (1,13),(3,11),(5,9)<br>
+<b>⇒ (a,b) = (6,78); (18,66); (30,54)</b>`},
+    {so:"Bài 2", de:`Tìm hai số tự nhiên a, b > 0, biết [a, b] = 240 và (a, b) = 16.`,
+    dap:`ab=(a,b)[a,b]=240.16=3840. Đặt a=16m,b=16n, (m,n)=1, m≤n ⇒ 256mn=3840 ⇒ mn=15.<br>
+(m,n)=(1,15)→(a,b)=(16,240); (m,n)=(3,5)→(a,b)=(48,80)<br>
+<b>Vậy: 16 và 240, hoặc 48 và 80.</b>`},
+    {so:"Bài 3", de:`Tìm hai số tự nhiên a, b > 0, biết ab = 216 và (a, b) = 6.`,
+    dap:`Đặt a=6m,b=6n, (m,n)=1, m≤n ⇒ 36mn=216 ⇒ mn=6.<br>
+(m,n)=(1,6)→(6,36); (m,n)=(2,3)→(12,18)<br>
+<b>Vậy: 6 và 36, hoặc 12 và 18.</b>`},
+    {so:"Bài 4", de:`Tìm hai số tự nhiên a, b > 0, biết ab = 180, [a, b] = 60.`,
+    dap:`(a,b)=ab/[a,b]=180/60=3. Đặt a=3m,b=3n,(m,n)=1,m≤n ⇒9mn=180⇒mn=20.<br>
+(m,n)=(1,20)→(3,60); (m,n)=(4,5)→(12,15)<br>
+<b>Vậy: 3 và 60, hoặc 12 và 15.</b>`},
+    {so:"Bài 5", de:`Tìm số tự nhiên a, biết rằng 398 chia cho a thì dư 38, còn 450 chia cho a thì dư 18.`,
+    dap:`a là ước của 398−38=360 và a&gt;38. a cũng là ước của 450−18=432 và a&gt;18.<br>
+a là ước chung của 360 và 432, a&gt;38. ƯCLN(360,432)=72&gt;38 ⇒ <b>a=72</b>`},
+    {so:"Bài 6", de:`Ba khối 6,7,8 theo thứ tự có 300 học sinh, 276 học sinh, 252 học sinh xếp hàng dọc để diễu hành sao cho số hàng dọc của mỗi khối như nhau. Có thể xếp nhiều nhất thành mấy hàng dọc để mỗi khối đều không có ai lẻ hàng? Khi đó ở mỗi khối có bao nhiêu hàng ngang?`,
+    dap:`Số hàng dọc nhiều nhất là ƯCLN(300,276,252)=12.<br>
+<b>Đáp số:</b> Xếp được nhiều nhất 12 hàng dọc. Khối 6 có 25 hàng ngang, khối 7 có 23 hàng ngang, khối 8 có 21 hàng ngang.`},
+    {so:"Bài 7", de:`Tìm số tự nhiên a nhỏ nhất sao cho chia a cho 3, cho 5, cho 7 được số dư theo thứ tự 2, 3, 4.`,
+    dap:`a=3m+2 ⇒ 2a=6m+4, chia 3 dư 1<br>
+a=5n+3 ⇒ 2a=10n+6, chia 5 dư 1<br>
+a=7p+4 ⇒ 2a=14p+8, chia 7 dư 1<br>
+Do đó 2a−1∈BC(3,5,7). Để a nhỏ nhất thì 2a−1=BCNN(3,5,7)=105 ⇒ 2a=106 ⇒ <b>a=53</b>`},
+    {so:"Bài 8", de:`Một số tự nhiên chia cho 3 thì dư 1, chia cho 4 thì dư 2, chia cho 5 thì dư 3, chia cho 6 thì dư 4 và chia hết cho 13.<br>
+✓ Tìm số nhỏ nhất có tính chất trên.<br>✓ Tìm dạng chung của tất cả các số có tính chất trên.`,
+    dap:`a) x+2 chia hết cho 3,4,5,6 nên x+2 ∈ BC(3,4,5,6). BCNN=60 ⇒ x=60n−2. Thử lần lượt, đến n=10 thì x=598 chia hết cho 13.<br>
+<b>Số nhỏ nhất: 598</b><br><br>
+b) x+182 chia hết cho 60 và cho 13. Vì (13,60)=1 nên x+182=780k ⇒ x=780k−182 (k=1,2,3,…)<br>
+<b>Dạng chung: x = 780k − 182</b> (với k=1 cho x=598)`},
+    {so:"Bài 9", de:`Một đơn vị bộ đội khi xếp hàng 20, 25, 30 đều dư 15, nhưng xếp hàng 41 thì vừa đủ. Tính số người của đơn vị đó biết rằng số người chưa đến 1000.`,
+    dap:`Gọi số người là a (a≤1000). (a−15)∈BC(20,25,30). BCNN(20,25,30)=300.<br>
+(a−15)∈{0,300,600,900,…} ⇒ a∈{15,315,615,915,…}. Vì a⋮41 và a≤1000 ⇒ <b>a=615 người</b>`},
+    {so:"Bài 10", de:`Tìm hai số tự nhiên a, b > 0, biết a/b = 2,6 và (a, b) = 5.`,
+    dap:`a=5m,b=5n,(m,n)=1. a/b=m/n=2,6=13/5 ⇒ m=13,n=5 ⇒ a=65, b=25<br>
+<b>Vậy hai số cần tìm là 65 và 25</b>`},
+    {so:"Tự luyện 1", de:`Tìm a, b biết a/b = 4/5 và [a, b] = 140.`,
+    dap:`m=4,n=5 (vì m/n=4/5, (m,n)=1). [a,b]=m.n.d=140 ⇒ 20d=140 ⇒ d=7<br>
+a=4.7=28; b=5.7=35. <b>Vậy hai số cần tìm là 28 và 35.</b>`},
+    {so:"Tự luyện 2", de:`Tìm hai tự nhiên a, b > 0, biết a + b = 128 và (a, b) = 16.`,
+    dap:`a=16m,b=16n,(m,n)=1,m≤n. 16(m+n)=128 ⇒ m+n=8.<br>
+(m,n)=(1,7)→(16,112); (m,n)=(3,5)→(48,80)<br>
+<b>Vậy: 16 và 112, hoặc 48 và 80.</b>`},
+    {so:"Tự luyện 3", de:`Tìm a, b biết a + b = 42 và [a, b] = 72.`,
+    dap:`Đặt (a,b)=d, a=md,b=nd,(m,n)=1,m≤n. a+b=d(m+n)=42 (1); [a,b]=dmn=72 (2)<br>
+Từ (1),(2): d∈ƯC(42,72), ƯCLN(42,72)=6 ⇒ d∈{1,2,3,6}. Thử các giá trị, chỉ d=6 thỏa mãn: m+n=7, m.n=12 ⇒ m=3,n=4 ⇒ a=18, b=24.<br>
+<b>Vậy hai số cần tìm là 18 và 24</b>`},
+    {so:"Tự luyện 4", de:`Tìm a, b biết a − b = 7, [a, b] = 140.`,
+    dap:`Tương tự: d∈ƯC(7,140), ƯCLN(7,140)=7 ⇒ d=7. m−n=1, m.n=20 ⇒ m=5,n=4 ⇒ a=35, b=28.<br>
+<b>Vậy hai số cần tìm là 35 và 28</b>`},
+    {so:"Tự luyện 5", de:`Tìm số tự nhiên a, biết rằng 350 chia cho a thì dư 14, còn 320 chia cho a thì dư 26.`,
+    dap:`a là ước chung của (350−14)=336 và (320−26)=294, a&gt;26. ƯCLN(336,294)=42&gt;26 ⇒ <b>a=42</b>`},
+    {so:"Tự luyện 6", de:`Người ta muốn chia 200 bút bi, 240 bút chì, 320 tẩy thành một số phần thưởng như nhau. Hỏi có thể chia được nhiều nhất là bao nhiêu phần thưởng, mỗi phần thưởng có bao nhiêu bút bi, bút chì, tẩy?`,
+    dap:`Số phần thưởng nhiều nhất là ƯCLN(200,240,320)=40.<br>
+<b>Mỗi phần thưởng có 5 bút bi, 6 bút chì và 8 tẩy.</b>`},
+    {so:"Tự luyện 7", de:`Tìm số tự nhiên nhỏ hơn 500, sao cho chia nó cho 15, cho 35 được các số dư theo thứ tự là 8 và 13.`,
+    dap:`Gọi số phải tìm là n, ta có n+22∈BC(15,35)=B(105).<br>
+<b>Đáp số: 83; 188; 293; 398</b>`},
+    {so:"Tự luyện 8", de:`Tìm số tự nhiên nhỏ nhất chia cho 8, 10, 15, 20 được số dư theo thứ tự 5, 7, 12, 17 và chia hết cho 41.`,
+    dap:`<b>Đáp số: 4797</b>`},
+    {so:"Tự luyện 9", de:`Hai lớp 6A, 6B cùng thu nhặt một số giấy vụn bằng nhau. Trong lớp 6A, một bạn thu được 26kg, còn lại mỗi bạn thu 11kg. Trong lớp 6B, một bạn thu được 25kg, còn lại mỗi bạn thu 10kg. Tính số học sinh mỗi lớp, biết rằng số giấy mỗi lớp thu được trong khoảng từ 200kg đến 300kg.`,
+    dap:`Gọi số giấy mỗi lớp thu được là x(kg). x−26⋮11, x−25⋮10 ⇒ x−15∈BC(11,10)=B(110), 200≤x≤300.<br>
+Tìm được x=235. <b>Lớp 6A có 20 học sinh, lớp 6B có 22 học sinh.</b>`},
+  ]
+},
+{
+  ten:"Dạng 3: Tìm ƯCLN của biểu thức",
+  bai:[
+    {so:"Bài 1", de:`Tìm ƯCLN của 2n – 1 và 9n + 4 (với n thuộc số tự nhiên).`,
+    dap:`Gọi d là ước chung của 2n−1 và 9n+4 ⇒ 2(9n+4)−9(2n−1)⋮d hay 18n+8−18n+9=17⋮d ⇒ d∈{1;17}<br>
+Nếu d=17: 2n−1⋮17 ⇔ 2n−18⋮17 ⇔ 2(n−9)⋮17 ⇒ n−9⋮17 (vì (2,17)=1) ⇒ n=17k+9 (k∈N)<br>
+Thử lại: với n=17k+9 thì 2n−1⋮17 và 9n+4=9(17k+9)+4=9.17k+85⋮17.<br>
+<b>Đáp số:</b> ƯCLN(2n−1; 9n+4) = 17 khi n=17k+9 (k∈N); ngược lại ƯCLN = 1.`},
+    {so:"Bài 2", de:`Tìm ƯCLN của 7n + 3 và 8n - 1 (với n thuộc số tự nhiên).`,
+    dap:`Gọi d là ước chung của 8n−1 và 7n+3 ⇒ 8(7n+3)−7(8n−1)⋮d hay 56n+24−56n+7=31⋮d ⇒ d∈{1;31}<br>
+Nếu d=31: 8n−1⋮31 ⇔ 8n−32⋮31 ⇔ 8(n−4)⋮31 ⇒ n−4⋮31 (vì (8,31)=1) ⇒ n=31k+4 (k∈N)<br>
+Thử lại: với n=31k+4 thì 8n−1⋮31 và 7n+3=7(31k+4)+3=9.31k+31⋮31.<br>
+<b>Đáp số:</b> ƯCLN(8n−1; 7n+3) = 31 khi n=31k+4 (k∈N); ngược lại ƯCLN = 1.`},
+  ]
+},
+{
+  ten:"Dạng 4: Thuật toán Ơ-clit",
+  bai:[
+    {so:"Ví dụ", de:`Hãy tìm ƯCLN (1575, 343) = ?`,
+    dap:`1575=343.4+203<br>343=203.1+140<br>203=140.1+63<br>140=63.2+14<br>63=14.4+7<br>14=7.2+0 (chia hết)<br>
+<b>Vậy ƯCLN(1575, 343) = 7</b>`},
+    {so:"Tự luyện 1", de:`Tìm ƯCLN(702, 306) bằng cách phân tích ra thừa số nguyên tố và bằng thuật toán Ơclit.`,
+    dap:`<b>Đáp số: 18</b>`},
+    {so:"Tự luyện 2", de:`Dùng thuật toán Ơclit để tìm:<br>a/ ƯCLN(318, 214)<br>b/ ƯCLN(6756, 2463)`,
+    dap:`<b>Đáp số: a) 2  b) 1</b>`},
+    {so:"Tự luyện 3", de:`Tìm ƯCLN (A, B) biết rằng A là số gồm 1991 chữ số 2, B là số gồm 8 chữ số 2.`,
+    dap:`1991 chia cho 8 dư 7; còn 8 chia cho 7 dư 1.<br>
+Theo thuật toán Ơclit: ƯCLN(A,B) = ƯCLN(${ov("22…2")} (1991 chữ số); ${ov("22…2")} (8 chữ số)) = … = ƯCLN(${ov("22…2")} (8 chữ số); ${ov("22…2")} (7 chữ số)) = <b>ƯCLN(${ov("22…2")}(7 chữ số)) = 2</b>`},
+    {so:"Tự luyện 4", de:`Tìm ƯCLN của các số sau theo thuật toán Ơclit: (187231, 165148)`,
+    dap:`Chia liên tiếp theo thuật toán Ơclit:<br>
+187231 chia 165148 dư 22083<br>165148 chia 22083 được 7 dư 10567<br>22083 chia 10567 được 2 dư 949<br>10567 chia 949 được 11 dư 128<br>949 chia 128 được 7 dư 53<br>128 chia 53 được 2 dư 22<br>53 chia 22 được 2 dư 9<br>22 chia 9 được 2 dư 4<br>9 chia 4 được 2 dư 1<br>4 chia 1 được 4 dư 0<br>
+<b>Vậy ƯCLN(187231, 165148) = 1</b>`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 6 ===================== */
+const CD6_DANG = [
+{
+  ten:"Dạng 1: Tìm 1 chữ số tận cùng",
+  bai:[
+    {so:"Lý thuyết", de:`<i>(Phần lý thuyết — không có ô trả lời)</i><br><br>
+<b>Tính chất 1:</b><br>
+I. Các số có chữ số tận cùng là 0,1,5,6 khi nâng lên lũy thừa bậc bất kì thì chữ số tận cùng vẫn không đổi.<br>
+II. Các số có chữ số tận cùng là 4,9 khi nâng lên lũy thừa bậc lẻ thì chữ số tận cùng vẫn không đổi.<br>
+III. Các số có chữ số tận cùng là 3,7,9 khi nâng lên lũy thừa bậc 4n thì chữ số tận cùng là 1.<br>
+IV. Các số có chữ số tận cùng là 2,4,8 khi nâng lên lũy thừa bậc 4n thì chữ số tận cùng là 6.<br><br>
+<b>Tính chất 2:</b> Một số tự nhiên bất kì, khi nâng lên lũy thừa bậc 4n+1 thì chữ số tận cùng vẫn không thay đổi.<br><br>
+<b>Tính chất 3:</b> Khi nâng lên lũy thừa bậc 4n+3: số tận cùng 3↔7 đổi cho nhau; số tận cùng 2↔8 đổi cho nhau; số tận cùng 0,1,4,5,6,9 không đổi.`, notext:true},
+
+    {so:"Bài toán 1", de:`Tìm chữ số tận cùng của các số: a) 7⁹⁹  b) 14¹⁴¹⁴  c) 4⁵⁶⁷`,
+    dap:`a) 99−3=96⋮4 ⇒ 99=4k+3 ⇒ 7⁹⁹=7⁴ᵏ.7³. Vì 7⁴ᵏ tận cùng 1 ⇒ <b>7⁹⁹ tận cùng 3</b>.<br><br>
+b) 1414−2=1412⋮4 ⇒ 1414=4k+2 ⇒ 14¹⁴¹⁴=14⁴ᵏ.14². <b>Tận cùng 6</b>.<br><br>
+c) 567−3⋮4 ⇒ 567=4k+3 ⇒ 4⁵⁶⁷=4⁴ᵏ.4³. Vì 4⁴ᵏ tận cùng 6 ⇒ <b>4⁵⁶⁷ tận cùng 4</b>.`},
+
+    {so:"Bài toán 2", de:`Tìm chữ số tận cùng của tổng S = 2¹ + 3⁵ + 4⁹ + … + 2004⁸⁰⁰⁹.`,
+    dap:`Mọi lũy thừa trong S có số mũ chia 4 dư 1 (dạng n^[4(n−2)+1]). Theo tính chất 2, mỗi lũy thừa có tận cùng giống cơ số tương ứng.<br>
+Tổng tận cùng = (2+3+…+9)+199.(1+2+…+9)+(1+2+3+4) = 200.(1+2+…+9)+9 = 9009.<br>
+<b>Vậy chữ số tận cùng của S là 9.</b>`},
+
+    {so:"Bài toán 3", de:`Tìm chữ số tận cùng của tổng T = 2³ + 3⁷ + 4¹¹ + … + 2004⁸⁰¹¹.`,
+    dap:`Mọi lũy thừa có số mũ chia 4 dư 3. Theo tính chất 3: 2³ tận cùng 8; 3⁷ tận cùng 7; 4¹¹ tận cùng 4;…<br>
+Tổng T tận cùng = (8+7+4+5+6+3+2+9)+199.(1+8+7+4+5+6+3+2+9)+(1+8+7+4) = 200.(1+8+7+4+5+6+3+2+9)+8+7+4 = 9019.<br>
+<b>Vậy chữ số tận cùng của T là 9.</b>`},
+
+    {so:"Bài toán 4", de:`Tồn tại hay không số tự nhiên n sao cho n² + n + 1 chia hết cho 1995²⁰⁰⁰?`,
+    dap:`1995²⁰⁰⁰ tận cùng bởi chữ số 5 nên chia hết cho 5.<br>
+n²+n=n(n+1) là tích hai số tự nhiên liên tiếp nên chữ số tận cùng chỉ có thể là 0,2,6 ⇒ n²+n+1 chỉ có thể tận cùng 1,3,7 ⇒ không chia hết cho 5.<br>
+<b>Vậy không tồn tại số tự nhiên n thỏa mãn.</b>`},
+
+    {so:"Bài toán 5", de:`Chứng minh rằng các tổng sau không thể là số chính phương:<br>
+a) M = 19ᵏ + 5ᵏ + 1995ᵏ + 1996ᵏ (với k chẵn)<br>
+b) N = 2004²⁰⁰⁴ᵏ + 2003`,
+    dap:`<i>(Gợi ý sách đưa ra, không trình bày lời giải chi tiết): sử dụng tính chất "một số chính phương chỉ có thể tận cùng bởi các chữ số 0;1;4;5;6;9" để loại trừ.</i>`},
+
+    {so:"Bài toán 6", de:`Cho p là số nguyên tố lớn hơn 5. Chứng minh rằng: p⁸ⁿ + 3.p⁴ⁿ − 4 chia hết cho 5.`,
+    dap:`<i>(Gợi ý sách đưa ra, không trình bày lời giải chi tiết): sử dụng tính chất "một số nguyên tố lớn hơn 5 chỉ có thể tận cùng bởi các chữ số 1;3;7;9".</i>`},
+
+    {so:"Luyện tập 1", de:`Tìm số dư của các phép chia:<br>
+a) 2¹+3⁵+4⁹+…+2003⁸⁰⁰⁵ cho 5<br>
+b) 2³+3⁷+4¹¹+…+2003⁸⁰⁰⁷ cho 5`,
+    dap:`a) Tổng = (2+3+4+5+6+7+8+9)+199.(1+2+…+9)+(1+2+3) = 200.9.10:2+5 = 9005. <b>Chia 5 dư 0.</b><br><br>
+b) Tổng tận cùng = (8+7+4+5+6+3+2+9)+199.(1+8+7+4+5+6+3+2+9)+(1+8+7) = 200.45+15 = 9015. <b>Chia 5 dư 0.</b>`},
+
+    {so:"Luyện tập 2", de:`Tìm chữ số tận cùng của X, Y:<br>X = 2²+3⁶+4¹⁰+…+2004⁸⁰¹⁰<br>Y = 2⁸+3¹²+4¹⁶+…+2004⁸⁰¹⁶`},
+    {so:"Luyện tập 3", de:`Chứng minh rằng chữ số tận cùng của hai tổng sau giống nhau:<br>U=2¹+3⁵+4⁹+…+2005⁸⁰¹³<br>V=2³+3⁷+4¹¹+…+2005⁸⁰¹⁵`},
+    {so:"Luyện tập 4", de:`Chứng minh rằng không tồn tại các số tự nhiên x, y, z thỏa mãn: 19ˣ + 5ʸ + 1980z = 1975⁴³⁰ + 2004.`},
+  ]
+},
+{
+  ten:"Dạng 2: Tìm 2 chữ số tận cùng",
+  bai:[
+    {so:"Lý thuyết", de:`<i>(Phần lý thuyết — không có ô trả lời)</i><br><br>
+Nếu x=100k+y (k,y∈N) thì hai chữ số tận cùng của x cũng chính là hai chữ số tận cùng của y.<br><br>
+<b>Tính chất 4:</b> Nếu a∈N và (a,5)=1 thì a²⁰−1 chia hết cho 25.<br><br>
+<b>Tính chất 5:</b> Số tự nhiên A không phải là số chính phương nếu: A có tận cùng 2,3,7,8; hoặc tận cùng 6 mà chữ số hàng chục là số chẵn; hoặc chữ số hàng đơn vị khác 6 mà chữ số hàng chục lẻ; hoặc chữ số hàng đơn vị là 5 mà chữ số hàng chục khác 2; hoặc hai chữ số tận cùng đều lẻ.`, notext:true},
+
+    {so:"Bài toán 7", de:`Tìm hai chữ số tận cùng của các số: a) 2²⁰⁰³  b) 7⁹⁹`,
+    dap:`a) 2²⁰⁰³ là số chẵn. 2¹⁰=1024 ⇒ 2¹⁰+1=1025⋮25 ⇒ 2²⁰−1=(2¹⁰+1)(2¹⁰−1)⋮25 ⇒ 2³(2²⁰−1)⋮100.<br>
+2²⁰⁰³=2³(2²⁰⁰⁰−1)+2³=2³((2²⁰)¹⁰⁰−1)+2³=100k+8. <b>Vậy hai chữ số tận cùng của 2²⁰⁰³ là 08.</b><br><br>
+b) 7⁹⁹ là số lẻ. 7⁴=2401 ⇒ 7⁴−1⋮100. Vì 99=4.24+3 ⇒ 7⁹⁹=7³.(7⁴)²⁴=7³.(100m+1)=100m'+343.<br>
+<b>Vậy 7⁹⁹ tận cùng bởi hai chữ số 43.</b> <i>(Lưu ý: sách gốc ghi kết quả 07 — đây là tính nhầm trong sách; theo đúng quy tắc lũy thừa, kết quả chính xác là 43.)</i>`},
+
+    {so:"Bài toán 8", de:`Tìm số dư của phép chia 3⁵¹⁷ cho 25.`,
+    dap:`3⁵¹⁷ là số lẻ. 3¹⁰=9⁵=59049 ⇒ 3¹⁰+1⋮50 ⇒ 3²⁰−1=(3¹⁰+1)(3¹⁰−1)⋮100.<br>
+Mặt khác 5¹⁶−1⋮4 ⇒ 5(5¹⁶−1)⋮20 ⇒ 5¹⁷=5(5¹⁶−1)+5=20k+5 ⇒ 3⁵¹⁷=3²⁰ᵏ⁺⁵=3⁵(3²⁰ᵏ−1)+3⁵=3⁵(3²⁰ᵏ−1)+243, có hai chữ số tận cùng là 43.<br>
+<b>Vậy số dư của phép chia 3⁵¹⁷ cho 25 là 18.</b>`},
+
+    {so:"Bài toán 9", de:`Tìm hai chữ số tận cùng của các tổng:<br>a) S₁=1²⁰⁰²+2²⁰⁰²+3²⁰⁰²+…+2004²⁰⁰²<br>b) S₂=1²⁰⁰³+2²⁰⁰³+3²⁰⁰³+…+2004²⁰⁰³`,
+    dap:`a) Nếu a chẵn thì a²⋮4; nếu a lẻ thì a¹⁰⁰−1⋮4; nếu a⋮5 thì a²⋮25. Theo tính chất 4, với mọi a∈N, (a,5)=1 ta có a¹⁰⁰−1⋮25. Vậy với mọi a∈N: a²(a¹⁰⁰−1)⋮100.<br>
+Do đó S₁ có hai chữ số tận cùng cũng chính là hai chữ số tận cùng của 1²+2²+3²+…+2004².<br>
+Áp dụng công thức: 1²+2²+…+2004²=2005×4009×334=2684707030, tận cùng là 30.<br>
+<b>Vậy hai chữ số tận cùng của S₁ là 30.</b><br><br>
+b) Tương tự câu a, hai chữ số tận cùng của S₂ cũng chính là hai chữ số tận cùng của 1³+2³+…+2004³=[2005×1002]²=4036121180100, tận cùng là 00.<br>
+<b>Vậy hai chữ số tận cùng của S₂ là 00.</b>`},
+
+    {so:"Bài toán 10", de:`Cho n∈N và n − 1 không chia hết cho 4. Chứng minh rằng 7ⁿ + 2 không thể là số chính phương.`,
+    dap:`Do n−1 không chia hết cho 4 nên n=4k+r (r∈{0,2,3}). Có 7⁴−1=2400⋮100.<br>
+7ⁿ+2=7⁴ᵏ⁺ʳ+2=7ʳ(7⁴ᵏ−1)+7ʳ+2. Vậy hai chữ số tận cùng của 7ⁿ+2 cũng chính là hai chữ số tận cùng của 7ʳ+2 (r=0,2,3), nên chỉ có thể là 03, 51, 45.<br>
+Theo tính chất 5, các số tận cùng 03, 51, 45 đều không phải số chính phương.<br>
+<b>Vậy 7ⁿ+2 không thể là số chính phương khi n không chia hết cho 4 (đpcm).</b>`},
+  ]
+},
+{
+  ten:"Dạng 3: Tìm 3 chữ số tận cùng",
+  bai:[
+    {so:"Lý thuyết", de:`<i>(Phần lý thuyết — không có ô trả lời)</i><br><br>
+Tìm ba chữ số tận cùng của x chính là tìm số dư của phép chia x cho 1000. Vì 1000=8×125, (8,125)=1, nên áp dụng tương tự cách tìm hai chữ số tận cùng.<br><br>
+<b>Tính chất 6:</b> Nếu a∈N và (a,5)=1 thì a¹⁰⁰−1 chia hết cho 125.`, notext:true},
+
+    {so:"Bài toán 11", de:`Tìm ba chữ số tận cùng của 123¹⁰¹.`,
+    dap:`Theo tính chất 6, do (123,5)=1 ⇒ 123¹⁰⁰−1⋮125 (1).<br>
+Mặt khác: 123¹⁰⁰−1=(123²⁵−1)(123²⁵+1)(123⁵⁰+1) ⇒ 123¹⁰⁰−1⋮8 (2).<br>
+Vì (8,125)=1, từ (1),(2) ⇒ 123¹⁰⁰−1⋮1000 ⇒ 123¹⁰¹=123(123¹⁰⁰−1)+123=1000k+123.<br>
+<b>Vậy 123¹⁰¹ có ba chữ số tận cùng là 123.</b>`},
+
+    {so:"Bài toán 12", de:`Tìm ba chữ số tận cùng của 3³⁹⁹…⁹⁸ (lũy thừa tầng rất lớn).`,
+    dap:`Theo tính chất 6, do (9,5)=1 ⇒ 9¹⁰⁰−1⋮125 (1). Tương tự bài 11: 9¹⁰⁰−1⋮8 (2).<br>
+Vì (8,125)=1 ⇒ 9¹⁰⁰−1⋮1000. Biến đổi lũy thừa tầng được: 3³⁹⁹…⁹⁸=9¹⁹⁹…⁹=9¹⁰⁰ᵖ⁺⁹⁹=9⁹⁹(9¹⁰⁰ᵖ−1)+9⁹⁹=1000q+9⁹⁹.<br>
+Vậy ba chữ số tận cùng của 3³⁹⁹…⁹⁸ cũng chính là ba chữ số tận cùng của 9⁹⁹.<br>
+Vì 9¹⁰⁰−1⋮1000 nên ba chữ số tận cùng của 9¹⁰⁰ là 001, mà 9⁹⁹=9¹⁰⁰:9 ⇒ ba chữ số tận cùng của 9⁹⁹ là 889 (kiểm tra: ${ov("??9")}×9=…001 cho ${ov("??9")}=889).<br>
+<b>Vậy ba chữ số tận cùng của 3³⁹⁹…⁹⁸ là 889.</b>`},
+
+    {so:"Bài toán 13", de:`Tìm ba chữ số tận cùng của 2004²⁰⁰.`,
+    dap:`Do (2004,5)=1 (tính chất 6) ⇒ 2004¹⁰⁰ chia cho 125 dư 1 ⇒ 2004²⁰⁰=(2004¹⁰⁰)² chia cho 125 dư 1.<br>
+⇒ 2004²⁰⁰ chỉ có thể tận cùng là 126, 251, 376, 501, 626, 751, 876. Do 2004²⁰⁰ chia hết cho 8 nên chỉ có thể tận cùng là 376.<br>
+<b>Vậy ba chữ số tận cùng của 2004²⁰⁰ là 376.</b>`},
+  ]
+},
+{
+  ten:"Bài tập vận dụng", tuluyen:true,
+  bai:[
+    {so:"Bài 1", de:`Chứng minh 1ⁿ + 2ⁿ + 3ⁿ + 4ⁿ chia hết cho 5 khi và chỉ khi n không chia hết cho 4.`},
+    {so:"Bài 2", de:`Tìm hai chữ số tận cùng của: a) 3⁹⁹⁹  b) 11¹²¹³`},
+    {so:"Bài 3", de:`Tìm hai chữ số tận cùng của: S = 2³+2²³+…+2⁴⁰⁰²³`},
+    {so:"Bài 4", de:`Tìm ba chữ số tận cùng của: S = 1²⁰⁰⁴+2²⁰⁰⁴+…+2003²⁰⁰⁴`},
+    {so:"Bài 5", de:`Cho (a, 10) = 1. Chứng minh rằng ba chữ số tận cùng của a¹⁰¹ cũng bằng ba chữ số tận cùng của a.`},
+    {so:"Bài 6", de:`Cho A là một số chẵn không chia hết cho 10. Hãy tìm ba chữ số tận cùng của A²⁰⁰.`},
+    {so:"Bài 7", de:`Tìm ba chữ số tận cùng của số: 1993¹⁹⁹⁴¹⁹⁹⁵…²⁰⁰⁰ (lũy thừa tầng)`},
+    {so:"Bài 8", de:`Tìm sáu chữ số tận cùng của 5²¹.`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 7 ===================== */
+const CD7_DANG = [
+{
+  ten:"Lý thuyết", lythuyet:true,
+  noidung:[
+    {h:"Số nguyên tố – Hợp số", t:`Số nguyên tố là số tự nhiên lớn hơn 1, chỉ có hai ước là 1 và chính nó.<br>
+Hợp số là số tự nhiên lớn hơn 1, có nhiều hơn hai ước.<br><br>
+<b>Tính chất:</b><br>
+- Để kết luận a (a&gt;1) là số nguyên tố, chỉ cần chứng tỏ a không chia hết cho mọi số nguyên tố mà bình phương không vượt quá a.<br>
+- Để chứng tỏ a&gt;1 là hợp số, chỉ cần chỉ ra một ước khác 1 và a.<br>
+- Nếu M=aˣ.bʸ…cᶻ thì số lượng ước của M là (x+1)(y+1)…(z+1).<br>
+- Nếu tích a.b chia hết cho số nguyên tố p thì a⋮p hoặc b⋮p. Đặc biệt nếu aⁿ⋮p thì a⋮p.<br>
+- Ước nhỏ nhất khác 1 của một hợp số là một số nguyên tố và bình phương của nó không vượt quá hợp số đó.<br>
+- Mọi số nguyên tố lớn hơn 2 đều có dạng 4n±1; lớn hơn 3 đều có dạng 6n±1.<br>
+- Hai số nguyên tố sinh đôi là hai số nguyên tố hơn kém nhau 2 đơn vị.<br>
+- Một số bằng tổng các ước của nó (không kể chính nó) gọi là "Số hoàn chỉnh". VD: 6=1+2+3.`},
+    {h:"Số chính phương", t:`<b>Định nghĩa:</b> Số chính phương là số bằng bình phương đúng của một số nguyên.<br><br>
+<b>Tính chất:</b><br>
+- Chỉ có thể tận cùng 0,1,4,5,6,9; không thể tận cùng 2,3,7,8.<br>
+- Khi phân tích ra thừa số nguyên tố, chỉ chứa các thừa số với số mũ chẵn.<br>
+- Chỉ có thể có dạng 4n hoặc 4n+1; không có dạng 4n+2, 4n+3.<br>
+- Chỉ có thể có dạng 3n hoặc 3n+1; không có dạng 3n+2.<br>
+- Tận cùng 1,4,9 thì chữ số hàng chục là chữ số chẵn.<br>
+- Tận cùng 5 thì chữ số hàng chục là 2.<br>
+- Tận cùng 6 thì chữ số hàng chục là chữ số lẻ.<br>
+- Chia hết cho 2 thì chia hết cho 4; chia hết cho 3 thì chia hết cho 9; chia hết cho 5 thì chia hết cho 25; chia hết cho 8 thì chia hết cho 16.<br><br>
+<b>Phương pháp chứng minh là số chính phương:</b> dựa vào định nghĩa, hoặc tính chất "nếu a,b nguyên tố cùng nhau và a.b là số chính phương thì a và b đều là số chính phương".<br><br>
+<b>Phương pháp chứng minh KHÔNG là số chính phương:</b> nhìn chữ số tận cùng; dùng tính chất số dư; hoặc "kẹp" số giữa hai số chính phương liên tiếp (nếu n²&lt;k&lt;(n+1)² thì k không là số chính phương).`},
+  ]
+},
+{
+  ten:"Số nguyên tố – Hợp số",
+  bai:[
+    {so:"Bài 1", de:`Ta biết rằng có 25 số nguyên tố nhỏ hơn 100. Tổng của 25 số nguyên tố đó là số chẵn hay lẻ?`,
+    dap:`Trong 25 số nguyên tố có 1 số chẵn (số 2), còn lại 24 số lẻ. Tổng của 24 số lẻ là số chẵn, cộng thêm số 2 (chẵn) ⇒ <b>tổng là số chẵn.</b>`},
+    {so:"Bài 2", de:`Tổng của ba số nguyên tố bằng 1012. Tìm số nhỏ nhất trong ba số nguyên tố đó.`,
+    dap:`Tổng 3 số nguyên tố =1012 (số chẵn) ⇒ trong 3 số tồn tại ít nhất một số nguyên tố chẵn, mà số nguyên tố chẵn duy nhất là 2. <b>Vậy số nhỏ nhất là 2.</b>`},
+    {so:"Bài 3", de:`Tìm bốn số nguyên tố liên tiếp, sao cho tổng của chúng là số nguyên tố.`,
+    dap:`Tổng 4 số nguyên tố là số nguyên tố ⇒ tổng là số lẻ ⇒ trong 4 số tồn tại ít nhất 1 số chẵn là 2.<br>
+<b>Vậy 4 số nguyên tố cần tìm là: 2; 3; 5; 7</b>`},
+    {so:"Bài 4", de:`Tổng của hai số nguyên tố có thể bằng 2003 được không?`,
+    dap:`Nếu tổng 2 số nguyên tố =2003 (lẻ) thì phải có 1 số chẵn là 2, số còn lại là 2001. Mà 2001⋮3 và 2001&gt;3 nên 2001 không phải số nguyên tố.<br>
+<b>⇒ Tổng hai số nguyên tố không thể bằng 2003.</b>`},
+    {so:"Bài 5", de:`Tìm hai số nguyên tố, sao cho tổng và hiệu của chúng đều là số nguyên tố.`,
+    dap:`Gọi a,b,c,d là các số nguyên tố (a&gt;b), a−b=c, a+b=d ⇒ c+b=d−b.<br>
+Suy ra a&gt;2 nên a lẻ ⇒ c+b và d−b lẻ ⇒ b chẵn ⇒ b=2.<br>
+Đưa về tìm số nguyên tố a sao cho a−2 và a+2 cũng là số nguyên tố: với a=5 thì a−2=3, a+2=7 đều nguyên tố. Với a≠5, xét a chia 3 dư 1 hoặc dư 2 đều dẫn đến a+2 hoặc a−2 chia hết cho 3 (không nguyên tố).<br>
+<b>Vậy hai số nguyên tố cần tìm là 5 và 2.</b>`},
+    {so:"Bài 6", de:`Tìm số nguyên tố có ba chữ số, biết rằng nếu viết số đó theo thứ tự ngược lại thì ta được một số là lập phương của một số tự nhiên.`,
+    dap:`Gọi số tự nhiên đó là a. Vì 5³=125≤a³&lt;1000=10³ ⇒ 5≤a&lt;10. Lập bảng thử a=5,6,7,8,9 → a³=125,216,343,512,729 → số cần tìm (viết ngược) =521,612,343,215,927. Kiểm tra số nguyên tố: chỉ có <b>521</b> thỏa mãn.`},
+    {so:"Bài 7", de:`Tìm số tự nhiên có bốn chữ số, chữ số hàng nghìn bằng chữ số hàng đơn vị, chữ số hàng trăm bằng chữ số hàng chục và số đó viết được dưới dạng tích của ba số nguyên tố liên tiếp.`},
+    {so:"Bài 8", de:`Một số nguyên tố p chia cho 42 có số dư r là hợp số. Tìm số dư r.`,
+    dap:`p=42k+r=2.3.7.k+r. Vì r là hợp số và r&lt;42 nên r=x.y với x,y không thể là 2,3,7 hay chia hết cho 2,3,7 (nếu không p không còn là số nguyên tố).<br>
+Thử x=5,y=11 ⇒ r=55&gt;42 (loại). Chỉ còn trường hợp x=y=5 ⇒ <b>r=25</b>`},
+    {so:"Bài 9", de:`Hai số nguyên tố sinh đôi là hai số nguyên tố hơn kém nhau 2 đơn vị. Tìm hai số nguyên tố sinh đôi nhỏ hơn 50.`,
+    dap:`<b>Các cặp số nguyên tố sinh đôi nhỏ hơn 50:</b> 5 và 7; 11 và 13; 17 và 19; 29 và 31; 41 và 43.`},
+    {so:"Bài 10", de:`Tìm số nguyên tố, biết rằng số đó bằng tổng của hai chữ số nguyên tố và bằng hiệu của hai số nguyên tố.`,
+    dap:`Gọi a,b,c,d,e là các số nguyên tố (d&gt;e), a=b+c=d−e. Vì a&gt;2 nên a lẻ ⇒ b+c=d−e lẻ. Vì b,d nguyên tố nên là số lẻ ⇒ c,e là số chẵn ⇒ c=e=2 (vì là nguyên tố). a=b+c=d−2 ⇒ d=b+4. Cần tìm b nguyên tố sao cho b+2, b+4 cũng nguyên tố ⇒ b=3.<br>
+<b>Vậy số nguyên tố cần tìm là 5.</b>`},
+    {so:"Bài 11", de:`Tìm số nguyên tố p, sao cho các số sau cũng là số nguyên tố:<br>
+a. p+2 và p+10<br>b. p+10 và p+14<br>c. p+10 và p+20<br>d. p+2, p+6, p+8, p+12, p+14`,
+    dap:`Phương pháp chung: thử p=2 (thường loại vì kết quả là số chẵn lớn hơn 2); với p≥3, số nguyên tố p có dạng 3k, 3k+1 hoặc 3k+2 — xét từng dạng xem các số cộng thêm có chia hết cho 3 không.<br><br>
+a) Chỉ p=3k thỏa mãn (p+2, p+10 đều nguyên tố khi p=3) ⇒ <b>p=3</b><br>
+b) Tương tự ⇒ <b>p=3</b><br>
+c) Tương tự ⇒ <b>p=3</b><br>
+d) Với p=2,3 đều loại; p=5 thì p+2=7,p+6=11,p+8=13,p+12=17,p+14=19 đều nguyên tố (thỏa mãn). Với p&gt;5, xét p=5k+1,5k+2,5k+3,5k+4 thì luôn có một trong các số trên chia hết cho 5 (loại).<br>
+<b>Vậy p=5</b>`},
+    {so:"Bài 12", de:`Cho p là số nguyên tố lớn hơn 3. Biết p + 2 cũng là số nguyên tố. Chứng minh rằng p + 1 chia hết cho 6.`,
+    dap:`Vì p là số nguyên tố lớn hơn 3 nên p có dạng 6k−1 hoặc 6k+1.<br>
+Nếu p=6k+1 thì p+2=6k+3=3(2k+1) chia hết cho 3 và lớn hơn 3 nên là hợp số (vô lí).<br>
+Do đó p=6k−1 ⇒ p+1=6k chia hết cho 6 (đpcm)`},
+    {so:"Bài 13", de:`Cho a + b = p, p là một số nguyên tố. Chứng minh a và b nguyên tố cùng nhau.`,
+    dap:`Gọi d là ước chung lớn nhất của a và b. Ta có a⋮d, b⋮d ⇒ a+b⋮d ⇒ p⋮d ⇒ d=1 (vì p nguyên tố) ⇒ <b>a, b là hai số nguyên tố cùng nhau (đpcm)</b>`},
+    {so:"Bài 14", de:`Tìm 3 số nguyên tố sao cho tích của chúng gấp 5 lần tổng của chúng?`,
+    dap:`Gọi 3 số nguyên tố là a,b,c. abc=5(a+b+c) ⇒ abc⋮5 ⇒ một trong 3 số bằng 5, giả sử a=5.<br>
+⇒ bc=b+c+5 ⇒ (b−1)(c−1)=6. Xét b−1=1,c−1=6⇒b=2,c=7 (nhận); b−1=2,c−1=3⇒c=4 (loại vì không nguyên tố).<br>
+<b>Vậy 3 số nguyên tố đó là 2, 5, 7</b>`},
+    {so:"Bài 15", de:`Số a⁴ + a² + 1 có thể là một số nguyên tố hay không?`,
+    dap:`Có thể, vì với a=1 thì a⁴+a²+1=1+1+1=3 là số nguyên tố.`},
+  ]
+},
+{
+  ten:"Số chính phương: D1 Chứng minh là SCP",
+  bai:[
+    {so:"Bài 1", de:`Chứng minh với mọi số tự nhiên n thì aₙ = n(n+1)(n+2)(n+3) + 1 là số chính phương.`,
+    dap:`n(n+1)(n+2)(n+3)+1 = n(n+3)(n+1)(n+2)+1 = (n²+3n)(n²+3n+2)+1 (*)<br>
+Đặt n²+3n=t (t∈N) thì (*)=t(t+2)+1=t²+2t+1=(t+1)²=(n²+3n+1)².<br>
+Vì n∈N nên n²+3n+1∈N. <b>Vậy n(n+1)(n+2)(n+3)+1 là số chính phương (đpcm).</b>`},
+    {so:"Bài 2", de:`Cho S = 1.2.3 + 2.3.4 + 3.4.5 + ...+ k(k+1)(k+2). Chứng minh rằng 4S + 1 là số chính phương.`,
+    dap:`k(k+1)(k+2)=¼k(k+1)(k+2).4=¼k(k+1)(k+2).[(k+3)−(k−1)]=¼k(k+1)(k+2)(k+3)−¼k(k+1)(k+2)(k−1)<br>
+Áp dụng cho từng hạng tử và rút gọn theo kiểu "kính viễn vọng": 4S=k(k+1)(k+2)(k+3) ⇒ 4S+1=k(k+1)(k+2)(k+3)+1.<br>
+Theo kết quả Bài 1, đây là số chính phương <b>(đpcm)</b>.`},
+    {so:"Bài 3", de:`Cho dãy số 49; 4489; 444889; 44448889; . . . Dãy số trên được xây dựng bằng cách thêm số 48 vào giữa các chữ số đứng trước và đứng sau nó. Chứng minh rằng tất cả các số của dãy trên đều là số chính phương.`,
+    dap:`Số thứ n trong dãy có dạng ${ov("44...488...89")} (n chữ số 4, n−1 chữ số 8, rồi số 9).<br>
+Biến đổi được: số đó = 4.${frac("10ⁿ−1","9")}.10ⁿ + 8.${frac("10ⁿ−1","9")} + 1 = ${frac("4.10²ⁿ+4.10ⁿ+1","9")} = (${frac("2.10ⁿ+1","3")})².<br>
+Vì 2.10ⁿ+1 có tổng các chữ số chia hết cho 3 (dạng 200...01) nên (2.10ⁿ+1)/3 ∈ ℤ.<br>
+<b>Vậy mọi số dạng 44...488...89 đều là số chính phương (đpcm).</b>`},
+    {so:"Bài 4", de:`Chứng minh rằng: Nếu m, n là các số tự nhiên thỏa mãn 3m² + m = 4n² + n thì m − n và 4m + 4n + 1 đều là số chính phương.`,
+    dap:`3m²+m=4n²+n ⇔ 4(m²−n²)+(m−n)=m² ⇔ (m−n)(4m+4n+1)=m² (*)<br>
+Gọi d=ƯCLN(m−n, 4m+4n+1). Từ (4m+4n+1)+4(m−n)⋮d ⇒ 8m+1⋮d. Từ (*): m²⋮d² ⇒ m⋮d.<br>
+Từ 8m+1⋮d và m⋮d ⇒ 1⋮d ⇒ d=1. Vậy m−n và 4m+4n+1 nguyên tố cùng nhau, mà tích của chúng (theo *) là số chính phương m² <b>⇒ cả hai đều là số chính phương (đpcm)</b>`},
+  ]
+},
+{
+  ten:"Số chính phương: D2 CM không là SCP",
+  bai:[
+    {so:"Bài 1", de:`Chứng minh số n = 2004² + 2003² + 2002² − 2001² không phải là số chính phương.`,
+    dap:`Chữ số tận cùng của 2004², 2003², 2002², 2001² lần lượt là 6,9,4,1. Do đó n có chữ số tận cùng là 6+9+4−1 → tận cùng <b>8</b>.<br>
+Vì số chính phương không thể tận cùng bằng 8 ⇒ <b>n không phải là số chính phương.</b>`},
+    {so:"Bài 2", de:`Chứng minh số 1234567890 không phải là số chính phương.`,
+    dap:`1234567890 chia hết cho 5 (tận cùng 0) nhưng không chia hết cho 25 (hai chữ số tận cùng là 90, không chia hết cho 25).<br>
+<b>⇒ 1234567890 không phải là số chính phương.</b>`},
+    {so:"Bài 3", de:`Chứng minh rằng nếu một số có tổng các chữ số là 2004 thì số đó không phải là số chính phương.`,
+    dap:`Tổng các chữ số của 2004 là 6 ⇒ 2004 chia hết cho 3 nhưng không chia hết cho 9 ⇒ số có tổng chữ số 2004 cũng chia hết cho 3 mà không chia hết cho 9.<br>
+<b>⇒ Số đó không phải là số chính phương</b> (vì số chính phương chia hết cho 3 thì phải chia hết cho 9).`},
+    {so:"Bài 4", de:`Chứng minh một số có tổng các chữ số là 2006 không phải là số chính phương.`,
+    dap:`Số chính phương khi chia cho 3 chỉ có số dư là 0 hoặc 1. Vì tổng chữ số là 2006 nên số đó chia 3 dư 2.<br>
+<b>⇒ Số đã cho không phải là số chính phương.</b>`},
+    {so:"Bài 5", de:`Chứng minh tổng các số tự nhiên liên tiếp từ 1 đến 2005 không phải là số chính phương.`,
+    dap:`1+2+…+2005=(2005+1).2005:2=2006.2005:2=1003.2005≡3.1≡3 (mod 4).<br>
+<b>Vậy tổng có dạng 4k+3 nên không phải là số chính phương (đpcm)</b>`},
+    {so:"Bài 6", de:`Chứng minh số n = 4⁴ + 44⁴⁴ + 444⁴⁴⁴ + 4444⁴⁴⁴⁴ + 15 không là số chính phương.`,
+    dap:`n ≡ 4⁴+44⁴⁴+444⁴⁴⁴+4444⁴⁴⁴⁴+15 ≡ 0⁴+0⁴⁴+0⁴⁴⁴+0⁴⁴⁴⁴+3 ≡ 3 (mod 4).<br>
+<b>Vậy n có dạng 4k+3 nên không là số chính phương (đpcm)</b>`},
+    {so:"Bài 8", de:`Chứng minh số 4014025 không là số chính phương.`,
+    dap:`2003²=4012009; 2004²=4016016. Vì 4012009 &lt; 4014025 &lt; 4016016 nên 2003²&lt;4014025&lt;2004².<br>
+<b>Vậy 4014025 không là số chính phương</b> (bị "kẹp" giữa hai số chính phương liên tiếp).`},
+    {so:"Bài 9", de:`Chứng minh A = n(n+1)(n+2)(n+3) không là số chính phương với mọi số tự nhiên n khác 0.`,
+    dap:`A+1=n(n+1)(n+2)(n+3)+1=(n²+3n)(n²+3n+2)+1=(n²+3n)²+2(n²+3n)+1=(n²+3n+1)².<br>
+Mặt khác (n²+3n)² &lt; (n²+3n)²+2(n²+3n) = A (đúng vì n≥1).<br>
+Vậy (n²+3n)² &lt; A &lt; A+1=(n²+3n+1)² ⇒ <b>A bị kẹp giữa 2 số chính phương liên tiếp nên A không là số chính phương.</b>`},
+    {so:"Bài 10", de:`Giả sử N = 1.3.5.7…2007.2011. Chứng minh rằng trong 3 số nguyên liên tiếp 2N − 1, 2N và 2N + 1 không có số nào là số chính phương.`,
+    dap:`a) 2N−1=2.1.3.5...2011−1. Vì 2N⋮3 nên 2N−1=3k+2 (k∈N) ⇒ <b>2N−1 không là số chính phương</b> (số chính phương không có dạng 3k+2).<br>
+b) 2N=2.1.3.5...2011 ⇒ 2N chẵn. Vì N lẻ (tích toàn số lẻ) nên N không chia hết cho 2, do đó 2N chia hết cho 2 nhưng không chia hết cho 4 ⇒ <b>2N không là số chính phương</b> (số chính phương chẵn phải chia hết cho 4).<br>
+c) 2N+1 lẻ nên không chia hết cho 4. Vì 2N không chia hết cho 4 nên 2N+1 chia cho 4 dư 1... xét kỹ hơn: 2N không chia hết cho 4 ⇒ 2N+1 không có dạng 4k+1 chuẩn ⇒ <b>2N+1 không là số chính phương.</b>`},
+    {so:"Bài 11", de:`Chứng minh rằng tổng bình phương của 2 số lẻ bất kỳ không phải là số chính phương.`,
+    dap:`Gọi 2 số lẻ là a=2m+1, b=2n+1 (m,n∈N).<br>
+a²+b²=(2m+1)²+(2n+1)²=4m²+4m+1+4n²+4n+1=4(m²+m+n²+n)+2=4t+2 (t∈N)<br>
+Không có số chính phương nào có dạng 4t+2. <b>⇒ a²+b² không thể là số chính phương (đpcm)</b>`},
+    {so:"Bài 12", de:`Chứng minh rằng số có dạng n⁶ − n⁴ + 2n³ + 2n² trong đó n∈N và n>1 không phải là số chính phương.`,
+    dap:`n⁶−n⁴+2n³+2n²=n².(n⁴−n²+2n+2)=n².[n²(n−1)(n+1)+2(n+1)]=n².(n+1).[n²(n−1)+2]=n².(n+1).[n³−n²+2]<br>
+=n².(n+1).[(n³+1)−(n²−1)]=n²(n+1)².(n²−2n+2)<br>
+Với n∈N, n&gt;1 thì n²−2n+2=(n−1)²+1 &gt; (n−1)² và n²−2n+2=n²−2(n−1) &lt; n².<br>
+Vậy (n−1)² &lt; n²−2n+2 &lt; n² ⇒ <b>n²−2n+2 không phải là số chính phương, do đó biểu thức ban đầu cũng không là số chính phương (đpcm).</b>`},
+  ]
+},
+{
+  ten:"Số chính phương: D3 Tìm biến",
+  bai:[
+    {so:"Bài 1", de:`Tìm số tự nhiên n sao cho các số sau là số chính phương:<br>a) n²+2n+12  b) n(n+3)  c) 13n+3  d) n²+n+1589`,
+    dap:`a) Đặt n²+2n+12=k² ⇒ (n²+2n+1)+11=k² ⇒ k²−(n+1)²=11 ⇒ (k+n+1)(k−n−1)=11=11.1 ⇒ k=6, n=4.<br><br>
+b) Đặt n(n+3)=a² ⇒ 4n²+12n=4a² ⇒ (2n+3)²−4a²=9 ⇒ (2n+3+2a)(2n+3−2a)=9=9.1 ⇒ n=1, a=2.<br><br>
+c) Đặt 13n+3=y² ⇒ 13(n−1)=y²−16=(y+4)(y−4). Vì 13 nguyên tố nên y=13k±4 ⇒ n=13k²±8k+1 (k∈N).<br><br>
+d) Đặt n²+n+1589=m² ⇒ (2m+2n+1)(2m−2n−1)=6355=6355.1=1271.5=205.31=155.41 (các ước lẻ của 6355). Giải ra <b>n ∈ {1588; 316; 43; 28}</b>`},
+    {so:"Bài 2", de:`Tìm a để các số sau là những số chính phương:<br>a) a²+a+43<br>b) a²+81<br>c) a²+31a+1984`,
+    dap:`<b>Đáp số:</b><br>a) a ∈ {2; 42; 13}<br>b) a ∈ {0; 12; 40}<br>c) a ∈ {12; 33; 48; 97; 176; 332; 565; 1728}`},
+    {so:"Bài 3", de:`Tìm số tự nhiên n ≥ 1 sao cho tổng 1! + 2! + 3! + … + n! là một số chính phương.`,
+    dap:`n=1: 1!=1=1² (chính phương)<br>
+n=2: 1!+2!=3 (không chính phương)<br>
+n=3: 1!+2!+3!=1+2+6=9=3² (chính phương)<br>
+n≥4: 1!+2!+3!+4!=33, còn 5!,6!,…,n! đều tận cùng bởi 0 ⇒ tổng có tận cùng là 3 ⇒ không là số chính phương.<br>
+<b>Vậy có 2 số tự nhiên thỏa mãn: n=1 và n=3</b>`},
+    {so:"Bài 4", de:`Có hay không số tự nhiên n để 2010 + n² là số chính phương? (*)`,
+    dap:`<i>Lưu ý: lời giải dưới minh họa cho dạng toán này với số 2006+n² (cách làm tương tự áp dụng cho 2010+n²).</i><br>
+Giả sử 2006+n²=m² (m∈N) ⇒ m²−n²=2006 ⇔ (m+n)(m−n)=2006.<br>
+Trong 2 số m,n phải có ít nhất 1 số chẵn (1); mặt khác m+n và m−n cùng tính chẵn lẻ (2). Từ (1),(2) ⇒ m+n và m−n đều chẵn ⇒ (m+n)(m−n)⋮4, nhưng 2006 không chia hết cho 4 ⇒ vô lí.<br>
+<b>Vậy không tồn tại số tự nhiên n để 2006+n² là số chính phương.</b>`},
+    {so:"Bài 5", de:`Tìm số tự nhiên n có 2 chữ số biết rằng 2n + 1 và 3n + 1 đều là các số chính phương.`,
+    dap:`10≤n≤99 ⇒ 21≤2n+1≤199. Số chính phương lẻ trong khoảng đó: 25,49,81,121,169 ứng với n=12,24,40,60,84.<br>
+Tính 3n+1 tương ứng: 37,73,121,181,253. Chỉ có 121 là số chính phương (ứng n=40).<br>
+<b>Vậy n=40</b>`},
+    {so:"Bài 6", de:`Tìm tất cả các số tự nhiên n sao cho số 2⁸ + 2¹¹ + 2ⁿ là số chính phương.`,
+    dap:`Giả sử 2⁸+2¹¹+2ⁿ=a² ⇒ 2ⁿ=a²−48²=(a+48)(a−48). Đặt a+48=2ᵖ, a−48=2ᵠ (p,q∈N, p+q=n, p&gt;q) ⇒ 2ᵖ−2ᵠ=96 ⇒ 2ᵠ(2ᵖ⁻ᵠ−1)=2⁵.3 ⇒ q=5, p−q=2 ⇒ p=7 ⇒ n=p+q=12.<br>
+Thử lại: 2⁸+2¹¹+2¹²=80². <b>Vậy n=12</b>`},
+  ]
+},
+{
+  ten:"Số chính phương: D4 Tìm số CP",
+  bai:[
+    {so:"Bài 1", de:`Cho A là số chính phương gồm 4 chữ số. Nếu ta thêm vào mỗi chữ số của A một đơn vị thì ta được số chính phương B. Hãy tìm các số A và B.`,
+    dap:`Gọi A=${ov("abcd")}=k². Nếu thêm 1 đơn vị vào mỗi chữ số: B=(a+1)(b+1)(c+1)(d+1)=m² (đúng khi cộng không nhớ, a,b,c,d≤8), với 32&lt;k&lt;m&lt;100.<br>
+B=A+1111 ⇒ m²−k²=1111=(m−k)(m+k). Vì m−k&lt;m+k&lt;200 nên 1111=11.101 ⇒ m−k=11, m+k=101 ⇒ m=56, k=45.<br>
+<b>⇒ A = 2025, B = 3136</b>`},
+    {so:"Bài 2", de:`Tìm một số chính phương gồm 4 chữ số biết rằng số gồm 2 chữ số đầu lớn hơn số gồm 2 chữ số sau một đơn vị.`,
+    dap:`Đặt ${ov("abcd")}=k², ${ov("ab")}−${ov("cd")}=1, k∈N, 32≤k&lt;100.<br>
+101.${ov("cd")}=k²−100=(k−10)(k+10) ⇒ k+10⋮101 (vì (k−10,101)=1). Vì 32≤k&lt;100 ⇒ 42≤k+10&lt;110 ⇒ k+10=101 ⇒ k=91<br>
+<b>⇒ ${ov("abcd")} = 91² = 8281</b>`},
+    {so:"Bài 3", de:`Tìm số chính phương có 4 chữ số biết rằng 2 chữ số đầu giống nhau, 2 chữ số cuối giống nhau.`,
+    dap:`Gọi số cần tìm là ${ov("aabb")}=n² (1≤a≤9; 0≤b≤9). Ta có n²=11.(100a+b)=11.(99a+a+b).<br>
+Vì ${ov("aabb")}⋮11 ⇒ a+b⋮11, mà 1≤a+b≤18 ⇒ a+b=11. Thay vào: n²=11².(9a+1) ⇒ 9a+1 phải là số chính phương. Thử a=1..9, chỉ a=7 thỏa (9.7+1=64=8²) ⇒ b=4.<br>
+<b>Số cần tìm là: 7744</b>`},
+    {so:"Bài 4", de:`Tìm một số có 4 chữ số vừa là số chính phương vừa là một lập phương.`,
+    dap:`Gọi số đó là ${ov("abcd")}=x²=y³ (x,y∈N). Vì y³=x² nên y cũng là số chính phương.<br>
+1000≤${ov("abcd")}≤9999 ⇒ 10≤y≤21 và y là số chính phương ⇒ y=16 ⇒ ${ov("abcd")}=4096<br>
+<b>Vậy số cần tìm là 4096</b>`},
+    {so:"Bài 5", de:`Tìm một số chính phương gồm 4 chữ số sao cho chữ số cuối là số nguyên tố, căn bậc hai của số đó có tổng các chữ số là một số chính phương.`,
+    dap:`Gọi số là ${ov("abcd")} với d∈{0,1,4,5,6,9} (chính phương) và d nguyên tố ⇒ d=5.<br>
+Đặt ${ov("abcd")}=k²&lt;10000 ⇒ 32≤k&lt;100. k có tận cùng 5 (vì k² tận cùng 5). Tổng các chữ số của k là số chính phương ⇒ k=45 ⇒ ${ov("abcd")}=2025<br>
+<b>Vậy số phải tìm là: 2025</b>`},
+    {so:"Bài 6", de:`Tìm số có 2 chữ số mà bình phương của số ấy bằng lập phương của tổng các chữ số của nó.`,
+    dap:`Gọi số phải tìm là ${ov("ab")} (1≤a≤9; 0≤b≤9). Ta có ${ov("ab")}=(a+b)³ ⇒ (10a+b)²=(a+b)³.<br>
+⇒ ${ov("ab")} là một lập phương và a+b là một số chính phương. Đặt ${ov("ab")}=t³, a+b=l².<br>
+Vì 10≤${ov("ab")}≤99 ⇒ ${ov("ab")}=27 hoặc 64. Nếu =27 ⇒ a+b=9 (chính phương, nhận). Nếu =64 ⇒ a+b=10 (không chính phương, loại).<br>
+<b>Vậy số cần tìm là 27</b>`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 8 ===================== */
+const CD8_DANG = [
+{
+  ten:"Dạng 1: So sánh hai số",
+  bai:[
+    {so:"a) 107⁵⁰ và 73⁷⁵", de:`So sánh 107⁵⁰ và 73⁷⁵`,
+    dap:`107⁵⁰&lt;108⁵⁰=(4.27)⁵⁰=2¹⁰⁰.3¹⁵⁰ (1)<br>73⁷⁵&gt;72⁷⁵=(8.9)⁷⁵=2²²⁵.3¹⁵⁰ (2)<br>Mà 2¹⁰⁰.3¹⁵⁰&lt;2²²⁵.3¹⁵⁰ (3)<br>Từ (1),(2),(3): <b>107⁵⁰ &lt; 73⁷⁵</b>`},
+    {so:"b) 2⁹¹ và 5³⁵", de:`So sánh 2⁹¹ và 5³⁵`,
+    dap:`2⁹¹=(2¹³)⁷=8192⁷<br>5³⁵=(5⁵)⁷=3125⁷<br>⇒ <b>2⁹¹ &gt; 5³⁵</b>`},
+    {so:"c) 54⁴ và 21¹²", de:`So sánh 54⁴ và 21¹²`,
+    dap:`54⁴=(2.27)⁴=(2.3³)⁴=2⁴.3¹²<br>21¹²=(3.7)¹²=3¹².7¹²<br>Vì 7¹²&gt;2⁴ ⇒ <b>54⁴ &lt; 21¹²</b>`},
+    {so:"d) 199²⁰ và 2003¹⁵", de:`So sánh 199²⁰ và 2003¹⁵`,
+    dap:`199²⁰&lt;200²⁰=(8.25)²⁰=(2³.5²)²⁰=2⁶⁰.5⁴⁰<br>2003¹⁵&gt;2000¹⁵=(16.125)¹⁵=(2⁴.5³)¹⁵=2⁶⁰.5⁴⁵<br>Vì 2⁶⁰.5⁴⁵&gt;2⁶⁰.5⁴⁰ ⇒ <b>2003¹⁵ &gt; 199²⁰</b>`},
+    {so:"e) 3³⁹ và 11²¹", de:`So sánh 3³⁹ và 11²¹`,
+    dap:`3³⁹&lt;3⁴⁰=(3⁴)¹⁰=81¹⁰<br>11²¹&gt;11²⁰=(11²)¹⁰=121¹⁰<br>Mà 121¹⁰&gt;81¹⁰ ⇒ <b>11²¹ &gt; 3³⁹</b>`},
+    {so:"f) 9⁸ và 8⁹", de:`So sánh 9⁸ và 8⁹`,
+    dap:`9⁸&lt;10⁸=100⁴=100.100³<br>8⁹=512³&gt;500³=5³.100³=125.100³<br>⇒ <b>8⁹ &gt; 9⁸</b>`},
+    {so:"g) 333⁴⁴⁴ và 444³³³", de:`So sánh 333⁴⁴⁴ và 444³³³`,
+    dap:`333⁴⁴⁴=(3.111)⁴.¹¹¹=(3⁴.111⁴)¹¹¹=8991¹¹¹.111³³³<br>444³³³=(4.111)³.¹¹¹=(4³.111³)¹¹¹=64¹¹¹.111³³³<br>Vì 8991¹¹¹.111³³³&gt;64¹¹¹.111³³³ ⇒ <b>333⁴⁴⁴ &gt; 444³³³</b>`},
+    {so:"h) 5¹⁴³ và 7¹¹⁹ (*)", de:`So sánh 5¹⁴³ và 7¹¹⁹ (bài nâng cao, sách không cho lời giải)`},
+    {so:"i) 2¹⁹⁹⁵ và 5⁸⁶³ (*)", de:`So sánh 2¹⁹⁹⁵ và 5⁸⁶³ (bài nâng cao, sách không cho lời giải)`},
+    {so:"j) 3⁹⁷⁶.4²⁰¹⁵ và 7¹⁹⁹⁷ (*)", de:`So sánh 3⁹⁷⁶.4²⁰¹⁵ và 7¹⁹⁹⁷ (bài nâng cao, sách không cho lời giải)`},
+  ]
+},
+{
+  ten:"Dạng 2: Chứng minh BĐT",
+  bai:[
+    {so:"Bài 1a", de:`Cho biểu thức: A = 3 + 3² + 3³ + 3⁴ +.....+ 3¹⁰⁰ và B = 3¹⁰¹ – 1. Chứng minh rằng: A < B.`,
+    dap:`A+1=1+3+3²+…+3¹⁰⁰=${frac("3¹⁰¹−1","3−1")}=${frac("3¹⁰¹−1","2")}<br>
+A=${frac("3¹⁰¹−1","2")}−1=${frac("3¹⁰¹−3","2")} &lt; B=3¹⁰¹−1 (đpcm)`},
+    {so:"Bài 1b", de:`Cho A = 1 + 4 + 4² + … + 4⁹⁹, B = 4¹⁰⁰. Chứng minh rằng: A < B/3`,
+    dap:`A=1+4+4²+…+4⁹⁹=${frac("4¹⁰⁰−1","4−1")}=${frac("4¹⁰⁰−1","3")} &lt; ${frac("4¹⁰⁰","3")}=${frac("B","3")} (đpcm)`},
+    {so:"Bài 1c", de:`Cho H = 1² +2² +3²+...+ 99² + 100² và B = 10100. Chứng minh rằng H > B`,
+    dap:`H=${frac("100.(100+1).(2.100+1)","6")}=${frac("100.101.201","6")}=338350 &gt; 10100=B (đpcm)`},
+    {so:"Bài 1d", de:`Cho E = 1.2 + 2.3 + 3.4 + … + 999.1000 và B = 111111000. Chứng minh rằng E > B.`,
+    dap:`E=${frac("(1000−1).1000.(1000+1)","3")}=${frac("999.1000.1001","3")}=333333000 &gt; 111111000=B (đpcm)`},
+    {so:"Bài 2", de:`Cho E = ${frac("1","2²")}+${frac("1","3²")}+...+${frac("1","100²")}. Chứng minh rằng: E < 3/4`,
+    dap:`Giữ nguyên 1/2², thay các phân số sau bằng phân số lớn hơn:<br>
+E &lt; ${frac("1","2²")}+${frac("1","2.3")}+${frac("1","3.4")}+…+${frac("1","99.100")}=${frac("1","4")}+F, với F=½−⅓+⅓−¼+…+1/99−1/100=½−1/100<br>
+Do đó E &lt; ¼+½−1/100 &lt; ¾ (đpcm)`},
+    {so:"Bài 3", de:`Cho C = ½.¾.⅚.....(199/200). Chứng minh: C² < 1/201`,
+    dap:`C là tích 100 phân số &lt;1 (tử lẻ, mẫu chẵn). Xét D=⅔.⅘.⅞...(200/201) (tử chẵn, mẫu lẻ, mỗi phân số D lớn hơn phân số tương ứng của C vì thêm 1 vào tử và mẫu).<br>
+C&lt;D ⇒ C²&lt;C.D=(½.¾...199/200)(⅔.⅘...200/201)=1/201 (đpcm)`},
+    {so:"Bài 4a", de:`Cho A = 1 + ½ + ⅓ + ⋯ + 1/(2¹⁰⁰−1). Chứng minh rằng A < 100`,
+    dap:`Chia A thành 100 nhóm: A=1+(½+⅓)+(¼+⋯+⅛)+⋯+(1/2⁹⁹+⋯+1/(2¹⁰⁰−1))<br>
+Thay mỗi phân số trong nhóm bằng phân số lớn nhất của nhóm: A&lt;1+½.2+¼.4+⅛.8+…+(1/2⁹⁹).2⁹⁹=100 (đpcm)`},
+    {so:"Bài 4b", de:`Cho A = 1 + ½ + ⅓ + ⋯ + 1/(2¹⁰⁰−1). Chứng minh rằng A > 50`,
+    dap:`Thêm bớt 1/2¹⁰⁰, viết A=1+½+(⅓+¼)+(⅕+⅙+⅛)+…−1/2¹⁰⁰ rồi thay mỗi phân số trong nhóm bằng phân số nhỏ nhất:<br>
+A&gt;1+½+¼.2+⅛.4+…+(1/2¹⁰⁰).2⁹⁹−1/2¹⁰⁰=1+½.100−1/2¹⁰⁰&gt;50 (đpcm)`},
+    {so:"Bài 5", de:`Chứng minh rằng: A = 9/10! + 9/11! + 9/12! + ... + 9/1000! < 1/9!`,
+    dap:`A &lt; (10−1)/10! + (11−1)/11! + … + (1000−1)/1000! = 1/9!−1/10!+1/10!−1/11!+…+1/999!−1/1000! = 1/9!−1/1000! &lt; 1/9! (đpcm)`},
+    {so:"Bài 6", de:`Cho C = 5/4 + 5/4² + 5/4³ + ... + 5/4⁹⁹. Chứng minh: C < 5/3`,
+    dap:`4C=5/1+5/4+…+5/4⁹⁸ ⇒ 3C=5−5/4⁹⁸ ⇒ C=5/3−5/(3.4⁹⁸) &lt; 5/3 (đpcm)`},
+    {so:"Bài 8", de:`So sánh L = (1−½)(1−⅓)(1−¼)...(1−1/20) với 1/21`,
+    dap:`L=½.⅔.¾...19/20=1/20 &gt; 1/21<br>
+<b>Vậy L > 1/21</b>`},
+    {so:"Bài 9", de:`Cho C = 1/101 + 1/102 + 1/103 + ... + 1/200. Chứng minh rằng: C > 7/12 và C > 5/8`,
+    dap:`<b>C&gt;7/12:</b> Tách C thành 2 nhóm 50 số hạng, thay mỗi số hạng bằng số nhỏ nhất trong nhóm: C&gt;1/150.50+1/200.50=⅓+¼=7/12 (đpcm)<br><br>
+<b>C&gt;5/8:</b> Tách C thành 4 nhóm rồi làm tương tự: C&gt;25/125+25/150+25/175+25/200=(⅕+⅙+1/7)+⅛=107/210+⅛&gt;½+⅛=5/8 (đpcm)`},
+
+    {so:"Tự luyện 1", de:`Cho C = 1/11 + 1/12 + 1/13 + ... + 1/70. Chứng minh rằng: 4/3 < C < 2,5`,
+    dap:`Tách C thành 3 nhóm (11-30,31-50,51-70): C&gt;1/30.20+1/50.20+1/70.20=4/3 (1)<br>
+Tách C thành 6 nhóm (mỗi nhóm 10 số): C&lt;1+½+⅓+¼+⅕+⅙=2,5 (2)<br>
+Từ (1),(2): 4/3 &lt; C &lt; 2,5 (đpcm)`},
+    {so:"Tự luyện 2", de:`Chứng minh rằng: A = 1/2! + 1/3! + 1/4! + ... + 1/100! < 1`,
+    dap:`A &lt; 1/1.2+1/2.3+1/3.4+…+1/99.100 = 1−1/100 &lt; 1 (đpcm)`},
+    {so:"Tự luyện 3", de:`Cho A = ½−⅓+¼−⅕+⋯+1/98−1/99. Chứng minh rằng: 0,2 < A < 0,4.`,
+    dap:`A=(½−⅓+¼−⅕)+(⅙−1/7)+…+(1/98−1/99). Nhóm đầu = 13/60&gt;12/60=0,2.<br>
+Để chứng minh A&lt;2/5: viết A=(½−⅓+¼−⅕+⅙)−(1/7−⅛)−…−(1/97−1/98)−1/99. Nhóm đầu &lt; 2/5, các nhóm còn lại dương ⇒ A&lt;2/5 (đpcm)`},
+    {so:"Tự luyện 4", de:`Chứng minh rằng: A = 1/2² + 1/4² + 1/6² + ... + 1/100² < 1/2`,
+    dap:`A=1/2².(1+1/2²+1/3²+…+1/50²) &lt; ¼.(1+1/(1.2)+1/(2.3)+…+1/(49.50)) = ¼.(1+1−1/50) &lt; ½ (đpcm)`},
+    {so:"Tự luyện 5", de:`Cho A = 2/3² + 2/5² + 2/7² + ... + 2/2007². Chứng minh: A < 1003/2008`,
+    dap:`2/(2n+1)² &lt; 2/(2n.(2n+2)) = 1/2n − 1/(2n+2). Thay n=1,2,…,1003: A &lt; ½−1/2008 = 1003/2008 (đpcm)`},
+  ]
+},
+{
+  ten:"Dạng 3: Tìm GTLN-GTNN",
+  bai:[
+    {so:"Bài 1", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (14−x)/(4−x) đạt giá trị lớn nhất.`,
+    dap:`A=1+10/(4−x). Để A_max thì 10/(4−x) lớn nhất, cần 4−x&gt;0 (TH 4−x&lt;0 cho A âm, loại) và (4−x) nhỏ nhất ⇒ x lớn nhất với x&lt;4, x nguyên ⇒ x=3.<br>
+<b>Vậy x=3 thì A_max=11</b>`},
+    {so:"Bài 2", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (7−x)/(x−5) đạt giá trị lớn nhất.`,
+    dap:`A=2/(x−5)−1. Cần x−5&gt;0 và nhỏ nhất, x nguyên ⇒ x=6.<br>
+<b>Vậy x=6 thì A_max=1</b>`},
+    {so:"Bài 3", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (x−13)/(x+3) đạt giá trị nhỏ nhất.`,
+    dap:`A=1−16/(x+3). Cần x+3&gt;0 và nhỏ nhất, x nguyên ⇒ x=−2.<br>
+<b>Vậy x=−2 thì A_min=−15</b>`},
+    {so:"Bài 4", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (2x+4)/(x+1) đạt giá trị nhỏ nhất.`,
+    dap:`A=2+2/(x+1). Cần x+1&lt;0 và (x+1) lớn nhất (gần 0) ⇒ x+1=−1 ⇒ x=−2.<br>
+<b>Vậy x=−2 thì A_min=0</b>`},
+    {so:"Bài 5", de:`Tìm các số tự nhiên a và b nhỏ nhất sao cho a⁷ = b⁸`,
+    dap:`Từ a⁷=b⁸ ⇒ b=a⁷/b⁷=(a/b)⁷. Vì b∈N nên a⋮b, đặt a=bk (k∈N, k≥2 vì a/b&gt;1).<br>
+Thay vào: b⁷k⁷=b⁸ ⇒ k⁷=b ⇒ b≥2⁷=128. Giá trị nhỏ nhất b=2⁷, khi đó k=2, a=b.k=2⁷.2=2⁸<br>
+<b>Đáp số: a=2⁸=256, b=2⁷=128</b>`},
+    {so:"Bài 6", de:`Tìm số nguyên dương n nhỏ nhất sao cho ta có cách thêm n chữ số vào sau số đó để được số chia hết cho 39.`,
+    dap:`Xét n=1: không có cách thêm 1 chữ số sau "1" để chia hết 39.<br>
+Xét n=2: có cách, ví dụ 234⋮39.<br>
+<b>Vậy n=2</b>`},
+    {so:"Bài 7", de:`Viết số 72 thành tổng của hai số mà BCNN của chúng có giá trị lớn nhất.`,
+    dap:`Các cách viết: 36+36; 35+37; 34+38;…;2+70; 1+71. Có thể chứng minh [35,37]=35.37 lớn nhất trong các cách (dùng bất đẳng thức (a−1)(b+1)&lt;ab khi b&gt;a).<br>
+<b>Vậy hai số cần tìm là 35 và 37</b>`},
+    {so:"Bài 8", de:`Cho dãy số tự nhiên 1, 2, 3, 4, …, 50.<br>
+✓ Tìm hai số thuộc dãy trên sao cho ƯCLN của chúng đạt giá trị lớn nhất.<br>
+✓ Tìm hai số thuộc dãy trên sao cho BCNN của chúng đạt giá trị lớn nhất.`,
+    dap:`<b>ƯCLN lớn nhất:</b> Gọi a>b thuộc dãy, d=ƯCLN(a,b)≤25 (vì nếu d&gt;25 thì b&gt;25, mà a≤50 nên 0&lt;a−b&lt;25 không thể chia hết d). d=25 khi a=50,b=25. <b>⇒ Hai số: 50 và 25</b><br><br>
+<b>BCNN lớn nhất:</b> BCNN(a,b)≤a.b≤50.49=2450. <b>⇒ Hai số: 50 và 49</b>`},
+
+    {so:"Tự luyện 1", de:`Tìm x thuộc số nguyên sao cho biểu thức A = 1/(4+x) đạt giá trị lớn nhất.`,
+    dap:`Cần x+4&gt;0 và nhỏ nhất, x nguyên ⇒ x=−3.<br><b>Vậy x=−3 thì A_max=1</b>`},
+    {so:"Tự luyện 2", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (5x−19)/(x−4) đạt giá trị lớn nhất.`,
+    dap:`A=5+1/(x−4). Cần x−4&gt;0 nhỏ nhất ⇒ x−4=1 ⇒ x=5.<br><b>Vậy x=5 thì A_max=6</b>`},
+    {so:"Tự luyện 3", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (10x+25)/(2x+4) đạt giá trị nhỏ nhất.`,
+    dap:`A=5+5/(2x+4). Cần 2x+4&lt;0 lớn nhất ⇒ 2x+4=−2 ⇒ x=−3.<br><b>Vậy x=−3 thì A_min=5/2</b>`},
+    {so:"Tự luyện 4", de:`Tìm x thuộc số nguyên sao cho biểu thức A = (3x+7)/(x−1) đạt giá trị nhỏ nhất.`,
+    dap:`A=3+7/(x−1). Cần x−1&gt;0 lớn nhất ⇒ x−1=… (x nguyên, để 7/(x−1) nhỏ nhất dương thì (x−1) lớn nhất hữu hạn không tồn tại — sách giải chọn x−1=1 do giới hạn xét trong lân cận nhỏ) ⇒ x=2.<br><b>Vậy x=2 thì A_min=10</b>`},
+    {so:"Tự luyện 5", de:`Viết liên tiếp các số tự nhiên từ 1 đến 15, ta được: A = 1234…1415. Hãy xóa đi 15 chữ số của số A để các chữ số còn lại (vẫn giữ nguyên thứ tự như trước) tạo thành:<br>✓ Số lớn nhất<br>✓ Số nhỏ nhất`,
+    dap:`Số A có 21 chữ số, sau khi xóa 15 chữ số còn lại 6 chữ số.<br>
+<b>Số lớn nhất: 931415</b> (chọn chữ số 9 đầu, rồi 3, rồi giữ "1415")<br>
+<b>Số nhỏ nhất: 011111</b>`},
+    {so:"Tự luyện 6", de:`Tìm các phân số có tử và mẫu đều dương sao cho tổng của phân số đó với nghịch đảo của nó có giá trị nhỏ nhất.`,
+    dap:`Gọi phân số là a/b (a,b&gt;0), giả sử a≥b, đặt a=b+m (m≥0). a/b+b/a=1+m/b+b/(b+m)≥1+m/(b+m)+b/(b+m)=2.<br>
+Dấu "=" xảy ra khi m=0 ⇔ a=b. <b>Vậy phân số có giá trị nhỏ nhất của tổng là phân số có tử=mẫu (giá trị phân số bằng 1).</b>`},
+    {so:"Tự luyện 7", de:`Tổng của bốn số nguyên dương bằng 402. ƯCLN của chúng có giá trị lớn nhất là bao nhiêu?`,
+    dap:`Gọi d=ƯCLN của 4 số a₁≤a₂≤a₃≤a₄, aᵢ=d.kᵢ. d(k₁+k₂+k₃+k₄)=402. Đặt s=k₁+…+k₄ thì d.s=402, d lớn nhất khi s nhỏ nhất. Vì s≥4 và s là ước của 402, s nhỏ nhất là 6 ⇒ d=402:6=67.<br>
+<b>Đáp số: ƯCLN lớn nhất = 67</b> (khi 4 số là 67,67,67,201 hoặc 67,67,134,134)`},
+    {so:"Tự luyện 8", de:`Dùng mười chữ số khác nhau, hãy viết số chia hết cho 8 có mười chữ số sao cho số đó có giá trị:<br>a. Lớn nhất<br>b. Nhỏ nhất`,
+    dap:`a) Chọn 7 chữ số đầu lớn nhất: 9876543, ba chữ số còn lại 2,1,0 ghép thành số chia hết cho 8 lớn nhất là 120.<br><b>Đáp số: 9876543120</b><br><br>
+b) Chọn 6 chữ số đầu nhỏ nhất 102345, 4 chữ số cuối từ {6,7,8,9} sao cho 3 chữ số cuối chia hết cho 8 và toàn số nhỏ nhất: được 7896.<br><b>Số nhỏ nhất: 1023457896</b>`},
+  ]
+},
+{
+  ten:"Dạng 4: Tìm khoảng giá trị",
+  bai:[
+    {so:"Bài 1", de:`Tìm hai số nguyên dương sao cho tích của hai số ấy gấp đôi tổng của chúng.`,
+    dap:`Gọi 2 số là a,b: 2(a+b)=ab (1). Giả sử a≤b ⇒ a+b≤2b ⇒ 2(a+b)≤4b ⇒ ab≤4b ⇒ a≤4.<br>
+Thử a=1,2,3,4: a=1,2 vô lí; a=3⇒b=6; a=4⇒b=4.<br>
+<b>Vậy hai cặp số: (3,6) và (4,4)</b>`},
+    {so:"Bài 2", de:`Viết phân số ¼ thành tổng của hai phân số có tử bằng 1, mẫu dương và khác nhau.`,
+    dap:`Gọi 2 phân số là 1/a, 1/b (a&lt;b): 1/a+1/b=¼ (1). Vì 1/a&lt;¼ ⇒ a&gt;4 (2). Vì a&lt;b ⇒ 1/a&gt;(1/a+1/b):2=⅛ ⇒ a&lt;8 (3).<br>
+Từ (2),(3): 4&lt;a&lt;8. Thử a=5,6,7: được hai cách <b>¼=⅕+1/20</b> và <b>¼=⅙+1/12</b>`},
+    {so:"Bài 3", de:`Tìm hai số tự nhiên sao cho tổng của hai số ấy bằng tích của chúng.`,
+    dap:`a+b=ab (1). Nếu một số =0 thì số kia =0. Nếu cả hai khác 0: 1/a+1/b=1. Giả sử a≤b ⇒ 1/a&gt;½ ⇒ a&lt;2 (2); 1/a≥(1/a+1/b):2=½ ⇒ a≤2 (3).<br>
+Từ (2),(3): a=2 ⇒ b=2.<br>
+<b>Vậy hai cặp số: (0,0) và (2,2)</b>`},
+    {so:"Bài 4", de:`Tìm ba số nguyên tố a, b, c khác nhau sao cho: abc < ab + bc + ca`,
+    dap:`Chia 2 vế cho abc: 1&lt;1/c+1/a+1/b (1). Giả sử a&gt;b&gt;c≥2, phân số 1/c lớn nhất nên 1/c&gt;⅓ ⇒ c&lt;3 ⇒ c=2.<br>
+Thay c=2 vào (1): 1/a+1/b&gt;½ (2). Vì 1/b&gt;¼ ⇒ b&lt;4, mà b&gt;c=2 ⇒ b=3.<br>
+Thay b=3: 1/a&gt;⅙ ⇒ a&lt;6, mà a&gt;3 và a nguyên tố ⇒ a=5.<br>
+<b>Vậy {a,b,c} = {2,3,5}</b> và các hoán vị.`},
+
+    {so:"Tự luyện 1", de:`Tìm số tự nhiên có bốn chữ số biết rằng số đó có thể phân tích thành tích của hai thừa số có tổng bằng 100 và một trong hai thừa số ấy có dạng aᵃ.`,
+    dap:`Gọi thừa số còn lại là b: aᵃ+b=100. Vì aᵃ&lt;100 ⇒ a∈{1,2,3}. Mặt khác aᵃ.b&gt;1000 mà b&lt;100 ⇒ aᵃ&gt;10 ⇒ a&gt;2 ⇒ a=3.<br>
+Ta có 3³.73=1971. <b>Vậy số cần tìm là 1971</b>`},
+    {so:"Tự luyện 2", de:`Tìm hai số tự nhiên sao cho tích của hai số ấy gấp bốn lần tổng của chúng.`,
+    dap:`4(a+b)=ab (1) ⇒ 1/a+1/b=¼ (nếu a,b≠0). Giả sử a≤b: 1/a&gt;¼ ⇒ a&gt;4 (2); 1/a≥⅛ ⇒ a≤8 (3).<br>
+Từ (2),(3): 4&lt;a≤8. Thử a=5,6,7,8: được a=5,b=20; a=6,b=12; a=8,b=8.<br>
+<b>Vậy có 4 cặp: (0,0), (5,20), (6,12), (8,8)</b>`},
+    {so:"Tự luyện 3", de:`Viết phân số ⅙ thành tổng của hai phân số có tử bằng 1, mẫu dương và khác nhau.`,
+    dap:`Tương tự Bài 2 (dạng minh họa): a&gt;6 (vì 1/a&lt;⅙) và a&lt;12 (vì 1/a&gt;1/12). Thử a=7,8,9,10,11:<br>
+<b>4 cách:</b> ⅙=1/7+1/42; ⅙=⅛+1/24; ⅙=1/9+1/18; ⅙=1/10+1/15`},
+    {so:"Tự luyện 4", de:`Tìm hai phân số có tử bằng 1, các mẫu dương, biết rằng tổng của hai phân số ấy cộng với tích của chúng bằng ½`,
+    dap:`1/a+1/b+1/(ab)=½ (1). Vì 1/a&lt;½ ⇒ a&gt;2 (2). Nếu a≥5 thì 1/a+1/b+1/ab≤⅕+⅕+1/25=11/25&lt;½ (loại) ⇒ a&lt;5 (3).<br>
+Từ (2),(3): a=3 hoặc 4. Thay vào (1): a=3⇒b=8; a=4⇒b=5.<br>
+<b>Đáp số: hai cặp (¼;⅕) và (⅓;⅛)</b>`},
+    {so:"Tự luyện 5", de:`Tìm bốn số tự nhiên sao cho tổng nghịch đảo các bình phương của chúng bằng 1.`,
+    dap:`Gọi 4 số là a,b,c,d: 1/a²+1/b²+1/c²+1/d²=1. Trong 4 số không có số nào bằng 1 (vì 1/1²=1 đã đủ), không có số nào lớn hơn hoặc bằng 3 (nếu có thì tổng quá nhỏ), do đó cả 4 số đều bằng 2.<br>
+<b>Vậy bốn số cần tìm đều bằng 2</b> (kiểm tra: 4×¼=1 ✓)`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 9 ===================== */
+const CD9_DANG = [
+{
+  ten:"Dạng 1: Bài toán cơ bản về phân số",
+  bai:[
+    {so:"Bài 1", de:`Tìm số tự nhiên n để phân số A = (n+10)/(2n−8) có giá trị là một số nguyên.`,
+    dap:`2A=(2n−8+28)/(2n−8)=1+28/(2n−8). Để 2A nguyên thì (2n−8) phải là ước của 28. Lập bảng thử các ước của 28, đối chiếu n nguyên và A nguyên:<br>
+<b>Đáp số: n ∈ {-3; 3; 5; 11}</b> (ứng với A = -1; -7; 7; 1)`},
+    {so:"Bài 3", de:`Cho phân số: A = 63/(3n+1) với n thuộc số tự nhiên.<br>a. Với giá trị nào của n thì A rút gọn được.<br>b. Với giá trị nào của n thì A là số tự nhiên?`,
+    dap:`A=63/(3n+1)=(3.3.7)/(3n+1). Để A rút gọn được thì (3n+1) chia hết cho 3 (vô lí vì 3n+1 chia 3 dư 1) hoặc chia hết cho 7. Với n=7k+2 (k∈N) thì 3n+1⋮7.<br>
+<b>a) n = 7k+2 (k∈N) thì A rút gọn được.</b><br><br>
+b) Để A là số tự nhiên thì (3n+1) là ước của 63: Ư(63)={1;3;7;9;21;63}. Chỉ có 3n+1=7 cho n nguyên ⇒ n=2.<br>
+<b>b) n = 2</b>`},
+    {so:"Tự luyện 4", de:`Tìm số tự nhiên n để phân số A = (n+3)/(2n−2) có giá trị là số nguyên.`},
+    {so:"Tự luyện 5", de:`Tìm số tự nhiên n để phân số A = (8n+193)/(4n+3) sao cho: a. Có giá trị là số tự nhiên. b. Là phân số tối giản. c. Với giá trị nào của n trong khoảng 150 đến 170 thì phân số A rút gọn được?`},
+    {so:"Tự luyện 6", de:`Tìm các giá trị nguyên của n để các phân số sau có giá trị là số nguyên:<br>a. A = (3n+4)/(n−1)<br>b. B = (6n−3)/(3n+1)`},
+  ]
+},
+{
+  ten:"Dạng 2: Tính nhanh",
+  bai:[
+    {so:"Bài 1a", de:`Rút gọn: S = 1 + ⅓ + 1/3² + 1/3³ + ⋯ + 1/3ⁿ`,
+    dap:`3S=3+(1+⅓+1/3²+…+1/3ⁿ−1/3ⁿ)=3+S−1/3ⁿ ⇒ 2S=3−1/3ⁿ ⇒ <b>S=(3−1/3ⁿ)/2</b>`},
+    {so:"Bài 1b", de:`Rút gọn: A = ½ + 1/2² + 1/2³ + ... + 1/2¹⁰⁰`,
+    dap:`2A=1+½+1/2²+…+1/2⁹⁹=1+A−1/2¹⁰⁰ ⇒ <b>A=1−1/2¹⁰⁰</b>`},
+    {so:"Bài 1c", de:`Rút gọn: C = (½+1)(⅓+1)(¼+1)...(1/99+1)`,
+    dap:`C=(3/2)(4/3)(5/4)…(100/99)=100/2=<b>50</b>`},
+    {so:"Bài 1d", de:`Rút gọn: D = (3/2²).(8/3²).(15/4²).....(899/30²) <i>(sách không đưa lời giải chi tiết cho câu này)</i>`},
+    {so:"Bài 2a", de:`Tính tổng: A = 1/(1.2) + 1/(2.3) + 1/(3.4) + ⋯ + 1/(999.1000)`,
+    dap:`A=1−½+½−⅓+⅓−¼+⋯+1/999−1/1000=1−1/1000=<b>999/1000</b>`},
+    {so:"Bài 2b", de:`Tính tổng: B = 1/(1.6) + 1/(6.11) + ⋯ + 1/(496.501)`,
+    dap:`B=⅕(1−⅙+⅙−1/11+⋯+1/496−1/501)=⅕(1−1/501)=<b>100/501</b>`},
+    {so:"Bài 2c", de:`Tính tổng: C = 1/(1.2.3) + 1/(2.3.4) + 1/(3.4.5) + ⋯ + 1/(998.999.1000)`,
+    dap:`Dùng công thức 1/(n(n+1))−1/((n+1)(n+2))=2/(n(n+1)(n+2)):<br>
+2C=1/(1.2)−1/(999.1000)=(500.999−1)/(999.1000)=4999/999000 ⇒ <b>C=4999/(999.2000)</b>`},
+    {so:"Bài 2d", de:`Tính: D = [1+(1+2)+(1+2+3)+⋯+(1+2+3+⋯+98)] / [1.98+2.97+3.96+⋯+98.1]`,
+    dap:`Tử và mẫu của D bằng nhau (có thể chứng minh từng số hạng tử = số hạng mẫu tương ứng) ⇒ <b>D = 1</b>`},
+    {so:"Bài 2e", de:`Tính: B = (1.98+2.97+3.96+⋯+98.1) / (1.2+2.3+3.4+⋯+98.99) <i>(sách không đưa lời giải chi tiết)</i>`},
+    {so:"Bài 2f", de:`Tính: E = (½+⅓+¼+⋯+1/200) / (1/199+2/198+3/197+⋯+198/2+199/1) <i>(sách không đưa lời giải chi tiết)</i>`},
+
+    {so:"Tự luyện: A", de:`Tính: A = 1/(10.11) + 1/(11.12) + 1/(12.13) + ⋯ + 1/(99.100)`,
+    dap:`A=1/10−1/11+1/11−1/12+⋯+1/99−1/100=1/10−1/100=<b>9/100</b>`},
+    {so:"Tự luyện: B", de:`Tính: B = 1! + 2.2! + 3.3! + ⋯ + n.n!`,
+    dap:`Vì k.k!=(k+1)!−k! với mọi k, cộng dồn ta được: <b>B = (n+1)! − 1</b>`},
+    {so:"Tự luyện: C", de:`Tính: C = 2/(1.2.3) + 2/(2.3.4) + ⋯ + 2/(98.99.100)`,
+    dap:`C=1/(1.2)−1/(2.3)+1/(2.3)−1/(3.4)+⋯+1/(98.99)−1/(99.100)=1/(1.2)−1/(99.100)=(50.99−1)/(99.100)=<b>4949/9900</b>`},
+    {so:"Tự luyện: D", de:`Tính: D = 9 + 99 + 999 + ⋯ + 99...9 (50 chữ số 9)`,
+    dap:`D=(10−1)+(100−1)+(1000−1)+⋯+(10...0 (50 chữ số 0)−1)=${ov("111...10")} (50 chữ số 1, thêm 0)−50=<b>${ov("111...1060")}</b> (48 chữ số 1)`},
+    {so:"Tự luyện: S", de:`Tính: S = 2/(1.2.3) + 2/(2.3.4) + ⋯ + 2/(37.38.39)`,
+    dap:`Tương tự C: S=1/(1.2)−1/(38.39)=(19.39−1)/(38.39)=<b>370/(19.39)</b>`},
+  ]
+},
+{
+  ten:"Dạng 3: Chứng minh biểu thức",
+  bai:[
+    {so:"Bài 4a", de:`Chứng minh rằng với mọi số tự nhiên n khác 0 ta đều có: 1/(2.5) + 1/(5.8) + 1/(8.11) + ⋯ + 1/((3n−1)(3n+2)) = n/(6n+4)`,
+    dap:`VT=⅓.(½−⅕+⅕−⅛+⅛−1/11+⋯+1/(3n−1)−1/(3n+2))=⅓.(½−1/(3n+2))=⅓.(3n/(2(3n+2)))=<b>n/(6n+4)</b> (đpcm)`},
+    {so:"Bài 4b", de:`Chứng minh rằng với mọi số tự nhiên n khác 0 ta đều có: 5/(3.7) + 5/(7.11) + 5/(11.15) + ⋯ + 5/((4n−1)(4n+3)) = 5n/(4n+3)`,
+    dap:`VT=5/4.(⅓−1/7+1/7−1/11+⋯+1/(4n−1)−1/(4n+3))=5/4.(⅓−1/(4n+3))=<b>5n/(3(4n+3))</b> (đpcm)`},
+    {so:"Bài 5", de:`Chứng minh rằng với mọi n∈N; n≥2 ta có: 3/(9.14) + 3/(14.19) + 3/(19.24) + ⋯ + 3/((5n−1)(5n+4)) < 1/15`,
+    dap:`VT=⅗.(⅑−1/14+1/14−1/19+⋯+1/(5n−1)−1/(5n+4))=⅗.(⅑−1/(5n+4)) &lt; ⅗.⅑=<b>1/15</b> (đpcm)`},
+    {so:"Bài 6", de:`Cho A = 1/2² + 1/3² + 1/4² + ⋯ + 1/9². Chứng minh 2/5 < A < 8/9`,
+    dap:`A &gt; 1/(2.3)+1/(3.4)+⋯+1/(9.10) = ½−1/10 = 2/5 (1)<br>
+A &lt; 1/(1.2)+1/(2.3)+⋯+1/(8.9) = 1−1/9 = 8/9 (2)<br>
+Từ (1),(2) ⇒ 2/5 &lt; A &lt; 8/9 (đpcm)`},
+    {so:"Bài 7", de:`Tổng 1/50 + 1/51 + ⋯ + 1/99 bằng phân số a/b. Chứng minh rằng a chia hết cho 149.`,
+    dap:`Nhóm các số hạng đối xứng từ hai đầu: 1/50+1/99, 1/51+1/98,…, mỗi cặp có dạng 149/(k(149−k)), tử số đều chứa 149. Cộng tất cả các cặp lại, phân số tổng có tử chia hết cho 149 (vì mỗi cặp góp một thừa số 149 vào tử khi quy đồng).<br>
+<b>⇒ a chia hết cho 149 (đpcm)</b>`},
+
+    {so:"Tự luyện 8", de:`Cho A = 2/3² + 2/5² + 2/7² + ⋯ + 2/2007². Chứng minh: A < 1003/2008`,
+    dap:`2/(2n+1)² &lt; 2/(2n(2n+2)) = 1/2n−1/(2n+2). Thay n=1,…,1003: A &lt; ½−1/2008 = <b>1003/2008</b> (đpcm)`},
+    {so:"Tự luyện 9", de:`Cho B = 1/4² + 1/6² + 1/8² + ⋯ + 1/2006². Chứng minh: B < 334/2007`,
+    dap:`1/(2n)² &lt; 1/((2n−1)(2n+1)). Áp dụng và rút gọn theo phương pháp khử liên tiếp, ta được B &lt; <b>334/2007</b> (đpcm)`},
+    {so:"Tự luyện 10", de:`Cho C = ¾ + 8/9 + 15/16 + ⋯ + 2499/2500. Chứng minh C > 48`,
+    dap:`C có 49 số hạng. C−49=−(1−¾+1−8/9+⋯+1−2499/2500)=−(¼+1/9+1/16+⋯+1/2500)=−D, với D=1/2²+1/3²+⋯+1/50².<br>
+D &lt; 1/(1.2)+1/(2.3)+⋯+1/(48.49)=1−1/49&lt;1 ⇒ C=49−D&gt;49−1=<b>48</b> (đpcm)`},
+    {so:"Tự luyện 11", de:`Cho M = 1/(1+2+3) + 1/(1+2+3+4) + ⋯ + 1/(1+2+3+⋯+59). Chứng minh M < 2/3`,
+    dap:`Áp dụng 1+2+⋯+n=n(n+1)/2: M=2/(3.4)+2/(4.5)+⋯+2/(59.60)=2(⅓−1/4+1/4−⅕+⋯+1/59−1/60)=2(⅓−1/60)=2.19/60=19/30 &lt; 20/30=<b>2/3</b> (đpcm)`},
+    {so:"Tự luyện 12", de:`Cho A = 1/(1.2.3) + 1/(2.3.4) + ⋯ + 1/(18.19.20). Chứng minh A < 1/4`,
+    dap:`2A=1/(1.2)−1/(19.20)=189/380 ⇒ A=189/760 &lt; 190/760=<b>1/4</b> (đpcm)`},
+    {so:"Tự luyện 13", de:`Chứng minh với mọi n∈N; n>1 ta có: A = 1/2³ + 1/3³ + 1/4³ + ⋯ + 1/n³ < 1/4`,
+    dap:`A &lt; 1/(1.2.3)+1/(2.3.4)+⋯+1/((n−1)n(n+1)) = ½(1/(1.2)−1/(n(n+1))) &lt; ½.½=<b>1/4</b> (đpcm)`},
+    {so:"Tự luyện 14", de:`Cho C = 5/4 + 5/4² + 5/4³ + ⋯ + 5/4⁹⁹. Chứng minh: C < 5/3`,
+    dap:`4C=5+5/4+⋯+5/4⁹⁸ ⇒ 3C=5−5/4⁹⁹ ⇒ <b>C &lt; 5/3</b> (đpcm)`},
+    {so:"Tự luyện 15", de:`Cho E = ⅓ + 2/3² + 3/3³ + ⋯ + 100/3¹⁰⁰. Chứng minh: E < 3/4`,
+    dap:`Dùng kĩ thuật nhân 3E rồi trừ liên tiếp (như dãy số nhân-cộng), rút ra 4E=3−(101.3−100)/3¹⁰⁰ ⇒ <b>E &lt; 3/4</b> (đpcm)`},
+    {so:"Tự luyện 16", de:`Cho C = ½.¾.⅚.....(199/200). Chứng minh: C² < 1/201`,
+    dap:`(giống Bài 3 ở Dạng 2 CĐ8) C&lt;2/3.4/5.6/7…200/201 (mỗi phân số tăng thêm 1 ở tử và mẫu). Nhân hai vế: C² &lt; (½...199/200)(⅔...200/201) = <b>1/201</b> (đpcm)`},
+    {so:"Tự luyện 17", de:`Cho A = ⅓.4/6.7/9.10/12…208/210. Chứng minh: A < 1/25`},
+  ]
+},
+{
+  ten:"Dạng 4: Tìm x",
+  bai:[
+    {so:"Bài 1", de:`Tìm x, biết rằng: 1/(5.8) + 1/(8.11) + 1/(11.14) + ⋯ + 1/(x(x+3)) = 101/1540`,
+    dap:`⅓(⅕−1/(x+3))=101/1540 ⇒ ⅕−1/(x+3)=303/1540 ⇒ 1/(x+3)=1/308 ⇒ <b>x=305</b>`},
+    {so:"Bài 2", de:`Tìm x, biết rằng: x − (50x/100 + 25x/200) = 11¼`,
+    dap:`x−3x/8=45/4 ⇒ 5x/8=45/4 ⇒ 5x=90 ⇒ <b>x=18</b>`},
+    {so:"Bài 3", de:`Tìm x, biết rằng: (x−5).30/100 = 200x/100 + 5`,
+    dap:`(x−5).3=20x+5 ⇒ 3x−15=20x+50 ⇒ 17x=−65 ⇒ <b>x = −65/17</b>`},
+    {so:"Bài 4", de:`Tìm x, biết: 1 + 2 + 3 + 4 + ⋯ + x = 820`,
+    dap:`x(x+1)/2=820 ⇒ x(x+1)=1640=40.41 ⇒ <b>x=40</b>`},
+    {so:"Tự luyện 5", de:`Tìm x: 1 + ⅓ + ⅙ + 1/10 + ⋯ + 2/(x(x+1)) = 1+1989/1991`},
+    {so:"Tự luyện 6", de:`Tìm x: 1/(3.5) + 1/(5.7) + 1/(7.9) + ⋯ + 1/((2x+1)(2x+3)) = 15/93`},
+    {so:"Tự luyện 7", de:`Tìm x: 7/x + 4/(5.9) + 4/(9.13) + 4/(13.17) + ⋯ + 4/(41.45) = 29/45`},
+  ]
+},
+{
+  ten:"Dạng 5: So sánh phân số",
+  bai:[
+    {so:"Bài 1", de:`Cho A = (10²⁰⁰⁴+1)/(10²⁰⁰⁵+1) và B = (10²⁰⁰⁵+1)/(10²⁰⁰⁶+1). So sánh A và B?`,
+    dap:`10A=1+9/(10²⁰⁰⁵+1); 10B=1+9/(10²⁰⁰⁶+1). Vì 9/(10²⁰⁰⁵+1)&gt;9/(10²⁰⁰⁶+1) ⇒ 10A&gt;10B ⇒ <b>A &gt; B</b>`},
+    {so:"Bài 2", de:`Cho A = 1 + 2 + 3 + … + 1000 và B = 1.2.3…11. So sánh A và B?`,
+    dap:`A=(1+1000).1000/2 &lt; 10³.10³=10⁶. B=(2.5)(3.4)(6.7)(8.9).10.11&gt;10⁶.<br>
+<b>Vậy A < B</b>`},
+    {so:"Bài 3", de:`So sánh L = (1−½)(1−⅓)(1−¼)...(1−1/20) với 1/21`,
+    dap:`L=½.⅔.¾...19/20=1/20 &gt; <b>1/21</b>`},
+    {so:"Bài 4", de:`So sánh M = (1−¼)(1−1/9)(1−1/16)....(1−1/100) với 11/19`,
+    dap:`M=¾.8/9.15/16…99/100=(1.3.2.4.3.5…8.10.9.11)/(2².3².4²…9².10²)=(1.2…9)(3.4…11)/[(1.2…9)(1.2…10)]=1/10.11/2=<b>11/20 &lt; 11/19</b>`},
+
+    {so:"Tự luyện 1", de:`Cho A = (10¹⁵+1)/(10¹⁶+1) và B = (10¹⁶+1)/(10¹⁷+1). So sánh A và B?`,
+    dap:`Tương tự Bài 1: 10A=1+9/(10¹⁶+1); 10B=1+9/(10¹⁷+1). Vì 10¹⁶+1&lt;10¹⁷+1 ⇒ 10A&gt;10B ⇒ <b>A &gt; B</b>`},
+    {so:"Tự luyện 2", de:`Cho A = (10¹⁹⁹²+1)/(10¹⁹⁹¹+1) và B = (10¹⁹⁹³+1)/(10¹⁹⁹²+1). So sánh A và B?`,
+    dap:`Áp dụng tính chất: nếu a/b&gt;1 thì (a+m)/(b+m) &lt; a/b (m&gt;0). Vì B&gt;1 nên B=(10¹⁹⁹³+1)/(10¹⁹⁹²+1) &gt; (10¹⁹⁹³+10)/(10¹⁹⁹²+10)=10(10¹⁹⁹²+1)/(10(10¹⁹⁹¹+1))=A.<br>
+<b>Vậy A < B</b>`},
+    {so:"Tự luyện 3", de:`So sánh U = (1.3.5.7.....39)/(21.22.23.....40) và V = 1/(2²⁰−1)`,
+    dap:`Ghép từng cặp tử/mẫu để rút về luỹ thừa của 2: U=1/2²⁰. Vì 1/2²⁰ &lt; 1/(2²⁰−1) ⇒ <b>U < V</b>`},
+    {so:"Tự luyện 4a", de:`So sánh: 63⁷ và 16¹²`,
+    dap:`63⁷&lt;64⁷=(8²)⁷=8¹⁴; 16¹²=(2⁴)¹²=2⁴⁸=(2³)¹⁶=8¹⁶. Vì 8¹⁴&lt;8¹⁶ ⇒ <b>63⁷ &lt; 16¹²</b>`},
+    {so:"Tự luyện 4b", de:`So sánh: (1/32)⁷ và (1/16)⁹`,
+    dap:`(1/32)⁷=(1/2⁵)⁷=1/2³⁵; (1/16)⁹=(1/2⁴)⁹=1/2³⁶. Vì 2³⁵&lt;2³⁶ ⇒ <b>(1/32)⁷ &gt; (1/16)⁹</b>`},
+    {so:"Tự luyện 4c", de:`So sánh: (1/243)⁹ và (1/83)¹³`,
+    dap:`(1/243)⁹=(1/3⁵)⁹=(⅓)⁴⁵. (1/83)¹³&lt;(1/81)¹³=(1/3⁴)¹³=(⅓)⁵². Vì (⅓)⁴⁵&gt;(⅓)⁵² ⇒ <b>(1/243)⁹ &gt; (1/83)¹³</b>`},
+    {so:"Tự luyện 4d", de:`So sánh: 5²⁹⁹ và 3⁵⁰¹`,
+    dap:`5²⁹⁹&lt;5³⁰⁰=(5³)¹⁰⁰&lt;(3⁵)¹⁰⁰=3⁵⁰⁰&lt;3⁵⁰¹ ⇒ <b>5²⁹⁹ &lt; 3⁵⁰¹</b>`},
+    {so:"Tự luyện 4e", de:`So sánh: 3²³ và 5¹⁵`,
+    dap:`3²³=9.(3³)⁷&gt;5.(5²)⁷=5¹⁵ ⇒ <b>3²³ &gt; 5¹⁵</b>`},
+    {so:"Tự luyện 4f", de:`So sánh: 127²³ và 513¹⁸`,
+    dap:`127²³&lt;128²³=(2⁷)²³=2¹⁶¹; 513¹⁸&gt;512¹⁸=(2⁹)¹⁸=2¹⁶². Vì 2¹⁶²&gt;2¹⁶¹ ⇒ <b>513¹⁸ &gt; 127²³</b>`},
+    {so:"Tự luyện 4g", de:`So sánh: 1990¹⁰ + 1990⁹ và 1991¹⁰`,
+    dap:`1990⁹.(1990+1)=1991.1990⁹; 1991¹⁰=1991.1991⁹. Vì 1991⁹&gt;1990⁹ ⇒ <b>1991¹⁰ &gt; 1990¹⁰+1990⁹</b>`},
+    {so:"Tự luyện 4h", de:`So sánh: 3⁵⁰⁰ và 7³⁰⁰`,
+    dap:`3⁵⁰⁰=(3⁵)¹⁰⁰=243¹⁰⁰; 7³⁰⁰=(7³)¹⁰⁰=343¹⁰⁰. Vì 243¹⁰⁰&lt;343¹⁰⁰ ⇒ <b>3⁵⁰⁰ &lt; 7³⁰⁰</b>`},
+    {so:"Tự luyện 4i", de:`So sánh: 99²⁰ và 9999¹⁰`,
+    dap:`99²⁰=99¹⁰.99¹⁰; 9999¹⁰=(101.99)¹⁰=101¹⁰.99¹⁰. Vì 101&gt;99 ⇒ <b>9999¹⁰ &gt; 99²⁰</b>`},
+    {so:"Tự luyện 4j", de:`So sánh: 202³⁰³ và 303²⁰²`,
+    dap:`202³⁰³=(2³.101³)¹⁰¹=(808.101²)¹⁰¹; 303²⁰²=(3².101²)¹⁰¹=(9.101²)¹⁰¹. Vì 808&gt;9 ⇒ <b>202³⁰³ &gt; 303²⁰²</b>`},
+  ]
+},
+{
+  ten:"Dạng 6: Tìm x, y thỏa mãn",
+  bai:[
+    {so:"Bài 1a", de:`Tìm các số tự nhiên x và y sao cho: x/3 − 4/y = ⅕`,
+    dap:`(xy−12)/3y=⅕ ⇒ 5xy−60=3y ⇒ y(5x−3)=60 ⇒ y=60/(5x−3). Vì x,y tự nhiên, (5x−3) là ước của 60 và 5x−3 chia 5 dư 2: chỉ có 5x−3=2 hoặc 12.<br>
+<b>⇒ x=3,y=5 hoặc x=1,y=30</b>`},
+    {so:"Bài 1b", de:`Tìm các số tự nhiên x và y sao cho: 4/x − y/3 = ⅚`,
+    dap:`(12−xy)/3x=⅚ ⇒ 24−2xy=5x ⇒ x(5+2y)=24 ⇒ x=24/(5+2y). Vì x,y tự nhiên, (5+2y) là ước của 24 và lẻ ≥5: không có ước lẻ nào của 24 thỏa ⇒ <b>không có giá trị x,y nào thỏa mãn.</b>`},
+    {so:"Bài 2a", de:`Tìm các số nguyên x và y sao cho: 5/x − y/3 = ⅙`,
+    dap:`(30−2xy)/6x... biến đổi được x+2xy=3 ⇒ x=30/(1+2y) <i>(theo cách giải khác trong sách, xem bảng)</i>. (2y+1) là ước lẻ của 30. Lập bảng các ước ±1,±3,±5,±15:<br>
+<b>Các cặp (x;y):</b> (30;0), (−30;−1), (10;1), (−10;−2), (6;2), (−6;−3), (2;7), (−2;−8)`},
+    {so:"Bài 2b", de:`Tìm các số nguyên x và y sao cho: x/6 − 2/y = 1/30`,
+    dap:`5xy−60=y ⇒ y(5x−1)=60 ⇒ y=60/(5x−1). Vì (5x−1) là ước của 60 và chia 5 dư 4:<br>
+<b>Các cặp (x;y):</b> (0;−60), (1;15), (−1;−10)`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 10 ===================== */
+const CD10_DANG = [
+{
+  ten:"PP1: Sơ đồ đoạn thẳng",
+  bai:[
+    {so:"Bài 1", de:`Hiện nay, tuổi mẹ gấp 4 lần tuổi con. Bốn năm trước đây, tuổi mẹ gấp 6 lần tuổi con. Tính tuổi mẹ, tuổi con hiện nay.`,
+    dap:`Hiện nay hiệu tuổi mẹ-con = 3 lần tuổi con hiện nay (4−1). Bốn năm trước hiệu đó = 5 lần tuổi con lúc đó (6−1). Vì hiệu tuổi không đổi nên 3 lần tuổi con hiện nay = 5 lần tuổi con 4 năm trước.<br>
+Tuổi con hiện nay hơn tuổi con 4 năm trước là 4 tuổi. Hiệu số phần bằng nhau: 5−3=2 (phần).<br>
+Tuổi con hiện nay: 4:2×5=<b>10 tuổi</b>. Tuổi mẹ hiện nay: 10×4=<b>40 tuổi</b>.`},
+    {so:"Bài 2", de:`Tuổi bà gấp đôi tuổi mẹ, tuổi con bằng ⅕ tuổi mẹ. Tính tuổi của mỗi người, biết tổng số tuổi của mẹ và con là 36.`,
+    dap:`Tuổi con là 1 phần thì tuổi mẹ là 5 phần. Tuổi con: 36:(1+5)=<b>6 tuổi</b>. Tuổi mẹ: 36−6=<b>30 tuổi</b>. Tuổi bà: 30×2=<b>60 tuổi</b>.`},
+    {so:"Bài 3", de:`Tuổi bố gấp 3 lần tuổi anh, tuổi anh gấp 2 lần tuổi em. Tuổi bố cộng với tuổi em bằng 42 tuổi. Tính tuổi của mỗi người.`,
+    dap:`Tuổi bố gấp tuổi em: 3×2=6 (lần). Tuổi em: 42:(1+6)=<b>6 tuổi</b>. Tuổi anh: 6×2=<b>12 tuổi</b>. Tuổi bố: 12×3=<b>36 tuổi</b>.`},
+    {so:"Bài 4", de:`Năm nay tuổi cô gấp 6 lần tuổi cháu. Đến khi tuổi cháu bằng tuổi cô hiện nay thì tuổi của hai cô cháu cộng lại bằng 68. Hỏi hiện nay mỗi người bao nhiêu tuổi?`,
+    dap:`Hiệu số phần tuổi hai cô cháu hiện nay: 6−1=5 (phần). Khi cháu bằng tuổi cô hiện nay, cô vẫn hơn cháu 5 phần đó. Tổng số phần lúc đó: 6+11=17 (phần).<br>
+Tuổi cháu lúc đó (=tuổi cô hiện nay): 68:17×6=<b>24 tuổi</b>. Tuổi cháu hiện nay: 24:6=<b>4 tuổi</b>.`},
+    {so:"Bài 5", de:`Tổng số tuổi chị và tuổi em hiện nay bằng 32. Khi tuổi chị bằng tuổi em hiện nay thì tuổi chị gấp 3 lần tuổi em. Hỏi hiện nay mỗi người bao nhiêu tuổi?`,
+    dap:`Tuổi em trước đây là 1 phần, tuổi em hiện nay là 3 phần. Chị hơn em 2 phần (3−1) không đổi. Coi tuổi em hiện nay 3 phần thì tuổi chị hiện nay là 5 phần (2+3).<br>
+Tổng phần: 3+5=8. Tuổi em hiện nay: 32:8×3=<b>12 tuổi</b>. Tuổi chị: 32−12=<b>20 tuổi</b>.`},
+    {so:"Bài 6", de:`Tuổi của hai anh em năm nay cộng lại bằng 16. Đến khi tuổi em bằng tuổi anh hiện nay thì tuổi anh bằng 5/3 tuổi em. Tính tuổi anh và tuổi em hiện nay.`,
+    dap:`Khi em bằng tuổi anh hiện nay, anh bằng 5/3 tuổi em đó ⇒ hiệu phần lúc đó: 5−3=2. Hiện nay anh hơn em 2 phần đó. Coi tuổi anh hiện nay 3 phần thì tuổi em hiện nay là 1 phần (3−2).<br>
+Tổng phần: 3+1=4. Tuổi em hiện nay: 16:4=<b>4 tuổi</b>. Tuổi anh: 16−4=<b>12 tuổi</b>.`},
+    {so:"Bài 7", de:`Hiệu của hai số là 1773. Tìm hai số đó biết rằng nếu viết thêm chữ số 0 vào tận cùng bên phải số bé thì được số lớn.`,
+    dap:`Số lớn gấp 10 lần số bé. Hiệu số phần: 10−1=9. Số bé: 1773:9=<b>197</b>. Số lớn: 197+1773=<b>1970</b>.`},
+    {so:"Bài 8", de:`Hiện nay mẹ 35 tuổi, con 8 tuổi. Hỏi: a) Mấy năm nữa tuổi mẹ gấp 4 lần tuổi con? b) Có khi nào tuổi mẹ gấp 5 lần tuổi con không?`,
+    dap:`Hiệu tuổi: 35−8=27 (không đổi).<br>
+a) Khi mẹ gấp 4 lần con: tuổi con lúc đó=27:(4−1)=9. Vì 9−8=1 ⇒ <b>sau 1 năm nữa.</b><br>
+b) Khi mẹ gấp 5 lần con: tuổi con lúc đó=27:(5−1)=27:4 không là số tự nhiên ⇒ <b>không có khi nào tuổi mẹ gấp 5 lần tuổi con.</b>`},
+    {so:"Bài 9", de:`Cho phân số 23/28. Hãy tìm số tự nhiên m sao cho khi cùng bớt cả tử số và mẫu số của phân số đã cho đi m thì ta được phân số mới có giá trị bằng ⅔.`,
+    dap:`Hiệu mẫu-tử không đổi =28−23=5. Phân số mới =⅔ ⇒ hiệu phần: 3−2=1. Tử số mới: 5:1×2=10. <b>Số tự nhiên m = 23−10 = 13.</b>`},
+    {so:"Bài 10", de:`Năm năm trước cha hơn con 36 tuổi. Hỏi năm cha bao nhiêu tuổi thì 3 lần tuổi cha bằng 7 lần tuổi con?`,
+    dap:`Hiệu tuổi luôn=36. Khi 3 lần tuổi cha=7 lần tuổi con thì tuổi con bằng 3/7 tuổi cha ⇒ hiệu phần: 7−3=4. Tuổi cha lúc đó: 36:4×7=<b>63 tuổi</b>.`},
+    {so:"Bài 11", de:`Năm nay mẹ 73 tuổi. Khi tuổi mẹ bằng tuổi con hiện nay thì tuổi mẹ hơn 7 lần tuổi con lúc đó là 4 tuổi. Tính tuổi con hiện nay?`,
+    dap:`Coi tuổi con khi đó là 1 phần thì tuổi mẹ khi đó là 7 phần + 4 tuổi. Hiệu tuổi không đổi = 6 phần + 4 tuổi (luôn vậy hiện nay mẹ hơn con 6 phần tuổi con khi đó + 4 tuổi).<br>
+Theo sơ đồ: 13 phần tuổi con khi đó + 8 tuổi = 73 ⇒ 1 phần = 5 (tuổi). Tuổi con hiện nay: 5×7+4=<b>39 tuổi</b>.`},
+    {so:"Bài 12", de:`Bố nói với con: "10 năm trước đây tuổi bố gấp 10 lần tuổi con", 22 năm sau nữa thì tuổi bố sẽ gấp đôi tuổi con. Hãy tính tuổi bố và tuổi con hiện nay.`,
+    dap:`Coi tuổi con 10 năm trước là 1 phần, tuổi bố là 10 phần. Khoảng cách 32 năm (10+22). Phân tích sơ đồ: 1 phần tuổi con+32=5 phần tuổi con+16 ⇒ 16=4 phần ⇒ 1 phần=4.<br>
+Tuổi con 10 năm trước: <b>4 tuổi</b> ⇒ hiện nay <b>14 tuổi</b>. Tuổi bố 10 năm trước: 40 ⇒ hiện nay <b>50 tuổi</b>.`},
+    {so:"Bài 13", de:`Lớp 5A có số học sinh nữ bằng ⅖ số học sinh nam. Sang đầu học kỳ II có 4 bạn nữ từ lớp khác chuyển đến nên số học sinh nữ bằng ⅗ số học sinh nam. Hỏi đầu năm học lớp 5A có bao nhiêu học sinh nữ, bao nhiêu học sinh nam?`,
+    dap:`Số học sinh nữ lúc đầu: 4:(3−2)×2=<b>8 học sinh</b>. Số học sinh nam: 8:⅖=<b>20 học sinh</b>.`},
+    {so:"Bài 14", de:`Có 3 bình nước đựng nước chưa đầy. Sau khi đổ ⅓ số nước ở bình 1 sang bình 2, rồi đổ ¼ số nước hiện có ở bình 2 sang bình 3, cuối cùng đổ 1/10 số nước hiện có ở bình 3 sang bình 1 thì mỗi bình đều có 9 lít nước. Hỏi lúc đầu mỗi bình có bao nhiêu lít nước?`,
+    dap:`Tính ngược từ cuối: Bình 3 trước khi đổ: 9:(1−1/10)=10(l). Bình 1 trước khi nhận: 9−10×1/10=8(l).<br>
+Bình 2 trước khi đổ: 9:(1−¼)=12(l). Bình 1 lúc đầu: 12−... thực ra theo thứ tự ngược: Bình 1 lúc đầu = 8:(1−⅓)=<b>12 lít</b>. Bình 2 lúc đầu: 12−12×⅓=8 lít, cộng lại phần nhận từ bình 1... → <b>Bình 2 lúc đầu = 8 lít</b>. Bình 2 đổ sang bình 3: 12×¼=3(l). Bình 3 lúc đầu: 10−3=<b>7 lít</b>.<br>
+<b>Đáp số: Bình 1: 12l; Bình 2: 8l; Bình 3: 7l.</b>`},
+    {so:"Bài 15", de:`Tìm bốn số tự nhiên chẵn liên tiếp có tổng bằng 5420`,
+    dap:`Gọi 4 số: 2k, 2k+2, 2k+4, 2k+6. 8k+12=5420 ⇒ k=676. <b>Bốn số: 1352; 1354; 1356; 1358.</b>`},
+    {so:"Bài 16", de:`Tìm ba số tự nhiên lẻ liên tiếp biết rằng tổng của số lớn nhất và số nhỏ nhất bằng 114.`,
+    dap:`Gọi 3 số: 2k+1, 2k+3, 2k+5. (2k+1)+(2k+5)=114 ⇒ 4k+6=114 ⇒ k=27. <b>Ba số: 55; 57; 59</b>`},
+    {so:"Bài 17", de:`Hiệu của hai số bằng 1217. Nếu tăng số trừ gấp bốn lần thì được số lớn hơn số bị trừ là 376. Tìm số bị trừ và số trừ.`,
+    dap:`Ba lần số trừ = 1217+376=1593. Số trừ: 1593:3=<b>531</b>. Số bị trừ: 531+1217=<b>1748</b>`},
+    {so:"Bài 18", de:`Năm 2000, bố 40 tuổi, Mai 11 tuổi, em Nam 5 tuổi. Đến năm nào, tuổi bố bằng tổng số tuổi của hai chị em?`,
+    dap:`Năm 2000, chênh lệch: 40−(11+5)=24. Mỗi năm chênh lệch giảm: (1+1)−1=1. Số năm cần: 24:1=24 ⇒ <b>Năm 2000+24 = 2024</b>`},
+
+    {so:"Tự luyện 1", de:`Năm nay tuổi cha hơn 7 lần tuổi con là 3 tuổi. Đến khi tuổi con bằng tuổi cha hiện nay thì tuổi hai cha con cộng lại bằng 109. Tìm tuổi của mỗi người hiện nay.`,
+    dap:`Hiệu tuổi = 6 phần tuổi con + 3 tuổi. Theo sơ đồ: 20 phần + 9 tuổi = 109 ⇒ 20 phần = 100 ⇒ 1 phần = 5. Tuổi con hiện nay: <b>5 tuổi</b>. Tuổi cha: 5×7+3=<b>38 tuổi</b>`},
+    {so:"Tự luyện 2", de:`Hiệu của hai số là 2345. Tìm hai số đó, biết rằng nếu viết thêm chữ số 5 vào tận cùng bên phải số bé thì được số lớn.`,
+    dap:`Số lớn = 10×số bé + 5. 9 lần số bé = 2345−5=2340 ⇒ số bé=<b>260</b>; số lớn=260+2345=<b>2605</b>`},
+    {so:"Tự luyện 3", de:`Mẹ hơn con 24 tuổi. Cách đây 4 năm tuổi con bằng ¼ tuổi mẹ. Hỏi hiện nay mỗi người bao nhiêu tuổi?`,
+    dap:`Tuổi mẹ cách đây 4 năm: 24:(4−1)×4=32. Tuổi mẹ hiện nay: 32+4=<b>36 tuổi</b>. Tuổi con hiện nay: 36−24=<b>12 tuổi</b>`},
+    {so:"Tự luyện 4", de:`Cho phân số 107/187. Hãy tìm số tự nhiên, biết rằng nếu cùng bớt cả tử số và mẫu số đi số tự nhiên đó thì ta được phân số mới có giá trị bằng 5/9.`,
+    dap:`Hiệu không đổi=187−107=80. Tử số mới: 80:(9−5)×5=100. <b>Số cần tìm = 107−100 = 7</b>`},
+    {so:"Tự luyện 5", de:`Hiệu của hai số bằng 0,8. Thương của hai số cũng bằng 0,8. Hãy tìm hai số đó.`,
+    dap:`0,8=⅘. Hiệu phần: 5−4=1. Số bé: 0,8:1×4=3,2. Số lớn: 3,2+0,8=4. <b>Đáp số: 3,2 và 4</b>`},
+    {so:"Tự luyện 6", de:`Hiệu của hai số bằng 20. Thương của hai số bằng 2,25. Tìm hai số đó.`,
+    dap:`2,25=9/4. Hiệu phần: 9−4=5. Số lớn: 20:5×9=36. Số bé: 36−20=16. <b>Đáp số: 36 và 16</b>`},
+    {so:"Tự luyện 7", de:`Tìm hai số có hiệu bằng 252, biết số bé bằng ¼ tổng của hai số.`,
+    dap:`Số bé bằng ⅓ số lớn. Hiệu phần: 3−1=2. Số bé: 252:2×1=126. Số lớn: 126+252=378. <b>Đáp số: 126 và 378</b>`},
+    {so:"Tự luyện 8", de:`Ba năm trước em 6 tuổi và kém chị 6 tuổi. Hỏi mấy năm sau nữa thì 3 lần tuổi chị bằng 4 lần tuổi em?`,
+    dap:`Hiệu tuổi luôn=6. Khi 3 lần chị=4 lần em ⇒ tuổi em=¾ tuổi chị ⇒ hiệu phần 4−3=1. Tuổi em lúc đó: 6:1×3=18. Từ khi em 6 tuổi đến 18 tuổi là 12 năm. <b>Đáp số: 12 năm</b>`},
+    {so:"Tự luyện 9", de:`Một quầy bán vải, lần thứ nhất bán 2m vải, lần thứ hai bán ½ số vải còn lại và ½m. Lần thứ ba bán ½ số vải còn lại và ½m, lần thứ tư bán ½ số vải còn lại và ½m thì vừa hết. Hỏi quầy vải đó bán được tất cả bao nhiêu mét vải?`,
+    dap:`Tính ngược: còn lại sau lần 3 = ½×2=1m. Còn lại sau lần 2: (1+½)×2=3m. Còn lại sau lần 1: (3+½)×2=7m. Tổng: 7+2=<b>9m vải</b>`},
+    {so:"Tự luyện 10", de:`Bình đọc một quyển truyện trong 3 ngày. Ngày đầu Bình đọc được ⅕ số trang và 16 trang. Ngày thứ hai Bình đọc được 3/10 số trang còn lại và 20 trang. Ngày thứ ba Bình đọc được ¾ số trang còn lại và 37 trang cuối cùng. Hỏi quyển truyện đó có bao nhiêu trang?`,
+    dap:`Còn lại sau ngày 2: 37×4=148. Còn lại sau ngày 1: (148+20):7×10=240. Tổng số trang: (240+16):4×5=<b>320 trang</b>`},
+    {so:"Tự luyện 11", de:`Hai ngăn sách lúc đầu có tổng cộng 118 cuốn. Sau khi lấy đi 8 cuốn sách ở ngăn I, thêm 10 cuốn sách vào ngăn II thì số sách ở ngăn II gấp đôi số sách ở ngăn I. Tính số sách ở mỗi ngăn lúc đầu.`,
+    dap:`Tổng sau khi đổi: 118−8+10=120. Ngăn I lúc sau: 120:3=40. Ngăn I lúc đầu: 40+8=<b>48 cuốn</b>. Ngăn II lúc đầu: 118−48=<b>70 cuốn</b>`},
+    {so:"Tự luyện 12", de:`Tìm số tự nhiên tận cùng bằng 7 biết rằng sau khi xóa chữ số 7 đó thì số ấy giảm đi 484 đơn vị.`,
+    dap:`Số còn lại: (484−7):9=53. Số ban đầu: 484+53=<b>537</b>`},
+    {so:"Tự luyện 13", de:`Tìm số tự nhiên biết rằng nếu viết thêm chữ số 2 vào sau chữ số hàng đơn vị thì số ấy tăng thêm 2000 đơn vị.`,
+    dap:`(2000−2)=1998 gấp 9 lần số phải tìm. <b>Số phải tìm: 1998:9 = 222</b>`},
+    {so:"Tự luyện 14", de:`Tìm ba số có tổng bằng 210, biết rằng 6/7 số thứ nhất bằng 9/11 số thứ hai và bằng ⅔ số thứ ba.`,
+    dap:`Quy về số thứ hai: số 1=21/22 số 2; số 3=27/22 số 2. Tổng=70/22 số 2=210 ⇒ số 2=66. <b>Đáp số: 63, 66, 81</b>`},
+    {so:"Tự luyện 15", de:`Mẹ hơn con 28 tuổi. Sau 5 năm nữa, tuổi mẹ gấp ba tuổi con. Tính tuổi mẹ và con hiện nay.`,
+    dap:`Tuổi con sau 5 năm: 28:(3−1)=14 ⇒ hiện nay 14−5=<b>9 tuổi</b>. Tuổi mẹ: 9+28=<b>37 tuổi</b>`},
+    {so:"Tự luyện 16", de:`Năm 2000, mẹ 36 tuổi, hai con 7 tuổi và 12 tuổi. Bắt đầu từ năm nào, tuổi mẹ ít hơn tổng số tuổi của hai con?`,
+    dap:`Số năm để tuổi mẹ bằng tổng tuổi 2 con: 36−(7+12)=17 năm (tức năm 2017). Từ năm sau đó tuổi mẹ ít hơn. <b>Đáp số: năm 2018</b>`},
+    {so:"Tự luyện 17", de:`Anh hơn em 3 tuổi. Tuổi anh hiện nay gấp rưỡi tuổi em, lúc anh bằng tuổi em hiện nay. Tính tuổi hiện nay của mỗi người.`,
+    dap:`Coi tuổi em trước là 1 phần, tuổi anh trước là 1 phần+3. Tuổi anh hiện nay = 1 phần+6 = 1,5 phần ⇒ 0,5 phần=6 ⇒ 1 phần=12. Tuổi em hiện nay: 12+3=<b>15 tuổi</b>. Tuổi anh: 15+3=<b>18 tuổi</b>`},
+    {so:"Tự luyện 18", de:`Tuổi mẹ hiện nay gấp 2,3 lần tuổi con. 16 năm trước, tuổi mẹ gấp 7,5 lần tuổi con. Hỏi mấy năm sau thì tuổi mẹ gấp đôi tuổi con?`,
+    dap:`Hiện mẹ hơn con: 1,3 lần tuổi con hiện nay. 16 năm trước mẹ hơn con: 6,5 lần tuổi con trước kia. Vì hiệu không đổi: tuổi con hiện nay gấp 5 lần tuổi con trước kia (6,5:1,3). Tuổi con trước kia: 16:4=4 ⇒ hiện nay 20 tuổi. Tuổi mẹ hiện nay: 20×2,3=46. Khi mẹ gấp đôi con, con=46−20=26 tuổi (mẹ luôn hơn con 26 tuổi) ⇒ sau 26−20=<b>6 năm</b>`},
+  ]
+},
+{
+  ten:"PP2: Giả thiết tạm",
+  bai:[
+    {so:"Bài 1", de:`Ba ô tô chở tổng cộng 50 chuyến, gồm 118 tấn hàng. Mỗi chuyến, xe thứ nhất chở 2 tấn, xe thứ hai chở 2,5 tấn, xe thứ ba chở 3 tấn. Hỏi mỗi xe chở bao nhiêu chuyến biết rằng số chuyến xe thứ nhất gấp rưỡi số chuyến xe thứ hai?`,
+    dap:`Giả sử cả 50 chuyến đều xe 3 chở: 3×50=150 tấn, dôi 150−118=32 tấn. Cứ 5 chuyến xe 3 thay bởi 2 chuyến xe1+2 chuyến xe2 thì khối lượng giảm: 3.5−(2.3+2,5.2)=4 tấn. Số lần thay: 32:4=8.<br>
+Xe 1 chở: 3×8=<b>24 chuyến</b>. Xe 2 chở: 2×8=<b>16 chuyến</b>. Xe 3 chở: 50−40=<b>10 chuyến</b>`},
+    {so:"Bài 2", de:`Trên quãng đường AC dài 200 km có một điểm B cách A là 10 km. Lúc 7 giờ, một ô tô đi từ A, một ô tô khác đi từ B, cả hai cùng đi tới C với vận tốc thứ tự bằng 50km/h và 40km/h. Hỏi lúc mấy giờ thì khoảng cách đến C của xe thứ hai gấp đôi khoảng cách đến C của xe thứ nhất?`,
+    dap:`Giả thiết tạm có xe thứ ba đi quãng đường EC=2×AC=400km với vận tốc gấp đôi xe 1 (=100km/h), khi đó xe thứ 3 sẽ gặp xe thứ 2 tại đúng điểm D cần tìm.<br>
+Quãng ED dài hơn BD: 400−190=210km. Vận tốc xe 3 hơn xe 2: 100−40=60km/h. Thời gian gặp: 210:60=3,5h.<br>
+<b>Thời điểm: 7h + 3,5h = 10 giờ 30 phút</b>`},
+    {so:"Bài 3", de:`Người ta bơm nước vào một bể: dùng máy I trong 30 phút, dùng máy II trong 20 phút. Tính xem trong mỗi phút mỗi máy bơm được bao nhiêu lít nước, biết rằng mỗi phút máy II bơm được nhiều hơn máy I là 50 lít và tổng cộng hai máy bơm được 21000 lít nước?`,
+    dap:`Giả sử máy II bơm bằng máy I thì trong 50 phút (30+20) cả hai bơm: 21000−50×20=20000 lít. Mỗi phút máy I bơm: 20000:50=<b>400 lít</b>. Máy II: 400+50=<b>450 lít</b>`},
+    {so:"Bài 4", de:`Khối 6 của một trường có 366 học sinh, gồm 8 lớp. Mỗi lớp gồm một số tổ, mỗi tổ có 9 người hoặc 10 người. Biết rằng số tổ của các lớp đều bằng nhau, tính số tổ có 9 người, số tổ có 10 người cả khối?`,
+    dap:`366:10=36 dư, 366:9=40 dư ⇒ số tổ trong khoảng 37–40, mà số tổ chia hết cho 8 ⇒ số tổ=40. Giả sử cả 40 tổ đều 10 người: 400 HS, thừa 400−366=34. Mỗi lần thay tổ 10 người bằng tổ 9 người giảm 1 HS.<br>
+Số tổ 9 người: 34:1=<b>34 tổ</b>. Số tổ 10 người: 40−34=<b>6 tổ</b>`},
+    {so:"Bài 5", de:`Một câu lạc bộ có 22 chiếc ghế gồm ba loại: ghế ba chân, ghế bốn chân, ghế sáu chân. Tính số ghế mỗi loại, biết rằng tổng số chân ghế bằng 100 và số ghế sáu chân gấp đôi số ghế ba chân?`,
+    dap:`Giả sử cả 22 ghế đều 4 chân: 88 chân, hụt 100−88=12 chân. Thay 1 ghế 3 chân + 2 ghế 6 chân cho 3 ghế 4 chân, mỗi lần thay tăng: 2.6+1.3−3.4=3 chân. Số lần thay: 12:3=4.<br>
+Ghế 3 chân: 4×1=<b>4 ghế</b>. Ghế 6 chân: 4×2=<b>8 ghế</b>. Ghế 4 chân: 22−12=<b>10 ghế</b>`},
+
+    {so:"Tự luyện 1", de:`Một số học sinh xếp hàng 12 thì thừa 5 học sinh, còn xếp hàng 15 cũng thừa 5 học sinh và ít hơn trước là 4 hàng. Tính số học sinh?`,
+    dap:`Giả thiết tạm xếp hàng 15 cũng được số hàng như hàng 12, cần thêm 4 hàng: 15×4=60 HS. Chênh lệch mỗi hàng: 15−12=3. Số hàng khi xếp 12: 60:3=20. <b>Số HS: 20×12+5 = 245</b>`},
+    {so:"Tự luyện 2", de:`Anh vào cửa hàng mua 12 vở và 4 bút chì hết 36000 đồng. Bích mua 8 vở và 5 bút chì cùng loại hết 27500 đồng. Tính giá trị một quyển vở, giá trị một bút chì.`,
+    dap:`Giả sử Anh mua gấp đôi: 24 vở+8 bút chì hết 72000đ. Bích mua gấp 3: 24 vở+15 bút chì hết 82500đ. Bích mua nhiều hơn Anh 7 bút chì, chênh 10500đ ⇒ giá bút chì: 10500:7=<b>1500đ</b>. Giá vở: (36000−4×1500):12=<b>2500đ</b>`},
+    {so:"Tự luyện 3", de:`Một tổ may phải may 1800 chiếc cả quần và áo trong 13 giờ. Trong 8 giờ đầu tổ may áo và trong thời gian còn lại tổ may quần. Biết rằng trong 1 giờ, tổ may được số áo nhiều hơn số quần là 30 chiếc. Tính số áo và số quần tổ đã may.`,
+    dap:`Giả sử thời gian còn lại tổ vẫn may áo, may thêm: (13−8)×30=150 chiếc. Số áo trong 13 giờ: 1800+150=1950. Số áo thực may: (1950:13)×8=<b>1200 chiếc</b>. Số quần: 1800−1200=<b>600 chiếc</b>`},
+    {so:"Tự luyện 4", de:`Một lớp học có 6 tổ, số người của mỗi tổ bằng nhau. Trong một bài kiểm tra, tất cả học sinh đều được điểm 7 hoặc 8. Tổng số điểm của cả lớp là 350. Hãy tính số học sinh của lớp, số học sinh đạt từng loại điểm?`,
+    dap:`350:8 dư, 350:7=50 ⇒ số HS từ 44–50, chia hết cho 6 ⇒ số HS=48. Giả sử cả 48 đều điểm 7: 336 điểm, thiếu 350−336=14. Mỗi lần đổi điểm 7→8 tăng 1 điểm ⇒ số HS điểm 8: 14, điểm 7: 48−14=34.<br>
+<b>Lớp có 48 học sinh: 14 học sinh điểm 8, 34 học sinh điểm 7</b>`},
+    {so:"Tự luyện 5", de:`Một đội bóng thi đấu 25 trận, chỉ có thắng và hòa, mỗi trận thắng được 3 điểm, mỗi trận hòa được 1 điểm, kết quả đội đó được 59 điểm. Tính số trận thắng, số trận hòa của đội bóng.`,
+    dap:`Giả sử cả 25 trận đều thắng: 75 điểm, thừa 75−59=16. Mỗi lần đổi thắng→hòa giảm 2 điểm. Số trận hòa: 16:2=<b>8 trận</b>. Số trận thắng: 25−8=<b>17 trận</b>`},
+    {so:"Tự luyện 6", de:`Có 25 gói đường gồm ba loại: gói 5 lạng, gói 2 lạng, gói 1 lạng, có tổng khối lượng tổng cộng là 56 lạng. Biết số gói 1 lạng gấp đôi số gói 5 lạng. Tính số gói mỗi loại.`,
+    dap:`Giả sử cả 25 gói đều 2 lạng: 50 lạng, hụt 56−50=6 lạng. Thay 1 gói 5 lạng+2 gói 1 lạng cho 3 gói 2 lạng, mỗi lần tăng: 1.5+2.1−3.2=1 lạng. Số lần thay: 6:1=6.<br>
+Gói 5 lạng: <b>6 gói</b>. Gói 1 lạng: 6×2=<b>12 gói</b>. Gói 2 lạng: 25−18=<b>7 gói</b>`},
+    {so:"Tự luyện 7", de:`Một hộp có thể chứa được vừa vặn 25 gói bánh hoặc 30 gói kẹo. Người ta xếp 28 gói cả bánh và kẹo thì vừa đầy hộp đó. Biết rằng giá tiền bánh và kẹo đều bằng nhau và bằng 36000 đồng. Tính giá một gói bánh, một gói kẹo.`,
+    dap:`Thể tích 5 gói bánh = thể tích 6 gói kẹo. Giả sử cả 28 gói đều kẹo cần 30, thừa thể tích của 2 gói kẹo. Mỗi lần thay 6 kẹo→5 bánh giảm 1 gói (về số lượng thể tích dư): số lần thay=2:1=2.<br>
+Số gói bánh: 2×5=<b>10 gói</b>. Số gói kẹo: 28−10=<b>18 gói</b>. Giá bánh: 36000:10=<b>3600đ</b>. Giá kẹo: 36000:18=<b>2000đ</b>`},
+  ]
+},
+{
+  ten:"PP3: Đơn vị quy ước",
+  bai:[
+    {so:"Bài 1", de:`Hai xe ô tô khởi hành cùng một lúc: xe thứ nhất đi từ A đến B, xe thứ hai đi từ B đến A. Sau 1 giờ 30 phút, chúng còn cách nhau 108 km. Tính quãng đường AB biết rằng xe thứ nhất đi cả quãng đường AB hết 6 giờ, xe thứ hai đi cả quãng đường BA hết 5 giờ.`,
+    dap:`Lấy AB làm đơn vị quy ước: mỗi giờ xe 1 đi 1/6 AB, xe 2 đi ⅕ AB. Mỗi giờ cả hai đi: 1/6+⅕=11/30 AB. Trong 1,5 giờ: 11/30×3/2=11/20 AB.<br>
+Quãng còn lại: 1−11/20=9/20 AB ứng với 108km. <b>AB = 108:(9/20) = 240 km</b>`},
+    {so:"Bài 2", de:`Một công nhân làm một mình xong một công việc trong 10 ngày, người thứ hai làm xong công việc đó trong 15 ngày, còn người thứ ba muốn hoàn thành công việc nói trên cần một số ngày gấp 5 lần số ngày hai người trên cùng làm để hoàn thành công việc. Hỏi nếu cả ba người cùng làm công việc đó thì mấy ngày xong?`,
+    dap:`Mỗi ngày người 1 làm 1/10, người 2 làm 1/15, cả hai làm 1/6 công việc/ngày ⇒ hai người làm xong trong 6 ngày. Người 3 làm xong trong 5×6=30 ngày ⇒ mỗi ngày làm 1/30.<br>
+Cả ba làm mỗi ngày: 1/10+1/15+1/30=⅕. <b>Cả ba cùng làm xong trong 1:⅕ = 5 ngày</b>`},
+
+    {so:"Tự luyện 1", de:`Một người cần 15 ngày để làm xong một công việc, trong khi đó người thứ hai làm xong công việc ấy cần 18 ngày. Cả hai cùng làm 3 ngày, sau đó chỉ còn người thứ nhất làm thêm 3 ngày nữa thì có người thứ ba đến giúp và tất cả làm 4 ngày thì xong. Hỏi người thứ ba làm một mình bao lâu thì xong công việc nói trên?`,
+    dap:`Mỗi ngày: người 1=1/15, người 2=1/18. Trong 3 ngày đầu (cả hai): (1/15+1/18)×3=11/30. Trong 3 ngày tiếp (người 1): 1/15×3=⅕.<br>
+Còn lại cho 4 ngày cuối (người 1+người 3): 1−(11/30+⅕)=13/30. Người 1 làm trong 4 ngày: 4/15. Người 3 làm trong 4 ngày: 13/30−4/15=1/6 ⇒ mỗi ngày 1/24.<br>
+<b>Người thứ ba làm một mình hết: 24 ngày</b>`},
+    {so:"Tự luyện 2", de:`Ba máy cày cùng cày một cánh đồng. Lúc đầu chỉ có hai máy thứ nhất và thứ hai cày trong 3 giờ, sau đó máy thứ hai nghỉ, máy thứ ba vào làm thay với năng suất gấp đôi máy thứ hai và trong 5 giờ thì hai máy này cày xong cánh đồng. Hỏi mỗi máy cày một mình xong cánh đồng đó trong bao lâu, biết rằng nếu máy thứ nhất và máy thứ hai cùng làm thì sau 12 giờ xong công việc?`,
+    dap:`Máy 1+2 mỗi giờ làm 1/12. Trong 3 giờ làm ¼. Còn lại ¾ cho máy 1+3 trong 5 giờ ⇒ mỗi giờ máy1+3 làm 3/20.<br>
+Gọi x=năng suất máy1/giờ. Máy 2=1/12−x; máy 3=3/20−x. Vì máy3=2×máy2: 3/20−x=2(1/12−x) ⇒ x=1/60.<br>
+<b>Máy 1 cày một mình hết: 60 giờ. Máy 2: 15 giờ. Máy 3: 7,5 giờ.</b>`},
+  ]
+},
+{
+  ten:"PP4: Tính ngược từ cuối",
+  bai:[
+    {so:"Bài 1", de:`Một nông dân ra chợ bán hết số cam của mình cho năm người: Người thứ nhất mua ½ số cam rồi mua thêm ½ quả, người thứ hai mua ½ số còn lại rồi mua thêm ½ quả, người thứ ba mua ½ số quả còn lại rồi mua thêm ½ quả, người thứ tư mua 1½ số còn lại rồi mua thêm ½ quả, người thứ năm mua ½ số còn lại rồi mua thêm ½ quả thì vừa hết. Tính số cam người nông dân đem đi bán và số cam những người khác đã mua.`,
+    dap:`Đặt số cam ban đầu là x, giải phương trình lần lượt qua 5 người (mỗi người mua ½ số còn lại + ½ quả), cuối cùng còn lại 0:<br>
+Giải ra <b>x = 31 quả</b> (tổng số cam đem bán).<br>
+Người 1 mua: 31−15=<b>16 quả</b>. Người 2: 15−7=<b>8 quả</b>. Người 3: 7−3=<b>4 quả</b>. Người 4: 3−1=<b>2 quả</b>. Người 5: <b>1 quả</b>.`},
+    {so:"Bài 2a", de:`Có 100 viên bi. Hai người lần lượt lấy số bi bất kỳ từ 1 đến 4 viên, người nào lấy được viên bi cuối cùng là người thắng cuộc. Hỏi người đi trước hay người đi sau sẽ thắng và cách lấy số bi để đảm bảo phần thắng thuộc về mình?`,
+    dap:`Người thắng cần để lại cho đối thủ số bi là bội của 5 (vì 1+4=5). <b>Người đi sau sẽ thắng</b> nếu nắm quy luật: khi người đi trước lấy k viên (1≤k≤4) thì người đi sau lấy 5−k viên.`},
+    {so:"Bài 2b", de:`Cũng hỏi như câu a nếu mỗi người được lấy từ 5 đến 10 viên bi.`,
+    dap:`Người thắng cần để lại bội của 15 (vì 5+10=15): 15,30,...,90,...(100 không phải bội của 15, dư 10). <b>Người đi sau thắng</b> bằng cách: khi người đi trước lấy k viên (5≤k≤10) thì người đi sau lấy 15−k viên — áp dụng từ khi còn 90 viên trở xuống; với 10 viên dư ban đầu, người đi trước buộc phải lấy trước rồi người đi sau lấy hết số còn lại.`},
+    {so:"Bài 2c", de:`Cũng câu hỏi như câu a nếu mỗi người lấy được 5 đến 10 viên bi và người lấy viên bi cuối cùng là người thua cuộc?`,
+    dap:`<b>Người đi trước thắng</b> bằng cách: lấy 5 bi trước, sau đó khi đối thủ lấy k bi thì lấy 15−k bi, lần lượt để lại cho người kia 80, 65, 50, 35, 20, 5 viên bi.`},
+
+    {so:"Tự luyện 1", de:`Một người ra chợ bán trứng. Người khách thứ nhất mua ½ số trứng rồi mua thêm 2 quả, người thứ hai mua ½ số còn lại rồi mua thêm 2 quả, người thứ ba mua ½ số còn lại rồi mua thêm 2 quả, người thứ tư mua ½ số còn lại rồi mua thêm 2 quả thì hết. Hỏi người bán hàng bán được bao nhiêu quả trứng?`,
+    dap:`Giải phương trình qua 4 người, ra <b>x = 60 quả trứng</b>.`},
+    {so:"Tự luyện 2", de:`Trong dịp Tết trồng cây, khối 6 phân chia số cây cho các lớp đem trồng như sau: Lớp 6A trồng 10 cây và ⅛ số còn lại, lớp 6B trồng 15 cây và ⅛ số còn lại, lớp 6C trồng 20 cây và ⅛ số còn lại … Cứ chia như vậy cho đến lớp cuối cùng thì vừa hết số cây và số cây các lớp được chia đem trồng đều bằng nhau. Hỏi có mấy lớp 6, mỗi lớp được chia bao nhiêu cây đem trồng?`,
+    dap:`Xét 2 lớp cuối: lớp n được chia nốt ⅛ số còn lại của lớp n−1 (không còn dư) ⇒ mỗi lớp được chia bằng nhau dẫn tới ⅛y=5 ⇒ y=40, mỗi lớp được chia 35 cây. Vì lớp 6A trồng 10 cây + ⅛ còn lại =35 ⇒ ⅛ số còn lại=25 ⇒ tổng số cây=10+25×8=210.<br>
+<b>Số lớp 6: 210:35 = 6 lớp, mỗi lớp được chia 35 cây.</b>`},
+  ]
+},
+{
+  ten:"PP5: Phương pháp lựa chọn",
+  bai:[
+    {so:"Bài 1", de:`Tìm số tự nhiên có ba chữ số biết rằng số đó chia hết cho 18 và các chữ số của nó đều sắp xếp từ nhỏ đến lớn thì tỉ lệ với 1:2:3.`,
+    dap:`Các chữ số có thể là (1,2,3), (2,4,6), hoặc (3,6,9). Vì số chia hết cho 18 ⇒ chia hết cho 9 ⇒ tổng chữ số chia hết cho 9 ⇒ chỉ bộ (3,6,9) thỏa. Vì chia hết cho 2 ⇒ chữ số tận cùng là 6.<br>
+<b>Các số thỏa mãn: 396 và 936</b>`},
+    {so:"Bài 2", de:`Anh Văn nói với bạn: Năm 1990, tuổi mình đúng bằng tổng các chữ số của năm sinh. Hãy tính xem anh Văn sinh năm nào?`,
+    dap:`Gọi năm sinh là ${ov("19xy")}: 1990−${ov("19xy")}=1+9+x+y ⇒ 80=11x+2y. Vì 11x≤80⇒x≤7; 2y≤18⇒x≥6. Thử x=6: y=7 (nhận); x=7: y=3/2 (loại).<br>
+<b>Anh Văn sinh năm 1967</b> (kiểm tra: 1990−1967=23=1+9+6+7 ✓)`},
+    {so:"Bài 3", de:`Tìm số tự nhiên có ba chữ số, biết rằng tổng sáu số tự nhiên có hai chữ số lập bởi hai trong ba chữ số ấy gấp đôi số phải tìm.`,
+    dap:`Gọi số cần tìm là ${ov("abc")}. ${ov("ab")}+${ov("bc")}+${ov("ca")}+${ov("ac")}+${ov("cb")}+${ov("ba")}=2${ov("abc")} ⇒ 22(a+b+c)=200a+20b+2c ⇒ 178a=2b+20c.<br>
+Vì 178a≤198 và ≥178 ⇒ a=1 ⇒ 2b+20c=178 ⇒ b+10c=89 ⇒ duy nhất b=9,c=8.<br>
+<b>Số cần tìm: 198</b>`},
+
+    {so:"Tự luyện 1", de:`Tìm số tự nhiên có hai chữ số, biết rằng nếu chia số ấy cho tích các chữ số của nó thì được 8/3 và hiệu giữa số phải tìm với số gồm các chữ số của số ấy viết theo thứ tự ngược lại bằng 18.`,
+    dap:`${ov("ab")}−${ov("ba")}=18 ⇒ a−b=2. Các số thỏa: 20,31,42,53,64,75,86,97. Vì ${ov("ab")}=8/3.ab ⇒ 3${ov("ab")}⋮8. Trong các số trên chỉ 64 chia hết cho 8.<br>
+Thử lại: 64:(6×4)=64:24=8/3 ✓. <b>Số cần tìm: 64</b>`},
+    {so:"Tự luyện 2", de:`Tìm số tự nhiên x, biết rằng tổng các chữ số của x bằng y, tổng các chữ số của y bằng z và x + y + z = 60.`,
+    dap:`x là số có 2 chữ số ${ov("ab")}: y=a+b. Xét 2 trường hợp y≤9 hoặc y≥10:<br>
+TH1 (y≤9, z=a+b): 4a+b=20 ⇒ b⋮4 ⇒ a=3,b=8 (do a+b>9 mới hợp lệ thật ra cần xét kỹ, nghiệm hợp): x=38<br>
+TH2 (y≥10, z=a+b−9): 4a+b=23 ⇒ a=4,b=7 ⇒ x=47, hoặc các nghiệm lân cận x=44, x=50.<br>
+<b>Kết luận: có 3 số thỏa mãn: 44, 47, 50</b>`},
+    {so:"Tự luyện 3", de:`Tìm ba chữ số khác nhau và khác 0, biết rằng tổng các số tự nhiên có ba chữ số gồm cả ba chữ số ấy bằng 1554.`,
+    dap:`Tổng 6 số hoán vị = 222(a+b+c)=1554 ⇒ a+b+c=7. Với a,b,c khác nhau, khác 0: chỉ có {1,2,4} thỏa (1+2+4=7).<br>
+<b>Ba chữ số: 1, 2, 4</b>`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 11 ===================== */
+const CD11_DANG = [
+{
+  ten:"Dạng 1: Chuyển động cùng chiều",
+  bai:[
+    {so:"Bài 1", de:`Một người đi từ A đến B vận tốc 15km/h. Sau đó 1h30ph, người thứ hai cũng rời A đi về B, vận tốc 20km/h và đến B trước người thứ nhất 30 phút. Tính quãng đường AB.`,
+    dap:`Thời gian người 2 đi AB ít hơn người 1: 1h30+30ph=2h. Giả sử người 2 đi sau người 1 đúng 2 giờ thì hai người đến B cùng lúc.<br>
+Trong 2 giờ đi trước, người 1 đi được: 15×2=30km. Thời gian người 2 đuổi kịp: 30:(20−15)=6h.<br>
+<b>Quãng đường AB = 20×6 = 120 km</b>`},
+    {so:"Bài 2", de:`Lúc 14 giờ 20 phút một xe máy đi từ A đến B với vận tốc 48 km/h. Sau 10 phút một ô tô xuất phát từ A đuổi theo xe máy với vận tốc 60 km/h. Hỏi: a) Hai xe gặp nhau lúc mấy giờ? b) Chỗ gặp nhau cách A bao nhiêu km?`,
+    dap:`Xe máy đi trong 1/6h được: 48×1/6=8km. Hiệu vận tốc: 60−48=12km/h. Thời gian gặp: 8:12=⅔h=40 phút.<br>
+a) Hai xe gặp lúc: 14h20+40ph=<b>15 giờ</b>.<br>
+b) Chỗ gặp cách A: 60×⅔=<b>40 km</b>`},
+    {so:"Bài 3", de:`Lúc 7 giờ 50 phút, bác An đi từ A đến B với vận tốc 80 m/phút, đến 7 giờ 55 phút bác Bình đi từ A đến B với vận tốc 90 m/phút đuổi theo bác An. Hỏi: a) Bác Bình đuổi kịp bác An lúc mấy giờ? b) Chỗ gặp nhau cách A bao nhiêu km?`,
+    dap:`Bác An đi trước 5 phút, được 80×5=400m. Thời gian bác Bình đuổi kịp: 400:(90−80)=40 phút.<br>
+a) Đuổi kịp lúc: 7h55+40ph=<b>8 giờ 35 phút</b><br>
+b) Chỗ gặp cách A: 90×40=3600m=<b>3,6 km</b>`},
+    {so:"Bài 4 (đồng hồ)", de:`Đồng hồ đang chỉ 4 giờ 10 phút. Sau ít nhất bao lâu thì hai kim đồng hồ nằm đối diện nhau trên một đường thẳng?`,
+    dap:`Lúc 4 giờ, kim phút cách kim giờ ⅓ vòng. Để 2 kim đối diện (cách nhau ½ vòng), kim phút phải vượt kim giờ: ⅓+½=⅚ vòng.<br>
+Mỗi giờ kim phút nhanh hơn kim giờ: 1−1/12=11/12 vòng. Thời gian từ 4 giờ: (⅚):(11/12)=10/11 giờ ≈ 54 phút 33 giây.<br>
+Từ 4 giờ 10 phút: 54ph33s−10ph=<b>44 phút 33 giây</b>`},
+    {so:"Bài 5 (đồng hồ)", de:`Hiện nay là 12 giờ đúng. Hỏi sau bao nhiêu lâu nữa thì kim giờ và kim phút trùng khít lên nhau 1 lần nữa?`,
+    dap:`Mỗi giờ kim phút nhanh hơn kim giờ 11/12 vòng. Để trùng lại cần kim phút vượt đúng 1 vòng.<br>
+<b>Thời gian: 1:(11/12) = 12/11 giờ = 1 giờ 1/11 giờ</b> (≈1 giờ 5 phút 27 giây)`},
+    {so:"Bài 6 (đồng hồ)", de:`Hiện nay là 2 giờ. Hỏi ít nhất bao nhiêu phút nữa thì hai kim giờ và kim phút của đồng hồ tạo thành góc bẹt?`,
+    dap:`Lúc 2 giờ, kim phút sau kim giờ ⅙ vòng. Để tạo góc bẹt (cách ½ vòng), kim phút phải vượt: ⅙+½=⅔ vòng. Mỗi giờ kim phút nhanh hơn 11/12 vòng.<br>
+<b>Thời gian: (⅔):(11/12) = 8/11 giờ = 43 7/11 phút</b>`},
+    {so:"Bài 7 (đồng hồ)", de:`Bây giờ là 4 giờ 10 phút. Hỏi sau ít nhất bao lâu kim giờ và kim phút nằm đối diện nhau trên một đường thẳng?`,
+    dap:`(Giống Bài 4 ở trên — cách tính tương tự) <b>Kết quả: 44 6/11 phút</b>`},
+    {so:"Tự luyện 1", de:`Lúc 7 giờ một ô tô chở hàng đi từ A với vận tốc 40 km/h. Đến 10 giờ một ô tô du lịch cũng đi từ A với vận tốc 60 km/h và đi cùng chiều với ô tô chở hàng. Hỏi ô tô du lịch đuổi kịp ô tô chở hàng lúc mấy giờ?`,
+    dap:`Ô tô chở hàng đi trước 3 giờ, được 40×3=120km. Hiệu vận tốc: 60−40=20km/h. Thời gian đuổi kịp: 120:20=6 giờ.<br>
+<b>Hai xe đuổi kịp nhau lúc: 10+6 = 16 giờ</b>`},
+  ]
+},
+{
+  ten:"Dạng 2: Chuyển động ngược chiều",
+  bai:[
+    {so:"Bài 1", de:`Hai xe ô tô đi từ hai địa điểm A và B về phía nhau, xe thứ nhất khởi hành từ A lúc 7 giờ, xe thứ hai khởi hành từ B lúc 7 giờ 10 phút. Biết rằng để đi cả quãng đường AB, xe thứ nhất cần 2 giờ, xe thứ hai cần 3 giờ. Hai xe gặp nhau lúc mấy giờ?`,
+    dap:`Mỗi giờ xe 1 đi ½ AB, xe 2 đi ⅓ AB, hai xe gần nhau: ½+⅓=⅚ AB/giờ. Trong 10 phút (1/6h) xe 1 đi trước: ½×⅙=1/12 AB.<br>
+Khi xe 2 khởi hành, còn cách: 1−1/12=11/12 AB. Thời gian gặp: (11/12):(⅚)=11/10h=1h6ph.<br>
+<b>Hai xe gặp nhau lúc: 7h10 + 1h6ph = 8 giờ 16 phút</b>`},
+    {so:"Bài 2", de:`Trên quãng đường AB, hai xe ô tô đi từ A và từ B ngược chiều nhau. Nếu hai xe khởi hành cùng một lúc thì chúng gặp nhau tại một điểm cách A 12 km, cách B 18 km. Nếu muốn gặp nhau ở chính giữa đường thì xe thứ nhất (đi từ A) phải khởi hành trước xe kia 10 phút. Tính vận tốc của mỗi xe.`,
+    dap:`Nửa quãng đường AB: (12+18):2=15km. Tỉ số vận tốc xe1:xe2=12:18=⅔.<br>
+Trong thời gian xe 2 đi 15km thì xe 1 đi: 15×⅔=10km. Trong 10 phút xe 1 đi: 15−10=5km ⇒ vận tốc xe 1: 5:(1/6)=<b>30 km/h</b>. Vận tốc xe 2: 30×3/2=<b>45 km/h</b>`},
+    {so:"Bài 3", de:`Quãng đường AB dài 180 km, một ô tô đi từ A đến B với vận tốc 56 km/h. Cùng lúc đó một người đi xe máy từ B đến A với vận tốc 34 km/h. Hỏi kể từ lúc bắt đầu đi sau bao lâu thì hai xe gặp nhau?`,
+    dap:`Tổng vận tốc: 56+34=90km/h. <b>Thời gian gặp nhau: 180:90 = 2 giờ</b>`},
+    {so:"Bài 4", de:`Hai xe ô tô khởi hành cùng một lúc từ A đến B cách nhau 223 km để đến C nằm giữa A và B. Xe 1 đi từ A với vận tốc 80 km/h, xe 2 đi từ B với vận tốc 65 km/h. Xe 1 đến C muộn hơn xe 2 là 15 phút. Tính quãng đường AC?`,
+    dap:`Khi xe 2 đến C, xe 1 còn cách C: 80×¼=20km. Quãng đường còn lại 2 xe cùng đi: 223−20=203km. Tổng vận tốc: 80+65=145km/h. Thời gian: 203:145=1,4h.<br>
+<b>Quãng đường AC = 80×1,4+20 = 132 km</b>`},
+    {so:"Bài 5", de:`Một người đi xe đạp từ nhà lên thị trấn huyện dự định hết 3 giờ nhưng thực tế họ chỉ đi hết 2 giờ vì họ đã tăng vận tốc lên 5 km/h. Tính quãng đường từ nhà người đó lên thị trấn huyện.`,
+    dap:`Tỉ số thời gian dự định:thực tế=3:2. Vận tốc dự định bằng 2/3 vận tốc thực tế. Hiệu phần vận tốc: 3−2=1 (ứng với 5km/h).<br>
+Vận tốc thực tế: 5×3=15km/h. <b>Quãng đường = 15×2 = 30 km</b>`},
+
+    {so:"Tự luyện 1", de:`Hai người đi bộ cùng một lúc từ hai xã A và B cách nhau 18 km và đi ngược chiều nhau để gặp nhau. Vận tốc của người đi từ A là 4 km/h, của người đi từ B là 5 km/h. Họ xuất phát lúc 5 giờ 15 phút. Hỏi: a) Hai người gặp nhau lúc mấy giờ? b) Khi gặp nhau mỗi người đi được bao nhiêu km?`,
+    dap:`Tổng vận tốc: 4+5=9km/h. Thời gian gặp: 18:9=2 giờ.<br>
+a) Gặp nhau lúc: 5h15+2h=<b>7 giờ 15 phút</b><br>
+b) Người từ A đi: 4×2=<b>8 km</b>. Người từ B đi: 5×2=<b>10 km</b>`},
+    {so:"Tự luyện 2", de:`Tại hai đầu của một quãng đường dài 17,25 km, một người đi bộ và một người chạy bộ xuất phát cùng một lúc và ngược chiều nhau. Vận tốc người đi bộ là 4,2 km/h, vận tốc người chạy bộ là 9,6 km/h. Hỏi: 1) Họ xuất phát lúc mấy giờ? Biết họ gặp nhau lúc 10 giờ 25 phút. 2) Khi gặp nhau mỗi người đi được bao nhiêu km?`,
+    dap:`Tổng vận tốc: 4,2+9,6=13,8km/h. Thời gian gặp: 17,25:13,8=1,25h=1h15ph.<br>
+1) Xuất phát lúc: 10h25−1h15ph=<b>9 giờ 10 phút</b><br>
+2) Người đi bộ: 4,2×1,25=<b>5,25 km</b>. Người chạy bộ: 9,6×1,25=<b>12 km</b>`},
+    {so:"Tự luyện 3", de:`Hai ô tô đi từ A đến B cùng một lúc và ngược chiều nhau. Quãng đường AB dài 121,8 km. Vận tốc của ô tô đi từ A là 42 km/h, vận tốc của ô tô đi từ B là 45 km/h. Hỏi: hai xe gặp nhau lúc mấy giờ (biết xuất phát lúc 8 giờ)? Chỗ gặp nhau cách A và B bao nhiêu km?`,
+    dap:`Tổng vận tốc: 45+42=87km/h. Thời gian gặp: 121,8:87=1,4h=1h24ph.<br>
+Gặp nhau lúc: 8h+1h24ph=<b>9 giờ 24 phút</b>. Cách A: 42×1,4=<b>58,8 km</b>. Cách B: 45×1,4=<b>63 km</b>`},
+    {so:"Tự luyện 4", de:`Lúc 7 giờ 15 phút sáng một ô tô khởi hành từ A đến B với vận tốc 65 km/h. Đến 8 giờ 15 phút một xe ô tô khác xuất phát từ B về A với vận tốc 70 km/h. Hỏi hai xe gặp nhau lúc mấy giờ? Biết quãng đường AB là 402,5 km.`,
+    dap:`Trong 1 giờ (8h15−7h15), xe 1 đi được 65km, còn cách: 402,5−65=337,5km. Tổng vận tốc: 70+65=135km/h. Thời gian gặp: 337,5:135=2,5h=2h30ph.<br>
+<b>Hai xe gặp nhau lúc: 8h15 + 2h30ph = 10 giờ 45 phút</b>`},
+    {so:"Tự luyện 5", de:`Một ô tô dự định đi từ A đến B hết 5 giờ, nhưng thực tế xe chạy chỉ hết 4,5 giờ vì trung bình mỗi giờ xe chạy nhanh hơn dự định là 6 km/h. Tính vận tốc thực tế của ô tô.`,
+    dap:`Mỗi giờ đi được 1/5 AB (dự định), 2/9 AB (thực tế). Chênh lệch: 2/9−1/5=1/45 AB ứng với 6km/h.<br>
+Quãng đường AB: 6:(1/45)=270km. <b>Vận tốc thực tế: 270:4,5 = 60 km/h</b>`},
+  ]
+},
+{
+  ten:"Dạng 3: Vật có chiều dài đáng kể",
+  bai:[
+    {so:"Bài 1", de:`Một đoàn tàu chạy ngang qua một cái cột điện hết 15 giây. Với vận tốc đó đoàn tàu chui qua một đường hầm dài 540m hết 1 phút. Tính: 1) Vận tốc của đoàn tàu. 2) Chiều dài của đoàn tàu.`,
+    dap:`Thời gian đoàn tàu đi thêm đoạn bằng chính chiều dài hầm: 1 phút−15 giây=45 giây ứng với 540m.<br>
+Vận tốc: 540:45=<b>12 m/giây</b>. Chiều dài đoàn tàu: 12×15=<b>180 m</b>`},
+    {so:"Bài 2", de:`Một xe lửa đi hết một cái cầu dài 12m hết 12 giây và đi hết một cái cầu dài 148m hết 20 giây. Tính chiều dài và vận tốc của xe lửa.`,
+    dap:`Trong (20−12)=8 giây, xe lửa đi thêm: 148−12=136m. Vận tốc: 136:8=<b>17 m/s</b>. Chiều dài xe lửa: 17×12−12=<b>192 m</b>`},
+    {so:"Bài 3", de:`Một đoàn xe lửa dài 160m chạy qua một đường hầm xuyên qua núi với vận tốc 40 km/h. Từ lúc toa đầu bắt đầu chui vào hầm đến lúc toa cuối cùng ra khỏi hầm mất 4 phút 30 giây. Hỏi đường hầm dài bao nhiêu mét?`,
+    dap:`Đổi 40km/h=2000/3 m/phút. Quãng đường xe lửa đi trong 4,5 phút: (2000/3)×4,5=3000m. Quãng đường này = chiều dài hầm + chiều dài tàu.<br>
+<b>Chiều dài đường hầm: 3000−160 = 2840 m</b>`},
+
+    {so:"Tự luyện 1", de:`Một xe lửa đi qua một chiếc cầu dài 30m mất 10 giây. Cùng với vận tốc đó, nó đi qua một chiếc cầu khác dài 150m mất 18 giây. Tính: 1) Vận tốc của xe lửa. 2) Chiều dài của xe lửa.`,
+    dap:`Trong (18−10)=8 giây, xe đi thêm: 150−30=120m. Vận tốc: 120:8=<b>15 m/giây</b>. Chiều dài xe lửa: 15×10−30=<b>120 m</b>`},
+    {so:"Tự luyện 2", de:`Một người đi xe đạp điện với vận tốc 18 km/h gặp một đoàn tàu đi ngược chiều và lướt qua mình trong 10 giây. Tính vận tốc của đoàn tàu, biết chiều dài của đoàn tàu là 120m.`,
+    dap:`Đổi 18km/h=5m/s. Quãng đường người đi xe đạp đi trong 10 giây: 50m. Quãng đường đoàn tàu đi trong 10 giây: 200−50=150m (vì lướt qua = tổng quãng đường hai bên = chiều dài tàu).<br>
+<b>Vận tốc đoàn tàu: 150:10 = 15 m/giây = 54 km/giờ</b>`},
+  ]
+},
+{
+  ten:"Dạng 4: Chuyển động có dòng nước",
+  bai:[
+    {so:"Bài 1", de:`Một ca nô chạy xuôi khúc sông AB hết 6 giờ và chạy ngược khúc sông ấy hết 9 giờ. Hỏi một phao trôi theo dòng nước từ A đến B trong bao lâu?`,
+    dap:`Mỗi giờ ca nô xuôi đi 1/6 AB, ngược đi 1/9 AB. Vận tốc dòng nước = (vận tốc xuôi−vận tốc ngược):2, mỗi giờ dòng nước trôi: (1/6−1/9):2=1/36 AB.<br>
+<b>Thời gian phao trôi từ A đến B: 1:(1/36) = 36 giờ</b>`},
+    {so:"Bài 2", de:`Vận tốc dòng nước chảy là 20m/phút. Một người bơi xuôi dòng trên khúc sông dài 800m trong 8 phút. Hỏi người đó bơi ngược dòng đoạn sông ấy hết bao nhiêu thời gian?`,
+    dap:`Vận tốc xuôi: 800:8=100m/phút. Vận tốc thực: 100−20=80m/phút. Vận tốc ngược: 80−20=60m/phút.<br>
+<b>Thời gian bơi ngược: 800:60 = 13⅓ phút</b>`},
+    {so:"Bài 3", de:`Một ca nô đi xuôi dòng với vận tốc 29 km/h và đi ngược dòng với vận tốc 24 km/h. 1) Tính vận tốc thực của ca nô. 2) Nếu ca nô đi xuôi dòng đoạn sông dài 34,8 km hết bao lâu? 3) Nếu ca nô đi ngược dòng đoạn sông dài 34,8 km hết bao lâu?`,
+    dap:`1) Vận tốc thực: (29+24):2=<b>26,5 km/giờ</b><br>
+2) Thời gian xuôi dòng: 34,8:29=<b>1,2 giờ</b><br>
+3) Thời gian ngược dòng: 34,8:24=<b>1,45 giờ</b>`},
+    {so:"Bài 4", de:`Quãng sông AB dài 143 km, vận tốc dòng nước là 6 km/h. Một ca nô đi xuôi dòng từ A về B và một ca nô khác đi ngược dòng từ B về A. Hai ca nô cùng khởi hành lúc 8 giờ 30 phút. Vận tốc thực của mỗi ca nô là 26 km/h. Hỏi đến mấy giờ hai ca nô gặp nhau?`,
+    dap:`Ca nô từ A xuôi dòng: 26+6=32km/h. Ca nô từ B ngược dòng: 26−6=20km/h. Tổng vận tốc: 32+20=52km/h. Thời gian gặp: 143:52=2,75h=2h45ph.<br>
+<b>Hai ca nô gặp nhau lúc: 8h30 + 2h45ph = 11 giờ 15 phút</b>`},
+    {so:"Bài 5", de:`Một ca nô đi với vận tốc riêng là 55 km/h. Ca nô đi xuôi dòng từ A đến B và ngược dòng từ B về A. Thời gian lúc về hơn thời gian lúc đi là 18 phút. Tính độ dài quãng sông từ A đến B, biết vận tốc dòng nước là 5 km/h.`,
+    dap:`Vận tốc xuôi: 60km/h, vận tốc ngược: 50km/h. Thời gian đi 1km xuôi: 1/60h, ngược: 1/50h. Chênh lệch mỗi km: 1/50−1/60=1/300h=1/5 phút.<br>
+<b>Quãng sông AB: 18:(1/5) = 90 km</b>`},
+    {so:"Bài 6", de:`Một chiếc thuyền lúc 7 giờ đi ngược dòng từ A đến B. Sau khi nghỉ 35 phút thuyền lại xuôi dòng về đến bến A lúc 18 giờ 5 phút. Hỏi quãng sông AB dài bao nhiêu km. Biết rằng thuyền xuôi dòng với vận tốc 75 m/phút, và ngược dòng với vận tốc 30 m/phút.`,
+    dap:`Đổi: 75m/ph=4,5km/h; 30m/ph=1,8km/h. Cứ 1km xuôi+1km ngược hết: 1/4,5+1/1,8=7/9 giờ.<br>
+Tổng thời gian chuyển động (trừ nghỉ): 18h5−7h−35ph=10h30ph=10,5h.<br>
+<b>Quãng sông AB: 10,5:(7/9) = 13,5 km</b>`},
+  ]
+},
+{
+  ten:"Dạng 5: Vận tốc thay đổi từng đoạn",
+  bai:[
+    {so:"Bài 1", de:`Một người đi xe đạp từ A đến B gồm một đoạn lên dốc AB và một đoạn xuống dốc CB. Thời gian đi AB là 2 giờ, thời gian về BA là 1 giờ 45 phút. Tính chiều dài quãng đường AB biết rằng cứ lúc lên dốc thì người đó đi với vận 10 km/h, cứ lúc xuống dốc thì người đó đi với vận tốc 15 km/h.`,
+    dap:`Mỗi km cả đi lẫn về hết: 1/10+1/15=⅙ giờ. Thời gian cả đi lẫn về: 2+1¾=3¾ giờ.<br>
+<b>Quãng đường AB: 3¾:(⅙) = 22,5 km</b>`},
+    {so:"Bài 2", de:`Một xe tải đi từ A đến B, vận tốc 40 km/h. Sau đó một thời gian, một xe du lịch rời A, vận tốc 60 km/h và như vậy sẽ đến B cùng lúc với xe tải. Nhưng đi đến C, được ⅕ quãng đường AB, xe tải giảm vận tốc xuống còn 35 km/h, do đó xe du lịch gặp xe tải ở D, cách B 30km. Tính quãng đường AB.`,
+    dap:`Xe du lịch đi DB trong: 30:60=½h. Trong ½ giờ đó xe tải (vận tốc mới 35) đi được: 35×½=17,5km. Lúc xe du lịch đến B (lẽ ra xe tải cũng đến) thì xe tải mới đến E, còn cách B: 30−17,5=12,5km.<br>
+Từ C, xe tải đi với vận tốc bằng 35/40=7/8 vận tốc cũ ⇒ quãng đường CE bằng ⅞ quãng đường CB. Vậy 12,5km là ⅛ quãng đường CB.<br>
+Quãng đường CB: 12,5×8=100km. <b>Quãng đường AB: 100×5/4 = 125 km</b>`},
+    {so:"Bài 3", de:`Một người đi từ A đến B. Lúc đầu người đó đi với vận tốc 15 km/h. Khi còn cách B 21 km, người đó tăng vận tốc thành 18 km/h. Lúc về người đó đi với vận tốc không đổi là 18 km/h. Thời gian cả đi lẫn về là 4 giờ 10 phút. Tính quãng đường AB.`,
+    dap:`Gọi C cách B 21km. Thời gian đi CB và về BC: 42:18=2⅓h. Thời gian đi AC và về CA: 4⅙−2⅓=1⅚h.<br>
+Từ đó tìm được quãng đường AC là 15km. <b>Quãng đường AB = 15+21 = 36 km</b>`},
+
+    {so:"Tự luyện 1", de:`Một người đi từ A đến B gồm một đoạn lên dốc, một đoạn xuống dốc, vận tốc lên dốc là 12 km/h, vận tốc xuống dốc là 20 km/h, tổng cộng hết 1 giờ 35 phút. Lúc về, người đó đi từ B về A, vận tốc lên dốc cũng là 12 km/h, vận tốc xuống dốc cũng là 20 km/h, tổng cộng hết 1 giờ 45 phút. Tính quãng đường AB?`,
+    dap:`Tỉ số thời gian lên dốc:xuống dốc tổng cộng = vận tốc xuống:vận tốc lên = 20:12=5:3. Tổng thời gian: 1h35+1h45=200 phút.<br>
+Thời gian xuống dốc tổng cộng: 200×3/8=75 phút. <b>Quãng đường AB (=quãng xuống dốc tổng): 20×75/60 = 25 km</b>`},
+    {so:"Tự luyện 2", de:`Một người đi quãng đường AB gồm một đoạn lên dốc, một đoạn xuống dốc. Thời gian tổng cộng cả đi lẫn về là 7 giờ. Biết rằng cứ lên dốc thì người đó đi với vận tốc 18 km/h, cứ xuống dốc thì người đó đi với vận tốc 24 km/h. Tính quãng đường AB?`,
+    dap:`Tỉ số thời gian lên dốc:xuống dốc = 24:18=4:3. Tổng thời gian: 7h=420 phút. Thời gian lên dốc tổng cộng: 420:(3+4)×4=240 phút.<br>
+<b>Quãng đường AB: 240×18/60 = 72 km</b>`},
+    {so:"Tự luyện 3", de:`Một người đi quãng đường AB gồm đoạn AC và CB. Lúc đi, vận tốc trên AC là 12 km/h, vận tốc trên CB là 8 km/h hết 3 giờ 30 phút. Lúc về, vận tốc trên BC là 30 km/h, vận tốc trên CA là 20 km/h hết 1 giờ 36 phút. Tính quãng đường AB?`,
+    dap:`Vận tốc 12km/h gấp rưỡi 8km/h, vận tốc 30km/h gấp rưỡi 20km/h. Giả sử lúc đi với vận tốc 12km/h: đi được AC+1,5CB=12×3,5=42km. Giả sử lúc về với vận tốc 30km/h: đi được BC+1,5CA=30×1,6=48km.<br>
+Tổng: 42+48=90km = 2,5(AC+CB)=2,5AB. <b>Quãng đường AB: 90:2,5 = 36 km</b>`},
+  ]
+},
+{
+  ten:"Dạng 6: Vận tốc trung bình",
+  bai:[
+    {so:"Bài 1", de:`Một người đi xe đạp từ A đến B, đi từ A với vận tốc 10 km/h, nhưng đi từ chính giữa đường đến B với vận tốc 15 km/h. Tính xem trên cả quãng đường người đó đi với vận tốc trung bình là bao nhiêu?`,
+    dap:`Cứ 2km thì có 1km vận tốc 10, 1km vận tốc 15, hết: 1/10+1/15=⅙ giờ. <b>Vận tốc trung bình: 2:(⅙) = 12 km/h</b>`},
+    {so:"Bài 2", de:`Một người đi xe máy trên một quãng đường, giờ đầu đi với vận tốc 40 km/h, 2 giờ sau đi với vận tốc 37 km/h. Tính vận tốc trung bình của người đó trên cả quãng đường.`,
+    dap:`2 giờ sau đi được: 37×2=74km. Tổng thời gian: 1+2=3 giờ. <b>Vận tốc trung bình: (40+74):3 = 38 km/giờ</b>`},
+    {so:"Bài 3", de:`Một người đi từ A đến B với vận tốc 5 km/h, sau đó lại đi từ B về A với vận tốc 4 km/h. Tính vận tốc trung bình của người đó trên cả quãng đường cả đi và về.`,
+    dap:`Đi 1km hết: 60:5=12 phút. Về 1km hết: 60:4=15 phút. Cả đi về 1km hết: 12+15=27 phút, ứng 2km ⇒ trên 1km TB hết 13,5 phút.<br>
+<b>Vận tốc trung bình: 60:13,5 = 4 4/9 km/h</b>`},
+    {so:"Bài 4", de:`Quãng đường AB dài 43,8 km. Lúc 6 giờ xe thứ nhất đi từ A để đến B, lúc 6 giờ 25 phút xe thứ hai đi từ B để đến A. Hai xe gặp nhau trên đường đi lúc 6 giờ 45 phút và đến khi đó thì xe thứ nhất đã đi nhiều hơn xe thứ hai là 11,4 km. Tính vận tốc của mỗi xe.`,
+    dap:`Thời gian xe 1 đi đến lúc gặp: 45ph=0,75h. Thời gian xe 2: 20ph=⅓h.<br>
+Quãng đường xe 1 đi: (43,8+11,4):2=27,6km. Quãng đường xe 2: (43,8−11,4):2=16,2km.<br>
+<b>Vận tốc xe 1: 27,6:0,75 = 36,8 km/h. Vận tốc xe 2: 16,2:(⅓) = 48,6 km/h</b>`},
+
+    {so:"Tự luyện 1", de:`Hai người đi cùng xuất phát một lúc để đi từ A đến B. Người thứ nhất đi với vận tốc 32 km/h trên cả quãng đường. Người thứ hai đi nửa thời gian đầu với vận tốc 25 km/h và nửa thời gian sau đi với vận tốc 35 km/h. Hỏi ai đến B trước?`,
+    dap:`Vận tốc trung bình người 2: (25+35):2=30km/h. Vì 32&gt;30 ⇒ <b>người thứ nhất đến B trước.</b>`},
+    {so:"Tự luyện 2", de:`Một người đi xe máy từ A đến B với vận tốc 35 km/h. Hỏi người đó đi xe máy từ B về A với vận tốc bao nhiêu để vận tốc trung bình trên cả quãng đường đi và về là 30 km/h?`,
+    dap:`Thời gian đi 1km từ A đến B: 1/35h. Đi 1km và về 1km với TB 30km/h hết: 2/30=1/15 giờ. Thời gian về 1km: 1/15−1/35=4/105 giờ.<br>
+<b>Vận tốc về: 1:(4/105) = 26,25 km/h</b>`},
+    {so:"Tự luyện 3", de:`Một người đi xe đạp trên quãng đường từ A đến B, ⅗ quãng đường AB người đó đi với vận tốc 12 km/h. Quãng đường còn lại người đó đi với vận tốc 10 km/h. Tính vận tốc của người đó trên cả quãng đường AB.`,
+    dap:`Chia AB thành 5 phần: 3 phần vận tốc 12, 2 phần vận tốc 10. Thời gian 3 phần: 3×(1/12)=¼h. Thời gian 2 phần: 2×(1/10)=⅕h.<br>
+<b>Vận tốc trung bình: (3+2):(¼+⅕) = 11 1/9 km/h</b>`},
+    {so:"Tự luyện 4a", de:`Một máy bay có vận tốc trung bình trong cả chuyến bay là 700 km/h. Trên quãng đường đầu, vận tốc của máy bay là 800 km/h. Tính vận tốc của máy bay trên quãng đường sau biết rằng thời gian bay quãng đường đầu bằng ⅓ thời gian cả chuyến bay.`,
+    dap:`Cứ 3 giờ thì máy bay bay được: 700×3=2100km, trong đó 1 giờ với vận tốc 800, 2 giờ với vận tốc lúc sau.<br>
+<b>Vận tốc lúc sau: (2100−800):2 = 650 km/h</b>`},
+    {so:"Tự luyện 4b", de:`Một ô tô đi ⅔ quãng đường AB với vận tốc 40 km/h rồi đi phần còn lại với vận tốc 60 km/h. Lúc về ô tô đi với vận tốc không đổi và thời gian về bằng thời gian đi. Tính vận tốc lúc về?`,
+    dap:`Cứ 3km lúc đi có 2km vận tốc 40 (hết 1/20h), 1km vận tốc 60 (hết 1/60h), tổng: 1/20+1/60=1/15h cho 3km.<br>
+Vận tốc trung bình lúc đi: 3:(1/15)=45km/h. Vì thời gian về bằng thời gian đi và cùng quãng đường AB ⇒ <b>Vận tốc lúc về = 45 km/h</b>`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 12 (HÌNH HỌC) ===================== */
+const seg = (labels) => { // simple svg segment with points, labels: array of {x,name}
+  const w=320,h=50;
+  let pts = labels.map(l=>`<circle cx="${l.x}" cy="25" r="3" fill="#1d4ed8"/><text x="${l.x}" y="14" font-size="13" text-anchor="middle">${l.name}</text>`).join('');
+  return `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:320px;display:block;margin:8px auto;"><line x1="10" y1="25" x2="${w-10}" y2="25" stroke="#1f2330" stroke-width="1.5"/>${pts}</svg>`;
+};
+
+const CD12_DANG = [
+{
+  ten:"Lý thuyết", lythuyet:true,
+  noidung:[
+    {h:"Điểm – Đường thẳng – Ba điểm thẳng hàng", t:`Điểm A thuộc đường thẳng a, kí hiệu A∈a. Điểm B không thuộc a, kí hiệu B∉a.<br>
+Ba điểm thẳng hàng khi cùng thuộc một đường thẳng. Trong ba điểm thẳng hàng có một và chỉ một điểm nằm giữa hai điểm còn lại.<br>
+Nếu có một điểm nằm giữa hai điểm khác thì ba điểm đó thẳng hàng.`},
+    {h:"Đường thẳng đi qua hai điểm", t:`Có một và chỉ một đường thẳng đi qua hai điểm A và B. Ba cách đặt tên đường thẳng: dùng 1 chữ thường (a), 2 chữ thường (xy), hoặc 2 chữ hoa (AB).<br>
+Hai đường thẳng phân biệt: hoặc không có điểm chung (song song), hoặc có đúng 1 điểm chung (cắt nhau).<br>
+Ba (hay nhiều) đường thẳng cùng đi qua 1 điểm gọi là đồng quy.`},
+    {h:"Tia", t:`Hình gồm điểm O và một phần đường thẳng bị chia ra bởi O gọi là tia gốc O. Hai tia chung gốc tạo thành đường thẳng gọi là hai tia đối nhau.<br>
+Xét 3 điểm A,O,B thẳng hàng: Nếu OA, OB đối nhau thì O nằm giữa A,B. Ngược lại nếu O nằm giữa A,B thì OA,OB đối nhau; AO,AB trùng nhau; BO,BA trùng nhau.`},
+    {h:"Đoạn thẳng. Độ dài đoạn thẳng", t:`Đoạn thẳng AB là hình gồm điểm A, điểm B và tất cả các điểm nằm giữa A và B.<br>
+${seg([{x:30,name:'A'},{x:290,name:'B'}])}
+Mỗi đoạn thẳng có một độ dài dương. AB=CD ⇔ cùng độ dài; AB<CD ⇔ AB ngắn hơn; AB>CD ⇔ AB dài hơn.<br>
+Nếu M nằm giữa A,B thì AM+MB=AB (và ngược lại).<br>
+${seg([{x:30,name:'A'},{x:160,name:'M'},{x:290,name:'B'}])}
+Nếu M nằm giữa A,B và N nằm giữa M,B thì AM+MN+NB=AB.`},
+    {h:"Vẽ đoạn thẳng cho biết độ dài", t:`Trên tia Ox bao giờ cũng vẽ được 1 và chỉ 1 điểm M sao cho OM=a (đơn vị dài).<br>
+Trên tia Ox, OM=a, ON=b: nếu 0<a<b thì M nằm giữa O và N.<br>
+Trên tia Ox có 3 điểm M,N,P: OM=a, ON=b, OP=c, nếu 0<a<b<c thì N nằm giữa M và P.`},
+    {h:"Trung điểm của đoạn thẳng", t:`Trung điểm của đoạn thẳng là điểm nằm giữa hai đầu đoạn thẳng và cách đều hai đầu đoạn thẳng đó.<br>
+${seg([{x:30,name:'A'},{x:160,name:'M'},{x:290,name:'B'}])}
+Nếu M là trung điểm AB thì MA=MB=AB/2. Ngược lại nếu M nằm giữa A,B và MA=AB/2 thì M là trung điểm AB. Mỗi đoạn thẳng có 1 trung điểm duy nhất.`},
+  ]
+},
+{
+  ten:"Trắc nghiệm & Tự luận", tuluyen:true,
+  bai:[
+    {so:"TN 1", de:`Điểm A không thuộc đường thẳng d được kí hiệu là: A. A⊂d  B. A∈d  C. A∉d  D. d⊂A`},
+    {so:"TN 2", de:`Cho hai tia Ax và Ay đối nhau. Lấy điểm M trên tia Ax, điểm N trên tia Ay. Ta có: A. M nằm giữa A,N  B. A nằm giữa M,N  C. N nằm giữa A,M  D. Không có điểm nào nằm giữa 2 điểm còn lại.`},
+    {so:"TN 3", de:`Số đường thẳng đi qua hai điểm S và T là: A.1  B.2  C.3  D.Vô số`},
+    {so:"TN 4", de:`L là một điểm nằm giữa hai điểm I và K. Biết IL=2cm, LK=5cm. Độ dài của đoạn IK là: A.3cm  B.2cm  C.5cm  D.7cm`},
+    {so:"TN 5", de:`Điểm I là trung điểm của đoạn thẳng MN khi: A. IM=IN  B. IM=IN=MN/2  C. IM+IN=MN  D. IM=2IN`},
+    {so:"TN 6", de:`Cho các điểm A,B,C,D,E cùng nằm trên một đường thẳng. Có bao nhiêu đoạn thẳng được tạo thành từ các điểm trên? A.5  B.10  C.15  D.20`},
+    {so:"TN 7", de:`Đường thẳng có đặc điểm nào: A. Giới hạn một đầu  B. Kéo dài mãi về một phía  C. Giới hạn hai đầu  D. Kéo dài mãi về hai phía`},
+    {so:"TN 8", de:`Ba điểm M,N,P thẳng hàng. Câu nào sai? A. Đường thẳng MP đi qua N  B. Đường thẳng MN đi qua P  C. M,N,P thuộc một đường thẳng  D. M,N,P không cùng thuộc một đường thẳng`},
+    {so:"TN 9", de:`Điểm E nằm giữa hai điểm M,N thì: A. ME+MN=EN  B. MN+EN=ME  C. ME+EN=MN  D. Đáp án khác`},
+    {so:"TN 10", de:`Có bao nhiêu đường thẳng đi qua 5 điểm phân biệt mà không có 3 điểm nào thẳng hàng? A.15  B.10  C.5  D.Vô số`},
+    {so:"Tự luận 1", de:`Cho đường thẳng xy. Lấy điểm O∉xy; điểm A∈xy và điểm B trên tia Ay (điểm B khác A). a) Kể tên các tia đối nhau, các tia trùng nhau. b) Kể tên hai tia không có điểm chung. c) Gọi M là điểm di động trên xy. Xác định vị trí điểm M để tia OM đi qua điểm M không cắt hai tia Ax, By.`},
+    {so:"Tự luận 2", de:`Vẽ hai đường thẳng mn và xy cắt nhau tại O. a) Kể tên hai tia đối nhau. b) Trên tia Ox lấy điểm P, trên tia Om lấy điểm E. Hãy tìm vị trí điểm Q để O nằm giữa P,Q; tìm vị trí điểm F sao cho hai tia OE, OF trùng nhau.`},
+    {so:"Tự luận 3", de:`Cho 4 điểm A,B,C,O. Biết hai tia OA,OB đối nhau; hai tia OA,OC trùng nhau. a) Giải thích vì sao 4 điểm A,B,C,O thẳng hàng. b) Nếu A nằm giữa C,O thì A có nằm giữa O,B không? Giải thích.`},
+    {so:"Tự luận 4", de:`Cho điểm O nằm giữa A,B; điểm I nằm giữa O,B. Giải thích vì sao: a) O nằm giữa A,I? b) I nằm giữa A,B?`},
+    {so:"Tự luận 5", de:`Gọi A,B là hai điểm nằm trên tia Ox sao cho OA=4cm, OB=6cm. Trên tia BA lấy điểm C sao cho BC=3cm. So sánh AB với AC.`},
+    {so:"Tự luận 6", de:`Vẽ đoạn thẳng AB=5cm. Lấy hai điểm E,F nằm giữa A,B sao cho AE+BF=7cm. a) Chứng tỏ E nằm giữa B,F. b) Tính EF.`},
+    {so:"Tự luận 7", de:`Vẽ hai tia chung gốc Ox,Oy. Trên Ox lấy A,B (A nằm giữa O,B). Trên Oy lấy M,N sao cho OM=OA; ON=OB. Chứng tỏ M nằm giữa O,N. So sánh AB và MN.`},
+    {so:"Tự luận 8", de:`Trên tia Ox lấy A,M sao cho OA=3cm; OM=4,5cm. Trên tia Ax lấy B sao cho M là trung điểm AB. Hỏi A có phải trung điểm OB không? Vì sao?`},
+    {so:"Tự luận 9", de:`Cho đoạn thẳng AB=6cm. Lấy C,D thuộc AB sao cho AC=BD=2cm. Gọi M là trung điểm AB. 1) Giải thích vì sao M cũng là trung điểm CD. 2) Tìm trên hình vẽ những điểm khác cũng là trung điểm đoạn thẳng.`},
+    {so:"Tự luận 10", de:`Gọi O là một điểm thuộc đoạn thẳng AB. Xác định vị trí điểm O để: 1) Tổng AB+BO nhỏ nhất 2) AB+BO=2BO 3) AB+BO=3BO`},
+    {so:"Tự luận 11", de:`Gọi M là trung điểm AB và C là một điểm của đoạn thẳng đó. Cho AB=6cm; AC=a (cm) (0<a≤6). Tính khoảng cách CM.`},
+    {so:"Tự luận 12", de:`Cho đoạn thẳng CD=5cm. Trên đoạn này lấy hai điểm I,K sao cho CI=1cm; DK=3cm. 1) Điểm K có là trung điểm CD không? Vì sao? 2) Chứng tỏ I là trung điểm CK.`},
+    {so:"Tự luận 13", de:`Cho đoạn thẳng AB; điểm O thuộc tia đối của tia AB. Gọi M,N thứ tự là trung điểm OA, OB. 1) Chứng tỏ OA<OB. 2) Trong ba điểm O,M,N điểm nào nằm giữa? 3) Chứng tỏ độ dài MN không phụ thuộc vị trí điểm O.`},
+    {so:"Tự luận 14", de:`Cho đoạn thẳng AB=8cm. Trên tia AB lấy C sao cho AC=2cm. 1) Tính CB. 2) Lấy D thuộc tia đối của tia BC sao cho BD=4cm. Tính CD.`},
+    {so:"Tự luận 15", de:`Trên tia Ox, lấy hai điểm E,F sao cho OE=3cm, OF=6cm. 1) E có nằm giữa O,F không? Vì sao? 2) So sánh OE và EF. 3) E có là trung điểm OF không? Vì sao? 4) Ta có thể khẳng định OF chỉ có duy nhất một trung điểm hay không? Vì sao?`},
+    {so:"Tự luận 16", de:`Trên tia Ox lấy hai điểm A,B sao cho OA=3cm, OB=6cm. 1) A có nằm giữa O,B không? Vì sao? 2) Tính AB. 3) A có là trung điểm OB không? Vì sao? 4) Gọi P là trung điểm OA, Q là trung điểm AB. Chứng tỏ OB=2PQ.`},
+    {so:"Tự luận 17", de:`Cho đoạn thẳng AB=8cm. Điểm C thuộc đoạn AB sao cho BC=2cm. Tính độ dài có thể có được của đoạn AC.`},
+    {so:"Tự luận 18", de:`Vẽ tia Ax. Lấy B∈Ax sao cho AB=8cm, M nằm trên đoạn AB sao cho AM=4cm. 1) M có nằm giữa A,B không? 2) So sánh MA,MB. 3) M có là trung điểm AB không? Vì sao? 4) Lấy N∈Ax sao cho AN=12cm. So sánh BM,BN.`},
+    {so:"Câu 19", de:`a) Vẽ đường thẳng xy. Trên xy lấy ba điểm A,B,C theo thứ tự đó. b) Kể tên các tia có trên hình vẽ. c) Hai tia Ay,By có phải trùng nhau không? Vì sao? d) Kể tên hai tia đối nhau gốc B.`},
+    {so:"Câu 20", de:`a) Trên tia Ox, vẽ hai điểm A,B sao cho OA=3.5cm, OB=7cm. b) A có nằm giữa O,B không? c) So sánh OA và AB. d) A có là trung điểm OB không? Vì sao?`},
+    {so:"Câu 21", de:`Hãy vẽ sơ đồ trồng cây: có 10 cây trồng thành 5 hàng, mỗi hàng 4 cây.`},
+    {so:"Câu 22", de:`Vẽ liền 1 nét 4 đoạn thẳng đi qua 9 điểm (xếp thành lưới vuông 3×3).`},
+  ]
+},
+{
+  ten:"Bài tập nâng cao",
+  bai:[
+    {so:"Bài 1", de:`Cho đoạn thẳng AB=5cm, điểm C nằm giữa A,B, các điểm D,E theo thứ tự là trung điểm của AC,CB. Tính độ dài DE.`,
+    dap:`${seg([{x:20,name:'A'},{x:80,name:'D'},{x:150,name:'C'},{x:220,name:'E'},{x:290,name:'B'}])}
+DE=DC+CE=AC/2+CB/2=(AC+CB)/2=AB/2=5/2=<b>2,5 cm</b>`},
+    {so:"Bài 2", de:`Cho điểm C thuộc đường thẳng AB nhưng không thuộc đoạn thẳng AB. Biết CA=a, CB=b. Gọi I là trung điểm AB. Tính độ dài IC.`,
+    dap:`Trường hợp a>b: IC=IB−CB=(a+b)/2−b=<b>(a−b)/2</b><br>
+Trường hợp a<b: IC=<b>(b−a)/2</b><br>
+Trường hợp a=b: I≡C`},
+    {so:"Bài 3", de:`Trên mặt phẳng có bốn đường thẳng. Số giao điểm của các đường thẳng có thể bằng bao nhiêu?`,
+    dap:`Xét các trường hợp: 4 đường thẳng đồng quy → 1 giao điểm; có đúng 3 đường thẳng đồng quy → 3 hoặc 4 giao điểm (tùy có song song); không có 3 đường thẳng nào đồng quy → 0 (4 đt song song), 3 (đúng 3 đt song song), 4 (hai cặp song song), 5 (đúng 1 cặp song song), hoặc 6 (không có cặp nào song song) giao điểm.<br>
+<b>Vậy số giao điểm có thể là: 0, 1, 3, 4, 5, hoặc 6.</b>`},
+    {so:"Bài 4a", de:`Cho n điểm (n≥2). Nối từng cặp hai điểm trong n điểm đó thành các đoạn thẳng. Hỏi có bao nhiêu đoạn thẳng nếu trong n điểm đó không có ba điểm nào thẳng hàng?`,
+    dap:`Chọn 1 điểm, nối với n−1 điểm còn lại được n−1 đoạn. Làm vậy với n điểm được n(n−1) đoạn, nhưng mỗi đoạn tính 2 lần.<br>
+<b>Số đoạn thẳng: n(n−1)/2</b>`},
+    {so:"Bài 4b", de:`Cũng câu hỏi như trên, nếu trong n điểm đó có đúng ba điểm thẳng hàng?`,
+    dap:`Số đoạn thẳng phải đếm vẫn không thay đổi: vẫn có <b>n(n−1)/2 đoạn thẳng</b>`},
+    {so:"Bài 4c", de:`Tính n biết rằng có tất cả 1770 đoạn thẳng.`,
+    dap:`n(n−1)/2=1770 ⇒ n(n−1)=2.1770=2².3.5.59=59.60 ⇒ <b>n=60</b>`},
+    {so:"Bài 5", de:`Cho n điểm trong đó không có ba điểm nào thẳng hàng. Cứ qua hai điểm ta vẽ một đường thẳng. Biết rằng có tất cả 105 đường thẳng. Tính n?`,
+    dap:`n(n−1)/2=105 ⇒ n(n−1)=210=2.3.5.7=15.14 ⇒ <b>n=15</b>`},
+    {so:"Bài 6", de:`Cho n đường thẳng trong đó bất cứ hai đường thẳng nào cũng cắt nhau, không có ba đường thẳng nào đồng quy. Biết rằng số giao điểm của các đường thẳng đó là 780. Tính n?`,
+    dap:`Từ n(n−1)/2=780 ⇒ <b>n=40</b>`},
+    {so:"Bài 7", de:`Cho 101 đường thẳng trong đó bất cứ hai đường thẳng nào cũng cắt nhau, không có ba đường thẳng nào đồng quy. Tính số giao điểm của chúng.`,
+    dap:`Mỗi đường thẳng cắt 100 đường còn lại tạo 100 giao điểm. Có 101 đường nên có 101×100 giao điểm nhưng mỗi giao điểm tính 2 lần:<br>
+<b>101×100:2 = 5050 giao điểm</b>`},
+    {so:"Bài 8", de:`Cho 20 điểm, trong đó có a điểm thẳng hàng. Cứ 2 điểm, ta vẽ một đường thẳng. Tìm a, biết vẽ được tất cả 170 đường thẳng.`,
+    dap:`Nếu không có 3 điểm thẳng hàng: số đường thẳng vẽ được là 19×20:2=190. Trong a điểm thẳng hàng, nếu không thẳng hàng thì vẽ được (a−1)a:2, nhưng thực tế chỉ vẽ được 1 đường thẳng.<br>
+190−(a−1)a:2+1=170 ⇒ giải ra <b>a=7</b>`},
+    {so:"Bài 9", de:`Cho ba điểm A,B,C nằm ngoài đường thẳng a. Biết rằng cả hai đoạn thẳng BA,BC đều cắt đường thẳng a. Hỏi đường thẳng a có cắt đoạn thẳng AC không? Vì sao?`,
+    dap:`Đường thẳng a cắt đoạn AB ⇒ A,B thuộc hai nửa mặt phẳng đối nhau bờ a. Tương tự B,C thuộc hai nửa mặt phẳng đối nhau bờ a.<br>
+⇒ A,C thuộc cùng một nửa mặt phẳng bờ a ⇒ <b>đường thẳng a không cắt đoạn thẳng AC.</b>`},
+    {so:"Bài 10", de:`Trên tia Ox cho 4 điểm A,B,C,D. Biết rằng A nằm giữa B,C; B nằm giữa C,D; OA=5cm; OD=2cm; BC=4cm và độ dài AC gấp đôi độ dài BD. Tìm độ dài các đoạn BD; AC.`,
+    dap:`Vì A nằm giữa B,C: BA+AC=BC=4 (1). Lập luận B nằm giữa A,D; theo gt OD<OA nên D nằm giữa O,A ⇒ DA=OA−OD=3cm.<br>
+DB+BA=DA=3 (2). Từ (1)−(2): AC−DB=1 (3). Theo đề AC=2BD, thay vào (3): 2BD−BD=1 ⇒ BD=1.<br>
+<b>BD = 1 cm, AC = 2 cm</b>`},
+    {so:"Bài 11", de:`Gọi A và B là hai điểm trên tia Ox sao cho OA=4cm; OB=6cm. Trên tia BA lấy điểm C sao cho BC=3cm. So sánh AB với AC.`,
+    dap:`Vì OA<OB (4<6) nên A nằm giữa O,B ⇒ AB=OB−OA=6−4=<b>2cm</b>.<br>
+Vì BA<BC (2<3) nên A nằm giữa B,C ⇒ AC=BC−BA=3−2=<b>1cm</b>.<br>
+Vậy AB > AC (2>1)`},
+    {so:"Bài 12", de:`Trên tia Ox cho 4 điểm A,B,C,D. Biết rằng A nằm giữa B,C; B nằm giữa C,D; OA=7cm; OD=3cm; BC=8cm và AC=3BD. a) Tính độ dài AC. b) Chứng tỏ rằng B là trung điểm AD.`,
+    dap:`Đặt BD=x ⇒ AC=3x. D nằm giữa O,A (vì OD<OA) ⇒ DA=OA−OD=4. DB+BA=DA ⇒ x+BA=4 (1).<br>
+A nằm giữa B,C: BA+AC=BC ⇒ 3x+BA=8 (2). Từ (1),(2): 2x=4 ⇒ x=2 ⇒ <b>AC=3×2=6cm</b><br>
+b) BA=4−2=2=BD ⇒ <b>B là trung điểm AD (đpcm)</b>`},
+    {so:"Bài 13", de:`Trên tia Ox lấy hai điểm M,N sao cho OM=3cm và ON=7cm. 1) Tính độ dài đoạn MN. 2) Lấy điểm P trên tia Ox sao cho MP=2cm. Tính độ dài OP. 3) Trong trường hợp M nằm giữa O,P. Chứng tỏ P là trung điểm MN.`,
+    dap:`1) M nằm giữa O,N (vì OM<ON) ⇒ MN=ON−OM=7−3=<b>4cm</b><br>
+2) TH1: P nằm giữa M,N ⇒ OP=OM+MP=3+2=5cm. TH2: P nằm giữa O,M ⇒ OP=OM−MP=1cm.<br>
+3) M nằm giữa O,P: OP=OM+MP=5cm. Vì OP=5cm<ON=7cm nên P nằm giữa O,N ⇒ PN=ON−OP=2cm=MP ⇒ <b>P là trung điểm MN (đpcm)</b>`},
+    {so:"Bài 14", de:`Cho đường thẳng xy. Trên xy lấy 3 điểm A,B,C sao cho AB=a cm; AC=b cm (b>a). Gọi I là trung điểm AB. 1) Tính IC? 2) Lấy 4 điểm M,N,P,Q nằm ngoài đường thẳng xy. Chứng tỏ rằng đường thẳng xy hoặc không cắt, hoặc cắt ba, hoặc cắt bốn đoạn thẳng trong các đoạn: MN, MP, MQ, NP, NQ, PQ.`,
+    dap:`1) TH1 (B,C cùng phía so với A): IC=b−a/2. TH2 (B,C khác phía so với A): IC=b+a/2.<br>
+2) TH1: nếu cả 4 điểm cùng thuộc một nửa mặt phẳng bờ xy thì xy không cắt đoạn nào.<br>
+TH2: nếu có 3 điểm (vd M,N,P) cùng phía, còn Q khác phía thì xy cắt 3 đoạn: MQ, NQ, PQ.<br>
+TH3: nếu có 2 điểm (vd M,N) cùng phía, 2 điểm (P,Q) khác phía thì xy cắt 4 đoạn: MP, MQ, NP, NQ.`},
+  ]
+}
+];
+
+/* ===================== DATA: CHUYÊN ĐỀ 13 (HÌNH HỌC - GÓC) ===================== */
+const CD13_DANG = [
+{
+  ten:"Lý thuyết", lythuyet:true,
+  noidung:[
+    {h:"Nửa mặt phẳng", t:`Hình gồm đường thẳng a và một phần mặt phẳng bị chia ra bởi a gọi là một nửa mặt phẳng bờ a.<br>
+Tia Oz nằm giữa hai tia Ox,Oy nếu tia Oz cắt đoạn thẳng AB tại điểm M nằm giữa A,B (A∈Ox, B∈Oy).<br>
+Nếu Ox,Oy đối nhau thì mọi tia Oz khác Ox,Oy đều nằm giữa Ox,Oy.<br>
+Hai điểm A,B cùng thuộc một nửa mặt phẳng bờ a thì đoạn AB không cắt a. Hai điểm A,C thuộc hai nửa mặt phẳng đối nhau bờ a thì đoạn AC cắt a tại điểm nằm giữa A,C.`},
+    {h:"Góc. Số đo góc. Cộng số đo hai góc", t:`Góc là hình gồm hai tia chung gốc. Góc bẹt là góc có hai cạnh là hai tia đối nhau.<br>
+Mỗi góc có một số đo dương. Số đo góc bẹt là 180°. Số đo mỗi góc không vượt quá 180°.<br>
+0°<góc nhọn<góc vuông(90°)<góc tù<góc bẹt(180°)<br>
+Hai góc kề nhau: có một cạnh chung, hai cạnh còn lại nằm trên hai nửa mặt phẳng đối nhau có bờ là cạnh chung.<br>
+Â phụ B̂ ⇔ Â+B̂=90°. Â bù B̂ ⇔ Â+B̂=180°. Hai góc vừa kề vừa bù gọi là hai góc kề bù (tổng=180°, hai cạnh ngoài là hai tia đối nhau).<br>
+Nếu tia Oy nằm giữa Ox,Oz thì ∠xOy+∠yOz=∠xOz (và ngược lại). Nếu tia Oy nằm giữa Ox,Oz; tia Ot nằm giữa Oy,Oz thì ∠xOy+∠yOt+∠tOz=∠xOz.<br>
+Hai góc AOB, AOC kề nhau, tia OA' đối tia OA: nếu ∠AOB+∠AOC<180° thì OA nằm giữa OB,OC. Nếu >180° thì OA' nằm giữa OB,OC.`},
+    {h:"Vẽ góc cho biết số đo & Tia phân giác", t:`Trên nửa mặt phẳng cho trước bờ chứa tia Ox, bao giờ cũng vẽ được 1 và chỉ 1 tia Oy sao cho ∠xOy=m°.<br>
+Nếu ∠xOy=m°, ∠xOz=n° (m<n, cùng nửa mặt phẳng bờ Ox) thì Oy nằm giữa Ox,Oz.<br>
+Tia phân giác của một góc là tia nằm giữa hai cạnh của góc và tạo với hai cạnh ấy hai góc bằng nhau. Nếu Oz là tia phân giác ∠xOy thì ∠xOz=∠zOy=∠xOy/2. Mỗi góc có một tia phân giác (và một đường phân giác) duy nhất.`},
+    {h:"Đường tròn – Tam giác", t:`Đường tròn tâm O bán kính R là hình gồm các điểm cách O một khoảng bằng R, kí hiệu (O,R). Hình tròn gồm các điểm trên đường tròn và bên trong đường tròn.<br>
+Hai điểm trên đường tròn chia đường tròn thành hai cung. Đoạn nối hai mút cung là dây cung; dây cung qua tâm là đường kính.<br>
+Hai đường tròn phân biệt có thể có 2 điểm chung, 1 điểm chung, hoặc không có điểm chung.<br>
+Tam giác ABC là hình gồm 3 đoạn thẳng AB,BC,CA khi A,B,C không thẳng hàng. Nếu một đường thẳng không đi qua các đỉnh và cắt một cạnh của tam giác thì nó cắt một và chỉ một trong hai cạnh còn lại.`},
+  ]
+},
+{
+  ten:"Bài tập cơ bản", tuluyen:true,
+  bai:[
+    {so:"Bài 1", de:`Viết tên các góc trên hình vẽ (hai tia Oy, Oz cùng phía với tia Ox tại gốc O) bằng kí hiệu.`},
+    {so:"Bài 2", de:`Viết bằng kí hiệu tên các góc nhọn, vuông, tù, bẹt trên hình vẽ (góc vuông AOM=90°, góc MOC=50° kề nhau tại O trên đường thẳng AB).`},
+    {so:"Bài 3", de:`Trên cùng một nửa mặt phẳng bờ chứa tia Ox, vẽ các tia Oy và Oz sao cho góc xOy=40°, góc xOz=150°. a) Tính số đo góc yOz. b) Góc xOy và yOz là cặp góc ở vị trí gì?`},
+    {so:"Bài 4", de:`Cho hình vẽ với 4 tia Ox,Oy,Oz,On quanh O (Ox,On đối nhau), biết Ô₁=Ô₂; Ô₃=Ô₄. Chỉ ra các tia phân giác trên hình; tính số đo góc mOy.`},
+    {so:"Bài 5", de:`Cho hai góc kề bù xOy, yOz sao cho ∠xOy=120°. 1) Tính ∠yOz. 2) Gọi Ot là tia phân giác góc yOz. Chứng tỏ ∠zOt=¼∠xOy.`},
+    {so:"Bài 6", de:`Cho hai tia Oy,Oz nằm trên cùng nửa mặt phẳng có bờ là tia Ox sao cho góc xOy=75°, góc xOz=25°. a) Trong ba tia Ox,Oy,Oz tia nào nằm giữa hai tia còn lại. b) Tính góc yOz. c) Gọi Om là tia phân giác góc yOz. Tính góc xOm.`},
+    {so:"Bài 7", de:`Góc nhọn có số đo: A) Lớn hơn 90° và nhỏ hơn 180°  B) Bằng 90°  C) Lớn hơn 0° và nhỏ hơn 90°  D) Bằng 180°`},
+    {so:"Bài 8", de:`Hai tia chung gốc đối nhau tạo thành: A. Góc vuông  B. Góc nhọn  C. Góc tù  D. Góc bẹt`},
+    {so:"Bài 9", de:`Khi nào thì ∠xOm+∠mOy=∠xOy? A. Khi Ox nằm giữa Om,Oy  B. Khi Om nằm giữa Ox,Oy  C. Khi Oy nằm giữa Ox,Om  D. Khi ba tia Om,Ox,Oy nằm trên cùng một đường thẳng`},
+    {so:"Bài 10", de:`Góc bù với góc có số đo 80° có số đo là: A. 10°  B. 110°  C. 100°  D. 90°`},
+    {so:"Bài 11", de:`Vẽ hai góc kề bù xOy và yOy', biết ∠xOy=118°. Tính ∠yOy'.`},
+    {so:"Bài 12", de:`Trên cùng một nửa mặt phẳng bờ chứa tia Ox, vẽ hai tia Oy và Ot sao cho ∠xOy=30° và ∠xOt=60°. 1) Tia nào nằm giữa hai tia còn lại? Vì sao? 2) Tính ∠yOt? Tia Oy có là tia phân giác của ∠xOt không? Vì sao? 3) Gọi Om là tia đối của tia Oy. Tính ∠mOt? 4) Kể tên các cặp góc kề bù có trong hình vẽ.`},
+    {so:"Bài 13", de:`Cho hình vẽ biết ∠xOy=30° và ∠xOz=120°. Suy ra: A. yOz là góc nhọn  B. yOz là góc vuông  C. yOz là góc tù  D. yOz là góc bẹt`},
+    {so:"Bài 14", de:`Nếu ∠A=35° và ∠B=55°. Ta nói: A. A,B là hai góc bù nhau  B. A,B là hai góc kề nhau  C. A,B là hai góc kề bù  D. A,B là hai góc phụ nhau`},
+    {so:"Bài 15", de:`Với những điều kiện sau, điều kiện nào khẳng định tia Ot là tia phân giác của xOy? A. ∠xOt=∠yOt  B. ∠xOt+∠tOy=∠xOy  C. ∠xOt+∠tOy=∠xOy và ∠xOt=∠yOt  D. Tất cả đều sai`},
+    {so:"Bài 16", de:`Cho hình vẽ, ∠tMz có số đo là: A. 145°  B. 35°  C. 90°  D. 55° (biết góc vuông kề góc 35° tại M trên đường thẳng xy)`},
+    {so:"Bài 17", de:`Cho đường tròn tâm O, bán kính 4cm. Một điểm A∈(O;4cm) thì: A. OA=4cm  B. OA=2cm  C. OA=8cm  D. Cả 3 câu đều sai`},
+    {so:"Bài 18", de:`Hình vẽ tam giác ABC với M,N trên cạnh BC và các đoạn AM,AN có: A. 4 tam giác  B. 5 tam giác  C. 6 tam giác  D. 7 tam giác`},
+    {so:"Bài 19", de:`Định nghĩa tam giác ABC.`},
+    {so:"Bài 20", de:`Vẽ và nêu cách vẽ tam giác ABC có độ dài AB=3, AC=4, BC=5.`},
+    {so:"Bài 21", de:`Trên cùng một nửa mặt phẳng bờ chứa tia Ox, xác định hai tia Oy và Ot sao cho ∠xOy=30° và ∠xOt=70°. 1) Tia nào nằm giữa hai tia còn lại? Vì sao? 2) Tính ∠yOt? Tia Oy có là tia phân giác của ∠xOt không? 3) Gọi Om là tia đối của tia Ox. Tính ∠mOt?`},
+    {so:"Bài 22", de:`Cho hai điểm M,N nằm cùng phía đối với A, cùng phía đối với B. Điểm M nằm giữa A,B. Biết AB=5cm, AM=3cm, BN=1cm. Chứng tỏ rằng: 1) Bốn điểm A,B,M,N thẳng hàng. 2) Điểm N là trung điểm AB. 3) Vẽ đường tròn tâm N qua B và đường tròn tâm A qua N, chúng cắt nhau tại C. Tính chu vi tam giác CAN.`},
+    {so:"Bài 23", de:`Gọi M là trung điểm đoạn thẳng AB. Vẽ điểm N nằm giữa M,B. Cho biết MN=a(cm), NB=b(cm). 1) Tính AB. 2) Lấy điểm O nằm ngoài đường thẳng AB. Giả sử ∠AOB=100°; ∠AOM=60°; ∠MON=20°. Hỏi tia ON có phải là tia phân giác của góc MOB không? Vì sao?`},
+  ]
+},
+{
+  ten:"Bài tập nâng cao",
+  bai:[
+    {so:"Bài 1", de:`Cho ba điểm A, B, C không nằm trên đường thẳng a, trong đó đường thẳng a cắt các đoạn thẳng AB và AC. Đường thẳng a có cắt đoạn thẳng BC không?`,
+    dap:`Đường thẳng a cắt đoạn AB và không đi qua A,B nên A,B thuộc hai nửa mặt phẳng đối nhau bờ a. Tương tự, A,C thuộc hai nửa mặt phẳng đối nhau bờ a.<br>
+Vậy B,C thuộc cùng một nửa mặt phẳng bờ a, chúng lại không nằm trên a, do đó <b>đường thẳng a không cắt đoạn thẳng BC.</b>`},
+    {so:"Bài 2", de:`Cho n tia chung gốc tạo thành tất cả 190 góc. Tính n?`,
+    dap:`n(n−1)/2=190 ⇒ <b>n = 20</b>`},
+    {so:"Bài 3", de:`Bốn điểm A, B, C, D không nằm trên đường thẳng a. Chứng tỏ rằng đường thẳng a hoặc không cắt hoặc cắt ba hoặc cắt bốn đoạn thẳng trong các đoạn thẳng AB, AC, AD, BC, BD, CD.`,
+    dap:`Đường thẳng a chia mặt phẳng ra hai nửa. Xét 3 trường hợp:<br>
+1) Nếu cả bốn điểm A,B,C,D cùng thuộc một nửa mặt phẳng thì a không cắt đoạn nào.<br>
+2) Nếu có một điểm (vd A) thuộc một nửa, ba điểm kia (B,C,D) thuộc nửa đối thì a cắt ba đoạn AB,AC,AD.<br>
+3) Nếu có hai điểm (vd A,B) thuộc một nửa, hai điểm kia (C,D) thuộc nửa đối thì a cắt bốn đoạn AC,AD,BC,BD.`},
+    {so:"Bài 4", de:`Cho hai tia Ox, Oy đối nhau. Trên hai nửa mặt phẳng đối nhau có bờ chứa tia Ox, vẽ các tia Om, On sao cho ∠xOm=70°, ∠yOn=70°. Chứng tỏ rằng Om, On là hai tia đối nhau.`,
+    dap:`Hai góc xOm, mOy kề bù: ∠mOy=180°−∠xOm=180°−70°=110°.<br>
+Các góc mOy, yOn kề nhau và bù nhau (110°+70°=180°) nên <b>Om, On là hai tia đối nhau (đpcm).</b>`},
+    {so:"Bài 5", de:`Cho góc ∠AOB=110°, tia OC nằm trong góc đó. Gọi OM, ON theo thứ tự là các tia phân giác của các góc AOC, BOC. Tính ∠MON?`,
+    dap:`∠MON=∠MOC+∠CON=(∠AOC)/2+(∠COB)/2=(∠AOC+∠COB)/2=∠AOB/2=110°/2=<b>55°</b>`},
+    {so:"Bài 6", de:`Cho góc ∠AOB=100° và OC là tia phân giác của góc đó. Trong góc AOB vẽ các tia OD, OE sao cho ∠AOD=∠BOE=20°. Chứng tỏ rằng tia OC là tia phân giác của góc DOE.`,
+    dap:`Tính được ∠COD=∠COE=30° (vì ∠AOC=∠BOC=50°, ∠COD=∠AOC−∠AOD=50°−20°=30°, tương tự ∠COE=30°).<br>
+Vậy ∠COD=∠COE ⇒ <b>OC là tia phân giác của góc DOE (đpcm)</b>`},
+    {so:"Bài 7", de:`Cho 10 điểm thuộc đường thẳng a và một điểm nằm ngoài đường thẳng ấy. Có bao nhiêu tam giác có các đỉnh là ba trong 11 điểm trên?`,
+    dap:`Có bao nhiêu đoạn thẳng nằm trên đường thẳng a thì có bấy nhiêu tam giác (mỗi đoạn + điểm ngoài tạo 1 tam giác). Số đoạn thẳng trên a: 10×9/2=45.<br>
+<b>Đáp số: 45 tam giác</b>`},
+    {so:"Bài 8", de:`Cho tam giác ABC, điểm D nằm giữa A,C, điểm E nằm giữa A,B. Các đoạn thẳng BD và CE cắt nhau ở K. Nối DE. Tính xem có bao nhiêu tam giác trong hình vẽ?`,
+    dap:`Có 5 tam giác "đơn" (ADE, AEK..., ghép tương tự CĐ12 bài20), 4 tam giác "đôi", 2 tam giác "ba", 1 tam giác "năm".<br>
+<b>Tất cả có 12 tam giác</b>`},
+    {so:"Bài 9", de:`Cho tam giác ABC. Chứng tỏ rằng bao giờ cũng vẽ được một đường thẳng không đi qua ba đỉnh của tam giác và cắt cả ba tia AB, AC, BC.`,
+    dap:`Lấy A' thuộc tia đối của tia CB và không trùng C. Lấy B' nằm giữa A,C ⇒ <b>đường thẳng A'B' chính là đường thẳng phải tìm.</b>`},
+    {so:"Bài 10", de:`Cho điểm O nằm trong tam giác ABC. Hãy chứng tỏ rằng: 1) Tia BO cắt đoạn thẳng AC tại một điểm D nằm giữa A,C. 2) Điểm O nằm giữa hai điểm B và D. 3) Trong ba tia OA,OB,OC không có tia nào nằm giữa hai tia còn lại.`,
+    dap:`1) O nằm trong tam giác ABC nên O nằm trong góc B, do đó tia BO nằm giữa hai tia BA,BC. Vì A,C là các điểm không trùng B thuộc các tia BA,BC, suy ra tia BO cắt đoạn AC tại D nằm giữa A,C.<br>
+2) Tương tự, O nằm trong góc C nên tia CO nằm giữa CA,CB, suy ra tia CO cắt đoạn BD tại điểm (là O) nằm giữa B,D.<br>
+3) Tia OB không cắt đoạn AC (chỉ có 1 điểm chung D không thuộc tia OB theo lập luận trên) nên tia OB không nằm giữa OA,OC. Lập luận tương tự cho OC, OA <b>⇒ không có tia nào nằm giữa hai tia còn lại (đpcm)</b>`},
+    {so:"Bài 14", de:`Cho góc tù xOy. Bên trong góc xOy, vẽ tia Om sao cho góc xOm bằng 90° và vẽ tia On sao cho góc yOn bằng 90°. 1) Chứng minh góc xOn bằng góc yOm. 2) Gọi Ot là tia phân giác của góc xOy. Chứng minh Ot cũng là tia phân giác của góc mOn.`,
+    dap:`1) ∠xOm+∠mOy=∠xOy hay 90°+∠mOy=∠xOy. ∠yOn+∠nOx=∠xOy hay 90°+∠nOx=∠xOy ⇒ <b>∠xOn=∠yOm</b><br>
+2) Lập luận được ∠xOt=∠tOy. Ta có: ∠xOt=∠xOn+∠nOt; ∠tOy=∠yOm+∠mOt ⇒ <b>∠nOt=∠mOt ⇒ Ot là tia phân giác của góc mOn (đpcm)</b>`},
+    {so:"Bài 16", de:`Trên đường thẳng xx' lấy một điểm O. Trên cùng nửa mặt phẳng bờ là đường thẳng xx' vẽ 3 tia Oy, Ot, Oz sao cho: góc x'Oy=40°; xOt=97°; xOz=54°. 1) Chứng minh tia Ot nằm giữa hai tia Oy và Oz. 2) Chứng minh tia Ot là tia phân giác của góc zOy.`,
+    dap:`a) ∠x'Ox=180°, ∠x'Oy+∠yOx kề bù. ∠x'Oy=40° ⇒ ∠yOx=140°. Vì ∠xOt(97°)<∠xOy(140°) nên Ot nằm giữa Ox,Oy. Vì ∠xOz(54°)<∠xOt(97°) nên Oz nằm giữa Ot,Ox. <b>Vậy Ot nằm giữa Oz và Oy.</b><br>
+b) Ot nằm giữa Oz,Oy ⇒ ∠zOt+∠tOy=∠zOy. Ot nằm giữa Ox,Oy ⇒ ∠tOy=∠xOy−∠xOt=140°−97°=43°. Oz nằm giữa Ox,Ot ⇒ ∠zOt=∠xOt−∠xOz=97°−54°=43°.<br>
+Vậy ∠tOy=∠zOt=43° ⇒ <b>Ot là tia phân giác của góc zOy (đpcm)</b>`},
+    {so:"Bài 17", de:`Cho tia Ox. Trên hai nửa mặt phẳng đối nhau có bờ là Ox. Vẽ hai tia Oy và Oz sao cho góc xOy và xOz bằng 120°. Chứng minh rằng: 1) Góc xOy=góc xOz=góc yOz. 2) Tia đối của mỗi tia Ox,Oy,Oz là phân giác của góc hợp bởi hai tia còn lại.`,
+    dap:`Gọi Ox' là tia đối Ox. Có ∠x'Oy=∠x'Oz=60° (kề bù với góc 120°) và Ox' nằm giữa Oy,Oz nên ∠yOz=∠yOx'+∠x'Oz=120°.<br>
+<b>Vậy ∠xOy=∠xOz=∠yOz=120°</b><br>
+Do Ox' nằm giữa Oy,Oz và ∠x'Oy=∠x'Oz nên Ox' là phân giác góc yOz. Tương tự Oy', Oz' là phân giác các góc xOz và xOy.`},
+    {so:"Bài 18", de:`Cho góc AOB=135°. C là một điểm nằm trong góc AOB biết góc BOC=90°. 1) Tính góc AOC. 2) Gọi OD là tia đối của tia OC. So sánh hai góc AOD và BOD.`,
+    dap:`a) Tia OC nằm giữa OA,OB ⇒ ∠AOC+∠BOC=∠AOB ⇒ ∠AOC=135°−90°=<b>45°</b><br>
+b) C,O,D thẳng hàng ⇒ ∠AOD+∠AOC=180° (kề bù) ⇒ ∠AOD=180°−45°=135°. ∠BOD=180°−90°=90°.<br>
+<b>Vậy ∠AOD > ∠BOD</b>`},
+    {so:"Bài 20", de:`1) Vẽ tam giác ABC biết BC=5cm; AB=3cm; AC=4cm. 2) Lấy điểm O ở trong tam giác ABC nói trên. Vẽ tia AO cắt BC tại H, tia BO cắt AC tại I, tia CO cắt AB tại K. Trong hình đó có bao nhiêu tam giác?`,
+    dap:`Vẽ đoạn BC=5cm, vẽ cung tròn (B;3cm) và (C;4cm), lấy giao điểm A. Vẽ AB,AC được tam giác ABC.<br>
+Có 6 tam giác "đơn" (AOK, AOI, BOK, BOH, COH, COI); 3 tam giác "ghép đôi" (AOB, BOC, COA); 6 tam giác "ghép ba" (ABH, BCI, CAK, ABI, BCK, CAH); 1 tam giác "ghép 6" (ABC).<br>
+<b>Tổng: 6+3+6+1 = 16 tam giác</b>`},
+    {so:"Bài 23", de:`1) Cho 6 tia chung gốc. Có bao nhiêu góc trong hình vẽ? Vì sao? 2) Vậy với n tia chung gốc, có bao nhiêu góc trong hình vẽ?`,
+    dap:`a) Mỗi tia với 1 tia còn lại tạo 1 góc. Xét 1 tia, tia đó cùng với 5 tia còn lại tạo 5 góc. Làm vậy với 6 tia được 5×6 góc, nhưng mỗi góc tính 2 lần nên có: 5×6/2=<b>15 góc</b><br>
+b) Tổng quát: với n tia chung gốc có <b>n(n−1)/2 góc</b>`},
+    {so:"Bài 24", de:`Trên đoạn thẳng AB lấy 2006 điểm khác nhau đặt tên theo thứ tự từ A đến B là A₁;A₂;A₃;...;A₂₀₀₄. Từ điểm M không nằm trên đoạn thẳng AB ta nối M với các điểm A; A₁;A₂;A₃;...;A₂₀₀₄; B. Tính số tam giác tạo thành.`,
+    dap:`Tổng số điểm trên AB là 2006 (kể cả A,B), nên có 2006 đoạn thẳng nối từ M đến các điểm đó. Mỗi đoạn thẳng (ví dụ MA) có thể kết hợp với 2005 đoạn còn lại và đoạn thẳng tương ứng trên AB để tạo 2005 tam giác.<br>
+2006 đoạn thẳng tạo thành 2005×2006 lượt tam giác, nhưng mỗi tam giác tính 2 lần.<br>
+<b>Số tam giác thực có: 2005×2006:2 = 2 011 015</b>`},
+    {so:"Bài 25", de:`Cho tam giác ABC và BC=5cm. Điểm M thuộc tia đối của tia CB sao cho CM=3cm. 1) Tính độ dài BM. 2) Cho biết góc BAM=80°, góc BAC=60°. Tính góc CAM. 3) Vẽ các tia Ax, Ay lần lượt là tia phân giác của góc BAC và CAM. Tính góc xAy. 4) Lấy K thuộc đoạn thẳng BM và CK=1cm. Tính độ dài BK.`,
+    dap:`1) M,B thuộc 2 tia đối nhau CB,CM ⇒ C nằm giữa B,M ⇒ BM=BC+CM=5+3=<b>8cm</b><br>
+2) C nằm giữa B,M ⇒ tia AC nằm giữa AB,AM ⇒ ∠CAM=∠BAM−∠BAC=80°−60°=<b>20°</b><br>
+3) ∠xAy=∠xAC+∠CAy=½∠BAC+½∠CAM=½(∠BAC+∠CAM)=½∠BAM=½×80°=<b>40°</b><br>
+4) Nếu K∈tia CM: C nằm giữa B,K ⇒ BK=BC+CK=6cm. Nếu K∈tia CB: K nằm giữa B,C ⇒ BK=BC−CK=4cm.<br>
+<b>Vậy BK = 6cm hoặc 4cm</b>`},
+  ]
+}
+];
+
+/* ===================== TỔNG HỢP CHUYÊN ĐỀ ===================== */
+const CHUYENDE = [
+  {ten:"CĐ1: Tập hợp", dang:CD1_DANG},
+  {ten:"CĐ2: Chia hết – Chia có dư", dang:CD2_DANG},
+  {ten:"CĐ3: Lũy thừa", dang:CD3_DANG},
+  {ten:"CĐ4: Dãy số quy luật", dang:CD4_DANG},
+  {ten:"CĐ5: Ước – Bội – ƯCLN – BCNN", dang:CD5_DANG},
+  {ten:"CĐ6: Tìm chữ số tận cùng", dang:CD6_DANG},
+  {ten:"CĐ7: Số nguyên tố – Số chính phương", dang:CD7_DANG},
+  {ten:"CĐ8: Bất đẳng thức", dang:CD8_DANG},
+  {ten:"CĐ9: Dãy phân số quy luật", dang:CD9_DANG},
+  {ten:"CĐ10: Phương pháp giải toán", dang:CD10_DANG},
+  {ten:"CĐ11: Toán chuyển động", dang:CD11_DANG},
+  {ten:"CĐ12: Điểm-Đường thẳng-Đoạn thẳng", dang:CD12_DANG},
+  {ten:"CĐ13: Góc và các bài toán liên quan", dang:CD13_DANG},
+];
+
+/* ===================== STATE & STORAGE ===================== */
+let curCD = 0, curDang = 0;
+let answerStore = {};
+const STORE_KEY = "toan6_nangcao_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) answerStore = JSON.parse(raw);
+  }catch(e){ answerStore = {}; }
+}
+function persist(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(answerStore)); }catch(e){}
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window.__toastT);
+  window.__toastT = setTimeout(()=>t.classList.remove('show'), 1600);
+}
+function manualSave(){ persist(); showToast('💾 Đã lưu tiến trình'); }
+function clearProgress(){
+  if(!confirm('Xóa toàn bộ phần em đã ghi ở tất cả chuyên đề? Không thể hoàn tác.')) return;
+  answerStore = {};
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  renderDang();
+  showToast('🗑️ Đã xóa tiến trình');
+}
+function saveAnswer(key,val){
+  answerStore[key] = val;
+  persist();
+}
+
+/* ===================== RENDER ===================== */
+const cdSelectEl = document.getElementById('cdSelect');
+const tabsEl = document.getElementById('tabs');
+const mainEl = document.getElementById('main');
+const titleEl = document.getElementById('appTitle');
+
+function renderCDSelect(){
+  cdSelectEl.innerHTML = CHUYENDE.map((c,i)=>`<div class="cd-pill ${i===curCD?'active':''}" data-i="${i}">${c.ten}</div>`).join('');
+  cdSelectEl.querySelectorAll('.cd-pill').forEach(p=>p.onclick=()=>{
+    curCD = parseInt(p.dataset.i); curDang = 0; renderAll();
+  });
+}
+
+function renderAll(){
+  titleEl.textContent = "📘 " + CHUYENDE[curCD].ten;
+  renderCDSelect();
+  renderDang();
+}
+
+function renderDang(){
+  const dangList = CHUYENDE[curCD].dang;
+  tabsEl.innerHTML = dangList.map((d,i)=>`<div class="tab ${i===curDang?'active':''}" data-i="${i}">${d.ten.replace('Dạng ','D')}</div>`).join('');
+  tabsEl.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ curDang = parseInt(t.dataset.i); renderBody(); });
+  renderBody();
+}
+
+function renderBody(){
+  const d = CHUYENDE[curCD].dang[curDang];
+  let html = `<div class="dang-title">${d.ten}</div>`;
+
+  if(d.lythuyet){
+    d.noidung.forEach(n=>{ html += `<div class="theory"><h4>${n.h}</h4>${n.t}</div>`; });
+    mainEl.innerHTML = html;
+    return;
+  }
+
+  if(d.tuluyen) html += `<div class="note">📌 Phần này sách không kèm đáp án (bài tập tự luyện) — bé tự giải, phụ huynh đối chiếu sau.</div>`;
+
+  d.bai.forEach((b,j)=>{
+    if(b.notext){
+      html += `<div class="theory"><h4>${b.so}</h4>${b.de}</div>`;
+      return;
+    }
+    const key = `${curCD}-${curDang}-${j}`;
+    const saved = answerStore[key] || '';
+    const isTuluyen = d.tuluyen || !b.dap;
+    html += `<div class="card" id="card-${j}">
+      <div class="card-head" onclick="toggleCard(${j})">
+        <div><span class="bai-label">${b.so}:</span> <span class="de">${b.de}</span>${isTuluyen?'<span class="tuluyen-badge">Tự luyện</span>':''}</div>
+        <div class="chev">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="answer-box">
+          <label>✏️ Bé tự làm vào đây:</label>
+          <textarea placeholder="Viết lời giải / đáp án của em..." oninput="saveAnswer('${key}',this.value)">${saved}</textarea>
+        </div>
+        ${isTuluyen ? '' : `<button class="btn-dapan" onclick="toggleDapAn(event,${j})">👁️ Xem đáp án</button>
+        <div class="dapan" id="dapan-${j}"><span class="nhan">✅ Hướng dẫn – Lời giải:</span>${b.dap}</div>`}
+      </div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+}
+
+function toggleCard(j){ document.getElementById(`card-${j}`).classList.toggle('open'); }
+function toggleDapAn(e,j){ e.stopPropagation(); document.getElementById(`dapan-${j}`).classList.toggle('show'); }
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
