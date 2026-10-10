@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tense Quest – Chinh phục 13 thì tiếng Anh</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+:root{--bg:#F2F6FC;--card:#fff;--ink:#14213D;--mute:#5B6785;--line:#DCE4F2;--y:#FFC933;--g:#25C16F;--b:#2F8CFF;--r:#FF5C6C;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1628;--card:#18233D;--ink:#EEF3FF;--mute:#9AA8C7;--line:#2A3858}}
+:root[data-theme="dark"]{--bg:#0E1628;--card:#18233D;--ink:#EEF3FF;--mute:#9AA8C7;--line:#2A3858}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-weight:600}
+#app{max-width:520px;height:100%;margin:0 auto;position:relative}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;padding:14px 16px 28px}
+.screen.on{display:flex}
+button{font-family:inherit;color:inherit;cursor:pointer}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo{font-weight:900;font-size:22px;flex:1;letter-spacing:-.3px}
+.logo i{font-style:normal;background:var(--y);color:#14213D;border-radius:10px;padding:1px 8px;margin-right:6px}
+.chip{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:5px 14px;font-weight:900}
+.back{width:44px;height:44px;border-radius:14px;border:2px solid var(--line);background:var(--card);font-size:20px;font-weight:900}
+h2{margin:6px 0 10px;font-size:22px;font-weight:900}
+.lead{color:var(--mute);margin:0 0 14px}
+.grp{position:relative;display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:24px;padding:18px;margin-bottom:12px;text-align:left;color:#14213D;overflow:hidden;box-shadow:0 6px 0 rgba(20,33,61,.22);transition:transform .1s,box-shadow .1s}
+.grp:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(20,33,61,.22)}
+.grp.p{background:var(--b);color:#fff}.grp.n{background:var(--g)}.grp.f{background:var(--y)}.grp.d{background:var(--ink);color:var(--bg)}
+.grp .ic{font-size:50px;animation:bob 2.4s ease-in-out infinite}
+.grp b{display:block;font-size:26px;font-weight:900;line-height:1.1}.grp small{font-size:15px;font-weight:700;opacity:.9}
+.grp .cnt{margin-left:auto;font-size:34px;font-weight:900;opacity:.35}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-7px) rotate(5deg)}}
+.tl{display:flex;align-items:center;margin:2px 0 14px}
+.tl span{flex:1;text-align:center;font-size:13px;color:var(--mute)}.tl em{display:block;width:14px;height:14px;border-radius:50%;margin:0 auto 4px;background:var(--line)}
+.tl .on em{background:var(--cur);box-shadow:0 0 0 5px color-mix(in srgb,var(--cur) 25%,transparent)}.tl .on{color:var(--ink);font-weight:900}
+.tcard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:2px solid var(--line);border-left:8px solid var(--cur);border-radius:18px;padding:12px 14px;margin-bottom:10px;text-align:left}
+.tcard:active{transform:scale(.98)}
+.tcard .ic{font-size:30px}.tcard b{display:block;font-size:18px;font-weight:900}.tcard small{color:var(--mute);font-weight:700}.tcard .st{margin-left:auto;white-space:nowrap;font-size:15px}
+.hero{background:var(--cur);color:#14213D;border-radius:24px;padding:16px 18px;margin-bottom:12px}
+.hero.w{color:#fff}.hero small{font-weight:800;opacity:.85}.hero h1{margin:2px 0 0;font-size:26px;line-height:1.1;font-weight:900}
+.tabs{display:flex;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:4px;margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;border-radius:12px;padding:9px;font-weight:900;font-size:16px}.tabs .on{background:var(--cur);color:#14213D}
+.box{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.box h3{margin:0 0 8px;font-size:16px;font-weight:900}
+.fm{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}.fm:first-of-type{border-top:0}
+.fm i{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;color:#fff}
+.fm code{font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:800;word-break:break-word}
+.note{color:var(--mute);font-size:14px;margin-top:6px}
+.box ul{margin:0;padding-left:20px}.box li{margin:4px 0}
+.sig{display:flex;flex-wrap:wrap;gap:6px}.sig span{background:color-mix(in srgb,var(--y) 35%,transparent);border-radius:999px;padding:3px 11px;font-size:14px;font-weight:800}
+.ex{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}.ex:first-of-type{border-top:0}
+.ex button{flex:none;width:40px;height:40px;border-radius:12px;border:0;background:var(--b);color:#fff;font-size:18px}
+.ex b{display:block}.ex small{color:var(--mute)}
+.tip{background:color-mix(in srgb,var(--g) 18%,var(--card));border:2px solid var(--g);border-radius:18px;padding:12px 14px;margin-bottom:12px}
+.go{width:100%;border:0;border-radius:18px;background:var(--cur,var(--g));color:#14213D;font-size:19px;font-weight:900;padding:15px;box-shadow:0 5px 0 rgba(20,33,61,.25)}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(20,33,61,.25)}
+.bar{flex:1;height:14px;background:var(--line);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--g);transition:width .35s}
+.q{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:22px 16px;text-align:center;margin:8px 0 14px;position:relative}
+.q .lab{color:var(--mute);font-size:14px;margin-bottom:8px}.q .t{font-size:24px;font-weight:900;line-height:1.3}
+.q .t u{display:inline-block;min-width:70px;border-bottom:4px solid var(--y);text-decoration:none;color:var(--b)}
+.q .sp{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:0;background:var(--b);color:#fff}
+.opt{display:block;width:100%;border:2px solid var(--line);border-bottom-width:5px;border-radius:16px;background:var(--card);font-size:19px;font-weight:800;padding:13px;margin-bottom:10px}
+.opt:active{transform:translateY(3px);border-bottom-width:2px}
+.opt.ok{background:color-mix(in srgb,var(--g) 30%,var(--card));border-color:var(--g)}.opt.no{background:color-mix(in srgb,var(--r) 25%,var(--card));border-color:var(--r)}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pop{position:fixed;left:50%;top:38%;font-size:90px;transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+.pop.go2{animation:pp .9s ease-out}@keyframes pp{0%{opacity:1;transform:translate(-50%,-50%) scale(.3)}60%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-90%) scale(1.5)}}
+.res{align-items:center;justify-content:center;text-align:center}.res .m{font-size:100px;animation:bob 1.8s infinite}.res .s{font-size:50px;letter-spacing:6px}
+.res .go{max-width:320px;margin:6px 0}.res .go.alt{background:var(--card);border:2px solid var(--line);box-shadow:none}
+.inp{width:100%;font-family:inherit;font-size:22px;font-weight:800;text-align:center;border:3px solid var(--line);border-radius:16px;padding:13px;margin-bottom:12px;background:var(--card);color:var(--ink);outline:0}.inp:focus{border-color:var(--b)}
+.ans{min-height:64px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border:3px dashed var(--line);border-radius:16px;margin-bottom:12px}.ph{color:var(--mute);font-size:15px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tk{border:2px solid var(--line);border-bottom-width:5px;border-radius:12px;background:var(--card);font-size:17px;font-weight:800;padding:8px 12px;touch-action:none;user-select:none;-webkit-user-select:none}
+.dr{padding:10px 0;border-top:1px dashed var(--line)}.dr:first-child{border-top:0}.dr.ok{background:color-mix(in srgb,var(--g) 14%,transparent);border-radius:12px}
+.lb{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;color:#fff;font-style:normal;font-weight:900;margin-bottom:6px}
+.slots{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.slot{min-width:54px;min-height:40px;border:2px dashed var(--mute);border-radius:10px;padding:6px 10px;font-weight:800;font-size:16px;text-align:center}.slot.f{border:2px solid var(--g);background:color-mix(in srgb,var(--g) 25%,var(--card))}
+.gh{position:fixed;transform:translate(-50%,-60%) scale(1.1);pointer-events:none;z-index:9;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 6px}.stats div{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 4px;text-align:center;font-size:12px;color:var(--mute)}.stats b{display:block;font-size:17px;color:var(--ink);font-weight:900}
+/* ===== MÁY TÍNH / MÀN HÌNH RỘNG (tự động theo độ rộng) ===== */
+@media (min-width:860px){
+ #app{max-width:1180px}
+ .screen{padding:26px 40px 44px}
+ .logo{font-size:28px}h2{font-size:26px}.lead{font-size:18px}
+ .tcard:hover{border-color:var(--cur)}.opt:hover{border-color:var(--b)}.go:hover{filter:brightness(1.05)}
+ #home.on{display:grid;grid-template-columns:repeat(3,1fr);gap:0 20px;align-content:start}
+ #home .top,#home h2,#home .lead{grid-column:1/-1}
+ #home .grp.d{grid-column:span 2}
+ #home .grp{flex-direction:column;align-items:flex-start;justify-content:center;padding:28px;min-height:210px}
+ #home .grp .ic{font-size:72px}#home .grp b{font-size:32px}
+ #home .grp .cnt{position:absolute;right:22px;top:14px;margin:0}
+ #list.on{display:grid;grid-template-columns:repeat(2,1fr);gap:0 18px;align-content:start}
+ #list .top,#list .tl,#list .lead,#list h2,#list .hero,#list .stats,#list .note,#list .box{grid-column:1/-1}
+ #lesson.on{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;align-content:start}
+ #lesson .top,#lesson .hero,#lesson .tip,#lesson .go,#lesson .box:has(#dg){grid-column:1/-1}
+ .hero h1{font-size:34px}.box{padding:18px}.fm code{font-size:16px}.ex b{font-size:18px}
+ #play,#done{padding-inline:max(40px,calc((100% - 820px)/2))}
+ #play.on{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-content:start}
+ #play .top,#play .q,#play .go,#play .inp,#play .ans,#play .bank{grid-column:1/-1}
+ .q{padding:34px 24px}.q .t{font-size:32px}.opt{font-size:21px;padding:16px}
+ .stats div{font-size:14px;padding:14px 6px}.stats b{font-size:24px}
+}
+@media (min-width:860px) and (max-width:1100px){#home.on{grid-template-columns:repeat(2,1fr)}#home .grp.d{grid-column:span 1}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div id="app">
+ <section class="screen on" id="home"></section>
+ <section class="screen" id="list"></section>
+ <section class="screen" id="lesson"></section>
+ <section class="screen" id="play"></section>
+ <section class="screen res" id="done"></section>
+ <div class="pop" id="pop"></div>
+</div>
+<script>
+/* ===== DỮ LIỆU 13 THÌ (nguồn: PDF + 3 file Word) ===== */
+const GR={past:{n:'Quá khứ',s:'Chuyện đã xảy ra',ic:'🦖',c:'#2F8CFF',cls:'p'},pres:{n:'Hiện tại',s:'Chuyện đang xảy ra',ic:'🏃',c:'#25C16F',cls:'n'},fut:{n:'Tương lai',s:'Chuyện sắp xảy ra',ic:'🚀',c:'#FFC933',cls:'f'}};
+const RAW=[
+['hts','pres','Hiện tại đơn','Present Simple','☀️',['S + V(s/es) + O','S + do/does + not + V + O','Do/Does + S + V + O ?'],['Sự thật hiển nhiên','Thói quen, việc lặp lại','Năng lực, sở thích','Lịch trình cố định (tàu, xe, thời khóa biểu)'],'always, usually, often, sometimes, every day, never',[['The sun rises in the East.','Mặt trời mọc ở hướng Đông.'],['I get up early every morning.','Mình dậy sớm mỗi sáng.']],'Thêm -es sau động từ tận cùng o, s, x, ch, sh (go → goes, watch → watches).',[['Mary often ___ to school by bike.',['go','goes','is going'],1],['I ___ up early every day.',['get','gets','got'],0]],'Với to be: S + am/is/are (+ not). Hỏi: Am/Is/Are + S ?'],
+['htt','pres','Hiện tại tiếp diễn','Present Continuous','🏃',['S + am/is/are + V-ing + O','S + am/is/are + not + V-ing + O','Am/Is/Are + S + V-ing + O ?'],['Hành động đang diễn ra ngay lúc nói','Sau câu mệnh lệnh: Look! Listen! Be quiet!','Phàn nàn, lặp lại với always','Kế hoạch gần trong tương lai'],'now, right now, at the moment, at present, Look!',[['The children are playing football now.','Bọn trẻ đang chơi bóng đá.'],['Look! The baby is crying.','Nhìn kìa! Em bé đang khóc.']],'KHÔNG dùng với động từ chỉ cảm giác, nhận thức: know, like, want, love, hate, understand, see, hear.',[['Be quiet! The baby ___ .',['sleeps','is sleeping','slept'],1],['They ___ football at the moment.',['play','are playing','played'],1]]],
+['htht','pres','Hiện tại hoàn thành','Present Perfect','✅',['S + have/has + V3 + O','S + have/has + not + V3 + O','Have/Has + S + V3 + O ?'],['Việc đã xảy ra (hoặc chưa bao giờ) ở thời điểm không rõ trong quá khứ','Việc lặp đi lặp lại đến nay','Dùng với since và for'],'already, yet, just, ever, never, since, for, recently, before',[['I have just finished my homework.','Mình vừa làm xong bài tập.'],['She has lived here for five years.','Cô ấy sống ở đây được 5 năm.']],'since + mốc thời gian (since 2020). for + khoảng thời gian (for 5 years).',[['I have lived here ___ 2020.',['for','since','ago'],1],['He ___ already eaten.',['have','has','had'],1]]],
+['hthtt','pres','Hiện tại hoàn thành tiếp diễn','Present Perfect Continuous','⏳',['S + have/has + been + V-ing + O','S + have/has + not + been + V-ing + O','Have/Has + S + been + V-ing + O ?'],['Nhấn mạnh khoảng thời gian một việc bắt đầu từ quá khứ và kéo dài đến hiện tại (có thể tiếp tục)'],'all day, all week, since, for, for a long time, lately, recently, so far, up until now',[['I have been studying English for two hours.','Mình học tiếng Anh được hai tiếng rồi.'],['It has been raining all day.','Trời mưa cả ngày rồi.']],'Hoàn thành thường: nhấn vào kết quả. Hoàn thành tiếp diễn: nhấn vào quá trình kéo dài.',[['She has been ___ since morning.',['cook','cooking','cooked'],1],['We ___ waiting for an hour.',['have been','are','had'],0]]],
+['qkd','past','Quá khứ đơn','Past Simple','⏪',['S + V-ed + O','S + did + not + V + O','Did + S + V + O ?'],['Việc đã xảy ra và kết thúc ở thời điểm xác định trong quá khứ'],'yesterday, last night/week/month/year, ago, in 2020',[['I visited my grandma yesterday.','Hôm qua mình thăm bà.'],['We watched a film last night.','Tối qua tụi mình xem phim.']],'Động từ bất quy tắc phải học thuộc: go → went, eat → ate, see → saw.',[['She ___ to the zoo last week.',['goes','went','has gone'],1],['Did you ___ the game?',['win','won','winning'],0]],'Với to be: S + was/were (+ not). Hỏi: Was/Were + S ?'],
+['qktt','past','Quá khứ tiếp diễn','Past Continuous','🌙',['S + was/were + V-ing + O','S + was/were + not + V-ing + O','Was/Were + S + V-ing + O ?'],['Việc đang diễn ra tại một thời điểm trong quá khứ','Việc đang diễn ra thì có việc khác xen vào','Hai việc xảy ra cùng lúc (while)'],'while, when, at that moment, at 10 pm last night',[['I was playing games at 8 last night.','8 giờ tối qua mình đang chơi game.'],['While Mom was cooking, I was reading.','Khi mẹ nấu ăn, mình đang đọc sách.']],'Việc đang diễn ra dùng tiếp diễn; việc xen vào dùng quá khứ đơn.',[['At 9 pm yesterday, I ___ TV.',['watch','was watching','watched'],1],['While she was sleeping, the phone ___ .',['rang','was ringing','rings'],0]]],
+['qkht','past','Quá khứ hoàn thành','Past Perfect','📜',['S + had + V3 + O','S + had + not + V3 + O','Had + S + V3 + O ?'],['Việc xảy ra và xong TRƯỚC một việc khác trong quá khứ'],'before, after, by the time, as soon as, when, already, just',[['When I arrived, the film had started.','Khi mình đến, phim đã chiếu rồi.'],['She had eaten before I came.','Cô ấy đã ăn trước khi mình đến.']],'Việc xảy ra trước → had + V3. Việc xảy ra sau → quá khứ đơn.',[['When we got there, the bus ___ left.',['has','had','was'],1],['After he ___ homework, he played.',['finished','had finished','finishing'],1]]],
+['qkhtt','past','Quá khứ hoàn thành tiếp diễn','Past Perfect Continuous','🗝️',['S + had + been + V-ing + O','S + had + not + been + V-ing + O','Had + S + been + V-ing + O ?'],['Nhấn mạnh khoảng thời gian một việc kéo dài và kết thúc trước một việc khác trong quá khứ'],'until then, by the time, prior to that time, before, after, for',[['I had been waiting for an hour when she came.','Mình đã chờ một tiếng thì cô ấy đến.'],['They had been playing until it rained.','Họ chơi mãi cho đến khi trời mưa.']],'Cách nhớ: had been + V-ing = đã đang làm (trước một mốc quá khứ).',[['He was tired because he ___ running.',['had been','has been','is'],0],['She had been ___ for two hours.',['study','studying','studied'],1]]],
+['tld','fut','Tương lai đơn','Future Simple','🔮',['S + will/shall + V + O','S + will/shall + not + V + O','Will/Shall + S + V + O ?'],['Dự đoán','Quyết định ngay lúc nói, sự tình nguyện, sẵn sàng','Lời hứa, lời đề nghị'],'tomorrow, next week, soon, in the future, I think, perhaps',[['I think it will rain tomorrow.','Mình nghĩ mai trời sẽ mưa.'],['I will help you carry the bag.','Để mình giúp bạn xách túi.']],'Tình nguyện, sẵn sàng → dùng will (không dùng be going to).',[['Wait! I ___ help you.',['will','am going','helped'],0],['Tomorrow it ___ be sunny.',['will','did','has'],0]]],
+['tlg','fut','Tương lai gần','Near Future','🛰️',['S + am/is/are + going to + V','S + am/is/are + not + going to + V','Am/Is/Are + S + going to + V ?'],['Dự định đã có từ trước','Dự đoán dựa vào dấu hiệu ở hiện tại'],'tonight, next month, soon, Look at the clouds!',[['I am going to visit Da Nang next month.','Tháng sau mình định đi Đà Nẵng.'],['Look at the clouds! It is going to rain.','Nhìn mây kìa! Trời sắp mưa.']],'Dự định có sẵn → be going to. Quyết định tức thì → will.',[['I saved money. I ___ to buy a new bike.',['will','am going','went'],1],['She is going ___ be a doctor.',['to','will','for'],0]]],
+['tltt','fut','Tương lai tiếp diễn','Future Continuous','🛸',['S + will + be + V-ing + O','S + will + not + be + V-ing + O','Will + S + be + V-ing + O ?'],['Việc sẽ đang diễn ra tại một thời điểm nào đó trong tương lai'],'at this time tomorrow, at 8 pm next Sunday, next week, in the future',[['At 8 pm tomorrow, I will be watching TV.','8 giờ tối mai mình sẽ đang xem TV.'],['This time next week, we will be flying to Hue.','Giờ này tuần sau tụi mình đang bay ra Huế.']],'Cũng có thể dùng: S + be going to + be + V-ing.',[['At this time tomorrow, I ___ swimming.',['will be','will','am'],0],['She will be ___ at 9 pm.',['study','studying','studied'],1]]],
+['tlht','fut','Tương lai hoàn thành','Future Perfect','🏁',['S + will + have + V3 + O','S + will + not + have + V3 + O','Will + S + have + V3 + O ?'],['Việc sẽ hoàn tất TRƯỚC một mốc hoặc một việc khác trong tương lai'],'by the time, by + mốc tương lai (by 6 pm, by 2030), before',[['By 6 pm, I will have finished my homework.','Đến 6 giờ chiều mình sẽ làm xong bài.'],['She will have left by the time you arrive.','Cô ấy sẽ đi rồi khi bạn đến.']],'Chú ý: phủ định là will not have + V3 (không phải will not be V-ing).',[['By next year, I ___ have learned 1000 words.',['will','am','had'],0],['By 9 pm, he will have ___ dinner.',['eat','ate','eaten'],2]]],
+['tlhtt','fut','Tương lai hoàn thành tiếp diễn','Future Perfect Continuous','🌌',['S + will + have been + V-ing + O','S + will + not + have been + V-ing + O','Will + S + have been + V-ing + O ?'],['Nhấn mạnh khoảng thời gian một việc kéo dài đến một mốc trong tương lai'],'by the time, by next month, for + khoảng thời gian',[['By June, I will have been learning English for 3 years.','Đến tháng 6 mình học tiếng Anh được 3 năm.'],['Next week, she will have been working here for a year.','Tuần sau cô ấy làm ở đây tròn một năm.']],'Cách nhớ: will have been + V-ing = sẽ đã đang làm đến mốc đó.',[['By 5 pm, I will have been ___ for 2 hours.',['study','studying','studied'],1],['He will have ___ driving for 5 hours.',['been','be','was'],0]]]
+];
+const T=RAW.map(([id,g,vi,en,ic,f,u,s,ex,tip,q,n])=>({id,g,vi,en,ic,f,u,s,ex,tip,q,n}));
+const byId=id=>T.find(t=>t.id===id);
+
+/* ===== ÂM THANH ===== */
+let ac;function tone(f,d,ty='sine',v=.2,dl=0){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(v,ac.currentTime+dl);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dl+d);o.connect(g).connect(ac.destination);o.start(ac.currentTime+dl);o.stop(ac.currentTime+dl+d)}catch(e){}}
+const sfx={click(){tone(700,.07,'square',.12);tone(1050,.1,'triangle',.18,.04)},ok(){[523,659,784,1047].forEach((f,i)=>tone(f,.16,'triangle',.22,i*.08))},no(){tone(220,.22,'sawtooth',.13);tone(165,.28,'sawtooth',.13,.1)},win(){[523,659,784,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.22,i*.11))}};
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+
+/* ===== LƯU TIẾN ĐỘ ===== */
+let P={};try{P=JSON.parse(localStorage.getItem('tq')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('tq',JSON.stringify(P))}catch(e){}};
+const total=()=>Object.values(P).reduce((a,b)=>a+b,0);
+const stars=n=>'⭐'.repeat(n||0)+'☆'.repeat(3-(n||0));
+
+/* ===== ĐIỀU HƯỚNG ===== */
+const $=id=>document.getElementById(id);
+const show=id=>document.querySelectorAll('.screen').forEach(s=>{s.classList.toggle('on',s.id===id);if(s.id===id)s.scrollTop=0});
+document.addEventListener('click',e=>{if(e.target.closest('button'))sfx.click()},true);
+
+function home(){
+ const cnt=g=>T.filter(t=>t.g===g).length;
+ $('home').innerHTML=`<div class="top"><div class="logo"><i>T</i>Tense Quest</div><div class="chip">⭐ ${total()}/${T.length*3}</div></div>
+ <h2>Chọn thế giới của bé</h2><p class="lead">13 thì tiếng Anh, chia theo 3 mốc thời gian.</p>
+ ${Object.entries(GR).map(([k,g])=>`<button class="grp ${g.cls}" onclick="openGroup('${k}')"><span class="ic">${g.ic}</span><div><b>${g.n}</b><small>${g.s}</small></div><span class="cnt">${cnt(k)} thì</span></button>`).join('')}
+ <button class="grp" style="background:var(--card);border:2px solid var(--line);box-shadow:none;color:var(--ink)" onclick="progress()"><span class="ic">📊</span><div><b>Tiến trình</b><small>Xem bé đã học được bao nhiêu</small></div></button>
+ <button class="grp d" onclick="detective()"><span class="ic">🔎</span><div><b>Thám tử thì</b><small>Đọc câu, đoán thì – trộn cả 13 thì</small></div></button>`;
+ show('home');
+}
+function openGroup(k){
+ const g=GR[k];
+ $('list').innerHTML=`<div class="top"><button class="back" onclick="home()">←</button><div class="logo">${g.n}</div><div class="chip">⭐ ${total()}</div></div>
+ <div class="tl" style="--cur:${g.c}">${Object.entries(GR).map(([kk,x])=>`<span class="${kk===k?'on':''}"><em></em>${x.n}</span>`).join('')}</div>
+ <p class="lead">Chọn một thì để học và luyện tập.</p>
+ ${T.filter(t=>t.g===k).map(t=>`<button class="tcard" style="--cur:${g.c}" onclick="lesson('${t.id}')"><span class="ic">${t.ic}</span><div><b>${t.vi}</b><small>${t.en}</small></div><span class="st">${stars(P[t.id])}</span></button>`).join('')}`;
+ show('list');
+}
+function lesson(id){
+ const t=byId(id),g=GR[t.g],col=t.g==='past'?'w':'';
+ const lab=[['+','var(--g)'],['−','var(--r)'],['?','var(--b)']];
+ $('lesson').innerHTML=`<div class="top"><button class="back" onclick="openGroup('${t.g}')">←</button><div class="logo">${t.en}</div><div class="chip">${stars(P[id])}</div></div>
+ <div class="hero ${col}" style="--cur:${g.c}"><small>${t.ic} ${g.n}</small><h1>${t.vi}</h1></div>
+ <div class="box"><h3>Công thức</h3>${t.f.map((x,i)=>`<div class="fm"><i style="background:${lab[i][1]}">${lab[i][0]}</i><code>${x}</code></div>`).join('')}${t.n?`<div class="note">${t.n}</div>`:''}</div>
+ <div class="box"><h3>Khi nào dùng?</h3><ul>${t.u.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="box"><h3>Từ khóa nhận biết</h3><div class="sig">${t.s.split(', ').map(x=>`<span>${x}</span>`).join('')}</div></div>
+ <div class="box"><h3>Ví dụ (bấm 🔊 để nghe)</h3>${t.ex.map(e=>`<div class="ex"><button onclick="say(this.dataset.s)" data-s="${e[0]}">🔊</button><div><b>${e[0]}</b><small>${e[1]}</small></div></div>`).join('')}</div>
+ <div class="box"><h3>🎮 Kéo thả: ghép công thức</h3><div class="note" style="margin:0 0 6px">Kéo (hoặc chạm) từng mảnh vào đúng ô trống.</div><div id="dg"></div></div>
+ <div class="tip"><b>💡 Mẹo nhớ:</b> ${t.tip}</div>
+ <button class="go" style="--cur:${g.c}" onclick="practice('${id}')">Luyện tập ngay</button>`;
+ G.seen[id]=1;saveG();show('lesson');initDrag(t);
+}
+
+/* ===== ENGINE CÂU HỎI (dùng cho luyện tập & thám tử) ===== */
+let S;
+const CJ={hts:[['The shop ___ (open) at 7 am.','opens'],['My father ___ (drink) coffee every morning.','drinks']],htt:[['Look! The cat ___ (climb) the tree.','is climbing'],['We ___ (do) our homework now.','are doing']],htht:[['I ___ (finish) my homework already.','have finished'],['He ___ (live) here since 2019.','has lived']],hthtt:[['It ___ (rain) all day.','has been raining'],['I ___ (wait) for you for an hour.','have been waiting']],qkd:[['We ___ (visit) Hanoi last summer.','visited'],['She ___ (eat) a banana yesterday.','ate']],qktt:[['I ___ (read) a book at 8 pm last night.','was reading'],['They ___ (play) football when it rained.','were playing']],qkht:[['The film ___ (start) before we arrived.','had started'],['She ___ (finish) lunch before I called.','had finished']],qkhtt:[['He ___ (run) for an hour before he stopped.','had been running'],['We ___ (wait) since 8 when the bus came.','had been waiting']],tld:[['I think it ___ (be) hot tomorrow.','will be'],['I ___ (call) you tonight, I promise.','will call']],tlg:[['Look at the clouds! It ___ (rain).','is going to rain'],['We ___ (visit) grandma next week. We planned it.','are going to visit']],tltt:[['This time tomorrow, I ___ (fly) to Hue.','will be flying'],['At 9 pm tonight, she ___ (sleep).','will be sleeping']],tlht:[['By 6 pm, I ___ (finish) my homework.','will have finished'],['By 2030, he ___ (become) a doctor.','will have become']],tlhtt:[['By June, I ___ (learn) English for 3 years.','will have been learning'],['By 5 pm, she ___ (study) for 2 hours.','will have been studying']]};
+let O;
+const CJ2={hts:[['Birds ___ (fly) in the sky.','fly'],['She ___ (not like) spicy food.','does not like']],htt:[['The boys ___ (not play) now. They are tired.','are not playing'],['Mom ___ (cook) dinner at the moment.','is cooking']],htht:[['They ___ (not see) that film yet.','have not seen'],['We ___ (just, arrive).','have just arrived']],hthtt:[['She ___ (work) here since 2020.','has been working'],['They ___ (play) games all afternoon.','have been playing']],qkd:[['He ___ (not go) to school yesterday.','did not go'],['They ___ (buy) a new car last year.','bought']],qktt:[['She ___ (not sleep) at midnight.','was not sleeping'],['We ___ (have) dinner when the lights went out.','were having']],qkht:[['I ___ (not do) my homework before the bell rang.','had not done'],['They ___ (leave) when I arrived.','had left']],qkhtt:[['She was tired because she ___ (work) all day.','had been working'],['The grass was wet. It ___ (rain).','had been raining']],tld:[['She ___ (not come) to the party.','will not come'],['Do not worry! I ___ (help) you.','will help']],tlg:[['He has no money. He ___ (not buy) a new phone.','is not going to buy'],['They ___ (build) a house next year. It is their plan.','are going to build']],tltt:[['I ___ (not work) at 8 pm tomorrow.','will not be working'],['They ___ (travel) in Japan next month.','will be travelling|will be traveling']],tlht:[['She ___ (not finish) by 5 pm.','will not have finished'],['By next week, we ___ (complete) the project.','will have completed']],tlhtt:[['By 2028, he ___ (work) here for 10 years.','will have been working'],['By midnight, they ___ (dance) for 4 hours.','will have been dancing']]};
+let G={s:{},seen:{},days:[]};try{G=Object.assign(G,JSON.parse(localStorage.getItem('tq2')||'{}'))}catch(e){}
+const saveG=()=>{try{localStorage.setItem('tq2',JSON.stringify(G))}catch(e){}};
+function rec(id,pct){const r=G.s[id]||(G.s[id]={a:0,best:0,last:0});r.a++;r.last=pct;r.best=Math.max(r.best,pct);const d=new Date().toISOString().slice(0,10);if(!G.days.includes(d))G.days.push(d);G.days=G.days.slice(-60)}
+function streak(){let n=0,d=new Date();for(;;){if(G.days.includes(d.toISOString().slice(0,10))){n++;d.setDate(d.getDate()-1)}else if(n===0){d.setDate(d.getDate()-1);if(!G.days.includes(d.toISOString().slice(0,10)))break}else break}return n}
+function progress(){
+ const best=id=>(G.s[id]||{}).best||0,mastered=T.filter(t=>best(t.id)>=80).length,avg=Math.round(T.reduce((a,t)=>a+best(t.id),0)/T.length),att=Object.values(G.s).reduce((a,r)=>a+r.a,0),d=G.s.det;
+ const row=t=>{const r=G.s[t.id],b=best(t.id),ic=b>=80?'🏅':r?'📖':G.seen[t.id]?'👀':'🌱';return `<button class="tcard" style="--cur:${GR[t.g].c}" onclick="lesson('${t.id}')"><span class="ic">${ic}</span><div style="flex:1"><b>${t.vi}</b><div class="bar" style="margin:6px 0"><i style="width:${b}%"></i></div><small>${r?`Tốt nhất ${b}% · gần nhất ${r.last}% · ${r.a} lần`:G.seen[t.id]?'Đã xem bài, chưa luyện tập':'Chưa học'}</small></div></button>`};
+ $('list').innerHTML=`<div class="top"><button class="back" onclick="home()">←</button><div class="logo">Tiến trình học</div></div>
+ <div class="hero" style="--cur:var(--g)"><small>Mức thành thạo chung</small><h1>${avg}%</h1><div class="bar" style="margin-top:8px;background:rgba(255,255,255,.55)"><i style="width:${avg}%;background:#14213D"></i></div></div>
+ <div class="stats"><div><b>${mastered}/${T.length}</b>thì vững</div><div><b>⭐ ${total()}</b>/${T.length*3}</div><div><b>${att}</b>lần luyện</div><div><b>🔥 ${streak()}</b>ngày liền</div></div>
+ <p class="note">🌱 chưa học · 👀 đã xem bài · 📖 đang luyện · 🏅 vững (từ 80%)</p>
+ ${Object.entries(GR).map(([k,g])=>`<h2>${g.ic} ${g.n}</h2>${T.filter(t=>t.g===k).map(row).join('')}`).join('')}
+ <h2>🔎 Thám tử thì</h2><div class="box">${d?`Tốt nhất ${d.best}% · gần nhất ${d.last}% · ${d.a} lần chơi`:'Chưa chơi lần nào'}</div>
+ <button class="go" id="rst" style="grid-column:1/-1;background:var(--card);border:2px solid var(--line);box-shadow:none;margin-top:6px" onclick="resetProgress()">🗑️ Xóa tiến trình</button>`;
+ show('list');
+}
+let rstArm=0;
+function resetProgress(){const b=$('rst');
+ if(!rstArm){rstArm=1;b.textContent='⚠️ Bấm lần nữa để xóa hết';b.style.borderColor='var(--r)';b.style.color='var(--r)';
+  setTimeout(()=>{rstArm=0;if(b.isConnected){b.textContent='🗑️ Xóa tiến trình';b.style.borderColor='';b.style.color=''}},4000);return}
+ rstArm=0;P={};G={s:{},seen:{},days:[]};try{localStorage.removeItem('tq');localStorage.removeItem('tq2')}catch(e){}progress()}
+function buildQs(t){
+ const oth=T.filter(x=>x.id!==t.id),qs=[],mine=t.s.split(', ');
+ t.q.forEach(([q,o,a])=>qs.push({lab:'Chọn từ đúng điền vào chỗ trống',q,o,a:o[a]}));
+ [...CJ[t.id],...CJ2[t.id]].forEach(([q,a])=>{const al=a.split('|');qs.push({t:'type',lab:'Chia động từ trong ngoặc',q,a:al[0],alts:al})});
+ t.ex.forEach(e=>qs.push({t:'order',lab:'Sắp xếp các từ thành câu đúng',q:e[1],plain:1,ns:1,a:e[0],words:e[0].split(' '),say:e[0]}));
+ qs.push({lab:'Câu này thuộc thì nào?',q:t.ex[1][0],o:shuffle([t.vi,...shuffle(oth).slice(0,2).map(x=>x.vi)]),a:t.vi,plain:1});
+ const f=t.f[0];qs.push({lab:'Công thức khẳng định của thì này là?',q:t.vi,plain:1,ns:1,o:shuffle([f,...shuffle(oth.filter(x=>x.f[0]!==f)).slice(0,2).map(x=>x.f[0])]),a:f});
+ const sg=mine.filter(x=>!oth.some(y=>y.s.split(', ').includes(x)));
+ if(sg.length)qs.push({lab:'Từ nào là dấu hiệu của thì này?',q:t.vi,plain:1,ns:1,o:shuffle([sg[0],...shuffle([...new Set(oth.flatMap(x=>x.s.split(', ')).filter(x=>!mine.includes(x)))]).slice(0,2)]),a:sg[0]});
+ [1,2].forEach(i=>{const f=t.f[i];qs.push({lab:i===1?'Công thức PHỦ ĐỊNH của thì này là?':'Công thức NGHI VẤN của thì này là?',q:t.vi,plain:1,ns:1,o:shuffle([f,...shuffle(oth.filter(x=>x.f[i]!==f)).slice(0,2).map(x=>x.f[i])]),a:f})});
+ t.u.slice(0,2).forEach(u=>qs.push({lab:'Trường hợp nào dùng thì này?',q:t.vi,plain:1,ns:1,o:shuffle([u,...shuffle(oth.flatMap(x=>x.u)).filter(x=>x!==u).slice(0,2)]),a:u}));
+ if(sg[1])qs.push({lab:'Từ nào là dấu hiệu của thì này?',q:t.vi,plain:1,ns:1,o:shuffle([sg[1],...shuffle([...new Set(oth.flatMap(x=>x.s.split(', ')).filter(x=>!mine.includes(x)))]).slice(0,2)]),a:sg[1]});
+ t.ex.forEach(e=>qs.push({lab:'Chọn câu tiếng Anh đúng nghĩa',q:e[1],plain:1,ns:1,o:shuffle([e[0],...shuffle(oth).slice(0,2).map(x=>x.ex[0][0])]),a:e[0]}));
+ qs.push({lab:'Câu này thuộc thì nào?',q:t.ex[0][0],o:shuffle([t.vi,...shuffle(oth).slice(0,2).map(x=>x.vi)]),a:t.vi,plain:1});
+ [1,0].forEach(k=>{const e=t.ex[k],x=k?shuffle(oth)[0]:t;qs.push({lab:'Đúng hay sai?',q:`"${e[0]}" – câu này dùng thì ${x.vi}.`,plain:1,ns:1,say:e[0],o:['Đúng','Sai'],a:x===t?'Đúng':'Sai'})});
+ return shuffle(qs).slice(0,20)
+}
+function body(q){
+ if(q.t==='type')return `<input id="ti" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án..."><button class="go" onclick="chkType()">Kiểm tra</button>`;
+ if(q.t==='order'){O={w:shuffle(q.words.map((x,i)=>i)),p:[]};return `<div class="ans" id="oa"></div><div class="bank" id="ob"></div><button class="go" onclick="chkOrder()">Kiểm tra</button>`}
+ return ''
+}
+function renderO(){const q=S.qs[S.i];
+ $('oa').innerHTML=O.p.map((i,k)=>`<button class="tk" onclick="O.p.splice(${k},1);renderO()">${q.words[i]}</button>`).join('')||'<span class="ph">Bấm các từ bên dưới để ghép câu</span>';
+ $('ob').innerHTML=O.w.filter(i=>!O.p.includes(i)).map(i=>`<button class="tk" onclick="O.p.push(${i});renderO()">${q.words[i]}</button>`).join('')}
+function wrong(id){S.first=false;sfx.no();const e=$(id);e.classList.add('shake');setTimeout(()=>e.classList.remove('shake'),400)}
+function chkOrder(){const q=S.qs[S.i];if(S.lock)return;O.p.map(i=>q.words[i]).join(' ')===q.a?win():wrong('oa')}
+function chkType(){const q=S.qs[S.i];if(S.lock)return;const v=$('ti').value.trim().toLowerCase().replace(/\s+/g,' ').replace(/’/g,"'").replace(/won't/g,'will not').replace(/n't/g,' not');q.alts.includes(v)?win():wrong('ti')}
+function win(){S.lock=true;if(S.first)S.right++;sfx.ok();flashStar();say(sentence());setTimeout(()=>{S.i++;S.i<S.qs.length?ask():finish()},1400)}
+function flashStar(t='⭐'){const p=$('pop');p.textContent=t;p.classList.remove('go2');void p.offsetWidth;p.classList.add('go2')}
+function initDrag(t){
+ const lab=['+','−','?'],col=['var(--g)','var(--r)','var(--b)'];
+ $('dg').innerHTML=t.f.map((f,r)=>{const w=f.split(' + ');return `<div class="dr"><i class="lb" style="background:${col[r]}">${lab[r]}</i><div class="slots">${w.map((x,k)=>`<span class="slot" data-k="${k}"></span>`).join('')}</div><div class="bank">${shuffle(w.map((x,k)=>[x,k])).map(([x,k])=>`<button class="tk" data-k="${k}">${x}</button>`).join('')}</div></div>`}).join('');
+ document.querySelectorAll('#dg .tk').forEach(b=>{
+  const put=s=>{const dr=b.closest('.dr');
+   if(s&&!s.textContent&&s.closest('.dr')===dr&&s.dataset.k===b.dataset.k){s.textContent=b.textContent;s.classList.add('f');b.remove();sfx.ok();
+    if(![...dr.querySelectorAll('.slot')].some(x=>!x.textContent)){dr.classList.add('ok');if(document.querySelectorAll('#dg .dr.ok').length===3){sfx.win();flashStar('🎉')}}}
+   else{sfx.no();b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400)}};
+  b.onpointerdown=e=>{e.preventDefault();const g=b.cloneNode(true);g.classList.add('gh');document.body.appendChild(g);
+   const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+   const up=ev=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);g.remove();
+    const el=document.elementFromPoint(ev.clientX,ev.clientY),s=el&&el.closest('.slot');
+    if(s)put(s);else if(Math.hypot(ev.clientX-e.clientX,ev.clientY-e.clientY)<10)put([...b.closest('.dr').querySelectorAll('.slot')].find(x=>!x.textContent))};
+   window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}})
+}
+function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1])}
+function practice(id){
+ const t=byId(id),qs=buildQs(t);
+ 
+ run(qs,{id,title:t.vi,back:()=>lesson(id)});
+}
+function detective(){
+ const qs=shuffle(T).slice(0,8).map(t=>{const e=shuffle(t.ex)[0];return{lab:'Thám tử: câu này thuộc thì nào?',q:e[0],o:shuffle([t.vi,...shuffle(T.filter(x=>x.id!==t.id)).slice(0,2).map(x=>x.vi)]),a:t.vi,plain:1}});
+ run(qs,{id:null,title:'Thám tử thì',back:home});
+}
+function run(qs,cfg){S={qs,i:0,right:0,first:true,cfg,lock:false};ask()}
+function ask(){
+ const q=S.qs[S.i];S.lock=false;S.first=true;
+ const txt=q.plain?q.q:q.q.replace('___','<u>&nbsp;&nbsp;&nbsp;</u>');
+ $('play').innerHTML=`<div class="top"><button class="back" onclick="S.cfg.back()">✕</button><div class="bar"><i style="width:${S.i/S.qs.length*100}%"></i></div><div class="chip">${S.right}✔</div></div>
+ <div class="q"><div class="lab">${q.lab}</div><div class="t">${txt}</div><button class="sp" onclick="say(sentence())">🔊</button></div>
+ ${body(q)||q.o.map((o,k)=>`<button class="opt" onclick="pick(this,${k})">${o}</button>`).join('')}`;
+ show('play');if(q.t==='order')renderO();if(q.plain&&!q.ns)say(q.q);
+}
+const sentence=()=>{const q=S.qs[S.i];return q.say||(q.plain?q.q:q.q.replace('___',q.a))};
+function pick(b,k){
+ if(S.lock)return;const q=S.qs[S.i];
+ if(q.o[k]===q.a){
+  S.lock=true;b.classList.add('ok');sfx.ok();if(S.first)S.right++;
+  const p=$('pop');p.textContent='⭐';p.classList.remove('go2');void p.offsetWidth;p.classList.add('go2');
+  if(!q.plain||q.say)say(sentence());
+  setTimeout(()=>{S.i++;S.i<S.qs.length?ask():finish()},1400);
+ }else{S.first=false;b.classList.add('no','shake');sfx.no()}
+}
+function finish(){
+ sfx.win();const n=S.right/S.qs.length,st=n>=.9?3:n>=.7?2:1;
+ if(S.cfg.id){P[S.cfg.id]=Math.max(P[S.cfg.id]||0,st);save()}rec(S.cfg.id||'det',Math.round(S.right/S.qs.length*100));saveG();
+ $('done').innerHTML=`<div class="m">${st===3?'🏆':st===2?'🥈':'🏅'}</div><h2>${st===3?'Xuất sắc!':st===2?'Giỏi lắm!':'Cố lên nào!'}</h2><div class="s">${stars(st)}</div><p class="lead">Đúng ngay lần đầu ${S.right}/${S.qs.length} câu – ${S.cfg.title}</p>
+ <button class="go" onclick="S.cfg.id?practice('${S.cfg.id}'):detective()">Chơi lại</button><button class="go alt" onclick="S.cfg.back()">Quay về bài học</button><button class="go alt" onclick="progress()">📊 Xem tiến trình</button>`;
+ show('done');
+}
+home();
+</script>
+</body>
+</html>
