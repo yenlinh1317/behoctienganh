@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Bé học từ vựng</title>
+<style>
+:root{color-scheme:light;--bg:#fffdf5;--c:#fff;--t:#14121f;--p:#6c5ce7;--ok:#2ecc71;--no:#ff6b6b;--bd:#e6dcc3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:17px system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center}
+#a{max-width:520px;margin:auto;padding:14px}h1{margin:8px 0 2px;font-size:26px}h2{font-size:34px;margin:14px 0 4px}p{margin:4px 0;color:inherit;opacity:.8}
+button{font:inherit;color:var(--t);background:var(--c);border:2px solid var(--bd);border-radius:14px;padding:12px;cursor:pointer}
+button:active{transform:scale(.97)}button:disabled{opacity:.4}.rw{display:flex;gap:8px;align-items:center}.rw span{flex:1;text-align:left}.rw button{padding:8px 12px}.chest{display:inline-block;animation:pop .7s}.chest span{font-size:96px}.chest b{display:block;font-size:34px;color:#d17a00}@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}.g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.g button{display:flex;flex-direction:column;gap:4px;font-weight:600}.g b{font-size:30px}
+.top{display:flex;justify-content:space-between;align-items:center}.o{display:grid;gap:10px;margin-top:14px}.o.two{grid-template-columns:1fr 1fr}
+.ok{background:var(--ok)!important;color:#fff}.no{background:var(--no)!important;color:#fff}.f{margin-top:12px;font-size:16px}
+.card{min-height:200px;display:flex;flex-direction:column;justify-content:center;background:var(--p);color:#fff;border-radius:20px;padding:20px;margin:16px 0;cursor:pointer}
+.card h2{margin:0}.tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.tiles button{min-height:64px;font-size:15px;padding:6px}
+input{font:inherit;padding:12px;border-radius:12px;border:2px solid var(--bd);width:100%;text-align:center;background:var(--c);color:var(--t)}
+.big{font-size:60px}.row{display:flex;gap:8px;justify-content:center}.row button{flex:1}
+</style></head><body><div id="a"></div><script>
+const W=`cathedral|/kəˈθiːdrəl/|nhà thờ chính
+square|/skweə/|quảng trường
+suburb|/ˈsʌbɜːb/|vùng ngoại ô
+crowded|/ˈkraʊdɪd/|đông đúc
+wide|/waɪd/|rộng
+temple|/ˈtempl/|đền
+pagoda|/pəˈɡəʊdə/|chùa
+pronunciation|/prəˌnʌnsiˈeɪʃn/|cách phát âm
+hot|/hɒt/|nóng
+historic|/hɪˈstɒrɪk/|thuộc về lịch sử
+convenient|/kənˈviːniənt/|thuận lợi
+peace|/piːs/|hòa bình
+famous|/ˈfeɪməs/|nổi tiếng
+narrow|/ˈnærəʊ/|hẹp
+attraction|/əˈtrækʃn/|sự thu hút
+attractive|/əˈtræktɪv/|lôi cuốn
+tourist|/ˈtʊərɪst/|khách du lịch
+located|/ləʊˈkeɪtɪd/|nằm ở vị trí
+popular|/ˈpɒpjələ/|phổ biến
+preserve|/prɪˈzɜːv/|bảo tồn
+former|/ˈfɔːmə/|trước đây
+invite|/ɪnˈvaɪt/|mời
+repair|/rɪˈpeə/|sửa chữa
+agree|/əˈɡriː/|đồng ý
+quick|/kwɪk/|nhanh
+prefer|/prɪˈfɜː/|thích hơn
+brake|/breɪk/|phanh
+afraid|/əˈfreɪd/|sợ
+poor|/pɔː/|nghèo
+rich|/rɪtʃ/|giàu
+difficult|/ˈdɪfɪkəlt/|khó khăn
+journey|/ˈdʒɜːni/|hành trình
+ill|/ɪl/|ốm
+dream|/driːm/|ước mơ
+foreign|/ˈfɒrən/|nước ngoài
+local|/ˈləʊkl/|nội địa
+passport|/ˈpɑːspɔːt/|hộ chiếu
+ticket|/ˈtɪkɪt/|vé
+suitcase|/ˈsuːtkeɪs/|va-li
+port|/pɔːt/|cảng
+airport|/ˈeəpɔːt/|sân bay
+country|/ˈkʌntri/|quốc gia
+price|/praɪs/|giá
+dentist|/ˈdentɪst/|nha sĩ
+artist|/ˈɑːtɪst/|nghệ sĩ
+scientist|/ˈsaɪəntɪst/|nhà khoa học
+dish|/dɪʃ/|bát đĩa
+broken|/ˈbrəʊkən/|hỏng
+iron|/ˈaɪən/|là phẳng
+guard|/ɡɑːd/|người bảo vệ
+alone|/əˈləʊn/|một mình
+lonely|/ˈləʊnli/|cô đơn
+expensive|/ɪkˈspensɪv/|đắt
+town|/taʊn/|thị trấn
+cook|/kʊk/|đầu bếp
+cooker|/ˈkʊkə/|nồi cơm
+funny|/ˈfʌni/|thú vị
+complain|/kəmˈpleɪn/|phàn nàn
+power|/ˈpaʊə/|sức mạnh
+guide|/ɡaɪd/|hướng dẫn
+unless|/ənˈles/|nếu không
+volcano|/vɒlˈkeɪnəʊ/|núi lửa
+vacuum|/ˈvækjuːm/|hút bụi
+simple|/ˈsɪmpl/|đơn giản
+helpful|/ˈhelpfl/|có ích
+forget|/fəˈɡet/|quên
+quarter|/ˈkwɔːtə/|một phần tư
+intelligent|/ɪnˈtelɪdʒənt/|thông minh
+artificial|/ˌɑːtɪˈfɪʃl/|nhân tạo
+letter|/ˈletə/|bức thư
+postcard|/ˈpəʊstkɑːd/|bưu thiếp
+excursion|/ɪkˈskɜːʃn/|chuyến thăm quan
+diploma|/dɪˈpləʊmə/|bằng cấp
+laboratory|/ləˈbɒrətri/|phòng thí nghiệm
+absolutely|/ˈæbsəluːtli/|chắc chắn rồi
+miss|/mɪs/|bỏ lỡ
+borrow|/ˈbɒrəʊ/|đi mượn
+lend|/lend/|cho mượn
+advantage|/ədˈvɑːntɪdʒ/|lợi ích
+disadvantage|/ˌdɪsədˈvɑːntɪdʒ/|bất lợi
+respect|/rɪˈspekt/|tôn trọng
+equality|/ɪˈkwɒləti/|sự công bằng
+formal|/ˈfɔːml/|trang trọng
+informal|/ɪnˈfɔːml/|không trang trọng
+several|/ˈsevrəl/|một vài
+nervous|/ˈnɜːvəs/|lo lắng
+humorous|/ˈhjuːmərəs/|hài hước
+lovely|/ˈlʌvli/|đáng yêu
+information|/ˌɪnfəˈmeɪʃn/|thông tin
+careful|/ˈkeəfl/|cẩn thận
+careless|/ˈkeələs/|bất cẩn
+useful|/ˈjuːsfl/|hữu ích
+useless|/ˈjuːsləs/|vô dụng
+wardrobe|/ˈwɔːdrəʊb/|tủ quần áo
+microwave|/ˈmaɪkrəweɪv/|lò vi sóng
+carpet|/ˈkɑːpɪt/|thảm lót sàn
+hostel|/ˈhɒstl/|nhà nghỉ
+deposit|/dɪˈpɒzɪt/|tiền cọc
+credit card|/ˈkredɪt kɑːd/|thẻ tín dụng
+youth|/juːθ/|tuổi trẻ`.split('\n').map(l=>{const[e,p,v]=l.split('|');return{e,p,v}});
+const $=s=>document.querySelector(s),A=$('#a'),R=a=>a[Math.random()*a.length|0],S=a=>[...a].sort(()=>Math.random()-.5);
+let V='f',vs=[];const lv=()=>{try{vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang))}catch(e){}};lv();try{speechSynthesis.onvoiceschanged=lv}catch(e){}
+const pick=g=>{const m=/male|david|daniel|james|george|guy|ryan|alex|fred|arthur|oliver|thomas|mark|brian|eric|roger/i,f=/female|samantha|karen|serena|zira|aria|jenny|sonia|libby|susan|hazel|victoria|moira|tessa|fiona|kate|emma/i;const r=x=>(g=='f'&&/aria|jenny|samantha|libby|sonia|ava|allison/i.test(x.name)?3:0)+(/natural|neural|online|enhanced|premium/i.test(x.name)?4:0)+(/google|microsoft|siri/i.test(x.name)?2:0)+(/^en-(GB|US)/i.test(x.lang)?1:0);const L=vs.filter(v=>g=='m'?(m.test(v.name)&&!f.test(v.name)):f.test(v.name)).sort((a,b)=>r(b)-r(a));return L[0]||[...vs].sort((a,b)=>r(b)-r(a))[0]};
+const say=t=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t),g=V[0],kid=V[1]=='k',v=pick(g);if(v)u.voice=v;u.lang=v?v.lang:'en-GB';u.rate=kid?(g=='f'?1:1.05):.88;u.pitch=kid?(g=='f'?1.9:2):(g=='f'?1.2:.8);speechSynthesis.speak(u)}catch(e){}};
+const VO=[['f','👩 Nữ'],['m','👨 Nam'],['fk','👧 Bé gái'],['mk','👦 Bé trai']];
+function sv(x){V=x;say('Hello! Let us learn English.');home()}
+const G=[['🃏','Thẻ lật','flash'],['🇻🇳','Chọn nghĩa','mc1'],['🔤','Chọn từ','mc2'],['👂','Nghe chọn từ','ls'],['🧩','Ghép cặp','match'],['❓','Điền chữ cái','miss'],['🔀','Xếp chữ','scr'],['⌨️','Nghe & gõ','type'],['✅','Đúng hay sai','tf'],['⏱️','Đua 60 giây','race']];
+let star=0,last=0,spent=0,PL=[],SC=0,RW=[{n:'🍦 Ăn kem',c:10},{n:'📺 Xem hoạt hình 30 phút',c:20},{n:'🎮 Chơi game 30 phút',c:30},{n:'🧸 Một món đồ chơi nhỏ',c:50},{n:'🍕 Đi ăn pizza',c:100}];
+try{const d=JSON.parse(localStorage.getItem('bhtv')||'{}');star=d.p||0;spent=d.s||0;if(d.r)RW=d.r;if(d.pl)PL=d.pl;SC=d.sc||0}catch(e){}
+const bal=()=>star-spent;const save=()=>{try{localStorage.setItem('bhtv',JSON.stringify({p:star,s:spent,r:RW,pl:PL,sc:SC}))}catch(e){}};setInterval(save,1500);
+function home(){A.innerHTML=`<h1>🌟 Bé học từ vựng</h1><p>${W.length} từ · ⭐ ${bal()} sao</p><p style="margin-top:10px">🔊 Chọn giọng đọc</p><div class=row>${VO.map(v=>`<button style="padding:8px 2px;font-size:14px" class="${V==v[0]?'ok':''}" onclick="sv('${v[0]}')">${v[1]}</button>`).join('')}</div><div class=g>${G.map((g,i)=>`<button onclick="go(${i})"><b>${g[0]}</b>${g[1]}</button>`).join('')}</div><button style='width:100%;margin-top:10px' onclick=shop()>🎁 Phần thưởng · ⭐ ${bal()}</button>`}
+function shop(msg=''){A.innerHTML=`<div class=top><button onclick=home()>←</button><b>🎁 Phần thưởng</b><span></span></div><h2>⭐ ${bal()}</h2><p>1 câu đúng = 1 điểm · 10 điểm = 5 sao</p><p id=mg></p><div id=rl class=o></div><p style=margin-top:18px>➕ Thêm phần thưởng (dành cho bố mẹ)</p><input id=nn placeholder='Tên phần thưởng'><input id=nc type=number placeholder='Số sao cần' style=margin-top:8px><button id=na style=margin-top:8px;width:100%>Thêm</button>`;
+$('#mg').textContent=msg;
+RW.forEach((r,i)=>{const d=document.createElement('div');d.className='rw';const s=document.createElement('span');s.textContent=`${r.n} · ⭐${r.c}`;const b=document.createElement('button');b.textContent='Đổi';b.disabled=bal()<r.c;let sure=0;b.onclick=()=>{if(!sure){sure=1;b.textContent='Chắc chưa?';return}spent+=r.c;save();clap();fw();shop(`🎉 Bé đã đổi: ${r.n}!`)};const x=document.createElement('button');x.textContent='✕';x.onclick=()=>{RW.splice(i,1);save();shop()};d.append(s,b,x);$('#rl').append(d)});
+$('#na').onclick=()=>{const n=$('#nn').value.trim(),c=parseInt($('#nc').value);if(n&&c>0){RW.push({n,c});RW.sort((a,b)=>a.c-b.c);save();shop()}}}
+const ANI=[['🐶','Chó con',5],['🐱','Mèo',5],['🐰','Thỏ',8],['🐥','Gà con',8],['🐷','Heo',10],['🐮','Bò',10],['🐴','Ngựa',15],['🐼','Gấu trúc',20],['🦊','Cáo',20],['🐵','Khỉ',25],['🦁','Sư tử',30],['🐘','Voi',35],['🦒','Hươu cao cổ',40],['🐧','Cánh cụt',40],['🐬','Cá heo',50],['🦄','Kỳ lân',60]];
+const SCN=[['Nông trại','linear-gradient(#8fd3ff 0 55%,#7ed957 55%)','☀️|8|4,☁️|60|6,🏡|68|36,🌳|6|34,🌻|40|50'],['Biển','linear-gradient(#9be7ff 0 45%,#35a7ff 45% 75%,#ffe29a 75%)','☀️|75|4,☁️|15|8,⛵|40|34,🌴|6|56'],['Rừng tuyết','linear-gradient(#cfe8ff 0 50%,#f4f9ff 50%)','❄️|20|5,❄️|70|12,🌲|8|34,🌲|75|36,⛄|45|52']];
+function shop(msg=''){A.innerHTML=`<div class=top><button onclick=home()>←</button><b>🎁 Phần thưởng</b><span></span></div><h2>⭐ ${bal()}</h2><p>Đúng 10/10 câu được hòm x5 ⭐ · Thi 60 giây đúng 20 câu được hòm x10 ⭐</p><p id=mg></p><button id=gv style=width:100%;margin:10px>🏞️ Khu vườn của bé (${PL.length} bạn thú)</button><div class=g id=an></div>`;
+$('#mg').textContent=msg;$('#gv').onclick=()=>garden();
+ANI.forEach(a=>{const b=document.createElement('button');b.innerHTML=`<b>${a[0]}</b>${a[1]}<br>⭐${a[2]}`;b.disabled=bal()<a[2];let sure=0;b.onclick=()=>{if(!sure){sure=1;snd(a[0]);b.innerHTML=`<b>${a[0]}</b>Đổi nhé?<br>⭐${a[2]}`;return}spent+=a[2];PL.push({a:a[0],x:15+Math.random()*60,y:50+Math.random()*30});save();clap();fw();garden(`🎉 Chào mừng ${a[1]} ${a[0]} về khu vườn!`)};$('#an').append(b)})}
+function garden(msg=''){const sc=SCN[SC];A.innerHTML=`<div class=top><button onclick=shop()>←</button><b>🏞️ ${sc[0]}</b><button id=sn>🔄 Đổi cảnh</button></div><p id=mg></p><div id=sc style='position:relative;height:60vh;min-height:300px;border-radius:18px;overflow:hidden;touch-action:none;background:${sc[1]}'></div><p>Kéo thả các bạn thú để xếp theo ý bé</p>`;
+$('#mg').textContent=msg||(PL.length?'':'Chưa có bạn thú nào. Đổi sao để mời bạn về nhé!');$('#sn').onclick=()=>{SC=(SC+1)%SCN.length;save();garden()};
+const B=$('#sc');sc[2].split(',').forEach(d=>{const[e,l,t]=d.split('|'),s=document.createElement('span');s.textContent=e;s.style.cssText=`position:absolute;left:${l}%;top:${t}%;font-size:44px;pointer-events:none`;B.append(s)});
+PL.forEach(p=>{const s=document.createElement('span');s.textContent=p.a;s.style.cssText=`position:absolute;font-size:46px;cursor:grab;user-select:none;touch-action:none;z-index:1;left:${p.x}%;top:${p.y}%`;
+s.onpointerdown=e=>{s.setPointerCapture(e.pointerId);s.drag=1;s.style.zIndex=5};
+s.onpointermove=e=>{if(!s.drag)return;const r=B.getBoundingClientRect();p.x=Math.max(0,Math.min(88,(e.clientX-r.left)/r.width*100-6));p.y=Math.max(0,Math.min(85,(e.clientY-r.top)/r.height*100-6));s.style.left=p.x+'%';s.style.top=p.y+'%'};
+s.onpointerup=()=>{s.drag=0;s.style.zIndex=1;save()};B.append(s)})}
+const SND={'🐶':['Woof woof!',1,.9],'🐱':['Meow!',1.6,.8],'🐰':['Squeak squeak!',2,1.2],'🐥':['Cheep cheep cheep!',2,1.3],'🐷':['Oink oink!',.7,.9],'🐮':['Moooo!',.3,.5],'🐴':['Neigh hee hee!',1.2,.8],'🐼':['Grrr, mmm!',.5,.7],'🦊':['Yip yip!',1.8,1.3],'🐵':['Ooh ooh ah ah!',1.5,1.2],'🦁':['Roooar!',.1,.5],'🐘':['Paaawoooo!',.2,.5],'🦒':['Hmm hmm!',.6,.7],'🐧':['Honk honk!',1.2,1],'🐬':['Ee ee ee!',2,1.4],'🦄':['Neigh! Sparkle!',1.5,.8]};
+const snd=e=>{const s=SND[e];if(!s)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(s[0]);u.lang='en-US';u.pitch=s[1];u.rate=s[2];speechSynthesis.speak(u)}catch(x){}};
+function end(sc,t,m){let g=0;if(!m)g=sc==10?5:0;else if(m=='race')g=sc>=20?10:0;else g=3;star+=g;save();
+if(!m)(sc>=9?clap:sc==8?ding:eck)();else(g?clap:ding)();if(g)fw();
+A.innerHTML=`<div class=big>${!m?(sc>=9?'🏆👏':sc==8?'😊':'😅'):g?'🏆':'😊'}</div><h2>${m=='m'?'Hoàn thành!':m?sc+' câu':sc+'/10'}</h2>${g?`<div class=chest><span>🧰</span><b>⭐ x${g}</b></div>`:`<p>Chưa nhận được sao. ${!m?'Phải đúng 10/10 nhé!':'Cần đúng 20 câu nhé!'}</p>`}<p>⭐ ${bal()} sao</p><div class=row><button onclick=go(last)>Chơi lại</button><button onclick=home()>Menu</button></div>`}
+function garden(msg=''){A.innerHTML=`<div class=top><button onclick=shop()>←</button><b>🏞️ Khu vườn</b><span></span></div><p id=mg></p><div id=sc style='position:relative;height:62vh;min-height:320px;border-radius:18px;overflow:hidden;touch-action:none;background:linear-gradient(#7ec8ff 0 38%,#69c943 38%)'><div style='position:absolute;left:52%;top:60%;width:42%;height:26%;border-radius:50%;background:radial-gradient(#8fe0ff,#2b9be6);box-shadow:0 0 0 6px #8d6e4a66'></div></div><p>Chạm vào bạn thú để nghe tiếng kêu · Kéo để dời chỗ</p>`;
+$('#mg').textContent=msg||(PL.length?'':'Chưa có bạn thú nào. Đổi sao để mời bạn về nhé!');const B=$('#sc');
+[['☀️',5,2,60],['☁️',50,6,44],['🌳',3,24,56],['🌳',80,20,56],['🌷',22,46,34],['🌻',40,70,38],['🌼',8,78,34],['🦋',62,40,28]].forEach(([e,l,t,z])=>{const s=document.createElement('span');s.textContent=e;s.style.cssText=`position:absolute;left:${l}%;top:${t}%;font-size:${z}px;pointer-events:none;text-shadow:${e=='☀️'?'0 0 30px #ffd84a':'none'}`;B.append(s)});
+PL.forEach(p=>{const s=document.createElement('span');s.textContent=p.a;s.style.cssText=`position:absolute;font-size:56px;cursor:grab;user-select:none;touch-action:none;z-index:1;left:${p.x}%;top:${p.y}%`;let sx,sy;
+s.onpointerdown=e=>{s.setPointerCapture(e.pointerId);s.drag=1;sx=e.clientX;sy=e.clientY;s.style.zIndex=5};
+s.onpointermove=e=>{if(!s.drag)return;const r=B.getBoundingClientRect();p.x=Math.max(0,Math.min(88,(e.clientX-r.left)/r.width*100-6));p.y=Math.max(0,Math.min(85,(e.clientY-r.top)/r.height*100-6));s.style.left=p.x+'%';s.style.top=p.y+'%'};
+s.onpointerup=e=>{s.drag=0;s.style.zIndex=1;save();if(Math.hypot(e.clientX-sx,e.clientY-sy)<6)snd(p.a)};B.append(s)})}
+function go(i){last=i;const k=G[i][2];k=='flash'?flash():k=='match'?match():k=='race'?race():quiz(k)}
+let AC;const au=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume();return AC}catch(e){}};
+function clap(){const c=au();if(!c)return;const r=c.sampleRate,b=c.createBuffer(1,r*2.5,r),d=b.getChannelData(0);for(let k=0;k<70;k++){const s=(Math.random()*1.9*r)|0,a=.3+Math.random()*.5;for(let i=0;i<r*.06&&s+i<d.length;i++)d[s+i]+=(Math.random()*2-1)*a*Math.exp(-i/(r*.012))}const o=c.createBufferSource();o.buffer=b;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=1800;const g=c.createGain();g.gain.value=3;const k=c.createDynamicsCompressor();o.connect(f);f.connect(g);g.connect(k);k.connect(c.destination);o.start()}
+function tone(fr,t0,l,ty,v){const c=au();if(!c)return;const o=c.createOscillator(),g=c.createGain(),T=c.currentTime+t0;o.type=ty;o.frequency.setValueAtTime(fr[0],T);o.frequency.exponentialRampToValueAtTime(fr[1],T+l);g.gain.setValueAtTime(v,T);g.gain.exponentialRampToValueAtTime(.001,T+l);o.connect(g);g.connect(c.destination);o.start(T);o.stop(T+l)}
+const ding=()=>{tone([660,660],0,.4,'sine',.3);tone([880,880],.2,.5,'sine',.3)};
+const eck=()=>{tone([1000,600],0,.22,'triangle',.5);tone([600,200],.3,.4,'triangle',.5)};
+function fw(){const cv=document.createElement('canvas');cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9';document.body.append(cv);const x=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;let P=[],t0=Date.now(),last=-999;
+const burst=()=>{tone([400,50],0,.25,'sine',.5);const cx=cv.width*(.15+Math.random()*.7),cy=cv.height*(.12+Math.random()*.4),h=Math.random()*360;for(let i=0;i<60;i++){const a=Math.PI*2*i/60,s=2+Math.random()*4;P.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,h})}};
+const f=()=>{const n=Date.now()-t0;x.clearRect(0,0,cv.width,cv.height);if(n<3500&&n-last>450){last=n;burst()}P=P.filter(p=>p.l>0);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.vx*=.985;p.l-=.012;x.fillStyle=`hsla(${p.h},100%,55%,${p.l})`;x.beginPath();x.arc(p.x,p.y,2.5,0,7);x.fill()});if(n<3500||P.length)requestAnimationFrame(f);else cv.remove()};f()}
+function end(sc,t){if(t==10)(sc>=9?clap:sc==8?ding:eck)();if(t==10&&sc>=9)fw();A.innerHTML=`<div class=big>${t!=10?'⏱️':sc>=9?'🏆👏':sc==8?'😊':'😅'}</div><h2>${sc}/${t}</h2><p>+${sc} điểm · ⭐ ${bal()} sao</p><div class=row><button onclick=go(last)>Chơi lại</button><button onclick=home()>Menu</button></div>`}
+function flash(){let L=S(W),i=0,f=0;const draw=()=>{const w=L[i];A.innerHTML=`<div class=top><button onclick=home()>←</button><span>${i+1}/${L.length}</span></div><div class=card id=cd>${f?`<h2>${w.v}</h2><p>${w.p}</p>`:`<h2>${w.e}</h2><p>Chạm để lật</p>`}</div><div class=row><button id=pv>◀</button><button id=sp>🔊</button><button id=nx>▶</button></div>`;
+$('#pv').onclick=()=>{i=(i+L.length-1)%L.length;f=0;draw()};$('#nx').onclick=()=>{i=(i+1)%L.length;f=0;draw()};$('#sp').onclick=()=>say(w.e);$('#cd').onclick=()=>{f=!f;draw()}};draw()}
+function match(){const P=S(W).slice(0,6);let T=S(P.flatMap(w=>[{w,t:w.e},{w,t:w.v}])),sel=null,ok=0;
+A.innerHTML=`<div class=top><button onclick=home()>←</button><span>Ghép từ với nghĩa</span></div><div class=tiles id=t></div>`;
+T.forEach(x=>{const b=document.createElement('button');b.textContent=x.t;b.onclick=()=>{if(b.disabled)return;if(x.t==x.w.e)say(x.w.e);if(!sel){sel={x,b};b.classList.add('ok');return}
+if(sel.b==b)return;if(sel.x.w==x.w&&sel.x.t!=x.t){b.classList.add('ok');b.disabled=sel.b.disabled=true;if(++ok==6)setTimeout(()=>end(6,6,'m'),600)}else{b.classList.add('no');const s=sel.b;setTimeout(()=>{b.classList.remove('no');s.classList.remove('ok')},500)}sel=null};$('#t').append(b)})}
+function quiz(k){let n=0,sc=0;const Q=S(W.filter(w=>!/\s/.test(w.e))).slice(0,10);const nx=()=>{if(n>=10)return end(sc,10);ask(k,Q[n],ok=>{if(ok)sc++;n++;setTimeout(nx,0)},`${n+1}/10`)};nx()}
+let tm;function race(){let sc=0,t=60,on=1;clearInterval(tm);tm=setInterval(()=>{t--;const e=$('#tt');if(e)e.textContent='⏱ '+t;if(t<=0){clearInterval(tm);on=0;end(sc,sc,'race')}},1000);
+const nx=()=>{if(on)ask('race',R(W.filter(w=>!/\s/.test(w.e))),ok=>{if(ok)sc++;setTimeout(nx,0)},`<span id=tt>⏱ ${t}</span> · ✔ ${sc}`)};nx()}
+function ask(k,w,cb,info){A.innerHTML=`<div class=top><button onclick="clearInterval(tm);home()">←</button><span>${info}</span></div><div id=q></div><div id=o class=o></div>`;
+const q=$('#q'),o=$('#o');let d=0;const fin=(ok,el)=>{if(d)return;d=1;if(el)el.classList.add(ok?'ok':'no');q.insertAdjacentHTML('beforeend',`<p class=f>${ok?'🎉 Đúng!':'😅 Đáp án'}: <b>${w.e}</b> ${w.p} = ${w.v}</p>`);say(w.e);{const b=document.createElement('button');b.textContent='Tiếp theo →';b.className='ok';b.onclick=()=>cb(ok);o.append(b)}};
+const mk=(txt,fn,box=o)=>{const b=document.createElement('button');b.textContent=txt;b.onclick=()=>fn(b);box.append(b);return b};
+const four=()=>S([w,...S(W.filter(x=>x!=w)).slice(0,3)]);
+if(k=='race')k=R(['mc1','mc2','ls']);
+if(k=='mc1'){q.innerHTML=`<h2>${w.e}</h2><p>${w.p}</p>`;say(w.e);four().forEach(x=>mk(x.v,b=>fin(x==w,b)))}
+else if(k=='mc2'){q.innerHTML=`<h2>${w.v}</h2>`;four().forEach(x=>mk(x.e,b=>fin(x==w,b)))}
+else if(k=='ls'){q.innerHTML=`<h2>🔊 Nghe và chọn</h2>`;say(w.e);mk('🔊 Nghe lại',()=>say(w.e));four().forEach(x=>mk(x.e,b=>fin(x==w,b)))}
+else if(k=='miss'){const i=R([...w.e].map((c,j)=>j).filter(j=>j>0));const c=w.e[i];q.innerHTML=`<h2>${w.e.slice(0,i)}_${w.e.slice(i+1)}</h2><p>${w.v} · ${w.p}</p>`;const ls=[c];while(ls.length<4){const x=R([...'abcdefghilmnoprstuy']);if(!ls.includes(x))ls.push(x)}o.className='o two';S(ls).forEach(x=>mk(x,b=>fin(x==c,b)))}
+else if(k=='scr'){q.innerHTML=`<p>${w.v}</p><h2 id=s>&nbsp;</h2>`;let s='';o.className='o two';S([...w.e]).forEach(c=>mk(c,b=>{b.disabled=true;s+=c;$('#s').textContent=s;if(s.length==w.e.length)fin(s==w.e)}))}
+else if(k=='type'){q.innerHTML=`<h2>${w.v}</h2><p>Gõ từ tiếng Anh</p>`;say(w.e);mk('🔊 Nghe',()=>say(w.e));const i=document.createElement('input');i.autocapitalize='off';o.append(i);mk('Kiểm tra',()=>fin(i.value.trim().toLowerCase()==w.e))}
+else if(k=='tf'){const r=Math.random()<.5,s=r?w:R(W.filter(x=>x!=w));q.innerHTML=`<h2>${w.e}</h2><p>có nghĩa là</p><h2>${s.v}</h2>`;say(w.e);o.className='o two';mk('✅ Đúng',b=>fin(r,b));mk('❌ Sai',b=>fin(!r,b))}}
+home();
+</script></body></html>
