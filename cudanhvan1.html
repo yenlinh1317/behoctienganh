@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cú Con Đánh Vần</title>
+<style>
+:root{--bg:#fff4dc;--card:#fff;--ink:#2b2a33;--pri:#14a0a8;--ok:#2ea44f;--bad:#e5484d;--sun:#f59e0b;--mut:#7d7a8a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b2832;--card:#2a3b47;--ink:#f4f1ea;--mut:#a9b6bf;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b2832;--card:#2a3b47;--ink:#f4f1ea;--mut:#a9b6bf;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;text-align:center}
+#app{max-width:560px;margin:0 auto;padding:14px}
+h1{margin:6px 0 0;font-size:1.7rem}.sub{margin:4px 0 12px;color:var(--mut)}
+.garden{background:var(--card);border-radius:16px;padding:10px;min-height:28px;font-size:1.6rem;margin-bottom:12px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cell,.opt,.btn,.ghost{font:inherit;color:var(--ink);cursor:pointer;border:0}
+.cell{background:var(--card);border-radius:14px;padding:8px 2px;box-shadow:0 2px 0 rgba(0,0,0,.12);display:flex;flex-direction:column;gap:2px}
+.cell small{color:var(--mut);font-size:.7rem}.cell b{font-size:1.5rem;color:var(--pri)}.cell span{font-size:.7rem;min-height:1em}
+.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dots{display:flex;gap:6px}.dots i{width:12px;height:12px;border-radius:50%;background:var(--mut);opacity:.35}.dots i.on{background:var(--ok);opacity:1}
+.ghost{background:var(--card);border-radius:12px;padding:8px 14px;font-size:1.1rem}
+.word{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:14px 0;font-size:2.6rem;font-weight:800}
+.syl{background:var(--card);border-radius:16px;padding:8px 14px;min-width:70px}
+.on{color:var(--pri)}.van{color:var(--sun)}.empty{color:var(--mut);opacity:.4}
+.q{font-size:1.15rem;margin:10px 0}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.opts.w{grid-template-columns:1fr}
+.opt{background:var(--card);border-radius:18px;padding:16px 4px;font-size:2rem;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.opt:active{transform:translateY(2px)}.opt.bad{background:var(--bad);color:#fff;animation:sh .3s}.opt.good{background:var(--ok);color:#fff}
+.btn{background:var(--pri);color:#fff;border-radius:16px;padding:14px 22px;font-size:1.1rem;font-weight:700;margin:6px}
+.say{background:var(--sun);color:#fff;border-radius:50%;width:56px;height:56px;font-size:1.5rem}
+.big{font-size:5rem;animation:bn 1s infinite alternate}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes bn{to{transform:translateY(-12px)}}
+.syl{cursor:pointer}.okc{background:#2ea44f!important;color:#fff}.badc{background:#e5484d!important;color:#fff}.seen{outline:3px solid var(--sun)}
+:root{--g1:#ffe9a8;--g2:#ffd3e0;--g3:#bdeaf6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g1:#1f3b4d;--g2:#2d2a4f;--g3:#17323a}}
+:root[data-theme="dark"]{--g1:#1f3b4d;--g2:#2d2a4f;--g3:#17323a}
+body{min-height:100%;background:radial-gradient(circle at 12% 18%,rgba(255,255,255,.45) 0 7%,transparent 7.5%),radial-gradient(circle at 88% 10%,rgba(255,255,255,.4) 0 9%,transparent 9.5%),radial-gradient(circle at 80% 85%,rgba(255,255,255,.35) 0 11%,transparent 11.5%),linear-gradient(160deg,var(--g1),var(--g2) 50%,var(--g3));background-attachment:fixed}
+body::before{content:"☁️      ⭐      🌈";position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:0;right:0;font-size:2.2rem;opacity:.5;white-space:pre;pointer-events:none}
+body::after{content:"🌳  🌻  🍄  🌷  🌳";position:fixed;bottom:calc(4px + env(safe-area-inset-bottom,0px));left:0;right:0;font-size:2.4rem;opacity:.45;white-space:pre;pointer-events:none}
+#app{position:relative;z-index:1;max-width:820px;padding:18px 16px 70px}
+h1{font-size:clamp(2.2rem,7vw,3.2rem)}.sub{font-size:1.25rem}
+.garden{font-size:2.2rem;box-shadow:0 3px 0 rgba(0,0,0,.1)}
+.grid{gap:12px}.cell{padding:14px 2px}.cell small{font-size:.95rem}.cell b{font-size:clamp(2rem,7vw,3rem)}.cell span{font-size:1rem}
+@media(min-width:640px){.grid{grid-template-columns:repeat(6,1fr)}}
+.ghost{font-size:1.4rem;padding:10px 18px}.dots i{width:16px;height:16px}.bar{font-size:1.3rem;font-weight:700}
+.word{font-size:clamp(2.8rem,9vw,5rem)!important;gap:16px}.syl{padding:12px 20px;border-radius:20px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+#sp{font-size:clamp(2rem,6.5vw,3.2rem)!important;min-height:4em!important}
+.q{font-size:clamp(1.4rem,4.5vw,2rem);font-weight:700;margin:14px 0}
+.opts{gap:14px}.opt{font-size:clamp(2.4rem,9vw,4rem);padding:26px 4px;border-radius:24px}
+.say{width:92px;height:92px;font-size:2.6rem;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.btn{font-size:1.5rem;padding:18px 30px;border-radius:20px}
+.big{font-size:8rem}
+.cam{position:relative;aspect-ratio:4/3;width:100%;border-radius:24px;overflow:hidden;background:#222;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.cam video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.zones{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr)}
+.zone{display:flex;flex-direction:column;justify-content:space-between;align-items:center;border:3px dashed rgba(255,255,255,.85);background:rgba(20,160,168,.2);color:#fff;font-weight:800;font-size:clamp(1.8rem,7vw,3.6rem);padding:10px 4px;cursor:pointer;text-shadow:0 2px 4px #000}
+.zone b{background:rgba(0,0,0,.5);border-radius:16px;padding:6px 12px}
+.zone i{display:block;height:16px;width:0;background:var(--sun);border-radius:8px;align-self:flex-start}
+.zone.good{background:rgba(46,164,79,.6)}.zone.bad{background:rgba(229,72,77,.6)}
+</style></head><body><div id="app"></div>
+<script>
+// Dữ liệu: [chữ, cột âm tiết, 6 từ] — theo Bài 1–26 sách Luyện Đọc tập 1
+const L=[
+["Bb","bi bu bư ba bo bô bơ bê be","ba ba,bể cá,bế bé,bề bề,bé bụ,bò bê"],
+["Cc","ca co cô cơ cu cư","cá cờ,cụ cố,bó cỏ,củ từ,cờ đỏ"],
+["Dd","di du dư da do dô dơ dê de","da dê,đá dế,do dự,dụ dỗ,ví da,dỗ bé"],
+["Đđ","đi đu đư đa đo đô đơ đê đe","đu đủ,đi đò,đỗ đỏ,đá đỏ,đi bộ,lá đa"],
+["Gg","ga go gô gơ gu gư","gà gô,gỗ gụ,gò má,gừ gừ,tủ gỗ"],
+["Kk","ki kê ke","kệ gỗ,kì đà,kẽ hở,kì cọ,cũ kĩ,ê ke"],
+["Hh","hi hu hư ha ho hô hơ hê he","lá hẹ,bờ hồ,hổ dữ,hạ cờ,hà mã,lọ hồ"],
+["Ll","li lu lư la lo lô lơ lê le","lọ cà,lá me,le le,lá cờ,lọ đỗ,lò xo"],
+["Mm","mi mu mư ma mo mô mơ mê me my","bố mẹ,mổ cá,cá mè,mỳ ý,mũ đỏ"],
+["Nn","ni nu nư na no nô nơ nê ne","no nê,nụ bí,nơ đỏ,nở rộ,ca nô,na bở"],
+["Rr","ri ru rư ra ro rô rơ rê re","rổ rá,bó rạ,bộ rễ,gà ri,rò rỉ,cá rô"],
+["Ss","si su sư sa so sô sơ sê se","su su,vé số,sơ mi,củ sả,ca sĩ,đồ sứ"],
+["Tt","ti tu tư ta to tô tơ tê te","tu hú,tổ cò,tò vò,tủ cũ,tô mì,bé tí"],
+["Vv","vi vu vư va vo vô vơ vê ve","võ sĩ,vở vẽ,ti vi,ví đỏ,cú vọ,vỏ đỗ"],
+["Xx","xi xu xư xa xo xô xơ xê xe","vé xe,xổ số,xù xì,xô đỏ,xẻ gỗ,xe lu"],
+["Ch ch","chi chu chư cha cho chô chơ chê che","che chở,chả cá,cha mẹ,chì đỏ,lá chè,chữ số"],
+["Gh gh","ghi ghê ghe","ghẹ đỏ,ghế gỗ,ghi nhớ,ghê sợ,vở ghi,ghế đá"],
+["Gi gi","giư gia gio giô giơ giê gie","giá đỗ,giò chả,gió to,gia sư,gia vị,giỏ cá"],
+["Ng ng","ngư nga ngo ngô ngơ ngu","lá ngổ,ru ngủ,ngô tẻ,ngõ nhỏ,ngã ba,cá ngừ"],
+["Ngh ngh","nghệ nghe nghi","củ nghệ,nghé tơ,nghỉ hè,ngô nghê,nghệ sĩ,ý nghĩ"],
+["Nh nh","nhi nhu như nha nho nhô nhơ nhê nhe","nhớ nhà,nho đỏ,nhà lá,nha sĩ,nhà thơ,nhổ cỏ"],
+["Kh kh","khi khu khư kha kho khô khơ khê khe","chú khỉ,cá kho,lá khô,quả khế,khe đá,cá khô"],
+["Ph ph","phi phu phư pha pho phô phơ phê phe","phố cổ,phở bò,phi cơ,cà phê,đi phà,phụ nữ"],
+["Th th","thi thu thư tha tho thô thơ thê the","quả thị,lá thư,thợ mỏ,thỏ mẹ,thứ tư,cá thu"],
+["Tr tr","tri tru trư tra tro trô trơ trê tre","trà đá,tre ngà,cá trê,vị trí,vũ trụ,nhà trẻ"],
+["Qu qu","qua quơ quê que quy","chả quế,quà nhỏ,tổ quạ,que chì,quà quê,cá quả"]
+];
+const R=[
+["Bà bế bé Bi.","Bể bề ở bể cá.","Bé bi bô: bà, ba."],
+["Bò bê có cỏ.","Bố có bể cá.","Cô có cờ, cò có cá."],
+["Dì Ba bế bé.","Bà dỗ bé Na."],
+["Ở bờ đê có dế.","Bố bế bé đi đò.","Bà có bí đỏ, đỗ đỏ."],
+["Nhà bà có tủ gỗ.","Mẹ gỡ cá cho bé."],
+["Hà kẻ vở vẽ.","Bố kì cọ bể cá.","Kệ gỗ đã cũ kĩ."],
+["Ở hồ có cá to.","Bé Hà bị ho.","Mẹ và bé đi xe ở bờ hồ."],
+["Mẹ có lọ cà, bà có lọ đỗ.","Xe lu đi lề mề.","Tú có lá cờ đỏ nhỏ."],
+["Tú có mũ ni đỏ.","Bố có mỳ ý cho bé.","Mẹ mổ cá mè."],
+["Bé Hà có nơ đỏ to.","Nụ bí bé tí ti.","Dì Ba đi ca nô."],
+["Gà ri đi bộ ở bờ đê.","Ở bờ hồ có cá rô to.","Bé Bi ủ rũ ở nhà."],
+["Bố Tú là ca sĩ.","Mẹ có áo sơ mi đỏ.","Bé Vy có sô cô la."],
+["Bố Tú là ca sĩ.","Mẹ có áo sơ mi đỏ.","Bé Vy có sô cô la."],
+["Bố An là võ sĩ.","Bé Na có vở vẽ.","Mẹ cho Vy về bà."],
+["Ở xa xa có xe lu to.","Bố Na là thợ xẻ gỗ.","Vũ có xô đỏ to."],
+["Mẹ và bé đi chợ quê.","Bé có chì đỏ nhỏ.","Bà cho bé chả cá."],
+["Ông có ghế gỗ đã cũ.","Bé có vở ghi.","Bờ hồ có ghế đá."],
+["Mẹ có lọ gia vị.","Chú Tư cho bé giỏ cá."],
+["Mẹ ru bé ngủ.","Chị Hà bẻ ngô cho bé.","Bé bị ngã ở ngõ nhỏ."],
+["Cô Hà là nghệ sĩ.","Nghỉ hè bé về quê.","Bờ đê có chú nghé tơ."],
+["Bé nhớ nhà, nhớ bố mẹ.","Chị Nhi nhổ cỏ cho bà.","Bố Hà là nha sĩ."],
+["Bà có cá kho khế.","Bé đi khe khẽ để bà ngủ.","Nhà bé ở khu phố cổ."],
+["Bé Na đi phà ra nhà bà.","Hà pha cà phê cho bố."],
+["Bố Hà là thợ mỏ.","Thứ tư Hà thi vẽ.","Cá mè to, cá cờ thì nhỏ."],
+["Chú Tư cho bé giỏ cá trê."],
+["Quê nhà Na có chả quế.","Ở quê có cá quả.","Bà có quà quê cho bé."],
+["Bố bê bể cá.","Bé có ô đỏ.","Bố đỡ bé.","Kì đà bò ở kẽ đá.","Bé bị ho, bà đã có lá hẹ.","Hà tả hồ cá.","Hồ cá to, có cá mè, cá trê, cá rô và cả cá cờ đỏ.","Mẹ cho bé đi chợ.","Ở chợ có gà ri, cá rô, su su.","Chợ có cả rổ rá."],
+["Chị có cá kho khế.","Cá hổ là cá dữ.","Bố mẹ cho Hà đi ca nô.","Bà che gió cho ba chú gà.","Mẹ nhờ Hà bê ghế nhỏ.","Ba Hà để bể cá ở hè.","Bể có cá, có cò, le le.","Cò ở bể là cò đá.","Le le là le le gỗ."],
+["Hà có ghế gỗ.","Ba Hà có ghế da.","Bờ hồ có ghế đá.","Bà bế bé Lê ở ghế đá.","Chú Hà có ghế gỗ.","Bà bế bé Lê.","Bé bi bô: “Dì… giò…”","Đó là bé kể: Dì Kế giã giò.","Cỗ có giò, có gà, có cả giá đỗ."],
+["Bé đi khe khẽ.","Bi vẽ chú khỉ.","Mẹ có quả me.","Mẹ có rổ khế để kho cá.","Nhà cô Nhã ở bờ hồ.","Hồ nhỏ, nhà nho nhỏ.","Hồ có cá mè, ba ba.","Nhà có na, nho, khế."],
+["Mẹ ru bé ngủ.","Nghỉ hè, Ly về bà.","Khi đi qua ngõ nhỏ, bé bị ngã.","Cô Nga cho bé Kha ra phố đi bộ.","Nhà dì Nga có pi a nô.","Cả nhà Bi ra phố, ghé nhà dì, nghe pi a nô.","Dì Nga pha cà phê.","Bố mẹ có cà phê.","Bi có phở.","Bé Ly có na."],
+["Bi học pi a nô.","Bà ở phố cổ.","Mẹ cho bé đi ăn phở.","Bố bé là thợ mỏ.","Bé Na đi phà về nhà cô Hà.","Quê có bà ở quê.","Khi bà ra phố, cả nhà có quà.","Quà là rổ khế, rổ mơ, cá rô, cá quả.","Có khi là cô gà ri."],
+["Mẹ Hà là y tá.","Na về quê, Na đi ra đê.","Mẹ có rổ khế cho bé.","Dì Mơ cho mẹ con cá quả.","Mẹ bế bé ra y tế xã.","Bố Thơ là thợ mỏ.","Bố ở xa nhà.","Ở nhà có mẹ, có Thơ, có bé Tộ.","Cả nhà nhớ bố."],
+["Chị cả cho bé vở ghi.","Cô cho bé bộ chữ số.","Bé Bi vẽ cá thu.","Nhà cô Hà có chú thỏ.","Thứ ba, bé Na thi vẽ.","Chó xù lừ lừ đi ra ngõ.","Lũ gà ngỡ nó là sư tử, sợ quá.","Sư tử đi qua.","Nó ngó chó xù: Mi mà là sư tử à?","Chó xù sợ quá: Dạ… chỉ là chó xù ạ."],
+["Dì Na vỗ về bé ngủ.","Nhà bà có tủ gỗ.","Quê bé Kha có nhà ga.","Cô cho bé vở ghi.","Bờ hồ có ghế đá.","Chị Trà cho bé Chi đi nhà trẻ.","Qua chợ, chị chỉ cho bé cá trê, cá mè…","Ở nhà trẻ, Chi nhớ mẹ.","Chị Trà dỗ: “Bé nhè thì cô chê đó”.","Bé nghe chị."],
+["Bé đi nhà trẻ.","Bé tô cho rõ chữ và số.","Bà đi chợ về có rổ cá to.","Nhà cô Hà có chú chó Lu.","Nhà Na có tre ngà.","Bố mẹ cho bé và chị Chi đi sở thú.","Sở thú có con chó.","Sở thú có con thỏ.","Sở thú có con bò.","Sở thú có con dê.","Sở thú có tê tê.","Sở thú có thú dữ, có sư tử.","Sở thú có cả hổ."],
+["Quả đu đủ nhỏ.","Bà có rổ củ từ.","Mẹ Hà có cá thu.","Chị Ly gửi thư cho mẹ.","Sở thú có sư tử.","Thứ tư bé ra nhà chị Kha.","Chị Kha cho bé vở ghi.","Chị Kha kẻ vở cho bé.","Bé tha hồ vẽ.","Bé vẽ chú khỉ, vẽ cả ghế gỗ.","Bà đi chợ về.","Bà cho bé và chị Kha quả khế.","Bé kê ghế cho bà."],
+["Quả đu đủ nhỏ.","Bà có rổ củ từ.","Mẹ Hà có cá thu.","Chị Ly gửi thư cho mẹ.","Sở thú có sư tử.","Nhà có giỗ.","Mẹ nhờ Bi dỗ bé Ly.","Bé nhè.","Bi bế bé.","Bé lơ mơ.","Bi đi nhè nhẹ.","Dỗ bé khó ghê cơ!"],
+["Quê bà có chả quế.","Bà cho bé quà quê.","Nhà Chi có quả vả.","Mẹ cho Chi quả lê.","Bà đi ô tô từ quê ra phố.","Bà cho bé ra chợ quê.","Chợ quê có đủ thứ quà quê.","Bà cho cả nhà quà quê.","Bà cho mẹ gà ri, gà, giò.","Bà cho bố chả quế.","Bà cho bé quả na.","Bà cho chị Chi quả lê.","Bà cho dì Na quả đu đủ."],
+["Chị ru bé ngủ.","Bé kể chị nghe.","Bé có nghé lá đa.","Bà cho mẹ quả bí ngô.","Cô Hà cho Bi nghỉ hè.","Nhà bé ở ngõ nhỏ, đi qua ngã tư.","Hè về, bà ra nhà bé nghỉ hè.","Bà ru bé ngủ.","Bà kể bé nghe: quê bà có chú nghé tơ, có ngô, có nghệ, có cả bí ngô… có đủ thứ."],
+["Chị có nho khô.","Bé bị nhọ ở má.","Khi đi nhớ đi nhè nhẹ.","Mẹ cho bé quả nho.","Nhà bà có cả bò và dê.","Hè về, nhà bé đi Sa Pa.","Sa Pa có mơ, có lê.","Khi về, bé ghé qua nhà bà Thu.","Bà Thu cho bé quà.","Bé bi bô kể cho bà Thu nghe: nhà bé có nghé.","Nhà bé có bê.","Nhà bé có dê.","Nhà bé có cả bò.","Bà Thu rất quý bé."],
+["Mẹ có giá đỗ.","Dì Na có gia vị.","Chú Tư giã giò.","Giỏ tre có cá rô to.","Dì Thi cho mẹ giò chả.","Nhà có giỗ.","Cả nhà ở nhà thờ tổ lo cỗ.","Chú Tư giã giò.","Dì Nụ có giò chả.","Bà có giỏ cá quả.","Cả nhà bé đi dự giỗ cụ."]
+];
+const AN=Array.from("🐰🐯🐼🦊🐸🐵🦁🐮🐷🐨🐥🦄🐙🦋🐢🐬🦒🐘🐧🦉🐝🐞🦜🐳🦔🦎🦀🐠🦓🦘🐊🦩🦥🦦🐴🐑🐐🦙🐓🦆🦅🐺");
+const ONS=["ngh","ng","nh","ch","gh","gi","kh","ph","th","tr","qu","b","c","d","đ","g","h","k","l","m","n","r","s","t","v","x"];
+const sp=s=>{s=s.normalize("NFC");for(const o of ONS)if(s.startsWith(o)&&s.length>o.length)return[o,s.slice(o.length)];return["",s]};
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const $=document.getElementById("app");
+let S={s:{}},G=null,ac,M=0;
+try{S=JSON.parse(localStorage.getItem("cu")||'{"s":{}}')}catch(e){}
+const save=()=>{try{localStorage.setItem("cu",JSON.stringify(S))}catch(e){}};
+function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="vi-VN";u.rate=.7;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function tone(f,d=.15){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.12;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+const ok=()=>{tone(660);setTimeout(()=>tone(880),120)},no=()=>tone(200,.25);
+
+function home(){stopCam();G=null;const done=Object.keys(S.s).filter(k=>S.s[k]>0);
+$.innerHTML=`<h1>🦉 Cú Con Đánh Vần</h1><p class="sub">Theo sách “Luyện Đọc” tập 1 · Bài 1–26</p>
+<div class="bar" style="justify-content:center;gap:8px;flex-wrap:wrap"><button class="ghost" style="${M==0?'outline:3px solid var(--pri)':''}" onclick="M=0;home()">🎮 Chơi game</button><button class="ghost" style="${M==1?'outline:3px solid var(--pri)':''}" onclick="M=1;home()">📖 Tập đọc câu</button><button class="ghost" style="${M==2?'outline:3px solid var(--pri)':''}" onclick="M=2;home()">🙌 Giơ tay</button></div><div class="garden">${done.length?done.map(k=>AN[k]).join(" "):"Hoàn thành bài để nhận bạn thú vào vườn!"}</div>
+<div class="grid">${(M==1?R:L).map((l,i)=>`<button class="cell" onclick="go(${i})"><small>Bài ${i+1}</small><b>${i<26?L[i][0]:"📖"}</b><span>${"⭐".repeat(S.s[i]||0)||"·"}</span></button>`).join("")}</div>`}
+
+function start(i){G={i,w:shuf(L[i][2].split(",")),r:0,m:0};nextRound()}
+const bar=()=>`<div class="bar"><button class="ghost" onclick="home()">←</button><div class="dots">${G.w.map((_,k)=>`<i class="${k<G.r?"on":""}"></i>`).join("")}</div><div>Bài ${G.i+1}</div></div>`;
+
+function nextRound(){
+ if(G.r>=G.w.length)return finish();
+ const w=G.w[G.r];
+ if(G.r%2==0){ // Ghép tiếng
+  G.syl=w.split(" ").map(sp);G.built=G.syl.map(s=>[s[0]?"":"-",""]);
+  G.steps=[];G.syl.forEach((s,t)=>{if(s[0])G.steps.push([t,0]);G.steps.push([t,1])});G.k=0;drawA();
+ }else drawB();
+}
+function drawA(){
+ const w=G.w[G.r],st=G.steps[G.k],[t,kind]=st||[],s=G.syl[t]||[];
+ const pool=kind?[...new Set(G.syl.flatMap(()=>L[G.i][2].split(/[, ]/)).map(x=>sp(x)[1]))]:[...new Set(L[G.i][2].split(/[, ]/).map(x=>sp(x)[0]).filter(Boolean))];
+ const fb=kind?["a","o","ô","ơ","u","ư","i","ê","e"]:["b","c","m","n","t","h","l"];
+ let o=[s[kind]];[...shuf(pool),...shuf(fb)].forEach(x=>{if(o.length<3&&!o.includes(x))o.push(x)});o=shuf(o);
+ const box=G.built.map(b=>`<div class="syl"><span class="on">${b[0]==="-"?"":b[0]||"▢"}</span><span class="van">${b[1]||"▢"}</span></div>`).join("");
+ $.innerHTML=bar()+`<button class="say" onclick="say('${w}')">🔊</button><div class="word">${box}</div>
+ <div class="q">Ghép từ “${w}”<br>${kind?"Vần":"Âm đầu"} của tiếng “${w.split(" ")[t]}” là gì?</div>
+ <div class="opts">${o.map(x=>`<button class="opt" onclick="pickA(this,'${x}')">${x}</button>`).join("")}</div>`;
+ if(G.k==0)say(w);
+}
+function pickA(b,x){
+ const [t,kind]=G.steps[G.k];
+ if(x!==G.syl[t][kind]){no();G.m++;b.classList.add("bad");return}
+ ok();b.classList.add("good");G.built[t][kind]=x;
+ const done=G.built[t][0]&&G.built[t][1];
+ G.k++;
+ if(G.k>=G.steps.length){drawA2();setTimeout(()=>{say(G.w[G.r]);G.r++;setTimeout(nextRound,1400)},500)}
+ else setTimeout(()=>{if(done)say(G.w[G.r].split(" ")[t]);drawA()},350);
+}
+function drawA2(){const w=G.w[G.r];$.innerHTML=bar()+`<div class="word">${G.built.map(b=>`<div class="syl"><span class="on">${b[0]==="-"?"":b[0]}</span><span class="van">${b[1]}</span></div>`).join("")}</div><div class="q">🎉 Giỏi quá! “${w}”</div>`}
+
+function drawB(){
+ const w=G.w[G.r],tts="speechSynthesis"in window;
+ const o=shuf([w,...shuf(G.w.filter(x=>x!==w)).slice(0,2)]);
+ $.innerHTML=bar()+`<div class="q">${tts?"Nghe Cú đọc, bấm vào từ đúng nhé!":"Tìm từ “"+w+"”"}</div><button class="say" onclick="say('${w}')">🔊</button>
+ <div class="opts w">${o.map(x=>`<button class="opt" onclick="pickB(this,'${x}')">${x}</button>`).join("")}</div>`;
+ say(w);
+}
+function pickB(b,x){
+ if(x!==G.w[G.r]){no();G.m++;b.classList.add("bad");b.disabled=true;return}
+ ok();b.classList.add("good");G.r++;setTimeout(nextRound,800);
+}
+function finish(){stopCam();
+ const n=G.m==0?3:G.m<=3?2:1;S.s[G.i]=Math.max(S.s[G.i]||0,n);save();
+ $.innerHTML=`<h1>Hoàn thành Bài ${G.i+1}!</h1><div class="big">${AN[G.i]}</div><p class="sub">Bạn nhỏ nhận được thú cưng mới</p><div style="font-size:2.4rem">${"⭐".repeat(n)}</div>
+ <button class="btn" onclick="go(${G.i})">Chơi lại</button>${G.i<(M==1?R:L).length-1?`<button class="btn" onclick="go(${G.i+1})">Bài tiếp →</button>`:""}<button class="btn" onclick="home()">Về bản đồ</button>`;
+ ok();say("Giỏi quá!");
+}
+const go=i=>M==2?startH(i):M?startR(i):start(i);
+const clean=s=>s.replace(/[.,:!?…“”"]/g,"");
+const norm=s=>clean(s.toLowerCase().normalize("NFC")).split(/\s+/).filter(Boolean);
+function startR(i){G={i,w:R[i],r:0,m:0,sp:{}};drawR()}
+function drawR(){
+ if(G.r>=G.w.length)return finish();
+ const s=G.w[G.r];G.sp={};
+ $.innerHTML=bar()+`<div class="q">① Bấm từng từ để đánh vần<br>② Bấm 🎤 rồi đọc cả câu</div>
+ <div class="word" style="font-size:1.9rem;gap:8px">${s.split(" ").map((w,k)=>`<div class="syl" id="w${k}" style="min-width:0" onclick="spell(${k})">${w}</div>`).join("")}</div>
+ <div id="sp" class="q" style="min-height:3em;font-size:1.6rem"></div>
+ <button class="say" onclick="say('${s}')">🔊</button> <button class="say" style="background:var(--bad)" onclick="listen()">🎤</button>
+ <div><button class="btn" onclick="G.m++;G.r++;drawR()">Câu tiếp →</button></div>
+ <div id="fb" class="q"></div>`;
+}
+function spell(k){
+ const w=clean(G.w[G.r].split(" ")[k]),[o,v]=sp(w.toLowerCase());
+ document.getElementById("w"+k).classList.add("seen");
+ document.getElementById("sp").innerHTML=`${o?`<span class="on">${o}</span> + `:""}<span class="van">${v}</span> → <b>${w}</b>`;
+ say(w);
+}
+function listen(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition,fb=document.getElementById("fb");
+ if(!SR){fb.innerHTML=`Máy chưa hỗ trợ nghe giọng. Bố mẹ nghe bé đọc rồi chọn nhé:<br><button class="btn" onclick="judge(1)">✅ Đọc đúng</button><button class="btn" onclick="judge(0)">🔁 Đọc lại</button>`;return}
+ const r=new SR();r.lang="vi-VN";r.interimResults=false;r.maxAlternatives=3;
+ fb.textContent="🎧 Cú đang nghe… bé đọc đi nào!";
+ r.onresult=e=>check([...e.results[0]].map(a=>a.transcript));
+ r.onerror=()=>{fb.textContent="Cú chưa nghe rõ. Bé cho phép micro rồi bấm 🎤 thử lại nhé."};
+ try{r.start()}catch(e){}
+}
+function lcs(t,h){const n=t.length,m=h.length,d=Array.from({length:n+1},()=>Array(m+1).fill(0));
+ for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)d[i][j]=t[i]==h[j]?d[i+1][j+1]+1:Math.max(d[i+1][j],d[i][j+1]);
+ const f=Array(n).fill(0);let i=0,j=0;while(i<n&&j<m){if(t[i]==h[j]){f[i]=1;i++;j++}else if(d[i+1][j]>=d[i][j+1])i++;else j++}return f}
+function check(alts){
+ const t=norm(G.w[G.r]);let best=null,heard=alts[0];
+ alts.forEach(a=>{const f=lcs(t,norm(a));if(!best||f.reduce((x,y)=>x+y)>best.reduce((x,y)=>x+y)){best=f;heard=a}});
+ t.forEach((_,k)=>{const e=document.getElementById("w"+k);e.classList.remove("okc","badc");e.classList.add(best[k]?"okc":"badc")});
+ const miss=best.filter(x=>!x).length,fb=document.getElementById("fb");
+ const pass=miss==0||(t.length>=6&&miss==1);
+ fb.innerHTML=`Cú nghe được: “${heard}”<br>`+(pass?"🎉 Đọc chính xác rồi!":"Chưa đúng ở các từ màu đỏ. Bấm vào từ đỏ để đánh vần lại, rồi bấm 🎤 đọc lại nhé!");
+ if(pass){ok();say(G.w[G.r]);G.r++;setTimeout(drawR,2200)}else{no();G.m++}
+}
+function judge(v){if(v){ok();G.r++;drawR()}else{G.m++;document.getElementById("fb").textContent="Bé đánh vần lại rồi đọc tiếp nhé!"}}
+let cam=null,raf=0,bg=null,last=0;
+const cv=document.createElement("canvas");cv.width=48;cv.height=36;
+const cx=cv.getContext("2d",{willReadFrequently:true});
+function stopCam(){cancelAnimationFrame(raf);if(cam){cam.getTracks().forEach(t=>t.stop());cam=null}bg=null}
+function startH(i){G={i,w:shuf(L[i][2].split(",")),r:0,m:0,h:1};drawH()}
+async function drawH(){
+ if(!G||!G.h)return;
+ if(G.r>=G.w.length)return finish();
+ const w=G.w[G.r],o=shuf([w,...shuf(G.w.filter(x=>x!==w)).slice(0,2)]);
+ G.o=o;G.lock=0;G.hold=[0,0,0];G.dead=[0,0,0];
+ $.innerHTML=bar()+`<div class="q">Cú đọc từ nào? Giơ tay vào ô đáp án nhé! <button class="say" style="width:64px;height:64px;font-size:1.8rem;vertical-align:middle" onclick="say('${w}')">🔊</button></div>
+ <div class="cam"><video id="v" playsinline muted></video><div class="zones">${o.map((x,k)=>`<div class="zone" id="z${k}" onclick="pickH(${k})"><b>${x}</b><i id="p${k}"></i></div>`).join("")}</div></div>
+ <div id="cm" class="q" style="font-size:1.1rem">Ngồi yên, chỉ giơ và vẫy tay vào ô muốn chọn (khoảng 1 giây). Cũng có thể bấm thẳng vào ô.</div>`;
+ say(w);
+ if(!cam){try{cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:640,height:480}})}catch(e){const c=document.getElementById("cm");if(c)c.textContent="Chưa mở được camera. Bé bấm thẳng vào ô đáp án, hoặc cho phép camera rồi mở lại trang nhé."}}
+ if(!G||!G.h){stopCam();return}
+ if(cam){const v=document.getElementById("v");if(!v)return;v.srcObject=cam;try{await v.play()}catch(e){}cancelAnimationFrame(raf);loop(v)}
+}
+function loop(v){
+ raf=requestAnimationFrame(()=>loop(v));
+ if(!G||!G.h||G.lock||v.readyState<2)return;
+ const now=performance.now(),dt=Math.min(now-last,100);last=now;
+ cx.save();cx.scale(-1,1);cx.drawImage(v,-48,0,48,36);cx.restore();
+ const d=cx.getImageData(0,0,48,36).data,n=48*36;
+ if(!bg){bg=new Float32Array(n);for(let p=0;p<n;p++)bg[p]=d[p*4]*.3+d[p*4+1]*.59+d[p*4+2]*.11;return}
+ const cnt=[0,0,0];
+ for(let y=0;y<36;y++)for(let x=0;x<48;x++){const p=y*48+x,g=d[p*4]*.3+d[p*4+1]*.59+d[p*4+2]*.11;if(Math.abs(g-bg[p])>30)cnt[Math.min(2,x/16|0)]++;bg[p]+=(g-bg[p])*.04}
+ const fr=cnt.map(c=>c/(16*36)),m=fr.indexOf(Math.max(...fr));
+ for(let k=0;k<3;k++){
+  const act=k==m&&fr[k]>.12&&!G.dead[k];
+  G.hold[k]=act?G.hold[k]+dt:Math.max(0,G.hold[k]-dt*2);
+  const e=document.getElementById("p"+k);if(e)e.style.width=Math.min(100,G.hold[k]/12)+"%";
+  if(G.hold[k]>=1200){pickH(k);break}
+ }
+}
+function pickH(k){
+ if(!G||G.lock||G.dead[k])return;
+ const x=G.o[k],z=document.getElementById("z"+k);
+ if(x!==G.w[G.r]){no();G.m++;G.dead[k]=1;G.hold=[0,0,0];z.classList.add("bad");return}
+ G.lock=1;ok();z.classList.add("good");say(x);G.r++;setTimeout(drawH,1300);
+}
+home();
+</script></body></html>
