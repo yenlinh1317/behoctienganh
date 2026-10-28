@@ -131,7 +131,7 @@ function speak(text,url){
 }
 
 /* ---- Trạng thái game ---- */
-let mode='all',total=10,qs=[],qi=0,score=0,locked=true,cand=null,held=0,lastT=0,wrongs=[],camOK=false,landmarker=null,running=false;
+let needNeutral=true,neutralT=0,readyAt=0,mode='all',total=10,qs=[],qi=0,score=0,locked=true,cand=null,held=0,lastT=0,wrongs=[],camOK=false,landmarker=null,running=false;
 const modes=[['all','Chữ cái + Từ vựng'],['words','Từ vựng'],['letters','Chữ cái']],counts=[5,10,20];
 const mk=(box,items,get,set,cur)=>{box.innerHTML='';items.forEach(it=>{const b=document.createElement('button');b.className='chip'+(get(it)===cur?' sel':'');b.textContent=Array.isArray(it)?it[1]:it+' câu';b.onclick=()=>{set(it);[...box.children].forEach(c=>c.classList.remove('sel'));b.classList.add('sel')};box.appendChild(b)})};
 mk($('modes'),modes,i=>i[0],i=>mode=i[0],'all');
@@ -147,7 +147,7 @@ function buildQs(){
   let right,wrong;
   if(q.t==='w'){right={t:q.v.w,img:q.v.img};const seen=new Set([right.t.toLowerCase()]);wrong=[];for(const o of shuffle(DATA.words)){const k=o.w.toLowerCase();if(!seen.has(k)){seen.add(k);wrong.push({t:o.w,img:o.img});if(wrong.length===1)break}}}
   else{right={t:q.v.c+' '+q.v.l,img:q.v.img};wrong=shuffle(DATA.letters.filter(x=>x!==q.v)).slice(0,1).map(x=>({t:x.c+' '+x.l,img:x.img}))}
-  const texts=shuffle([right,...wrong]),pp=shuffle(['L','R']);
+  const texts=shuffle([right,...wrong]),pp=['L','R'];
   return {q,right:right.t,opts:texts.map((t,i)=>({t:t.t,img:t.img,pose:pp[i]}))};
  });
 }
@@ -172,7 +172,7 @@ async function startCam(){
 }
 
 function showQ(){
- const Q=qs[qi];locked=false;cand=null;held=0;
+ const Q=qs[qi];locked=false;cand=null;held=0;needNeutral=true;neutralT=0;readyAt=performance.now()+1200;
  $('prog').textContent=`Câu ${qi+1}/${qs.length}`;$('score').textContent=`⭐ ${score}`;
  const img=$('qimg'),big=$('qbig');
  img.style.display='none';big.textContent='🔊';$('qtxt').textContent='Nghe và chọn đáp án đúng';
@@ -223,6 +223,7 @@ function loop(now){
   [[7,8]].forEach(([a,b])=>{c.beginPath();c.moveTo(lm[a].x*cv.width,lm[a].y*cv.height);c.lineTo(lm[b].x*cv.width,lm[b].y*cv.height);c.stroke()});
   [0,7,8].forEach(i=>{c.beginPath();c.arc(lm[i].x*cv.width,lm[i].y*cv.height,7,0,7);c.fill()});
  }
+ if(needNeutral){if(!p)neutralT+=dt;else neutralT=0;if(neutralT>=.4&&now>=readyAt){needNeutral=false;$('camnote').textContent='Nghiêng đầu sang bên đáp án bé chọn và giữ yên 1 giây'}else{$('camnote').textContent='Đưa đầu thẳng lại, nghe xong rồi nghiêng để chọn'}cand=null;held=0;els.forEach(e=>e.querySelector('.fill').style.width='0%');return}
  if(p&&p===cand)held+=dt;else{cand=p;held=0}
  els.forEach((e,i)=>e.querySelector('.fill').style.width=(p&&Q.opts[i].pose===cand?Math.min(held/HOLD,1)*100:0)+'%');
  if(cand&&held>=HOLD){const i=allowed.indexOf(cand);cand=null;held=0;if(i>=0)answer(i)}
